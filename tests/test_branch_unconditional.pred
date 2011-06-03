@@ -1,0 +1,13 @@
+if ($mips_gregs{"t0"} == 0) {
+	return ("instruction before branch missed");
+}
+if ($mips_gregs{"t1"} == 0) {
+	return ("instruction in branch-delay slot missed");
+}
+if ($mips_gregs{"t2"} != 0) {
+	return ("branch failed to skip instruction");
+}
+if ($mips_gregs{"t3"} == 0) {
+	return ("branch target missed");
+}
+return ("OK");

@@ -1,0 +1,11 @@
+# Check that intended 32-bit and 64-bit constants turn up in t0 and t1
+
+if ($mips_gregs{"t0"} != 0x76543210) {
+	return ("t0 has value ".$mips_gregs{"t0"}." rather than expected ".
+	    "0x76543210");
+}
+if ($mips_gregs{"t1"} != 0xfedcba9876543210) {
+	return ("t1 has value ".$mips_gregs{"t1"}." rather than expected ".
+	    "0xfedcba9876543210");
+}
+return ("OK");
