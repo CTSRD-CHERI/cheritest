@@ -33,6 +33,10 @@ TEST_FILES=					\
 		raw_template.s			\
 		raw_reg_init.s			\
 		raw_reg_load_immediate.s	\
+		raw_load_byte.s			\
+		raw_load_hword.s		\
+		raw_load_word.s			\
+		raw_load_dword.s		\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_reg_load_immediate.s	\
@@ -113,6 +117,6 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	../sim -m $(TEST_CYCLE_LIMIT) > $@
 
 $(LOGDIR)/%.result : $(TESTDIR)/%.pred $(LOGDIR)/%.log
-	$(TESTPREDICATE) $(LOGDIR)/$(basename $(notdir $@)).log \
+	-$(TESTPREDICATE) $(LOGDIR)/$(basename $(notdir $@)).log \
 	    $(TESTDIR)/$(basename $(notdir $@)).pred $@
 

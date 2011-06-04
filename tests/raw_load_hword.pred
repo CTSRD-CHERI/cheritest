@@ -1,0 +1,5 @@
+if ($mips_gregs{"t0"} != 0xfedc) {
+	my $string = sprintf("0x%x", $mips_gregs{"t0"});
+	return ("load half word returned ".$string." rather than 0xfedc");
+}
+return ("OK");
