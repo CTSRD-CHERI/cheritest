@@ -1,5 +1,5 @@
 __stack_size__ = 0x400; /* 1k stack */
-__mem_top__ = 0x80008000;
+__mem_top__ = 0x9000000080008000;
 
 __sp = __mem_top__;
 __heap_top__ = __mem_top__ - __stack_size__;
@@ -7,7 +7,7 @@ __sp_bottom = __heap_top__;
 
 SECTIONS
 {
-. = 0x40000000;
+. = 0x9000000040000000;
 
 .text : { *(.text) } 
 .bss : { *(.bss) }
