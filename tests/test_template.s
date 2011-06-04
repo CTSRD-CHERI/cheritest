@@ -10,15 +10,15 @@
 		.global test
 test:		.ent test
 		addu 	$sp, $sp, -32
-		sw	$ra, 24($sp)
-		sw	$fp, 16($sp)
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
 		addu	$fp, $sp, 32
 
 		# Test itself goes here
 		nop
 
-		lw	$fp, 16($sp)
-		lw	$ra, 24($sp)
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
 		addu	$sp, $sp, 32
 		jr	$ra
 		nop			# branch-delay slot
