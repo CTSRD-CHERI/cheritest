@@ -33,6 +33,7 @@ TEST_FILES=					\
 		raw_template.s			\
 		raw_reg_init.s			\
 		raw_reg_load_immediate.s	\
+		raw_branch_unconditional.s	\
 		raw_jump_and_link.s		\
 		raw_load_byte.s			\
 		raw_load_hword.s		\
@@ -45,8 +46,7 @@ TEST_FILES=					\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_reg_load_immediate.s	\
-		test_reg_assignment.s		\
-		test_branch_unconditional.s
+		test_reg_assignment.s
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT

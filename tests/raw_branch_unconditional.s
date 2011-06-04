@@ -8,10 +8,7 @@
 # the branch-delay slot, $t2 should be skipped, and $t3 at the branch target.
 #
 
-		.global	test
-test:		.ent	test
-		addu 	$sp, $sp, -32
-
+start:
 		li	$t0, 1
 		b	branch_target
 		li	$t1, 1		# branch-delay slot
@@ -19,7 +16,12 @@ test:		.ent	test
 branch_target:
 		li	$t3, 1
 
-		addu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+		# Dump registers in the simulator
+		mtc0	$v0, $26
+		nop
+		nop
+
+		# Terminate the simulator
+		break
+end:
+		b end
