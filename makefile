@@ -37,6 +37,10 @@ TEST_FILES=					\
 		raw_load_hword.s		\
 		raw_load_word.s			\
 		raw_load_dword.s		\
+		raw_store_byte.s		\
+		raw_store_hword.s		\
+		raw_store_word.s		\
+		raw_store_dword.s		\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_reg_load_immediate.s	\
