@@ -33,6 +33,7 @@ TEST_FILES=					\
 		raw_template.s			\
 		raw_reg_init.s			\
 		raw_reg_load_immediate.s	\
+		raw_jump_and_link.s		\
 		raw_load_byte.s			\
 		raw_load_hword.s		\
 		raw_load_word.s			\
