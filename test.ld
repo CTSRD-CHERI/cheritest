@@ -9,10 +9,10 @@ SECTIONS
 {
 . = 0x9000000040000000;
 
-.text : { init.o(.text) 
+.text ALIGN(0x8): { init.o(.text) 
 	*(EXCLUDE_FILE (init.o) .text) }
-.bss : { *(.bss) }
-.data : { *(.data)}
+.bss ALIGN(0x8): { *(.bss) }
+.data ALIGN(0x8): { *(.data)}
 
 __heap = ALIGN(0x8); /*64-bit alligned heap pointer */
 __bss_start = ADDR(.bss);

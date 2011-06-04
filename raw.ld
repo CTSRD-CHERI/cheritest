@@ -9,9 +9,9 @@ SECTIONS
 {
 . = 0x9000000040000000;
 
-.text : { *(.text) } 
-.bss : { *(.bss) }
-.data : { *(.data)}
+.text ALIGN(0x8): { *(.text) } 
+.bss ALIGN(0x8): { *(.bss) }
+.data ALIGN(0x8): { *(.data)}
 
 __heap = ALIGN(0x8); /*64-bit alligned heap pointer */
 __bss_start = ADDR(.bss);
