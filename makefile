@@ -100,6 +100,7 @@ init.o: init.s
 $(OBJDIR)/%.o : $(TESTDIR)/%.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
+## TODO: rename these all to test_raw so that we are consistent 
 $(OBJDIR)/raw_%.elf : $(OBJDIR)/raw_%.o $(RAW_LDSCRIPT)
 	sde-ld -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
 
@@ -125,4 +126,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 $(LOGDIR)/%.result : $(TESTDIR)/%.pred $(LOGDIR)/%.log
 	-$(TESTPREDICATE) $(LOGDIR)/$(basename $(notdir $@)).log \
 	    $(TESTDIR)/$(basename $(notdir $@)).pred $@
+
+nosetest: cleantest $(TEST_LOGS)
+	PYTHONPATH=../tools nosetests
 
