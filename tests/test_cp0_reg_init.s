@@ -25,17 +25,20 @@ test:		.ent test
 		# Count Register
 		mfc0	$a2, $9
 
+		# Compare Register
+		mfc0	$a3, $11
+
 		# Status Register
-		mfc0	$a3, $12
+		mfc0	$a4, $12
 
 		# Processor Revision Identifier (PRId)
-		mfc0	$a4, $15
+		mfc0	$a5, $15
 
 		# Config Register
-		mfc0	$a5, $16
+		mfc0	$a6, $16
 
 		# XContext Register
-		mfc0	$a6, $20
+		mfc0	$a7, $20
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

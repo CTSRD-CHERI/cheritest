@@ -5,10 +5,11 @@
 my $context_reg = $mips_gregs{"a0"};
 my $wired_reg = $mips_gregs{"a1"};
 my $count_reg = $mips_gregs{"a2"};
-my $status_reg = $mips_gregs{"a3"};
-my $prid_reg = $mips_gregs{"a4"};
-my $config_reg = $mips_gregs{"a5"};
-my $xcontext_reg = $mips_gregs{"a6"};
+my $compare_reg = $mips_gregs{"a3"};
+my $status_reg = $mips_gregs{"a4"};
+my $prid_reg = $mips_gregs{"a5"};
+my $config_reg = $mips_gregs{"a6"};
+my $xcontext_reg = $mips_gregs{"a7"};
 
 my $context_reg_exp = 0x0;
 if ($context_reg != $context_reg_exp) {
@@ -32,6 +33,17 @@ if ($wired_reg != $wired_reg_exp) {
 if ($count_reg < 100 || $count_reg > 600) {
 	my $string = sprintf("0x%x", $count_reg);
 	return ("Count Register was ".$string."; this is surprising.");
+}
+
+#
+# Preferable that the compare register be 0, to maximise time available to
+# the OS before a timer interrupt fires.
+#
+my $compare_reg_exp = 0x0;
+if ($compare_reg != $compare_reg_exp) {
+	my $string = sprintf("0x%x", $compare_reg);
+	my $string_exp = sprintf("0x%x", $compare_reg_exp);
+	return ("Compare Register was ".$string.", expected ".$string_exp);
 }
 
 #
