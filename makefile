@@ -46,7 +46,8 @@ TEST_FILES=					\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_reg_load_immediate.s	\
-		test_reg_assignment.s
+		test_reg_assignment.s		\
+		test_cp0_reg_init.s
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
