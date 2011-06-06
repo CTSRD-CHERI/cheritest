@@ -1,4 +1,6 @@
 from bsim_utils import BaseBsimTestCase
+import unittest
+import nose
 
 class test_cp0_reg_init(BaseBsimTestCase):
     def test_context_reg(self):
@@ -29,32 +31,20 @@ class test_cp0_reg_init(BaseBsimTestCase):
         self.assertRegisterEqual((self.MIPS.a4) >> 28 & 0x1, 0)
 
     ## We should have interrupts enabled for all sources.
-    ##
-    ## XXX: but we don't
     def test_status_im(self):
-        #self.assertRegisterEqual((self.MIPS.a4 >> 8) & 0xff, 0xff)
-        self.assertRegisterEqual((self.MIPS.a4 >> 8) & 0xff, 0x02)
+        self.assertRegisterEqual((self.MIPS.a4 >> 8) & 0xff, 0xff)
 
     ## We should be in 64-bit kernel mode.
-    ##
-    ## XXX: but we aren't
     def test_status_kx(self):
-        #self.assertRegisterEqual((self.MIPS.a4 >> 7) & 0x1, 1)
-        self.assertRegisterEqual((self.MIPS.a4 >> 7) & 0x1, 0)
+        self.assertRegisterEqual((self.MIPS.a4 >> 7) & 0x1, 1)
 
     ## We should have a 64-bit supervisor mode.
-    ##
-    ## XXX: but we don't
     def test_status_sx(self):
-        #self.assertRegisterEqual((self.MIPS.a4 >> 6) & 0x1, 1)
-        self.assertRegisterEqual((self.MIPS.a4 >> 6) & 0x1, 0)
+        self.assertRegisterEqual((self.MIPS.a4 >> 6) & 0x1, 1)
 
     ## We should have a 64-bit user mode.
-    ##
-    ## XXX: but we don't
     def test_status_ux(self):
-        #self.assertRegisterEqual((self.MIPS.a4 >> 5) & 0x1, 1)
-        self.assertRegisterEqual((self.MIPS.a4 >> 5) & 0x1, 0)
+        self.assertRegisterEqual((self.MIPS.a4 >> 5) & 0x1, 1)
  
     ## We expect to be in kernel mode at init.
     def test_status_ksu(self):
@@ -69,22 +59,17 @@ class test_cp0_reg_init(BaseBsimTestCase):
         self.assertRegisterEqual((self.MIPS.a4 >> 1) & 0x1, 0)
  
     ## We expect interrupts enabled
-    ##
-    ## XXX: but we don't
     def test_status_ie(self):
-        #self.assertRegisterEqual(self.MIPS.a4 & 0x1, 1)
-        self.assertRegisterEqual(self.MIPS.a4 & 0x1, 0)
+        self.assertRegisterEqual(self.MIPS.a4 & 0x1, 1)
  
     ## It doesn't really matter what vendor we report as, but we should indicate
     ## that we are R4400ish
-    ##
-    ## XXX: but we don't
     def test_prid_imp_reg(self):
-        #self.assertRegisterEqual((self.MIPS.a5 >> 8) & 0xff, 0x04)
-        self.assertRegisterEqual((self.MIPS.a5 >> 8) & 0xff, 0)
+        self.assertRegisterEqual((self.MIPS.a5 >> 8) & 0xff, 0x04)
 
     ## XXX
     def test_config_reg(self):
+        raise nose.SkipTest("Correct value of config not yet known")
         self.assertRegisterEqual(self.MIPS.a6, 0)
 
     ## XXX:
