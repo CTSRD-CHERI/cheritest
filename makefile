@@ -91,7 +91,7 @@ clean: cleantest
 	rm -f $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS)
 	rm -f *.hex mem.bin
 
-.PHONY: all clean cleantest test
+.PHONY: all clean cleantest test nosetest failnosetest
 .SECONDARY: $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS)
 
 init.o: init.s
@@ -126,6 +126,10 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 $(LOGDIR)/%.result : $(TESTDIR)/%.pred $(LOGDIR)/%.log
 	-$(TESTPREDICATE) $(LOGDIR)/$(basename $(notdir $@)).log \
 	    $(TESTDIR)/$(basename $(notdir $@)).pred $@
+
+# Simulate a failure on all unit tests
+failnosetest: cleantest $(TEST_LOGS)
+	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=../tools nosetests
 
 nosetest: cleantest $(TEST_LOGS)
 	PYTHONPATH=../tools nosetests
