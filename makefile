@@ -129,8 +129,8 @@ $(LOGDIR)/%.result : $(TESTDIR)/%.pred $(LOGDIR)/%.log
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(TEST_LOGS)
-	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=../tools nosetests
+	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=../tools nosetests $(NOSEFLAGS)
 
 nosetest: cleantest $(TEST_LOGS)
-	PYTHONPATH=../tools nosetests
+	PYTHONPATH=../tools nosetests $(NOSEFLAGS)
 
