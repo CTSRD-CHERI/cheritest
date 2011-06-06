@@ -32,18 +32,23 @@ class test_cp0_reg_init(BaseBsimTestCase):
 
     ## We should have interrupts enabled for all sources.
     def test_status_im(self):
+        '''Test status register to confirm that interrupts are enabled for
+        all sources (IM)'''
         self.assertRegisterEqual((self.MIPS.a4 >> 8) & 0xff, 0xff)
 
     ## We should be in 64-bit kernel mode.
     def test_status_kx(self):
+        '''Test status register to confirm that we are in 64-bit kernel mode (KX)'''
         self.assertRegisterEqual((self.MIPS.a4 >> 7) & 0x1, 1)
 
     ## We should have a 64-bit supervisor mode.
     def test_status_sx(self):
+        '''Test status register to confirm that we are in 64-bit supervisor mode (SX)'''
         self.assertRegisterEqual((self.MIPS.a4 >> 6) & 0x1, 1)
 
     ## We should have a 64-bit user mode.
     def test_status_ux(self):
+        '''Test status register to confirm that we are in 64-bit user mode (UX)'''
         self.assertRegisterEqual((self.MIPS.a4 >> 5) & 0x1, 1)
  
     ## We expect to be in kernel mode at init.
@@ -60,11 +65,13 @@ class test_cp0_reg_init(BaseBsimTestCase):
  
     ## We expect interrupts enabled
     def test_status_ie(self):
+        '''Test status register to confirm that interrupts are enabled (IE)'''
         self.assertRegisterEqual(self.MIPS.a4 & 0x1, 1)
  
     ## It doesn't really matter what vendor we report as, but we should indicate
     ## that we are R4400ish
     def test_prid_imp_reg(self):
+        '''Test that the PRId register indicates a R4400ish vendor'''
         self.assertRegisterEqual((self.MIPS.a5 >> 8) & 0xff, 0x04)
 
     ## XXX
