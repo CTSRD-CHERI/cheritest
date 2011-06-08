@@ -65,8 +65,8 @@ class test_cp0_reg_init(BaseBsimTestCase):
  
     ## We expect interrupts enabled
     def test_status_ie(self):
-        '''Test status register to confirm that interrupts are enabled (IE)'''
-        self.assertRegisterEqual(self.MIPS.a4 & 0x1, 1)
+        '''Test status register to confirm that interrupts are disabled (IE)'''
+        self.assertRegisterEqual(self.MIPS.a4 & 0x1, 0)
  
     ## It doesn't really matter what vendor we report as, but we should indicate
     ## that we are R4400ish

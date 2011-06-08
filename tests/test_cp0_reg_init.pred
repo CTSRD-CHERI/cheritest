@@ -136,11 +136,9 @@ if ($status_exl != $status_exl_exp) {
 	return ("Status Register EXL was ".$string.", expected ".$string_exp);
 }
 
-# We expect interrupts enabled
+# We expect interrupts disabled
 #
-# XXX: but we don't
 my $status_ie = $status_reg & 0x1;
-#my $status_ie_exp = 1;
 my $status_ie_exp = 0;
 if ($status_ie != $status_ie_exp) {
 	my $string = sprintf("0x%x", $status_ie);
