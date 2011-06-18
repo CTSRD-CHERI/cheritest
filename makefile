@@ -133,5 +133,8 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 failnosetest: cleantest $(TEST_LOGS)
 	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=../tools nosetests $(NOSEFLAGS)
 
+print-versions:
+	nosetests --version
+
 nosetest: cleantest $(TEST_LOGS)
 	PYTHONPATH=../tools nosetests $(NOSEFLAGS)
