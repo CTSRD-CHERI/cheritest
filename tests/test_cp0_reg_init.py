@@ -30,6 +30,9 @@ class test_cp0_reg_init(BaseBsimTestCase):
     def test_status_cu(self):
         self.assertRegisterEqual((self.MIPS.a4) >> 28 & 0x1, 0)
 
+    ## We should be using boot-time exceptions (BEV)
+        self.assertRegisterEqual((self.MIPS.a4) >> 22 & 0x1, 1)
+
     ## We should have interrupts enabled for all sources.
     def test_status_im(self):
         '''Test status register to confirm that interrupts are enabled for
