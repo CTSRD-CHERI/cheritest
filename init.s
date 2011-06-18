@@ -12,7 +12,7 @@
 start:
 		# Set up stack and stack frame
 		dla	$sp, __sp
-		addu 	$sp, $sp, -32
+		daddu 	$sp, $sp, -32
 
 		# Invoke test function test() provided by individual tests.
 		jal test

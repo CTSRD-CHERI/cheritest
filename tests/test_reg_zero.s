@@ -10,10 +10,10 @@
 
 		.global	test
 test:		.ent	test
-		addu 	$sp, $sp, -32
+		daddu 	$sp, $sp, -32
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
-		addu	$fp, $sp, 32
+		daddu	$fp, $sp, 32
 
 		# Pull an initial value out
 		move	$t0, $zero
@@ -29,7 +29,7 @@ test:		.ent	test
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
-		addu	$sp, $sp, 32
+		daddu	$sp, $sp, 32
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test

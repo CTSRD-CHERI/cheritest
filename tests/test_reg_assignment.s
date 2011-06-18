@@ -9,12 +9,12 @@
 
 		.global	test
 test:		.ent	test
-		addu 	$sp, $sp, -32
+		daddu 	$sp, $sp, -32
 
 		dli	$t1, 0xfedcba9876543210
 		move	$t2, $t1
 
-		addu	$sp, $sp, 32
+		daddu	$sp, $sp, 32
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
