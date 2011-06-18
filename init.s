@@ -11,6 +11,7 @@
 
 start:
 		# Set up stack and stack frame
+		dla	$fp, __sp
 		dla	$sp, __sp
 		daddu 	$sp, $sp, -32
 
