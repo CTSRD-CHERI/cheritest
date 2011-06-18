@@ -12,10 +12,10 @@
 # terminate the simulator on completion.  This is suitable for most forms of
 # tests, but not those that need to test final values of $ra, for example.
 #
-# Each test is accompanied by a predicate file, which implements a perl
-# fragment that analyses registers from a simulator run to decide if the test
-# passed or not.  Successful tests return "OK", and unsuccessul ones some
-# other useful diagnostic string.
+# Each test is accompanied by a Nose test case file, which analyses registers
+# from the simulator run to decide if the test passed or not.  The Nose test
+# framework drives each test, checks results, and summarises the test run on
+# completion.
 #
 # Tests are run in the order listed in TEST_FILES; it is recommended they be
 # sorted by rough functional dependence on CPU features.
@@ -68,23 +68,19 @@ TEST_LDSCRIPT=test.ld
 TEST_INIT=init.s
 TEST_INIT_OBJECT=init.o
 
-TEST_PREDS := $(TEST_FILES:%.s=$(LOGDIR)/%.pred)
-
 TEST_OBJECTS := $(TEST_FILES:%.s=$(OBJDIR)/%.o)
 TEST_ELFS := $(TEST_FILES:%.s=$(OBJDIR)/%.elf)
 TEST_MEMS := $(TEST_FILES:%.s=$(OBJDIR)/%.mem)
 TEST_LOGS := $(TEST_FILES:%.s=$(LOGDIR)/%.log)
-TEST_RESULTS := $(TEST_FILES:%.s=$(LOGDIR)/%.result)
 
 MEMCONV=python ../tools/memConv.py
-TESTPREDICATE=perl ../tools/testPredicate.pl
 
 all: $(TEST_MEMS)
 
-test: cleantest $(TEST_LOGS) $(TEST_RESULTS)
+test: cleantest nosetest
 
 cleantest:
-	rm -f $(TEST_LOGS) $(TEST_RESULTS)
+	rm -f $(TEST_LOGS)
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT)
@@ -123,14 +119,9 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	cp *.hex ..
 	../sim -m $(TEST_CYCLE_LIMIT) > $@
 
-$(LOGDIR)/%.result : $(TESTDIR)/%.pred $(LOGDIR)/%.log
-	-$(TESTPREDICATE) $(LOGDIR)/$(basename $(notdir $@)).log \
-	    $(TESTDIR)/$(basename $(notdir $@)).pred $@
-
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(TEST_LOGS)
 	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=../tools nosetests $(NOSEFLAGS)
 
 nosetest: cleantest $(TEST_LOGS)
 	PYTHONPATH=../tools nosetests $(NOSEFLAGS)
-

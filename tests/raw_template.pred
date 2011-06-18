@@ -1,5 +1,0 @@
-# Check error conditions, return a descriptive string on failure
-if (0) {
-	return ("an error occurred");
-}
-return ("OK");

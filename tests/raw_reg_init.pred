@@ -1,9 +1,0 @@
-my $i;
-
-for ($i = 0; $i < 32; $i++) {
-	if ($mips_greg[$i] != 0) {
-		return ("register ".$mips_greg_num2name[$i]." initial value ".
-		    $mips_greg[$i]." on CPU init");
-	}
-}
-return ("OK");

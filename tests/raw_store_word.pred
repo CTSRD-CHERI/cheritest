@@ -1,6 +1,0 @@
-if ($mips_gregs{"t1"} != 0xfedcba98) {
-	my $string = sprintf("0x%x", $mips_gregs{"t1"});
-	return ("load of stored word returned ".$string.
-	    " rather than 0xfedcba98");
-}
-return ("OK");

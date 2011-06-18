@@ -1,7 +1,0 @@
-# Check that intended 64-bit value is in t2
-
-if ($mips_gregs{"t2"} != 0xfedcba9876543210) {
-	return ("t2 has value ".$mips_gregs{"t2"}." rather than expected ".
-	    "0xfedcba9876543210");
-}
-return ("OK");
