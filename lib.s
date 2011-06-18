@@ -21,8 +21,6 @@ memcpy:
 
 memcpy_loop:
 		lb	$t0, 0($a1)
-		nop			# XXXRW: Work around load-to-store
-		nop			# race in CHERI.
 		sb	$t0, 0($a0)
 
 		# Increment dest and src, decrement len
