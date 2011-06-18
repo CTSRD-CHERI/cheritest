@@ -39,7 +39,8 @@ TEST_FILES=					\
 		raw_load_hword.s		\
 		raw_load_word.s			\
 		raw_load_dword.s		\
-		raw_load_delay.s		\
+		raw_load_delay_reg.s		\
+		raw_load_delay_store.s		\
 		raw_store_byte.s		\
 		raw_store_hword.s		\
 		raw_store_word.s		\
