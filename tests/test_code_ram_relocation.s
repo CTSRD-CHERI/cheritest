@@ -17,24 +17,18 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
-		# Copy our stub handler to the RAM address for regular
-		# exception handling.
+		# Set up 'handler' as the RAM exception handler.
 		#
 		dli	$a0, 0xffffffff80000180
 		dla	$a1, handler
-		dli	$a2, 8		# Number of instructions to copy
-		dsll	$a2, $a2, 2	# Number of bytes to copy
-
-		jal	memcpy
-		nop			# branch-delay slot
+		jal	handler_install
+		nop
 
 		#
 		# Jump to handler address
 		#
-jumpto:
 		li	$t0, 1
 		dli	$a0, 0xffffffff80000180
-
 		jr	$a0
 		nop			# branch-delay slot
 
@@ -49,12 +43,6 @@ return:
 		nop			# branch-delay slot
 		.end	test
 
-#
-# Position-independent "jump back" code.  Be careful not to let the size of
-# this code get out of sync with the copying code above!
-#
-# XXXRW: Really, we should let the linker calculate the length for us.
-#
 handler:
 		dla	$a0, back
 		j	$a0
