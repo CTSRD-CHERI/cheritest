@@ -49,7 +49,9 @@ TEST_FILES=					\
 		test_reg_zero.s			\
 		test_reg_load_immediate.s	\
 		test_reg_assignment.s		\
-		test_cp0_reg_init.s
+		test_cp0_reg_init.s		\
+		test_code_rom_relocation.s	\
+		test_code_ram_relocation.s
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -69,6 +71,8 @@ RAW_LDSCRIPT=raw.ld
 TEST_LDSCRIPT=test.ld
 TEST_INIT=init.s
 TEST_INIT_OBJECT=init.o
+TEST_LIB=lib.s
+TEST_LIB_OBJECT=lib.o
 
 TEST_OBJECTS := $(TEST_FILES:%.s=$(OBJDIR)/%.o)
 TEST_ELFS := $(TEST_FILES:%.s=$(OBJDIR)/%.elf)
@@ -85,7 +89,7 @@ cleantest:
 	rm -f $(TEST_LOGS)
 
 clean: cleantest
-	rm -f $(TEST_INIT_OBJECT)
+	rm -f $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
 	rm -f $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS)
 	rm -f *.hex mem.bin
 
@@ -95,6 +99,9 @@ clean: cleantest
 init.o: init.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o init.o init.s
 
+lib.o: lib.s
+	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o lib.o lib.s
+
 $(OBJDIR)/%.o : $(TESTDIR)/%.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
@@ -102,9 +109,10 @@ $(OBJDIR)/%.o : $(TESTDIR)/%.s
 $(OBJDIR)/raw_%.elf : $(OBJDIR)/raw_%.o $(RAW_LDSCRIPT)
 	sde-ld -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
 
-$(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) $(TEST_INIT_OBJECT)
+$(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
 	sde-ld -EB -G0 -T$(TEST_LDSCRIPT) $(TEST_INIT_OBJECT) \
-	    $< -o $@ -m elf64btsmip
+	    $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
 	sde-objcopy -S -O binary $< $@
