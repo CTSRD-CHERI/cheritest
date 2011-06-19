@@ -78,13 +78,14 @@ TEST_LIB_OBJECT=lib.o
 TEST_OBJECTS := $(TEST_FILES:%.s=$(OBJDIR)/%.o)
 TEST_ELFS := $(TEST_FILES:%.s=$(OBJDIR)/%.elf)
 TEST_MEMS := $(TEST_FILES:%.s=$(OBJDIR)/%.mem)
+TEST_DUMPS := $(TEST_FILES:%.s=$(OBJDIR)/%.dump)
 TEST_LOGS := $(TEST_FILES:%.s=$(LOGDIR)/%.log)
 
 MEMCONV=python ../tools/memConv.py
 
-all: $(TEST_MEMS)
+all: $(TEST_MEMS) $(TEST_DUMPS)
 
-test: cleantest nosetest
+test: nosetest
 
 cleantest:
 	rm -f $(TEST_LOGS)
@@ -118,6 +119,9 @@ $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
 	sde-objcopy -S -O binary $< $@
 
+$(OBJDIR)/%.dump: $(OBJDIR)/%.elf
+	sde-objdump -xsSd $< > $@
+
 #
 # memConv.py needs fixing so that it accepts explicit sources and
 # destinations.  That way concurrent runs can't tread on each other, allowing
@@ -137,5 +141,5 @@ failnosetest: cleantest $(TEST_LOGS)
 print-versions:
 	nosetests --version
 
-nosetest: cleantest $(TEST_LOGS)
+nosetest: all cleantest $(TEST_LOGS)
 	PYTHONPATH=../tools nosetests $(NOSEFLAGS)
