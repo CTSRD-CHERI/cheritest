@@ -52,7 +52,8 @@ TEST_FILES=					\
 		test_cp0_reg_init.s		\
 		test_code_rom_relocation.s	\
 		test_code_ram_relocation.s	\
-		test_exception_bev1_trap.s
+		test_exception_bev1_trap.s	\
+		test_exception_bev0_trap.s
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
