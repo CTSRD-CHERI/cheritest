@@ -70,10 +70,8 @@ LOGDIR=log
 
 RAW_LDSCRIPT=raw.ld
 TEST_LDSCRIPT=test.ld
-TEST_INIT=init.s
-TEST_INIT_OBJECT=init.o
-TEST_LIB=lib.s
-TEST_LIB_OBJECT=lib.o
+TEST_INIT_OBJECT=$(OBJDIR)/init.o
+TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 
 TEST_OBJECTS := $(TEST_FILES:%.s=$(OBJDIR)/%.o)
 TEST_ELFS := $(TEST_FILES:%.s=$(OBJDIR)/%.elf)
@@ -92,17 +90,15 @@ cleantest:
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	rm -f $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS)
+	rm -f $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
 	rm -f *.hex mem.bin
 
 .PHONY: all clean cleantest test nosetest failnosetest
-.SECONDARY: $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS)
+.SECONDARY: $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
+    $(TEST_LIB_OBJECT)
 
-init.o: init.s
-	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o init.o init.s
-
-lib.o: lib.s
-	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o lib.o lib.s
+$(OBJDIR)/%.o : %.s
+	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o : $(TESTDIR)/%.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<

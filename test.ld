@@ -9,8 +9,8 @@ SECTIONS
 {
 . = 0x9000000040000000;
 
-.text ALIGN(0x8): { init.o(.text) 
-	*(EXCLUDE_FILE (init.o) .text) }
+.text ALIGN(0x8): { obj/init.o(.text) 
+	*(EXCLUDE_FILE (obj/init.o) .text) }
 .bss ALIGN(0x8): { *(.bss) }
 .data ALIGN(0x8): { *(.data)}
 
