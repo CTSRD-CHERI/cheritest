@@ -75,7 +75,10 @@ return:
 		.end	test
 
 #
-# Our actual exception handler, which tests various properties.
+# Our actual exception handler, which tests various properties.  This code
+# assumes that the trap wasn't in a branch-delay slot (and the test code
+# checks BD as well), so EPC += 4 should return control after the trap
+# instruction.
 #
 		.ent bev1_handler
 bev1_handler:
@@ -83,6 +86,12 @@ bev1_handler:
 		mfc0	$a3, $12	# Status register
 		mfc0	$a4, $13	# Cause register
 		mfc0	$a5, $14	# EPC
+		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		mtc0	$k0, $14
+		nop			# NOPs to avoid hazard with ERET
+		nop			# XXXRW: How many are actually
+		nop			# required here?
+		nop
 		eret
 		.end bev1_handler
 
