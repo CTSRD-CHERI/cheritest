@@ -57,12 +57,12 @@ test:		.ent test
 		#
 		# Trigger exception.
 		#
+desired_epc:
 		teqi	$zero, 0
 
 		#
 		# Exception return.
 		#
-desired_epc:
 		li	$a1, 1
 		mfc0	$a7, $12	# Status register after ERET
 
