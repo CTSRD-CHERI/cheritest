@@ -1,3 +1,4 @@
+*.dump
 *.elf
 *.mem
 *.o
