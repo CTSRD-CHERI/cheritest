@@ -2,7 +2,7 @@ from bsim_utils import BaseBsimTestCase
 
 class test_exception_tge_eq(BaseBsimTestCase):
     def test_epc(self):
-        self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "EPC not set properly")
+        self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 
     def test_returned(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by tge instruction")
