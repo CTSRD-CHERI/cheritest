@@ -43,15 +43,15 @@ test:		.ent test
 		dli	$a6, 0
 
 		#
-		# First, don't trigger it.
-		#
-		teqi	$zero, 1
-
-		#
 		# Save the desired EPC value for this exception so we can
 		# check it later.
 		#
 		dla	$a0, desired_epc
+
+		#
+		# First, don't trigger it.
+		#
+		teqi	$zero, 1
 
 		#
 		# Trigger exception.
