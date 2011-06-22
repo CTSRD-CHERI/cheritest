@@ -57,8 +57,8 @@ test:		.ent test
 		#
 		# Trigger exception.
 		#
-desired_epc:
 		dli	$t1, 1
+desired_epc:
 		tgei	$t1, 0
 
 		#
