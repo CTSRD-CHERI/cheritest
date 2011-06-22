@@ -55,6 +55,7 @@ TEST_FILES=					\
 		test_exception_bev1_trap.s	\
 		test_exception_bev0_trap.s	\
 		test_exception_bev0_trap_bd.s	\
+		test_exception_breakpoint.s	\
 		test_exception_syscall.s
 
 #
