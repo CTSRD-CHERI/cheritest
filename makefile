@@ -59,6 +59,7 @@ TEST_FILES=					\
 		test_exception_syscall.s	\
 		test_exception_teq.s		\
 		test_exception_teqi.s		\
+		test_exception_teqi_sign.s	\
 		test_exception_tge_eq.s		\
 		test_exception_tge_gr.s		\
 		test_exception_tgei_eq.s		\
