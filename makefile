@@ -54,7 +54,8 @@ TEST_FILES=					\
 		test_code_ram_relocation.s	\
 		test_exception_bev1_trap.s	\
 		test_exception_bev0_trap.s	\
-		test_exception_bev0_trap_bd.s
+		test_exception_bev0_trap_bd.s	\
+		test_exception_syscall.s
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
