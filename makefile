@@ -62,8 +62,10 @@ TEST_FILES=					\
 		test_exception_teqi_sign.s	\
 		test_exception_tge_eq.s		\
 		test_exception_tge_gr.s		\
-		test_exception_tgei_eq.s		\
-		test_exception_tgei_gr.s
+		test_exception_tgei_eq.s	\
+		test_exception_tgei_gr.s	\
+		test_exception_tgei_eq_sign.s	\
+		test_exception_tgei_gr_sign.s
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT

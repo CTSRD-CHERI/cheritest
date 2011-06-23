@@ -5,7 +5,7 @@
 
 #
 # Exercise trap instruction 'tgei' (trap if greater than of equal immediate,
-# signed), "equal" case.
+# signed), "greater than" case.
 #
 
 		.global test
@@ -50,15 +50,11 @@ test:		.ent test
 		dla	$a0, desired_epc
 
 		#
-		# First, don't trigger it.
-		#
-		tgei	$zero, 1
-
-		#
 		# Trigger exception.
 		#
+		dli	$t1, -1
 desired_epc:
-		tgei	$zero, 0
+		tgei	$t1, -2
 
 		#
 		# Exception return.

@@ -4,8 +4,8 @@
 .set noat
 
 #
-# Exercise trap instruction 'tgei' (trap if greater than of equal immediate),
-# "greater than" case.
+# Exercise trap instruction 'tgei' (trap if greater than of equal immediate,
+# signed), "greater than" case.
 #
 
 		.global test
