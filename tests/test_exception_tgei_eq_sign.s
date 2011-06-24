@@ -5,7 +5,7 @@
 
 #
 # Exercise trap instruction 'tgei' (trap if greater than of equal immediate,
-# signed), "equal" case.
+# signed), "equal" case (negative).
 #
 
 		.global test

@@ -50,12 +50,6 @@ test:		.ent test
 		dla	$a0, desired_epc
 
 		#
-		# First, don't trigger it.
-		#
-		dli	$t1, 1
-		tge	$zero, $t1
-
-		#
 		# Trigger exception.
 		#
 		dli	$t1, 1

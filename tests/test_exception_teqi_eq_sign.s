@@ -4,8 +4,8 @@
 .set noat
 
 #
-# Exercise trap instruction 'tgei' (trap if greater than of equal immediate,
-# signed), "greater than" case (negative).
+# Exercise trap instruction 'teqi' (trap if equal immediate signed), equal
+# case (negative).
 #
 
 		.global test
@@ -54,7 +54,7 @@ test:		.ent test
 		#
 		dli	$t1, -1
 desired_epc:
-		tgei	$t1, -2
+		teqi	$t1, -1
 
 		#
 		# Exception return.

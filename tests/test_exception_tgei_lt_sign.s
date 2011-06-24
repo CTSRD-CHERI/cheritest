@@ -4,7 +4,8 @@
 .set noat
 
 #
-# Exercise trap instruction 'teqi' (trap if equal immediate).
+# Exercise trap instruction 'tgei' (trap if greater than of equal immediate,
+# signed), "less than" case (negative).
 #
 
 		.global test
@@ -34,36 +35,13 @@ test:		.ent test
 		#
 		# Clear registers we'll use when testing results later.
 		#
-		dli	$a0, 0
-		dli	$a1, 0
 		dli	$a2, 0
-		dli	$a3, 0
-		dli	$a4, 0
-		dli	$a5, 0
-		dli	$a6, 0
 
 		#
-		# Save the desired EPC value for this exception so we can
-		# check it later.
+		# Don't trigger it.
 		#
-		dla	$a0, desired_epc
-
-		#
-		# First, don't trigger it.
-		#
-		teqi	$zero, 1
-
-		#
-		# Trigger exception.
-		#
-desired_epc:
-		teqi	$zero, 0
-
-		#
-		# Exception return.
-		#
-		li	$a1, 1
-		mfc0	$a6, $12	# Status register after ERET
+		dli	$t1, -2
+		tgei	$t1, -1
 
 return:
 		ld	$fp, 16($sp)
@@ -74,16 +52,12 @@ return:
 		.end	test
 
 #
-# Our actual exception handler, which tests various properties.  This code
-# assumes that the trap wasn't in a branch-delay slot (and the test code
-# checks BD as well), so EPC += 4 should return control after the trap
-# instruction.
+# Simple exception handler that shouldn't run; assumes that the trap is not
+# from a branch-delay slot or may become confused.
 #
 		.ent bev0_handler
 bev0_handler:
 		li	$a2, 1
-		mfc0	$a3, $12	# Status register
-		mfc0	$a4, $13	# Cause register
 		mfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		mtc0	$k0, $14
