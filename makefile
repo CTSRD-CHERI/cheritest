@@ -37,6 +37,7 @@ TEST_FILES=					\
 		raw_branch_unconditional.s	\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
+		raw_jump_and_link_reg.s		\
 		raw_load_byte.s			\
 		raw_load_hword.s		\
 		raw_load_word.s			\
