@@ -38,6 +38,9 @@ TEST_FILES=					\
 		raw_beq_eq.s			\
 		raw_beq_eq_neg.s		\
 		raw_beq_ne.s			\
+		raw_beql_eq.s			\
+		raw_beql_eq_neg.s		\
+		raw_beql_ne.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
