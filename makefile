@@ -35,6 +35,9 @@ TEST_FILES=					\
 		raw_reg_load_immediate.s	\
 		raw_reg_load_immediate_sign.s	\
 		raw_branch_unconditional.s	\
+		raw_beq_eq.s			\
+		raw_beq_eq_neg.s		\
+		raw_beq_ne.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
