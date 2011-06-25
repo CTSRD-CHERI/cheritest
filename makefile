@@ -41,6 +41,7 @@ TEST_FILES=					\
 		raw_ori.s			\
 		raw_xor.s			\
 		raw_xori.s			\
+		raw_jump.s			\
 		raw_branch_unconditional.s	\
 		raw_beq_eq.s			\
 		raw_beq_eq_back.s		\
