@@ -61,6 +61,14 @@ TEST_FILES=					\
 		raw_bgtz_gt.s			\
 		raw_bgtz_gt_back.s		\
 		raw_bgtz_lt.s			\
+		raw_bgtzl_eq.s			\
+		raw_bgtzl_gt.s			\
+		raw_bgtzl_gt_back.s		\
+		raw_bgtzl_lt.s			\
+		raw_blez_eq.s			\
+		raw_blez_eq_back.s		\
+		raw_blez_gt.s			\
+		raw_blez_lt.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
@@ -141,6 +149,7 @@ cleantest:
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
 	rm -f $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
+	rm -f $(TESTDIR)/*.pyc
 	rm -f *.hex mem.bin
 
 .PHONY: all clean cleantest test nosetest failnosetest
