@@ -4,11 +4,20 @@
 .set noat
 
 #
-# Regression test that loads a byte from memory.
+# Unit test that loads bytes from memory.
 #
 		.text
 start:
-		lb	$t0, dword
+		# Load a byte from double word storage
+		lbu	$a0, dword
+
+		# Load bytes with sign extension
+		lb	$a1, positive
+		lb	$a2, negative
+
+		# Load bytes without sign extension
+		lbu	$a3, positive
+		lbu	$a4, negative
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
@@ -22,3 +31,5 @@ end:
 
 		.data
 dword:		.dword	0xfedcba9876543210
+positive:	.byte	0x7f
+negative:	.byte	0xff

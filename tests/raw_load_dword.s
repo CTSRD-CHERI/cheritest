@@ -4,11 +4,15 @@
 .set noat
 
 #
-# Regression test that loads a double word from memory.
+# Unit test that load double words from memory.  Unlike shorter loads, there
+# is no distinction between sign-extended and unsigned loads, but we do
+# positive and negative variations to check all is well.
 #
 		.text
 start:
-		ld	$t0, dword
+		ld	$a0, dword
+		ld	$a1, positive
+		ld	$a2, negative
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
@@ -22,3 +26,5 @@ end:
 
 		.data
 dword:		.dword	0xfedcba9876543210
+positive:	.dword	0x7fffffffffffffff
+negative:	.dword	0xffffffffffffffff

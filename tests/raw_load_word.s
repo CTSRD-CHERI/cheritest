@@ -4,11 +4,20 @@
 .set noat
 
 #
-# Regression test that loads a word from memory
+# Unit test that loads words from memory
 #
 		.text
 start:
-		lw	$t0, dword
+		# Load a word from double word storage
+		lwu	$a0, dword
+
+		# Load words with sign extension
+		lw	$a1, positive
+		lw	$a2, negative
+
+		# Load words without sign extension
+		lwu	$a3, positive
+		lwu	$a4, negative
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
@@ -22,3 +31,5 @@ end:
 
 		.data
 dword:		.dword	0xfedcba9876543210
+positive:	.word	0x7fffffff
+negative:	.word	0xffffffff

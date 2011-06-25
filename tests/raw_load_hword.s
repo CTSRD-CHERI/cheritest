@@ -4,11 +4,20 @@
 .set noat
 
 #
-# Regression test that loads a half word from memory.
+# Unit test that loads half words from memory.
 #
 		.text
 start:
-		lh	$t0, dword
+		# Load a half word from double word storage
+		lhu	$a0, dword
+
+		# Load half words with sign extension
+		lh	$a1, positive
+		lh	$a2, negative
+
+		# Load half words without sign extension
+		lh	$a3, positive
+		lh	$a4, negative
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
@@ -22,3 +31,5 @@ end:
 
 		.data
 dword:		.dword	0xfedcba9876543210
+positive:	.hword	0x7fff
+negative:	.hword	0xffff
