@@ -4,16 +4,17 @@
 .set noat
 
 #
-# Test beq (branch on equal), unequal case.
+# Test bne (branch on equal, signed), less than case and forward jump.
 #
 
 start:
 		li	$a0, 1		# before
-		li	$t0, 1
-		beq	$zero, $t0, branch_target
+		li	$t0, -1
+		bne	$t0, $zero, branch_target
 		li	$a1, 2		# branch-delay slot
-		li	$a2, 3		# should run
+		li	$a2, 3		# shouldn't run
 branch_target:
+		li	$a3, 4		# should run
 
 		# Dump registers in the simulator
 		mtc0	$v0, $26

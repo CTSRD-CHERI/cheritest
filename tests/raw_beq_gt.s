@@ -4,16 +4,16 @@
 .set noat
 
 #
-# Test beql (branch on equal, likely), equal case and forward jump.
+# Test beq (branch on equal), greater than case.
 #
 
 start:
 		li	$a0, 1		# before
-		beql	$zero, $zero, branch_target
+		li	$t0, 1
+		beq	$t0, $zero, branch_target
 		li	$a1, 2		# branch-delay slot
-		li	$a2, 3		# shouldn't run
+		li	$a2, 3		# should run
 branch_target:
-		li	$a3, 4		# should run
 
 		# Dump registers in the simulator
 		mtc0	$v0, $26

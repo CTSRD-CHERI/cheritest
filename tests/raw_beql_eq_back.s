@@ -4,8 +4,8 @@
 .set noat
 
 #
-# Test beq (branch on equal), equal case and backward jump.  Of course, this
-# first requires a forward jump.
+# Test beql (branch on equal, likely), equal case and backward jump.  Of
+# course, this first requires a forward jump.
 #
 
 start:
@@ -27,6 +27,6 @@ end:
 
 forward_target:
 		li	$a0, 1		# before
-		beq	$zero, $zero, back_target
+		beql	$zero, $zero, back_target
 		li	$a1, 2		# branch-delay slot
 		li	$a2, 3		# shouldn't run

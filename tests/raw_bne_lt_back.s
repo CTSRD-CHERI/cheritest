@@ -4,7 +4,7 @@
 .set noat
 
 #
-# Test bne (branch on not equal), not equal case and backward jump.  Of
+# Test bne (branch on not equal), less than case and backward jump.  Of
 # course, this first requires a forward jump.
 #
 
@@ -27,7 +27,7 @@ end:
 
 forward_target:
 		li	$a0, 1		# before
-		li	$t0, 1
+		li	$t0, -1
 		bne	$t0, $zero, back_target
 		li	$a1, 2		# branch-delay slot
 		li	$a2, 3		# shouldn't run

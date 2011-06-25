@@ -37,10 +37,12 @@ TEST_FILES=					\
 		raw_branch_unconditional.s	\
 		raw_beq_eq.s			\
 		raw_beq_eq_back.s		\
-		raw_beq_ne.s			\
+		raw_beq_gt.s			\
+		raw_beq_lt.s			\
 		raw_beql_eq.s			\
 		raw_beql_eq_back.s		\
-		raw_beql_ne.s			\
+		raw_beql_gt.s			\
+		raw_beql_lt.s			\
 		raw_bgez_eq.s			\
 		raw_bgez_eq_back.s		\
 		raw_bgez_gt.s			\
@@ -58,25 +60,25 @@ TEST_FILES=					\
 		raw_bgezl_gt.s			\
 		raw_bgezl_lt.s			\
 		raw_bgtz_eq.s			\
-		raw_bgtz_gt.s			\
 		raw_bgtz_gt_back.s		\
+		raw_bgtz_gt.s			\
 		raw_bgtz_lt.s			\
 		raw_bgtzl_eq.s			\
-		raw_bgtzl_gt.s			\
 		raw_bgtzl_gt_back.s		\
+		raw_bgtzl_gt.s			\
 		raw_bgtzl_lt.s			\
-		raw_blez_eq.s			\
 		raw_blez_eq_back.s		\
+		raw_blez_eq.s			\
 		raw_blez_gt.s			\
 		raw_blez_lt.s			\
-		raw_blezl_eq.s			\
 		raw_blezl_eq_back.s		\
+		raw_blezl_eq.s			\
 		raw_blezl_gt.s			\
 		raw_blezl_lt.s			\
 		raw_bltz_eq.s			\
 		raw_bltz_gt.s			\
-		raw_bltz_lt.s			\
 		raw_bltz_lt_back.s		\
+		raw_bltz_lt.s			\
 		raw_bltzal_eq.s			\
 		raw_bltzal_gt.s			\
 		raw_bltzal_lt_back.s		\
@@ -90,8 +92,9 @@ TEST_FILES=					\
 		raw_bltzl_lt.s			\
 		raw_bltzl_lt_back.s		\
 		raw_bne_eq.s			\
-		raw_bne_ne_back.s		\
-		raw_bne_ne.s			\
+		raw_bne_gt.s			\
+		raw_bne_lt_back.s		\
+		raw_bne_lt.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\

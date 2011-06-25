@@ -4,12 +4,13 @@
 .set noat
 
 #
-# Test beql (branch on equal, likely), equal case and forward jump.
+# Test bne (branch on equal, signed), greater than case and forward jump.
 #
 
 start:
 		li	$a0, 1		# before
-		beql	$zero, $zero, branch_target
+		li	$t0, 1
+		bne	$t0, $zero, branch_target
 		li	$a1, 2		# branch-delay slot
 		li	$a2, 3		# shouldn't run
 branch_target:

@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_bne_ne(BaseBsimTestCase):
+class raw_bne_gt(BaseBsimTestCase):
     def test_before_bne(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before forward bne missed")
 

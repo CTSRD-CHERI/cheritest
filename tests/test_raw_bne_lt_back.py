@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_bne_ne_back(BaseBsimTestCase):
+class raw_bne_lt_back(BaseBsimTestCase):
     def test_before_bne(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before backward bne missed")
 

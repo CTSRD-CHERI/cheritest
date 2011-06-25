@@ -4,13 +4,13 @@
 .set noat
 
 #
-# Test beq (branch on equal), unequal case.
+# Test beql (branch on equal, likely), greater than case.
 #
 
 start:
 		li	$a0, 1		# before
 		li	$t0, 1
-		beq	$zero, $t0, branch_target
+		beql	$t0, $zero, branch_target
 		li	$a1, 2		# branch-delay slot
 		li	$a2, 3		# should run
 branch_target:

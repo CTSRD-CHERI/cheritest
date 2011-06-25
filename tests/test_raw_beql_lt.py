@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_beql_ne(BaseBsimTestCase):
+class raw_beql_lt(BaseBsimTestCase):
 
     def test_before_beql(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before beql missed")
