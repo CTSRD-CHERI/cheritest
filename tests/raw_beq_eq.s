@@ -4,7 +4,7 @@
 .set noat
 
 #
-# Test beq (branch on equal, signed), equal case and forward jump.
+# Test beq (branch on equal), equal case and forward jump.
 #
 
 start:

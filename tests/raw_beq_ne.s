@@ -4,7 +4,7 @@
 .set noat
 
 #
-# Test beq (branch on equal, signed), unequal case.
+# Test beq (branch on equal), unequal case.
 #
 
 start:
