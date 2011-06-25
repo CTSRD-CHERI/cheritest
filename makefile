@@ -49,6 +49,10 @@ TEST_FILES=					\
 		raw_bgezal_eq_back.s		\
 		raw_bgezal_gt.s			\
 		raw_bgezal_lt.s			\
+		raw_bgezall_eq.s		\
+		raw_bgezall_eq_back.s		\
+		raw_bgezall_gt.s		\
+		raw_bgezall_lt.s		\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
