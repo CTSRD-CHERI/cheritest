@@ -81,6 +81,10 @@ TEST_FILES=					\
 		raw_bltzal_gt.s			\
 		raw_bltzal_lt_back.s		\
 		raw_bltzal_lt.s			\
+		raw_bltzall_eq.s		\
+		raw_bltzall_gt.s		\
+		raw_bltzall_lt_back.s		\
+		raw_bltzall_lt.s		\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
