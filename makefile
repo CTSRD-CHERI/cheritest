@@ -69,6 +69,10 @@ TEST_FILES=					\
 		raw_blez_eq_back.s		\
 		raw_blez_gt.s			\
 		raw_blez_lt.s			\
+		raw_blezl_eq.s			\
+		raw_blezl_eq_back.s		\
+		raw_blezl_gt.s			\
+		raw_blezl_lt.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
