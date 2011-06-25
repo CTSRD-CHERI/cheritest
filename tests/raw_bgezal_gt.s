@@ -13,11 +13,11 @@ start:
 		dla	$a4, desired_return_address
 		li	$t0, 1
 		li	$a0, 1			# Before
-		bgezal	$t0, jal_target
+		bgezal	$t0, bgezal_target
 		li	$a1, 2			# Branch-delay slot
 desired_return_address:
 		li	$a2, 3			# Shouldn't run
-jal_target:
+bgezal_target:
 		li	$a3, 4			# Should run
 
 		# Dump registers in the simulator
