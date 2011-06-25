@@ -13,5 +13,5 @@ class raw_bgezal_eq_back(BaseBsimTestCase):
     def test_bgezal_target(self):
         self.assertRegisterEqual(self.MIPS.a3, 4, "instruction at branch target didn't run")
 
-    def test_bgezal_ra(self)
+    def test_bgezal_ra(self):
         self.assertRegisterEqual(self.MIPS.a4, self.MIPS.ra, "bgezal ra incorrect")
