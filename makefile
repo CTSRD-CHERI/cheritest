@@ -34,6 +34,13 @@ TEST_FILES=					\
 		raw_reg_init.s			\
 		raw_reg_load_immediate.s	\
 		raw_reg_load_immediate_sign.s	\
+		raw_and.s			\
+		raw_andi.s			\
+		raw_nor.s			\
+		raw_or.s			\
+		raw_ori.s			\
+		raw_xor.s			\
+		raw_xori.s			\
 		raw_branch_unconditional.s	\
 		raw_beq_eq.s			\
 		raw_beq_eq_back.s		\
