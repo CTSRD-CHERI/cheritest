@@ -41,6 +41,10 @@ TEST_FILES=					\
 		raw_beql_eq.s			\
 		raw_beql_eq_neg.s		\
 		raw_beql_ne.s			\
+		raw_bgez_eq.s			\
+		raw_bgez_eq_neg.s		\
+		raw_bgez_gt.s			\
+		raw_bgez_lt.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
