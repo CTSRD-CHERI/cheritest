@@ -4,7 +4,7 @@
 .set noat
 
 #
-# Exercise trap instruction 'teq' (trap if equal), not equal case.
+# Exercise trap instruction 'teq' (trap if equal), greater than case.
 #
 
 		.global test
@@ -39,9 +39,8 @@ test:		.ent test
 		#
 		# Don't trigger it.
 		#
-		dli	$t0, 0
-		dli	$t1, 1
-		teq	$t0, $t1
+		dli	$t0, 1
+		teq	$t0, $zero
 
 return:
 		ld	$fp, 16($sp)

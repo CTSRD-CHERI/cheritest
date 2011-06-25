@@ -133,9 +133,11 @@ TEST_FILES=					\
 		test_exception_breakpoint.s	\
 		test_exception_syscall.s	\
 		test_exception_teq_eq.s		\
-		test_exception_teq_ne.s		\
+		test_exception_teq_gt.s		\
+		test_exception_teq_lt.s		\
 		test_exception_teqi_eq.s	\
-		test_exception_teqi_ne.s	\
+		test_exception_teqi_gt.s	\
+		test_exception_teqi_lt.s	\
 		test_exception_teqi_eq_sign.s	\
 		test_exception_tge_eq.s		\
 		test_exception_tge_gr.s		\
