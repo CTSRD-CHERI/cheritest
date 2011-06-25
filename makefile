@@ -140,16 +140,16 @@ TEST_FILES=					\
 		test_exception_teqi_lt.s	\
 		test_exception_teqi_eq_sign.s	\
 		test_exception_tge_eq.s		\
-		test_exception_tge_gr.s		\
+		test_exception_tge_gt.s		\
 		test_exception_tge_lt.s		\
 		test_exception_tgei_eq.s	\
-		test_exception_tgei_gr.s	\
+		test_exception_tgei_gt.s	\
 		test_exception_tgei_lt.s	\
 		test_exception_tgei_eq_sign.s	\
-		test_exception_tgei_gr_sign.s	\
+		test_exception_tgei_gt_sign.s	\
 		test_exception_tgei_lt_sign.s	\
 		test_exception_tgeiu_eq.s	\
-		test_exception_tgeiu_gr.s	\
+		test_exception_tgeiu_gt.s	\
 		test_exception_tgeiu_lt.s
 
 #

@@ -1,14 +1,14 @@
 from bsim_utils import BaseBsimTestCase
 
-class test_exception_tgei_gr(BaseBsimTestCase):
+class test_exception_tge_gt(BaseBsimTestCase):
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 
     def test_returned(self):
-        self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by tgei instruction")
+        self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by tge instruction")
 
-    def test_tgei_handled(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "tgei exception handler not run")
+    def test_tge_handled(self):
+        self.assertRegisterEqual(self.MIPS.a2, 1, "tge exception handler not run")
 
     def test_exl_in_handler(self):
         self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")

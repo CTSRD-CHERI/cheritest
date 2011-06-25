@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class test_exception_tgei_gr_sign(BaseBsimTestCase):
+class test_exception_tgei_gt(BaseBsimTestCase):
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 
