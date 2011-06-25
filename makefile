@@ -89,6 +89,9 @@ TEST_FILES=					\
 		raw_bltzl_gt.s			\
 		raw_bltzl_lt.s			\
 		raw_bltzl_lt_back.s		\
+		raw_bne_eq.s			\
+		raw_bne_ne_back.s		\
+		raw_bne_ne.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
