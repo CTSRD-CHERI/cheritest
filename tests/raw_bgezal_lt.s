@@ -5,7 +5,7 @@
 
 #
 # Test bgezal (branch on greater than or equal to zero and link, signed),
-# less than case, backward branch.
+# less than case.
 #
 
 start:
