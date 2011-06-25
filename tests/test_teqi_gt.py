@@ -1,5 +1,5 @@
 from bsim_utils import BaseBsimTestCase
 
-class test_exception_teqi_gt(BaseBsimTestCase):
+class test_teqi_gt(BaseBsimTestCase):
     def test_teqi_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "teqi trapped when greater than")

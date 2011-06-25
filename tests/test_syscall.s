@@ -4,7 +4,7 @@
 .set noat
 
 #
-# Exercise system call instruction.
+# Exercise syscall instruction.
 #
 
 		.global test

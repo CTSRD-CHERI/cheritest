@@ -4,7 +4,7 @@
 .set noat
 
 #
-# Exercise breakpoint instruction.
+# Exercise break instruction.
 #
 
 		.global test

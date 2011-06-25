@@ -130,27 +130,27 @@ TEST_FILES=					\
 		test_exception_bev1_trap.s	\
 		test_exception_bev0_trap.s	\
 		test_exception_bev0_trap_bd.s	\
-		test_exception_breakpoint.s	\
-		test_exception_syscall.s	\
-		test_exception_teq_eq.s		\
-		test_exception_teq_gt.s		\
-		test_exception_teq_lt.s		\
-		test_exception_teqi_eq.s	\
-		test_exception_teqi_gt.s	\
-		test_exception_teqi_lt.s	\
-		test_exception_teqi_eq_sign.s	\
-		test_exception_tge_eq.s		\
-		test_exception_tge_gt.s		\
-		test_exception_tge_lt.s		\
-		test_exception_tgei_eq.s	\
-		test_exception_tgei_gt.s	\
-		test_exception_tgei_lt.s	\
-		test_exception_tgei_eq_sign.s	\
-		test_exception_tgei_gt_sign.s	\
-		test_exception_tgei_lt_sign.s	\
-		test_exception_tgeiu_eq.s	\
-		test_exception_tgeiu_gt.s	\
-		test_exception_tgeiu_lt.s
+		test_break.s			\
+		test_syscall.s			\
+		test_teq_eq.s			\
+		test_teq_gt.s			\
+		test_teq_lt.s			\
+		test_teqi_eq.s			\
+		test_teqi_gt.s			\
+		test_teqi_lt.s			\
+		test_teqi_eq_sign.s		\
+		test_tge_eq.s			\
+		test_tge_gt.s			\
+		test_tge_lt.s			\
+		test_tgei_eq.s			\
+		test_tgei_gt.s			\
+		test_tgei_lt.s			\
+		test_tgei_eq_sign.s		\
+		test_tgei_gt_sign.s		\
+		test_tgei_lt_sign.s		\
+		test_tgeiu_eq.s			\
+		test_tgeiu_gt.s			\
+		test_tgeiu_lt.s
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT

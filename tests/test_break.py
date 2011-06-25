@@ -1,23 +1,23 @@
 from bsim_utils import BaseBsimTestCase
 
-class test_exception_breakpoint(BaseBsimTestCase):
-    def test_epc(self):
+class test_break(BaseBsimTestCase):
+    def test_break_epc(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 
-    def test_returned(self):
+    def test_break_returned(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by breakpoint instruction")
 
-    def test_breakpoint_handled(self):
+    def test_break_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 1, "breakpoint exception handler not run")
 
-    def test_exl_in_handler(self):
+    def test_break_exl_in_handler(self):
         self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
 
-    def test_cause_bd(self):
+    def test_break_cause_bd(self):
         self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")
 
-    def test_cause_code(self):
+    def test_break_cause_code(self):
         self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 9, "Code not set to Sys")
 
-    def test_not_exl_after_handler(self):
+    def test_break_not_exl_after_handler(self):
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
