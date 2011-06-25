@@ -95,6 +95,10 @@ TEST_FILES=					\
 		raw_bne_gt.s			\
 		raw_bne_lt_back.s		\
 		raw_bne_lt.s			\
+		raw_bnel_eq.s			\
+		raw_bnel_gt.s			\
+		raw_bnel_lt_back.s		\
+		raw_bnel_lt.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
