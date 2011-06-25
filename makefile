@@ -36,13 +36,13 @@ TEST_FILES=					\
 		raw_reg_load_immediate_sign.s	\
 		raw_branch_unconditional.s	\
 		raw_beq_eq.s			\
-		raw_beq_eq_neg.s		\
+		raw_beq_eq_back.s		\
 		raw_beq_ne.s			\
 		raw_beql_eq.s			\
-		raw_beql_eq_neg.s		\
+		raw_beql_eq_back.s		\
 		raw_beql_ne.s			\
 		raw_bgez_eq.s			\
-		raw_bgez_eq_neg.s		\
+		raw_bgez_eq_back.s		\
 		raw_bgez_gt.s			\
 		raw_bgez_lt.s			\
 		raw_jump_reg.s			\
