@@ -25,6 +25,7 @@ back_target:
 		break
 end:
 		b end
+		nop
 
 forward_target:
 		dla	$a4, desired_return_address
