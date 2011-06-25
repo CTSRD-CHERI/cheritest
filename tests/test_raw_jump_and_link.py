@@ -14,4 +14,4 @@ class raw_jump_and_link(BaseBsimTestCase):
         self.assertRegisterEqual(self.MIPS.t3, 4, "instruction at jump target didn't run")
 
     def test_t8(self):
-        self.assertRegisterEqual(self.MIPS.t8, self.MIPS.ra)
+        self.assertRegisterEqual(self.MIPS.t8, self.MIPS.ra, "jal set incorrect return address")

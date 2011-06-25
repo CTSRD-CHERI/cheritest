@@ -4,4 +4,4 @@ class raw_reg_load_immediate(BaseBsimTestCase):
     def test_load_immediate(self):
         '''Test load immediate instruction'''
         for i in range(32):
-            self.assertRegisterExpected(i, i)
+            self.assertRegisterExpected(i, i, "Register load immediate failed")
