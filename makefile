@@ -57,6 +57,10 @@ TEST_FILES=					\
 		raw_bgezl_eq_back.s		\
 		raw_bgezl_gt.s			\
 		raw_bgezl_lt.s			\
+		raw_bgtz_eq.s			\
+		raw_bgtz_gt.s			\
+		raw_bgtz_gt_back.s		\
+		raw_bgtz_lt.s			\
 		raw_jump_reg.s			\
 		raw_jump_and_link.s		\
 		raw_jump_and_link_reg.s		\
