@@ -30,7 +30,7 @@ memcpy_loop:
 		bnez	$a2, memcpy_loop	# loop until done
 		nop			# branch-delay slot
 
-		ld	$fp, 16($fp)
+		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
 		jr	$ra
@@ -68,7 +68,7 @@ handler_install:
 		jal memcpy
 		nop			# branch-delay slot
 
-		ld	$fp, 16($fp)
+		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
 		jr	$ra
