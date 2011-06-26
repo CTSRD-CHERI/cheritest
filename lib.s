@@ -88,3 +88,29 @@ handler_stub:
 		jr	$k0
 		nop
 		.end handler_stub
+
+#
+# Configure post-boot exception vectors by clearing the BEV bit in the CP0
+# status register.  Stomps on t0 and t1.
+#
+		.text
+		.global bev_clear
+		.ent bev_clear
+bev_clear:
+		daddu	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
+
+		mfc0	$t0, $12
+		dli	$t1, 1 << 22	# BEV bit
+		nor	$t1, $t1
+		and	$t0, $t0, $t1
+		mtc0	$t0, $12
+
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
+		.end bev_clear

@@ -17,11 +17,8 @@ test:		.ent test
 		#
 		# Set BEV=0
 		#
-		mfc0	$t0, $12
-		dli	$t1, 1 << 22
-		nor	$t1, $t1
-		and	$t0, $t0, $t1
-		mtc0	$t0, $12
+		jal	bev_clear
+		nop
 
 		#
 		# Set up exception handler.
