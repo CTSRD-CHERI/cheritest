@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_jump_and_link(BaseBsimTestCase):
+class raw_jal(BaseBsimTestCase):
     def test_jal(self):
         self.assertRegisterEqual(self.MIPS.t0, 1, "instruction before jal missed")
 

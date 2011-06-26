@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_branch_unconditional(BaseBsimTestCase):
+class raw_b(BaseBsimTestCase):
     def test_t0(self):
         self.assertRegisterNotEqual(self.MIPS.t0, 0, "instruction before branch missed")
 

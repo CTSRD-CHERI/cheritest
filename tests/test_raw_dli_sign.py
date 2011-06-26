@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_reg_load_immediate_sign(BaseBsimTestCase):
+class raw_dli_sign(BaseBsimTestCase):
     def test_li_sign(self):
         '''Test that 32-bit negative immediate is sign-extended'''
         self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "Sign-extended negative 32-bit load immediate failed")

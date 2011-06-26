@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_jump_reg(BaseBsimTestCase):
+class raw_jr(BaseBsimTestCase):
     def test_before_jr(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before jr missed")
 

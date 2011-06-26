@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_load_byte(BaseBsimTestCase):
+class raw_lb(BaseBsimTestCase):
     def test_a0(self):
         '''Test unsigned load byte from double word'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfe, "Unsigned load from double word failed")

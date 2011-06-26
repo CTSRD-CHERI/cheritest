@@ -33,8 +33,8 @@ TEST_FILES=					\
 		raw_template.s			\
 		raw_reg_init.s			\
 		raw_hilo.s			\
-		raw_reg_load_immediate.s	\
-		raw_reg_load_immediate_sign.s	\
+		raw_dli.s			\
+		raw_dli_sign.s			\
 		raw_and.s			\
 		raw_andi.s			\
 		raw_nor.s			\
@@ -43,7 +43,7 @@ TEST_FILES=					\
 		raw_xor.s			\
 		raw_xori.s			\
 		raw_jump.s			\
-		raw_branch_unconditional.s	\
+		raw_b.s				\
 		raw_beq_eq.s			\
 		raw_beq_eq_back.s		\
 		raw_beq_gt.s			\
@@ -108,23 +108,23 @@ TEST_FILES=					\
 		raw_bnel_gt.s			\
 		raw_bnel_lt_back.s		\
 		raw_bnel_lt.s			\
-		raw_jump_reg.s			\
-		raw_jump_and_link.s		\
-		raw_jump_and_link_reg.s		\
-		raw_load_byte.s			\
-		raw_load_hword.s		\
-		raw_load_word.s			\
-		raw_load_dword.s		\
+		raw_jr.s			\
+		raw_jal.s			\
+		raw_jalr.s			\
+		raw_lb.s			\
+		raw_lh.s			\
+		raw_lw.s			\
+		raw_ld.s			\
 		raw_load_delay_reg.s		\
 		raw_load_delay_store.s		\
-		raw_store_byte.s		\
-		raw_store_hword.s		\
-		raw_store_word.s		\
-		raw_store_dword.s		\
+		raw_sb.s			\
+		raw_sh.s			\
+		raw_sw.s			\
+		raw_sd.s			\
 		test_template.s			\
 		test_reg_zero.s			\
-		test_reg_load_immediate.s	\
-		test_reg_assignment.s		\
+		test_dli.s			\
+		test_move.s			\
 		test_hilo.s			\
 		test_cp0_reg_init.s		\
 		test_code_rom_relocation.s	\
