@@ -15,20 +15,12 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
-		# Set BEV=0
-		#
-		mfc0	$t0, $12
-		dli	$t1, 1 << 22
-		nor	$t1, $t1
-		and	$t0, $t0, $t1
-		mtc0	$t0, $12
-
-		#
 		# Set up exception handler.
 		#
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, bev0_handler
-		jal	handler_install
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
 		nop
 
 		#

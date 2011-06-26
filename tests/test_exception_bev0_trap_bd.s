@@ -16,17 +16,12 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
-		# Set BEV=0
+		# Set up 'handler' as the RAM exception handler.
 		#
 		jal	bev_clear
 		nop
-
-		#
-		# Set up 'handler' as the RAM exception handler.
-		#
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, bev0_handler
-		jal	handler_install
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
 		nop
 
 		#

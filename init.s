@@ -18,14 +18,12 @@ start:
 		daddu 	$sp, $sp, -32
 
 		# Install default exception handlers
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, exception_end
-		jal 	handler_install
+		dla	$a0, exception_end
+		jal 	bev0_handler_install
 		nop
 
-		dli	$a0, 0xffffffffbfc00380
-		dla	$a1, exception_end
-		jal	handler_install
+		dla	$a0, exception_end
+		jal	bev1_handler_install
 		nop
 
 		#

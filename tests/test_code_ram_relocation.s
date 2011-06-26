@@ -19,9 +19,8 @@ test:		.ent test
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, handler
-		jal	handler_install
+		dla	$a0, handler
+		jal	bev0_handler_install
 		nop
 
 		#

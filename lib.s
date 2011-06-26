@@ -38,33 +38,38 @@ memcpy_loop:
 		.end memcpy
 
 #
-# Install an exception handler at address a0, which unconditionally jumps
-# back to the address passed via a1.  a2, t0, and v0 also stepped on by
-# memcpy().
+# Functions to install exception handlers for general-purpose exceptions when
+# BEV=0 and BEV=1.  The handler to install is at address a0, and will be
+# jumped to unconditionally.
+#
+# This function invokes memcpy(), which will stop on a2, t0, and v0.
 #
 
 		.data
-handler_target:
+bev0_handler_target:
+		.dword	0x0
+bev1_handler_target:
 		.dword	0x0
 		.text
 
-		.global handler_install
-		.ent handler_install
-handler_install:
+		.global bev0_handler_install
+		.ent bev0_handler_install
+bev0_handler_install:
 		daddu	$sp, $sp, -32
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		# Store the caller's handler in 'handler_target' to be found
-		# later by handler_stub.
-		sd	$a1, handler_target
+		# Store the caller's handler in bev0_handler_target to be
+		# found later by bev0_handler_stub.
+		sd	$a0, bev0_handler_target
 
-		# Install our handler_stub in exception handler memory
-		# specified by the caller.
+		# Install our bev0_handler_stub at the MIPS-specified
+		# exception vector address.
+		dli	$a0, 0xffffffff80000180
+		dla	$a1, bev0_handler_stub
 		dli	$a2, 8 		# 32-bit instruction count
 		dsll	$a2, 2		# Convert to byte count
-		dla	$a1, handler_stub
 		jal memcpy
 		nop			# branch-delay slot
 
@@ -73,21 +78,55 @@ handler_install:
 		daddu	$sp, $sp, 32
 		jr	$ra
 		nop			# branch-delay slot
-		.end handler_install
+		.end bev0_handler_install
 
+
+		.global bev1_handler_install
+		.ent bev1_handler_install
+bev1_handler_install:
+		daddu	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
+
+		# Store the caller's handler in bev1_handler_target to be
+		# found later by bev1_handler_stub.
+		sd	$a0, bev1_handler_target
+
+		# Install our bev1_handler_stub at the MIPS-specified
+		# exception vector address.
+		dli	$a0, 0xffffffffbfc00380
+		dla	$a1, bev1_handler_stub
+		dli	$a2, 8 		# 32-bit instruction count
+		dsll	$a2, 2		# Convert to byte count
+		jal memcpy
+		nop			# branch-delay slot
+
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
+		.end bev1_handler_install
 
 #
-# Position-independent exception handler that jumps to an address specified
-# via handler_install.  Steps on $k0.
+# Position-independent exception handlers that jump to an address specified
+# via {bev0, bev1}_handler_install.  Steps on $k0.
 #
 
-		.global handler
-		.ent handler_stub
-handler_stub:
-		ld	$k0, handler_target
+		.ent bev0_handler_stub
+bev0_handler_stub:
+		ld	$k0, bev0_handler_target
 		jr	$k0
 		nop
-		.end handler_stub
+		.end bev0_handler_stub
+
+		.ent bev1_handler_stub
+bev1_handler_stub:
+		ld	$k0, bev1_handler_target
+		jr	$k0
+		nop
+		.end bev1_handler_stub
 
 #
 # Configure post-boot exception vectors by clearing the BEV bit in the CP0

@@ -18,28 +18,20 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
-		# Set BEV=0
-		#
-		jal	bev_clear
-		nop
-
-		#
 		# Install a dummy handler, which should not be invoked, in the
 		# ROM exception handler.
 		#
-		dli	$a0, 0xffffffffbfc00380
-		dla	$a1, bev1_handler
-		dli	$a2, 3		# 32-bit instructions
-		dsll	$a2, $a2, 2	# Convert to bytes
-		jal	memcpy
+		dla	$a0, bev1_handler
+		jal	bev1_handler_install
 		nop
 
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, bev0_handler
-		jal	handler_install
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
 		nop
 
 		#
@@ -104,8 +96,6 @@ bev0_handler:
 #
 # If the wrong handler is invoked, escape quickly, leaving behind a calling
 # card.
-#
-# XXXRW: Should have the linker calculate the length for us.
 #
 		.ent bev1_handler
 bev1_handler:
