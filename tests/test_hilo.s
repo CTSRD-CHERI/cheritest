@@ -17,16 +17,6 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
-		# Check that HI and LO are initialised to 0 on reset.
-		#
-		mfhi	$a0
-		mflo	$a1
-
-		# Mandated double-nop between reads and writes
-		nop
-		nop
-
-		#
 		# Check that we can load values into, and extract values out
 		# of HI and LO for context switching purposes.
 		#
@@ -59,6 +49,11 @@ test:		.ent test
 
 		#
 		# And likewise, a single divide operation.
+		#
+		# XXXRW: SDE as for MIPS insists on including break/trap code
+		# for divide by zero when ddiv is used.  It would be nice to
+		# turn that off.  Until we figure out how, the .noat above
+		# will cause this ddiv instruction to generate a warning.
 		#
 		dli	$t1, 0x5568a2865eb2ee3e
 		dli	$t0, 0x2ac0abc68a41800e

@@ -32,6 +32,7 @@ TESTDIR=tests
 TEST_FILES=					\
 		raw_template.s			\
 		raw_reg_init.s			\
+		raw_hilo.s			\
 		raw_reg_load_immediate.s	\
 		raw_reg_load_immediate_sign.s	\
 		raw_and.s			\
