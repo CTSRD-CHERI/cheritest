@@ -153,7 +153,8 @@ TEST_FILES=					\
 		test_tgei_lt_sign.s		\
 		test_tgeiu_eq.s			\
 		test_tgeiu_gt.s			\
-		test_tgeiu_lt.s
+		test_tgeiu_lt.s			\
+		test_cp0_compare.s
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
