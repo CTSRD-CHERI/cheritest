@@ -28,6 +28,44 @@ start:
 		jal	handler_install
 		nop
 
+		#
+		# Explicitly clear most registers in order to make the effects
+		# of a test on the register file more clear.  Otherwise,
+		# values leaked from init.s and its dependencies may hang
+		# around.
+		#
+		dli	$at, 0
+		dli	$v0, 0
+		dli	$v1, 0
+		dli	$a0, 0
+		dli	$a1, 0
+		dli	$a2, 0
+		dli	$a3, 0
+		dli	$a4, 0
+		dli	$a5, 0
+		dli	$a6, 0
+		dli	$a7, 0
+		dli	$t0, 0
+		dli	$t1, 0
+		dli	$t2, 0
+		dli	$t3, 0
+		dli	$s0, 0
+		dli	$s1, 0
+		dli	$s2, 0
+		dli	$s3, 0
+		dli	$s4, 0
+		dli	$s5, 0
+		dli	$s6, 0
+		dli	$s7, 0
+		dli	$t8, 0
+		dli	$t9, 0
+		dli	$k0, 0
+		dli	$k1, 0
+		dli	$gp, 0
+		# Not cleared: $sp, $fp, $ra
+		mthi	$at
+		mtlo	$at
+
 		# Invoke test function test() provided by individual tests.
 		jal test
 		nop			# branch-delay slot
