@@ -160,6 +160,12 @@ TEST_FILES=					\
 		test_tlt_eq.s			\
 		test_tlt_gt.s			\
 		test_tlt_lt.s			\
+		test_tlti_eq.s			\
+		test_tlti_gt.s			\
+		test_tlti_lt.s			\
+		test_tlti_eq_sign.s		\
+		test_tlti_gt_sign.s		\
+		test_tlti_lt_sign.s		\
 		test_cp0_compare.s
 
 #
