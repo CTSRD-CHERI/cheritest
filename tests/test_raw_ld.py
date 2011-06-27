@@ -1,6 +1,6 @@
 from bsim_utils import BaseBsimTestCase
 
-class raw_load_dword(BaseBsimTestCase):
+class raw_ld(BaseBsimTestCase):
     def test_a0(self):
         '''Test load double word instruction'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Double word load failed")
