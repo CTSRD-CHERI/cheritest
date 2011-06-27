@@ -175,6 +175,12 @@ TEST_FILES=					\
 		test_tne_eq.s			\
 		test_tne_gt.s			\
 		test_tne_lt.s			\
+		test_tnei_eq_sign.s		\
+		test_tnei_eq.s			\
+		test_tnei_gt_sign.s		\
+		test_tnei_gt.s			\
+		test_tnei_lt_sign.s		\
+		test_tnei_lt.s			\
 		test_cp0_compare.s
 
 #
