@@ -19,6 +19,12 @@ start:
 		lbu	$a3, positive
 		lbu	$a4, negative
 
+		# Load bytes at non-zero offsets
+		dla	$t0, val1
+		lb	$a5, 1($t0)
+		dla	$t1, val2
+		lb	$a6, -1($t1)
+
 		# Dump registers in the simulator
 		mtc0 $v0, $26
 		nop
@@ -33,3 +39,5 @@ end:
 dword:		.dword	0xfedcba9876543210
 positive:	.byte	0x7f
 negative:	.byte	0xff
+val1:		.byte	0x01
+val2:		.byte	0x02

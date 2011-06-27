@@ -20,3 +20,11 @@ class raw_lw(BaseBsimTestCase):
     def test_a4(self):
         '''Test unsigned negative load word'''
         self.assertRegisterEqual(self.MIPS.a4, 0xffffffff, "Unsigned negaive word load failed")
+
+    def test_pos_offset(self):
+        '''Test word load at positive offset'''
+        self.assertRegisterEqual(self.MIPS.a5, 2, "Word load at positive offset failed")
+
+    def test_neg_offset(self):
+        '''Test word load at negative offset'''
+        self.assertRegisterEqual(self.MIPS.a6, 1, "Word load at negative offset failed")

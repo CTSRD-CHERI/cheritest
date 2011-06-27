@@ -10,9 +10,16 @@
 #
 		.text
 start:
+		# Load double words
 		ld	$a0, dword
 		ld	$a1, positive
 		ld	$a2, negative
+
+		# Load double words at non-zero offsets
+		dla	$t0, val1
+		ld	$a3, 8($t0)
+		dla	$t1, val2
+		ld	$a4, -8($t1)
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
@@ -28,3 +35,5 @@ end:
 dword:		.dword	0xfedcba9876543210
 positive:	.dword	0x7fffffffffffffff
 negative:	.dword	0xffffffffffffffff
+val1:		.dword	0x0000000000000001
+val2:		.dword	0x0000000000000002

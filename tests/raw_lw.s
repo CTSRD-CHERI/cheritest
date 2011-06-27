@@ -19,6 +19,12 @@ start:
 		lwu	$a3, positive
 		lwu	$a4, negative
 
+		# Load words at non-zero offsets
+		dla	$t0, val1
+		lw	$a5, 4($t0)
+		dla	$t1, val2
+		lw	$a6, -4($t1)
+
 		# Dump registers in the simulator
 		mtc0 $v0, $26
 		nop
@@ -33,3 +39,5 @@ end:
 dword:		.dword	0xfedcba9876543210
 positive:	.word	0x7fffffff
 negative:	.word	0xffffffff
+val1:		.word	0x00000001
+val2:		.word	0x00000002
