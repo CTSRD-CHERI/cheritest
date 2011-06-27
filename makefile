@@ -154,6 +154,9 @@ TEST_FILES=					\
 		test_tgeiu_eq.s			\
 		test_tgeiu_gt.s			\
 		test_tgeiu_lt.s			\
+		test_tgeu_eq.s			\
+		test_tgeu_gt.s			\
+		test_tgeu_lt.s			\
 		test_cp0_compare.s
 
 #
