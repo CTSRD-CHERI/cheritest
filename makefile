@@ -154,6 +154,16 @@ TEST_FILES=					\
 		test_dsubu_overflow.s		\
 		test_sub_overflow.s		\
 		test_subu_overflow.s		\
+		test_lh_unalign.s		\
+		test_lw_unalign.s		\
+		test_ld_unalign.s		\
+		test_ll_unalign.s		\
+		test_lld_unalign.s		\
+		test_sh_unalign.s		\
+		test_sw_unalign.s		\
+		test_sd_unalign.s		\
+		test_sc_unalign.s		\
+		test_scd_unalign.s		\
 		test_break.s			\
 		test_syscall.s			\
 		test_teq_eq.s			\
