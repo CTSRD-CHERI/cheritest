@@ -166,6 +166,9 @@ TEST_FILES=					\
 		test_tlti_eq_sign.s		\
 		test_tlti_gt_sign.s		\
 		test_tlti_lt_sign.s		\
+		test_tltiu_eq.s			\
+		test_tltiu_gt.s			\
+		test_tltiu_lt.s			\
 		test_cp0_compare.s
 
 #
