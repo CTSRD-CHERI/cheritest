@@ -117,6 +117,8 @@ TEST_FILES=					\
 		raw_ld.s			\
 		raw_load_delay_reg.s		\
 		raw_load_delay_store.s		\
+		raw_ll.s			\
+		raw_lld.s			\
 		raw_sb.s			\
 		raw_sh.s			\
 		raw_sw.s			\
