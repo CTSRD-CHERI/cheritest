@@ -172,6 +172,9 @@ TEST_FILES=					\
 		test_tltu_eq.s			\
 		test_tltu_gt.s			\
 		test_tltu_lt.s			\
+		test_tne_eq.s			\
+		test_tne_gt.s			\
+		test_tne_lt.s			\
 		test_cp0_compare.s
 
 #
