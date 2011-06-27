@@ -142,6 +142,18 @@ TEST_FILES=					\
 		test_exception_bev1_trap.s	\
 		test_exception_bev0_trap.s	\
 		test_exception_bev0_trap_bd.s	\
+		test_add_overflow.s		\
+		test_addi_overflow.s		\
+		test_addiu_overflow.s		\
+		test_addu_overflow.s		\
+		test_dadd_overflow.s		\
+		test_daddi_overflow.s		\
+		test_daddiu_overflow.s		\
+		test_daddu_overflow.s		\
+		test_dsub_overflow.s		\
+		test_dsubu_overflow.s		\
+		test_sub_overflow.s		\
+		test_subu_overflow.s		\
 		test_break.s			\
 		test_syscall.s			\
 		test_teq_eq.s			\
