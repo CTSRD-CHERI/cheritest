@@ -123,6 +123,8 @@ TEST_FILES=					\
 		raw_sh.s			\
 		raw_sw.s			\
 		raw_sd.s			\
+		raw_sc.s			\
+		raw_scd.s			\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_dli.s			\
