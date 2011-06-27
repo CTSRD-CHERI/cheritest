@@ -17,7 +17,7 @@ class test_add_overflow(BaseBsimTestCase):
         self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")
 
     def test_cause_code(self):
-        self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 13, "Code not set to Tr")
+        self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 12, "Code not set to Ov")
 
     def test_not_exl_after_handler(self):
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
