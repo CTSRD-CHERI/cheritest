@@ -31,7 +31,7 @@ start:
 		sh	$a4, negative
 		lhu	$a4, negative
 
-		# Store and load bytes at non-zero offsets
+		# Store and load half words at non-zero offsets
 		dla	$t0, val1
 		dli	$a5, 2
 		sh	$a5, 2($t0)

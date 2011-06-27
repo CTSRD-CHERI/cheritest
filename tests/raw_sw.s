@@ -31,7 +31,7 @@ start:
 		sw	$a4, negative
 		lwu	$a4, negative
 
-		# Store and load bytes at non-zero offsets
+		# Store and load words at non-zero offsets
 		dla	$t0, val1
 		dli	$a5, 2
 		sw	$a5, 4($t0)
