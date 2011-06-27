@@ -21,3 +21,10 @@ class raw_sh(BaseBsimTestCase):
         '''Test unsigned load of stored negative half word'''
         self.assertRegisterEqual(self.MIPS.a4, 0xffff, "Unsigned load of negative half word failed")
 
+    def test_pos_offset(self):
+        '''Test half word store, load at positive offset'''
+        self.assertRegisterEqual(self.MIPS.a5, 2, "Half word store, load at positive offset failed")
+
+    def test_neg_offset(self):
+        '''Test half word store, load at negative offset'''
+        self.assertRegisterEqual(self.MIPS.a6, 1, "Half word store, load at negative offset failed")

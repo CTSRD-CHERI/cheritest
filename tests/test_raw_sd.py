@@ -12,3 +12,11 @@ class raw_sd(BaseBsimTestCase):
     def test_a2(self):
         '''Test signed load of stored negative double word'''
         self.assertRegisterEqual(self.MIPS.a2, 0xffffffffffffffff, "Signed load of negative double word failed")
+
+    def test_pos_offset(self):
+        '''Test double word store, load at positive offset'''
+        self.assertRegisterEqual(self.MIPS.a3, 2, "Double word store, load at positive offset failed")
+
+    def test_neg_offset(self):
+        '''Test double word store, load at negative offset'''
+        self.assertRegisterEqual(self.MIPS.a4, 1, "Double word store, load at negative offset failed")

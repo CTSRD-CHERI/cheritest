@@ -24,6 +24,17 @@ start:
 		sd	$a2, negative
 		ld	$a2, negative
 
+		# Store and load double words at non-zero offsets
+		dla	$t0, val1
+		dli	$a3, 2
+		sd	$a3, 8($t0)
+		ld	$a3, 8($t0)
+
+		dla	$t1, val2
+		dli	$a4, 1
+		sd	$a4, -8($t1)
+		ld	$a4, -8($t1)
+
 		# Dump registers in the simulator
 		mtc0	$v0, $26
 		nop
@@ -38,3 +49,5 @@ end:
 dword:		.dword	0x0000000000000000
 positive:	.dword	0x0000000000000000
 negative:	.dword	0x0000000000000000
+val1:		.dword	0x0000000000000000
+val2:		.dword	0x0000000000000000

@@ -20,3 +20,12 @@ class raw_sb(BaseBsimTestCase):
     def test_a4(self):
         '''Test unsigned load of stored negative byte'''
         self.assertRegisterEqual(self.MIPS.a4, 0xff, "Store and unsigned load of negative byte failed")
+
+    def test_pos_offset(self):
+        '''Test byte store, load at positive offset'''
+        self.assertRegisterEqual(self.MIPS.a5, 2, "Byte store, load at positive offset failed")
+
+    def test_neg_offset(self):
+        '''Test byte store, load at negative offset'''
+        self.assertRegisterEqual(self.MIPS.a6, 1, "Byte store, load at negative offset failed")
+
