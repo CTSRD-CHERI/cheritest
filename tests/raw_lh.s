@@ -16,8 +16,8 @@ start:
 		lh	$a2, negative
 
 		# Load half words without sign extension
-		lh	$a3, positive
-		lh	$a4, negative
+		lhu	$a3, positive
+		lhu	$a4, negative
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
