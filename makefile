@@ -35,6 +35,7 @@ TEST_FILES=					\
 		raw_hilo.s			\
 		raw_dli.s			\
 		raw_dli_sign.s			\
+		raw_lui.s			\
 		raw_and.s			\
 		raw_andi.s			\
 		raw_nor.s			\
