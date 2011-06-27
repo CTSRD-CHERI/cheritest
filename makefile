@@ -131,6 +131,10 @@ TEST_FILES=					\
 		test_dli.s			\
 		test_move.s			\
 		test_hilo.s			\
+		test_slt.s			\
+		test_slti.s			\
+		test_sltiu.s			\
+		test_sltu.s			\
 		test_cp0_reg_init.s		\
 		test_code_rom_relocation.s	\
 		test_code_ram_relocation.s	\
