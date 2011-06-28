@@ -36,7 +36,18 @@ TEST_FILES=					\
 		raw_dli.s			\
 		raw_dli_sign.s			\
 		raw_lui.s			\
-		raw_and.s			\
+		raw_add.s			\
+		raw_addi.s			\
+		raw_addiu.s			\
+		raw_addu.s			\
+		raw_sub.s			\
+		raw_subu.s			\
+		raw_dadd.s			\
+		raw_daddi.s			\
+		raw_daddiu.s			\
+		raw_daddu.s			\
+		raw_dsub.s			\
+		raw_dsubu.s			\
 		raw_andi.s			\
 		raw_nor.s			\
 		raw_or.s			\
