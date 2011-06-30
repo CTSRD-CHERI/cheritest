@@ -10,7 +10,7 @@
 start:
 		li	$a0, 1		# before
 		li	$t0, -1
-		bgtz	$t0, branch_target
+		bgtzl	$t0, branch_target
 		li	$a1, 2		# branch-delay slot; shouldn't run
 		li	$a2, 3		# should run
 branch_target:
