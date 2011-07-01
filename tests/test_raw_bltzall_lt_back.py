@@ -2,7 +2,7 @@ from bsim_utils import BaseBsimTestCase
 
 class raw_bltzall_lt_back(BaseBsimTestCase):
     def test_before_bltzall(self):
-        self.assertRegisterEqual(self.MIPS.a0, -1, "instruction before bltzall missed")
+        self.assertRegisterNotEqual(self.MIPS.a0, 0, "instruction before bltzall missed")
 
     def test_bltzall_branch_delay(self):
         self.assertRegisterEqual(self.MIPS.a1, 2, "instruction in brach-delay slot missed")
