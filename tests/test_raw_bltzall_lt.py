@@ -5,7 +5,7 @@ class raw_bltzall_lt(BaseBsimTestCase):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before bltzall missed")
 
     def test_bltzall_branch_delay(self):
-        self.assertRegisterNotEqual(self.MIPS.a1, 2, "instruction in brach-delay slot taken")
+        self.assertRegisterEqual(self.MIPS.a1, 2, "instruction in brach-delay slot missed")
 
     def test_bltzall_skipped(self):
         self.assertRegisterNotEqual(self.MIPS.a2, 3, "bltzall didn't branch")
