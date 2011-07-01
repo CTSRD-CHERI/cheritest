@@ -30,7 +30,7 @@ end:
 forward_target:
 		dla	$a4, desired_return_address
 		li	$a0, -1
-		bltzall	$zero, back_target
+		bltzall	$a0, back_target
 		li	$a1, 2		# branch-delay slot
 
 desired_return_address:
