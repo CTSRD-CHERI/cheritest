@@ -5,7 +5,7 @@ class raw_bgezall_eq_back(BaseBsimTestCase):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before bgezall missed")
 
     def test_bgezall_branch_delay(self):
-        self.assertRegisterNotEqual(self.MIPS.a1, 2, "instruction in brach-delay slot taken")
+        self.assertRegisterEqual(self.MIPS.a1, 2, "instruction in brach-delay slot missed")
 
     def test_bgezall_skipped(self):
         self.assertRegisterNotEqual(self.MIPS.a2, 3, "bgezall didn't branch")
