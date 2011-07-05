@@ -3,7 +3,7 @@ from bsim_utils import BaseBsimTestCase
 class raw_ll(BaseBsimTestCase):
     def test_a0(self):
         '''Test unsigned load linked word from double word'''
-        self.assertRegisterEqual(self.MIPS.a0, 0xfedcba98, "Unsigned load linked word from double word failed")
+        self.assertRegisterEqual(self.MIPS.a0, 0xfffffffffedcba98, "Unsigned load linked word from double word failed")
 
     def test_a1(self):
         '''Test signed-extended positive load linked word'''
