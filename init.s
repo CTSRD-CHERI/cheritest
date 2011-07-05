@@ -75,7 +75,7 @@ exception_end:
 		nop
 
 		# Terminate the simulator
-	    #    break
+	    mtc0 $at, $23
 end:
 		b end
 		nop

@@ -16,6 +16,6 @@ start:
 		nop
 
 		# Terminate the simulator
-	        break
+	        mtc0 $v0, $23
 end:
 		b end
