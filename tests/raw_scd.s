@@ -23,6 +23,9 @@ start:
 		dli	$t0, 0x9800000000000000		# Cached, non-coherenet
 		daddu	$gp, $gp, $t0
 
+		# Initialize link register to something we won't touch.
+		lld $a0, 64($gp)
+		
 		# Store and load a double word into double word storage
 		dli	$a0, 0xfedcba9876543210
 		scd	$a0, 0($gp)			# @dword

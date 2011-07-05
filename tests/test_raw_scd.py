@@ -7,7 +7,7 @@ class raw_scd(BaseBsimTestCase):
 
     def test_load(self):
         '''Load of conditionally stored word from double word'''
-        self.assertRegisterEqual(self.MIPS.a1, 0xfedcba987654321, "Load of conditionally stored word from double word failed")
+        self.assertRegisterEqual(self.MIPS.a1, 0xfedcba9876543210, "Load of conditionally stored word from double word failed")
 
     def test_store_positive(self):
         '''Store conditional of positive word'''
