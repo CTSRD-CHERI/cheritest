@@ -75,6 +75,7 @@ exception_end:
 		nop
 
 		# Terminate the simulator
-	        break
+	    #    break
 end:
 		b end
+		nop

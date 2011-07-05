@@ -38,7 +38,7 @@ test:		.ent test
 		# Enable interrupts
 		#
 		mfc0	$t0, $12	# Read from CP0 status register
-		ori	$t0, $t0, 7 << 8	# Enable timer interrupt
+		ori	$t0, $t0, 8 << 12	# Enable timer interrupt
 		ori	$t0, 0x1	# Enable interrupts generally
 		mtc0	$t0, $12	# Write to CP0 status register
 
