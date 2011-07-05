@@ -46,7 +46,7 @@ test:		.ent test
 		#
 		dla	$t0, bytes
 desired_epc:
-		ll	$a7, 1($t1)
+		ll	$a7, 1($t0)
 
 		#
 		# Exception return.
