@@ -54,6 +54,7 @@ test:		.ent test
 		dli	$a5, 0
 		dli	$a6, 0
 		dli	$a7, 0
+		dli	$s0, 0
 
 		#
 		# The wait loop repeatedly loads the CP0 count register so
@@ -93,6 +94,17 @@ bev0_handler:
 		mfc0	$a7, $13	# Cause register
 		dla	$k0, eret_target
 		mtc0	$k0, $14
+
+		#
+		# Resetting the compare register should clear the IP7 flag in
+		# the cause register, and also stop interrupts from
+		# immediately re-firing on ERET.
+		#
+		li	$t0, 0
+		mtc0	$t0, $11	# Write to CP0 compare register
+		nop
+		nop
+		mfc0	$s0, $13	# Cause register
 		nop			# NOPs to avoid hazard with ERET
 		nop			# XXXRW: How many are actually
 		nop			# required here?
