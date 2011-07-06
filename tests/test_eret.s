@@ -24,6 +24,7 @@ test:		.ent test
 		mfc0	$a0, $12
 		ori	$a0, 1 << 1
 		mtc0	$a0, $12
+		nop
 		mfc0	$a0, $12	# Saved to let us check EXL stuck
 
 		# Configure a target EPC
