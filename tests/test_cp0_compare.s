@@ -32,13 +32,15 @@ test:		.ent test
 		mfc0	$a0, $9		# Read from CP0 count register
 		daddiu	$a0, $a0, 1000	# += 1000
 		mtc0	$a0, $11	# Write to CP0 compare register
+		nop
+		nop
 		mfc0	$a1, $11	# Read back for test
 
 		#
 		# Enable interrupts
 		#
 		mfc0	$t0, $12	# Read from CP0 status register
-		ori	$t0, $t0, 8 << 12	# Enable timer interrupt
+		ori	$t0, $t0, 0x80 << 8	# Enable timer interrupt
 		ori	$t0, 0x1	# Enable interrupts generally
 		mtc0	$t0, $12	# Write to CP0 status register
 
