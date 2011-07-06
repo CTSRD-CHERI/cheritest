@@ -104,6 +104,8 @@ bev0_handler:
 		mtc0	$t0, $11	# Write to CP0 compare register
 		nop
 		nop
+		nop
+		nop
 		mfc0	$s0, $13	# Cause register
 		nop			# NOPs to avoid hazard with ERET
 		nop			# XXXRW: How many are actually
