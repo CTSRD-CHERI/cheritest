@@ -35,8 +35,7 @@ class test_cp0_reg_init(BaseBsimTestCase):
 
     ## We should have interrupts enabled for all sources.
     def test_status_im(self):
-        '''Test status register to confirm that interrupts are enabled for
-        all sources (IM)'''
+        '''Test status register to confirm that interrupts are enabled for all sources (IM)'''
         self.assertRegisterEqual((self.MIPS.a4 >> 8) & 0xff, 0xff, "Unexpected CP0 interrupt mask value on reset")
 
     ## We should be in 64-bit kernel mode.
