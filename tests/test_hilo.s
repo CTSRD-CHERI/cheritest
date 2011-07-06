@@ -55,8 +55,8 @@ test:		.ent test
 		# turn that off.  Until we figure out how, the .noat above
 		# will cause this ddiv instruction to generate a warning.
 		#
-		dli	$t1, 0x5568a2865eb2ee3e
-		dli	$t0, 0x2ac0abc68a41800e
+		dli	$t0, 0x5568a2865eb2ee3e
+		dli	$t1, 0x2ac0abc68a41800e
 		ddiv	$t0, $t1
 
 		# Mandated double-nop between reads and writes

@@ -13,4 +13,4 @@ class test_hilo(BaseBsimTestCase):
 
     def test_hilo_ddiv(self):
         self.assertRegisterEqual(self.MIPS.a6, 0x2aa7f6bfd4716e30, "HI incorrect after ddiv")
-        self.assertRegisterEqual(self.MIPS.a7, 0x2, "LO incorrect after ddiv")
+        self.assertRegisterEqual(self.MIPS.a7, 0x1, "LO incorrect after ddiv")
