@@ -1,0 +1,98 @@
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
+
+#
+# Check that various operations interrupt load linked + store conditional
+# double word.
+#
+
+		.global test
+test:		.ent test
+		daddu 	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
+
+		#
+		# Set up nop exception handler.
+		#
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
+		nop
+
+		#
+		# Uninterrupted access; check to make sure the right value
+		# comes back.
+		#
+		lld	$a0, dword
+		scd	$a0, dword
+		ld	$a1, dword
+
+		#
+		# Load the double word into another register between lld and
+		# scd; this shouldn't cause the store to fail.
+		#
+		lld	$a2, dword
+		ld	$t0, dword
+		scd	$a2, dword
+
+		#
+		# Check to make sure we are allowed to increment the loaded
+		# number, so we can do atomic arithmetic.
+		#
+		lld	$a3, dword
+		addiu	$a3, $a3, 1
+		scd	$a3, dword
+		ld	$a4, dword
+
+		#
+		# Store to double word between lld and scd; check to make
+		# sure that the scd not only returns failure, but doesn't
+		# store.
+		#
+		li	$t0, 1
+		lld	$a5, dword
+		sd	$a5, dword
+		scd	$t0, dword
+		ld	$a6, dword
+
+		#
+		# Trap between lld and scd; check to make sure that the scd
+		# not only returns failure, but doesn't store.
+		#
+		lld	$a7, dword
+		tnei	$zero, 1
+		scd	$a7, dword
+
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
+		.end	test
+
+
+#
+# No-op exception handler to return back after the tnei and confirm that the
+# following sc fails.  This code assumes that the trap isn't from a branch-
+# delay slot.
+
+#
+		.ent bev0_handler
+bev0_handler:
+		mfc0	$k0, $14	# EPC
+		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
+		mtc0	$k0, $14
+		nop			# NOPs to avoid hazard with ERET
+		nop			# XXXRW: How many are actually
+		nop			# required here?
+		nop
+		eret
+		.end bev0_handler
+
+		.data
+dword:		.dword	0xffffffffffffffff
