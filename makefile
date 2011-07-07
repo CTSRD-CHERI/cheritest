@@ -41,6 +41,7 @@ TEST_FILES=					\
 		raw_addi.s			\
 		raw_addiu.s			\
 		raw_addu.s			\
+		raw_arithmetic_combo.s			\
 		raw_sub.s			\
 		raw_subu.s			\
 		raw_dadd.s			\
