@@ -24,7 +24,7 @@ class test_llsc(BaseBsimTestCase):
 
     def test_ll_sw_sc_failure(self):
 	'''That an ll+sw+sc spanning fails'''
-	self.assertRegisterEqual(self.MIPS.a5, 0, "Interrupted ll+sw+sc succeeded")
+	self.assertRegisterEqual(self.MIPS.t0, 0, "Interrupted ll+sw+sc succeeded")
 
     def test_ll_sw_sc_value(self):
 	'''That an ll+sc spanning a store to the line does not store'''
