@@ -172,6 +172,7 @@ TEST_FILES=					\
 		test_ld_unalign.s		\
 		test_ll_unalign.s		\
 		test_lld_unalign.s		\
+		test_mul_div_loop.s			\
 		test_sh_unalign.s		\
 		test_sw_unalign.s		\
 		test_sd_unalign.s		\
