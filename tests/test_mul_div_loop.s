@@ -4,13 +4,9 @@
 .set noat
 
 #
-# This test checks two properties of eret:
-#
-# (1) It must clear the EXL flag in the status register
-# (2) It must jump to EPC without a branch delay slot
-#
-# In the future, it might be useful to also have an error trap test that works
-# with ERL rather than EXL.
+# This test runs a loop of multiplying and dividing
+# numbers with a seed from -10 to 10.  We just test
+# that the final results are correct.
 #
 
 		.global test
