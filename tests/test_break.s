@@ -44,7 +44,7 @@ test:		.ent test
 		# Trigger exception.
 		#
 desired_epc:
-end:
+		break	0
 
 		#
 		# Exception return.
