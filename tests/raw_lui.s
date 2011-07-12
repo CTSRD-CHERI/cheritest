@@ -22,6 +22,6 @@ start:
 		nop
 
 		# Terminate the simulator
-		break
 end:
+		break
 		b end

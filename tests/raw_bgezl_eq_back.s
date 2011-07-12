@@ -21,8 +21,8 @@ back_target:
 		nop
 
 		# Terminate the simulator
-		break
 end:
+		break
 		b end
 
 forward_target:

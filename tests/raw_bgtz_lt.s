@@ -21,6 +21,6 @@ branch_target:
 		nop
 
 		# Terminate the simulator
-		break
 end:
+		break
 		b end
