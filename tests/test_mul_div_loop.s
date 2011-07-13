@@ -23,7 +23,7 @@ loop:
 		div	$0,$v0,$s1
 		teq	$s1,$0,0x7
 		mflo	$v0
-		move	$s8,$v0
+		move	$t8,$v0
 skip_div:
 		addiu	$s1,$s1,1
 		movz	$v1,$s6,$v0
