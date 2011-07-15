@@ -237,7 +237,7 @@ TEST_FILES=					\
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
-TEST_CYCLE_LIMIT=3000
+TEST_CYCLE_LIMIT=4000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
