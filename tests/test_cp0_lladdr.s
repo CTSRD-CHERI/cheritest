@@ -1,7 +1,6 @@
 .set mips64
 .set noreorder
 .set nobopt
-.set noat
 
 #
 # Check that the CP0 "lladdr" register is properly updated during load linked

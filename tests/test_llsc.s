@@ -1,7 +1,6 @@
 .set mips64
 .set noreorder
 .set nobopt
-.set noat
 
 #
 # Check that various operations interrupt load linked + store conditional.
@@ -82,9 +81,9 @@ test:		.ent test
 #
 		.ent bev0_handler
 bev0_handler:
-		mfc0	$k0, $14	# EPC
+		dmfc0	$k0, $14	# EPC
 		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
-		mtc0	$k0, $14
+		dmtc0	$k0, $14
 		nop			# NOPs to avoid hazard with ERET
 		nop			# XXXRW: How many are actually
 		nop			# required here?

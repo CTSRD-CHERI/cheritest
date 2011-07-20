@@ -77,9 +77,9 @@ bev0_handler:
 		li	$a2, 1
 		mfc0	$a3, $12	# Status register
 		mfc0	$a4, $13	# Cause register
-		mfc0	$a5, $14	# EPC
+		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 8	# EPC += 8 to bump PC forward on ERET
-		mtc0	$k0, $14
+		dmtc0	$k0, $14
 		nop			# NOPs to avoid hazard with ERET
 		nop			# XXXRW: How many are actually
 		nop			# required here?

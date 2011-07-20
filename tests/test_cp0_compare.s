@@ -93,7 +93,7 @@ bev0_handler:
 		mfc0	$a6, $12	# Status register
 		mfc0	$a7, $13	# Cause register
 		dla	$k0, eret_target
-		mtc0	$k0, $14
+		dmtc0	$k0, $14
 
 		#
 		# Resetting the compare register should clear the IP7 flag in

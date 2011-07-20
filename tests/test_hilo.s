@@ -1,7 +1,6 @@
 .set mips64
 .set noreorder
 .set nobopt
-.set noat
 
 #
 # Test for 'HI' and 'LO' registers used with integer multiply and divide.  The

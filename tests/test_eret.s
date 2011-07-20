@@ -30,7 +30,7 @@ test:		.ent test
 
 		# Configure a target EPC
 		dla	$t0, epc_target
-		mtc0	$t0, $14
+		dmtc0	$t0, $14
 
 		nop			# NOPs to avoid hazard with ERET
 		nop			# XXXRW: How many are actually
