@@ -139,6 +139,8 @@ TEST_FILES=					\
 		raw_sd.s			\
 		raw_sc.s			\
 		raw_scd.s			\
+		raw_mfc0_dmfc0.s		\
+		raw_mtc0_sign_extend.s		\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_dli.s			\
