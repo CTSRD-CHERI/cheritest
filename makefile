@@ -399,7 +399,7 @@ test: nosetest
 
 cleantest:
 	rm -f $(TEST_LOGS)
-	rm -f %(GXEMUL_TEST_LOGS)
+	rm -f $(GXEMUL_TEST_LOGS)
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
@@ -460,4 +460,4 @@ nosetest: all cleantest $(TEST_LOGS)
 	PYTHONPATH=../tools/sim nosetests $(NOSEFLAGS)
 
 gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
-PYTHONPATH=../tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS)
+	PYTHONPATH=../tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS)
