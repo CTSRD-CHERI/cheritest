@@ -456,6 +456,7 @@ failnosetest: cleantest $(TEST_LOGS)
 print-versions:
 	nosetests --version
 
+# Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
 nosetest: all cleantest $(TEST_LOGS)
 	PYTHONPATH=../tools/sim nosetests $(NOSEFLAGS)
 
