@@ -235,6 +235,133 @@ TEST_FILES=					\
 		test_cp0_compare.s		\
 		test_cp0_lladdr.s
 
+GXEMUL_TEST_FILES=
+		raw_template.s                  \
+                raw_reg_init.s                  \
+                raw_hilo.s                      \
+                raw_dli.s                       \
+                raw_dli_sign.s                  \
+                raw_reg_name.s                  \
+                raw_lui.s                       \
+                raw_add.s                       \
+                raw_addi.s                      \
+                raw_addiu.s                     \
+                raw_addu.s                      \
+                raw_arithmetic_combo.s                  \
+                raw_sub.s                       \
+                raw_subu.s                      \
+                raw_dadd.s                      \
+                raw_daddi.s                     \
+                raw_daddiu.s                    \
+                raw_daddu.s                     \
+                raw_dsub.s                      \
+                raw_dsubu.s                     \
+                raw_andi.s                      \
+                raw_nor.s                       \
+                raw_or.s                        \
+                raw_ori.s                       \
+                raw_xor.s                       \
+                raw_xori.s                      \
+                raw_jump.s                      \
+                raw_b.s                         \
+                raw_beq_eq.s                    \
+                raw_beq_eq_back.s               \
+                raw_beq_gt.s                    \
+                raw_beq_lt.s                    \
+                raw_beql_eq.s                   \
+                raw_beql_eq_back.s              \
+                raw_beql_gt.s                   \
+                raw_beql_lt.s                   \
+                raw_bgez_eq.s                   \
+                raw_bgez_eq_back.s              \
+                raw_bgez_gt.s                   \
+                raw_bgez_lt.s                   \
+                raw_bgezal_eq.s                 \
+                raw_bgezal_eq_back.s            \
+                raw_bgezal_gt.s                 \
+                raw_bgezal_lt.s                 \
+                raw_bgezall_eq.s                \
+                raw_bgezall_eq_back.s           \
+                raw_bgezall_gt.s                \
+                raw_bgezall_lt.s                \
+                raw_bgezl_eq.s                  \
+                raw_bgezl_eq_back.s             \
+                raw_bgezl_gt.s                  \
+                raw_bgezl_lt.s                  \
+                raw_bgtz_eq.s                   \
+                raw_bgtz_gt_back.s              \
+                raw_bgtz_gt.s                   \
+                raw_bgtz_lt.s                   \
+                raw_bgtzl_eq.s                  \
+                raw_bgtzl_gt_back.s             \
+                raw_bgtzl_gt.s                  \
+                raw_bgtzl_lt.s                  \
+                raw_blez_eq_back.s              \
+                raw_blez_eq.s                   \
+                raw_blez_gt.s                   \
+                raw_blez_lt.s                   \
+                raw_blezl_eq_back.s             \
+                raw_blezl_eq.s                  \
+                raw_blezl_gt.s                  \
+                raw_blezl_lt.s                  \
+                raw_bltz_eq.s                   \
+                raw_bltz_gt.s                   \
+                raw_bltz_lt_back.s              \
+                raw_bltz_lt.s                   \
+                raw_bltzal_eq.s                 \
+                raw_bltzal_gt.s                 \
+                raw_bltzal_lt_back.s            \
+                raw_bltzal_lt.s                 \
+                raw_bltzall_eq.s                \
+                raw_bltzall_gt.s                \
+                raw_bltzall_lt_back.s           \
+                raw_bltzall_lt.s                \
+                raw_bltzl_eq.s                  \
+                raw_bltzl_gt.s                  \
+                raw_bltzl_lt.s                  \
+                raw_bltzl_lt_back.s             \
+                raw_bne_eq.s                    \
+                raw_bne_gt.s                    \
+                raw_bne_lt_back.s               \
+                raw_bne_lt.s                    \
+                raw_bnel_eq.s                   \
+                raw_bnel_gt.s                   \
+                raw_bnel_lt_back.s              \
+                raw_bnel_lt.s                   \
+                raw_jr.s                        \
+                raw_jal.s                       \
+                raw_jalr.s                      \
+                raw_lb.s                        \
+                raw_lh.s                        \
+                raw_lw.s                        \
+                raw_ld.s                        \
+                raw_load_delay_reg.s            \
+                raw_load_delay_store.s          \
+                raw_ll.s                        \
+                raw_lld.s                       \
+                raw_sb.s                        \
+                raw_sh.s                        \
+                raw_sw.s                        \
+                raw_sd.s                        \
+                test_template.s                 \
+                test_reg_zero.s                 \
+                test_dli.s                      \
+                test_move.s                     \
+                test_hilo.s                     \
+                test_slt.s                      \
+                test_slti.s                     \
+                test_sltiu.s                    \
+                test_sltu.s                     \
+                test_cp0_reg_init.s             \
+                test_code_rom_relocation.s      \
+                test_code_ram_relocation.s      \
+                test_eret.s                     \
+                test_mul_div_loop.s                     \
+                test_break.s                    \
+                test_syscall.s                  \
+                test_cp0_compare.s              \
+
+
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
@@ -248,6 +375,7 @@ TEST_CYCLE_LIMIT=4000
 
 OBJDIR=obj
 LOGDIR=log
+GXEMUL_LOGDIR=gxemul_log
 
 RAW_LDSCRIPT=raw.ld
 TEST_LDSCRIPT=test.ld
@@ -259,6 +387,9 @@ TEST_ELFS := $(TEST_FILES:%.s=$(OBJDIR)/%.elf)
 TEST_MEMS := $(TEST_FILES:%.s=$(OBJDIR)/%.mem)
 TEST_DUMPS := $(TEST_FILES:%.s=$(OBJDIR)/%.dump)
 TEST_LOGS := $(TEST_FILES:%.s=$(LOGDIR)/%.log)
+GXEMUL_TEST_LOGS := $(GXEMUL_TEST_FILES:%.s=$(GXEMUL_LOGDIR)/%_gxemul.log)
+GXEMUL_RAW_PREFIXED := $(GXEMUL_TEST_FILES:raw_%.s=test_raw_%.s)
+GXEMUL_TESTS := $(GXEMUL_RAW_PREFIXED:%.s=tests/%.py)
 
 MEMCONV=python ../tools/memConv.py
 
@@ -268,6 +399,7 @@ test: nosetest
 
 cleantest:
 	rm -f $(TEST_LOGS)
+	rm -f %(GXEMUL_TEST_LOGS)
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
@@ -312,6 +444,12 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	cp *.hex ..
 	../sim -m $(TEST_CYCLE_LIMIT) > $@
 
+.NOTPARALLEL:
+$(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
+        ../../gxemul/gxemul_mod/gxemul-0.6.0/gxemul -E oldtestmips -M 3072 -i
+ -p "end" $< >$@ 2>&1
+
+
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(TEST_LOGS)
 	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=../tools nosetests $(NOSEFLAGS)
@@ -320,4 +458,7 @@ print-versions:
 	nosetests --version
 
 nosetest: all cleantest $(TEST_LOGS)
-	PYTHONPATH=../tools nosetests $(NOSEFLAGS)
+	PYTHONPATH=../tools/sim nosetests $(NOSEFLAGS)
+
+gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
+PYTHONPATH=../tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS)
