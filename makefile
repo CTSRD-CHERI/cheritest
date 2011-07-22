@@ -235,8 +235,8 @@ TEST_FILES=					\
 		test_cp0_compare.s		\
 		test_cp0_lladdr.s
 
-GXEMUL_TEST_FILES=
-		raw_template.s                  \
+GXEMUL_TEST_FILES=				\
+		Raw_template.s                  \
                 raw_reg_init.s                  \
                 raw_hilo.s                      \
                 raw_dli.s                       \
