@@ -10,26 +10,31 @@
 start:
 		# Store and load a byte into double word storage
 		dli	$a0, 0xfe
-		sb	$a0, dword
-		lbu	$a0, dword
+		dla	$t3, dword
+		sb	$a0, 0($t3)
+		lbu	$a0, 0($t3)
 
 		# Store and load bytes with sign extension
 		dli	$a1, 1
-		sb	$a1, positive
-		lb	$a1, positive
+		dla	$t3, positive
+		sb	$a1, 0($t3)
+		lb	$a1, 0($t3)
 
 		dli	$a2, -1
-		sb	$a2, negative
-		lb	$a2, negative
+		dla	$t3, negative
+		sb	$a2, 0($t3)
+		lb	$a2, 0($t3)
 
 		# Store and load bytes without sign extension
 		dli	$a3, 1
-		sb	$a3, positive
-		lbu	$a3, positive
+		dla	$t3, positive
+		sb	$a3, 0($t3)
+		lbu	$a3, 0($t3)
 
 		dli	$a4, -1
-		sb	$a4, negative
-		lbu	$a4, negative
+		dla	$t3, negative
+		sb	$a4, 0($t3)
+		lbu	$a4, 0($t3)
 
 		# Store and load bytes at non-zero offsets
 		dla	$t0, val1

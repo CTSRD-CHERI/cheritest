@@ -10,26 +10,31 @@
 start:
 		# Store and load a word into double word storage
 		dli	$a0, 0xfedcba98
-		sw	$a0, dword
-		lwu	$a0, dword
+		dla	$t3, dword
+		sw	$a0, 0($t3)
+		lwu	$a0, 0($t3)
 
 		# Store and load words with sign extension
 		dli	$a1, 1
-		sw	$a1, positive
-		lw	$a1, positive
+		dla	$t3, positive
+		sw	$a1, 0($t3)
+		lw	$a1, 0($t3)
 
 		dli	$a2, -1
-		sw	$a2, negative
-		lw	$a2, negative
+		dla	$t3, negative
+		sw	$a2, 0($t3)
+		lw	$a2, 0($t3)
 
 		# Store and load words without sign extension
 		dli	$a3, 1
-		sw	$a3, positive
-		lwu	$a3, positive
+		dla	$t3, positive
+		sw	$a3, 0($t3)
+		lwu	$a3, 0($t3)
 
 		dli	$a4, -1
-		sw	$a4, negative
-		lwu	$a4, negative
+		dla	$t3, negative
+		sw	$a4, 0($t3)
+		lwu	$a4, 0($t3)
 
 		# Store and load words at non-zero offsets
 		dla	$t0, val1

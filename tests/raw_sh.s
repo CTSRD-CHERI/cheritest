@@ -10,26 +10,31 @@
 start:
 		# Store and load a half word into double word storage
 		dli	$a0, 0xfedc
-		sh	$a0, dword
-		lhu	$a0, dword
+		dla	$t3, dword
+		sh	$a0, 0($t3)
+		lhu	$a0, 0($t3)
 
 		# Store and load half words with sign extension
 		dli	$a1, 1
-		sh	$a1, positive
-		lh	$a1, positive
+		dla	$t3, positive
+		sh	$a1, 0($t3)
+		lh	$a1, 0($t3)
 
 		dli	$a2, -1
-		sh	$a2, negative
-		lh	$a2, negative
+		dla	$t3, negative
+		sh	$a2, 0($t3)
+		lh	$a2, 0($t3)
 
 		# Store and load half words without sign extension
 		dli	$a3, 1
-		sh	$a3, positive
-		lhu	$a3, positive
+		dla	$t3, positive
+		sh	$a3, 0($t3)
+		lhu	$a3, 0($t3)
 
 		dli	$a4, -1
-		sh	$a4, negative
-		lhu	$a4, negative
+		dla	$t3, negative
+		sh	$a4, 0($t3)
+		lhu	$a4, 0($t3)
 
 		# Store and load half words at non-zero offsets
 		dla	$t0, val1

@@ -12,17 +12,20 @@
 		.text
 start:
 		dli	$a0, 0xfedcba9876543210
-		sd	$a0, dword
-		ld	$a0, dword
+		dla	$t3, dword
+		sd	$a0, 0($t3)
+		ld	$a0, 0($t3)
 
 		# Store and load double with sign extension
 		dli	$a1, 1
-		sd	$a1, positive
-		ld	$a1, positive
+		dla	$t3, positive
+		sd	$a1, 0($t3)
+		ld	$a1, 0($t3)
 
 		dli	$a2, -1
-		sd	$a2, negative
-		ld	$a2, negative
+		dla	$t3, negative
+		sd	$a2, 0($t3)
+		ld	$a2, 0($t3)
 
 		# Store and load double words at non-zero offsets
 		dla	$t0, val1
