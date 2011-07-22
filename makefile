@@ -446,8 +446,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-        ../../gxemul/gxemul_mod/gxemul-0.6.0/gxemul -E oldtestmips -M 3072 -i
- -p "end" $< >$@ 2>&1
+	../../gxemul/gxemul_mod/gxemul-0.6.0/gxemul -E oldtestmips -M 3072 -i -p "end" $< >$@ 2>&1
 
 
 # Simulate a failure on all unit tests
