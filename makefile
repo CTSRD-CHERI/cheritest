@@ -419,12 +419,12 @@ $(OBJDIR)/%.o : $(TESTDIR)/%.s
 
 ## TODO: rename these all to test_raw so that we are consistent 
 $(OBJDIR)/raw_%.elf : $(OBJDIR)/raw_%.o $(RAW_LDSCRIPT)
-	sde-ld -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip_fbsd
+	sde-ld -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
 	sde-ld -EB -G0 -T$(TEST_LDSCRIPT) $(TEST_INIT_OBJECT) \
-	    $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip_fbsd
+	    $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
 	sde-objcopy -S -O binary $< $@
