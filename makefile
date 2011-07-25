@@ -467,4 +467,4 @@ gxemul-build:
 	rm -f -r ../tools/gxemul/CTSRD-CHERI-gxemul-8d92b42/
 	wget https://github.com/CTSRD-CHERI/gxemul/zipball/8d92b42a6ccdb7d94a2ad43f7e5e70d17bb7839c -O ../tools/gxemul/gxemul-testversion.zip --no-check-certificate
 	unzip ../tools/gxemul/gxemul-testversion.zip -d ../tools/gxemul/
-	(cd ../tools/gxemul/CTSRD-CHERI-gxemul-8d92b42; ./configure; make)
+	cd ../tools/gxemul/CTSRD-CHERI-gxemul-8d92b42 && ./configure && $(MAKE)
