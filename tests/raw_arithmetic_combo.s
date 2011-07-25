@@ -28,7 +28,7 @@ test:		.ent test
 		dadd $a1, $a1, $a1
 		daddi $a1, $a1, 20
 		daddiu $a1, $a1, -10
-		daddu $s0, $a1, $a1		# t0 = 0x2800000014
+		daddu $s0, $a1, $a1		# s0 = 0x2800000014
 		sra $a0, $a0, 3
 		ori $a0, $a0, 16
 		ddiv $0, $s0, $a0
@@ -41,7 +41,7 @@ test:		.ent test
 		xori $a1, $a1, 40971
 		xor $a0, $a0, $a1
 		divu $0, $a0, $a1
-		mflo $s1					# t1 = 0x0000000001
+		mflo $s1					# s1 = 0x0000000001
 		dsll $a0, $s1, 20
 		mult $a0, $a1
 		mfhi $a0
@@ -50,7 +50,7 @@ test:		.ent test
 		mfhi $a0
 		sub $a0, $a0, $a1
 		dmultu $a0, $a1
-		mflo $s2					# t2 = 0xffffffff9c320384
+		mflo $s2					# s2 = 0xffffffff9c320384
 		sub $a0, $0, $s2
 		dsra $a1, $a1, 14
 		dsll32 $a0, $a0, 1
@@ -58,7 +58,7 @@ test:		.ent test
 		dsra32 $a0, $a0, 4
 		dsrl $a0, $a0, 4
 		mul $a1, $a1, $a1
-		dsrlv $s3, $a0, $a1		# t3 = 0x00FFFFFFFFFF1E6F
+		dsrlv $s3, $a0, $a1		# s3 = 0x00FFFFFFFFFF1E6F
 		dsll32 $a0, $s3, 4
 		dsrl32 $a0, $a0, 4
 		dsub $a1, $a0, $a1
@@ -66,7 +66,7 @@ test:		.ent test
 		mflo $a1
 		mfhi $a0
 		nor $a0, $a0, $a1
-		or $s4, $a0, $a1			# t4 = 0xF..FFC3BE75
+		or $s4, $a0, $a1			# s4 = 0xF..FFC3BE75
 		dsubu $a0, $s4, $a1
 		andi $a1, $a1, 4
 		sllv $a0, $a0, $a1
@@ -75,7 +75,7 @@ test:		.ent test
 		subu $a0, $a0, $a1
 		lui $a1, 3984
 		addi $a1, $a1, 61
-		subu $s5, $a0, $a1		# t5 = 0x0
+		subu $s5, $a0, $a1		# s5 = 0x0
 		move $v0, $s5
 		
 		# Dump registers in the simulator
