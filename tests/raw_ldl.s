@@ -4,15 +4,16 @@
 .set noat
 
 start:
-		dla	$a0, testword
-		ldl	$a1, 0($a0)
-		ldl	$a2, 4($a0)
-		ldl	$a3, 8($a0)
-
 		dla	$a0, alternate
-		ldl     $a4, 0($a0)
-                ldl     $a5, 4($a0)
-                ldl     $a6, 8($a0)
+		ldl	$a1, 0($a0)
+		ldl	$a2, 1($a0)
+		ldl	$a3, 2($a0)
+		ldl	$a4, 3($a0)
+		ldl	$a5, 4($a0)
+		ldl	$a6, 5($a0)
+		ldl	$a7, 6($a0)
+		ldl	$t0, 7($a0)
+		ldl	$t1, 8($a0)
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26

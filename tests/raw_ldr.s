@@ -4,15 +4,16 @@
 .set noat
 
 start:
-		dla	$a0, testword
-		ldr	$a1, 0($a0)
-		ldr	$a2, 4($a0)
-		ldr	$a3, 8($a0)
-
 		dla	$a0, alternate
-		ldr     $a4, 0($a0)
-                ldr     $a5, 4($a0)
-                ldr     $a6, 8($a0)
+		ldr	$a1, 0($a0)
+		ldr	$a2, 1($a0)
+		ldr	$a3, 2($a0)
+		ldr	$a4, 3($a0)
+		ldr	$a5, 4($a0)
+		ldr	$a6, 5($a0)
+		ldr	$a7, 6($a0)
+		ldr	$t0, 7($a0)
+		ldr	$t1, 8($a0)
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
