@@ -56,6 +56,8 @@ TEST_FILES=					\
 		raw_ori.s			\
 		raw_xor.s			\
 		raw_xori.s			\
+		raw_sll.s			\
+		raw_sllv.s			\
 		raw_jump.s			\
 		raw_b.s				\
 		raw_beq_eq.s			\
@@ -141,6 +143,14 @@ TEST_FILES=					\
 		raw_scd.s			\
 		raw_mfc0_dmfc0.s		\
 		raw_mtc0_sign_extend.s		\
+		raw_ldl.s			\
+		raw_ldr.s			\
+		raw_lwl.s			\
+		raw_lwr.s			\
+		raw_sdl.s			\
+		raw_sdr.s			\
+		raw_swl.s			\
+		raw_swr.s			\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_dli.s			\
@@ -262,6 +272,8 @@ GXEMUL_TEST_FILES=				\
                 raw_ori.s                       \
                 raw_xor.s                       \
                 raw_xori.s                      \
+		raw_sll.s			\
+		raw_sllv.s			\
                 raw_jump.s                      \
                 raw_b.s                         \
                 raw_beq_eq.s                    \
@@ -343,6 +355,16 @@ GXEMUL_TEST_FILES=				\
                 raw_sh.s                        \
                 raw_sw.s                        \
                 raw_sd.s                        \
+		raw_mfc0_dmfc0.s		\
+		raw_mtc0_sign_extend.s		\
+		raw_ldl.s			\
+		raw_ldr.s			\
+		raw_lwl.s			\
+		raw_lwr.s			\
+		raw_sdl.s			\
+		raw_sdr.s			\
+		raw_swl.s			\
+		raw_swr.s			\
                 test_template.s                 \
                 test_reg_zero.s                 \
                 test_dli.s                      \
@@ -359,6 +381,9 @@ GXEMUL_TEST_FILES=				\
                 test_mul_div_loop.s                     \
                 test_break.s                    \
                 test_syscall.s                  \
+		test_teq_eq.s			\
+		test_teq_gt.s			\
+		test_teq_lt.s			\
                 test_cp0_compare.s              \
 
 
