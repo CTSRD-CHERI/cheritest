@@ -26,6 +26,7 @@ loop:
 		move	$t8,$v0
 skip_div:
 		addiu	$s1,$s1,1
+    move	$v1,$v0
 		movz	$v1,$s6,$v0
 		sw	$v1,0($sp)
 		slti	$v0,$s1,10
