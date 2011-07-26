@@ -62,7 +62,8 @@ bev0_handler_install:
 
 		# Store the caller's handler in bev0_handler_target to be
 		# found later by bev0_handler_stub.
-		sd	$a0, bev0_handler_target
+		dla	$t2, bev0_handler_target
+		sd	$a0, 0($t2)
 
 		# Install our bev0_handler_stub at the MIPS-specified
 		# exception vector address.
@@ -91,7 +92,8 @@ bev1_handler_install:
 
 		# Store the caller's handler in bev1_handler_target to be
 		# found later by bev1_handler_stub.
-		sd	$a0, bev1_handler_target
+		dla	$t2, bev1_handler_target
+		sd	$a0, 0($t2)
 
 		# Install our bev1_handler_stub at the MIPS-specified
 		# exception vector address.
