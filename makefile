@@ -58,6 +58,8 @@ TEST_FILES=					\
 		raw_xori.s			\
 		raw_sll.s			\
 		raw_sllv.s			\
+		raw_srl.s			\
+		raw_srlv.s			\
 		raw_jump.s			\
 		raw_b.s				\
 		raw_beq_eq.s			\
@@ -274,6 +276,8 @@ GXEMUL_TEST_FILES=				\
                 raw_xori.s                      \
 		raw_sll.s			\
 		raw_sllv.s			\
+		raw_srl.s			\
+		raw_srlv.s			\
                 raw_jump.s                      \
                 raw_b.s                         \
                 raw_beq_eq.s                    \

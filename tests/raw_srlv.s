@@ -7,16 +7,20 @@ start:
 		dli	$a0, 0xfedcba9876543210
 
 		li	$a1, 0
-		sllv	$a1, $a0, $a1
+		srlv	$a1, $a0, $a1
 
 		li	$a2, 1
-		sllv	$a2, $a0, $a2
+		srlv	$a2, $a0, $a2
 
 		li	$a3, 16
-		sllv	$a3, $a0, $a3
+		srlv	$a3, $a0, $a3
 
 		li	$a4, 31
-		sllv	$a4, $a0, $a4
+		srlv	$a4, $a0, $a4
+
+		dli	$a5, 0x00000000ffffffff
+		li	$a6, 0 
+		srlv	$a6, $a5, $a6
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
