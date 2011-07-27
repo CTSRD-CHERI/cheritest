@@ -3,6 +3,11 @@
 .set nobopt
 .set noat
 
+#
+# Tests the Doubleword Shift Left Logical Variable instruction which is a 64-bit instruction
+# Any extra padding added on the right should be zero 
+#
+
 start:
 		dli	$a0, 0xfedcba9876543210
 

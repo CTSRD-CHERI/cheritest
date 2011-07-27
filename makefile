@@ -197,6 +197,7 @@ TEST_FILES=					\
 		test_ld_unalign.s		\
 		test_ll_unalign.s		\
 		test_lld_unalign.s		\
+		test_div.s			\
 		test_mul_div_loop.s			\
 		test_sh_unalign.s		\
 		test_sw_unalign.s		\
@@ -405,6 +406,7 @@ GXEMUL_TEST_FILES=				\
                 test_code_rom_relocation.s      \
                 test_code_ram_relocation.s      \
                 test_eret.s                     \
+		test_div.s			\
                 test_mul_div_loop.s                     \
                 test_break.s                    \
                 test_syscall.s                  \
