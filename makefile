@@ -500,25 +500,25 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-	../tools/gxemul/CTSRD-CHERI-gxemul-8d92b42/gxemul -E oldtestmips -M 3072 -i -p "end" $< >$@ 2>&1
+	tools/gxemul/CTSRD-CHERI-gxemul-8d92b42/gxemul -E oldtestmips -M 3072 -i -p "end" $< >$@ 2>&1
 
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(TEST_LOGS)
-	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=../tools nosetests $(NOSEFLAGS)
+	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=tools nosetests $(NOSEFLAGS)
 
 print-versions:
 	nosetests --version
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
 nosetest: all cleantest $(TEST_LOGS)
-	PYTHONPATH=../tools/sim nosetests $(NOSEFLAGS)
+	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS)
 
 gxemul-nosetest: all cleantest gxemul-build $(GXEMUL_TEST_LOGS)
-	PYTHONPATH=../tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS)
+	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS)
 
 gxemul-build:
-	rm -f -r ../tools/gxemul/CTSRD-CHERI-gxemul-8d92b42/
-	wget https://github.com/CTSRD-CHERI/gxemul/zipball/8d92b42a6ccdb7d94a2ad43f7e5e70d17bb7839c -O ../tools/gxemul/gxemul-testversion.zip --no-check-certificate
-	unzip ../tools/gxemul/gxemul-testversion.zip -d ../tools/gxemul/
-	cd ../tools/gxemul/CTSRD-CHERI-gxemul-8d92b42 && ./configure && $(MAKE)
+	rm -f -r tools/gxemul/CTSRD-CHERI-gxemul-8d92b42/
+	wget https://github.com/CTSRD-CHERI/gxemul/zipball/8d92b42a6ccdb7d94a2ad43f7e5e70d17bb7839c -O tools/gxemul/gxemul-testversion.zip --no-check-certificate
+	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
+	cd tools/gxemul/CTSRD-CHERI-gxemul-8d92b42 && ./configure && $(MAKE)
