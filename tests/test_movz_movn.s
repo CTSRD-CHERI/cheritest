@@ -33,7 +33,7 @@ movn_false:
     sw	$a1,0($sp)
     lw	$v0,0($sp)
     lw	$v1,0($sp)
-    movn	$v1,$a0,$a0
+    movn	$v1,$a0,$zero
     sw	$v1,0($sp)
     lw	$s2,0($sp)
 movn_true:
