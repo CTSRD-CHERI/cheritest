@@ -4,9 +4,11 @@
 .set noat
 
 #
-# This test runs a loop of multiplying and dividing
-# numbers with a seed from -10 to 10.  We just test
-# that the final results are correct.
+# This test exercises movz and movn in true and false
+# cases for each.  They take operands fed from preceding
+# loads and feed into stores.  This case failed in compiled
+# code due to movz and movn being a special case for
+# pipeline forwarding.
 #
 
 		.global test
