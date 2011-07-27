@@ -68,6 +68,9 @@ TEST_FILES=					\
 		raw_dsrl.s			\
 		raw_dsrlv.s			\
 		raw_dsrl32.s			\
+		raw_dsra.s			\
+		raw_dsrav.s			\
+		raw_dsra32.s			\
 		raw_jump.s			\
 		raw_b.s				\
 		raw_beq_eq.s			\
@@ -294,6 +297,9 @@ GXEMUL_TEST_FILES=				\
 		raw_dsrl.s			\
 		raw_dsrlv.s			\
 		raw_dsrl32.s			\
+		raw_dsra.s			\
+		raw_dsrav.s			\
+		raw_dsra32.s			\
                 raw_jump.s                      \
                 raw_b.s                         \
                 raw_beq_eq.s                    \
