@@ -255,6 +255,7 @@ TEST_FILES=					\
 		test_tnei_lt.s			\
 		test_llsc.s			\
 		test_lldscd.s			\
+    test_movz_movn.s			\
 		test_cp0_compare.s		\
 		test_cp0_lladdr.s
 
