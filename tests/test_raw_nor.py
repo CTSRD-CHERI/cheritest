@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_nor(BaseBsimTestCase):
+class raw_nor(BaseCHERITestCase):
     def nor_zeros(self):
         self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "0 nor 0")
 

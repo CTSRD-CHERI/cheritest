@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_ldl(BaseBsimTestCase):
+class raw_ldl(BaseCHERITestCase):
 	def test_offset_zero(self):
 		self.assertRegisterEqual(self.MIPS.a1, 0xfedcba9876543210, "LDL with zero offset failed")
 

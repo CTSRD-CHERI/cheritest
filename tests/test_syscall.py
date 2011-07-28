@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_syscall(BaseBsimTestCase):
+class test_syscall(BaseCHERITestCase):
     def test_syscall_epc(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 

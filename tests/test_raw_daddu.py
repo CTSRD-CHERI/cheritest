@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_daddu(BaseBsimTestCase):
+class raw_daddu(BaseCHERITestCase):
     def test_independent_inputs(self):
         '''Check that simple daddu worked, no input modification'''
         self.assertRegisterEqual(self.MIPS.s3, 1, "daddu modified first input")

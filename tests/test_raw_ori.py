@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_ori(BaseBsimTestCase):
+class raw_ori(BaseCHERITestCase):
     def ori_zeros(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0000000000000000, "0 ori 0")
 

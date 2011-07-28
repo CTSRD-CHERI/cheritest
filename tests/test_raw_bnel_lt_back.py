@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_bnel_lt_back(BaseBsimTestCase):
+class raw_bnel_lt_back(BaseCHERITestCase):
     def test_before_bnel(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before backward bnel missed")
 

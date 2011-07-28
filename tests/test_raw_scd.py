@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_scd(BaseBsimTestCase):
+class raw_scd(BaseCHERITestCase):
     def test_store(self):
         '''Store conditional of word to double word'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Store conditional of word to double word failed")

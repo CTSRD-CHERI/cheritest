@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_div(BaseBsimTestCase):
+class test_div(BaseCHERITestCase):
 	def test_pos_pos(self):
 		'''Test of positive number divided by positive number'''
 		self.assertRegisterEqual(self.MIPS.a0, 3, "Modulo failed")

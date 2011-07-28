@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_swl(BaseBsimTestCase):
+class raw_swl(BaseCHERITestCase):
 	def test_a0(self):
 		'''Test SWL with zero offset'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xfffffffffedcba98, "SWL with zero offset failed")

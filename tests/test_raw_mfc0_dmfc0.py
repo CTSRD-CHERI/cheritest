@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_mfc0_dmfc0(BaseBsimTestCase):
+class raw_mfc0_dmfc0(BaseCHERITestCase):
     def test_dmfc0_correct(self):
         '''Check that the value from the EPC is the label'''
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a2, "Read from EPC, with dmfc0, was not the same as desired label")

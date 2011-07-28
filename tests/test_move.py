@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_move(BaseBsimTestCase):
+class test_move(BaseCHERITestCase):
     def test_move(self):
         '''Check that intended 64-bit value is in t2'''
         self.assertRegisterEqual(self.MIPS.t2, 0xfedcba9876543210, "Register assignment failed")

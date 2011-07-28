@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_eret(BaseBsimTestCase):
+class test_eret(BaseCHERITestCase):
     def test_a0(self):
         '''Confirm EXL was set by test code'''
         self.assertRegisterEqual((self.MIPS.a0 >> 1) & 0x1, 1, "Unable to set EXL")

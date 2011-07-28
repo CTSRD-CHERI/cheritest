@@ -27,8 +27,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_addu_overflow(BaseBsimTestCase):
+class test_addu_overflow(BaseCHERITestCase):
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "addu triggered overflow exception")

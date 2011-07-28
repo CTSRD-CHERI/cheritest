@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_reg_init(BaseBsimTestCase):
+class raw_reg_init(BaseCHERITestCase):
     def test_reg_init(self):
         '''Test that state of all registers is zero on CPU init'''
         for i in range(32):

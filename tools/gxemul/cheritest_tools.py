@@ -127,8 +127,8 @@ def is_envvar_true(var):
     not set to "0"'''
     return os.environ.get(var, "0") != "0"
 
-class BaseBsimTestCase(unittest.TestCase):
-    '''Abstract base class for test cases for the CHERI CPU running under BSIM.
+class BaseCHERITestCase(unittest.TestCase):
+    '''Abstract base class for test cases for the CHERI CPU running under gxemul. 
     Concrete subclasses may override class variables LOG_DIR (for the location
     of the log directory, defaulting to "log") and LOG_FN (for the name of the
     log file within LOG_DIR, defaulting to the class name appended with

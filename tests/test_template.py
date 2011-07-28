@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_template(BaseBsimTestCase):
+class test_template(BaseCHERITestCase):
     def test_template(self):
         ## Check equality
         self.assertRegisterEqual(0, 0, "Failure description here")

@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_hilo(BaseBsimTestCase):
+class test_hilo(BaseCHERITestCase):
     def test_hilo_set_hi(self):
         self.assertRegisterEqual(self.MIPS.a2, 0xe624379d7daf6318, "HI not preserved across set/get")
 

@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_b(BaseBsimTestCase):
+class raw_b(BaseCHERITestCase):
     def test_t0(self):
         self.assertRegisterNotEqual(self.MIPS.t0, 0, "instruction before branch missed")
 

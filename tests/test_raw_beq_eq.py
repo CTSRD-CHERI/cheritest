@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_beq_eq(BaseBsimTestCase):
+class raw_beq_eq(BaseCHERITestCase):
     def test_before_beq(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before forward beq missed")
 

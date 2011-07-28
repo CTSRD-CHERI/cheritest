@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_sdr(BaseBsimTestCase):
+class raw_sdr(BaseCHERITestCase):
 	def test_a1(self):
 		self.assertRegisterEqual(self.MIPS.a1, 0x1000000000000000, "SDR with zero offset failed")
 

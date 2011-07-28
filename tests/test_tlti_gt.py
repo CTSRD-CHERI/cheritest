@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_tlti_gt(BaseBsimTestCase):
+class test_tlti_gt(BaseCHERITestCase):
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "tlti trapped when greater than")
 

@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_bgezall_lt(BaseBsimTestCase):
+class raw_bgezall_lt(BaseCHERITestCase):
 
     def test_before_bgezall(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before bgezall missed")

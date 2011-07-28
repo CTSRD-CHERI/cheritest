@@ -27,7 +27,7 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
 #
 # This test makes sure that the python framework agrees with the assembler as
@@ -37,7 +37,7 @@ from bsim_utils import BaseBsimTestCase
 # bugs/mismatches.
 #
 
-class raw_reg_name(BaseBsimTestCase):
+class raw_reg_name(BaseCHERITestCase):
     def test_reg_zero(self):
 	'''Test register $zero'''
 	self.assertRegisterEqual(self.MIPS.zero, 0, "register $zero mismatch")

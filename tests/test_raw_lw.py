@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_lw(BaseBsimTestCase):
+class raw_lw(BaseCHERITestCase):
     def test_a0(self):
         '''Test unsigned load word from double word'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfedcba98, "Unsigned load word from double word failed")

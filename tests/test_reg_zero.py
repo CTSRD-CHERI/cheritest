@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_reg_zero(BaseBsimTestCase):
+class test_reg_zero(BaseCHERITestCase):
     def test_zero(self):
         '''Test that register zero is zero'''
         self.assertRegisterEqual(self.MIPS.zero, 0, "Register zero has non-zero value on termination")

@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_add(BaseBsimTestCase):
+class raw_add(BaseCHERITestCase):
     def test_independent_inputs(self):
         '''Check that simple add worked, no input modification'''
         self.assertRegisterEqual(self.MIPS.s3, 1, "add modified first input")

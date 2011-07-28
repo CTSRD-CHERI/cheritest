@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_dli(BaseBsimTestCase):
+class raw_dli(BaseCHERITestCase):
     def test_reg_values(self):
         '''Test dli instruction across all general-purpose registers'''
         for i in range(32):

@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_arithmetic_combo(BaseBsimTestCase):
+class raw_arithmetic_combo(BaseCHERITestCase):
     def test_a0(self):
         '''Test that stages of the arithmetic combo test procuced the correct result.'''
         self.assertRegisterEqual(self.MIPS.s0, 0x0000002800000014, "Stage 1 Incorrect")

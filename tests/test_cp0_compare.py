@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_cp0_compare(BaseBsimTestCase):
+class test_cp0_compare(BaseCHERITestCase):
     def test_compare_readback(self):
         '''Test that CP0 compare register write succeeded'''
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a1, "CP0 compare register write failed")

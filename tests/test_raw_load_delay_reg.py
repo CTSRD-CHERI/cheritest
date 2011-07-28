@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_load_delay_reg(BaseBsimTestCase):
+class raw_load_delay_reg(BaseCHERITestCase):
     def test_0nop(self):
         self.assertRegisterEqual(self.MIPS.t0, 0xfedcba9876543210, "load to reg with zero NOPs failed")
 

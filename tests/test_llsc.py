@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_llsc(BaseBsimTestCase):
+class test_llsc(BaseCHERITestCase):
 
     def test_ll_sc_success(self):
 	'''That an uninterrupted ll+sc succeeds'''

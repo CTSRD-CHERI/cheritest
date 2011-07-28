@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_lldscd(BaseBsimTestCase):
+class test_lldscd(BaseCHERITestCase):
 
     def test_lld_scd_success(self):
 	'''That an uninterrupted lld+scd succeeds'''

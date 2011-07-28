@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_code_rom_relocation(BaseBsimTestCase):
+class test_code_rom_relocation(BaseCHERITestCase):
     def test_t0(self):
         self.assertRegisterEqual(self.MIPS.t0, 1, "instruction before jump missed")
 

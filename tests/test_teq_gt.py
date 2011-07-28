@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_teq_gt(BaseBsimTestCase):
+class test_teq_gt(BaseCHERITestCase):
     def test_teq_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "teq trapped when greater than")
 

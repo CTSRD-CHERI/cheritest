@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_slti(BaseBsimTestCase):
+class test_slti(BaseCHERITestCase):
     def test_eq(self):
         '''set on less than immediate: equal, non-negative'''
         self.assertRegisterEqual(self.MIPS.a0, 0, "slti returned true for equal, non-negative")

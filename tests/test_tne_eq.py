@@ -27,8 +27,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_tne_eq(BaseBsimTestCase):
+class test_tne_eq(BaseCHERITestCase):
     def test_tne_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "tne trapped when equal")

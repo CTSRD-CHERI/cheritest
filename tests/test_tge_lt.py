@@ -27,8 +27,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_tge_lt(BaseBsimTestCase):
+class test_tge_lt(BaseCHERITestCase):
     def test_tge_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "tge trapped when less than")

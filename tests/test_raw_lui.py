@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_lui(BaseBsimTestCase):
+class raw_lui(BaseCHERITestCase):
     def test_lui_replace(self):
         '''Check that existing data is entirely overwritten by lui'''
         self.assertRegisterEqual(self.MIPS.a0, 0, "lui didn't overwrite all bits")

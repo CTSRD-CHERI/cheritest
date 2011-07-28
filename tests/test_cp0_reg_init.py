@@ -27,11 +27,11 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 import unittest
 import nose
 
-class test_cp0_reg_init(BaseBsimTestCase):
+class test_cp0_reg_init(BaseCHERITestCase):
     def test_context_reg(self):
         '''Test context register default value'''
         self.assertRegisterEqual(self.MIPS.a0, 0x0, "Unexpected CP0 context register value on reset")

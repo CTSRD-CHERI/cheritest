@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class raw_blezl_lt(BaseBsimTestCase):
+class raw_blezl_lt(BaseCHERITestCase):
     def test_before_blezl(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before forward blezl missed")
 
