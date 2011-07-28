@@ -71,16 +71,16 @@ test:		.ent test
 		xori $a1, $a1, 40971
 		xor $a0, $a0, $a1
 		divu $0, $a0, $a1
-		mflo $s1					# s1 = 0x0000000001
+		mflo $s1			# s1 = 0x0000000001
 		dsll $a0, $s1, 20
 		mult $a0, $a1
 		mfhi $a0
-		dsll32 $a0,$a0,20
-		dmult $a0,$a1
+		dsll32 $a0, $a0, 20
+		dmult $a0, $a1
 		mfhi $a0
 		sub $a0, $a0, $a1
 		dmultu $a0, $a1
-		mflo $s2					# s2 = 0xffffffff9c320384
+		mflo $s2			# s2 = 0xffffffff9c320384
 		sub $a0, $0, $s2
 		dsra $a1, $a1, 14
 		dsll32 $a0, $a0, 1
@@ -96,7 +96,7 @@ test:		.ent test
 		mflo $a1
 		mfhi $a0
 		nor $a0, $a0, $a1
-		or $s4, $a0, $a1			# s4 = 0xF..FFC3BE75
+		or $s4, $a0, $a1		# s4 = 0xF..FFC3BE75
 		dsubu $a0, $s4, $a1
 		andi $a1, $a1, 4
 		sllv $a0, $a0, $a1
@@ -114,7 +114,7 @@ test:		.ent test
 		nop
 
 		# Terminate the simulator
-	    mtc0 $v0, $23
+		mtc0 $v0, $23
 end:
 		b end
 		.end	test
