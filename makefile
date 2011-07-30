@@ -36,6 +36,8 @@ TEST_FILES=					\
 		raw_dli.s			\
 		raw_dli_sign.s			\
 		raw_reg_name.s			\
+		raw_nop.s			\
+		raw_ssnop.s			\
 		raw_lui.s			\
 		raw_add.s			\
 		raw_addi.s			\
@@ -274,6 +276,8 @@ GXEMUL_TEST_FILES=				\
 		raw_dli.s			\
 		raw_dli_sign.s			\
 		raw_reg_name.s			\
+		raw_nop.s			\
+		raw_ssnop.s			\
 		raw_lui.s			\
 		raw_add.s			\
 		raw_addi.s			\
