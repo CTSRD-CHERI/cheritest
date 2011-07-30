@@ -263,7 +263,7 @@ TEST_FILES=					\
 		test_tnei_lt.s			\
 		test_llsc.s			\
 		test_lldscd.s			\
-		test_movz_movn.s		\
+		test_movz_movn_pipeline.s	\
 		test_cp0_compare.s		\
 		test_cp0_lladdr.s
 
@@ -427,6 +427,7 @@ GXEMUL_TEST_FILES=				\
 		test_teq_eq.s			\
 		test_teq_gt.s			\
 		test_teq_lt.s			\
+		test_movz_movn_pipeline.s	\
 		test_cp0_compare.s		\
 
 

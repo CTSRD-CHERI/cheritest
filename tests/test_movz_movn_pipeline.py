@@ -29,18 +29,16 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class test_movz_movn(BaseCHERITestCase):
-    def test_movz_true(self):
+class test_movz_movn_pipeline(BaseCHERITestCase):
+    def test_movz_pipeline_true(self):
         '''Test that result of MOVZ test is correct.'''
         self.assertRegisterEqual(self.MIPS.s0, 0xFFFFFFFFFFFFFFFF, "MOVZ moved when it shouldn't have.")
-    def test_movz_false(self):
+    def test_movz_pipeline_false(self):
         '''Test that result of MOVZ test is correct.'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0000000000000001, "MOVZ did not move when it should have.")
-    def test_movn_true(self):
+    def test_movn_pipeline_true(self):
         '''Test that result of MOVN test is correct.'''
         self.assertRegisterEqual(self.MIPS.s2, 0xFFFFFFFFFFFFFFFF, "MOVN moved when it shouldn't have.")
-    def test_movn_false(self):
+    def test_movn_pipeline_false(self):
         '''Test that result of MOVN test is correct.'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0000000000000001, "MOVN did not move when it should have.")
-
-		
