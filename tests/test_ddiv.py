@@ -28,9 +28,9 @@
 # SUCH DAMAGE.
 #
 
-from bsim_utils import BaseBsimTestCase
+from cheritest_tools import BaseCHERITestCase
 
-class test_ddiv(BaseBsimTestCase):
+class test_ddiv(BaseCHERITestCase):
 	def test_pos_pos(self):
 		'''Test of positive number divided by positive number'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xdebc9a78563412, "Modulo failed")
