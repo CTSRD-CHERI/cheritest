@@ -33,6 +33,12 @@
 .set nobopt
 .set noat
 
+#
+# Short block comment describing the test: what instruction/behaviour are we
+# investigating; what properties are we testing, what properties are deferred
+# to other tests?  What might we want to test as well in the future?
+#
+
 start:
 		# Test here
 		nop
