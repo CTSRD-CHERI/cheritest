@@ -40,9 +40,9 @@ start:
     andi $a4, $0, 0
     andi $a5, $0, 0
 		dla	$a0, alternate
-		lwr     $a1, 0($a0)
-                lwr     $a2, 1($a0)
-                lwr     $a3, 2($a0)
+		lwr $a1, 0($a0)
+    lwr $a2, 1($a0)
+    lwr $a3, 2($a0)
 		lwr	$a4, 3($a0)
 		lwr	$a5, 4($a0)
 
