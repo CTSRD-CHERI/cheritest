@@ -527,7 +527,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 < /dev/ptmx
 
 
 # Simulate a failure on all unit tests
