@@ -207,6 +207,7 @@ TEST_FILES=					\
 		test_multu.s			\
 		test_dmult.s			\
 		test_dmultu.s			\
+		test_madd.s			\
 		test_mul_div_loop.s		\
 		test_sh_unalign.s		\
 		test_sw_unalign.s		\
@@ -425,6 +426,7 @@ GXEMUL_TEST_FILES=				\
 		test_multu.s			\
 		test_dmult.s			\
 		test_dmultu.s			\
+		test_madd.s			\
 		test_mul_div_loop.s		\
 		test_break.s			\
 		test_syscall.s			\
