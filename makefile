@@ -455,6 +455,7 @@ TEST_CYCLE_LIMIT=4000
 OBJDIR=obj
 LOGDIR=log
 GXEMUL_LOGDIR=gxemul_log
+GXEMUL_BINDIR=tools/gxemul/CTSRD-CHERI-gxemul-8d92b42
 
 RAW_LDSCRIPT=raw.ld
 TEST_LDSCRIPT=test.ld
@@ -525,7 +526,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-	tools/gxemul/CTSRD-CHERI-gxemul-8d92b42/gxemul -E oldtestmips -M 3072 -i -p "end" $< >$@ 2>&1
+	$(GXEMUL_BINDIR)/gxemul -E oldtestmips -M 3072 -i -p "end" $< >$@ 2>&1
 
 
 # Simulate a failure on all unit tests
@@ -539,11 +540,11 @@ print-versions:
 nosetest: all cleantest $(TEST_LOGS)
 	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS)
 
-gxemul-nosetest: all cleantest gxemul-build $(GXEMUL_TEST_LOGS)
+gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
 	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS)
 
 gxemul-build:
-	rm -f -r tools/gxemul/CTSRD-CHERI-gxemul-8d92b42/
+	rm -f -r $(GXEMUL_BINDIR)
 	wget https://github.com/CTSRD-CHERI/gxemul/zipball/8d92b42a6ccdb7d94a2ad43f7e5e70d17bb7839c -O tools/gxemul/gxemul-testversion.zip --no-check-certificate
 	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
-	cd tools/gxemul/CTSRD-CHERI-gxemul-8d92b42 && ./configure && $(MAKE)
+	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
