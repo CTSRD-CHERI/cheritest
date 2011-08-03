@@ -539,10 +539,10 @@ print-versions:
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
 nosetest: all cleantest $(TEST_LOGS)
-	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS)
+	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS) || true
 
 gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
-	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS)
+	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS) || true
 
 gxemul-build:
 	rm -f -r $(GXEMUL_BINDIR)
