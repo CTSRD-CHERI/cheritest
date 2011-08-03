@@ -456,6 +456,7 @@ OBJDIR=obj
 LOGDIR=log
 GXEMUL_LOGDIR=gxemul_log
 GXEMUL_BINDIR=tools/gxemul/CTSRD-CHERI-gxemul-8d92b42
+GXEMUL_OPTS=-E oldtestmips -M 3072 -i -p "end"
 
 RAW_LDSCRIPT=raw.ld
 TEST_LDSCRIPT=test.ld
@@ -526,7 +527,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-	$(GXEMUL_BINDIR)/gxemul -E oldtestmips -M 3072 -i -p "end" $< >$@ 2>&1
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1
 
 
 # Simulate a failure on all unit tests
