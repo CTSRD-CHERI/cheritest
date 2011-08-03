@@ -1,4 +1,3 @@
-B
 #-
 # Copyright (c) 2011 William M. Morland
 # All rights reserved.
@@ -34,8 +33,9 @@ B
 .set nobopt
 
 #
-# Test which tries the 32-bit multiplication operator with each combination
-# of positive and negative arguments.
+# Test of madd which multiplies two 32 bit numbers and then adds the 64-bit
+# result to the 64-bit number made up of the 32 least significant bits in
+# lo and hi
 # Results are 32-bit numbers (sign-extended to 64-bits) which are stored
 # in hi (most-significant 32 bits) and lo (least-significant 32 bits)
 #
