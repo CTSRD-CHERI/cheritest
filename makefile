@@ -472,7 +472,7 @@ GXEMUL_TEST_LOGS := $(GXEMUL_TEST_FILES:%.s=$(GXEMUL_LOGDIR)/%_gxemul.log)
 GXEMUL_RAW_PREFIXED := $(GXEMUL_TEST_FILES:raw_%.s=test_raw_%.s)
 GXEMUL_TESTS := $(GXEMUL_RAW_PREFIXED:%.s=tests/%.py)
 
-MEMCONV=python ../tools/memConv.py
+MEMCONV=python ${CHERIROOT}/tools/memConv.py
 
 all: $(TEST_MEMS) $(TEST_DUMPS)
 
@@ -522,8 +522,7 @@ $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
 $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	cp $< mem.bin
 	$(MEMCONV) bsim
-	cp *.hex ..
-	../sim -m $(TEST_CYCLE_LIMIT) > $@
+	${CHERIROOT}/sim -m $(TEST_CYCLE_LIMIT) > $@
 
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
