@@ -452,6 +452,8 @@ TEST_CYCLE_LIMIT=4000
 # tests to current categories.
 #
 
+CHERIROOT?=../../cheri/trunk
+
 OBJDIR=obj
 LOGDIR=log
 GXEMUL_LOGDIR=gxemul_log
