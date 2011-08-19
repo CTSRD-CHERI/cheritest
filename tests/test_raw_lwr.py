@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_lwr(BaseCHERITestCase):
+class test_raw_lwr(BaseCHERITestCase):
 	def test_offset_zero(self):
 		self.assertRegisterEqual(self.MIPS.a1, 0x00000000000000fe, "LWR with zero offset failed")
 

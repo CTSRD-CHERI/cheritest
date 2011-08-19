@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_sdl(BaseCHERITestCase):
+class test_raw_sdl(BaseCHERITestCase):
 	def test_a1(self):
 		self.assertRegisterEqual(self.MIPS.a1, 0xfedcba9876543210, "SDL with zero offset failed")
 

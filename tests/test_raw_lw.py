@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_lw(BaseCHERITestCase):
+class test_raw_lw(BaseCHERITestCase):
     def test_a0(self):
         '''Test unsigned load word from double word'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfedcba98, "Unsigned load word from double word failed")

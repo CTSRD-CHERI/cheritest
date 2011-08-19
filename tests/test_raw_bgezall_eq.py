@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_bgezall_eq(BaseCHERITestCase):
+class test_raw_bgezall_eq(BaseCHERITestCase):
     def test_before_bgezall(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before bgezall missed")
 

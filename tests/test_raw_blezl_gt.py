@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_blezl_gt(BaseCHERITestCase):
+class test_raw_blezl_gt(BaseCHERITestCase):
 
     def test_before_blezl(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before blezl missed")

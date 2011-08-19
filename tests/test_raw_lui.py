@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_lui(BaseCHERITestCase):
+class test_raw_lui(BaseCHERITestCase):
     def test_lui_replace(self):
         '''Check that existing data is entirely overwritten by lui'''
         self.assertRegisterEqual(self.MIPS.a0, 0, "lui didn't overwrite all bits")

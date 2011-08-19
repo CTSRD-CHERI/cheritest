@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_sc(BaseCHERITestCase):
+class test_raw_sc(BaseCHERITestCase):
     def test_store(self):
         '''Store conditional of word to double word'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Store conditional of word to double word failed")

@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_jalr(BaseCHERITestCase):
+class test_raw_jalr(BaseCHERITestCase):
     def test_before_jalr(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before jalr missed")
 

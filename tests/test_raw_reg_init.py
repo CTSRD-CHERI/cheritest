@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_reg_init(BaseCHERITestCase):
+class test_raw_reg_init(BaseCHERITestCase):
     def test_reg_init(self):
         '''Test that state of all registers is zero on CPU init'''
         for i in range(32):

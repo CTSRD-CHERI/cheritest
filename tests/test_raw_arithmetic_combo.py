@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_arithmetic_combo(BaseCHERITestCase):
+class test_raw_arithmetic_combo(BaseCHERITestCase):
     def test_a0(self):
         '''Test that stages of the arithmetic combo test procuced the correct result.'''
         self.assertRegisterEqual(self.MIPS.s0, 0x0000002800000014, "Stage 1 Incorrect")

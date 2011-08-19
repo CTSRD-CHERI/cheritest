@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_dsrl(BaseCHERITestCase):
+class test_raw_dsrl(BaseCHERITestCase):
         def test_a1(self):
 		'''Test a DSRL of zero'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")

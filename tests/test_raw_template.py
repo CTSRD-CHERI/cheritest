@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_template(BaseCHERITestCase):
+class test_raw_template(BaseCHERITestCase):
     def test_template(self):
         ## Check equality
         self.assertRegisterEqual(0, 0, "Failure description here")

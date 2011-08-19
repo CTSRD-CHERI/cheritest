@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_beq_gt(BaseCHERITestCase):
+class test_raw_beq_gt(BaseCHERITestCase):
 
     def test_before_beq(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before beq missed")

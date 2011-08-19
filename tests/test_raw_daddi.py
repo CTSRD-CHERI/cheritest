@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_daddi(BaseCHERITestCase):
+class test_raw_daddi(BaseCHERITestCase):
     def test_independent_inputs(self):
         '''Check that simple add worked, no input modification'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "daddi modified input")

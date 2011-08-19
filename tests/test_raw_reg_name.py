@@ -37,7 +37,7 @@ from cheritest_tools import BaseCHERITestCase
 # bugs/mismatches.
 #
 
-class raw_reg_name(BaseCHERITestCase):
+class test_raw_reg_name(BaseCHERITestCase):
     def test_reg_zero(self):
 	'''Test register $zero'''
 	self.assertRegisterEqual(self.MIPS.zero, 0, "register $zero mismatch")

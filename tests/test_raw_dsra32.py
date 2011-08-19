@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_dsra32(BaseCHERITestCase):
+class test_raw_dsra32(BaseCHERITestCase):
         def test_a1(self):
 		'''Test a DSRA32 of zero, effective 32'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")

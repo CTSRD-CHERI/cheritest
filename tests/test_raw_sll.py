@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_sll(BaseCHERITestCase):
+class test_raw_sll(BaseCHERITestCase):
         def test_a1(self):
 		'''Test a SLL of zero'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")

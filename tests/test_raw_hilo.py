@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_hilo(BaseCHERITestCase):
+class test_raw_hilo(BaseCHERITestCase):
     def test_init_hi(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "HI non-zero on reset")
 

@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_ssnop(BaseCHERITestCase):
+class test_raw_ssnop(BaseCHERITestCase):
     def test_ssnop(self):
         '''Test that registers are unmodified after SSNOP'''
         for i in range(32):

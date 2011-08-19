@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_dli(BaseCHERITestCase):
+class test_raw_dli(BaseCHERITestCase):
     def test_reg_values(self):
         '''Test dli instruction across all general-purpose registers'''
         for i in range(32):

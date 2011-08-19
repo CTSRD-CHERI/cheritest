@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_load_delay_store(BaseCHERITestCase):
+class test_raw_load_delay_store(BaseCHERITestCase):
     def test_0nop(self):
         self.assertRegisterEqual(self.MIPS.t0, 0xfedcba9876543210, "load to store with zero NOPs failed")
 

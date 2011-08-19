@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_andi(BaseCHERITestCase):
+class test_raw_andi(BaseCHERITestCase):
     def andi_zeros(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0000000000000000, "0 andi 0")
 

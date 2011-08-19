@@ -29,6 +29,6 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class test_creturn(BaseCHERITestCase):
+class test_cretval(BaseCHERITestCase):
     def test_v0(self):
         self.assertRegisterEqual(self.MIPS.v0, 100, "Return value corrupted on return from C function");

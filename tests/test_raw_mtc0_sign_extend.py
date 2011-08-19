@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_mtc0_sign_extend(BaseCHERITestCase):
+class test_raw_mtc0_sign_extend(BaseCHERITestCase):
     def test_mtc0_signext(self):
         '''MTC0 should sign extend (some documentation suggests all 64-bits should be copied but sign-extension is logical and in line with other operations and GXemul)'''
         self.assertRegisterEqual(self.MIPS.a0, 0x00000000ffff0000, "LUI instruction failed")

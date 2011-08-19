@@ -4,17 +4,19 @@
 # "raw" -- which run without any prior software initialisation.  This is used
 # only for a few very early tests, such as checking default register values on
 # reset.  These tests must explicitly dump the register file and terminate the
-# simulation.
+# simulation.  Source file names must match the pattern "test_raw_*.s".
 #
 # "test" -- some amount of software setup and tear-down, but running without
 # the TLB enabled.  Tests implement a "test" function that accepts neither
 # arguments nor returns values.  The framework will dump registers and
 # terminate the simulator on completion.  This is suitable for most forms of
 # tests, but not those that need to test final values of $ra, for example.
+# Source file names must match the pattern "test_*.s".
 #
 # "c" -- tests written in the C language; similar to the "test" category, but
 # based on a .c input file containing a single function test() with similar
-# properties to the "test" case.
+# properties to the "test" case.  Source file names must match the pattern
+# "test_*.c".
 #
 # Each test is accompanied by a Nose test case file, which analyses registers
 # from the simulator run to decide if the test passed or not.  The Nose test
@@ -34,142 +36,142 @@
 TESTDIR=tests
 
 TEST_FILES=					\
-		raw_template.s			\
-		raw_reg_init.s			\
-		raw_hilo.s			\
-		raw_dli.s			\
-		raw_dli_sign.s			\
-		raw_reg_name.s			\
-		raw_nop.s			\
-		raw_ssnop.s			\
-		raw_lui.s			\
-		raw_add.s			\
-		raw_addi.s			\
-		raw_addiu.s			\
-		raw_addu.s			\
-		raw_arithmetic_combo.s		\
-		raw_sub.s			\
-		raw_subu.s			\
-		raw_dadd.s			\
-		raw_daddi.s			\
-		raw_daddiu.s			\
-		raw_daddu.s			\
-		raw_dsub.s			\
-		raw_dsubu.s			\
-		raw_andi.s			\
-		raw_nor.s			\
-		raw_or.s			\
-		raw_ori.s			\
-		raw_xor.s			\
-		raw_xori.s			\
-		raw_sll.s			\
-		raw_sllv.s			\
-		raw_srl.s			\
-		raw_srlv.s			\
-		raw_sra.s			\
-		raw_srav.s			\
-		raw_dsll.s			\
-		raw_dsllv.s			\
-		raw_dsll32.s			\
-		raw_dsrl.s			\
-		raw_dsrlv.s			\
-		raw_dsrl32.s			\
-		raw_dsra.s			\
-		raw_dsrav.s			\
-		raw_dsra32.s			\
-		raw_jump.s			\
-		raw_b.s				\
-		raw_beq_eq.s			\
-		raw_beq_eq_back.s		\
-		raw_beq_gt.s			\
-		raw_beq_lt.s			\
-		raw_beql_eq.s			\
-		raw_beql_eq_back.s		\
-		raw_beql_gt.s			\
-		raw_beql_lt.s			\
-		raw_bgez_eq.s			\
-		raw_bgez_eq_back.s		\
-		raw_bgez_gt.s			\
-		raw_bgez_lt.s			\
-		raw_bgezal_eq.s			\
-		raw_bgezal_eq_back.s		\
-		raw_bgezal_gt.s			\
-		raw_bgezal_lt.s			\
-		raw_bgezall_eq.s		\
-		raw_bgezall_eq_back.s		\
-		raw_bgezall_gt.s		\
-		raw_bgezall_lt.s		\
-		raw_bgezl_eq.s			\
-		raw_bgezl_eq_back.s		\
-		raw_bgezl_gt.s			\
-		raw_bgezl_lt.s			\
-		raw_bgtz_eq.s			\
-		raw_bgtz_gt_back.s		\
-		raw_bgtz_gt.s			\
-		raw_bgtz_lt.s			\
-		raw_bgtzl_eq.s			\
-		raw_bgtzl_gt_back.s		\
-		raw_bgtzl_gt.s			\
-		raw_bgtzl_lt.s			\
-		raw_blez_eq_back.s		\
-		raw_blez_eq.s			\
-		raw_blez_gt.s			\
-		raw_blez_lt.s			\
-		raw_blezl_eq_back.s		\
-		raw_blezl_eq.s			\
-		raw_blezl_gt.s			\
-		raw_blezl_lt.s			\
-		raw_bltz_eq.s			\
-		raw_bltz_gt.s			\
-		raw_bltz_lt_back.s		\
-		raw_bltz_lt.s			\
-		raw_bltzal_eq.s			\
-		raw_bltzal_gt.s			\
-		raw_bltzal_lt_back.s		\
-		raw_bltzal_lt.s			\
-		raw_bltzall_eq.s		\
-		raw_bltzall_gt.s		\
-		raw_bltzall_lt_back.s		\
-		raw_bltzall_lt.s		\
-		raw_bltzl_eq.s			\
-		raw_bltzl_gt.s			\
-		raw_bltzl_lt.s			\
-		raw_bltzl_lt_back.s		\
-		raw_bne_eq.s			\
-		raw_bne_gt.s			\
-		raw_bne_lt_back.s		\
-		raw_bne_lt.s			\
-		raw_bnel_eq.s			\
-		raw_bnel_gt.s			\
-		raw_bnel_lt_back.s		\
-		raw_bnel_lt.s			\
-		raw_jr.s			\
-		raw_jal.s			\
-		raw_jalr.s			\
-		raw_lb.s			\
-		raw_lh.s			\
-		raw_lw.s			\
-		raw_ld.s			\
-		raw_load_delay_reg.s		\
-		raw_load_delay_store.s		\
-		raw_ll.s			\
-		raw_lld.s			\
-		raw_sb.s			\
-		raw_sh.s			\
-		raw_sw.s			\
-		raw_sd.s			\
-		raw_sc.s			\
-		raw_scd.s			\
-		raw_mfc0_dmfc0.s		\
-		raw_mtc0_sign_extend.s		\
-		raw_ldl.s			\
-		raw_ldr.s			\
-		raw_lwl.s			\
-		raw_lwr.s			\
-		raw_sdl.s			\
-		raw_sdr.s			\
-		raw_swl.s			\
-		raw_swr.s			\
+		test_raw_template.s		\
+		test_raw_reg_init.s		\
+		test_raw_hilo.s			\
+		test_raw_dli.s			\
+		test_raw_dli_sign.s		\
+		test_raw_reg_name.s		\
+		test_raw_nop.s			\
+		test_raw_ssnop.s		\
+		test_raw_lui.s			\
+		test_raw_add.s			\
+		test_raw_addi.s			\
+		test_raw_addiu.s		\
+		test_raw_addu.s			\
+		test_raw_arithmetic_combo.s	\
+		test_raw_sub.s			\
+		test_raw_subu.s			\
+		test_raw_dadd.s			\
+		test_raw_daddi.s		\
+		test_raw_daddiu.s		\
+		test_raw_daddu.s		\
+		test_raw_dsub.s			\
+		test_raw_dsubu.s		\
+		test_raw_andi.s			\
+		test_raw_nor.s			\
+		test_raw_or.s			\
+		test_raw_ori.s			\
+		test_raw_xor.s			\
+		test_raw_xori.s			\
+		test_raw_sll.s			\
+		test_raw_sllv.s			\
+		test_raw_srl.s			\
+		test_raw_srlv.s			\
+		test_raw_sra.s			\
+		test_raw_srav.s			\
+		test_raw_dsll.s			\
+		test_raw_dsllv.s		\
+		test_raw_dsll32.s		\
+		test_raw_dsrl.s			\
+		test_raw_dsrlv.s		\
+		test_raw_dsrl32.s		\
+		test_raw_dsra.s			\
+		test_raw_dsrav.s		\
+		test_raw_dsra32.s		\
+		test_raw_jump.s			\
+		test_raw_b.s			\
+		test_raw_beq_eq.s		\
+		test_raw_beq_eq_back.s		\
+		test_raw_beq_gt.s		\
+		test_raw_beq_lt.s		\
+		test_raw_beql_eq.s		\
+		test_raw_beql_eq_back.s		\
+		test_raw_beql_gt.s		\
+		test_raw_beql_lt.s		\
+		test_raw_bgez_eq.s		\
+		test_raw_bgez_eq_back.s		\
+		test_raw_bgez_gt.s		\
+		test_raw_bgez_lt.s		\
+		test_raw_bgezal_eq.s		\
+		test_raw_bgezal_eq_back.s	\
+		test_raw_bgezal_gt.s		\
+		test_raw_bgezal_lt.s		\
+		test_raw_bgezall_eq.s		\
+		test_raw_bgezall_eq_back.s	\
+		test_raw_bgezall_gt.s		\
+		test_raw_bgezall_lt.s		\
+		test_raw_bgezl_eq.s		\
+		test_raw_bgezl_eq_back.s	\
+		test_raw_bgezl_gt.s		\
+		test_raw_bgezl_lt.s		\
+		test_raw_bgtz_eq.s		\
+		test_raw_bgtz_gt_back.s		\
+		test_raw_bgtz_gt.s		\
+		test_raw_bgtz_lt.s		\
+		test_raw_bgtzl_eq.s		\
+		test_raw_bgtzl_gt_back.s	\
+		test_raw_bgtzl_gt.s		\
+		test_raw_bgtzl_lt.s		\
+		test_raw_blez_eq_back.s		\
+		test_raw_blez_eq.s		\
+		test_raw_blez_gt.s		\
+		test_raw_blez_lt.s		\
+		test_raw_blezl_eq_back.s	\
+		test_raw_blezl_eq.s		\
+		test_raw_blezl_gt.s		\
+		test_raw_blezl_lt.s		\
+		test_raw_bltz_eq.s		\
+		test_raw_bltz_gt.s		\
+		test_raw_bltz_lt_back.s		\
+		test_raw_bltz_lt.s		\
+		test_raw_bltzal_eq.s		\
+		test_raw_bltzal_gt.s		\
+		test_raw_bltzal_lt_back.s	\
+		test_raw_bltzal_lt.s		\
+		test_raw_bltzall_eq.s		\
+		test_raw_bltzall_gt.s		\
+		test_raw_bltzall_lt_back.s	\
+		test_raw_bltzall_lt.s		\
+		test_raw_bltzl_eq.s		\
+		test_raw_bltzl_gt.s		\
+		test_raw_bltzl_lt.s		\
+		test_raw_bltzl_lt_back.s	\
+		test_raw_bne_eq.s		\
+		test_raw_bne_gt.s		\
+		test_raw_bne_lt_back.s		\
+		test_raw_bne_lt.s		\
+		test_raw_bnel_eq.s		\
+		test_raw_bnel_gt.s		\
+		test_raw_bnel_lt_back.s		\
+		test_raw_bnel_lt.s		\
+		test_raw_jr.s			\
+		test_raw_jal.s			\
+		test_raw_jalr.s			\
+		test_raw_lb.s			\
+		test_raw_lh.s			\
+		test_raw_lw.s			\
+		test_raw_ld.s			\
+		test_raw_load_delay_reg.s	\
+		test_raw_load_delay_store.s	\
+		test_raw_ll.s			\
+		test_raw_lld.s			\
+		test_raw_sb.s			\
+		test_raw_sh.s			\
+		test_raw_sw.s			\
+		test_raw_sd.s			\
+		test_raw_sc.s			\
+		test_raw_scd.s			\
+		test_raw_mfc0_dmfc0.s		\
+		test_raw_mtc0_sign_extend.s	\
+		test_raw_ldl.s			\
+		test_raw_ldr.s			\
+		test_raw_lwl.s			\
+		test_raw_lwr.s			\
+		test_raw_sdl.s			\
+		test_raw_sdr.s			\
+		test_raw_swl.s			\
+		test_raw_swr.s			\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_dli.s			\
@@ -284,140 +286,140 @@ TEST_FILES=					\
 # omit tests specific to the CHERI ISA.
 #
 GXEMUL_TEST_FILES=				\
-		raw_template.s			\
-		raw_reg_init.s			\
-		raw_hilo.s			\
-		raw_dli.s			\
-		raw_dli_sign.s			\
-		raw_reg_name.s			\
-		raw_nop.s			\
-		raw_ssnop.s			\
-		raw_lui.s			\
-		raw_add.s			\
-		raw_addi.s			\
-		raw_addiu.s			\
-		raw_addu.s			\
-		raw_arithmetic_combo.s		\
-		raw_sub.s			\
-		raw_subu.s			\
-		raw_dadd.s			\
-		raw_daddi.s			\
-		raw_daddiu.s			\
-		raw_daddu.s			\
-		raw_dsub.s			\
-		raw_dsubu.s			\
-		raw_andi.s			\
-		raw_nor.s			\
-		raw_or.s			\
-		raw_ori.s			\
-		raw_xor.s			\
-		raw_xori.s			\
-		raw_sll.s			\
-		raw_sllv.s			\
-		raw_srl.s			\
-		raw_srlv.s			\
-		raw_sra.s			\
-		raw_srav.s			\
-		raw_dsll.s			\
-		raw_dsllv.s			\
-		raw_dsll32.s			\
-		raw_dsrl.s			\
-		raw_dsrlv.s			\
-		raw_dsrl32.s			\
-		raw_dsra.s			\
-		raw_dsrav.s			\
-		raw_dsra32.s			\
-		raw_jump.s			\
-		raw_b.s				\
-		raw_beq_eq.s			\
-		raw_beq_eq_back.s		\
-		raw_beq_gt.s			\
-		raw_beq_lt.s			\
-		raw_beql_eq.s			\
-		raw_beql_eq_back.s		\
-		raw_beql_gt.s			\
-		raw_beql_lt.s			\
-		raw_bgez_eq.s			\
-		raw_bgez_eq_back.s		\
-		raw_bgez_gt.s			\
-		raw_bgez_lt.s			\
-		raw_bgezal_eq.s			\
-		raw_bgezal_eq_back.s		\
-		raw_bgezal_gt.s			\
-		raw_bgezal_lt.s			\
-		raw_bgezall_eq.s		\
-		raw_bgezall_eq_back.s		\
-		raw_bgezall_gt.s		\
-		raw_bgezall_lt.s		\
-		raw_bgezl_eq.s			\
-		raw_bgezl_eq_back.s		\
-		raw_bgezl_gt.s			\
-		raw_bgezl_lt.s			\
-		raw_bgtz_eq.s			\
-		raw_bgtz_gt_back.s		\
-		raw_bgtz_gt.s			\
-		raw_bgtz_lt.s			\
-		raw_bgtzl_eq.s			\
-		raw_bgtzl_gt_back.s		\
-		raw_bgtzl_gt.s			\
-		raw_bgtzl_lt.s			\
-		raw_blez_eq_back.s		\
-		raw_blez_eq.s			\
-		raw_blez_gt.s			\
-		raw_blez_lt.s			\
-		raw_blezl_eq_back.s		\
-		raw_blezl_eq.s			\
-		raw_blezl_gt.s			\
-		raw_blezl_lt.s			\
-		raw_bltz_eq.s			\
-		raw_bltz_gt.s			\
-		raw_bltz_lt_back.s		\
-		raw_bltz_lt.s			\
-		raw_bltzal_eq.s			\
-		raw_bltzal_gt.s			\
-		raw_bltzal_lt_back.s		\
-		raw_bltzal_lt.s			\
-		raw_bltzall_eq.s		\
-		raw_bltzall_gt.s		\
-		raw_bltzall_lt_back.s		\
-		raw_bltzall_lt.s		\
-		raw_bltzl_eq.s			\
-		raw_bltzl_gt.s			\
-		raw_bltzl_lt.s			\
-		raw_bltzl_lt_back.s		\
-		raw_bne_eq.s			\
-		raw_bne_gt.s			\
-		raw_bne_lt_back.s		\
-		raw_bne_lt.s			\
-		raw_bnel_eq.s			\
-		raw_bnel_gt.s			\
-		raw_bnel_lt_back.s		\
-		raw_bnel_lt.s			\
-		raw_jr.s			\
-		raw_jal.s			\
-		raw_jalr.s			\
-		raw_lb.s			\
-		raw_lh.s			\
-		raw_lw.s			\
-		raw_ld.s			\
-		raw_load_delay_reg.s		\
-		raw_load_delay_store.s		\
-		raw_ll.s			\
-		raw_lld.s			\
-		raw_sb.s			\
-		raw_sh.s			\
-		raw_sw.s			\
-		raw_sd.s			\
-		raw_mfc0_dmfc0.s		\
-		raw_mtc0_sign_extend.s		\
-		raw_ldl.s			\
-		raw_ldr.s			\
-		raw_lwl.s			\
-		raw_lwr.s			\
-		raw_sdl.s			\
-		raw_sdr.s			\
-		raw_swl.s			\
-		raw_swr.s			\
+		test_raw_template.s		\
+		test_raw_reg_init.s		\
+		test_raw_hilo.s			\
+		test_raw_dli.s			\
+		test_raw_dli_sign.s		\
+		test_raw_reg_name.s		\
+		test_raw_nop.s			\
+		test_raw_ssnop.s		\
+		test_raw_lui.s			\
+		test_raw_add.s			\
+		test_raw_addi.s			\
+		test_raw_addiu.s		\
+		test_raw_addu.s			\
+		test_raw_arithmetic_combo.s	\
+		test_raw_sub.s			\
+		test_raw_subu.s			\
+		test_raw_dadd.s			\
+		test_raw_daddi.s		\
+		test_raw_daddiu.s		\
+		test_raw_daddu.s		\
+		test_raw_dsub.s			\
+		test_raw_dsubu.s		\
+		test_raw_andi.s			\
+		test_raw_nor.s			\
+		test_raw_or.s			\
+		test_raw_ori.s			\
+		test_raw_xor.s			\
+		test_raw_xori.s			\
+		test_raw_sll.s			\
+		test_raw_sllv.s			\
+		test_raw_srl.s			\
+		test_raw_srlv.s			\
+		test_raw_sra.s			\
+		test_raw_srav.s			\
+		test_raw_dsll.s			\
+		test_raw_dsllv.s		\
+		test_raw_dsll32.s		\
+		test_raw_dsrl.s			\
+		test_raw_dsrlv.s		\
+		test_raw_dsrl32.s		\
+		test_raw_dsra.s			\
+		test_raw_dsrav.s		\
+		test_raw_dsra32.s		\
+		test_raw_jump.s			\
+		test_raw_b.s			\
+		test_raw_beq_eq.s		\
+		test_raw_beq_eq_back.s		\
+		test_raw_beq_gt.s		\
+		test_raw_beq_lt.s		\
+		test_raw_beql_eq.s		\
+		test_raw_beql_eq_back.s		\
+		test_raw_beql_gt.s		\
+		test_raw_beql_lt.s		\
+		test_raw_bgez_eq.s		\
+		test_raw_bgez_eq_back.s		\
+		test_raw_bgez_gt.s		\
+		test_raw_bgez_lt.s		\
+		test_raw_bgezal_eq.s		\
+		test_raw_bgezal_eq_back.s	\
+		test_raw_bgezal_gt.s		\
+		test_raw_bgezal_lt.s		\
+		test_raw_bgezall_eq.s		\
+		test_raw_bgezall_eq_back.s	\
+		test_raw_bgezall_gt.s		\
+		test_raw_bgezall_lt.s		\
+		test_raw_bgezl_eq.s		\
+		test_raw_bgezl_eq_back.s	\
+		test_raw_bgezl_gt.s		\
+		test_raw_bgezl_lt.s		\
+		test_raw_bgtz_eq.s		\
+		test_raw_bgtz_gt_back.s		\
+		test_raw_bgtz_gt.s		\
+		test_raw_bgtz_lt.s		\
+		test_raw_bgtzl_eq.s		\
+		test_raw_bgtzl_gt_back.s	\
+		test_raw_bgtzl_gt.s		\
+		test_raw_bgtzl_lt.s		\
+		test_raw_blez_eq_back.s		\
+		test_raw_blez_eq.s		\
+		test_raw_blez_gt.s		\
+		test_raw_blez_lt.s		\
+		test_raw_blezl_eq_back.s	\
+		test_raw_blezl_eq.s		\
+		test_raw_blezl_gt.s		\
+		test_raw_blezl_lt.s		\
+		test_raw_bltz_eq.s		\
+		test_raw_bltz_gt.s		\
+		test_raw_bltz_lt_back.s		\
+		test_raw_bltz_lt.s		\
+		test_raw_bltzal_eq.s		\
+		test_raw_bltzal_gt.s		\
+		test_raw_bltzal_lt_back.s	\
+		test_raw_bltzal_lt.s		\
+		test_raw_bltzall_eq.s		\
+		test_raw_bltzall_gt.s		\
+		test_raw_bltzall_lt_back.s	\
+		test_raw_bltzall_lt.s		\
+		test_raw_bltzl_eq.s		\
+		test_raw_bltzl_gt.s		\
+		test_raw_bltzl_lt.s		\
+		test_raw_bltzl_lt_back.s	\
+		test_raw_bne_eq.s		\
+		test_raw_bne_gt.s		\
+		test_raw_bne_lt_back.s		\
+		test_raw_bne_lt.s		\
+		test_raw_bnel_eq.s		\
+		test_raw_bnel_gt.s		\
+		test_raw_bnel_lt_back.s		\
+		test_raw_bnel_lt.s		\
+		test_raw_jr.s			\
+		test_raw_jal.s			\
+		test_raw_jalr.s			\
+		test_raw_lb.s			\
+		test_raw_lh.s			\
+		test_raw_lw.s			\
+		test_raw_ld.s			\
+		test_raw_load_delay_reg.s	\
+		test_raw_load_delay_store.s	\
+		test_raw_ll.s			\
+		test_raw_lld.s			\
+		test_raw_sb.s			\
+		test_raw_sh.s			\
+		test_raw_sw.s			\
+		test_raw_sd.s			\
+		test_raw_mfc0_dmfc0.s		\
+		test_raw_mtc0_sign_extend.s	\
+		test_raw_ldl.s			\
+		test_raw_ldr.s			\
+		test_raw_lwl.s			\
+		test_raw_lwr.s			\
+		test_raw_sdl.s			\
+		test_raw_sdr.s			\
+		test_raw_swl.s			\
+		test_raw_swr.s			\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_dli.s			\
@@ -489,8 +491,7 @@ CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 GXEMUL_TESTS := $(basename $(GXEMUL_TEST_FILES))
 GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(GXEMUL_TESTS)))
-GXEMUL_RAW_PREFIXED := $(GXEMUL_TESTS:raw_%=test_raw_%)
-GXEMUL_USE_TESTS := $(GXEMUL_RAW_PREFIXED:%=tests/%.py)
+GXEMUL_USE_TESTS := $(addsuffix .py,$(addprefix tests/,$(GXEMUL_TESTS)))
 
 MEMCONV=python ${CHERIROOT}/tools/memConv.py
 
@@ -512,9 +513,6 @@ clean: cleantest
 .SECONDARY: $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
     $(TEST_LIB_OBJECT)
 
-$(OBJDIR)/raw_%.o : $(TESTDIR)/raw_%.s
-	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
-
 $(OBJDIR)/test_%.o : $(TESTDIR)/test_%.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
@@ -525,7 +523,7 @@ $(OBJDIR)/%.o: %.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 ## TODO: rename these all to test_raw so that we are consistent 
-$(OBJDIR)/raw_%.elf : $(OBJDIR)/raw_%.o $(RAW_LDSCRIPT)
+$(OBJDIR)/test_raw_%.elf : $(OBJDIR)/test_raw_%.o $(RAW_LDSCRIPT)
 	sde-ld -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \

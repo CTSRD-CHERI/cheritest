@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_dli_sign(BaseCHERITestCase):
+class test_raw_dli_sign(BaseCHERITestCase):
     def test_li_sign(self):
         '''Test that 32-bit negative immediate is sign-extended'''
         self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "Sign-extended negative 32-bit load immediate failed")

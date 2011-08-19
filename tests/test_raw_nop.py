@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_nop(BaseCHERITestCase):
+class test_raw_nop(BaseCHERITestCase):
     def test_raw_nop(self):
         '''Test that registers are unmodified after NOP'''
         for i in range(32):

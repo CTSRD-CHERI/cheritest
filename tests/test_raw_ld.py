@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_ld(BaseCHERITestCase):
+class test_raw_ld(BaseCHERITestCase):
     def test_a0(self):
         '''Test load double word instruction'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Double word load failed")

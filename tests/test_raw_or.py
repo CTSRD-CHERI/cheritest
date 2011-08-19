@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_or(BaseCHERITestCase):
+class test_raw_or(BaseCHERITestCase):
     def or_zeros(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0000000000000000, "0 or 0")
 

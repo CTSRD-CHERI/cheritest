@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_nor(BaseCHERITestCase):
+class test_raw_nor(BaseCHERITestCase):
     def nor_zeros(self):
         self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "0 nor 0")
 

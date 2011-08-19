@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_jump(BaseCHERITestCase):
+class test_raw_jump(BaseCHERITestCase):
     def test_j_before(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before j missed")
 

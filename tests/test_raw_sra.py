@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_sra(BaseCHERITestCase):
+class test_raw_sra(BaseCHERITestCase):
         def test_a1(self):
 		'''Test a SRA of zero'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")

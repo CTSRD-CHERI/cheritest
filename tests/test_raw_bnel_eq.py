@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_bnel_eq(BaseCHERITestCase):
+class test_raw_bnel_eq(BaseCHERITestCase):
 
     def test_before_bnel(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before bnel missed")

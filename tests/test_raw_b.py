@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_b(BaseCHERITestCase):
+class test_raw_b(BaseCHERITestCase):
     def test_t0(self):
         self.assertRegisterNotEqual(self.MIPS.t0, 0, "instruction before branch missed")
 

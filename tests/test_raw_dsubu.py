@@ -29,7 +29,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class raw_dsubu(BaseCHERITestCase):
+class test_raw_dsubu(BaseCHERITestCase):
     def test_independent_inputs(self):
         '''Check that simple dsubu worked, no input modification'''
         self.assertRegisterEqual(self.MIPS.s3, 2, "dsubu modified first input")
