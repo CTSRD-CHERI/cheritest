@@ -44,8 +44,10 @@ MIPS_REG_NUM2NAME=[
 ]
 
 ## WILL: Issue in that rather than a0-a7 & t0-t3 we have in GXemul a0-a3 & t0-t7
-## although t0-t3 appears to map to a4-a7y. Other than this all relevant
-## registers are present and correct
+## although t0-t3 appears to map to a4-a7y. This is indicative of the old O32
+## ABI rather than the newer N32/N64 ABI we are using. Despite this it seems as
+## though even when explicitly emulating N64 CPUs it maintains the O32
+## naming conventions for the registers.
 
 
 ## Inverse mapping of register name to register number
