@@ -280,7 +280,8 @@ TEST_FILES=					\
 		test_ctemplate.c		\
 		test_casmgp.c			\
 		test_cretval.c			\
-		test_crecurse.c
+		test_crecurse.c			\
+		test_cglobals.c
 
 #
 # This list is the subset of TEST_FILES believed to work on gxemul; it should
@@ -456,7 +457,8 @@ GXEMUL_TEST_FILES=				\
 		test_ctemplate.c		\
 		test_casmgp.c			\
 		test_cretval.c			\
-		test_crecurse.c
+		test_crecurse.c			\
+		test_cglobals.c
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
