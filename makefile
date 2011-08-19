@@ -1,5 +1,5 @@
 #
-# Build system for CHERI regression tests.  Tests fall into two categories:
+# Build system for CHERI regression tests.  Tests fall into three categories:
 #
 # "raw" -- which run without any prior software initialisation.  This is used
 # only for a few very early tests, such as checking default register values on
@@ -11,6 +11,10 @@
 # arguments nor returns values.  The framework will dump registers and
 # terminate the simulator on completion.  This is suitable for most forms of
 # tests, but not those that need to test final values of $ra, for example.
+#
+# "c" -- tests written in the C language; similar to the "test" category, but
+# based on a .c input file containing a single function test() with similar
+# properties to the "test" case.
 #
 # Each test is accompanied by a Nose test case file, which analyses registers
 # from the simulator run to decide if the test passed or not.  The Nose test
@@ -270,8 +274,15 @@ TEST_FILES=					\
 		test_lldscd.s			\
 		test_movz_movn_pipeline.s	\
 		test_cp0_compare.s		\
-		test_cp0_lladdr.s
+		test_cp0_lladdr.s		\
+		test_ctemplate.c		\
+		test_casmgp.c			\
+		test_cretval.c
 
+#
+# This list is the subset of TEST_FILES believed to work on gxemul; it should
+# omit tests specific to the CHERI ISA.
+#
 GXEMUL_TEST_FILES=				\
 		raw_template.s			\
 		raw_reg_init.s			\
@@ -439,7 +450,9 @@ GXEMUL_TEST_FILES=				\
 		test_teq_lt.s			\
 		test_movz_movn_pipeline.s	\
 		test_cp0_compare.s		\
-
+		test_ctemplate.c		\
+		test_casmgp.c			\
+		test_cretval.c
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -462,17 +475,22 @@ GXEMUL_OPTS=-E oldtestmips -M 3072 -i -p "end"
 
 RAW_LDSCRIPT=raw.ld
 TEST_LDSCRIPT=test.ld
+
 TEST_INIT_OBJECT=$(OBJDIR)/init.o
 TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 
-TEST_OBJECTS := $(TEST_FILES:%.s=$(OBJDIR)/%.o)
-TEST_ELFS := $(TEST_FILES:%.s=$(OBJDIR)/%.elf)
-TEST_MEMS := $(TEST_FILES:%.s=$(OBJDIR)/%.mem)
-TEST_DUMPS := $(TEST_FILES:%.s=$(OBJDIR)/%.dump)
-TEST_LOGS := $(TEST_FILES:%.s=$(LOGDIR)/%.log)
-GXEMUL_TEST_LOGS := $(GXEMUL_TEST_FILES:%.s=$(GXEMUL_LOGDIR)/%_gxemul.log)
-GXEMUL_RAW_PREFIXED := $(GXEMUL_TEST_FILES:raw_%.s=test_raw_%.s)
-GXEMUL_TESTS := $(GXEMUL_RAW_PREFIXED:%.s=tests/%.py)
+TESTS := $(basename $(TEST_FILES))
+TEST_OBJS := $(addsuffix .o,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
+CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
+
+GXEMUL_TESTS := $(basename $(GXEMUL_TEST_FILES))
+GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
+	$(GXEMUL_LOGDIR)/,$(GXEMUL_TESTS)))
+GXEMUL_RAW_PREFIXED := $(GXEMUL_TESTS:raw_%=test_raw_%)
+GXEMUL_USE_TESTS := $(GXEMUL_RAW_PREFIXED:%=tests/%.py)
 
 MEMCONV=python ${CHERIROOT}/tools/memConv.py
 
@@ -481,7 +499,7 @@ all: $(TEST_MEMS) $(TEST_DUMPS)
 test: nosetest
 
 cleantest:
-	rm -f $(TEST_LOGS)
+	rm -f $(CHERI_TEST_LOGS)
 	rm -f $(GXEMUL_TEST_LOGS)
 
 clean: cleantest
@@ -494,10 +512,16 @@ clean: cleantest
 .SECONDARY: $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
     $(TEST_LIB_OBJECT)
 
-$(OBJDIR)/%.o : %.s
+$(OBJDIR)/raw_%.o : $(TESTDIR)/raw_%.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
-$(OBJDIR)/%.o : $(TESTDIR)/%.s
+$(OBJDIR)/test_%.o : $(TESTDIR)/test_%.s
+	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+
+$(OBJDIR)/test_%.o : $(TESTDIR)/test_%.c
+	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+
+$(OBJDIR)/%.o: %.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 ## TODO: rename these all to test_raw so that we are consistent 
@@ -532,18 +556,19 @@ $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
 
 
 # Simulate a failure on all unit tests
-failnosetest: cleantest $(TEST_LOGS)
+failnosetest: cleantest $(CHERI_TEST_LOGS)
 	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=tools nosetests $(NOSEFLAGS)
 
 print-versions:
 	nosetests --version
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
-nosetest: all cleantest $(TEST_LOGS)
+nosetest: all cleantest $(CHERI_TEST_LOGS)
 	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS) || true
 
 gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
-	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_TESTS) || true
+	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_USE_TESTS) \
+	    || true
 
 gxemul-build:
 	rm -f -r $(GXEMUL_BINDIR)
