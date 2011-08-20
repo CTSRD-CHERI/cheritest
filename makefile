@@ -279,6 +279,7 @@ TEST_FILES=					\
 		test_cp0_lladdr.s		\
 		test_hardware_mappings.s	\
 		test_hardware_mappings_write.s	\
+		test_hardware_mapping_cached_read.s	\
 		test_ctemplate.c		\
 		test_casmgp.c			\
 		test_cretval.c			\
