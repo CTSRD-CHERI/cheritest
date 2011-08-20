@@ -277,6 +277,7 @@ TEST_FILES=					\
 		test_movz_movn_pipeline.s	\
 		test_cp0_compare.s		\
 		test_cp0_lladdr.s		\
+		test_hardware_mappings.s	\
 		test_ctemplate.c		\
 		test_casmgp.c			\
 		test_cretval.c			\
@@ -454,6 +455,7 @@ GXEMUL_TEST_FILES=				\
 		test_teq_lt.s			\
 		test_movz_movn_pipeline.s	\
 		test_cp0_compare.s		\
+		test_hardware_mappings.s	\
 		test_ctemplate.c		\
 		test_casmgp.c			\
 		test_cretval.c			\
