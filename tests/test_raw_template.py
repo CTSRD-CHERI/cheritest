@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2011 Steven J. Murdoch
+# Copyright (c) 2011 (holder)
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
