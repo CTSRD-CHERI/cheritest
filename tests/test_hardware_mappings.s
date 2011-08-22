@@ -75,6 +75,9 @@ test:		.ent test
 		dli	$t0, 0x9000000000000000		# xkphys uncached
 		daddu	$t0, $gp, $t0
 		ld	$a2, 0($t0)
+		lui $t1, 0x4000
+		dsubu $t0, $t0, $t1
+		sd	$a2, 0($t0)	# Store constant in lower 512MB to prepare for 32 bit mapping tests
 
 		dli	$t0, 0x9800000000000000		# xkphys cached,
 		daddu	$t0, $gp, $t0			# noncoherent
@@ -90,12 +93,14 @@ test:		.ent test
 
 		dli	$t0, 0xb000000000000000		# xkphys cached,
 		daddu	$t0, $gp, $t0			# update on write
-		ld	$a5, 0($t0)
+		ld	$a6, 0($t0)
 
 		#
 		# Also test historic MIPS ckseg0 and ckseg1, also present in
 		# R4000.
 		#
+		lui $t0, 0x4000
+		dsubu $gp, $gp, $t0
 		dli	$t0, 0xffffffffa0000000		# ckseg1, uncached
 		daddu	$t0, $gp, $t0
 		ld	$a0, 0($t0)
