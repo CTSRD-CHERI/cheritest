@@ -71,7 +71,7 @@ test:		.ent test
 		# working with, which can then be offset by various segment
 		# bases.  Store this in $gp for reuse.
 		#
-		dli	$t0, 0x9800000000000000		# Cached
+		dli	$t0, 0x9000000000000000		# Uncached
 		dsubu	$gp, $gp, $t0			# Physical
 
 		#

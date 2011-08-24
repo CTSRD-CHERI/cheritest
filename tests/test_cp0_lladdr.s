@@ -49,7 +49,7 @@ test:		.ent test
 		# convert to physical addresses as that is what lladdr will
 		# report.
 		#
-		dli	$t0, 0x9800000000000000
+		dli	$t0, 0x9000000000000000
 		dla	$s0, word1
 		dsubu	$s0, $s0, $t0
 		dla	$s1, word2
