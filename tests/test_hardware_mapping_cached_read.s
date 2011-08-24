@@ -62,25 +62,25 @@ test:		.ent test
 		# determine expected behaviour for our instruction sequence.
 		#
 		mfc0	$s1, $16
-
+		
 		#
-		# Read via uncached address (address saved in $s0).
+		# Calculate uncached address (address saved in $gp).
 		#
 		dla	$s0, dword
+		dli	$t0, 0x9800000000000000
+		dsubu	$s0, $s0, $t0
+		dli	$t0, 0x9000000000000000
+		daddu	$s0, $s0, $t0
+
+		#
+		# (1) Read via uncached address, (address saved in $s0).
+		#
 		ld	$a0, 0($s0)
 
 		#
-		# Calculate cached address (address saved in $gp).
+		# Read via cached address; brings line into data cache. 
 		#
 		dla	$gp, dword
-		dli	$t0, 0x9000000000000000
-		dsubu	$gp, $gp, $t0
-		dli	$t0, 0x9800000000000000
-		daddu	$gp, $gp, $t0
-
-		#
-		# (1) Read via cached address; brings line into data cache.
-		#
 		ld	$a1, 0($gp)
 
 		#
