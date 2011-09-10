@@ -35,7 +35,7 @@
 
 TESTDIR=tests
 
-TEST_FILES=					\
+RAW_FRAMEWORK_FILES=				\
 		test_raw_template.s		\
 		test_raw_reg_init.s		\
 		test_raw_hilo.s			\
@@ -44,7 +44,9 @@ TEST_FILES=					\
 		test_raw_reg_name.s		\
 		test_raw_nop.s			\
 		test_raw_ssnop.s		\
-		test_raw_lui.s			\
+		test_raw_lui.s
+
+RAW_ALU_FILES=					\
 		test_raw_add.s			\
 		test_raw_addi.s			\
 		test_raw_addiu.s		\
@@ -78,7 +80,9 @@ TEST_FILES=					\
 		test_raw_dsrl32.s		\
 		test_raw_dsra.s			\
 		test_raw_dsrav.s		\
-		test_raw_dsra32.s		\
+		test_raw_dsra32.s
+
+RAW_BRANCH_FILES=				\
 		test_raw_jump.s			\
 		test_raw_b.s			\
 		test_raw_beq_eq.s		\
@@ -147,7 +151,9 @@ TEST_FILES=					\
 		test_raw_bnel_lt.s		\
 		test_raw_jr.s			\
 		test_raw_jal.s			\
-		test_raw_jalr.s			\
+		test_raw_jalr.s
+
+RAW_MEM_FILES=					\
 		test_raw_lb.s			\
 		test_raw_lh.s			\
 		test_raw_lw.s			\
@@ -162,8 +168,6 @@ TEST_FILES=					\
 		test_raw_sd.s			\
 		test_raw_sc.s			\
 		test_raw_scd.s			\
-		test_raw_mfc0_dmfc0.s		\
-		test_raw_mtc0_sign_extend.s	\
 		test_raw_ldl.s			\
 		test_raw_ldr.s			\
 		test_raw_lwl.s			\
@@ -171,19 +175,55 @@ TEST_FILES=					\
 		test_raw_sdl.s			\
 		test_raw_sdr.s			\
 		test_raw_swl.s			\
-		test_raw_swr.s			\
+		test_raw_swr.s
+
+RAW_CP0_FILES=					\
+		test_raw_mfc0_dmfc0.s		\
+		test_raw_mtc0_sign_extend.s
+
+TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
 		test_reg_zero.s			\
 		test_dli.s			\
 		test_move.s			\
+		test_movz_movn_pipeline.s	\
+		test_code_rom_relocation.s	\
+		test_code_ram_relocation.s	\
+		test_ctemplate.c		\
+		test_casmgp.c			\
+		test_cretval.c			\
+		test_crecurse.c			\
+		test_cglobals.c
+
+TEST_ALU_FILES=					\
 		test_hilo.s			\
+		test_div.s			\
+		test_divu.s			\
+		test_ddiv.s			\
+		test_ddivu.s			\
+		test_mult.s			\
+		test_multu.s			\
+		test_dmult.s			\
+		test_dmultu.s			\
+		test_madd.s			\
+		test_msub.s			\
+		test_mul_div_loop.s		\
 		test_slt.s			\
 		test_slti.s			\
 		test_sltiu.s			\
-		test_sltu.s			\
+		test_sltu.s
+
+TEST_MEM_FILES=					\
+		test_llsc.s			\
+		test_lldscd.s			\
+		test_hardware_mappings.s	\
+		test_hardware_mappings_write.s	\
+
+TEST_CACHE_FILES=				\
+		test_hardware_mapping_cached_read.s
+
+TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
-		test_code_rom_relocation.s	\
-		test_code_ram_relocation.s	\
 		test_eret.s			\
 		test_exception_bev1_trap.s	\
 		test_exception_bev0_trap.s	\
@@ -205,18 +245,7 @@ TEST_FILES=					\
 		test_ld_unalign.s		\
 		test_ll_unalign.s		\
 		test_lld_unalign.s		\
-		test_div.s			\
-		test_divu.s			\
-		test_ddiv.s			\
-		test_ddivu.s			\
-		test_mult.s			\
-		test_multu.s			\
-		test_dmult.s			\
-		test_dmultu.s			\
-		test_madd.s			\
 		test_madd_lo_overflow.s		\
-		test_msub.s			\
-		test_mul_div_loop.s		\
 		test_sh_unalign.s		\
 		test_sw_unalign.s		\
 		test_sd_unalign.s		\
@@ -272,19 +301,20 @@ TEST_FILES=					\
 		test_tnei_gt.s			\
 		test_tnei_lt_sign.s		\
 		test_tnei_lt.s			\
-		test_llsc.s			\
-		test_lldscd.s			\
-		test_movz_movn_pipeline.s	\
 		test_cp0_compare.s		\
-		test_cp0_lladdr.s		\
-		test_hardware_mappings.s	\
-		test_hardware_mappings_write.s	\
-		test_hardware_mapping_cached_read.s	\
-		test_ctemplate.c		\
-		test_casmgp.c			\
-		test_cretval.c			\
-		test_crecurse.c			\
-		test_cglobals.c
+		test_cp0_lladdr.s
+
+TEST_FILES=					\
+		$(RAW_FRAMEWORK_FILES)		\
+		$(RAW_ALU_FILES)		\
+		$(RAW_BRANCH_FILES)		\
+		$(RAW_MEM_FILES)		\
+		$(RAW_CP0_FILES)		\
+		$(TEST_FRAMEWORK_FILES)		\
+		$(TEST_ALU_FILES)		\
+		$(TEST_MEM_FILES)		\
+		$(TEST_CACHE_FILES)		\
+		$(TEST_CP0_FILES)
 
 #
 # This list is the subset of TEST_FILES believed to work on gxemul; it should
