@@ -33,7 +33,17 @@
 # "make test" runs the tests
 #
 
+#
+# List of directories in which to find test source and .py files.
+#
 TESTDIR=tests
+TESTDIRS=					\
+		$(TESTDIR)/framework		\
+		$(TESTDIR)/alu			\
+		$(TESTDIR)/branch		\
+		$(TESTDIR)/mem			\
+		$(TESTDIR)/cache		\
+		$(TESTDIR)/cp0
 
 RAW_FRAMEWORK_FILES=				\
 		test_raw_template.s		\
@@ -51,6 +61,7 @@ RAW_ALU_FILES=					\
 		test_raw_addi.s			\
 		test_raw_addiu.s		\
 		test_raw_addu.s			\
+		test_raw_and.s			\
 		test_raw_arithmetic_combo.s	\
 		test_raw_sub.s			\
 		test_raw_subu.s			\
@@ -217,7 +228,7 @@ TEST_ALU_FILES=					\
 
 TEST_MEM_FILES=					\
 		test_hardware_mappings.s	\
-		test_hardware_mappings_write.s	\
+		test_hardware_mappings_write.s
 
 TEST_LLSC_FILES=				\
 		test_ll_unalign.s		\
@@ -236,25 +247,6 @@ TEST_CP0_FILES=					\
 		test_eret.s			\
 		test_exception_bev0_trap.s	\
 		test_exception_bev0_trap_bd.s	\
-		test_add_overflow.s		\
-		test_addi_overflow.s		\
-		test_addiu_overflow.s		\
-		test_addu_overflow.s		\
-		test_dadd_overflow.s		\
-		test_daddi_overflow.s		\
-		test_daddiu_overflow.s		\
-		test_daddu_overflow.s		\
-		test_dsub_overflow.s		\
-		test_dsubu_overflow.s		\
-		test_sub_overflow.s		\
-		test_subu_overflow.s		\
-		test_lh_unalign.s		\
-		test_lw_unalign.s		\
-		test_ld_unalign.s		\
-		test_madd_lo_overflow.s		\
-		test_sh_unalign.s		\
-		test_sw_unalign.s		\
-		test_sd_unalign.s		\
 		test_break.s			\
 		test_syscall.s			\
 		test_teq_eq.s			\
@@ -277,6 +269,29 @@ TEST_CP0_FILES=					\
 		test_tne_gt.s			\
 		test_tne_lt.s			\
 		test_cp0_compare.s
+
+TEST_ALU_OVERFLOW_FILES=			\
+		test_add_overflow.s		\
+		test_addi_overflow.s		\
+		test_addiu_overflow.s		\
+		test_addu_overflow.s		\
+		test_dadd_overflow.s		\
+		test_daddi_overflow.s		\
+		test_daddiu_overflow.s		\
+		test_daddu_overflow.s		\
+		test_dsub_overflow.s		\
+		test_dsubu_overflow.s		\
+		test_sub_overflow.s		\
+		test_subu_overflow.s		\
+		test_madd_lo_overflow.s
+
+TEST_MEM_UNALIGN_FILES=				\
+		test_lh_unalign.s		\
+		test_lw_unalign.s		\
+		test_ld_unalign.s		\
+		test_sh_unalign.s		\
+		test_sw_unalign.s		\
+		test_sd_unalign.s
 
 TEST_BEV1_FILES=				\
 		test_exception_bev1_trap.s
@@ -312,6 +327,10 @@ TEST_TRAPI_FILES=				\
 		test_tnei_lt_sign.s		\
 		test_tnei_lt.s
 
+#
+# All unit tests.  Implicitly, these will all be run for CHERI, but subsets
+# may be used for other targets.
+#
 TEST_FILES=					\
 		$(RAW_FRAMEWORK_FILES)		\
 		$(RAW_ALU_FILES)		\
@@ -325,29 +344,21 @@ TEST_FILES=					\
 		$(TEST_LLSC_FILES)		\
 		$(TEST_CACHE_FILES)		\
 		$(TEST_CP0_FILES)		\
-		$(TEST_TRAPI_FILES)		\
-		$(TEST_BEV1_FILES)
+		$(TEST_BEV1_FILES)		\
+		$(TEST_ALU_OVERFLOW_FILES)	\
+		$(TEST_MEM_UNALIGN_FILES)	\
+		$(TEST_TRAPI_FILES)
 
 #
-# Tests to run with gxemul -- omits several categories:
+# Omit certain categories of tests due to gxemul functional omissions:
 #
-# $(RAW_LLSC_FILES), $(TEST_LLSC_FILES) -- gxemul does not implement load
-# linked, store conditional.
+# llsc - gxemul terminates the simulator on load linked, store conditional
+# cache - gxemul does not simulate a cache
+# bev1 - gxemul does not support early boot exception vectors
+# trapi - gxemul does not implement trap instructions with immediate
+#         arguments
 #
-# $(TEST_TRAPI_FILES) -- gxemul omits MIPS4k trap instructions.
-#
-# $(TEST_BEV1_FILES) -- gxemul omits support for boot-time exception vectors.
-#
-GXEMUL_TEST_FILES=				\
-		$(RAW_FRAMEWORK_FILES)		\
-		$(RAW_ALU_FILES)		\
-		$(RAW_BRANCH_FILES)		\
-		$(RAW_MEM_FILES)		\
-		$(RAW_CP0_FILES)		\
-		$(TEST_FRAMEWORK_FILES)		\
-		$(TEST_ALU_FILES)		\
-		$(TEST_MEM_FILES)		\
-		$(TEST_CP0_FILES)
+GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -362,6 +373,7 @@ TEST_CYCLE_LIMIT=20000
 
 CHERIROOT?=../../cheri/trunk
 
+VPATH=$(TESTDIRS)
 OBJDIR=obj
 LOGDIR=log
 GXEMUL_LOGDIR=gxemul_log
@@ -379,12 +391,10 @@ TEST_OBJS := $(addsuffix .o,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
-CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 
-GXEMUL_TESTS := $(basename $(GXEMUL_TEST_FILES))
+CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
-	$(GXEMUL_LOGDIR)/,$(GXEMUL_TESTS)))
-GXEMUL_USE_TESTS := $(addsuffix .py,$(addprefix tests/,$(GXEMUL_TESTS)))
+	$(GXEMUL_LOGDIR)/,$(TESTS)))
 
 MEMCONV=python ${CHERIROOT}/tools/memConv.py
 
@@ -399,17 +409,17 @@ cleantest:
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
 	rm -f $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
-	rm -f $(TESTDIR)/*.pyc
+	rm -f $(TESTDIR)/*/*.pyc
 	rm -f *.hex mem.bin
 
 .PHONY: all clean cleantest test nosetest failnosetest
 .SECONDARY: $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
     $(TEST_LIB_OBJECT)
 
-$(OBJDIR)/test_%.o : $(TESTDIR)/test_%.s
+$(OBJDIR)/test_%.o : test_%.s
 	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
-$(OBJDIR)/test_%.o : $(TESTDIR)/test_%.c
+$(OBJDIR)/test_%.o : test_%.c
 	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
@@ -443,23 +453,22 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 < /dev/ptmx
-
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 < /dev/ptmx || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
-	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=tools nosetests $(NOSEFLAGS)
+	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=tools nosetests $(NOSEFLAGS) $(TESTDIRS)
 
 print-versions:
 	nosetests --version
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
 nosetest: all cleantest $(CHERI_TEST_LOGS)
-	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS) || true
+	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
 gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
-	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_USE_TESTS) \
-	    || true
+	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
+	    $(TESTDIRS) || true
 
 gxemul-build:
 	rm -f -r $(GXEMUL_BINDIR)
