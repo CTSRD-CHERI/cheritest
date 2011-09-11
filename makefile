@@ -56,7 +56,8 @@ RAW_FRAMEWORK_FILES=				\
 		test_raw_reg_name.s		\
 		test_raw_nop.s			\
 		test_raw_ssnop.s		\
-		test_raw_lui.s
+		test_raw_lui.s			\
+		test_raw_counterdev.s
 
 RAW_ALU_FILES=					\
 		test_raw_add.s			\
@@ -360,7 +361,12 @@ TEST_FILES=					\
 # trapi - gxemul does not implement trap instructions with immediate
 #         arguments
 #
-GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi"
+# Some tests are omitted as CHERI-specific:
+#
+# counterdev - gxemul does not provide the "counter" device used to test
+#              cache semantics.
+#
+GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
