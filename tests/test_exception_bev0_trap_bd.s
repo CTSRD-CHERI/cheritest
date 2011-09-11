@@ -77,7 +77,7 @@ test:		.ent test
 		li	$t0, 1
 desired_epc:
 		bnez	$t0, branch_target
-		teqi	$zero, 0
+		teq	$zero, $zero
 branch_target:
 
 		#

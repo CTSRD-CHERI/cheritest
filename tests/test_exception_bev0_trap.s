@@ -86,7 +86,7 @@ test:		.ent test
 		# Trigger exception.
 		#
 desired_epc:
-		teqi	$zero, 0
+		teq	$zero, $zero
 
 		#
 		# Exception return.
