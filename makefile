@@ -160,14 +160,10 @@ RAW_MEM_FILES=					\
 		test_raw_ld.s			\
 		test_raw_load_delay_reg.s	\
 		test_raw_load_delay_store.s	\
-		test_raw_ll.s			\
-		test_raw_lld.s			\
 		test_raw_sb.s			\
 		test_raw_sh.s			\
 		test_raw_sw.s			\
 		test_raw_sd.s			\
-		test_raw_sc.s			\
-		test_raw_scd.s			\
 		test_raw_ldl.s			\
 		test_raw_ldr.s			\
 		test_raw_lwl.s			\
@@ -176,6 +172,12 @@ RAW_MEM_FILES=					\
 		test_raw_sdr.s			\
 		test_raw_swl.s			\
 		test_raw_swr.s
+
+RAW_LLSC_FILES=					\
+		test_raw_ll.s			\
+		test_raw_lld.s			\
+		test_raw_sc.s			\
+		test_raw_scd.s
 
 RAW_CP0_FILES=					\
 		test_raw_mfc0_dmfc0.s		\
@@ -214,10 +216,17 @@ TEST_ALU_FILES=					\
 		test_sltu.s
 
 TEST_MEM_FILES=					\
-		test_llsc.s			\
-		test_lldscd.s			\
 		test_hardware_mappings.s	\
 		test_hardware_mappings_write.s	\
+
+TEST_LLSC_FILES=				\
+		test_ll_unalign.s		\
+		test_lld_unalign.s		\
+		test_sc_unalign.s		\
+		test_scd_unalign.s		\
+		test_llsc.s			\
+		test_lldscd.s			\
+		test_cp0_lladdr.s
 
 TEST_CACHE_FILES=				\
 		test_hardware_mapping_cached_read.s
@@ -225,7 +234,6 @@ TEST_CACHE_FILES=				\
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
 		test_eret.s			\
-		test_exception_bev1_trap.s	\
 		test_exception_bev0_trap.s	\
 		test_exception_bev0_trap_bd.s	\
 		test_add_overflow.s		\
@@ -243,26 +251,41 @@ TEST_CP0_FILES=					\
 		test_lh_unalign.s		\
 		test_lw_unalign.s		\
 		test_ld_unalign.s		\
-		test_ll_unalign.s		\
-		test_lld_unalign.s		\
 		test_madd_lo_overflow.s		\
 		test_sh_unalign.s		\
 		test_sw_unalign.s		\
 		test_sd_unalign.s		\
-		test_sc_unalign.s		\
-		test_scd_unalign.s		\
 		test_break.s			\
 		test_syscall.s			\
 		test_teq_eq.s			\
 		test_teq_gt.s			\
 		test_teq_lt.s			\
+		test_tge_eq.s			\
+		test_tge_gt.s			\
+		test_tge_lt.s			\
+		test_tgeu_eq.s			\
+		test_tgeu_gt.s			\
+		test_tgeu_lt.s			\
+		test_tlt_eq.s			\
+		test_tlt_gt.s			\
+		test_tlt_lt.s			\
+		test_tltu_eq.s			\
+		test_tltu_gt_sign.s		\
+		test_tltu_gt.s			\
+		test_tltu_lt.s			\
+		test_tne_eq.s			\
+		test_tne_gt.s			\
+		test_tne_lt.s			\
+		test_cp0_compare.s
+
+TEST_BEV1_FILES=				\
+		test_exception_bev1_trap.s
+
+TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
 		test_teqi_gt.s			\
 		test_teqi_lt.s			\
 		test_teqi_eq_sign.s		\
-		test_tge_eq.s			\
-		test_tge_gt.s			\
-		test_tge_lt.s			\
 		test_tgei_eq.s			\
 		test_tgei_gt.s			\
 		test_tgei_lt.s			\
@@ -272,12 +295,6 @@ TEST_CP0_FILES=					\
 		test_tgeiu_eq.s			\
 		test_tgeiu_gt.s			\
 		test_tgeiu_lt.s			\
-		test_tgeu_eq.s			\
-		test_tgeu_gt.s			\
-		test_tgeu_lt.s			\
-		test_tlt_eq.s			\
-		test_tlt_gt.s			\
-		test_tlt_lt.s			\
 		test_tlti_eq.s			\
 		test_tlti_gt.s			\
 		test_tlti_lt.s			\
@@ -288,23 +305,40 @@ TEST_CP0_FILES=					\
 		test_tltiu_gt_sign.s		\
 		test_tltiu_gt.s			\
 		test_tltiu_lt.s			\
-		test_tltu_eq.s			\
-		test_tltu_gt_sign.s		\
-		test_tltu_gt.s			\
-		test_tltu_lt.s			\
-		test_tne_eq.s			\
-		test_tne_gt.s			\
-		test_tne_lt.s			\
 		test_tnei_eq_sign.s		\
 		test_tnei_eq.s			\
 		test_tnei_gt_sign.s		\
 		test_tnei_gt.s			\
 		test_tnei_lt_sign.s		\
-		test_tnei_lt.s			\
-		test_cp0_compare.s		\
-		test_cp0_lladdr.s
+		test_tnei_lt.s
 
 TEST_FILES=					\
+		$(RAW_FRAMEWORK_FILES)		\
+		$(RAW_ALU_FILES)		\
+		$(RAW_BRANCH_FILES)		\
+		$(RAW_MEM_FILES)		\
+		$(RAW_LLSC_FILES)		\
+		$(RAW_CP0_FILES)		\
+		$(TEST_FRAMEWORK_FILES)		\
+		$(TEST_ALU_FILES)		\
+		$(TEST_MEM_FILES)		\
+		$(TEST_LLSC_FILES)		\
+		$(TEST_CACHE_FILES)		\
+		$(TEST_CP0_FILES)		\
+		$(TEST_TRAPI_FILES)		\
+		$(TEST_BEV1_FILES)
+
+#
+# Tests to run with gxemul -- omits several categories:
+#
+# $(RAW_LLSC_FILES), $(TEST_LLSC_FILES) -- gxemul does not implement load
+# linked, store conditional.
+#
+# $(TEST_TRAPI_FILES) -- gxemul omits MIPS4k trap instructions.
+#
+# $(TEST_BEV1_FILES) -- gxemul omits support for boot-time exception vectors.
+#
+GXEMUL_TEST_FILES=				\
 		$(RAW_FRAMEWORK_FILES)		\
 		$(RAW_ALU_FILES)		\
 		$(RAW_BRANCH_FILES)		\
@@ -315,185 +349,6 @@ TEST_FILES=					\
 		$(TEST_MEM_FILES)		\
 		$(TEST_CACHE_FILES)		\
 		$(TEST_CP0_FILES)
-
-#
-# This list is the subset of TEST_FILES believed to work on gxemul; it should
-# omit tests specific to the CHERI ISA.
-#
-GXEMUL_TEST_FILES=				\
-		test_raw_template.s		\
-		test_raw_reg_init.s		\
-		test_raw_hilo.s			\
-		test_raw_dli.s			\
-		test_raw_dli_sign.s		\
-		test_raw_reg_name.s		\
-		test_raw_nop.s			\
-		test_raw_ssnop.s		\
-		test_raw_lui.s			\
-		test_raw_add.s			\
-		test_raw_addi.s			\
-		test_raw_addiu.s		\
-		test_raw_addu.s			\
-		test_raw_arithmetic_combo.s	\
-		test_raw_sub.s			\
-		test_raw_subu.s			\
-		test_raw_dadd.s			\
-		test_raw_daddi.s		\
-		test_raw_daddiu.s		\
-		test_raw_daddu.s		\
-		test_raw_dsub.s			\
-		test_raw_dsubu.s		\
-		test_raw_andi.s			\
-		test_raw_nor.s			\
-		test_raw_or.s			\
-		test_raw_ori.s			\
-		test_raw_xor.s			\
-		test_raw_xori.s			\
-		test_raw_sll.s			\
-		test_raw_sllv.s			\
-		test_raw_srl.s			\
-		test_raw_srlv.s			\
-		test_raw_sra.s			\
-		test_raw_srav.s			\
-		test_raw_dsll.s			\
-		test_raw_dsllv.s		\
-		test_raw_dsll32.s		\
-		test_raw_dsrl.s			\
-		test_raw_dsrlv.s		\
-		test_raw_dsrl32.s		\
-		test_raw_dsra.s			\
-		test_raw_dsrav.s		\
-		test_raw_dsra32.s		\
-		test_raw_jump.s			\
-		test_raw_b.s			\
-		test_raw_beq_eq.s		\
-		test_raw_beq_eq_back.s		\
-		test_raw_beq_gt.s		\
-		test_raw_beq_lt.s		\
-		test_raw_beql_eq.s		\
-		test_raw_beql_eq_back.s		\
-		test_raw_beql_gt.s		\
-		test_raw_beql_lt.s		\
-		test_raw_bgez_eq.s		\
-		test_raw_bgez_eq_back.s		\
-		test_raw_bgez_gt.s		\
-		test_raw_bgez_lt.s		\
-		test_raw_bgezal_eq.s		\
-		test_raw_bgezal_eq_back.s	\
-		test_raw_bgezal_gt.s		\
-		test_raw_bgezal_lt.s		\
-		test_raw_bgezall_eq.s		\
-		test_raw_bgezall_eq_back.s	\
-		test_raw_bgezall_gt.s		\
-		test_raw_bgezall_lt.s		\
-		test_raw_bgezl_eq.s		\
-		test_raw_bgezl_eq_back.s	\
-		test_raw_bgezl_gt.s		\
-		test_raw_bgezl_lt.s		\
-		test_raw_bgtz_eq.s		\
-		test_raw_bgtz_gt_back.s		\
-		test_raw_bgtz_gt.s		\
-		test_raw_bgtz_lt.s		\
-		test_raw_bgtzl_eq.s		\
-		test_raw_bgtzl_gt_back.s	\
-		test_raw_bgtzl_gt.s		\
-		test_raw_bgtzl_lt.s		\
-		test_raw_blez_eq_back.s		\
-		test_raw_blez_eq.s		\
-		test_raw_blez_gt.s		\
-		test_raw_blez_lt.s		\
-		test_raw_blezl_eq_back.s	\
-		test_raw_blezl_eq.s		\
-		test_raw_blezl_gt.s		\
-		test_raw_blezl_lt.s		\
-		test_raw_bltz_eq.s		\
-		test_raw_bltz_gt.s		\
-		test_raw_bltz_lt_back.s		\
-		test_raw_bltz_lt.s		\
-		test_raw_bltzal_eq.s		\
-		test_raw_bltzal_gt.s		\
-		test_raw_bltzal_lt_back.s	\
-		test_raw_bltzal_lt.s		\
-		test_raw_bltzall_eq.s		\
-		test_raw_bltzall_gt.s		\
-		test_raw_bltzall_lt_back.s	\
-		test_raw_bltzall_lt.s		\
-		test_raw_bltzl_eq.s		\
-		test_raw_bltzl_gt.s		\
-		test_raw_bltzl_lt.s		\
-		test_raw_bltzl_lt_back.s	\
-		test_raw_bne_eq.s		\
-		test_raw_bne_gt.s		\
-		test_raw_bne_lt_back.s		\
-		test_raw_bne_lt.s		\
-		test_raw_bnel_eq.s		\
-		test_raw_bnel_gt.s		\
-		test_raw_bnel_lt_back.s		\
-		test_raw_bnel_lt.s		\
-		test_raw_jr.s			\
-		test_raw_jal.s			\
-		test_raw_jalr.s			\
-		test_raw_lb.s			\
-		test_raw_lh.s			\
-		test_raw_lw.s			\
-		test_raw_ld.s			\
-		test_raw_load_delay_reg.s	\
-		test_raw_load_delay_store.s	\
-		test_raw_ll.s			\
-		test_raw_lld.s			\
-		test_raw_sb.s			\
-		test_raw_sh.s			\
-		test_raw_sw.s			\
-		test_raw_sd.s			\
-		test_raw_mfc0_dmfc0.s		\
-		test_raw_mtc0_sign_extend.s	\
-		test_raw_ldl.s			\
-		test_raw_ldr.s			\
-		test_raw_lwl.s			\
-		test_raw_lwr.s			\
-		test_raw_sdl.s			\
-		test_raw_sdr.s			\
-		test_raw_swl.s			\
-		test_raw_swr.s			\
-		test_template.s			\
-		test_reg_zero.s			\
-		test_dli.s			\
-		test_move.s			\
-		test_hilo.s			\
-		test_slt.s			\
-		test_slti.s			\
-		test_sltiu.s			\
-		test_sltu.s			\
-		test_cp0_reg_init.s		\
-		test_code_rom_relocation.s	\
-		test_code_ram_relocation.s	\
-		test_eret.s			\
-		test_div.s			\
-		test_divu.s			\
-		test_ddiv.s			\
-		test_ddivu.s			\
-		test_mult.s			\
-		test_multu.s			\
-		test_dmult.s			\
-		test_dmultu.s			\
-		test_madd.s			\
-		test_madd_lo_overflow.s		\
-		test_msub.s			\
-		test_mul_div_loop.s		\
-		test_break.s			\
-		test_syscall.s			\
-		test_teq_eq.s			\
-		test_teq_gt.s			\
-		test_teq_lt.s			\
-		test_movz_movn_pipeline.s	\
-		test_cp0_compare.s		\
-		test_hardware_mappings.s	\
-		test_hardware_mappings_write.s	\
-		test_ctemplate.c		\
-		test_casmgp.c			\
-		test_cretval.c			\
-		test_crecurse.c			\
-		test_cglobals.c
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
