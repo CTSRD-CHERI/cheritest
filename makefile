@@ -26,11 +26,13 @@
 # Tests are run in the order listed in TEST_FILES; it is recommended they be
 # sorted by rough functional dependence on CPU features.
 #
-# Note: For the time being, all tests must reside in the tests/ directory
-# itself, and not in further sub-directories.
+# All tests must be in the $(TESTDIR) tree; if you add new sub-directories,
+# remember to add them to $(TESTDIRS).  Some tests are annotated with Nose
+# attributes so that they will be excluded on gxemul -- see GXEMUL_NOSEFLAGS.
 #
 # "make" builds all the required parts
-# "make test" runs the tests
+# "make test" runs the tests through CHERI
+# "make gxemul-test" runs the tests through gxemul
 #
 
 #
