@@ -45,7 +45,8 @@ TESTDIRS=					\
 		$(TESTDIR)/branch		\
 		$(TESTDIR)/mem			\
 		$(TESTDIR)/cache		\
-		$(TESTDIR)/cp0
+		$(TESTDIR)/cp0                  \
+		$(TESTDIR)/cp2
 
 RAW_FRAMEWORK_FILES=				\
 		test_raw_template.s		\
@@ -196,6 +197,9 @@ RAW_LLSC_FILES=					\
 RAW_CP0_FILES=					\
 		test_raw_mfc0_dmfc0.s		\
 		test_raw_mtc0_sign_extend.s
+
+RAW_CP2_FILES=					\
+		test_raw_capinstructions.s
 
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
@@ -405,6 +409,7 @@ GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 
 MEMCONV=python ${CHERIROOT}/tools/memConv.py
+AS=sde-as
 
 all: $(TEST_MEMS) $(TEST_DUMPS)
 
@@ -425,13 +430,13 @@ clean: cleantest
     $(TEST_LIB_OBJECT)
 
 $(OBJDIR)/test_%.o : test_%.s
-	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/test_%.o : test_%.c
 	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
-	sde-as -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 ## TODO: rename these all to test_raw so that we are consistent 
 $(OBJDIR)/test_raw_%.elf : $(OBJDIR)/test_raw_%.o $(RAW_LDSCRIPT)
