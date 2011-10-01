@@ -41,6 +41,9 @@
 # horribly wrong during the test.
 #
 
+		.text
+		.global start
+		.ent start
 start:
 		# Set up stack and stack frame
 		dla	$fp, __sp
@@ -109,3 +112,4 @@ exception_end:
 end:
 		b end
 		nop
+		.end start
