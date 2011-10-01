@@ -18,6 +18,12 @@
 # properties to the "test" case.  Source file names must match the pattern
 # "test_*.c".
 #
+# As a further dimension, each test is run in two forms: at the default start
+# address in the uncached xkphys region, and relocated to the cached xkphys
+# region.  The latter requires an additional instructions to jump to the
+# cached start location when the test begins.  Notice that there are .celf,
+# .cmem, etc, indicating the version linked for cached instructions.
+#
 # Each test is accompanied by a Nose test case file, which analyses registers
 # from the simulator run to decide if the test passed or not.  The Nose test
 # framework drives each test, checks results, and summarises the test run on
@@ -393,42 +399,57 @@ GXEMUL_BINDIR=tools/gxemul/CTSRD-CHERI-gxemul-8d92b42
 GXEMUL_OPTS=-E oldtestmips -M 3072 -i -p "end"
 
 RAW_LDSCRIPT=raw.ld
+RAW_CACHED_LDSCRIPT=raw_cached.ld
 TEST_LDSCRIPT=test.ld
+TEST_CACHED_LDSCRIPT=test_cached.ld
 
 TEST_INIT_OBJECT=$(OBJDIR)/init.o
+TEST_INIT_CACHED_OBJECT=$(OBJDIR)/init_cached.o
 TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 
 TESTS := $(basename $(TEST_FILES))
 TEST_OBJS := $(addsuffix .o,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 
 CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
+CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
+	$(LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
+	$(GXEMUL_LOGDIR)/,$(TESTS)))
+GXEMUL_TEST_CACHED_LOGS := $(addsuffix _cached_gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 
 MEMCONV=python ${CHERIROOT}/tools/memConv.py
 AS=sde-as
 
-all: $(TEST_MEMS) $(TEST_DUMPS)
+all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS)
 
 test: nosetest
 
 cleantest:
-	rm -f $(CHERI_TEST_LOGS)
-	rm -f $(GXEMUL_TEST_LOGS)
+	rm -f $(CHERI_TEST_LOGS) $(CHERI_TEST_CACHED_LOGS)
+	rm -f $(GXEMUL_TEST_LOGS) $(GXEMUL_TEST_CACHED_LOGS)
 
 clean: cleantest
-	rm -f $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
+	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
 	rm -f $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
+	rm -f $(TEST_CACHED_ELFS) $(TEST_CACHED_MEMS) $(TEST_CACHED_DUMPS)
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f *.hex mem.bin
 
 .PHONY: all clean cleantest test nosetest failnosetest
 .SECONDARY: $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
-    $(TEST_LIB_OBJECT)
+    $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
 
+#
+# Targets for unlinked .o files.  The same .o files can be used for both
+# uncached and cached runs of the suite, so we just build them once.
+#
 $(OBJDIR)/test_%.o : test_%.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
@@ -438,7 +459,9 @@ $(OBJDIR)/test_%.o : test_%.c
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
-## TODO: rename these all to test_raw so that we are consistent 
+#
+# Targets for ELF images of tests running out of uncached memory.
+#
 $(OBJDIR)/test_raw_%.elf : $(OBJDIR)/test_raw_%.o $(RAW_LDSCRIPT)
 	sde-ld -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
 
@@ -447,16 +470,37 @@ $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \
 	sde-ld -EB -G0 -T$(TEST_LDSCRIPT) $(TEST_INIT_OBJECT) \
 	    $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
 
+#
+# Targets for ELF images of tests running out of cached memory.
+#
+$(OBJDIR)/test_raw_%_cached.elf : $(OBJDIR)/test_raw_%.o \
+	    $(TEST_INIT_CACHED_OBJECT) $(RAW_CACHED_LDSCRIPT)
+	sde-ld -EB -G0 -T$(RAW_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
+	    $< -o $@ -m elf64btsmip
+
+$(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
+	    $(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
+	sde-ld -EB -G0 -T$(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
+
+#
+# Convert ELF images to raw memory images that can be loaded into simulators
+# or hardware.
+#
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
 	sde-objcopy -S -O binary $< $@
 
+#
+# Provide an annotated disassembly for the ELF image to be used in diagnosis.
+#
 $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
 	sde-objdump -xsSd $< > $@
 
 #
-# memConv.py needs fixing so that it accepts explicit sources and
-# destinations.  That way concurrent runs can't tread on each other, allowing
-# testing with -j, etc.
+# Target to execute a Bluespec simulation of the test suite; memConv.py needs
+# fixing so that it accepts explicit sources and destinations.  That way
+# concurrent runs can't tread on each other, allowing testing with -j, etc.
 #
 .NOTPARALLEL:
 $(LOGDIR)/%.log : $(OBJDIR)/%.mem
@@ -464,6 +508,11 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	$(MEMCONV) bsim
 	${CHERIROOT}/sim -m $(TEST_CYCLE_LIMIT) > $@
 
+#
+# Target to execute a gxemul simulation.
+#
+# XXX: What is this not parallel?
+#
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 < /dev/ptmx || true
@@ -475,11 +524,20 @@ failnosetest: cleantest $(CHERI_TEST_LOGS)
 print-versions:
 	nosetests --version
 
+foo: $(CHERI_TEST_LOGS)
+
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
 nosetest: all cleantest $(CHERI_TEST_LOGS)
 	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
+nosetest_cached: all cleantest $(CHERI_TEST_CACHED_LOGS)
+	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS) $(TESTDIRS) || true
+
 gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
+	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
+	    $(TESTDIRS) || true
+
+gxemul-nosetest_cached: all cleantest $(GXEMUL_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
