@@ -39,6 +39,7 @@
 # test framework can also test the initial value of $sp.
 #
 
+		.global start
 start:
 		# Dump registers in the simulator
 		mtc0 $v0, $26

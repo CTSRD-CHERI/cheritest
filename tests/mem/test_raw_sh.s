@@ -37,6 +37,7 @@
 # Unit test that stores half words to, and then loads half words from, memory.
 #
 		.text
+		.global start
 start:
 		# Store and load a half word into double word storage
 		dli	$a0, 0xfedc

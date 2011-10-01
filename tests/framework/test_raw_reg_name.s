@@ -33,6 +33,7 @@
 .set nobopt
 .set noat
 
+		.global start
 start:
 		# Test here
 		dli	$zero, 0		# no-op

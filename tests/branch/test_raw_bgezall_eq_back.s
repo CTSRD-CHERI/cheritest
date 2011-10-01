@@ -39,6 +39,7 @@
 # correct, control flow is as expected, that $ra is properly assigned.
 #
 
+		.global start
 start:
 		b forward_target
 		nop			# branch-delay slot

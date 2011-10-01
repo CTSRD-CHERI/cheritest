@@ -37,6 +37,7 @@
 # Test beql (branch on equal, likely), equal case and forward jump.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		beql	$zero, $zero, branch_target

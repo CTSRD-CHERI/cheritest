@@ -37,6 +37,7 @@
 # Test bltzl (branch on less than zero likely, signed), greater than case.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		li	$t0, 1

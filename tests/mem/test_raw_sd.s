@@ -40,6 +40,7 @@
 # variations to check all is well.
 #
 		.text
+		.global start
 start:
 		dli	$a0, 0xfedcba9876543210
 		dla	$t3, dword

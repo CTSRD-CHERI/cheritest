@@ -38,6 +38,7 @@
 # the branch-delay slot, $t2 should be skipped, and $t3 at the branch target.
 #
 
+		.global start
 start:
 		li	$t0, 1
 		b	branch_target

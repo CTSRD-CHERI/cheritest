@@ -38,6 +38,7 @@
 # expected, that the desired register updated, and that $ra is *not* updated.
 #
 
+		.global start
 start:
 		li	$a0, 1
 		dla	$a1, desired_return_address	# To check $a2 against

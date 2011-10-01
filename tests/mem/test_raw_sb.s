@@ -37,6 +37,7 @@
 # Unit test that stores bytes to, and then loads bytes from, memory.
 #
 		.text
+		.global start
 start:
 		# Store and load a byte into double word storage
 		dli	$a0, 0xfe

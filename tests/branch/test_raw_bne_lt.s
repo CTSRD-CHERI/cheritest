@@ -37,6 +37,7 @@
 # Test bne (branch on equal, signed), less than case and forward jump.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		li	$t0, -1

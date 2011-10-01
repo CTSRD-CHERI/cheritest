@@ -39,6 +39,7 @@
 # positive and negative variations to check all is well.
 #
 		.text
+		.global start
 start:
 		# Load double words
 		ld	$a0, dword

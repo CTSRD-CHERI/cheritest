@@ -38,6 +38,7 @@
 # case and forward jump.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		bgezl	$zero, branch_target

@@ -37,6 +37,7 @@
 # Test lui (load upper immediate)
 #
 
+		.global start
 start:
 		dli	$a0, 0xffffffffffffffff
 		dli	$a1, 0

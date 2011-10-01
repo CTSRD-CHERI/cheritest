@@ -39,6 +39,7 @@
 # Overflow is left to higher-level tests, as exceptions are implied.
 #
 
+		.global start
 start:
 		#
 		# subu with independent inputs and outputs; preserve inputs

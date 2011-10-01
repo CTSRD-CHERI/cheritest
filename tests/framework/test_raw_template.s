@@ -39,6 +39,7 @@
 # to other tests?  What might we want to test as well in the future?
 #
 
+		.global start
 start:
 		# Test here
 		nop

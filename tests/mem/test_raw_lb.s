@@ -37,6 +37,7 @@
 # Unit test that loads bytes from memory.
 #
 		.text
+		.global start
 start:
 		# Load a byte from double word storage
 		lbu	$a0, dword

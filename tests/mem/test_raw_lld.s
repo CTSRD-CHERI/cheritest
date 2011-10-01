@@ -37,6 +37,7 @@
 # Unit test for load linked.
 #
 		.text
+		.global start
 start:
 		# Load double words
 		lld	$a0, dword

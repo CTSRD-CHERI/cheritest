@@ -37,6 +37,7 @@
 # Test beq (branch on equal), greater than case.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		li	$t0, 1

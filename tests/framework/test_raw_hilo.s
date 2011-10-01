@@ -38,6 +38,7 @@
 # Other tests for HI and LO are in test_hilo.
 #
 
+		.global start
 start:
 		# Test here
 		mfhi	$a0

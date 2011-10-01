@@ -39,6 +39,7 @@
 # is as expected, that $ra is properly assigned.
 #
 
+		.global start
 start:
 		dla	$a4, desired_return_address
 		li	$a0, 1			# Before

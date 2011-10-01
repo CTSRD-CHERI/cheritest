@@ -39,6 +39,7 @@
 # Overflow is left to higher-level tests, as exceptions are implied.
 #
 
+		.global start
 start:
 		#
 		# daddi with independent input and output; preserve input for

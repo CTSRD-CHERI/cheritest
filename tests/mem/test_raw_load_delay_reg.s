@@ -41,6 +41,7 @@
 #
 
 		.text
+		.global start
 start:
 		# No NOP
 		dla	$a0, dword0

@@ -33,6 +33,7 @@
 .set nobopt
 .set noat
 
+		.global start
 start:
 		# Set all registers to known values so that we can check they
 		# are unmodified after the SSNOP.

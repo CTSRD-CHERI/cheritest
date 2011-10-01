@@ -40,6 +40,7 @@
 #
 
 		.text
+		.global start
 start:
 		#
 		# Store conditional only works against addresses in cached

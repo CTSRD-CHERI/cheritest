@@ -33,6 +33,7 @@
 .set nobopt
 .set noat
 
+		.global start
 start:
 		cscr    $c1,  $c2, $a3
 		cjr     $c1,  $3

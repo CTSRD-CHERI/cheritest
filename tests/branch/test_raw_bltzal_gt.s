@@ -37,6 +37,7 @@
 # Test bltzal (branch on less than zero and link, signed), greater than case.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		li	$t0, 1

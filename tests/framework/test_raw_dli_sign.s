@@ -38,6 +38,7 @@
 # expected.  The former implies a sign extension on load.
 #
 
+		.global start
 start:
 		# Test here
 		li	$a0, -1

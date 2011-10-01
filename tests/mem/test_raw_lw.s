@@ -37,6 +37,7 @@
 # Unit test that loads words from memory
 #
 		.text
+		.global start
 start:
 		# Load a word from double word storage
 		lwu	$a0, dword

@@ -38,6 +38,7 @@
 # Any extra padding added on the right should be zero 
 #
 
+		.global start
 start:
 		dli	$a0, 0xfedcba9876543210
 

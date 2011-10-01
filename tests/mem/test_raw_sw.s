@@ -37,6 +37,7 @@
 # Unit test that stores words to, and then loads words from, memory.
 #
 		.text
+		.global start
 start:
 		# Store and load a word into double word storage
 		dli	$a0, 0xfedcba98

@@ -39,6 +39,7 @@
 # addresses.  All accesses in this test are 64-bit.
 #
 
+		.global start
 start:
 		dli	$t0, 0x900000007f004000
 

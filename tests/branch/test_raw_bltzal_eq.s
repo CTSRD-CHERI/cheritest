@@ -37,6 +37,7 @@
 # Test bltzal (branch on less than zero and link, signed), equal case.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		bltzal	$zero, branch_target

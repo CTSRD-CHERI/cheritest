@@ -40,6 +40,7 @@
 # (2) Confirm that $ra is properly assigned.
 #
 
+		.global start
 start:
 
 		li	$t0, 1

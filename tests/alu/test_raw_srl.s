@@ -39,6 +39,7 @@
 # There should be sign extension in the 32-bit result for the upper 32 bits
 #
 
+		.global start
 start:
 		dli	$a0, 0xfedcba9876543210
 		srl	$a1, $a0, 0

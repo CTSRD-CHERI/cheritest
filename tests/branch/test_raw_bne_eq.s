@@ -37,6 +37,7 @@
 # Test bne (branch on not equal), equal case.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		bne	$zero, $zero, branch_target

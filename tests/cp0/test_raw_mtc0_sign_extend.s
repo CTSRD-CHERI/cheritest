@@ -33,6 +33,7 @@
 .set nobopt
 .set noat
 
+		.global start
 start:
 		li	$a0, 0xffff
 		dsll	$a0, $a0, 16

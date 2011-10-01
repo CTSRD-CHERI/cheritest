@@ -37,6 +37,7 @@
 # Test bnel (branch on not equal, likely), equal case.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		bnel	$zero, $zero, branch_target

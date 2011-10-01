@@ -33,6 +33,7 @@
 .set nobopt
 .set noat
 
+		.global start
 start:
     andi $a1, $0, 0
     andi $a2, $0, 0

@@ -37,6 +37,7 @@
 # Test bgez (branch on greater than or equal to zero, signed), less than case.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		li	$t0, -1

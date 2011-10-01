@@ -38,6 +38,7 @@
 # delay slot is properly executed.
 #
 
+		.global start
 start:
 		li	$a0, 1
 		j	jump_target

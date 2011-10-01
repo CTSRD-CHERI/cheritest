@@ -37,6 +37,7 @@
 # Exercise the 'andi' instruction.
 #
 
+		.global start
 start:
 		# Test here
 		dli	$t0, 0x0000000000000000

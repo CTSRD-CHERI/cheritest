@@ -37,6 +37,7 @@
 # Unit test that stores partial words to, and the loads full words from, memory.
 #
 		.text
+		.global start
 start:
 		dli	$a0, 0xfedcba98
 		dla	$t0, dword

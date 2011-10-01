@@ -33,6 +33,7 @@
 .set nobopt
 .set noat
 
+		.global start
 start:
 		dli	$a0, 0xfedcba9876543210
 		dsrl32	$a1, $a0, 0

@@ -37,6 +37,7 @@
 # Unit test that loads half words from memory.
 #
 		.text
+		.global start
 start:
 		# Load a half word from double word storage
 		lhu	$a0, dword

@@ -38,6 +38,7 @@
 # forward jump.
 #
 
+		.global start
 start:
 		li	$a0, 1		# before
 		li	$t0, -1

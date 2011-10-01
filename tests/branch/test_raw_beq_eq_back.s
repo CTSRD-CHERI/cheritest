@@ -38,6 +38,7 @@
 # first requires a forward jump.
 #
 
+		.global start
 start:
 		b forward_target
 		nop			# branch-delay slot

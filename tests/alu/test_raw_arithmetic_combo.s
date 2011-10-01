@@ -43,8 +43,8 @@
 # with ERL rather than EXL.
 #
 
-		.global test
-test:		.ent test
+		.global start
+start:		.ent start
 		move $a0, $0
 		move $a1, $0
 		addi $a0, $a0, -10
@@ -117,4 +117,4 @@ test:		.ent test
 		mtc0 $v0, $23
 end:
 		b end
-		.end	test
+		.end	start

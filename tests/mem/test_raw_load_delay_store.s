@@ -42,6 +42,7 @@
 #
 
 		.text
+		.global start
 start:
 		# No NOP
 		dla	$a0, load0

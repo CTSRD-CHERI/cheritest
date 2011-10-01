@@ -38,6 +38,7 @@
 # lw.
 #
 		.text
+		.global start
 start:
 		# Load a word from double word storage
 		ll	$a0, dword
