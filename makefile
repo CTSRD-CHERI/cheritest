@@ -421,7 +421,7 @@ CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
-GXEMUL_TEST_CACHED_LOGS := $(addsuffix _cached_gxemul.log,$(addprefix \
+GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 
 MEMCONV=python ${CHERIROOT}/tools/memConv.py
@@ -515,6 +515,9 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 #
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 < /dev/ptmx || true
+
+$(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 < /dev/ptmx || true
 
 # Simulate a failure on all unit tests
