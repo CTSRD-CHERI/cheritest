@@ -49,19 +49,19 @@ test:		.ent test
 		# convert to physical addresses as that is what lladdr will
 		# report.
 		#
-		dli	$t0, 0x9000000000000000
+		dli	$t0, 0x00ffffffffffff
 		dla	$s0, word1
-		dsubu	$s0, $s0, $t0
+		and	$s0, $s0, $t0
 		dla	$s1, word2
-		dsubu	$s1, $s1, $t0
+		and	$s1, $s1, $t0
 		dla	$s2, word3
-		dsubu	$s2, $s2, $t0
+		and	$s2, $s2, $t0
 		dla	$s3, dword1
-		dsubu	$s3, $s3, $t0
+		and	$s3, $s3, $t0
 		dla	$s4, dword2
-		dsubu	$s4, $s4, $t0
+		and	$s4, $s4, $t0
 		dla	$s5, dword3
-		dsubu	$s5, $s5, $t0
+		and	$s5, $s5, $t0
 
 		#
 		# Query value on reset

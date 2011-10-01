@@ -73,8 +73,8 @@ test:		.ent test
 		# Calculate cached address (address saved in $gp).
 		#
 		dla	$gp, dword
-		dli	$t0, 0x9000000000000000
-		dsubu	$gp, $gp, $t0
+		dli	$t0, 0x00ffffffffffffff
+		and	$gp, $gp, $t0
 		dli	$t0, 0x9800000000000000
 		daddu	$gp, $gp, $t0
 

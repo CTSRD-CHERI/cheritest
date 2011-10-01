@@ -64,8 +64,8 @@ test:		.ent test
 		# bases.  Store this in $gp for reuse.
 		#
 		dla	$gp, dword
-		dli	$t0, 0x9000000000000000		# Uncached
-		dsubu	$gp, $gp, $t0			# Physical
+		dli	$t0, 0x00ffffffffffffff		# Uncached
+		and	$gp, $gp, $t0			# Physical
 
 		#
 		# Test various mappings to see if we get back the right data.
