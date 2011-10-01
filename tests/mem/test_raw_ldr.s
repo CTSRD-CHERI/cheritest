@@ -35,15 +35,15 @@
 
 		.global start
 start:
-    andi $a1, $0, 0
-    andi $a2, $0, 0
-    andi $a3, $0, 0
-    andi $a4, $0, 0
-    andi $a5, $0, 0
-    andi $a6, $0, 0
-    andi $a7, $0, 0
-    andi $t0, $0, 0
-    andi $t1, $0, 0
+		andi	$a1, $0, 0
+		andi	$a2, $0, 0
+		andi	$a3, $0, 0
+		andi	$a4, $0, 0
+		andi	$a5, $0, 0
+		andi	$a6, $0, 0
+		andi	$a7, $0, 0
+		andi	$t0, $0, 0
+		andi	$t1, $0, 0
 		dla	$a0, alternate
 		ldr	$a1, 0($a0)
 		ldr	$a2, 1($a0)

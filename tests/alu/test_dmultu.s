@@ -33,9 +33,9 @@
 .set nobopt
 
 #
-# Test which tries the 64-bit doubleword unsigned multiplication operator with each combination
-# of positive and negative arguments.
-# Results are stored in hi (remainder) and lo (quotient)
+# Test which tries the 64-bit doubleword unsigned multiplication operator
+# with each combination of positive and negative arguments.  Results are
+# stored in hi (remainder) and lo (quotient).
 #
 
 		.global test

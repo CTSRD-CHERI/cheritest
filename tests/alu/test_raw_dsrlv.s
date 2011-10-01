@@ -34,8 +34,9 @@
 .set noat
 
 #
-# Tests the Doubleword Shift Right Logical Variable instruction which is a 64-bit instruction
-# Any extra padding added on the left should be zero rather than sign extended
+# Tests the Doubleword Shift Right Logical Variable instruction which is a
+# 64-bit instruction.  Any extra padding added on the left should be zero
+# rather than sign extended.
 #
 
 		.global start

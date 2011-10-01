@@ -34,8 +34,8 @@
 
 #
 # Test which tries the 64-bit doubleword division unsigned operator with
-# each combination of positive and negative arguments.
-# Results are stored in hi (remainder) and lo (quotient)
+# each combination of positive and negative arguments.  Results are stored in
+# hi (remainder) and lo (quotient).
 #
 
 		.global test

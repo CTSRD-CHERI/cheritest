@@ -34,8 +34,8 @@
 .set noat
 
 #
-# Tests the Doubleword Shift Right Arithmetic instruction which is a 64-bit instruction
-# Any extra padding added on the left should be sign extended
+# Tests the Doubleword Shift Right Arithmetic instruction which is a 64-bit
+# instruction.  Any extra padding added on the left should be sign extended.
 #
 
 		.global start

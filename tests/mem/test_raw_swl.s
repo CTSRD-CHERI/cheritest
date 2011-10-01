@@ -34,7 +34,8 @@
 .set noat
 
 #
-# Unit test that stores partial words to, and the loads full words from, memory.
+# Unit test that stores partial words to, and the loads full words from,
+# memory.
 #
 		.text
 		.global start

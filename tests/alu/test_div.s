@@ -34,9 +34,9 @@
 
 #
 # Test which tries the 32-bit division operator with each combination
-# of positive and negative arguments.
-# Results are 32-bit numbers (sign-extended to 64-bits) which are stored
-# in hi (remainder) and lo (quotient)
+# of positive and negative arguments.  Results are 32-bit numbers
+# (sign-extended to 64-bits) which are stored in hi (remainder) and lo
+# (quotient).
 #
 
 		.global test

@@ -34,9 +34,9 @@
 .set noat
 
 #
-# Tests the Shift Left Logical Variable instruction which is a 32-bit instruction
-# Any extra padding added on the right should be zero 
-# There should be sign extension in the 32-bit result for the upper 32 bits
+# Tests the Shift Left Logical Variable instruction which is a 32-bit
+# instruction.  Any extra padding added on the right should be zero.  There
+# should be sign extension in the 32-bit result for the upper 32 bits.
 #
 
 		.global start

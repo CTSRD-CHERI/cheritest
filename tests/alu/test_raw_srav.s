@@ -34,9 +34,9 @@
 .set noat
 
 #
-# Tests the Shift Right Arithmetic Variable instruction which is a 32-bit instruction
-# Any new far left bits should  be correctly sign extended
-# There should be sign extension in the 32-bit result for the upper 32 bits
+# Tests the Shift Right Arithmetic Variable instruction which is a 32-bit
+# instruction.  Any new far left bits should  be correctly sign extended.
+# There should be sign extension in the 32-bit result for the upper 32 bits.
 #
 
 		.global start

@@ -34,9 +34,9 @@
 
 #
 # Test which tries the 32-bit multiplication operator with each combination
-# of positive and negative arguments.
-# Results are 32-bit numbers (sign-extended to 64-bits) which are stored
-# in hi (most-significant 32 bits) and lo (least-significant 32 bits)
+# of positive and negative arguments.  Results are 32-bit numbers
+# (sign-extended to 64-bits) which are stored in hi (most-significant 32
+# bits) and lo (least-significant 32 bits).
 #
 
 		.global test
