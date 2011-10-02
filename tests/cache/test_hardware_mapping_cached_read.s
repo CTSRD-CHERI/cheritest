@@ -64,37 +64,44 @@ test:		.ent test
 		mfc0	$s1, $16
 
 		#
-		# Read via uncached address (address saved in $s0).
-		#
-		dla	$s0, dword
-		ld	$a0, 0($s0)
-
-		#
-		# Calculate cached address (address saved in $gp).
+		# Calculate a physical address and save it in $gp.  Various
+		# virtual addreses, to be stored in $t0, will be generated
+		# using it.
 		#
 		dla	$gp, dword
 		dli	$t0, 0x00ffffffffffffff
 		and	$gp, $gp, $t0
-		dli	$t0, 0x9800000000000000
-		daddu	$gp, $gp, $t0
+
+		#
+		# Read via uncached address.
+		#
+		dli	$t0, 0x9000000000000000
+		daddu	$t0, $gp, $t0
+		ld	$a0, 0($t0)
 
 		#
 		# (1) Read via cached address; brings line into data cache.
 		#
-		ld	$a1, 0($gp)
+		dli	$t0, 0x9800000000000000
+		daddu	$t0, $gp, $t0
+		ld	$a1, 0($t0)
 
 		#
 		# (2) Write via uncached address; should not affect data cache
 		# line.
 		#
+		dli	$t0, 0x9000000000000000
+		daddu	$t0, $gp, $t0
 		dli	$t1, 0xafafafafafafafaf
-		sd	$t1, 0($s0)
+		sd	$t1, 0($t0)
 
 		#
 		# (3) Read via cached address; should see previously written
 		# value.
 		#
-		ld	$a2, 0($gp)
+		dli	$t0, 0x9800000000000000
+		daddu	$t0, $gp, $t0
+		ld	$a2, 0($t0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
