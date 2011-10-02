@@ -431,6 +431,8 @@ all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS)
 
 test: nosetest
 
+test_cached: nosetest_cached
+
 cleantest:
 	rm -f $(CHERI_TEST_LOGS) $(CHERI_TEST_CACHED_LOGS)
 	rm -f $(GXEMUL_TEST_LOGS) $(GXEMUL_TEST_CACHED_LOGS)
@@ -531,17 +533,17 @@ foo: $(CHERI_TEST_LOGS)
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
 nosetest: all cleantest $(CHERI_TEST_LOGS)
-	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS) $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=0 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetest_cached: all cleantest $(CHERI_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/sim nosetests $(NOSEFLAGS) $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=1 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
 gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
-	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
+	PYTHONPATH=tools/gxemul CACHED=0 nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-nosetest_cached: all cleantest $(GXEMUL_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/gxemul nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
+	PYTHONPATH=tools/gxemul CACHED=1 nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-build:

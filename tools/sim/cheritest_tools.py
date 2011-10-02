@@ -117,13 +117,26 @@ class BaseCHERITestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         '''Parse the log file and instantiate MIPS'''
+        self.cached = bool(int(os.environ.get("CACHED", "0")))
         if self.LOG_FN is None:
-            self.LOG_FN = self.__name__ + ".log"
+            if self.cached:
+                self.LOG_FN = self.__name__ + "_cached.log"
+            else:
+                self.LOG_FN = self.__name__ + ".log"
         fh = open(os.path.join(self.LOG_DIR, self.LOG_FN), "rt")
         try:
             self.MIPS = MipsStatus(fh)
         except MipsException, e:
             self.MIPS_EXCEPTION = e
+
+    def id(self):
+        id = unittest.TestCase.id(self)
+        if not self.cached:
+            return id
+
+        pos = id.find(".")
+        assert(pos >= 0)
+        return id[:pos] + "_cached" + id[pos:]
 
     def setUp(self):
         if not self.MIPS_EXCEPTION is None:
