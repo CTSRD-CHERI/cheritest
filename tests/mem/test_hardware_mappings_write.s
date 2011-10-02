@@ -60,31 +60,30 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
-		# Write out a new value via the unmapped, uncached region, in
-		# the hopes that later reads will see it.
-		#
-		dla	$gp, dword
-		dli	$t0, 0x0123456789abcdef
-		sd	$t0, 0($gp)
-
 		# Calculate the physical address of the memory we will be
 		# working with, which can then be offset by various segment
 		# bases.  Store this in $gp for reuse.
 		#
+		dla	$gp, dword
 		dli	$t0, 0x00ffffffffffffff		# Uncached
 		and	$gp, $gp, $t0			# Physical
+
+		#
+		# Write out a new value via the unmapped, uncached region, in
+		# the hopes that later reads will see it.
+		#
+		dli	$t0, 0x9000000000000000
+		daddu	$t0, $gp, $t0
+		dli	$t1, 0x0123456789abcdef
+		sd	$t1, 0($t0)
 
 		#
 		# Test various mappings to see if we get back the right data.
 		# Start with 64-bit mappings from R4000.
 		#
-
 		dli	$t0, 0x9000000000000000		# xkphys uncached
 		daddu	$t0, $gp, $t0
 		ld	$a2, 0($t0)
-		lui $t1, 0x4000
-		dsubu $t0, $t0, $t1
-		sd	$a2, 0($t0)	# Store constant in lower 512MB to prepare for 32 bit mapping tests
 
 		dli	$t0, 0x9800000000000000		# xkphys cached,
 		daddu	$t0, $gp, $t0			# noncoherent
@@ -103,11 +102,27 @@ test:		.ent test
 		ld	$a6, 0($t0)
 
 		#
+		# Store constant in lower 512MB to prepare for 32 bit mapping
+		# tests.
+		#
+		# XXXRW: This test incorrectly assumes that there is memory to
+		# be found at ~0x4000 before the unit test start address.
+		# To make this test more reliable, we should ideally use a
+		# start address in the base 512M of physical memory.  Possible
+		# failure modes here include overwriting arbitrary portions of
+		# test memory.
+		#
+		lui	$t0, 0x4000
+		dsubu	$gp, $gp, $t0
+
+		dli	$t0, 0x9000000000000000
+		daddu	$t0, $gp, $t0
+		sd	$a2, 0($t0)
+
+		#
 		# Also test historic MIPS ckseg0 and ckseg1, also present in
 		# R4000.
 		#
-		lui $t0, 0x4000
-		dsubu $gp, $gp, $t0
 		dli	$t0, 0xffffffffa0000000		# ckseg1, uncached
 		daddu	$t0, $gp, $t0
 		ld	$a0, 0($t0)
