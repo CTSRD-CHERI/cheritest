@@ -425,7 +425,7 @@ GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 
 MEMCONV=python ${CHERIROOT}/tools/memConv.py
-AS=sde-as
+AS=mips64-as
 
 all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS)
 
