@@ -72,3 +72,5 @@ positive:	.word	0x7fffffff
 negative:	.word	0xffffffff
 val1:		.word	0x00000001
 val2:		.word	0x00000002
+buf:		.word	0x12345678
+				.word	0x9ABCDEF0
