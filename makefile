@@ -497,7 +497,7 @@ $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
 # Provide an annotated disassembly for the ELF image to be used in diagnosis.
 #
 $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
-	sde-objdump -xsSd $< > $@
+	sde-objdump -xsSD $< > $@
 
 #
 # Target to execute a Bluespec simulation of the test suite; memConv.py needs
