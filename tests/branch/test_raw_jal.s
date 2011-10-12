@@ -53,11 +53,12 @@ jal_target:
 		li	$t3, 4				# Should run
 
 		# Dump registers in the simulator
-		mtc0 $v0, $26
+		mtc0	$v0, $26
 		nop
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+	        mtc0	$v0, $23
 end:
 		b end
+		nop

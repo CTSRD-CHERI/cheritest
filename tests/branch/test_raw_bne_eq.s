@@ -51,6 +51,7 @@ branch_target:
 		nop
 
 		# Terminate the simulator
+		mtc0	$v0, $23
 end:
-		break
 		b end
+		nop

@@ -52,9 +52,10 @@ back_target:
 		nop
 
 		# Terminate the simulator
+		mtc0	$v0, $23
 end:
-		break
 		b end
+		nop
 
 forward_target:
 		li	$a0, 1		# before
