@@ -532,17 +532,17 @@ print-versions:
 foo: $(CHERI_TEST_LOGS)
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
-nosetest: all cleantest $(CHERI_TEST_LOGS)
+nosetest: all $(CHERI_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
-nosetest_cached: all cleantest $(CHERI_TEST_CACHED_LOGS)
+nosetest_cached: all $(CHERI_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
-gxemul-nosetest: all cleantest $(GXEMUL_TEST_LOGS)
+gxemul-nosetest: all $(GXEMUL_TEST_LOGS)
 	PYTHONPATH=tools/gxemul CACHED=0 nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-gxemul-nosetest_cached: all cleantest $(GXEMUL_TEST_CACHED_LOGS)
+gxemul-nosetest_cached: all $(GXEMUL_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/gxemul CACHED=1 nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
