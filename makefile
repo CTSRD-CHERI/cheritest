@@ -263,6 +263,7 @@ TEST_CP0_FILES=					\
 		test_break.s			\
 		test_syscall.s			\
 		test_syscall2.s			\
+		test_syscall50.s		\
 		test_teq_eq.s			\
 		test_teq_gt.s			\
 		test_teq_lt.s			\

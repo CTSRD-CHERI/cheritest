@@ -27,26 +27,92 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
 
-class test_syscall2(BaseCHERITestCase):
-    def test_syscall2_epc(self):
-        self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-    def test_syscall2_returned(self):
-        self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by syscall instruction")
+#
+# Exercise syscall instruction -- only this time, do it 50 times.
+#
 
-    def test_syscall2_handled(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "syscall exception handler not run")
+		.global test
+test:		.ent test
+		daddu 	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
 
-    def test_syscall2_exl_in_handler(self):
-        self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
+		#
+		# Set up exception handler.
+		#
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
+		nop
 
-    def test_syscall2_cause_bd(self):
-        self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")
+		#
+		# Clear registers we'll use when testing results later.
+		#
+		dli	$a0, 0
+		dli	$a1, 0
+		dli	$a2, 0
+		dli	$a3, 0
+		dli	$a4, 0
+		dli	$a5, 0
+		dli	$a6, 0
 
-    def test_syscall2_cause_code(self):
-        self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 8, "Code not set to Sys")
+		#
+		# Save the desired EPC value for the second exception so that
+		# we can check it later.
+		#
+		dla	$a0, desired_epc
 
-    def test_syscall2_not_exl_after_handler(self):
-        self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
+		li	$t0, 50
+loop:
+
+		#
+		# Trigger exception.
+		#
+desired_epc:
+		syscall	0
+
+		daddi	$t0, $t0, -1
+		bne	$t0, $zero, loop
+
+		#
+		# Exception return.
+		#
+		li	$a1, 1
+		mfc0	$a6, $12	# Status register after ERET
+
+return:
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
+		.end	test
+
+#
+# Our actual exception handler, which tests various properties.  This code
+# assumes that the trap wasn't in a branch-delay slot (and the test code
+# checks BD as well), so EPC += 4 should return control after the trap
+# instruction.
+#
+		.ent bev0_handler
+bev0_handler:
+		li	$a2, 1
+		mfc0	$a3, $12	# Status register
+		mfc0	$a4, $13	# Cause register
+		dmfc0	$a5, $14	# EPC
+		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+		nop			# NOPs to avoid hazard with ERET
+		nop			# XXXRW: How many are actually
+		nop			# required here?
+		nop
+		eret
+		.end bev0_handler
