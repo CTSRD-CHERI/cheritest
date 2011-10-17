@@ -50,15 +50,22 @@ memcpy:
 		move	$v0, $a0	# Return initial value of dest.
 
 memcpy_loop:
+		# Check up front -- length could start out as zero.
+		beq	$a2, $zero, memcpy_done
+		nop
+
 		lb	$t0, 0($a1)
 		sb	$t0, 0($a0)
 
-		# Increment dest and src, decrement len
+		# Increment dest and src, decrement len.
 		daddiu	$a0, 1
 		daddiu	$a1, 1
 		daddiu	$a2, -1
-		bnez	$a2, memcpy_loop	# loop until done
+
+		b memcpy_loop
 		nop			# branch-delay slot
+
+memcpy_done:
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
