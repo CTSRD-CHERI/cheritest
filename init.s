@@ -107,6 +107,11 @@ exception_end:
 		nop
 		nop
 
+		# Dump capability registers in the simulator
+		mfc2 $v0, $0, 4
+		nop
+		nop
+
 		# Terminate the simulator
 		mtc0 $at, $23
 end:
