@@ -206,7 +206,8 @@ RAW_CP0_FILES=					\
 		test_raw_mtc0_sign_extend.s
 
 RAW_CP2_FILES=					\
-		test_raw_capinstructions.s
+		test_raw_capinstructions.s	\
+		test_cp2_reg_init.s
 
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
@@ -380,7 +381,7 @@ TEST_FILES=					\
 # counterdev - gxemul does not provide the "counter" device used to test
 #              cache semantics.
 #
-GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev"
+GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev and not capabilities"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
