@@ -206,8 +206,7 @@ RAW_CP0_FILES=					\
 		test_raw_mtc0_sign_extend.s
 
 RAW_CP2_FILES=					\
-		test_raw_capinstructions.s	\
-		test_cp2_reg_init.s
+		test_raw_capinstructions.s
 
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
@@ -288,6 +287,9 @@ TEST_CP0_FILES=					\
 		test_tne_lt.s			\
 		test_cp0_compare.s
 
+TEST_CP2_FILES=					\
+		test_cp2_reg_init.s
+
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
 		test_addi_overflow.s		\
@@ -362,6 +364,7 @@ TEST_FILES=					\
 		$(TEST_LLSC_FILES)		\
 		$(TEST_CACHE_FILES)		\
 		$(TEST_CP0_FILES)		\
+		$(TEST_CP2_FILES)		\
 		$(TEST_BEV1_FILES)		\
 		$(TEST_ALU_OVERFLOW_FILES)	\
 		$(TEST_MEM_UNALIGN_FILES)	\
