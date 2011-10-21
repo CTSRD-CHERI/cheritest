@@ -289,7 +289,8 @@ TEST_CP0_FILES=					\
 
 TEST_CP2_FILES=					\
 		test_cp2_reg_init.s		\
-		test_cp2_reg_name.s
+		test_cp2_reg_name.s		\
+		test_cp2_getdecleng.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
