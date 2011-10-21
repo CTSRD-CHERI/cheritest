@@ -39,3 +39,5 @@ class test_template(BaseCHERITestCase):
         self.MIPS.zero
         ## Access register by number
         self.MIPS[0]
+        ## Access capability register by number
+        self.MIPS.c0
