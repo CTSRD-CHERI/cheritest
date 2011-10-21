@@ -149,7 +149,7 @@ class CapMipsStatus(MipsStatus):
         regnum = None
         if key.startswith("c"):
             try:
-                regnum = int[key[1:]]
+                regnum = int(key[1:])
             except ValueError, e:
                 pass
         if regnum != None:
