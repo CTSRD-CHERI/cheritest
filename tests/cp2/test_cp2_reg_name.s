@@ -34,13 +34,10 @@
 .set noat
 
 #
-# Set each CP2 register to use a quickly recognised upper address, in order
-# to confirm that the assembler, simulator, and test suite (rouchly) agree.
-# This test assumes that $c2_kcc is an appropriate origin for the length
-# 0xffffffffffffffff, and relies on at least cdecleng and dli working.  The
-# order of assignments is slightly subtle: we do c29 last so as not to
-# introduce confusion.  A delta of 0 is reserved for $c2_pcc, which we don't
-# directly manipulate.
+# Set each CP2 register to use an easily recognised otype, in order to
+# confirm that the assembler, simulator, and test suite (roughly) agree.  This
+# test depends on at least csetotype and dli working.  $c2_pcc is left
+# unmodified form boot, so should be 0.
 #
 # XXXRW: once we support mneumonics such as $c2_kcc, we should test those as
 # well.
@@ -53,71 +50,71 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		dli		$at, 2
-		cdecleng	$c0, $c29, $at
-		dli		$at, 3
-		cdecleng	$c1, $c29, $at
-		dli		$at, 4
-		cdecleng	$c2, $c29, $at
-		dli		$at, 5
-		cdecleng	$c3, $c29, $at
-		dli		$at, 6
-		cdecleng	$c4, $c29, $at
-		dli		$at, 7
-		cdecleng	$c5, $c29, $at
-		dli		$at, 8
-		cdecleng	$c6, $c29, $at
-		dli		$at, 9
-		cdecleng	$c7, $c29, $at
-		dli		$at, 10
-		cdecleng	$c8, $c29, $at
-		dli		$at, 11
-		cdecleng	$c9, $c29, $at
-		dli		$at, 12
-		cdecleng	$c10, $c29, $at
-		dli		$at, 13
-		cdecleng	$c11, $c29, $at
-		dli		$at, 14
-		cdecleng	$c12, $c29, $at
-		dli		$at, 15
-		cdecleng	$c13, $c29, $at
-		dli		$at, 16
-		cdecleng	$c14, $c29, $at
-		dli		$at, 17
-		cdecleng	$c15, $c29, $at
-		dli		$at, 18
-		cdecleng	$c16, $c29, $at
-		dli		$at, 19
-		cdecleng	$c17, $c29, $at
-		dli		$at, 20
-		cdecleng	$c18, $c29, $at
-		dli		$at, 21
-		cdecleng	$c19, $c29, $at
-		dli		$at, 22
-		cdecleng	$c20, $c29, $at
-		dli		$at, 23
-		cdecleng	$c21, $c29, $at
-		dli		$at, 24
-		cdecleng	$c22, $c29, $at
-		dli		$at, 25
-		cdecleng	$c23, $c29, $at
-		dli		$at, 26
-		cdecleng	$c24, $c29, $at
-		dli		$at, 27
-		cdecleng	$c25, $c29, $at
-		dli		$at, 28
-		cdecleng	$c26, $c29, $at
-		dli		$at, 29
-		cdecleng	$c27, $c29, $at
-		dli		$at, 30
-		cdecleng	$c28, $c29, $at
-		dli		$at, 31
-		cdecleng	$c30, $c29, $at
-		dli		$at, 32
-		cdecleng	$c31, $c29, $at
-		dli		$at, 1
-		cdecleng	$c29, $c29, $at
-		
+		dli		$t0, 1
+		csettype	$c0, $c0, $t0
+		dli		$t0, 2
+		csettype	$c1, $c1, $t0
+		dli		$t0, 3
+		csettype	$c2, $c2, $t0
+		dli		$t0, 4
+		csettype	$c3, $c3, $t0
+		dli		$t0, 5
+		csettype	$c4, $c4, $t0
+		dli		$t0, 6
+		csettype	$c5, $c5, $t0
+		dli		$t0, 7
+		csettype	$c6, $c6, $t0
+		dli		$t0, 8
+		csettype	$c7, $c7, $t0
+		dli		$t0, 9
+		csettype	$c8, $c8, $t0
+		dli		$t0, 10
+		csettype	$c9, $c9, $t0
+		dli		$t0, 11
+		csettype	$c10, $c10, $t0
+		dli		$t0, 12
+		csettype	$c11, $c11, $t0
+		dli		$t0, 13
+		csettype	$c12, $c12, $t0
+		dli		$t0, 14
+		csettype	$c13, $c13, $t0
+		dli		$t0, 15
+		csettype	$c14, $c14, $t0
+		dli		$t0, 16
+		csettype	$c15, $c15, $t0
+		dli		$t0, 17
+		csettype	$c16, $c16, $t0
+		dli		$t0, 18
+		csettype	$c17, $c17, $t0
+		dli		$t0, 19
+		csettype	$c18, $c18, $t0
+		dli		$t0, 20
+		csettype	$c19, $c19, $t0
+		dli		$t0, 21
+		csettype	$c20, $c20, $t0
+		dli		$t0, 22
+		csettype	$c21, $c21, $t0
+		dli		$t0, 23
+		csettype	$c22, $c22, $t0
+		dli		$t0, 24
+		csettype	$c23, $c23, $t0
+		dli		$t0, 25
+		csettype	$c24, $c24, $t0
+		dli		$t0, 26
+		csettype	$c25, $c25, $t0
+		dli		$t0, 27
+		csettype	$c26, $c26, $t0
+		dli		$t0, 28
+		csettype	$c27, $c27, $t0
+		dli		$t0, 29
+		csettype	$c28, $c28, $t0
+		dli		$t0, 30
+		csettype	$c29, $c29, $t0
+		dli		$t0, 31
+		csettype	$c30, $c30, $t0
+		dli		$t0, 32
+		csettype	$c31, $c31, $t0
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
