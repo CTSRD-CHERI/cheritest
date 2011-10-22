@@ -303,7 +303,8 @@ TEST_CP2_FILES=					\
 		test_cp2_get_mem_pipeline.s	\
 		test_cp2_cloadr_priv.s		\
 		test_cp2_cloadr_unpriv.s	\
-		test_cp2_cload_unpriv.s
+		test_cp2_cload_unpriv.s		\
+		test_cp2_c0_load.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
