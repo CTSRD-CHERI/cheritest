@@ -36,7 +36,7 @@ from nose.plugins.attrib import attr
 
 class test_cp2_cscr(BaseCHERITestCase):
     @attr('capabilities')
-    def test_cp2_csr_underflow(self):
+    def test_cp2_cscr_underflow(self):
         '''Test that cscr didn't overwrite dword before requested addr'''
         self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef, "cscr underflow")
 
