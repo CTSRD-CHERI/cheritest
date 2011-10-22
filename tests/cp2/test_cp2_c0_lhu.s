@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test various stock MIPS loads indirected via a modified c0.
+# Test lhu (load half word unsigned) indirected via a constrained c0.
 #
 # XXXRW: The subtractive nature of cdecleng makes lengths awkward to
 # calculate -- but perhaps more importantly, somewhat error-prone to
@@ -67,24 +67,10 @@ test:		.ent test
 		#
 		cmove	$c0, $c1
 
-		# Double word load
 		dli	$t0, 0
-		ld	$a0, 0($t0)		# 64-bit aligned
-
-		# Word loads
-		lwu	$a1, 0($t0)		# 64-bit aligned
-		lwu	$a2, 4($t0)		# 32-bit aligned
-
-		# Half word loads
-		lhu	$a3, 0($t0)		# 64-bit aligned
-		lhu	$a4, 4($t0)		# 32-bit aligned
-		lhu	$a5, 6($t0)		# 16-bit aligned
-
-		# Byte loads
-		lbu	$a6, 0($t0)		# 64-bit aligned
-		lbu	$a7, 4($t0)		# 32-bit aligned
-		lbu	$s0, 6($t0)		# 16-bit aligned
-		lbu	$s1, 7($t0)		# 8-bit aligned
+		lhu	$a0, 0($t0)		# 64-bit aligned
+		lhu	$a1, 4($t0)		# 32-bit aligned
+		lhu	$a2, 6($t0)		# 16-bit aligned
 
 		#
 		# Restore privileged c0 for test termination.
