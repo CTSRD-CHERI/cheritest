@@ -27,68 +27,16 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 #
-# Test various load via capability (offset by immediate) operations using a
-# capability restricted to a specific portion of the global address space.
-#
-# XXXRW: The subtractive nature of cdecleng makes lengths awkward to
-# calculate -- but perhaps more importantly, somewhat error-prone to
-# calculate.
+# Test cld (load double via capability, offset by immediate) using an
+# unprivileged capability.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
-		#
-		# Set up $c1 to point at data
-		#
-		dla	$t0, data
-		cincbase	$c1, $c1, $t0
-
-		#
-		# We want $c1.length to be 16 -- query the current $c1,
-		# subtract 16, and then pass that to cdecleng.
-		#
-		cgetleng	$t1, $c1
-		dsub		$t1, 16
-		cdecleng	$c1, $c1, $t1
-
-		# Double word load
-		cld	$a0, $c1, 0		# 64-bit aligned
-
-		# Word loads
-		clw	$a1, $c1, 0		# 64-bit aligned
-		clw	$a2, $c1, 4		# 32-bit aligned
-
-		# Half word loads
-		clh	$a3, $c1, 0		# 64-bit aligned
-		clh	$a4, $c1, 4		# 32-bit aligned
-		clh	$a5, $c1, 6		# 16-bit aligned
-
-		# Byte loads
-		clb	$a6, $c1, 0		# 64-bit aligned
-		clb	$a7, $c1, 4		# 32-bit aligned
-		clb	$s0, $c1, 6		# 16-bit aligned
-		clb	$s1, $c1, 7		# 8-bit aligned
-
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
-
-		.data
-		.align 3
-data:		.dword	0x0011223344556677
-		.dword	0x8899aabbccddeeff
+class test_cp2_cld_unpriv(BaseCHERITestCase):
+    @attr('capabilities')
+    def test_cp2_cld_64aligned(self):
+        '''Test a 64-bit aligned double word load via an unprivileged capability'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x0011223344556677, "64-bit aligned cld returned incorrect value")

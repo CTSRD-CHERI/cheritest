@@ -34,12 +34,8 @@
 .set noat
 
 #
-# Test various load via capability (offset by register) operations using a
-# capability restricted to a specific portion of the global address space.
-#
-# XXXRW: The subtractive nature of cdecleng makes lengths awkward to
-# calculate -- but perhaps more importantly, somewhat error-prone to
-# calculate.
+# Test clhr (load half word via capability, offset by register) using a fully
+# privileged capability.
 #
 
 		.global test
@@ -49,42 +45,13 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		#
-		# Set up $c1 to point at data
-		#
 		dla	$t0, data
-		cincbase	$c1, $c1, $t0
+		daddiu	$t1, $t0, 4
+		daddiu	$t2, $t0, 6
 
-		#
-		# We want $c1.length to be 16 -- query the current $c1,
-		# subtract 16, and then pass that to cdecleng.
-		#
-		cgetleng	$t1, $c1
-		dsub		$t1, 16
-		cdecleng	$c1, $c1, $t1
-
-		dli	$t0, 0
-		dli	$t1, 4
-		dli	$t2, 6
-		dli	$t3, 7
-
-		# Double word load
-		cldr	$a0, $c1, $t0		# 64-bit aligned
-
-		# Word loads
-		clwr	$a1, $c1, $t0		# 64-bit aligned
-		clwr	$a2, $c1, $t1		# 32-bit aligned
-
-		# Half word loads
-		clhr	$a3, $c1, $t0		# 64-bit aligned
-		clhr	$a4, $c1, $t1		# 32-bit aligned
-		clhr	$a5, $c1, $t2		# 16-bit aligned
-
-		# Byte loads
-		clbr	$a6, $c1, $t0		# 64-bit aligned
-		clbr	$a7, $c1, $t1		# 32-bit aligned
-		clbr	$s0, $c1, $t2		# 16-bit aligned
-		clbr	$s1, $c1, $t3		# 8-bit aligned
+		clhr	$a0, $c1, $t0		# 64-bit aligned
+		clhr	$a1, $c1, $t1		# 32-bit aligned
+		clhr	$a2, $c1, $t2		# 16-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

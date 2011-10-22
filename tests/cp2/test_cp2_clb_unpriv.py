@@ -31,62 +31,27 @@ from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test various load via capability (offset by register) operations using a
-# fully unprivileged capability.
+# Test clb (load byte via capability, offset by immediate) using an
+# unprivileged capability. 
 #
 
-class test_cp2_cloadr_unpriv(BaseCHERITestCase):
-
-    # Double word test
-    @attr('capabilities')
-    def test_cp2_cld_64aligned(self):
-        '''Test a 64-bit aligned double word load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x0011223344556677, "64-bit aligned cld returned incorrect value")
-
-    # Word tests
-    @attr('capabilities')
-    def test_cp2_clw_64aligned(self):
-        '''Test a 64-bit aligned word load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x00112233, "64-bit aligned clw returned incorrect value")
-
-    @attr('capabilities')
-    def test_cp2_clw_32aligned(self):
-        '''Test a 32-bit aligned word load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x44556677, "32-bit aligned clw returned incorrect value")
-
-    # Half word tests
-    @attr('capabilities')
-    def test_cp2_clh_64aligned(self):
-        '''Test a 64-bit aligned half-word load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0011, "64-bit aligned clh returned incorrect value")
-
-    @attr('capabilities')
-    def test_cp2_clh_32aligned(self):
-        '''Test a 32-bit aligned half word load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.a4, 0x4455, "32-bit aligned clh returned incorrect value")
-
-    @attr('capabilities')
-    def test_cp2_clh_16aligned(self):
-        '''Test a 16-bit aligned half word load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.a5, 0x6677, "16-bit aligned clh returned incorrect value")
-
-    # Byte tests
+class test_cp2_clb_unpriv(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_clb_64aligned(self):
         '''Test a 64-bit aligned byte load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.a6, 0x00, "64-bit aligned clb returned incorrect value")
+        self.assertRegisterEqual(self.MIPS.a0, 0x00, "64-bit aligned clb returned incorrect value")
 
     @attr('capabilities')
     def test_cp2_clb_32aligned(self):
         '''Test a 32-bit aligned byte load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.a7, 0x44, "32-bit aligned clb returned incorrect value")
+        self.assertRegisterEqual(self.MIPS.a1, 0x44, "32-bit aligned clb returned incorrect value")
 
     @attr('capability')
     def test_cp2_clb_16aligned(self):
         '''Test a 16-bit aligned byte load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.s0, 0x66, "16-bit aligned clb returned incorrect value")
+        self.assertRegisterEqual(self.MIPS.a2, 0x66, "16-bit aligned clb returned incorrect value")
 
     @attr('capability')
     def test_cp2_clb_8aligned(self):
         '''Test a 8-bit aligned byte load via an unprivileged capability'''
-        self.assertRegisterEqual(self.MIPS.s1, 0x77, "8-bit aligned clb returned incorrect value")
+        self.assertRegisterEqual(self.MIPS.a3, 0x77, "8-bit aligned clb returned incorrect value")
