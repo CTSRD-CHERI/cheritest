@@ -35,7 +35,7 @@
 
 #
 # Perform a few basic tests involving capability register length: query the
-# starting length of $kcc, reduce the length, and query it again.
+# starting length of $c2, reduce the length, and query it again.
 #
 
 		.global test
@@ -49,9 +49,9 @@ test:		.ent test
 		dli	$a0, 1
 		dli	$a1, 2
 
-		cgetleng	$a0, $c29
-		cdecleng	$c29, $c29, $t0
-		cgetleng	$a1, $c29
+		cgetleng	$a0, $c2
+		cdecleng	$c2, $c2, $t0
+		cgetleng	$a1, $c2
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
