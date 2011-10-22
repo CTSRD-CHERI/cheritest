@@ -66,7 +66,7 @@ test:		.ent test
 		clbr	$a6, $c1, $t0		# 64-bit aligned
 		clbr	$a7, $c1, $t1		# 32-bit aligned
 		clbr	$s0, $c1, $t2		# 16-bit aligned
-		clbr	$s1, $c1, $t3		# 8-byte aligned
+		clbr	$s1, $c1, $t3		# 8-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
