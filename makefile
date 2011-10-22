@@ -316,7 +316,11 @@ TEST_CP2_FILES=					\
 		test_cp2_c0_ld.s		\
 		test_cp2_c0_lwu.s		\
 		test_cp2_c0_lhu.s		\
-		test_cp2_c0_lbu.s
+		test_cp2_c0_lbu.s		\
+		test_cp2_csd_unpriv.s		\
+		test_cp2_csw_unpriv.s		\
+		test_cp2_csh_unpriv.s		\
+		test_cp2_csb_unpriv.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
