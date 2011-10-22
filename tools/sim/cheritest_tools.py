@@ -130,7 +130,7 @@ class CapMipsStatus(MipsStatus):
     def __init__(self, fh):
         ## Read the normal MIPS registers
         MipsStatus.__init__(self, fh)
-        self.capreg_vals = [None] * 32
+        self.cp2 = [None] * 32
         self.pcc = None
         ## Reset file handle for reading capability registers
         self.reset_fh()
@@ -140,7 +140,7 @@ class CapMipsStatus(MipsStatus):
             pc_groups = CAPMIPS_PC_RE.search(line)
             if (reg_groups):
                 reg_num = int(reg_groups.group(1))
-                self.capreg_vals[reg_num] = Capability(*reg_groups.groups()[1:6])
+                self.cp2[reg_num] = Capability(*reg_groups.groups()[1:6])
             if (pc_groups):
                 self.pcc = Capability(*pc_groups.groups()[0:5])
 
@@ -153,15 +153,15 @@ class CapMipsStatus(MipsStatus):
             except ValueError, e:
                 pass
         if regnum != None:
-            return self.capreg_vals[regnum]
+            return self.cp2[regnum]
         else:
             return MipsStatus.__getattr__(self, key)
 
     def __repr__(self):
         v = []
-        for i in range(len(self.capreg_vals)):
+        for i in range(len(self.cp2)):
             reg_num = ("c%d"%i).rjust(3)
-            v.append("%s: %s"%(reg_num, self.capreg_vals[i]))
+            v.append("%s: %s"%(reg_num, self.cp2[i]))
         v.append("PCC: %s"%(self.pcc))
         return MipsStatus.__repr__(self) + "\n" + "\n".join(v)
 

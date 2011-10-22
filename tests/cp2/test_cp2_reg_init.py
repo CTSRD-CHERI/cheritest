@@ -57,35 +57,32 @@ class test_cp2_reg_init(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.pcc.perms, 0x7fff, "CP2 PCC perms incorrectly initialised")
         self.assertRegisterEqual(self.MIPS.pcc.u, 1, "CP2 PCC unsealed incorrectly initialised")
 
-# XXXRW: These tests are disabled until we have a syntax for accessing
-# capability registers using an indexed array, similar to self.MIPS[].
-#
-#    @attr('capabilities')
-#    def test_cp2_reg_init_rest_base(self):
-#        '''Test that CP2 general-purpose register bases are correctly initialised'''
-#        for i in range(1, 26):
-#            self.assertRegisterEqual(self.MIPS.cp2[i].base, 0x0, "CP2 capability register bases incorrectly initialised")
-#
-#    @attr('capabilities')
-#    def test_cp2_reg_init_rest_length(self):
-#        '''Test that CP2 general-purpose register lengths are correctly initialised'''
-#        for i in range(1, 26):
-#            self.assertRegisterEqual(self.MIPS.cp2[i].length, 0xffffffffffffffff, "CP2 capability register lengths incorrectly initialised")
-#
-#    @attr('capabilities')
-#    def test_cp2_reg_init_rest_ctype(self):
-#        '''Test that CP2 general-purpose register ctypes are correctly initialised'''
-#        for i in range(1, 26):
-#            self.assertRegisterEqual(self.MIPS.cp2[i].ctype, 0x0, "CP2 capability register ctypes incorrectly initialised")
-#
-#    @attr('capabilities')
-#    def test_cp2_reg_init_rest_perms(self):
-#        '''Test that CP2 general-purpose register perms are correctly initialised'''
-#        for i in range(1, 26):
-#            self.assertRegisterEqual(self.MIPS.cp2[i].perms, 0x7fff, "CP2 capability register perms incorrectly initialised")
-#
-#    @attr('capabilities')
-#    def test_cp2_reg_init_rest_unsealed(self):
-#        '''Test that CP2 general-purpose register unsealeds are correctly initialised'''
-#        for i in range(1, 26):
-#            self.assertRegisterEqual(self.MIPS.cp2[i].unsealed, 1, "CP2 capability register unsealeds incorrectly initialised")
+    @attr('capabilities')
+    def test_cp2_reg_init_rest_base(self):
+        '''Test that CP2 general-purpose register bases are correctly initialised'''
+        for i in range(1, 26):
+            self.assertRegisterEqual(self.MIPS.cp2[i].base, 0x0, "CP2 capability register bases incorrectly initialised")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_rest_length(self):
+        '''Test that CP2 general-purpose register lengths are correctly initialised'''
+        for i in range(1, 26):
+            self.assertRegisterEqual(self.MIPS.cp2[i].length, 0xffffffffffffffff, "CP2 capability register lengths incorrectly initialised")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_rest_ctype(self):
+        '''Test that CP2 general-purpose register ctypes are correctly initialised'''
+        for i in range(1, 26):
+            self.assertRegisterEqual(self.MIPS.cp2[i].ctype, 0x0, "CP2 capability register ctypes incorrectly initialised")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_rest_perms(self):
+        '''Test that CP2 general-purpose register perms are correctly initialised'''
+        for i in range(1, 26):
+            self.assertRegisterEqual(self.MIPS.cp2[i].perms, 0x7fff, "CP2 capability register perms incorrectly initialised")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_rest_unsealed(self):
+        '''Test that CP2 general-purpose register unsealeds are correctly initialised'''
+        for i in range(1, 26):
+            self.assertRegisterEqual(self.MIPS.cp2[i].unsealed, 1, "CP2 capability register unsealeds incorrectly initialised")
