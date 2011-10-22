@@ -294,6 +294,7 @@ TEST_CP2_FILES=					\
 		test_cp2_getincbase.s		\
 		test_cp2_getdecleng.s		\
 		test_cp2_getandperm.s		\
+		test_cp2_cmove.s		\
 		test_cp2_cscr.s			\
 		test_cp2_clcr.s			\
 		test_cp2_alu_mod_pipeline.s	\
