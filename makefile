@@ -320,7 +320,11 @@ TEST_CP2_FILES=					\
 		test_cp2_csd_unpriv.s		\
 		test_cp2_csw_unpriv.s		\
 		test_cp2_csh_unpriv.s		\
-		test_cp2_csb_unpriv.s
+		test_cp2_csb_unpriv.s		\
+		test_cp2_csdr_unpriv.s		\
+		test_cp2_cswr_unpriv.s		\
+		test_cp2_cshr_unpriv.s		\
+		test_cp2_csbr_unpriv.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
