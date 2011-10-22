@@ -39,19 +39,19 @@ class test_cp2_get_mem_pipeline(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_cgetbase_mem(self):
         '''Test that cgetbase results visible to store instructions'''
-        self.assertRegisterEqual(self.MIPS.t0, 0x0, "cgetbase returns incorrect vmeme")
+        self.assertRegisterEqual(self.MIPS.t0, 0x0, "cgetbase returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_cgetleng_mem(self):
 	'''Test that cgetleng results visible to store instructions'''
-	self.assertRegisterEqual(self.MIPS.t1, 0xffffffffffffffff, "cgetleng returns incorrect vmeme")
+	self.assertRegisterEqual(self.MIPS.t1, 0xffffffffffffffff, "cgetleng returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_cgetperm_mem(self):
         '''Test that cgetperm results visible to store instructions'''
-        self.assertRegisterEqual(self.MIPS.t2, 0x7fff, "cgetperm returns incorrect vmeme")
+        self.assertRegisterEqual(self.MIPS.t2, 0x7fff, "cgetperm returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_cgettype_mem(self):
         '''Test that cgettype results visible to store instructions'''
-        self.assertRegisterEqual(self.MIPS.t3, 0x0, "cgettype returns incorrect vmeme")
+        self.assertRegisterEqual(self.MIPS.t3, 0x0, "cgettype returns incorrect value")

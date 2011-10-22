@@ -39,19 +39,19 @@ class test_cp2_mem_mod_pipeline(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_mem_cincbase(self):
         '''Test that cincbase uses ld results in pipeline'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x100, "cgetbase returns incorrect vmeme")
+        self.assertRegisterEqual(self.MIPS.a0, 0x100, "cgetbase returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_mem_cdecleng(self):
 	'''Test that cdecleng uses ld results in pipeline'''
-	self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff - 0x100, "cgetleng returns incorrect vmeme")
+	self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff - 0x100, "cgetleng returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_mem_candperm(self):
         '''Test that candperm uses ld results in pipeline'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x7fff & 0x100, "cgetperm returns incorrect vmeme")
+        self.assertRegisterEqual(self.MIPS.a2, 0x7fff & 0x100, "cgetperm returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_mem_csettype(self):
         '''Test that csettype uses ld results in pipeline'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x100, "cgettype returns incorrect vmeme")
+        self.assertRegisterEqual(self.MIPS.a3, 0x100, "cgettype returns incorrect value")
