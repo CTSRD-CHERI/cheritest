@@ -54,20 +54,9 @@ class test_cp2_reg_init(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.pcc.base, 0x0, "CP2 PCC base incorrectly initialised")
         self.assertRegisterEqual(self.MIPS.pcc.length, 0xffffffffffffffff, "CP2 PCC length incorrectly initialised")
         self.assertRegisterEqual(self.MIPS.pcc.ctype, 0x0, "CP2 PCC ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.pcc.perms, 0x7c91, "CP2 PCC perms incorrectly initialised")
+        self.assertRegisterEqual(self.MIPS.pcc.perms, 0x7fff, "CP2 PCC perms incorrectly initialised")
         self.assertRegisterEqual(self.MIPS.pcc.u, 1, "CP2 PCC unsealed incorrectly initialised")
 
-    @attr('capabilities')
-    def test_cp2_reg_init_c0(self):
-        '''Test that CP2 register C0 is correctly initialised'''
-        self.assertRegisterEqual(self.MIPS.c0.base, 0x0, "CP2 C0 base incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c0.length, 0xffffffffffffffff, "CP2 C0 length incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c0.ctype, 0x0, "CP2 C0 ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c0.perms, 0x4018, "CP2 C0 perms incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c0.u, 1, "CP2 C0 unsealed incorrectly initialised")
-
-    # Note: these tests includes C26, which is RCC.
-#
 # XXXRW: These tests are disabled until we have a syntax for accessing
 # capability registers using an indexed array, similar to self.MIPS[].
 #
@@ -81,7 +70,7 @@ class test_cp2_reg_init(BaseCHERITestCase):
 #    def test_cp2_reg_init_rest_length(self):
 #        '''Test that CP2 general-purpose register lengths are correctly initialised'''
 #        for i in range(1, 26):
-#            self.assertRegisterEqual(self.MIPS.cp2[i].length, 0x0, "CP2 capability register lengths incorrectly initialised")
+#            self.assertRegisterEqual(self.MIPS.cp2[i].length, 0xffffffffffffffff, "CP2 capability register lengths incorrectly initialised")
 #
 #    @attr('capabilities')
 #    def test_cp2_reg_init_rest_ctype(self):
@@ -93,61 +82,10 @@ class test_cp2_reg_init(BaseCHERITestCase):
 #    def test_cp2_reg_init_rest_perms(self):
 #        '''Test that CP2 general-purpose register perms are correctly initialised'''
 #        for i in range(1, 26):
-#            self.assertRegisterEqual(self.MIPS.cp2[i].perms, 0x0, "CP2 capability register perms incorrectly initialised")
-#
+#            self.assertRegisterEqual(self.MIPS.cp2[i].perms, 0x7fff, "CP2 capability register perms incorrectly initialised")
 #
 #    @attr('capabilities')
 #    def test_cp2_reg_init_rest_unsealed(self):
 #        '''Test that CP2 general-purpose register unsealeds are correctly initialised'''
 #        for i in range(1, 26):
 #            self.assertRegisterEqual(self.MIPS.cp2[i].unsealed, 1, "CP2 capability register unsealeds incorrectly initialised")
-
-    # IDC is c27
-    @attr('capabilities')
-    def test_cp2_reg_init_idc(self):
-        '''Test that CP2 register IDC is correctly initialised'''
-        self.assertRegisterEqual(self.MIPS.c27.base, 0x0, "CP2 IDC base incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c27.length, 0xffffffffffffffff, "CP2 IDC length incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c27.ctype, 0x0, "CP2 IDC ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c27.perms, 0x7fff, "CP2 IDC perms incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c27.u, 1, "CP2 IDC unsealed incorrectly initialised")
-
-    # TSC is c28
-    @attr('capabilities')
-    def test_cp2_reg_init_tsc(self):
-        '''Test that CP2 register TSC is correctly initialised'''
-        self.assertRegisterEqual(self.MIPS.c28.base, 0x0, "CP2 TSC base incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c28.length, 0x0, "CP2 TSC length incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c28.ctype, 0x0, "CP2 TSC ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c28.perms, 0x0, "CP2 TSC perms incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c28.u, 1, "CP2 TSC unsealed incorrectly initialised")
-
-    # KCC is c29
-    @attr('capabilities')
-    def test_cp2_reg_init_kcc(self):
-        '''Test that CP2 register KCC is correctly initialised'''
-        self.assertRegisterEqual(self.MIPS.c29.base, 0x0, "CP2 KCC base incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c29.length, 0xffffffffffffffff, "CP2 KCC length incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c29.ctype, 0x0, "CP2 KCC ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c29.perms, 0x7fff, "CP2 KCC perms incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c29.u, 1, "CP2 KCC unsealed incorrectly initialised")
-
-    # KDC is c30
-    @attr('capabilities')
-    def test_cp2_reg_init_kdc(self):
-        '''Test that CP2 register KDC is correctly initialised'''
-        self.assertRegisterEqual(self.MIPS.c30.base, 0x0, "CP2 KDC base incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c30.length, 0x0, "CP2 KDC length incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c30.ctype, 0x0, "CP2 KDC ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c30.perms, 0x0, "CP2 KDC perms incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c30.u, 1, "CP2 KDC unsealed incorrectly initialised")
-
-    # EPCC is c31
-    @attr('capabilities')
-    def test_cp2_reg_init_epcc(self):
-        '''Test that CP2 register EPCC is correctly initialised'''
-        self.assertRegisterEqual(self.MIPS.c31.base, 0x0, "CP2 EPCC base incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c31.length, 0xffffffffffffffff, "CP2 EPCC length incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c31.ctype, 0x0, "CP2 EPCC ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c31.perms, 0x7c91, "CP2 EPCC perms incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.c31.u, 1, "CP2 EPCC unsealed incorrectly initialised")
