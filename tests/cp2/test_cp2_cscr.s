@@ -77,9 +77,6 @@ test:		.ent test
 		dla	$t1, overflow
 		ld	$a5, 0($t1)
 
-		# XXXRW: It would be desirable to write out a second
-		# capability register with non-default contents.
-
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
