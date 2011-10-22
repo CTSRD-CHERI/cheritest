@@ -294,7 +294,8 @@ TEST_CP2_FILES=					\
 		test_cp2_getincbase.s		\
 		test_cp2_getdecleng.s		\
 		test_cp2_getandperm.s		\
-		test_cp2_alu_mod_pipeline.s
+		test_cp2_alu_mod_pipeline.s	\
+		test_cp2_mem_mod_pipeline.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
