@@ -328,7 +328,11 @@ TEST_CP2_FILES=					\
 		test_cp2_csdr_priv.s		\
 		test_cp2_cswr_priv.s		\
 		test_cp2_cshr_priv.s		\
-		test_cp2_csbr_priv.s
+		test_cp2_csbr_priv.s		\
+		test_cp2_c0_sd.s		\
+		test_cp2_c0_sw.s		\
+		test_cp2_c0_sh.s		\
+		test_cp2_c0_sb.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
