@@ -46,12 +46,12 @@ class test_cp2_clbr_priv(BaseCHERITestCase):
         '''Test a 32-bit aligned byte load via a privileged capability'''
         self.assertRegisterEqual(self.MIPS.a1, 0x44, "32-bit aligned clbr returned incorrect value")
 
-    @attr('capability')
+    @attr('capabilities')
     def test_cp2_clbr_16aligned(self):
         '''Test a 16-bit aligned byte load via a privileged capability'''
         self.assertRegisterEqual(self.MIPS.a2, 0x66, "16-bit aligned clbr returned incorrect value")
 
-    @attr('capability')
+    @attr('capabilities')
     def test_cp2_clbr_8aligned(self):
         '''Test a 8-bit aligned byte load via a privileged capability'''
         self.assertRegisterEqual(self.MIPS.a3, 0x77, "8-bit aligned clbr returned incorrect value")

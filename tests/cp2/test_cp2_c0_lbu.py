@@ -45,12 +45,12 @@ class test_cp2_c0_lbu(BaseCHERITestCase):
         '''Test a 32-bit aligned byte load via a constrained c0'''
         self.assertRegisterEqual(self.MIPS.a1, 0x44, "32-bit aligned lbu returned incorrect value")
 
-    @attr('capability')
+    @attr('capabilities')
     def test_cp2_lbu_16aligned(self):
         '''Test a 16-bit aligned byte load via a constrained c0'''
         self.assertRegisterEqual(self.MIPS.a2, 0x66, "16-bit aligned lbu returned incorrect value")
 
-    @attr('capability')
+    @attr('capabilities')
     def test_cp2_lbu_8aligned(self):
         '''Test a 8-bit aligned byte load via a constrained c0'''
         self.assertRegisterEqual(self.MIPS.a3, 0x77, "8-bit aligned lbu returned incorrect value")
