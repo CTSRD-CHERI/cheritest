@@ -85,4 +85,4 @@ class test_cp2_reg_init(BaseCHERITestCase):
     def test_cp2_reg_init_rest_unsealed(self):
         '''Test that CP2 general-purpose register unsealeds are correctly initialised'''
         for i in range(1, 26):
-            self.assertRegisterEqual(self.MIPS.cp2[i].unsealed, 1, "CP2 capability register unsealeds incorrectly initialised")
+            self.assertRegisterEqual(self.MIPS.cp2[i].u, 1, "CP2 capability register unsealeds incorrectly initialised")
