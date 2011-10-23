@@ -34,7 +34,7 @@ from nose.plugins.attrib import attr
 # Full capability context switch test.
 #
 
-class test_cp2_cscr_clcr_context(BaseCHERITestCase):
+class test_cp2_cswitch(BaseCHERITestCase):
     @attr('capabilities')
     def test_unsealed(self):
         for i in range(0, 28):

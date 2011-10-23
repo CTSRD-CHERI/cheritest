@@ -297,7 +297,8 @@ TEST_CP2_FILES=					\
 		test_cp2_cmove.s		\
 		test_cp2_cscr.s			\
 		test_cp2_clcr.s			\
-		test_cp2_cscr_clcr_context.s	\
+		test_cp2_cswitch.s		\
+		test_cp2_cswitch_clr.s		\
 		test_cp2_alu_mod_pipeline.s	\
 		test_cp2_mem_mod_pipeline.s	\
 		test_cp2_get_alu_pipeline.s	\
