@@ -448,7 +448,7 @@ VPATH=$(TESTDIRS)
 OBJDIR=obj
 LOGDIR=log
 GXEMUL_LOGDIR=gxemul_log
-GXEMUL_BINDIR=tools/gxemul/CTSRD-CHERI-gxemul-8d92b42
+GXEMUL_BINDIR?=tools/gxemul/CTSRD-CHERI-gxemul-8d92b42
 GXEMUL_OPTS=-E oldtestmips -M 3072 -i -p "end"
 
 RAW_LDSCRIPT=raw.ld
