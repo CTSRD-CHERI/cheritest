@@ -241,4 +241,63 @@ test:		.ent test
 		#
 		.data
 		.align 5
-data:		.fill 960
+data:		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c0
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c1
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c2
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c3
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c4
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c5
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c6
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c7
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c8
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c9
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c10
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c11
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c12
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c13
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c14
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c15
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c16
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c17
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c18
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c19
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c20
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c21
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c22
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c23
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c24
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c25
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c26
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c27
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c28
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c31
+		.dword	0x0011223344556677, 0x8899aabbccddeeff
