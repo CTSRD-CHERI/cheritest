@@ -242,7 +242,8 @@ TEST_ALU_FILES=					\
 
 TEST_MEM_FILES=					\
 		test_hardware_mappings.s	\
-		test_hardware_mappings_write.s
+		test_hardware_mappings_write.s	\
+		test_sd_burst.s
 
 TEST_LLSC_FILES=				\
 		test_ll_unalign.s		\
