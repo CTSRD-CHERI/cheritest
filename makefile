@@ -64,7 +64,8 @@ RAW_FRAMEWORK_FILES=				\
 		test_raw_nop.s			\
 		test_raw_ssnop.s		\
 		test_raw_lui.s			\
-		test_raw_counterdev.s
+		test_raw_counterdev.s		\
+		test_raw_jr_cached.s
 
 RAW_ALU_FILES=					\
 		test_raw_add.s			\
