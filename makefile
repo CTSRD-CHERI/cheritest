@@ -572,13 +572,18 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 # Target to execute a gxemul simulation.
 #
 # XXX: What is this not parallel?
+# I'm not sure why it wasn't before, but the killall below will not behave well
+# in parallel builds.
 #
 .NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 < /dev/ptmx || true
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 < /dev/ptmx | \
+        (dd bs=1024 count=10240 of=$@; killall -q gxemul) || true
 
+.NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 < /dev/ptmx || true
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 < /dev/ptmx | \
+        (dd bs=1024 count=10240 of=$@; killall -q gxemul) || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
