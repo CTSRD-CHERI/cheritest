@@ -49,13 +49,13 @@
 # $a0 - exception counter (should be 2)
 # $a1 - set to 1 before first trap (should be 1)
 # $a2 - set to 1 after first trap (should be 1)
-# $a3 - queried $ra within sandbox (should be 0xc)
+# $a3 - queried $ra within sandbox (should be 0x10)
 # $a4 - set to 1 after second trap (should be 1)
 # $a5 - linker-provided return address following sandbox restore (no check)
 # $a6 - queried $ra after sandbox (should be equal to a5)
 #
 # $a7 - saved base of sandbox
-# $s0 - saved length of sandbox (should be roughly 20)
+# $s0 - saved length of sandbox (should be roughly 24)
 #
 # $s1 - cause register from last trap (should be TRAP)
 #

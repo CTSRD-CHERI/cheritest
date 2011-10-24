@@ -64,7 +64,7 @@ class test_cp2_exception_epcc(BaseCHERITestCase):
     #
     @attr('capabilities')
     def test_sandbox_length(self):
-        self.assertRegisterEqual(self.MIPS.s0, 20, "sandbox length not 20")
+        self.assertRegisterEqual(self.MIPS.s0, 24, "sandbox length not 24")
 
     #
     # Check that we only entered the last exception because of an explicit
@@ -79,7 +79,7 @@ class test_cp2_exception_epcc(BaseCHERITestCase):
     #
     @attr('capabilities')
     def test_sandbox_pc(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0xc, "sandbox PC unexpected")
+        self.assertRegisterEqual(self.MIPS.a3, 0x10, "sandbox PC unexpected")
 
     #
     # Check that post-sandbox, $pc is roughly as expected
