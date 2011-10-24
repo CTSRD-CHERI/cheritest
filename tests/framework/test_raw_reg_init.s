@@ -34,13 +34,43 @@
 .set noat
 
 #
-# This regression test simply dumps registers to the simulator console.  It
-# uses its own init routine to avoid setting up a stack frame, so that the
-# test framework can also test the initial value of $sp.
+# This unit tests that registers can be properly initialised from software.
 #
 
 		.global start
 start:
+		move	$at, $zero
+		move	$v0, $zero
+		move	$v1, $zero
+		move	$a0, $zero
+		move	$a1, $zero
+		move	$a2, $zero
+		move	$a3, $zero
+		move	$a4, $zero
+		move	$a5, $zero
+		move	$a6, $zero
+		move	$a7, $zero
+		move	$t0, $zero
+		move	$t1, $zero
+		move	$t2, $zero
+		move	$t3, $zero
+		move	$s0, $zero
+		move	$s1, $zero
+		move	$s2, $zero
+		move	$s3, $zero
+		move	$s4, $zero
+		move	$s5, $zero
+		move	$s6, $zero
+		move	$s7, $zero
+		move	$t8, $zero
+		move	$t9, $zero
+		move	$k0, $zero
+		move	$k1, $zero
+		move	$gp, $zero
+		move	$sp, $zero
+		move	$fp, $zero
+		move	$ra, $zero
+
 		# Dump registers in the simulator
 		mtc0 $v0, $26
 		nop
