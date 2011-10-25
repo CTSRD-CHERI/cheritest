@@ -75,6 +75,14 @@ class test_cp2_exception_epcc(BaseCHERITestCase):
         self.assertRegisterEqual((self.MIPS.s1 >> 2) & 0x1f, 13, "last exception not a trap")
 
     #
+    # Check that the exception handler is returning PCC-relative PCs rather
+    # than absolute virtual PCs.
+    #
+    @attr('capabilities')
+    def test_trap_epc(self):
+        self.assertRegisterEqual(self.MIPS.s2, 0x10, "incorrect EPC for last trap")
+
+    #
     # Check that in-sandbox $pc is roughly as expected
     #
     @attr('capabilities')

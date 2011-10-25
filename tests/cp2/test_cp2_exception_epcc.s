@@ -58,6 +58,7 @@
 # $s0 - saved length of sandbox (should be roughly 24)
 #
 # $s1 - cause register from last trap (should be TRAP)
+# $s2 - EPC register from last trap (should be 0x10)
 #
 # $c2 - saved EPCC from first trap (before sandbox)
 #     - perms from EPCC on first trap (should be 0x7fff)
@@ -191,6 +192,9 @@ exception_handler:
 
 		# Remove sandboxing
 		cmove	$c31, $c0	# Move $c0 into $epcc
+
+		# Save sandbox EPC for later inspection
+		dmfc0	$s2, $14
 
 		# Set EPC to continue after exception return
 		dla	$k0, sandbox_end
