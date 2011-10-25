@@ -372,6 +372,11 @@ loop:
 		bne	$t3, $zero, loop
 		nop
 
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
 		.end test
 
 		#

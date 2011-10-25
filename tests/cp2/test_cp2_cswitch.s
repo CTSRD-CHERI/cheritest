@@ -233,6 +233,11 @@ test:		.ent test
 		daddiu	$t0, $t0, 32
 		clcr	$c31, $c30, $t0
 
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
 		.end test
 
 		#
