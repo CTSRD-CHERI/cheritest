@@ -47,6 +47,7 @@ test:		.ent test
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
+		li	$s2, 0
 
 		#
 		# Set up 'handler' as the RAM exception handler.
@@ -55,6 +56,7 @@ test:		.ent test
 		nop
 		dla	$a0, exception_handler
 		jal	bev0_handler_install
+		nop
 		dla	$a0, exception_handler
 		jal	bev1_handler_install
 		nop
