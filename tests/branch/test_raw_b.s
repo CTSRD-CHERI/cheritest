@@ -40,6 +40,11 @@
 
 		.global start
 start:
+		li	$t0, 0
+		li	$t1, 0
+		li	$t2, 0
+		li	$t3, 0
+
 		li	$t0, 1
 		b	branch_target
 		li	$t1, 1		# branch-delay slot

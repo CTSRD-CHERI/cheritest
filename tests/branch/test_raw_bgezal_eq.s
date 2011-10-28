@@ -41,6 +41,12 @@
 
 		.global start
 start:
+		li	$a0, 0
+		li	$a1, 0
+		li	$a2, 0
+		li	$a3, 0
+		li	$a4, 0
+
 		dla	$a4, desired_return_address
 		li	$a0, 1			# Before
 		bgezal	$zero, bgezal_target

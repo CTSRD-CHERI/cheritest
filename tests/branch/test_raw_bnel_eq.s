@@ -39,6 +39,10 @@
 
 		.global start
 start:
+		li	$a0, 0
+		li	$a1, 0
+		li	$a2, 0
+
 		li	$a0, 1		# before
 		bnel	$zero, $zero, branch_target
 		li	$a1, 2		# branch-delay slot; shouldn't run

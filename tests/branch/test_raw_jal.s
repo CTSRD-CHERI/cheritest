@@ -42,6 +42,10 @@
 
 		.global start
 start:
+		li	$t0, 0
+		li	$t1, 0
+		li	$t2, 0
+		li	$t3, 0
 
 		li	$t0, 1
 		dla	$t8, desired_return_address	# To check $ra against

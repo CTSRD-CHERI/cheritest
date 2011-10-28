@@ -31,13 +31,13 @@ from cheritest_tools import BaseCHERITestCase
 
 class test_raw_b(BaseCHERITestCase):
     def test_t0(self):
-        self.assertRegisterNotEqual(self.MIPS.t0, 0, "instruction before branch missed")
+        self.assertRegisterEqual(self.MIPS.t0, 1, "instruction before branch missed")
 
     def test_t1(self):
-        self.assertRegisterNotEqual(self.MIPS.t1, 0, "instruction in branch-delay slot missed")
+        self.assertRegisterEqual(self.MIPS.t1, 1, "instruction in branch-delay slot missed")
 
     def test_t2(self):
-        self.assertRegisterEqual(self.MIPS.t2, 0, "branch failed to skip instruction")
+        self.assertRegisterNotEqual(self.MIPS.t2, 1, "branch failed to skip instruction")
 
     def test_t3(self):
-        self.assertRegisterNotEqual(self.MIPS.t3, 0, "branch target missed")
+        self.assertRegisterEqual(self.MIPS.t3, 1, "branch target missed")

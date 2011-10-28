@@ -39,6 +39,11 @@
 
 		.global start
 start:
+		li	$a0, 0
+		li	$a1, 0
+		li	$a2, 0
+		li	$a3, 0
+
 		li	$a0, 1		# before
 		li	$t0, 1
 		bne	$t0, $zero, branch_target

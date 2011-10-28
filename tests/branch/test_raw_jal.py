@@ -37,7 +37,7 @@ class test_raw_jal(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.t1, 2, "insruction in branch-delay slot missed")
 
     def test_t2(self):
-        self.assertRegisterEqual(self.MIPS.t2, 0, "jump didn't happen")
+        self.assertRegisterNotEqual(self.MIPS.t2, 3, "jump didn't happen")
 
     def test_t3(self):
         self.assertRegisterEqual(self.MIPS.t3, 4, "instruction at jump target didn't run")
