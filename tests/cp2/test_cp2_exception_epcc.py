@@ -80,7 +80,7 @@ class test_cp2_exception_epcc(BaseCHERITestCase):
     #
     @attr('capabilities')
     def test_trap_epc(self):
-        self.assertRegisterEqual(self.MIPS.s2, 0x10, "incorrect EPC for last trap")
+        self.assertRegisterEqual(self.MIPS.s2, 0x14, "incorrect EPC for last trap")
 
     #
     # Check that in-sandbox $pc is roughly as expected
