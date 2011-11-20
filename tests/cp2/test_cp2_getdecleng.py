@@ -43,4 +43,4 @@ class test_cp2_getdecleng(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_getleng2(self):
         '''Test that cgetleng returns correct value after cdecleng'''
-        self.assertRegisterEqual(self.MIPS.a1, 0xfffffffffffffffe, "cgetleng returns incorrect value after csetleng")
+        self.assertRegisterEqual(self.MIPS.a1, 0x100, "cgetleng returns incorrect value after csetleng")

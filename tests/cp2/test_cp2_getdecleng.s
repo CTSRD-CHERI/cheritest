@@ -45,9 +45,9 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		dli	$t0, 1
-		dli	$a0, 1
-		dli	$a1, 2
+		dli	$t0, 0x100
+		dli	$a0, 0x2000
+		dli	$a1, 0x3000
 
 		cgetleng	$a0, $c2
 		cdecleng	$c2, $c2, $t0
