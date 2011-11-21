@@ -54,4 +54,4 @@ class test_cp2_cmove(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_cmove_length(self):
         '''Test that cmove retained the length field correctly'''
-        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff - 0x200, "cmove failed to retain correct length")
+        self.assertRegisterEqual(self.MIPS.a3, 0x200, "cmove failed to retain correct length")

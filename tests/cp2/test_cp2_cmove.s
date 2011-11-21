@@ -50,6 +50,7 @@ test:		.ent test
 		csettype	$c2, $c2, $t0
 		dli		$t0, 0x100
 		cincbase	$c2, $c2, $t0
+		dli		$t0, 0x200
 		cdecleng	$c2, $c2, $t0
 		dli		$t0, 0xff
 		candperm	$c2, $c2, $t0

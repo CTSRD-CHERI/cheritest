@@ -44,7 +44,7 @@ class test_cp2_alu_mod_pipeline(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_alu_cdecleng(self):
 	'''Test that cdecleng uses ALU results in pipeline'''
-	self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff - 0x100, "cgetleng returns incorrect value")
+	self.assertRegisterEqual(self.MIPS.a1, 0x100, "cgetleng returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_alu_candperm(self):

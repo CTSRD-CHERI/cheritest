@@ -104,17 +104,12 @@ test:		.ent test
 		cincbase	$c1, $c1, $a7
 
 		#
-		# XXXRW: slightly awkward installation of $c1.length due to
-		# lacking a csetleng instruction.  Put the desired length in
-		# $t1, then calculate a difference from the current length by
-		# which to decrement the current length.
+		# Calculate desired length of $c1 into $s0, then set the length.
 		#
 		dla	$t0, sandbox_end
 		dsubu	$s0, $t0, $a7
 
-		cgetleng	$t2, $c1
-		dsubu		$t2, $t2, $s0
-		cdecleng	$c1, $c1, $t2
+		cdecleng	$c1, $c1, $s0
 
 		#
 		# First trap -- on return, we will be running relative to the
