@@ -486,9 +486,7 @@ AS=mips64-as
 
 all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS)
 
-test: nosetest
-
-test_cached: nosetest_cached
+test: nosetest nosetest_cached
 
 cleantest:
 	rm -f $(CHERI_TEST_LOGS) $(CHERI_TEST_CACHED_LOGS)
@@ -501,7 +499,7 @@ clean: cleantest
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f *.hex mem.bin
 
-.PHONY: all clean cleantest test nosetest failnosetest
+.PHONY: all clean cleantest test nosetest nosetest_cached failnosetest
 .SECONDARY: $(TEST_OBJECTS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
     $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
 
