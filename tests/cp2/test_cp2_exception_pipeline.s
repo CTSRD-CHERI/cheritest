@@ -119,7 +119,6 @@ test:		.ent test
 
 		.ent bev0_handler
 bev0_handler:
-		mfc0	$k0, $13	# Cause register
 		dmfc0	$k0, $14	# EPC
 		daddiu	$k0, $k0, 8 	# EPC += 8 to bump PC forward on ERET N.B. 8 because we wish to skip instruction after svc!
 		dmtc0	$k0, $14
@@ -131,7 +130,7 @@ bev0_handler:
 		.end bev0_handler
 
 		.data
-		.align  3
+		.align  5
 data:		.dword	0xfeedbeefdeadbeef
 		.dword	0xfeedbeefdeadbeef
 		.dword	0xfeedbeefdeadbeef
