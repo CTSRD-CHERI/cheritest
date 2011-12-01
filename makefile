@@ -447,7 +447,7 @@ TEST_CYCLE_LIMIT=100000
 # tests to current categories.
 #
 
-CHERIROOT?=../../cheri/trunk
+CHERIROOT?=$(PWD)/../../cheri/trunk
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
@@ -557,14 +557,14 @@ $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
 
 #
 # Target to execute a Bluespec simulation of the test suite; memConv.py needs
-# fixing so that it accepts explicit sources and destinations.  That way
-# concurrent runs can't tread on each other, allowing testing with -j, etc.
-#
-.NOTPARALLEL:
+# fixing so that it accepts explicit sources and destinations but for now we
+# can use a temporary directory so that parallel builds work.
 $(LOGDIR)/%.log : $(OBJDIR)/%.mem
-	cp $< mem.bin
-	$(MEMCONV) bsim
-	${CHERIROOT}/sim -m $(TEST_CYCLE_LIMIT) > $@
+	TMPDIR=$$(mktemp -d) && \
+	cd $$TMPDIR && \
+	cp $(PWD)/$< mem.bin && \
+	$(MEMCONV) bsim && ${CHERIROOT}/sim -m $(TEST_CYCLE_LIMIT) > $(PWD)/$@ && \
+	rm -r $$TMPDIR
 
 #
 # Target to execute a gxemul simulation.
@@ -573,12 +573,12 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 # I'm not sure why it wasn't before, but the killall below will not behave well
 # in parallel builds.
 #
-.NOTPARALLEL:
+# Don't use .NOTPARALLEL because it stops anything in this makefile
+# from running in parallel! Just don't use -j when running gxemul tests...
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 < /dev/ptmx | \
         (dd bs=1024 count=10240 of=$@; killall -q gxemul) || true
 
-.NOTPARALLEL:
 $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 < /dev/ptmx | \
         (dd bs=1024 count=10240 of=$@; killall -q gxemul) || true
