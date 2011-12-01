@@ -447,7 +447,8 @@ TEST_CYCLE_LIMIT=100000
 # tests to current categories.
 #
 
-CHERIROOT?=$(PWD)/../../cheri/trunk
+CHERIROOT?=../../cheri/trunk
+CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
@@ -482,7 +483,7 @@ GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 
-MEMCONV=python ${CHERIROOT}/tools/memConv.py
+MEMCONV=python ${CHERIROOT_ABS}/tools/memConv.py
 AS=mips64-as
 
 all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS)
@@ -563,7 +564,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
 	cp $(PWD)/$< mem.bin && \
-	$(MEMCONV) bsim && ${CHERIROOT}/sim -m $(TEST_CYCLE_LIMIT) > $(PWD)/$@ && \
+	$(MEMCONV) bsim && ${CHERIROOT_ABS}/sim -m $(TEST_CYCLE_LIMIT) > $(PWD)/$@ && \
 	rm -r $$TMPDIR
 
 #
