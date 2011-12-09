@@ -46,3 +46,7 @@ class test_raw_sllv(BaseCHERITestCase):
 	def test_a4(self):
 		'''Test a SLLV of 31(max)'''
 		self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000000, "Shift of thirty-one (max) failed")
+
+	def test_a5(self):
+		'''Test a SLL of 32 (valid 64-bit shift but 32-bit instruction should treat as zero)'''
+		self.assertRegisterEqual(self.MIPS.a5, 0x0000000076543210, "Shift of 32 (too big) failed")
