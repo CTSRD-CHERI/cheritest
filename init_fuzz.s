@@ -35,7 +35,7 @@
 
 #
 # Generic init.s used by low-level CHERI fuzz tests. Identical to
-# init_fuzz.s except that registers are initialised to more interesting
+# init.s except that registers are initialised to more interesting
 # values and cp2 regs are not dumped because gxemul does not have cp2 yet...
 #
 		.text
