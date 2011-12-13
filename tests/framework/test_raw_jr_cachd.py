@@ -29,6 +29,6 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class test_raw_jr_cached(BaseCHERITestCase):
+class test_raw_jr_cachd(BaseCHERITestCase):
     def test_a0(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0123456789abcdef, "Instructions after jr skipped")

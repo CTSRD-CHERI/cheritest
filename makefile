@@ -226,7 +226,8 @@ TEST_FRAMEWORK_FILES=				\
 		test_casmgp.c			\
 		test_cretval.c			\
 		test_crecurse.c			\
-		test_cglobals.c
+		test_cglobals.c                 \
+		test_raw_jr_cachd.s             \
 
 TEST_ALU_FILES=					\
 		test_hilo.s			\
