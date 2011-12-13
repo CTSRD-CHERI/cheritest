@@ -461,6 +461,8 @@ TEST_CYCLE_LIMIT=100000
 
 CHERIROOT?=../../cheri/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
+TOOLS_DIR = ../../cherilibs/trunk/tools
+TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
@@ -505,7 +507,7 @@ SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED
 GXEMUL_FUZZ_TEST_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_LOGS))
 GXEMUL_FUZZ_TEST_CACHED_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_CACHED_LOGS))
 
-MEMCONV=python ${CHERIROOT_ABS}/tools/memConv.py
+MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 AS=mips64-as
 
 all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS)
