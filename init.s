@@ -59,6 +59,11 @@ start:
 		jal	bev1_handler_install
 		nop
 
+	        # Switch to 64-bit mode (no effect on cheri, but required for gxemul)
+	        mfc0    $at, $12
+	        or      $at, $at, 0xe0
+	        mtc0    $at, $12
+
 		#
 		# Explicitly clear most registers in order to make the effects
 		# of a test on the register file more clear.  Otherwise,
