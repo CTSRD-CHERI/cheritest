@@ -28,6 +28,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_template(BaseCHERITestCase):
     def test_template(self):
@@ -39,5 +40,7 @@ class test_template(BaseCHERITestCase):
         self.MIPS.zero
         ## Access register by number
         self.MIPS[0]
+    @attr('capabilities')
+    def test_template_c0(self):
         ## Access capability register by number
         self.MIPS.c0.base

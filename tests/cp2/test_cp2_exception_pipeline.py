@@ -39,31 +39,32 @@ from nose.plugins.attrib import attr
 # which we try to check here.
 #
 
+
 class test_cp2_exception_pipeline(BaseCHERITestCase):
     @attr('capabilities')
     def test_cincbase(self):
         # Should be unchanged from default
         self.assertRegisterEqual(self.MIPS.c2.base, 0x0, "cincbase instruction was not properly flushed from pipeline")
-
+    @attr('capabilities')
     def test_cdeclen(self):
         # Should be unchanged from default
         self.assertRegisterEqual(self.MIPS.c3.length, 0xffffffffffffffff, "cdeclen instruction was not properly flushed from pipeline")
-
+    @attr('capabilities')
     def test_candperms(self):
         # Should be unchanged from default
         self.assertRegisterEqual(self.MIPS.c4.perms, 0x7fff, "candperms instruction was not properly flushed from pipeline")
-
+    @attr('capabilities')
     def test_csettype(self):
         # Should be unchanged from default
         self.assertRegisterEqual(self.MIPS.c5.ctype, 0x0, "csettype instruction was not properly flushed from pipeline")
-
+    @attr('capabilities')
     def test_cscr(self):
         # These registers should contain test data, NOT the stored capability register
         self.assertRegisterEqual(self.MIPS.a0, 0xfeedbeefdeadbeef, "cscr instruction was not properly flushed from pipeline")
         self.assertRegisterEqual(self.MIPS.a1, 0xfeedbeefdeadbeef, "cscr instruction was not properly flushed from pipeline")
         self.assertRegisterEqual(self.MIPS.a2, 0xfeedbeefdeadbeef, "cscr instruction was not properly flushed from pipeline")
         self.assertRegisterEqual(self.MIPS.a3, 0xfeedbeefdeadbeef, "cscr instruction was not properly flushed from pipeline")
-
+    @attr('capabilities')
     def test_clcr(self):
         # The c7 register should be unchanged from its default value
         self.assertRegisterEqual(self.MIPS.c7.ctype, 0, "clcr instruction was not properly flushed from pipeline")

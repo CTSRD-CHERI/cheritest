@@ -28,8 +28,10 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_template(BaseCHERITestCase):
+    @attr('capabilities')
     def test_template(self):
         ## Check equality
         self.assertRegisterEqual(0, 0, "Failure description here")
