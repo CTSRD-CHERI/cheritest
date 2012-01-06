@@ -106,12 +106,18 @@ exception_end:
 		mtc0 $at, $26
 		nop
 		nop
-
+	
+		mfc0 $k0, $15	        # prid register
+		and  $k0, $k0, 0xff00
+		xor  $k0, $k0, 0x8900
+		beqz $k0, skip_cp2_dump # Skip cp2 dump on gxemul
+		nop
+	
 		# Dump capability registers in the simulator
-		mfc2 $v0, $0, 4
+		mfc2 $k0, $0, 4
 		nop
 		nop
-
+skip_cp2_dump:		
 		# Terminate the simulator
 		mtc0 $at, $23
 end:
