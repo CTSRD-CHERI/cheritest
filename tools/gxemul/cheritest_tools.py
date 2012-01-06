@@ -59,8 +59,9 @@ class BaseCHERITestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         '''Parse the log file and instantiate MIPS'''
+        cached=is_envvar_true('CACHED') and "_cached" or ""
         if self.LOG_FN is None:
-            self.LOG_FN = self.__name__ + "_gxemul.log"
+            self.LOG_FN = self.__name__ + "_gxemul" +cached+".log"
         fh = open(os.path.join(self.LOG_DIR, self.LOG_FN), "rt")
         try:
             self.MIPS = MipsStatus(fh)
