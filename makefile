@@ -349,6 +349,7 @@ TEST_CP2_FILES=					\
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
+		test_add_overflow_wrong_sign.s  \
 		test_addi_overflow.s		\
 		test_addiu_overflow.s		\
 		test_addu_overflow.s		\
