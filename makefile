@@ -469,7 +469,7 @@ OBJDIR=obj
 LOGDIR=log
 GXEMUL_LOGDIR=gxemul_log
 GXEMUL_BINDIR?=tools/gxemul/CTSRD-CHERI-gxemul-8d92b42
-GXEMUL_OPTS=-E oldtestmips -M 3072 -i -p "end"
+GXEMUL_OPTS=-V -E oldtestmips -M 3072 -i -p "end"
 
 RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
@@ -612,21 +612,23 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	rm -r $$TMPDIR
 
 #
-# Target to execute a gxemul simulation.
+# Target to execute a gxemul simulation.  Gxemul is focused on running
+# interactively which causes two problems: firstly there is no way to
+# say on the command line that we want to run for only
+# TEST_CYCLE_LIMIT cycles, and secondly gxemul assumes that there is
+# an interactive terminal and hangs if stdin goes away. We get around
+# this with the following glorious hackery to 1) feed gxemul commands
+# to step TEST_CYCLE_LIMIT times then exit and 2) wait until gxemul
+# closes stdin before exiting the pipeline.
 #
-# XXX: What is this not parallel?
-# I'm not sure why it wasn't before, but the killall below will not behave well
-# in parallel builds.
-#
-# Don't use .NOTPARALLEL because it stops anything in this makefile
-# from running in parallel! Just don't use -j when running gxemul tests...
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 < /dev/ptmx | \
-        (dd bs=1024 count=10240 of=$@; killall -q gxemul) || true
+	(echo -e "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 1; done ) | \
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 || true
+
 
 $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 < /dev/ptmx | \
-        (dd bs=1024 count=10240 of=$@; killall -q gxemul) || true
+	(echo -e "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 1; done ) | \
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
