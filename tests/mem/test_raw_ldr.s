@@ -35,15 +35,15 @@
 
 		.global start
 start:
-		andi	$a1, $0, 0
-		andi	$a2, $0, 0
-		andi	$a3, $0, 0
-		andi	$a4, $0, 0
-		andi	$a5, $0, 0
-		andi	$a6, $0, 0
-		andi	$a7, $0, 0
-		andi	$t0, $0, 0
-		andi	$t1, $0, 0
+		dli	$a1, 0xb7b6b5b4b3b2b1b0
+		move	$a2, $a1
+		move	$a3, $a1
+		move	$a4, $a1
+		move	$a5, $a1
+		move	$a6, $a1
+		move	$a7, $a1
+		move	$t0, $a1
+		move	$t1, $a1
 		dla	$a0, alternate
 		ldr	$a1, 0($a0)
 		ldr	$a2, 1($a0)
@@ -66,5 +66,5 @@ end:
 		b end
 
 		.data
-testword:	.dword 0xffffffffffffffff
 alternate:	.dword 0xfedcba9876543210
+testword:	.dword 0xffffffffffffffff
