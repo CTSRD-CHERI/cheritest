@@ -623,12 +623,12 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 # closes stdin before exiting the pipeline.
 #
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
-	(echo -e "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 1; done ) | \
+	(/bin/echo -e "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 || true
 
 
 $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
-	(echo -e "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 1; done ) | \
+	(/bin/echo -e "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 || true
 
 # Simulate a failure on all unit tests
