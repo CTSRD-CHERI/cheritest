@@ -37,7 +37,7 @@ CACHED = bool(int(os.environ.get("CACHED", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-TEST_FILE_RE=re.compile('test_fuzz_\d+.s')
+TEST_FILE_RE=re.compile('test_fuzz_\w+_\d+.s')
 TEST_DIR ='tests/fuzz'
 
 #Not derived from unittest.testcase because we wish test_fuzz to

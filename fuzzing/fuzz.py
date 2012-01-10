@@ -32,17 +32,62 @@ import itertools
 import inspect
 import string
 import os
+import random
 
-if __name__=="__main__":
-    from optparse import OptionParser
-    parser = OptionParser()
-    parser.add_option("-d", "--test-dir",
-                      help="Directory to generate tests in.", default="tests/fuzz")
-    (options, args) = parser.parse_args()
+load_store_widths=['B','H','W','D']
+
+def format_load(width, signed, alignment, left):
+    pass
     
-    fuzz_dir=os.path.dirname(inspect.getfile(inspect.currentframe()))
+def make_list(s):
+    return [l for l in s.split() if len(l)>0 and l[0]!='#']
 
-    ops= """
+def generate_tests(options, group, variables):
+    test_no=0
+    fuzz_dir=os.path.dirname(inspect.getfile(inspect.currentframe()))
+    template=string.Template(open(os.path.join(fuzz_dir,group+"_template.txt")).read())
+    for params in itertools.product(*[var[1] for var in variables]):
+        test_name="test_fuzz_%s_%08d" % (group, test_no)
+        test_path_base=os.path.join(options.test_dir,test_name)
+        test_asm_path=test_path_base+".s"
+        param_dict=dict(zip([var[0] for var in variables],params))
+        param_dict["nops"]="\tnop\n" * param_dict["nops"]
+        random.seed(test_no)
+        param_dict["a0_val"]="0x%016x"% random.randint(0,0xffffffffffffffff)
+        param_dict["a1_val"]="0x%016x"% random.randint(0,0xffffffffffffffff)
+        test_asm=open(test_asm_path, 'w')
+        test_asm.write(template.substitute(param_dict))
+        test_asm.close()
+        test_no+=1
+    print "generated %d %s tests" % (test_no, group)
+
+def generate_load(options):
+    ops=make_list("""
+    LB
+    LBU
+    LD
+    LDL
+    LDR
+    LH
+    LHU
+    LW
+    LWU
+    LWL
+    LWR
+    LL
+    LLD
+    """)
+    generate_tests(options, 'load', [
+            ('op',ops),
+            ('offset', [0]),
+            ('rs',['$0','$a0']),
+            ('rt',['$0','$a0']),
+            ('nops', range(7)),
+            ])
+    
+
+def generate_arithmetic(options):
+    ops= make_list("""
     ADD
     ADDU
     SUB
@@ -56,49 +101,57 @@ if __name__=="__main__":
     SLL
     SRA
     SRL
-    """.split()
+    DADD
+    DADDU
+    DSUB
+    DSUBU
+    DSLL
+    DSRA
+    DSRL
+    """)
     #TODO $ra is also special...
     # rd0 is either zero reg or a gp reg
-    rd0_regs="""
-    $0
+    rd0_regs=make_list("""
     $a0
-    """.split()
+    """)
     # rd1 is gp reg (maybe same as rd0)
-    rd1_regs="""
-    $a0
+    rd1_regs=make_list("""
     $a1
-    """.split()
+    """)
     # source regs are either zero, same as rd0, or something else
-    source0_regs="""
+    source0_regs=make_list("""
     $0
     $a0
     $a1
-    """.split()
-    source1_regs="""
+    """)
+    source1_regs=make_list("""
     $0
-    $a0
     $a1
-    """.split()
-    nops=range(7)
-    test_no=0
-    template=string.Template(open(os.path.join(fuzz_dir,"asm_template.txt")).read())
-    for params in itertools.product(
-            ops, \
-            rd0_regs, \
-            source0_regs, \
-            source0_regs, \
-            ops, \
-            rd1_regs, \
-            source1_regs, \
-            source1_regs, \
-            nops):
-        test_name="test_fuzz_%08d" % (test_no)
-        test_path_base=os.path.join(options.test_dir,test_name)
-        test_asm_path=test_path_base+".s"
-        test_asm=open(test_asm_path, 'w')
-        param_dict=dict(zip(["op0","rd0","rs0","rt0","op1","rd1","rs1","rt1","nops"],params))
-        param_dict["nops"]="\tnop\n" * param_dict["nops"]
-        test_asm.write(template.substitute(param_dict))
-        test_asm.close()
-        test_no+=1
-    print "generated %d tests" % (test_no+1)
+    $a0
+    """)
+    nops=[0]
+
+    generate_tests(
+        options, 
+        "alu", 
+        [ ('op0', ops),
+          ('rd0', rd0_regs),
+          ('rs0', source0_regs),
+          ('rt0', source0_regs),
+          ('op1', ops),
+          ('rd1', rd1_regs),
+          ('rs1', source1_regs),
+          ('rt1', source1_regs),
+          ('nops', nops),])
+
+if __name__=="__main__":
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-d", "--test-dir",
+                      help="Directory to generate tests in.", default="tests/fuzz")
+    (options, args) = parser.parse_args()
+    generate_arithmetic(options)
+    generate_load(options)
+
+
+

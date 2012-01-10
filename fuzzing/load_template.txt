@@ -23,9 +23,10 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-# Template for simple two instruction fuzz tests. The two opcodes and
-# registers are chosen in a script and a variable number of nops is 
-# inserted between them. Currently only R-type intructions are supported...
+# Template for simple two instruction fuzz tests where the first
+# instruction is a load. The two opcodes and registers are chosen in a
+# script and a variable number of nops is inserted between
+# them. Currently only R-type intructions are supported...
 
 .set mips64
 .set noreorder
@@ -34,9 +35,15 @@
 
 .global test
 test:   .ent    test
-	$op0	$rd0, $rs0, $rt0
+	dla     $$a7, bytes
+	$op	$$a0, $offset($$a7)
 $nops
-	$op1	$rd1, $rs1, $rt1
+	daddu	$$a1, $rs, $rt
 	jr	$$ra
 	nop
         .end    test
+
+		.data
+		.align	5
+bytes:		.dword	0x0001020304050607
+		.dword	0x08090a0b0c0d0e0f
