@@ -47,6 +47,7 @@ test:		.ent test
 		dli	$t0, 1
 		dli	$t1, -1
 		dli	$t2, -2
+		dli     $t3, 0x8000000000000000
 
 		# Equal, non-negative
 		slt	$a0, $zero, $zero
@@ -66,6 +67,10 @@ test:		.ent test
 		# Less than, negative
 		slt	$a5, $t2, $t1
 
+		# Less than 64-bit negative value
+	        slt     $a6, $t3, $zero
+	        
+	
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32

@@ -53,3 +53,7 @@ class test_slt(BaseCHERITestCase):
     def test_lt_sign(self):
         '''set on less than: less than, non-negative'''
         self.assertRegisterEqual(self.MIPS.a5, 1, "slt returned true for less than, negative")
+
+    def test_lt_64bit(self):
+        '''set on less than: less than, 64-bit'''
+        self.assertRegisterEqual(self.MIPS.a6, 1, "slt returned true for less than, negative")
