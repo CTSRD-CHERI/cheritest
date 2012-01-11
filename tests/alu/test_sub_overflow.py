@@ -50,3 +50,6 @@ class test_sub_overflow(BaseCHERITestCase):
 
     def test_not_exl_after_handler(self):
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
+    
+    def test_result_not_written(self):
+        self.assertRegisterEqual(self.MIPS.t0, 0xffffffff80000000, "Result register should not be written on exception.")
