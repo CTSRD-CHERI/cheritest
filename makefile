@@ -358,8 +358,10 @@ TEST_ALU_OVERFLOW_FILES=			\
 		test_daddiu_overflow.s		\
 		test_daddu_overflow.s		\
 		test_dsub_overflow.s		\
+		test_dsub_overflow_minint.s	\
 		test_dsubu_overflow.s		\
 		test_sub_overflow.s		\
+		test_sub_overflow_minint.s	\
 		test_subu_overflow.s		\
 		test_madd_lo_overflow.s
 
