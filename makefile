@@ -464,6 +464,9 @@ TEST_CYCLE_LIMIT=100000
 
 CHERIROOT?=../../cheri/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
+CHERILIBS?=../../cherilibs/trunk
+CHERILIBS_ABS:=$(realpath $(CHERILIBS))
+CHERICONF?=$(CHERIROOT_ABS)/simconfig
 TOOLS_DIR = ../../cherilibs/trunk/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 
@@ -611,7 +614,10 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
 	cp $(PWD)/$< mem.bin && \
-	$(MEMCONV) bsim && ${CHERIROOT_ABS}/sim -m $(TEST_CYCLE_LIMIT) > $(PWD)/$@ && \
+	$(MEMCONV) bsim && \
+	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+	CHERI_CONFIG=$(CHERICONF) \
+	${CHERIROOT_ABS}/sim -m $(TEST_CYCLE_LIMIT) > $(PWD)/$@ && \
 	rm -r $$TMPDIR
 
 #
