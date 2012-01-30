@@ -1,4 +1,4 @@
-#-
+#!/usr/bin/env python
 # Copyright (c) 2011 Robert M. Norton
 # All rights reserved.
 #
@@ -28,36 +28,90 @@
 # bluesim and gxemul. tests/fuzz/test_fuzz.py is a nose test which
 # compares the results.
 
-import itertools
+import itertools, operator
 import inspect
 import string
-import os
+import os, sys
 import random
 
 def make_list(s):
-    return [l for l in s.split() if len(l)>0 and l[0]!='#']
+    return [l for l in map(str.strip, s.splitlines()) if l and l[0]!='#']
 
-def generate_tests(options, group, variables):
-    test_no=0
-    fuzz_dir=os.path.dirname(inspect.getfile(inspect.currentframe()))
-    template=string.Template(open(os.path.join(fuzz_dir,group+"_template.txt")).read())
-    for params in itertools.product(*[var[1] for var in variables]):
-        test_name="test_fuzz_%s_%08d" % (group, test_no)
-        test_path_base=os.path.join(options.test_dir,test_name)
-        test_asm_path=test_path_base+".s"
-        param_dict=dict(zip([var[0] for var in variables],params))
-        param_dict["nops"]="\tnop\n" * param_dict["nops"]
-        random.seed(test_no)
-        param_dict["a0_val"]="0x%016x"% random.randint(0,0xffffffffffffffff)
-        param_dict["a1_val"]="0x%016x"% random.randint(0,0xffffffffffffffff)
-        test_asm=open(test_asm_path, 'w')
-        test_asm.write(template.substitute(param_dict))
-        test_asm.close()
-        test_no+=1
-    print "generated %d %s tests" % (test_no, group)
+interesting_imm_values=make_list('''
+0x0
+0x1
+0x1f
+0x3f
+0xffff
+0xefff
+0x8000
+''')
 
-def generate_load(options):
-    ops=make_list("""
+interesting_reg_values=make_list('''
+0x0
+0x1
+0x2
+0xffffffffffffffff
+0xffffffff80000000
+0x8000000000000000
+0x7fffffffffffffff
+0x000000007fffffff
+0xffffffff
+0x80000000
+0xfffffffffffffffe
+0x7ffffffffffffffe
+0x000000007ffffffe
+random
+''')
+
+reg_reg_ops=make_list("""
+    ADD
+    ADDU
+    SUB
+    SUBU
+    SLT
+    SLTU
+    AND
+    OR
+    XOR
+    NOR
+    SLLV
+    SRA
+    SRL
+    DADD
+    DADDU
+    DSUB
+    DSUBU
+    DSLLV
+    DSRA
+    DSRL
+    MOVZ
+    MOVN
+""")
+
+reg_imm_ops=make_list("""
+    ADDI
+    ADDIU
+    SLTI
+    SLTIU
+    ANDI
+    ORI
+    XORI
+    LUI
+    DADDI
+    DADDIU
+    SLL
+    SRA
+    SRL
+    DSLL
+    DSRA
+    DSRL
+    DSLL32
+    DSRL32
+    DSRA32
+""")
+
+load_ops=make_list("""
     LB
     LBU
     LD
@@ -69,11 +123,66 @@ def generate_load(options):
     LWU
     LWL
     LWR
-    #LL
+    #LL -- gxemul has a fit on unaligned LL!
     #LLD
-    """)
-    generate_tests(options, 'load', [
-            ('op',ops),
+""")
+
+# Div disabled because assembler insists on using a macro!
+divmul_ops=make_list("""
+    MULT
+    MULTU
+#    DIV
+#    DIVU
+    DMULT
+    DMULTU
+#    DDIV
+#    DDIVU
+""")
+#MADD
+#MSUB
+#MULI
+
+def generate_tests(options, group, variables):
+    """
+    A generic function for generating tests:
+    options is the script options as returned by optparse,
+    group is a string prefix which is used to determine the template name and test names.
+    variables is a list of (varname, iterable) tuples representing the possible values taken
+        by each variable varname in the template.
+    """
+    test_no=0
+    fuzz_dir=os.path.dirname(inspect.getfile(inspect.currentframe()))
+    template=string.Template(open(os.path.join(fuzz_dir,group+"_template.txt")).read())
+    num_tests=reduce(operator.mul, [len(var[1]) for var in variables])
+    sys.stdout.write("Generating %d %s tests..." % (num_tests, group))
+    sys.stdout.flush()
+    if options.count or (options.only and group!=options.only):
+        print "skip."
+        if options.count:
+            return num_tests
+        else:
+            return 0
+    for params in itertools.product(*[var[1] for var in variables]):
+        test_name="test_fuzz_%s_%08d" % (group, test_no)
+        test_path_base=os.path.join(options.test_dir,test_name)
+        test_asm_path=test_path_base+".s"
+        param_dict=dict(zip([var[0] for var in variables], params))
+        for k,v in param_dict.iteritems():
+            if v=="random":
+                param_dict[k]="0x%016x"% random.randint(0,0xffffffffffffffff)
+        if param_dict.has_key("nops"):
+            param_dict["nops"]="\tnop\n" * param_dict["nops"]
+        random.seed(test_no)
+        test_asm=open(test_asm_path, 'w')
+        test_asm.write(template.substitute(param_dict))
+        test_asm.close()
+        test_no+=1
+    print "done."
+    return test_no
+
+def generate_load(options):
+    return generate_tests(options, 'load', [
+            ('op',load_ops),
             ('offset', range(7)),
             ('rs',['$0','$a0']),
             ('rt',['$0','$a0']),
@@ -82,71 +191,118 @@ def generate_load(options):
     
 
 def generate_arithmetic(options):
-    ops= make_list("""
-    ADD
-    ADDU
-    SUB
-    SUBU
-    SLT
-    SLTU
-    AND
-    OR
-    XOR
-    NOR
-    SLL
-    SRA
-    SRL
-    DADD
-    DADDU
-    DSUB
-    DSUBU
-    DSLL
-    DSRA
-    DSRL
-    """)
     #TODO $ra is also special...
-    # rd0 is either zero reg or a gp reg
+    # rd0 is fixed as $a0
     rd0_regs=make_list("""
     $a0
     """)
-    # rd1 is gp reg (maybe same as rd0)
+    # rd1 is fixed as $a1
     rd1_regs=make_list("""
     $a1
     """)
-    # source regs are either zero, same as rd0, or something else
+    # source regs are either zero, same as rd0 or rd1
     source0_regs=make_list("""
-    $0
+    $zero
     $a0
     $a1
     """)
     source1_regs=make_list("""
-    $0
-    $a1
     $a0
+    $a1
     """)
-    nops=[0]
+    nops=[0,1,2,4]
 
-    generate_tests(
+    return generate_tests(
         options, 
-        "alu", 
-        [ ('op0', ops),
+        "alu_two_reg", 
+        [ ('a0_val', ['random']), 
+          ('a1_val', ['random']),
+          ('op0', reg_reg_ops),
           ('rd0', rd0_regs),
           ('rs0', source0_regs),
           ('rt0', source0_regs),
-          ('op1', ops),
+          ('op1', reg_reg_ops),
           ('rd1', rd1_regs),
           ('rs1', source1_regs),
           ('rt1', source1_regs),
           ('nops', nops),])
+
+def generate_arithmetic_single_reg_imm(options):
+    return generate_tests(
+        options,
+        "alu_single_imm",
+        [ ('op0', reg_imm_ops),
+          ('a0_val', interesting_reg_values), 
+          ('a1_val', interesting_imm_values),
+        ])
+
+def generate_arithmetic_single_reg_reg(options):
+    return generate_tests(
+        options,
+        "alu_single_reg",
+        [ ('op0', reg_reg_ops),
+          ('a0_val', interesting_reg_values), 
+          ('a1_val', interesting_reg_values),
+        ])
+
+def generate_divmul_single(options):
+    return generate_tests(
+        options,
+        "divmul_single",
+        [ ('op0', divmul_ops),
+          ('a0_val', interesting_reg_values), 
+          ('a1_val', interesting_reg_values),
+          ('nops', [0,1,2,4,8,16]),
+        ])
+
+def generate_tlb(options):
+    return generate_tests(
+        options,
+        "tlb",
+        [ (
+                'mode', 
+                [0, 2] #kernel, user (supervisor not implemented on gxemul)
+          ),
+          (
+                'page', 
+                [0,1, 0x3ffff, 0x40000, 0x2000000, 0x3ffffff, 0x4000000, 0x7ffffff]
+          ),
+          (
+                'segment', 
+                [0,1,3] # no unmapped
+          ),
+          (
+                'asid', 
+                [0, 0xaa, 0xff]
+          ),
+          (
+                'index', 
+                [0,1,21,47]
+          ),
+          (
+                'cached', 
+                [0,1,2,3] # Currently has no effect on cheri or gxemul!
+          ),
+        ]
+    )
 
 if __name__=="__main__":
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-d", "--test-dir",
                       help="Directory to generate tests in.", default="tests/fuzz")
+    parser.add_option("-c", "--count",
+                      help="Just count the tests, don't generate them.", action="store_true", default=False)
+    parser.add_option("-o", "--only",
+                      help="Only generate given test group.", default='')
     (options, args) = parser.parse_args()
-    generate_arithmetic(options)
-    generate_load(options)
-
+    tests=0
+    tests+=generate_arithmetic(options)
+    tests+=generate_arithmetic_single_reg_reg(options)
+    tests+=generate_arithmetic_single_reg_imm(options)
+    tests+=generate_divmul_single(options)
+    tests+=generate_load(options)
+    tests+=generate_tlb(options)
+    print "Total: %d tests." % tests
 
 

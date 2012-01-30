@@ -37,7 +37,7 @@ __sp_bottom = __heap_top__;
 
 SECTIONS
 {
-	. = 0x9000000040000000;
+	. = 0x9800000040000000;
 
 	.text ALIGN(0x8): {
 		obj/init_fuzz.o(.text) 

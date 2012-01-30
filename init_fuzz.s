@@ -41,6 +41,18 @@
 		.text
 		.global start
 		.ent start
+#
+# When we want to run the CHERI unit test suite at a cached address, the
+# tests are linked with that base in mind.  This small stub jumps to the
+# cached start address.  We clear $t0 so that later test code sees the
+# presumed zero value from processor initialisation expected by, for example,
+# test_raw_reginit.  This is not ideal, but there's no way to jump to the
+# right address without using a register at all.
+#
+uncached_start:
+		dla	$t0, start
+		jr	$t0
+		move	$t0, $zero	# branch-delay slot
 start:
 		# Set up stack and stack frame
 		dla	$fp, __sp
