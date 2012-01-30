@@ -469,10 +469,13 @@ CHERILIBS_ABS:=$(realpath $(CHERILIBS))
 CHERICONF?=$(CHERIROOT_ABS)/simconfig
 TOOLS_DIR = ../../cherilibs/trunk/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
+SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
+CHERISOCKET:= /tmp/cheri_debug_listen_socket
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
 LOGDIR=log
+ALTERA_LOGDIR=altera_log
 GXEMUL_LOGDIR=gxemul_log
 GXEMUL_BINDIR?=tools/gxemul/CTSRD-CHERI-gxemul-8d92b42
 GXEMUL_OPTS=-V -E oldtestmips -M 3072 -i -p "end"
@@ -497,12 +500,17 @@ TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_HEXS := $(addsuffix .hex,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 
 CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(LOGDIR)/,$(TESTS)))
+ALTERA_TEST_LOGS := $(addsuffix .log,$(addprefix $(ALTERA_LOGDIR)/,$(TESTS)))
+ALTERA_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
+	$(ALTERA_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
@@ -516,9 +524,11 @@ GXEMUL_FUZZ_TEST_CACHED_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 AS=mips64-as
 
-all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS)
+all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
 
 test: nosetest nosetest_cached
+
+test_hardware: altera-nosetest altera-nosetest_cached
 
 # Because fuzz testing deals with lots of small files it is preferable to use
 # find | xargs to remove them. For other cleans it is probably better to 
@@ -542,6 +552,9 @@ clean: cleantest
 .SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
     $(TEST_INIT_CACHED_OBJECT) $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT)
 
+$(CHERISOCKET):
+	$(SYSTEM_CONSOLE_DIR_ABS)/system-console --script=$(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.tcl &
+    
 #
 # Targets for unlinked .o files.  The same .o files can be used for both
 # uncached and cached runs of the suite, so we just build them once.
@@ -599,6 +612,18 @@ $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
 #
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
 	sde-objcopy -S -O binary $< $@
+  
+#
+# Convert ELF images to raw memory images that can be loaded into simulators
+# or hardware.
+#
+$(OBJDIR)/%.hex : $(OBJDIR)/%.mem
+	TMPDIR=$$(mktemp -d) && \
+	cd $$TMPDIR && \
+	cp $(PWD)/$< mem.bin && \
+	$(MEMCONV) verilog && \
+	cp initial.hex $(PWD)/$@ && \
+	rm -r $$TMPDIR
 
 #
 # Provide an annotated disassembly for the ELF image to be used in diagnosis.
@@ -619,6 +644,17 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	CHERI_CONFIG=$(CHERICONF) \
 	${CHERIROOT_ABS}/sim -m $(TEST_CYCLE_LIMIT) > $(PWD)/$@ && \
 	rm -r $$TMPDIR
+  
+#
+# Target to do a run of the test suite on hardware.
+$(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(CHERISOCKET)
+	while ! test -S /tmp/cheri_debug_listen_socket; do sleep 0.1; done
+	TMPDIR=$$(mktemp -d) && \
+	cd $$TMPDIR && \
+	cp $(PWD)/$< mem.hex && \
+	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(PWD)/$@ && \
+	rm -r $$TMPDIR
+	sleep 1
 
 #
 # Target to execute a gxemul simulation.  Gxemul is focused on running
@@ -671,6 +707,14 @@ nosetest: all $(CHERI_TEST_LOGS)
 nosetest_cached: all $(CHERI_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
+altera-nosetest: all $(ALTERA_TEST_LOGS)
+	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
+	    $(TESTDIRS) || true
+
+altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
+	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
+	    $(TESTDIRS) || true
+  
 gxemul-nosetest: all $(GXEMUL_TEST_LOGS)
 	PYTHONPATH=tools/gxemul CACHED=0 nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
