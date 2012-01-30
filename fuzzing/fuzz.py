@@ -34,11 +34,6 @@ import string
 import os
 import random
 
-load_store_widths=['B','H','W','D']
-
-def format_load(width, signed, alignment, left):
-    pass
-    
 def make_list(s):
     return [l for l in s.split() if len(l)>0 and l[0]!='#']
 
@@ -74,12 +69,12 @@ def generate_load(options):
     LWU
     LWL
     LWR
-    LL
-    LLD
+    #LL
+    #LLD
     """)
     generate_tests(options, 'load', [
             ('op',ops),
-            ('offset', [0]),
+            ('offset', range(7)),
             ('rs',['$0','$a0']),
             ('rt',['$0','$a0']),
             ('nops', range(7)),

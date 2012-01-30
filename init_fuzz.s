@@ -48,14 +48,19 @@ start:
 		daddu 	$sp, $sp, -32
 
 		# Install default exception handlers
-		dla	$a0, exception_end
+		dla	$a0, bev0_handler
 		jal 	bev0_handler_install
 		nop
 
-		dla	$a0, exception_end
+		dla	$a0, bev0_handler
 		jal	bev1_handler_install
 		nop
 
+	        # Switch to 64-bit mode (no effect on cheri, but required for gxemul)
+	        mfc0    $at, $12
+	        or      $at, $at, 0xe0
+	        mtc0    $at, $12
+	
 		#
 		# Initialise registers to some fixed values to use as
 	        # a 'fixture'.
@@ -96,8 +101,10 @@ start:
 		jal test
 		nop			# branch-delay slot
 
-		# Dump registers on the simulator
 exception_end:
+		ld      $k0, exception_count
+		
+		# Dump registers on the simulator
 		mtc0 $at, $26
 		nop
 		nop
@@ -113,3 +120,40 @@ end:
 		b end
 		nop
 		.end start
+
+exception_handler:
+		.ent bev0_handler
+bev0_handler:
+		daddu	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+	        sd      $k0,  8($sp)
+		daddu	$fp, $sp, 32
+	
+
+		# Increment exception counter
+	        dla     $ra, exception_count
+		ld      $k0, ($ra)
+	        addi    $k0, $k0, 1
+	        sd      $k0, ($ra)
+
+		# Skip the instruction which caused exception and return
+		dmfc0	$k0, $14	# EPC
+		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+
+	        ld	$ra, 24($sp)
+		ld	$fp, 16($sp)
+	        ld      $k0,  8($sp)
+		daddu	$sp, $sp, 32
+		nop			# NOPs to avoid hazard with ERET
+		nop			# XXXRW: How many are actually
+		nop			# required here?
+		nop
+		eret
+		.end bev0_handler
+
+	.data
+	.align 3
+exception_count:
+		.dword	0x0
