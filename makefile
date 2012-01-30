@@ -54,6 +54,7 @@ TESTDIRS=					\
 		$(TESTDIR)/framework		\
 		$(TESTDIR)/alu			\
 		$(TESTDIR)/branch		\
+		$(TESTDIR)/tlb			\
 		$(TESTDIR)/mem			\
 		$(TESTDIR)/cache		\
 		$(TESTDIR)/cp0                  \
@@ -376,6 +377,15 @@ TEST_MEM_UNALIGN_FILES=				\
 TEST_BEV1_FILES=				\
 		test_exception_bev1_trap.s
 
+
+TEST_TLB_FILES=                                 \
+		test_tlb_load_0.s               \
+		test_tlb_load_max.s             \
+		test_tlb_load_asid.s		\
+		test_tlb_store_0.s		\
+		test_tlb_store_protected.s	\
+		test_tlb_user_mode.s		
+
 TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
 		test_teqi_gt.s			\
@@ -430,6 +440,7 @@ TEST_FILES=					\
 		$(TEST_CP0_FILES)		\
 		$(TEST_CP2_FILES)		\
 		$(TEST_BEV1_FILES)		\
+		$(TEST_TLB_FILES)		\
 		$(TEST_ALU_OVERFLOW_FILES)	\
 		$(TEST_MEM_UNALIGN_FILES)	\
 		$(TEST_TRAPI_FILES)             \
