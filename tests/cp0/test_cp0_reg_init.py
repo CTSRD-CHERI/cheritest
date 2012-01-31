@@ -28,8 +28,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
-import unittest
-import nose
+from nose.plugins.attrib import attr
 
 class test_cp0_reg_init(BaseCHERITestCase):
     def test_context_reg(self):
@@ -101,6 +100,7 @@ class test_cp0_reg_init(BaseCHERITestCase):
  
     ## It doesn't really matter what vendor we report as, but we should indicate
     ## that we are R4400ish
+    @attr('cheri')
     def test_prid_imp_reg(self):
         '''Test that the PRId register indicates a R4400ish vendor'''
         self.assertRegisterEqual((self.MIPS.a5 >> 8) & 0xff, 0x04, "Unexpected CP0 vendor value on reset")

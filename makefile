@@ -459,8 +459,9 @@ TEST_FILES=					\
 #
 # counterdev - gxemul does not provide the "counter" device used to test
 #              cache semantics.
+# cheri - gxemul is simply not CHERI
 #
-GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev and not capabilities"
+GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev and not capabilities and not cheri"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
