@@ -60,6 +60,16 @@ cached_start:
 
 		# Terminate the simulator
 	        mtc0	$v0, $23
+
+		#
+		# In the case where the simulator doesn't terminate (perhaps			# because we're not in simulation), jump back to the uncached
+		# address.  Some test frameworks use the 'end' symbol to set
+		# a breakpoint and/or confirm that the test exited properly,
+		# and we need to use the right one.
+		#
+		dla	$t2, end
+		j	$t2
+		nop
 end:
 		b end
 		nop
