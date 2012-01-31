@@ -29,6 +29,8 @@
 #
 from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
+import unittest
+import nose
 
 class test_cp0_reg_init(BaseCHERITestCase):
     def test_context_reg(self):
