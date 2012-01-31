@@ -46,7 +46,3 @@ class test_hardware_mapping_cached_read(BaseCHERITestCase):
     @attr('cache')
     def test_cached_read1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x0123456789abcdef, "Initial cached read failure")
-
-    @attr('cache')
-    def test_cached_read3(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0x0123456789abcdef, "Cached read returns data from uncached write");

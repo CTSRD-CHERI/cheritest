@@ -40,12 +40,10 @@
 # (2) Uncached write to data address
 # (3) Cached read from data address
 #
-# Assuming that the cache is implemented (possibly not true for ISA
-# simulators but generally true of hardware), (3) should not see the results
-# of (2), regardless of write back/write through configuration.  We attempt
-# to check the CP0 config register 'DC' and 'SC' fields to determine if a
-# cache should be present, which will help the test case determine if this
-# test should fail (or not).
+# Assuming that the cache is implemented (possibly not true for ISA simulators
+# but generally true of hardware).  We attempt to check the CP0 config
+# register 'DC' and 'SC' fields to determine if a cache should be present,
+# which will help the test case determine if this test should fail (or not).
 #
 # xkphys addresses are used.
 #
@@ -94,14 +92,6 @@ test:		.ent test
 		daddu	$t0, $gp, $t0
 		dli	$t1, 0xafafafafafafafaf
 		sd	$t1, 0($t0)
-
-		#
-		# (3) Read via cached address; should see previously written
-		# value.
-		#
-		dli	$t0, 0x9800000000000000
-		daddu	$t0, $gp, $t0
-		ld	$a2, 0($t0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
