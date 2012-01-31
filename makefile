@@ -565,7 +565,7 @@ clean: cleantest
 
 $(CHERISOCKET):
 	$(SYSTEM_CONSOLE_DIR_ABS)/system-console --script=$(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.tcl &
-    
+
 #
 # Targets for unlinked .o files.  The same .o files can be used for both
 # uncached and cached runs of the suite, so we just build them once.
@@ -623,7 +623,7 @@ $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
 #
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
 	sde-objcopy -S -O binary $< $@
-  
+
 #
 # Convert ELF images to raw memory images that can be loaded into simulators
 # or hardware.
@@ -657,7 +657,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	${CHERIROOT_ABS}/sim -m $(TEST_CYCLE_LIMIT) > $(PWD)/$@ && \
 	rm -r $$TMPDIR
-  
+
 #
 # Target to do a run of the test suite on hardware.
 $(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(CHERISOCKET)
@@ -727,7 +727,7 @@ altera-nosetest: all $(ALTERA_TEST_LOGS)
 altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
-  
+
 gxemul-nosetest: all $(GXEMUL_TEST_LOGS)
 	PYTHONPATH=tools/gxemul CACHED=0 nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
