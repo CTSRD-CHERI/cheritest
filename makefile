@@ -651,8 +651,10 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	cd $$TMPDIR && \
 	cp $(PWD)/$< mem.bin && \
 	$(MEMCONV) bsim && \
+	sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' \
+	    < $(CHERICONF) > $$TMPDIR/simconfig && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
-	CHERI_CONFIG=$(CHERICONF) \
+	CHERI_CONFIG=$$TMPDIR/simconfig \
 	${CHERIROOT_ABS}/sim -m $(TEST_CYCLE_LIMIT) > $(PWD)/$@ && \
 	rm -r $$TMPDIR
   
