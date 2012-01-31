@@ -61,6 +61,7 @@ start:
 	        mtc0 $v0, $23
 end:
 		b end
+		nop
 
 		.data
 dword:		.dword	0xfedcba9876543210

@@ -78,6 +78,7 @@ start:
 	        mtc0 $v0, $23
 end:
 		b end
+		nop
 
 		#
 		# Pad out data so that each double word gets its own cache

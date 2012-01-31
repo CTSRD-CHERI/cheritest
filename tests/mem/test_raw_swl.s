@@ -61,12 +61,16 @@ start:
 		swl	$a4, 7($t0)
 		lw	$a4, 4($t0)
 
-
-		#Terminate the simulator
+		# Dump registers in the simulator
 		mtc0	$v0, $26
+		nop
+		nop
+
+		# Terminate the simulator
+		mtc0	$v0, $23
 end:
 		b	end
-
+		nop
 
 		.data
 dword:		.dword 0x0000000000000000
