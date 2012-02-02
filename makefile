@@ -565,7 +565,10 @@ clean: cleantest
     $(TEST_INIT_CACHED_OBJECT) $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT)
 
 $(CHERISOCKET):
-	$(SYSTEM_CONSOLE_DIR_ABS)/system-console --script=$(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.tcl &
+	python $(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.py > /dev/null &
+	
+$(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
+	make -C $(TOOLS_DIR_ABS)/debug/ cherictl
 
 #
 # Targets for unlinked .o files.  The same .o files can be used for both
@@ -661,14 +664,15 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 
 #
 # Target to do a run of the test suite on hardware.
-$(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(CHERISOCKET)
-	while ! test -S /tmp/cheri_debug_listen_socket; do sleep 0.1; done
+$(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
+	while ! test -e /tmp/cheri_debug_listen_socket; do sleep 0.1; done
+	#sleep 5
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
 	cp $(PWD)/$< mem.hex && \
 	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(PWD)/$@ && \
 	rm -r $$TMPDIR
-	sleep 1
+	sleep .5
 
 #
 # Target to execute a gxemul simulation.  Gxemul is focused on running
@@ -721,11 +725,11 @@ nosetest: all $(CHERI_TEST_LOGS)
 nosetest_cached: all $(CHERI_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
-altera-nosetest: all $(ALTERA_TEST_LOGS)
+altera-nosetest: all $(CHERISOCKET) $(ALTERA_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
+altera-nosetest_cached: all $(CHERISOCKET) $(ALTERA_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
