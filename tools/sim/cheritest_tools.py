@@ -49,7 +49,7 @@ class BaseCHERITestCase(unittest.TestCase):
     ".log"). Subclasses will be provided with the class variable MIPS, containing
     an instance of MipsStatus representing the state of the CHERI CPU.'''
 
-    LOG_DIR = "log"
+    LOG_DIR = os.environ.get("LOGDIR", "log")
     LOG_FN = None
     MIPS = None
     MIPS_EXCEPTION = None
