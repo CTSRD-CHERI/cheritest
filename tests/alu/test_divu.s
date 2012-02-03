@@ -73,6 +73,15 @@ test:		.ent test
 		mfhi	$a6
 		mflo	$a7
 
+		# The result of the following is undefined
+		# for signed divide but should cause no problems
+		# for unsigned.
+		li      $t0, 0x80000000
+		li      $t1, 0xffffffff
+		divu    $zero, $t0, $t1
+		mfhi    $s0
+		mflo	$s1
+	
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32

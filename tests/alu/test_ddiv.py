@@ -50,3 +50,9 @@ class test_ddiv(BaseCHERITestCase):
 		'''Test of positive number divided by negative number'''
 		self.assertRegisterEqual(self.MIPS.a6, 0xdebc9a78563412, "Modulo failed")
 		self.assertRegisterEqual(self.MIPS.a7, 0xfffffffffffffff1, "Division failed")
+
+	def test_overflow(self):
+		'''Test of maximally negative number divided by negative one (overflow). 
+		Expected behaviour is undefined...'''
+		self.assertRegisterEqual(self.MIPS.s0, 0, "Overflow modulo failed")
+		self.assertRegisterEqual(self.MIPS.s1, 0x8000000000000000, "Overflow quotient failed")

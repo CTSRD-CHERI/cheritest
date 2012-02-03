@@ -71,6 +71,17 @@ test:		.ent test
 		mfhi	$a6
 		mflo	$a7
 
+		# The result of the following is undefined
+		# (only way to produce integer divide overflow).
+		# Useful to test that cheri does not blow up,
+		# don't really care about result. gxemul crashes!
+		dli     $t0, 0x8000000000000000
+		dli     $t1, 0xffffffffffffffff
+		ddiv    $zero, $t0, $t1
+		mfhi    $s0
+		mflo	$s1
+
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
