@@ -128,6 +128,20 @@ load_ops=make_list("""
     #LLD
 """)
 
+store_ops=make_list("""
+    SB
+    SD
+    SDL
+    SDR
+    SH
+    SW
+    SWL
+    SWR
+    #SC
+    #SCD
+""")
+
+
 mul_ops=make_list("""
     MULT
     MULTU
@@ -192,7 +206,13 @@ def generate_load(options):
             ('rt',['$0','$a0']),
             ('nops', range(7)),
             ])
-    
+
+def generate_store(options):
+    return generate_tests(options, 'store', [
+            ('op',store_ops),
+            ('offset', range(7)),
+            ('nops', range(7)),
+            ])
 
 def generate_arithmetic(options):
     #TODO $ra is also special...
@@ -319,6 +339,7 @@ if __name__=="__main__":
     tests+=generate_mul_single(options)
     tests+=generate_div_single(options)
     tests+=generate_load(options)
+    tests+=generate_store(options)
     tests+=generate_tlb(options)
     print "Total: %d tests." % tests
 
