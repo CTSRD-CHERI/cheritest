@@ -23,8 +23,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-# Template for single instruction alu fuzz tests. The opcode and value
-# to test are chosen in a script. Currently only R-type intructions are supported...
+# Template for single div instruction fuzz tests. The opcode and value
+# to test are chosen in a script.
 
 .set mips64
 .set noreorder
@@ -35,7 +35,9 @@
 test:   .ent    test
 	dli     $$a0, $a0_val
 	dli     $$a1, $a1_val
-	$op0	$$a0, $$a1
+	# Destination must be zero otherwise assembler uses
+	# macro instead of div instruction.
+	$op0	$$0, $$a0, $$a1
 $nops
 	mfhi	$$a2
         mflo    $$a3

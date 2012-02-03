@@ -47,13 +47,11 @@ interesting_imm_values=make_list('''
 0x8000
 ''')
 
-interesting_reg_values=make_list('''
-0x0
+non_zero_interesting_reg_values=make_list('''
 0x1
 0x2
 0xffffffffffffffff
 0xffffffff80000000
-0x8000000000000000
 0x7fffffffffffffff
 0x000000007fffffff
 0xffffffff
@@ -63,6 +61,9 @@ interesting_reg_values=make_list('''
 0x000000007ffffffe
 random
 ''')
+
+# Note that 0x8000000000000000 is zero when viewed as a 32-bit integer
+interesting_reg_values=['0','0x8000000000000000']+non_zero_interesting_reg_values
 
 reg_reg_ops=make_list("""
     ADD
@@ -127,17 +128,20 @@ load_ops=make_list("""
     #LLD
 """)
 
-# Div disabled because assembler insists on using a macro!
-divmul_ops=make_list("""
+mul_ops=make_list("""
     MULT
     MULTU
-#    DIV
-#    DIVU
     DMULT
     DMULTU
-#    DDIV
-#    DDIVU
 """)
+
+div_ops=make_list("""
+    DIV
+    DIVU
+    DDIV
+    DDIVU
+""")
+
 #MADD
 #MSUB
 #MULI
@@ -245,15 +249,27 @@ def generate_arithmetic_single_reg_reg(options):
           ('a1_val', interesting_reg_values),
         ])
 
-def generate_divmul_single(options):
+def generate_mul_single(options):
     return generate_tests(
         options,
-        "divmul_single",
-        [ ('op0', divmul_ops),
+        "mul_single",
+        [ ('op0', mul_ops),
           ('a0_val', interesting_reg_values), 
           ('a1_val', interesting_reg_values),
           ('nops', [0,1,2,4,8,16]),
         ])
+
+
+def generate_div_single(options):
+    return generate_tests(
+        options,
+        "div_single",
+        [ ('op0', div_ops),
+          ('a0_val', interesting_reg_values), 
+          ('a1_val', non_zero_interesting_reg_values),
+          ('nops', [0,1,2,4,8,16]),
+        ])
+
 
 def generate_tlb(options):
     return generate_tests(
@@ -300,7 +316,8 @@ if __name__=="__main__":
     tests+=generate_arithmetic(options)
     tests+=generate_arithmetic_single_reg_reg(options)
     tests+=generate_arithmetic_single_reg_imm(options)
-    tests+=generate_divmul_single(options)
+    tests+=generate_mul_single(options)
+    tests+=generate_div_single(options)
     tests+=generate_load(options)
     tests+=generate_tlb(options)
     print "Total: %d tests." % tests
