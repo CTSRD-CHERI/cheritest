@@ -540,7 +540,18 @@ all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_
 
 test: nosetest nosetest_cached
 
-test_hardware: altera-nosetest altera-nosetest_cached
+hardware-setup:
+	- killall -9 altera_socket_tunnel.py
+	- killall -9 system-console
+	#- rm /tmp/cheri_debug_listen_socket
+	#$(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.py > /local/scratch/output.txt &
+	
+hardware-cleanup:
+	- killall -9 altera_socket_tunnel.py
+	- killall -9 system-console
+	#- rm /tmp/cheri_debug_listen_socket
+
+test_hardware: hardware-setup altera-nosetest altera-nosetest_cached hardware-cleanup
 
 # Because fuzz testing deals with lots of small files it is preferable to use
 # find | xargs to remove them. For other cleans it is probably better to 
@@ -552,6 +563,7 @@ clean_fuzz:
 cleantest:
 	rm -f $(CHERI_TEST_LOGS) $(CHERI_TEST_CACHED_LOGS)
 	rm -f $(GXEMUL_TEST_LOGS) $(GXEMUL_TEST_CACHED_LOGS)
+	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT)
@@ -563,9 +575,6 @@ clean: cleantest
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
 .SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
     $(TEST_INIT_CACHED_OBJECT) $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT)
-
-$(CHERISOCKET):
-	python $(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.py > /dev/null &
 	
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	make -C $(TOOLS_DIR_ABS)/debug/ cherictl
@@ -665,14 +674,14 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 #
 # Target to do a run of the test suite on hardware.
 $(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
+	nios2-download -r
 	while ! test -e /tmp/cheri_debug_listen_socket; do sleep 0.1; done
-	#sleep 5
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
 	cp $(PWD)/$< mem.hex && \
 	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(PWD)/$@ && \
 	rm -r $$TMPDIR
-	sleep .5
+	sleep .1
 
 #
 # Target to execute a gxemul simulation.  Gxemul is focused on running
@@ -725,11 +734,11 @@ nosetest: all $(CHERI_TEST_LOGS)
 nosetest_cached: all $(CHERI_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
-altera-nosetest: all $(CHERISOCKET) $(ALTERA_TEST_LOGS)
+altera-nosetest: all $(ALTERA_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-altera-nosetest_cached: all $(CHERISOCKET) $(ALTERA_TEST_CACHED_LOGS)
+altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
