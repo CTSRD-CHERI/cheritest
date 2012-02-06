@@ -1,0 +1,65 @@
+#-
+# Copyright (c) 2012 Robert M. Norton
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+# Template for two instruction fuzz test which performs a load
+# followed by a store.  The types of loads and offsets are varied by
+# the script. There are actually two types of test: if samesame is
+# true the load and store are to the same longword with an xor to
+# modify the value, otherwise the store is to the next longword with
+# no xor.
+
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
+
+.global test
+test:   .ent    test
+	dla     $$a6, bytes
+.if $samesame
+	daddu	$$a7, $$a6, 0
+.else
+	daddu	$$a7, $$a6, 8
+.endif
+	dli     $$t0, 0xaaaaaaaaaaaaaaaa
+
+	$load_op $$a0, $load_offset($$a6)
+.if $samesame
+	# but different...
+	xor      $$a0, $$t0	
+.endif
+	$store_op $$a0, $store_offset($$a7)
+
+	ld	$$a1, 0($$a6)
+	ld      $$a2, 8($$a6)
+
+	jr	$$ra
+	nop
+        .end    test
+
+		.data
+		.align	5
+bytes:		.dword	0x0001020304050607
+		.dword	0x08090a0b0c0d0e0f

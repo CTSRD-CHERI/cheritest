@@ -214,6 +214,16 @@ def generate_store(options):
             ('nops', range(7)),
             ])
 
+def generate_loadstore(options):
+    return generate_tests(options, 'loadstore', [
+            ('load_op',load_ops),
+            ('load_offset', range(7)),
+            ('samesame', range(2)),
+            ('store_op',store_ops),
+            ('store_offset', range(7)),
+            ])
+    
+
 def generate_arithmetic(options):
     #TODO $ra is also special...
     # rd0 is fixed as $a0
@@ -340,6 +350,7 @@ if __name__=="__main__":
     tests+=generate_div_single(options)
     tests+=generate_load(options)
     tests+=generate_store(options)
+    tests+=generate_loadstore(options)
     tests+=generate_tlb(options)
     print "Total: %d tests." % tests
 
