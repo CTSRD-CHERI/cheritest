@@ -68,8 +68,7 @@ class MipsStatus(object):
             raise MipsException("Failed to parse PC from %s"%self.fh)
         for i in range(len(MIPS_REG_NUM2NAME)):
             if self.reg_vals[i] is None:
-                raise MipsException("Failed to parse register %d from" +
-                                    "%s"%(i,self.fh))
+                raise MipsException("Failed to parse register %d from %s"%(i,self.fh))
 
     def parse_log(self):
         '''Parse a log file and populate self.reg_vals and self.pc'''
