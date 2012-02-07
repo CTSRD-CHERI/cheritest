@@ -113,6 +113,7 @@ RAW_ALU_FILES=					\
 RAW_BRANCH_FILES=				\
 		test_raw_jump.s			\
 		test_raw_b.s			\
+		test_raw_b_maxoffset.s		\
 		test_raw_beq_eq.s		\
 		test_raw_beq_eq_back.s		\
 		test_raw_beq_gt.s		\
