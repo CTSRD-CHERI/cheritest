@@ -156,6 +156,69 @@ div_ops=make_list("""
     DDIVU
 """)
 
+one_arg_branches=make_list("""
+    BGEZ
+    BGTZ
+    BLEZ
+    BLTZ
+    BGEZAL
+    BLTZAL
+    BGEZL
+    BGTZL
+    BLEZL
+    BLTZL
+    BGEZALL
+    BLTZALL
+""")
+
+two_arg_branches=make_list("""
+   BEQ
+   BNE
+   BEQL
+   BNEL
+""")
+
+register_branches=make_list("""
+   JR
+   JALR
+""")
+
+branch_ops=make_list("""
+B Unconditional Branch
+BAL Branch and Link
+""")
+
+trap_ops=make_list("""
+BREAK Breakpoint
+SYSCALL System Call
+TEQ Trap if Equal
+TEQI Trap if Equal Immediate
+TGE Trap if Greater or Equal
+TGEI Trap if Greater of Equal Immediate
+TGEIU Trap if Greater or Equal Immediate Unsigned
+TGEU Trap if Greater or Equal Unsigned
+TLT Trap if Less Than
+TLTI Trap if Less Than Immediate
+TLTIU Trap if Less Than Immediate Unsigned
+TLTU Trap if Less Than Unsigned
+TNE Trap if Not Equal
+TNEI Trap if Not Equal Immediate
+""")
+
+misc_ops="""
+CACHE Perform Cache Operation
+DMFC0 Doubleword Move from Coprocessor 0
+DMTC0 Doubleword Move to Coprocessor 0
+ERET Exception Return
+MFC0 Move from Coprocessor 0
+MTC0 Move to Coprocessor 0
+TLBP Probe TLB for Matching Entry
+TLBR Read Indexed TLB Entry
+TLBWI Write Indexed TLB Entry
+TLBWR Write Random TLB Entry
+WAIT Enter Standby Mode
+"""
+
 #MADD
 #MSUB
 #MULI
@@ -332,6 +395,16 @@ def generate_tlb(options):
         ]
     )
 
+def generate_branch_one_arg(options):
+    return generate_tests(
+        options,
+        "branch_one_arg", (
+            ('op', one_arg_branches),
+            ('arg_val', interesting_reg_values),
+            # cannot test offsets -2 or -1  because of structure of test
+            ('offset', map(lambda x: x*4,[-(2**15),-255,-7,-6,-5,-4,-3,0,1,2,3,4,5,6,7,0x100,0x7fff])),
+))
+
 if __name__=="__main__":
     from optparse import OptionParser
     parser = OptionParser()
@@ -352,6 +425,7 @@ if __name__=="__main__":
     tests+=generate_store(options)
     tests+=generate_loadstore(options)
     tests+=generate_tlb(options)
+    tests+=generate_branch_one_arg(options)
     print "Total: %d tests." % tests
 
 
