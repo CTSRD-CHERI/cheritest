@@ -489,6 +489,7 @@ VPATH=$(TESTDIRS)
 OBJDIR=obj
 LOGDIR=log
 ALTERA_LOGDIR=altera_log
+HWSIM_LOGDIR=hwsim_log
 GXEMUL_LOGDIR=gxemul_log
 GXEMUL_BINDIR?=tools/gxemul/CTSRD-CHERI-gxemul-8d92b42
 GXEMUL_OPTS=-V -E oldtestmips -M 3072 -i -p "end"
@@ -524,6 +525,9 @@ CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 ALTERA_TEST_LOGS := $(addsuffix .log,$(addprefix $(ALTERA_LOGDIR)/,$(TESTS)))
 ALTERA_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(ALTERA_LOGDIR)/,$(TESTS)))
+HWSIM_TEST_LOGS := $(addsuffix .log,$(addprefix $(HWSIM_LOGDIR)/,$(TESTS)))
+HWSIM_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
+	$(HWSIM_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
@@ -544,15 +548,15 @@ test: nosetest nosetest_cached
 hardware-setup:
 	- killall -9 altera_socket_tunnel.py
 	- killall -9 system-console
-	#- rm /tmp/cheri_debug_listen_socket
-	#$(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.py > /local/scratch/output.txt &
+	- rm /tmp/cheri_debug_listen_socket
+	$(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.py > /local/scratch/output.txt &
 	
 hardware-cleanup:
 	- killall -9 altera_socket_tunnel.py
 	- killall -9 system-console
-	#- rm /tmp/cheri_debug_listen_socket
+	- rm /tmp/cheri_debug_listen_socket
 
-test_hardware: hardware-setup altera-nosetest altera-nosetest_cached hardware-cleanup
+test_hardware: altera-nosetest altera-nosetest_cached
 
 # Because fuzz testing deals with lots of small files it is preferable to use
 # find | xargs to remove them. For other cleans it is probably better to 
@@ -683,6 +687,22 @@ $(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
 	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(PWD)/$@ && \
 	rm -r $$TMPDIR
 	sleep .1
+	
+#
+# Target to run the hardware test suite on the simulator.
+$(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
+	cd /auto/homes/jdw57/ctsrd/cheri/trunk/ && \
+	./sim &
+	sleep 2
+	while ! test -e /tmp/cheri_debug_listen_socket; do sleep 0.1; done
+	TMPDIR=$$(mktemp -d) && \
+	cd $$TMPDIR && \
+	cp $(PWD)/$< mem.hex && \
+	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(PWD)/$@ && \
+	rm -r $$TMPDIR
+	killall -9 bluetcl
+	rm /tmp/cheri_debug_listen_socket
+	sleep 1
 
 #
 # Target to execute a gxemul simulation.  Gxemul is focused on running
@@ -735,12 +755,20 @@ nosetest: all $(CHERI_TEST_LOGS)
 nosetest_cached: all $(CHERI_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
 
-altera-nosetest: all $(ALTERA_TEST_LOGS)
+altera-nosetest: hardware-setup all $(ALTERA_TEST_LOGS) hardware-cleanup
 	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
+altera-nosetest_cached: hardware-setup all $(ALTERA_TEST_CACHED_LOGS) hardware-cleanup
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
+	    $(TESTDIRS) || true
+
+hwsim-nosetest: all $(HWSIM_TEST_LOGS)
+	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
+	    $(TESTDIRS) || true
+
+hwsim-nosetest_cached: all $(HWSIM_TEST_CACHED_LOGS)
+	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-nosetest: all $(GXEMUL_TEST_LOGS)
