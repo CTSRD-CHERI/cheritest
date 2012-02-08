@@ -36,10 +36,6 @@
 #
 # Test sb (store byte) indirected via a constrained c0.
 #
-# XXXRW: The subtractive nature of csetlen makes lengths awkward to
-# calculate -- but perhaps more importantly, somewhat error-prone to
-# calculate.
-#
 
 		.global test
 test:		.ent test

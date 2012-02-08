@@ -37,10 +37,6 @@
 # Test clh (load half word via capability, offset by immediate) using a
 # capability restricted to a specific portion of the global address space.
 #
-# XXXRW: The subtractive nature of csetlen makes lengths awkward to
-# calculate -- but perhaps more importantly, somewhat error-prone to
-# calculate.
-#
 
 		.global test
 test:		.ent test
