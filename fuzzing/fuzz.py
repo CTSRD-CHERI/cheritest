@@ -406,6 +406,17 @@ def generate_branch_one_arg(options):
             ('offset', map(lambda x: x*4,[-(2**15),-255,-7,-6,-5,-4,-3,0,1,2,3,4,5,6,7,0x100,0x7fff])),
 ))
 
+def generate_branch_two_args(options):
+    return generate_tests(
+        options,
+        "branch_two_args", (
+            ('op', two_arg_branches),
+            ('arg_val1', interesting_reg_values),
+            ('arg_val2', interesting_reg_values),
+            # cannot test offsets -2 or -1  because of structure of test
+            ('offset', map(lambda x: x*4,[-(2**15),-255,-7,-6,-5,-4,-3,0,1,2,3,4,5,6,7,0x100,0x7fff])),
+))
+
 if __name__=="__main__":
     from optparse import OptionParser
     parser = OptionParser()
@@ -427,6 +438,7 @@ if __name__=="__main__":
     tests+=generate_loadstore(options)
     tests+=generate_tlb(options)
     tests+=generate_branch_one_arg(options)
+    tests+=generate_branch_two_args(options)
     print "Total: %d tests." % tests
 
 
