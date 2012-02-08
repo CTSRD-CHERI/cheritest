@@ -39,7 +39,7 @@ class test_cp2_cmove(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_cmove_uperms(self):
         '''Test that cmove retained u, perms fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0xff, "cmove failed to retain correct u, perms fields")
+        self.assertRegisterEqual(self.MIPS.a0, 0x80ff, "cmove failed to retain correct u, perms fields")
 
     @attr('capabilities')
     def test_cp2_cmove_type(self):

@@ -49,7 +49,7 @@ class test_cp2_alu_mod_pipeline(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_alu_candperm(self):
         '''Test that candperm uses ALU results in pipeline'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x7fff & 0x100, "cgetperm returns incorrect value")
+        self.assertRegisterEqual(self.MIPS.a2, 0xffff & 0x8100, "cgetperm returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_alu_csettype(self):

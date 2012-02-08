@@ -38,9 +38,9 @@ class test_cp2_getandperm(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_getperm1(self):
         '''Test that cgetperm returns correct initial value'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x7fff, "cgetperm returns incorrect initial value")
+        self.assertRegisterEqual(self.MIPS.a0, 0xffff, "cgetperm returns incorrect initial value")
 
     @attr('capabilities')
     def test_cp2_getperm2(self):
         '''Test that cgetperm returns correct value after candperm'''
-        self.assertRegisterEqual(self.MIPS.a1, 0xff, "cgetperm returns incorrect value after candperm")
+        self.assertRegisterEqual(self.MIPS.a1, 0x80ff, "cgetperm returns incorrect value after candperm")
