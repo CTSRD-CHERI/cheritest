@@ -57,10 +57,10 @@ test:		.ent test
 		cincbase	$c2, $c2, $t0
 		cgetbase	$a0, $c2
 
-		# Test cdecleng
+		# Test csetlen
 		dli	$t1, 0
 		daddiu	$t1, $t1, 0x100
-		cdecleng	$c3, $c3, $t1
+		csetlen	$c3, $c3, $t1
 		cgetleng	$a1, $c3
 
 		# Test candperm

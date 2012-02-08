@@ -68,10 +68,10 @@ test:		.ent test
 		# handler will return to syscall + 8
 		cincbase	$c2, $c2, $t0  # not executed
 
-		# Test cdecleng
+		# Test csetlen
 		dli	$t1, 0x100
 		syscall 0
-		cdecleng	$c3, $c3, $t1  # not executed
+		csetlen	$c3, $c3, $t1  # not executed
 
 		# Test candperm
 		dli	$t2, 0x100
@@ -86,7 +86,7 @@ test:		.ent test
 		# Create a test capability for loading and storing
 		dli     $t0, 0x100
 		cincbase	$c6, $c6, $t0
-		cdeclen		$c6, $c6, $t0
+		csetlen		$c6, $c6, $t0
 		candperm	$c6, $c6, $t0
 		csettype	$c6, $c6, $t0
 		

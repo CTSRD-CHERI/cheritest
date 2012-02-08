@@ -41,7 +41,7 @@ start:
 		cgettype $a1,  $c2
 		csettype $c1,  $c2, $a3
 		cincbase $c1,  $c2, $a3
-		cdecleng $c1,  $c2, $a3
+		csetlen $c1,  $c2, $a3
 		cmove    $c1,  $c2
 		candperm $c1,  $c2, $a3
 		cscr     $c1,  $c2, $a3

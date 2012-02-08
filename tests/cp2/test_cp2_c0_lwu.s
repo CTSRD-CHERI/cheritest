@@ -36,7 +36,7 @@
 #
 # Test lwu (load word unsigned) indirected via a constrainted c0.
 #
-# XXXRW: The subtractive nature of cdecleng makes lengths awkward to
+# XXXRW: The subtractive nature of csetlen makes lengths awkward to
 # calculate -- but perhaps more importantly, somewhat error-prone to
 # calculate.
 #
@@ -56,11 +56,11 @@ test:		.ent test
 
 		#
 		# We want $c1.length to be 16 -- query the current $c1,
-		# subtract 16, and then pass that to cdecleng.
+		# subtract 16, and then pass that to csetlen.
 		#
 		cgetleng	$t1, $c1
 		dsub		$t1, 16
-		cdecleng	$c1, $c1, $t1
+		csetlen	$c1, $c1, $t1
 
 		#
 		# Install new $c0

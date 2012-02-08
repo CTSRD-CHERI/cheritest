@@ -27,35 +27,20 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 #
-# Perform a few basic tests involving capability register length: query the
-# starting length of $c2, reduce the length, and query it again.
+# Check basic behaviour of cgetleng and csetlen.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+class test_cp2_getsetleng(BaseCHERITestCase):
+    @attr('capabilities')
+    def test_cp2_getleng1(self):
+        '''Test that cgetleng returns correct initial value'''
+        self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "cgetleng returns incorrect initial value")
 
-		dli	$t0, 0x100
-		dli	$a0, 0x2000
-		dli	$a1, 0x3000
-
-		cgetleng	$a0, $c2
-		cdecleng	$c2, $c2, $t0
-		cgetleng	$a1, $c2
-
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+    @attr('capabilities')
+    def test_cp2_getleng2(self):
+        '''Test that cgetleng returns correct value after csetlen'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x100, "cgetleng returns incorrect value after csetleng")

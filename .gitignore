@@ -1,3 +1,4 @@
 *.hex
+*.bak
 mem.bin
 gxemul_log/

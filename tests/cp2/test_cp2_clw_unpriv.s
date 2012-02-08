@@ -37,7 +37,7 @@
 # Test clw (load word via capability, offset by immediate) using a capability
 # restricted to a specific portion of the global address space.
 #
-# XXXRW: The subtractive nature of cdecleng makes lengths awkward to
+# XXXRW: The subtractive nature of csetlen makes lengths awkward to
 # calculate -- but perhaps more importantly, somewhat error-prone to
 # calculate.
 #
@@ -57,11 +57,11 @@ test:		.ent test
 
 		#
 		# We want $c1.length to be 16 -- query the current $c1,
-		# subtract 16, and then pass that to cdecleng.
+		# subtract 16, and then pass that to csetlen.
 		#
 		cgetleng	$t1, $c1
 		dsub		$t1, 16
-		cdecleng	$c1, $c1, $t1
+		csetlen	$c1, $c1, $t1
 
 		clw	$a0, $c1, 0		# 64-bit aligned
 		clw	$a1, $c1, 4		# 32-bit aligned

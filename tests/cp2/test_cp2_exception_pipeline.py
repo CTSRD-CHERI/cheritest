@@ -46,9 +46,9 @@ class test_cp2_exception_pipeline(BaseCHERITestCase):
         # Should be unchanged from default
         self.assertRegisterEqual(self.MIPS.c2.base, 0x0, "cincbase instruction was not properly flushed from pipeline")
     @attr('capabilities')
-    def test_cdeclen(self):
+    def test_csetlen(self):
         # Should be unchanged from default
-        self.assertRegisterEqual(self.MIPS.c3.length, 0xffffffffffffffff, "cdeclen instruction was not properly flushed from pipeline")
+        self.assertRegisterEqual(self.MIPS.c3.length, 0xffffffffffffffff, "csetlen instruction was not properly flushed from pipeline")
     @attr('capabilities')
     def test_candperms(self):
         # Should be unchanged from default

@@ -302,7 +302,7 @@ TEST_CP2_FILES=					\
 		test_cp2_reg_name.s		\
 		test_cp2_getsettype.s		\
 		test_cp2_getincbase.s		\
-		test_cp2_getdecleng.s		\
+		test_cp2_getsetleng.s		\
 		test_cp2_getandperm.s		\
 		test_cp2_cmove.s		\
 		test_cp2_cscr.s			\

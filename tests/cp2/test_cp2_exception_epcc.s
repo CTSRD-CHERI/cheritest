@@ -109,7 +109,7 @@ test:		.ent test
 		dla	$t0, sandbox_end
 		dsubu	$s0, $t0, $a7
 
-		cdecleng	$c1, $c1, $s0
+		csetlen	$c1, $c1, $s0
 
 		#
 		# First trap -- on return, we will be running relative to the

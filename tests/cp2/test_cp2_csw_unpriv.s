@@ -53,11 +53,11 @@ test:		.ent test
 
 		#
 		# We want $c1.length to be 8 -- query the current $c1,
-		# subtract 8, and then pass that to cdecleng.
+		# subtract 8, and then pass that to csetlen.
 		#
 		cgetleng	$t1, $c1
 		dsub		$t1, 8
-		cdecleng	$c1, $c1, $t1
+		csetlen	$c1, $c1, $t1
 
 		dli	$t2, 0x01234567
 		csw	$t2, $c1, 0
