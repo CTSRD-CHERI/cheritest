@@ -54,6 +54,5 @@ start:
 
 		# Terminate the simulator
 end:
-		break
 		b end
     nop
