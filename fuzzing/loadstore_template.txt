@@ -30,6 +30,8 @@
 # modify the value, otherwise the store is to the next longword with
 # no xor.
 
+$params_str
+
 .set mips64
 .set noreorder
 .set nobopt

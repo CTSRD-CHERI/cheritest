@@ -251,6 +251,7 @@ def generate_tests(options, group, variables):
         for k,v in param_dict.iteritems():
             if v=="random":
                 param_dict[k]="0x%016x"% random.randint(0,0xffffffffffffffff)
+        param_dict['params_str']="\n".join("# %s: %s" % (k,("%d==0x%x" % (v,v&0xffffffffffffffff)) if type(v)==int else v) for k,v in param_dict.iteritems())
         if param_dict.has_key("nops"):
             param_dict["nops"]="\tnop\n" * param_dict["nops"]
         random.seed(test_no)

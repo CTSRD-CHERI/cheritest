@@ -36,7 +36,7 @@
 # cheri both fail to perform the accesses in the same way (because of a badly
 # programmed TLB).
 
-
+$params_str
 
 .set mips64
 .set noreorder

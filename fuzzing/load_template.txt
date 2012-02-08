@@ -28,6 +28,8 @@
 # script and a variable number of nops is inserted between
 # them. Currently only R-type intructions are supported...
 
+$params_str
+
 .set mips64
 .set noreorder
 .set nobopt

@@ -31,6 +31,8 @@
 # to acheive the correct spacing. s0-s5 are used to keep track of the
 # path taken.
 
+$params_str
+
 .set mips64
 .set noreorder
 .set nobopt

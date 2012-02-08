@@ -27,6 +27,8 @@
 # store followed by a variable number of nops followed by loading
 # from the stored to memory.
 
+$params_str
+
 .set mips64
 .set noreorder
 .set nobopt

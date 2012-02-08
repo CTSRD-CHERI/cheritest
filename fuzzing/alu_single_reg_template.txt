@@ -26,6 +26,8 @@
 # Template for single instruction alu fuzz tests. The opcode and value
 # to test are chosen in a script. Currently only R-type intructions are supported...
 
+$params_str
+
 .set mips64
 .set noreorder
 .set nobopt

@@ -26,6 +26,8 @@
 # Template for single div instruction fuzz tests. The opcode and value
 # to test are chosen in a script.
 
+$params_str
+
 .set mips64
 .set noreorder
 .set nobopt
