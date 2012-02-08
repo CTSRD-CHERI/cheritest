@@ -39,7 +39,11 @@
 #
 
 		.global start
-start:
+start:   
+    li	$a0, 0xdead				# Clear register
+    li	$a3, 0xdead				# Clear register
+    li	$a4, 0xdead				# Clear register
+    li	$a5, 0xdead				# Clear register
 		li	$a0, 1
 		dla	$a1, desired_return_address	# To check $a2 against
 		li	$ra, 0				# To get 0 after jalr
