@@ -558,6 +558,18 @@ hardware-cleanup:
 
 test_hardware: altera-nosetest altera-nosetest_cached
 
+$(CHERISOCKET):	
+	TMPDIR=$$(mktemp -d) && \
+	cd $$TMPDIR && \
+	cp ${CHERIROOT_ABS}/sw/mem.bin mem.bin && \
+	$(MEMCONV) bsim && \
+	sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' \
+		< $(CHERICONF) > $$TMPDIR/simconfig && \
+	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+	CHERI_CONFIG=$$TMPDIR/simconfig \
+	${CHERIROOT_ABS}/sim &
+	
+
 # Because fuzz testing deals with lots of small files it is preferable to use
 # find | xargs to remove them. For other cleans it is probably better to 
 # list the files explicitly.
@@ -691,8 +703,6 @@ $(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
 #
 # Target to run the hardware test suite on the simulator.
 $(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
-	cd /auto/homes/jdw57/ctsrd/cheri/trunk/ && \
-	./sim &
 	sleep 2
 	while ! test -e /tmp/cheri_debug_listen_socket; do sleep 0.1; done
 	TMPDIR=$$(mktemp -d) && \
@@ -763,11 +773,11 @@ altera-nosetest_cached: hardware-setup all $(ALTERA_TEST_CACHED_LOGS) hardware-c
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-hwsim-nosetest: all $(HWSIM_TEST_LOGS)
+hwsim-nosetest: $(CHERISOCKET) all $(HWSIM_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-hwsim-nosetest_cached: all $(HWSIM_TEST_CACHED_LOGS)
+hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
