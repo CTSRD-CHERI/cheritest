@@ -46,7 +46,7 @@ SECTIONS
 	.bss ALIGN(0x8): { *(.bss) }
 	.data ALIGN(0x8): { *(.data)}
 
-	__heap = ALIGN(0x8);	/* 64-bit alligned heap pointer */
+	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
 	__bss_start = ADDR(.bss);
 	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
 }
