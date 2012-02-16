@@ -39,15 +39,15 @@ test:   .ent    test
 		dla     $a1, testdata2		# Load address of testdata in bram
 
 		# Set up TLB entry for testdata1
-		dmtc0	$zero, $0		# TLB index = 0
-		li      $at, 1			# ASID=1
-		dmtc0	$at, $10		# TLB HI address (BRAM) Virtual address (first page, ASID=1) 63:62 == 00 means kernel user address space
+		dmtc0	$zero, $0		        # TLB index = 0
+		li      $at, 1			      # ASID=1
+		dmtc0	$at, $10		        # TLB HI address (BRAM) Virtual address (first page, ASID=1) 63:62 == 00 means kernel user address space
 		and     $a2, $a0, 0xffffffe000	# Get physical page (PFN) of testdata (40 bits less 13 low order bits)
-		dsrl    $a2, $a2, 6		# Put PFN in correct position for EntryLow
-		or      $a2, 0x12   		# Set valid and uncached bits
-		dmtc0	$a2, $2			# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual address (VPN))
-		dmtc0	$zero, $3		# TLB EntryLow1 = 0 (invalid)
-		tlbwi				# Write Indexed TLB Entry
+		dsrl    $a2, $a2, 6		   # Put PFN in correct position for EntryLow
+		or      $a2, 0x12   		   # Set valid and uncached bits
+		dmtc0	$a2, $2			        # TLB EntryLow0 = a2 (Low half of TLB entry for even virtual address (VPN))
+		dmtc0	$zero, $3		        # TLB EntryLow1 = 0 (invalid)
+		tlbwi				              # Write Indexed TLB Entry
 	
 		# Set up TLB entry for testdata2
 		li      $at, 1
@@ -63,10 +63,22 @@ test:   .ent    test
 
 		li      $at, 2
 		dmtc0   $at, $10                # ASID=2
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
 		ld      $a4, 0($0)		# Test read from virtual address.
 
 		li      $at, 1
 		dmtc0   $at, $10                # ASID=1
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
 		ld      $a5, 0($0)		# Test read from virtual address.
 	
 		jr      $ra
