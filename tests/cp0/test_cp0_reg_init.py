@@ -107,11 +107,29 @@ class test_cp0_reg_init(BaseCHERITestCase):
         '''Test that the PRId register indicates a R4400ish vendor'''
         self.assertRegisterEqual((self.MIPS.a5 >> 8) & 0xff, 0x04, "Unexpected CP0 vendor value on reset")
 
-    ## XXX
     def test_config_reg(self):
-        raise nose.SkipTest("Correct value of config not yet known")
-        self.assertRegisterEqual(self.MIPS.a6, 0, "Unexpected CP0 config register value on reset")
+        self.assertRegisterEqual(self.MIPS.a6, 0x800c083, "Unexpected CP0 config register value on reset")
+
+    def mkConfig1(self, M, MMU, IS, IL, IA, DS, DL, DA, C2, MD, PC, WR, CA, EP, FP):
+        return ((M & 1) << 31) | \
+               ((MMU & 0x3f) << 25) | \
+               ((IS & 7) << 22) | \
+               ((IL & 7) << 19) | \
+               ((IA & 7) << 16) | \
+               ((DS & 7) << 13) | \
+               ((DL & 7) << 10) | \
+               ((DA & 7) << 07) | \
+               ((C2 & 7) << 6) | \
+               ((MD & 1) << 5) | \
+               ((PC & 1) << 4) | \
+               ((WR & 1) << 3) | \
+               ((CA & 1) << 2) | \
+               ((EP & 1) << 1) | \
+               ((FP & 1) << 1)
+
+    def test_config1_reg(self):
+        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(0,16-1,3,2,0,3,2,0,1,0,0,0,0,0,0), "Unexpected CP0 config1 register value on reset")
 
     ## XXX:
     def test_xcontext_reg(self):
-        self.assertRegisterEqual(self.MIPS.a7, 0, "Unexpected CP0 xcontext register value on reset")
+        self.assertRegisterEqual(self.MIPS.s0, 0, "Unexpected CP0 xcontext register value on reset")

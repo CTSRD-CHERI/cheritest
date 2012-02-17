@@ -65,10 +65,15 @@ test:		.ent test
 		mfc0	$a5, $15
 
 		# Config Register
-		mfc0	$a6, $16
+		mfc0	$a6, $16, 0
+
+		# Config1 Register
+		mfc0	$a7, $16, 1
+
 
 		# XContext Register
-		mfc0	$a7, $20
+		mfc0	$s0, $20
+
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
