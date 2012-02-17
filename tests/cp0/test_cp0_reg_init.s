@@ -47,32 +47,32 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		# Context Register
-		mfc0	$a0, $4
+		dmfc0	$a0, $4
 
 		# Wired Register
-		mfc0	$a1, $6
+		dmfc0	$a1, $6
 
 		# Count Register
-		mfc0	$a2, $9
+		dmfc0	$a2, $9
 
 		# Compare Register
-		mfc0	$a3, $11
+		dmfc0	$a3, $11
 
 		# Status Register
-		mfc0	$a4, $12
+		dmfc0	$a4, $12
 
 		# Processor Revision Identifier (PRId)
-		mfc0	$a5, $15
+		dmfc0	$a5, $15
 
 		# Config Register
-		mfc0	$a6, $16, 0
+		dmfc0	$a6, $16, 0
 
 		# Config1 Register
-		mfc0	$a7, $16, 1
+		dmfc0	$a7, $16, 1
 
 
 		# XContext Register
-		mfc0	$s0, $20
+		dmfc0	$s0, $20
 
 
 		ld	$fp, 16($sp)

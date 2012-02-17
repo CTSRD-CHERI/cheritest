@@ -108,7 +108,7 @@ class test_cp0_reg_init(BaseCHERITestCase):
         self.assertRegisterEqual((self.MIPS.a5 >> 8) & 0xff, 0x04, "Unexpected CP0 vendor value on reset")
 
     def test_config_reg(self):
-        self.assertRegisterEqual(self.MIPS.a6, 0x800c083, "Unexpected CP0 config register value on reset")
+        self.assertRegisterEqual(self.MIPS.a6, 0x8000c083, "Unexpected CP0 config register value on reset")
 
     def mkConfig1(self, M, MMU, IS, IL, IA, DS, DL, DA, C2, MD, PC, WR, CA, EP, FP):
         return ((M & 1) << 31) | \
