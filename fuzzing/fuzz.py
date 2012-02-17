@@ -183,9 +183,9 @@ register_branches=make_list("""
    JALR
 """)
 
-branch_ops=make_list("""
-B Unconditional Branch
-BAL Branch and Link
+no_arg_branch_ops=make_list("""
+   B
+   BAL
 """)
 
 trap_ops=make_list("""
@@ -417,6 +417,15 @@ def generate_branch_two_args(options):
             ('offset', map(lambda x: x*4,[-(2**15),-255,-7,-6,-5,-4,-3,0,1,2,3,4,5,6,7,0x100,0x7fff])),
 ))
 
+def generate_branch_no_args(options):
+    return generate_tests(
+        options,
+        "branch_no_args", (
+            ('op', no_arg_branch_ops),
+            # cannot test offsets -2 or -1  because of structure of test
+            ('offset', map(lambda x: x*4,[-(2**15),-255,-7,-6,-5,-4,-3,0,1,2,3,4,5,6,7,0x100,0x7fff])),
+))
+
 if __name__=="__main__":
     from optparse import OptionParser
     parser = OptionParser()
@@ -439,6 +448,7 @@ if __name__=="__main__":
     tests+=generate_tlb(options)
     tests+=generate_branch_one_arg(options)
     tests+=generate_branch_two_args(options)
+    tests+=generate_branch_no_args(options)
     print "Total: %d tests." % tests
 
 
