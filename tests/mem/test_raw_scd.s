@@ -49,8 +49,8 @@ start:
 		#
 
 		dla	$gp, dword
-		dli	$t0, 0x9000000000000000		# Uncached
-		dsubu	$gp, $gp, $t0
+    dli	$a0, 0x00000000FFFFFFFF
+    and $gp, $gp, $a0
 		dli	$t0, 0x9800000000000000		# Cached, non-coherenet
 		daddu	$gp, $gp, $t0
 
