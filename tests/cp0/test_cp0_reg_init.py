@@ -128,7 +128,7 @@ class test_cp0_reg_init(BaseCHERITestCase):
                ((FP & 1) << 1)
 
     def test_config1_reg(self):
-        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,3,2,0,3,2,0,1,0,0,0,0,0,0), "Unexpected CP0 config1 register value on reset")
+        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,3,4,0,3,4,0,1,0,0,0,0,0,0), "Unexpected CP0 config1 register value on reset")
 
     ## XXX:
     def test_xcontext_reg(self):
