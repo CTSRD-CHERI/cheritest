@@ -190,6 +190,7 @@ RAW_MEM_FILES=					\
 		test_raw_ld_beq_gt_pipeline.s	\
 		test_raw_load_delay_reg.s	\
 		test_raw_load_delay_store.s	\
+    test_raw_cache_write_to_use.s \
 		test_raw_sb.s			\
 		test_raw_sh.s			\
 		test_raw_sw.s			\
