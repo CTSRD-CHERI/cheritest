@@ -47,10 +47,12 @@ test:   .ent    test
 		or      $a3, 0x13   		# Set valid and global bits, uncached
 		dmtc0	$zero, $2		# TLB EntryLow0 = invalid
 		dmtc0	$a3, $3			# TLB EntryLow1 = a3
+		tlbwi				# Write Indexed TLB Entry
 
 		and     $k0, $a0, 0xfff		# Get offset of testdata within page.
 		daddu   $k0, $k0, $a1		# Construct an address in kernel user space.
-		tlbwi				# Write Indexed TLB Entry
+		nop							# Delay for tlb update to take effect
+		nop
 
 		ld      $a5, 0($k0)			# Test read from virtual address.
 
