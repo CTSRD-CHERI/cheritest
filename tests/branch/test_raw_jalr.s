@@ -47,9 +47,9 @@ start:
 		li	$a0, 1
 		dla	$a1, desired_return_address	# To check $a2 against
 		li	$ra, 0				# To get 0 after jalr
-		dla	$t0, jal_target			# Load jump target
+		dla	$t0, jal_target		# Load jump target
 		jalr	$a2, $t0
-		li	$a3, 3				# Branch-delay slot
+		daddi	$a3, $a2, 0		# Branch-delay slot, testing forwarding
 desired_return_address:
 		li	$a4, 4				# Shouldn't run
 jal_target:

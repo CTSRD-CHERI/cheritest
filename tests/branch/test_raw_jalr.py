@@ -34,7 +34,7 @@ class test_raw_jalr(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before jalr missed")
 
     def test_jalr_branch_delay(self):
-        self.assertRegisterEqual(self.MIPS.a3, 3, "instruction in branch-delay slot missed")
+        self.assertRegisterEqual(self.MIPS.a3, self.MIPS.a1, "instruction in branch-delay slot missed or register forwarding didn't work")
 
     def test_jalr_skipped(self):
         self.assertRegisterNotEqual(self.MIPS.a4, 4, "jump didn't happen")
