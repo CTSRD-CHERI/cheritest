@@ -45,6 +45,9 @@ test:   .ent    test
 		dmtc0	$a3, $3			# TLB EntryLow1 = k0 (Low half of TLB entry for odd virtual address (VPN))
 		tlbwi				# Write Indexed TLB Entry
 
+		nop
+		nop
+		nop
 		and     $a4, $a0, 0xfff		# Get offset of testdata within page.
 		ld      $a5, 0($a4)		# Load from virtual address
 
