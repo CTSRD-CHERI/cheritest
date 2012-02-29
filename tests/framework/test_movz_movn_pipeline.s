@@ -42,15 +42,28 @@
 
 		.global test
 test:		.ent test
+movz_strange: # This case was found in freeBSD and failed
+		li		$s8, 5
+		li		$a1, 5
+		li		$a0, 4
+		li		$a2, 0
+		sw      $a0, 68($sp)
+		lw		$a0, 68($sp)
+		subu	$a1, $s8, $a1
+		move	$v0, $a0
+		ld		$a2, 128($sp) # cache miss
+		slt 	$v1, $a2, $a0
+		movz	$v0, $a2,$v1
+		subu	$s5, $a1, $v0
 movz_false:
 		li	$a0, 1
 		li	$a1, -1
-		sw	$a1, 0($sp)
-		lw	$v0, 0($sp)
-		lw	$v1, 0($sp)
-		movz	$v1, $a0,$v0
-		sw	$v1, 0($sp)
-		lw	$s0, 0($sp)
+		sw      $a1, 0($sp)
+        lw      $v0, 0($sp)
+        lw      $v1, 0($sp)
+        movz    $v1, $a0,$v0
+        sw      $v1, 0($sp)
+        lw      $s0, 0($sp)
 movz_true:
 		sw	$a1, 0($sp)
 		lw	$v0, 0($sp)
