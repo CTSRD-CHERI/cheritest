@@ -486,6 +486,7 @@ TOOLS_DIR = ${CHERILIBS_ABS}/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
 CHERISOCKET:= /tmp/cheri_debug_listen_socket
+SIM        := ${CHERIROOT_ABS}/sim
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
@@ -569,7 +570,7 @@ $(CHERISOCKET):
 		< $(CHERICONF) > $$TMPDIR/simconfig && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
-	${CHERIROOT_ABS}/sim &
+	$(SIM) &
 	
 
 # Because fuzz testing deals with lots of small files it is preferable to use
@@ -678,7 +679,7 @@ $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
 # Target to execute a Bluespec simulation of the test suite; memConv.py needs
 # fixing so that it accepts explicit sources and destinations but for now we
 # can use a temporary directory so that parallel builds work.
-$(LOGDIR)/%.log : $(OBJDIR)/%.mem
+$(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
 	cp $(PWD)/$< mem.bin && \
@@ -687,7 +688,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem
 	    < $(CHERICONF) > $$TMPDIR/simconfig && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
-	${CHERIROOT_ABS}/sim +trace +regDump -m $(TEST_CYCLE_LIMIT) > \
+	$(SIM) +trace +regDump -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@ && \
 	rm -r $$TMPDIR
 
