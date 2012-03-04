@@ -383,6 +383,7 @@ TEST_BEV1_FILES=				\
 
 TEST_TLB_FILES=                                 \
 		test_tlb_load_0.s               \
+		test_tlb_exception_fill.s   \
 		test_tlb_load_max.s             \
 		test_tlb_load_asid.s		\
 		test_tlb_store_0.s		\
@@ -688,7 +689,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	    < $(CHERICONF) > $$TMPDIR/simconfig && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
-	$(SIM) +trace +regDump -m $(TEST_CYCLE_LIMIT) > \
+	$(SIM) +regDump -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@ && \
 	rm -r $$TMPDIR
 
