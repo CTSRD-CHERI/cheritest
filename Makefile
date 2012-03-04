@@ -689,7 +689,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	    < $(CHERICONF) > $$TMPDIR/simconfig && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
-	$(SIM) +regDump -m $(TEST_CYCLE_LIMIT) > \
+	$(SIM) +regDump +trace -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@ && \
 	rm -r $$TMPDIR
 
