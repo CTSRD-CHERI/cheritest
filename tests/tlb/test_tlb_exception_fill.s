@@ -102,8 +102,8 @@ bev0_handler:
 		mfc0	$a3, $12	# Status register
 		mfc0	$a4, $13	# Cause register
 		dmfc0	$a5, $14	# EPC
-		daddi	$k0, $a5, -4	# EPC -= 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
+		#daddi	$k0, $a5, -4	# EPC -= 4 to bump PC forward on ERET
+		#dmtc0	$k0, $14
 tlb_stuff:
                 dsrl    $a2, $0, 6                 # Put PFN in correct position for EntryLow with physical address of 0
                 or	$a2, 0x17                      # Set valid and uncached bits
