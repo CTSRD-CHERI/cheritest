@@ -756,11 +756,13 @@ fuzz_generate: $(FUZZ_SCRIPT)
 	python $(FUZZ_SCRIPT) -d $(FUZZ_TEST_DIR)
 
 # The rather unpleasant side-effect of snorting too much candy floss...
-nose_fuzz: fuzz_run_tests
-	PYTHONPATH=tools/sim CACHED=0 nosetests $(NOSEFLAGS) tests/fuzz || true
+nose_fuzz: $(SIM) fuzz_run_tests
+	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit \
+	    --xunit-file=nosetests.xml $(NOSEFLAGS) tests/fuzz || true
 
-nose_fuzz_cached: fuzz_run_tests_cached
-	PYTHONPATH=tools/sim CACHED=1 nosetests $(NOSEFLAGS) tests/fuzz || true
+nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
+	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit \
+            --xunit-file=nosetests_cached.xml $(NOSEFLAGS) tests/fuzz || true
 
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
