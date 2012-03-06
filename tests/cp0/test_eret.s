@@ -56,6 +56,8 @@ test:		.ent test
 		mtc0	$a0, $12
 		nop
 		nop
+		nop
+		nop
 		mfc0	$a0, $12	# Saved to let us check EXL stuck
 
 		# Configure a target EPC

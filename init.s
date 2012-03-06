@@ -51,11 +51,11 @@ start:
 		daddu 	$sp, $sp, -32
 
 		# Install default exception handlers
-		dla	$a0, exception_end
+		dla	$a0, exception_count_handler
 		jal 	bev0_handler_install
 		nop
 
-		dla	$a0, exception_end
+		dla	$a0, exception_count_handler
 		jal	bev1_handler_install
 		nop
 
@@ -65,39 +65,39 @@ start:
 	        mtc0    $at, $12
 
 		#
-		# Explicitly clear most registers in order to make the effects
+		# Explicitly initialise most registers in order to make the effects
 		# of a test on the register file more clear.  Otherwise,
 		# values leaked from init.s and its dependencies may hang
 		# around.
 		#
-		dli	$at, 0
-		dli	$v0, 0
-		dli	$v1, 0
-		dli	$a0, 0
-		dli	$a1, 0
-		dli	$a2, 0
-		dli	$a3, 0
-		dli	$a4, 0
-		dli	$a5, 0
-		dli	$a6, 0
-		dli	$a7, 0
-		dli	$t0, 0
-		dli	$t1, 0
-		dli	$t2, 0
-		dli	$t3, 0
-		dli	$s0, 0
-		dli	$s1, 0
-		dli	$s2, 0
-		dli	$s3, 0
-		dli	$s4, 0
-		dli	$s5, 0
-		dli	$s6, 0
-		dli	$s7, 0
-		dli	$t8, 0
-		dli	$t9, 0
-		dli	$k0, 0
-		dli	$k1, 0
-		dli	$gp, 0
+		dli	$at, 0x0101010101010101 # r1 
+		dli	$v0, 0x0202020202020202 # r2 
+		dli	$v1, 0x0303030303030303 # r3 
+		dli	$a0, 0x0404040404040404 # r4 
+		dli	$a1, 0x0505050505050505 # r5 
+		dli	$a2, 0x0606060606060606 # r6 
+		dli	$a3, 0x0707070707070707 # r7 
+		dli	$a4, 0x0808080808080808 # r8 
+		dli	$a5, 0x0909090909090909 # r9 
+		dli	$a6, 0x0a0a0a0a0a0a0a0a # r10
+		dli	$a7, 0x0b0b0b0b0b0b0b0b # r11
+		dli	$t0, 0x0c0c0c0c0c0c0c0c # r12
+		dli	$t1, 0x0d0d0d0d0d0d0d0d # r13
+		dli	$t2, 0x0e0e0e0e0e0e0e0e # r14
+		dli	$t3, 0x0f0f0f0f0f0f0f0f # r15
+		dli	$s0, 0x1010101010101010 # r16
+		dli	$s1, 0x1111111111111111 # r17
+		dli	$s2, 0x1212121212121212 # r18
+		dli	$s3, 0x1313131313131313 # r19
+		dli	$s4, 0x1414141414141414 # r20
+		dli	$s5, 0x1515151515151515 # r21
+		dli	$s6, 0x1616161616161616 # r22
+		dli	$s7, 0x1717171717171717 # r23
+		dli	$t8, 0x1818181818181818 # r24
+		dli	$t9, 0x1919191919191919 # r25
+		dli	$k0, 0x1a1a1a1a1a1a1a1a # r26
+		dli	$k1, 0x1b1b1b1b1b1b1b1b # r27
+		dli	$gp, 0x1c1c1c1c1c1c1c1c # r28
 		# Not cleared: $sp, $fp, $ra
 		mthi	$at
 		mtlo	$at
@@ -106,12 +106,7 @@ start:
 		jal test
 		nop			# branch-delay slot
 
-		# Dump registers on the simulator
-exception_end:
-		mtc0 $at, $26
-		nop
-		nop
-	
+		# Check the prid to see if running on simulator or gxemul
 		mfc0 $k0, $15	        # prid register
 		and  $k0, $k0, 0xff00
 		xor  $k0, $k0, 0x8900
@@ -122,10 +117,54 @@ exception_end:
 		mfc2 $k0, $0, 4
 		nop
 		nop
-skip_cp2_dump:		
+skip_cp2_dump:
+		# Load the exception count into k0 so that it is visible in register dump
+		ld      $k0, exception_count
+		
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
+
 		# Terminate the simulator
 		mtc0 $at, $23
 end:
 		b end
 		nop
 		.end start
+
+		.ent exception_count_handler
+exception_count_handler:
+		daddu	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+	        sd      $k0,  8($sp)
+		daddu	$fp, $sp, 32
+	
+
+		# Increment exception counter
+	        dla     $ra, exception_count
+		ld      $k0, ($ra)
+	        addi    $k0, $k0, 1
+	        sd      $k0, ($ra)
+
+		# Skip the instruction which caused exception and return
+		dmfc0	$k0, $14	# EPC
+		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+
+	        ld	$ra, 24($sp)
+		ld	$fp, 16($sp)
+	        ld      $k0,  8($sp)
+		daddu	$sp, $sp, 32
+		nop			# NOPs to avoid hazard with ERET
+		nop			# XXXRW: How many are actually
+		nop			# required here?
+		nop
+		eret
+		.end exception_count_handler
+
+	        .data
+		.align 3
+exception_count:
+		.dword	0x0

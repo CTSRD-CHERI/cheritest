@@ -64,6 +64,8 @@ test:		.ent test
 		mtc0	$a0, $11	# Write to CP0 compare register
 		nop
 		nop
+		nop
+		nop
 		mfc0	$a1, $11	# Read back for test
 
 		#

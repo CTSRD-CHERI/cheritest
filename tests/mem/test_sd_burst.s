@@ -47,7 +47,7 @@ test:		.ent test
 
 		dli	$k0, 8
 
-		dla	$t0, dword
+		dla	$gp, dword
 
 		dli	$s0, 0x0123456789abcdef
 		dli	$s1, 0x0123456789abcdef
@@ -73,51 +73,51 @@ test:		.ent test
 		dli	$a7, 0x0123456789abcdef
 
 loop:
-		sd	$s0, 0($t0)
-		sd	$s1, 8($t0)
-		sd	$s2, 16($t0)
-		sd	$s3, 24($t0)
-		sd	$s4, 32($t0)
-		sd	$s5, 40($t0)
-		sd	$s6, 48($t0)
-		sd	$s7, 56($t0)
+		sd	$s0, 0($gp)
+		sd	$s1, 8($gp)
+		sd	$s2, 16($gp)
+		sd	$s3, 24($gp)
+		sd	$s4, 32($gp)
+		sd	$s5, 40($gp)
+		sd	$s6, 48($gp)
+		sd	$s7, 56($gp)
 
-		sd	$t0, 64($t0)
-		sd	$t1, 72($t0)
-		sd	$t2, 80($t0)
-		sd	$t3, 88($t0)
+		sd	$t0, 64($gp)
+		sd	$t1, 72($gp)
+		sd	$t2, 80($gp)
+		sd	$t3, 88($gp)
 
-		sd	$a0, 96($t0)
-		sd	$a1, 104($t0)
-		sd	$a2, 112($t0)
-		sd	$a3, 120($t0)
-		sd	$a4, 128($t0)
-		sd	$a5, 136($t0)
-		sd	$a6, 144($t0)
-		sd	$a7, 152($t0)
+		sd	$a0, 96($gp)
+		sd	$a1, 104($gp)
+		sd	$a2, 112($gp)
+		sd	$a3, 120($gp)
+		sd	$a4, 128($gp)
+		sd	$a5, 136($gp)
+		sd	$a6, 144($gp)
+		sd	$a7, 152($gp)
 
-		ld	$a0, 0($t0)
-		ld	$a1, 8($t0)
-		ld	$a2, 16($t0)
-		ld	$a3, 24($t0)
-		ld	$a4, 32($t0)
-		ld	$a5, 40($t0)
-		ld	$a6, 48($t0)
-		ld	$a7, 56($t0)
+		ld	$a0, 0($gp)
+		ld	$a1, 8($gp)
+		ld	$a2, 16($gp)
+		ld	$a3, 24($gp)
+		ld	$a4, 32($gp)
+		ld	$a5, 40($gp)
+		ld	$a6, 48($gp)
+		ld	$a7, 56($gp)
 
-		ld	$t0, 64($t0)
-		ld	$t1, 72($t0)
-		ld	$t2, 80($t0)
-		ld	$t3, 88($t0)
+		ld	$t0, 64($gp)
+		ld	$t1, 72($gp)
+		ld	$t2, 80($gp)
+		ld	$t3, 88($gp)
 
-		ld	$a0, 96($t0)
-		ld	$a1, 104($t0)
-		ld	$a2, 112($t0)
-		ld	$a3, 120($t0)
-		ld	$a4, 128($t0)
-		ld	$a5, 136($t0)
-		ld	$a6, 144($t0)
-		ld	$a7, 152($t0)
+		ld	$a0, 96($gp)
+		ld	$a1, 104($gp)
+		ld	$a2, 112($gp)
+		ld	$a3, 120($gp)
+		ld	$a4, 128($gp)
+		ld	$a5, 136($gp)
+		ld	$a6, 144($gp)
+		ld	$a7, 152($gp)
 
 		# Loop until zero
 		daddiu	$k0, $k0, -1

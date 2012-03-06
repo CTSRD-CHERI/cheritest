@@ -502,13 +502,10 @@ RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
 TEST_LDSCRIPT=test.ld
 TEST_CACHED_LDSCRIPT=test_cached.ld
-FUZZ_LDSCRIPT=test_fuzz.ld
-FUZZ_CACHED_LDSCRIPT=test_fuzz_cached.ld
 
 TEST_INIT_OBJECT=$(OBJDIR)/init.o
 # Fuzz tests have a slightly different init which doesn't dump
 # capability registers and has more interesting initial register values.
-FUZZ_INIT_OBJECT=$(OBJDIR)/init_fuzz.o
 TEST_INIT_CACHED_OBJECT=$(OBJDIR)/init_cached.o
 TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 
@@ -587,7 +584,7 @@ cleantest:
 	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
 
 clean: cleantest
-	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT)
+	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
 	rm -f $(TEST_OBJS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
 	rm -f $(TEST_CACHED_ELFS) $(TEST_CACHED_MEMS) $(TEST_CACHED_DUMPS)
 	rm -f $(TESTDIR)/*/*.pyc
@@ -595,7 +592,7 @@ clean: cleantest
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
 .SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
-    $(TEST_INIT_CACHED_OBJECT) $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT)
+    $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
 	
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	make -C $(TOOLS_DIR_ABS)/debug/ cherictl
@@ -617,11 +614,6 @@ $(OBJDIR)/%.o: %.s
 # Targets for ELF images of tests running out of uncached memory.
 #
 
-$(OBJDIR)/test_fuzz_%.elf : $(OBJDIR)/test_fuzz_%.o $(FUZZ_LDSCRIPT) \
-	    $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	sde-ld -EB -G0 -T$(FUZZ_LDSCRIPT) $(FUZZ_INIT_OBJECT) \
-	    $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
-
 $(OBJDIR)/test_raw_%.elf : $(OBJDIR)/test_raw_%.o $(RAW_LDSCRIPT)
 	sde-ld -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
 
@@ -633,12 +625,6 @@ $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \
 #
 # Targets for ELF images of tests running out of cached memory.
 #
-$(OBJDIR)/test_fuzz_%_cached.elf : $(OBJDIR)/test_fuzz_%.o \
-	    $(FUZZ_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	sde-ld -EB -G0 -T$(FUZZ_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(FUZZ_INIT_OBJECT) $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
-
 
 $(OBJDIR)/test_raw_%_cached.elf : $(OBJDIR)/test_raw_%.o \
 	    $(TEST_INIT_CACHED_OBJECT) $(RAW_CACHED_LDSCRIPT)
