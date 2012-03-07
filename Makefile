@@ -59,7 +59,12 @@ TESTDIRS=					\
 		$(TESTDIR)/cache		\
 		$(TESTDIR)/cp0                  \
 		$(TESTDIR)/cp2                  \
-		$(TESTDIR)/fuzz
+		$(TESTDIR)/fuzz_regressions
+
+ifneq ($(NOFUZZ),1)
+TESTDIRS +=  $(TESTDIR)/fuzz
+endif
+
 
 RAW_FRAMEWORK_FILES=				\
 		test_raw_template.s		\
@@ -424,8 +429,11 @@ TEST_TRAPI_FILES=				\
 
 FUZZ_SCRIPT:=fuzzing/fuzz.py
 FUZZ_TEST_DIR:=tests/fuzz
+ifneq ($(NOFUZZ),1)
 FUZZ_TEST_FILES:=$(notdir $(wildcard $(FUZZ_TEST_DIR)/*.s))
-
+endif
+FUZZ_REGRESSION_TEST_DIR:=tests/fuzz_regressions/
+FUZZ_REGRESSION_TEST_FILES:=$(notdir $(wildcard $(FUZZ_REGRESSION_TEST_DIR)/*.s))
 #
 # All unit tests.  Implicitly, these will all be run for CHERI, but subsets
 # may be used for other targets.
@@ -449,7 +457,8 @@ TEST_FILES=					\
 		$(TEST_ALU_OVERFLOW_FILES)	\
 		$(TEST_MEM_UNALIGN_FILES)	\
 		$(TEST_TRAPI_FILES)             \
-		$(FUZZ_TEST_FILES)
+		$(FUZZ_TEST_FILES)              \
+		$(FUZZ_REGRESSION_TEST_FILES)
 
 #
 # Omit certain categories of tests due to gxemul functional omissions:
@@ -489,6 +498,8 @@ TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
 CHERISOCKET:= /tmp/cheri_debug_listen_socket
 SIM        := ${CHERIROOT_ABS}/sim
+# Set to 1 to disable fuzz tests, which can be useful at times.
+NOFUZZ?=0
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
