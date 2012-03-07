@@ -178,11 +178,6 @@ two_arg_branches=make_list("""
    BNEL
 """)
 
-register_branches=make_list("""
-   JR
-   JALR
-""")
-
 no_arg_branch_ops=make_list("""
    B
    BAL
@@ -426,6 +421,16 @@ def generate_branch_no_args(options):
             ('offset', map(lambda x: x*4,[-(2**15),-255,-7,-6,-5,-4,-3,0,1,2,3,4,5,6,7,0x100,0x7fff])),
 ))
 
+def generate_jump_register(options):
+    return generate_tests(
+        options,
+        "jump_register", (
+            ('link', [0,1]),
+            ('targetreg', ['$a0', '$ra']),
+            ('destreg', ['$zero','$ra','$a1']),
+            ('offset', map(lambda x: x*4, [-5,-4,-2,1,2,4,5])),
+        ))
+
 if __name__=="__main__":
     from optparse import OptionParser
     parser = OptionParser()
@@ -449,6 +454,7 @@ if __name__=="__main__":
     tests+=generate_branch_one_arg(options)
     tests+=generate_branch_two_args(options)
     tests+=generate_branch_no_args(options)
+    tests+=generate_jump_register(options)
     print "Total: %d tests." % tests
 
 
