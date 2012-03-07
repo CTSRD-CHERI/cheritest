@@ -266,7 +266,8 @@ TEST_LLSC_FILES=				\
 		test_cp0_lladdr.s
 
 TEST_CACHE_FILES=				\
-		test_hardware_mapping_cached_read.s
+		test_hardware_mapping_cached_read.s \
+		test_cache_instruction.s
 
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
