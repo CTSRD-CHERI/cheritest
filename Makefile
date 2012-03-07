@@ -481,7 +481,7 @@ GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not c
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
-TEST_CYCLE_LIMIT=100000
+TEST_CYCLE_LIMIT=1000000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
