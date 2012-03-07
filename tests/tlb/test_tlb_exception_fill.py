@@ -32,3 +32,6 @@ from cheritest_tools import BaseCHERITestCase
 class test_tlb_exception_fill(BaseCHERITestCase):
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a1, self.MIPS.a2, "Load worked")
+    def test_epc(self):
+        self.assertRegisterEqual(self.MIPS.a6, 0, "Virtual address load loop did not match load loop for some values.")
+    

@@ -58,6 +58,11 @@ test:		.ent test
 		# check it later.
 		#
 		dla	$a0, desired_epc
+		
+		#
+		# Set $a7 to some physical page number.  We will increment this on each miss.
+		#
+		dli		$a7, 0xF
 
 		#
 		# Clear registers we'll use when testing results later.
@@ -67,6 +72,7 @@ test:		.ent test
 		dli	$a3, 0
 		dli	$a4, 0
 		dli	$a5, 0
+		dli	$a6, 0
 
 		#
 		# Set up a taken branh with a trap instruction in the
@@ -82,6 +88,30 @@ desired_epc:
 		# not $a1.
 		#
 		ld	$a2, 0($zero)
+		
+		#
+		# Do a loop that will write 8 pages of virtual address space,
+		# Then read those back and count the number of non-matches.
+		#
+		dli $a3, 0x8000
+		dli $a4, 0
+write_loop:
+		sd $a4, 0($a4)
+		daddi $a4, $a4, 8
+		bnez $a3, write_loop
+		daddi $a3, $a3, -8
+		
+		dli $a3, 0x8000
+		dli $a4, 0
+read_loop:
+		ld $a5, 0($a4)
+		beq $a5, $a4, skip_add
+		daddi $a4, $a4, 8
+		addi $a6, $a6, 1
+skip_add:
+		bnez $a3, read_loop
+		daddi $a3, -8
+	
 return:
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
@@ -99,18 +129,21 @@ return:
 		.ent bev0_handler
 bev0_handler:
 		li	$a2, 1
-		mfc0	$a3, $12	# Status register
-		mfc0	$a4, $13	# Cause register
-		dmfc0	$a5, $14	# EPC
-		#daddi	$k0, $a5, -4	# EPC -= 4 to bump PC forward on ERET
-		#dmtc0	$k0, $14
 tlb_stuff:
-                dsrl    $a2, $0, 6                 # Put PFN in correct position for EntryLow with physical address of 0
-                or	$a2, 0x17                      # Set valid and uncached bits
-                dmtc0   $a2, $2                    # TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
-                dmtc0   $zero, $3                  # TLB EntryLow1 = 0 (invalid)
-                tlbwr				   # Write Random
-                mtc0 $at, $25
+		daddi	$a7, 1						# Allocate a new physical page address
+		dsll    $a2, $a7, 6                 # Put PFN in correct position for EntryLow
+		or		$a2, 0x17					# Set valid and uncached bits
+		dmtc0   $a2, $2						# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
+		daddi	$a7, 1						# Allocate a new physical page address
+		dsll    $a2, $a7, 6					# Put PFN in correct position for EntryLow
+		or		$a2, 0x17					# Set valid and uncached bits
+		dmtc0   $a2, $3						# TLB EntryLow1 = a2 (Upper half of TLB entry for even virtual $
+		nop
+		nop
+		nop
+		nop
+		tlbwr								# Write Random
+		mtc0 $at, $25
 
 		nop			# NOPs to avoid hazard with ERET
 		nop			# XXXRW: How many are actually
