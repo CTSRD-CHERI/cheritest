@@ -396,7 +396,9 @@ TEST_TLB_FILES=                                 \
 		test_tlb_read.s			\
 		test_tlb_store_0.s		\
 		test_tlb_store_protected.s	\
-		test_tlb_user_mode.s		
+		test_tlb_user_mode.s		\
+		test_tlb_invalid_load.s		\
+		test_tlb_invalid_store.s
 
 TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
