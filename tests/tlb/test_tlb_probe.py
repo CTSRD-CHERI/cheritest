@@ -30,7 +30,7 @@
 from cheritest_tools import BaseCHERITestCase
 
 class test_tlb_probe(BaseCHERITestCase):
-    def test_load_succeeded(self):
+    def test_tlb_probe_succeeded(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x6, "TLB probe find failed.")
-    def test_load_succeeded(self):
+    def test_tlb_probe_miss_is_correct(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x8000000000000000, "TLB probe miss failed.")
