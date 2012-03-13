@@ -38,10 +38,10 @@ test:   .ent    test
  		li	$a0, 0x6
 		dmtc0	$a0, $0			# TLB index
 		li	$a0, 0x2000
-		dmtc0	$zero, $10		# TLB HI address
-		li	$a0, 0x3000
+		dmtc0	$a0, $10		# TLB HI address
+		li	$a0, 0x3010
 		dmtc0	$a0, $2			# TLB EntryLow0 = k0 (Low half of TLB entry for even virtual address (VPN))
-		li	$a0, 0x4000
+		li	$a0, 0x4010
 		dmtc0	$a0, $3			# TLB EntryLow1 = k0 (Low half of TLB entry for odd virtual address (VPN))
 		tlbwi				# Write Indexed TLB Entry
 		

@@ -37,6 +37,6 @@ class test_tlb_read(BaseCHERITestCase):
     def test_tlb_read_entryHi(self):
         self.assertRegisterEqual(self.MIPS.a2, 0x2000, "TLB read of EntryHi is incorrect.")
     def test_tlb_read_entryLo0(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0x3000, "TLB read of EntryLo0 is incorrect.")
+        self.assertRegisterEqual(self.MIPS.a3, 0x3010, "TLB read of EntryLo0 is incorrect.")
     def test_tlb_read_entryLo1(self):
-        self.assertRegisterEqual(self.MIPS.a4, 0x4000, "TLB read of EntryLo1 is incorrect.")
+        self.assertRegisterEqual(self.MIPS.a4, 0x4010, "TLB read of EntryLo1 is incorrect.")
