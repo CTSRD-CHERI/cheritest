@@ -393,6 +393,7 @@ TEST_TLB_FILES=                                 \
 		test_tlb_exception_fill.s	\
 		test_tlb_load_max.s             \
 		test_tlb_load_asid.s		\
+		test_tlb_read.s			\
 		test_tlb_store_0.s		\
 		test_tlb_store_protected.s	\
 		test_tlb_user_mode.s		
