@@ -57,6 +57,6 @@ class test_tlb_invalid_load(BaseCHERITestCase):
     def test_status(self):
         self.assertRegisterEqual(self.MIPS.s4 & 2, 2, "Wrong EXL")
     def test_cause(self):
-        self.assertRegisterEqual(self.MIPS.s5 & 0x3c, 0x8, "Wrong Exception Code")
+        self.assertRegisterEqual(self.MIPS.s5 & 0x7c, 0x8, "Wrong Exception Code")
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a6, self.MIPS.s6, "Wrong EPC")

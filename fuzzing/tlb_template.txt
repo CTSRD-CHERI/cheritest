@@ -56,6 +56,13 @@ $params_str
 # s0: offset of testdata within page
 # s1: virtual address of testdata
 # s2: virtual address of testcode
+# s3: BadVAddr
+# s4: Context
+# s5: XContext
+# s6: EntryHi
+# s7: Status
+# v0: Cause
+# v1: EPC
 
 .global test
 test:   .ent    test
@@ -150,6 +157,15 @@ testcode:
 		syscall
 
 exception_handler:
+		dmfc0	$$s3, $$8	# BadVAddr
+		dmfc0	$$s4, $$4	# Context
+		dmfc0	$$s5, $$20	# XContext
+		dmfc0	$$s6, $$10	# EntryHi
+		dmfc0   $$s7, $$12      # Status
+		and     $$s7, 2		# Extract EXL bit
+		dmfc0	$$v0, $$13	# Cause
+		and     $$v0, 0x7c	# Extract ExcCode
+		dmfc0   $$v1, $$14      # EPC
 		dla	$$t0, after_test
 		jr	$$t0
 		nop
