@@ -385,6 +385,14 @@ def generate_tlb(options):
                 [0,1,21,47]
           ),
           (
+                'valid',
+                [0,1],
+          ),
+          (
+                'dirty',
+                [0,1],
+          ),
+          (
                 'cached', 
                 [0,1,2,3] # Currently has no effect on cheri or gxemul!
           ),
