@@ -90,11 +90,11 @@ write_loop:
 		daddi $a3, $a3, -64
 		
 		dli $a3, 0x40000
-		dli $a4, 0
 read_loop:
+		daddi $a4, $a4, -64
 		ld $a5, 0($a4)
 		beq $a5, $a4, skip_add
-		daddi $a4, $a4, 64
+		nop
 		addi $a6, $a6, 1
 skip_add:
 		bnez $a3, read_loop
