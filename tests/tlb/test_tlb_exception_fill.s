@@ -61,12 +61,6 @@ test:		.ent test
 		dla	$a0, bev0_handler
 		jal	set_bev0_xtlb_handler
 		nop
-
-		#
-		# Save the desired EPC value for this exception so we can
-		# check it later.
-		#
-		dla	$a0, desired_epc
 		
 		#
 		# Set $a7 to some physical page number.  We will increment this on each miss.
@@ -82,44 +76,29 @@ test:		.ent test
 		dli	$a4, 0
 		dli	$a5, 0
 		dli	$a6, 0
-
-		#
-		# Set up a taken branh with a trap instruction in the
-		# branch-delay slot.  EPC should point at the branch, not the
-		# trap instruction.
-		#
-		li	$t0, 1
-desired_epc:
-		sd	$a1, 0($zero)
-		#
-		# Exception return.  If EPC is 4 too high, due to not
-		# handling the branch-delay slot right, $a6 will be set but
-		# not $a1.
-		#
-		ld	$a2, 0($zero)
 		
 		#
 		# Do a loop that will write 8 pages of virtual address space,
 		# Then read those back and count the number of non-matches.
 		#
-		dli $a3, 0x8000
+		dli $a3, 0x40000
 		dli $a4, 0
 write_loop:
 		sd $a4, 0($a4)
-		daddi $a4, $a4, 8
+		daddi $a4, $a4, 64
 		bnez $a3, write_loop
-		daddi $a3, $a3, -8
+		daddi $a3, $a3, -64
 		
-		dli $a3, 0x8000
+		dli $a3, 0x40000
 		dli $a4, 0
 read_loop:
 		ld $a5, 0($a4)
 		beq $a5, $a4, skip_add
-		daddi $a4, $a4, 8
+		daddi $a4, $a4, 64
 		addi $a6, $a6, 1
 skip_add:
 		bnez $a3, read_loop
-		daddi $a3, -8
+		daddi $a3, -64
 	
 return:
 		ld	$fp, 16($sp)
@@ -139,13 +118,25 @@ return:
 bev0_handler:
 		li	$a2, 1
 tlb_stuff:
+		tlb_stuff:
+		dmfc0	$t0, $20
+		dli 	$t3, 0x9800000001000000
+		or		$t0, $t0, $t3
+		ld		$t1, 0($t0)
+		bnez	$t1, skip_new_entry
+		nop
 		daddi	$a7, 1						# Allocate a new physical page address
 		dsll    $a2, $a7, 6                 # Put PFN in correct position for EntryLow
 		or		$a2, 0x17					# Set valid and uncached bits
-		dmtc0   $a2, $2						# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
-		daddi	$a7, 1						# Allocate a new physical page address
+		sd		$a2, 0($t0)
+		daddi	$a7, $a7, 1					# Allocate a new physical page address
 		dsll    $a2, $a7, 6					# Put PFN in correct position for EntryLow
 		or		$a2, 0x17					# Set valid and uncached bits
+		sd		$a2, 8($t0)
+skip_new_entry:
+		ld		$a2, 0($t0)
+		dmtc0   $a2, $2						# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
+		ld		$a2, 8($t0)
 		dmtc0   $a2, $3						# TLB EntryLow1 = a2 (Upper half of TLB entry for even virtual $
 		nop
 		nop
