@@ -78,7 +78,7 @@ test:		.ent test
 		dli	$a6, 0
 		
 		#
-		# Do a loop that will write 8 pages of virtual address space,
+		# Do a loop that will write 64 pages of virtual address space,
 		# Then read those back and count the number of non-matches.
 		#
 		dli $a3, 0x40000
