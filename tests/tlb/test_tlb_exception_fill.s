@@ -44,13 +44,22 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		#
-		# Set up 'handler' as the RAM exception handler.
-		#
 		jal	bev_clear
 		nop
+
+		#
+		# Set up 'handler' as the RAM exception handler.
+		# Note that we set up both common and xtlb handlers
+		# because the first miss (with EXL=1) will go to
+		# the common handler but subsequent misses (following eret)
+		# will go to xtlb miss.
+		#
 		dla	$a0, bev0_handler
-		jal	bev0_handler_install
+		jal	set_bev0_common_handler
+		nop
+
+		dla	$a0, bev0_handler
+		jal	set_bev0_xtlb_handler
 		nop
 
 		#
