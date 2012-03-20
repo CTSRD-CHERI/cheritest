@@ -503,8 +503,10 @@ TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
 CHERISOCKET:= /tmp/cheri_debug_listen_socket
 SIM        := ${CHERIROOT_ABS}/sim
-# Set to 1 to disable fuzz tests, which can be useful at times.
+# Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
+# Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
+SIM_TRACE_OPTS?=+trace +cTrace +showTranslations
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
@@ -692,7 +694,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	    < $(CHERICONF) > $$TMPDIR/simconfig && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
-	$(SIM) +regDump +trace +cTrace +showTranslations -m $(TEST_CYCLE_LIMIT) > \
+	$(SIM) +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@ && \
 	rm -r $$TMPDIR
 
