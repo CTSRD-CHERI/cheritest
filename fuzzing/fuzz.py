@@ -88,6 +88,7 @@ reg_reg_ops=make_list("""
     DSRL
     MOVZ
     MOVN
+    MUL
 """)
 
 reg_imm_ops=make_list("""
@@ -347,7 +348,6 @@ def generate_mul_single(options):
           ('a1_val', interesting_reg_values),
           ('nops', [0,1,2,4,8,16]),
         ])
-
 
 def generate_div_single(options):
     return generate_tests(
