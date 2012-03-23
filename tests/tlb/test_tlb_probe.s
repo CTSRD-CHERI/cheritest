@@ -33,7 +33,10 @@
 
 .global test
 test:   .ent    test
+		li	$t0, 1			# Load counter so that we execute the following test twice,
+						# to check for tlb probe speed.
 		# Fill in a tlb entry and write it
+probe_test_start:
  		dmtc0	$zero, $5       	# Write 0 to page mask i.e. 4k pages
  		li	$a0, 0x6
 		dmtc0	$a0, $0			# TLB index 
@@ -79,8 +82,6 @@ test:   .ent    test
 		nop
 		nop
 		nop
-		nop
-		nop
 		dmfc0	$a0, $0			# Read index, which should be six
 		
 		# Search TLB for another value
@@ -95,9 +96,10 @@ test:   .ent    test
 		nop
 		nop
 		nop
-		nop
-		nop
 		dmfc0	$a1, $0			# Read index, which should be negative
+		
+		bnez	$t0, probe_test_start
+		daddi	$t0, -1
 
 		jr      $ra
 		nop
