@@ -32,4 +32,8 @@ from cheritest_tools import BaseCHERITestCase
 class test_tlb_instruction_miss(BaseCHERITestCase):
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a5, 0xbeef, "Translated instructions didn't run")
+    def test_badVaddr(self):
+        self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a6, "Bad Virtual Address is incorrect")
+    def test_badVictim(self):
+        self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a7, "EPC is incorrect")
     

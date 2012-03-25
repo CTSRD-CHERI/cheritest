@@ -39,10 +39,10 @@
 
 		.global test
 test:		.ent test
-		daddu 	$sp, $sp, -32
+		daddu 		$sp, $sp, -32
 		sd		$ra, 24($sp)
 		sd		$fp, 16($sp)
-		daddu	$fp, $sp, 32
+		daddu		$fp, $sp, 32
 
 		jal		bev_clear
 		nop
@@ -65,13 +65,12 @@ test:		.ent test
 		#
 		# Clear registers we'll use when testing results later.
 		#
-		dla		$a1, mapped_code
+		dla		$a4, mapped_code
 		dli		$a2, 0xFFFFFFFF
-		and		$a1, $a2, $a1
+		and		$a4, $a2, $a4
 		dli		$a3, 0
-		dli		$a4, 0
 		dli		$a5, 0
-		jalr	$a1
+		jalr	$a4
 		dli		$a6, 0
 		dla		$a1, return
 		jr		$a1
@@ -81,8 +80,6 @@ test:		.ent test
 		# Instructions to run mapped.
 		#
 mapped_code:
-		dli		$a3, 0xbeef
-		dli		$a4, 0xbeef
 		jr		$31
 		dli		$a5, 0xbeef
 	
@@ -104,14 +101,16 @@ return:
 bev0_handler:
 		li	$a2, 1
 tlb_stuff:
-		dmfc0	$t0, $8						# Get bad virtual address
-		dli 	$t3, 0xFFFFE000				# Mask off the page offset
+		dmfc0	$t0, $8					# Get bad virtual address
+		move	$a6, $t0				# Get bad virtual address
+		dmfc0	$a7, $14				# Get victim address
+		dli 	$t3, 0xFFFFE000			# Mask off the page offset
 		and		$t0, $t0, $t3
-		dror	$a2, $t0, 6                 # Put PFN in correct position for EntryLow
-		or		$a2, 0x17					# Set valid and uncached bits
-		dmtc0   $a2, $2						# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
-		ori		$a2, 0x1000					# Set the 13th bit for to insert the upper physical address
-		dmtc0   $a2, $3						# TLB EntryLow1 = a2 (Upper half of TLB entry for even virtual $
+		dror	$a2, $t0, 6             # Put PFN in correct position for EntryLow
+		or		$a2, 0x17				# Set valid and uncached bits
+		dmtc0   $a2, $2					# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
+		ori		$a2, 0x1000				# Set the 13th bit for to insert the upper physical address
+		dmtc0   $a2, $3					# TLB EntryLow1 = a2 (Upper half of TLB entry for even virtual $
 		nop
 		nop
 		nop
