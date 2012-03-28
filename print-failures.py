@@ -41,22 +41,31 @@ def prettyPrint(element):
   return minidom.parseString(txt).toprettyxml()
 
 def prettyPrintItems(etree, tag, prefix, verbose):
+  failure_count=0
   ## Find the parent tag of all matching tags 
   for e in etree.findall('.//%s/..'%tag):
+    failure_count+=1
     if verbose:
       print prefix + prettyPrint(e)
     else:
       print prefix + e.attrib["name"]
+  return failure_count 
 
 def main():
   parser = argparse.ArgumentParser(description='Process the XML output of nose to show failing/error test cases.')
-  parser.add_argument('fh', type=file, help='XML file (in xUnit format) to parse', metavar='FILE')
+  parser.add_argument('fh', type=file, help='XML file (in xUnit format) to parse', metavar='FILE', nargs='+')
   parser.add_argument('--verbose', '-v', dest='verbose', action='store_true', help='Show full error/failure details')
   args = parser.parse_args() 
  
-  etree = ET.parse(args.fh)
-  prettyPrintItems(etree, 'failure', 'F: ', args.verbose)
-  prettyPrintItems(etree, 'error', 'E: ', args.verbose)
+  failure_count = 0
+  for fh in args.fh:
+    etree = ET.parse(fh)
+    failure_count += prettyPrintItems(etree, 'failure', fh.name+' F: ', args.verbose)
+    failure_count += prettyPrintItems(etree, 'error', fh.name+' E: ', args.verbose)
+
+  print "Failures: %d"%failure_count
+  if failure_count:
+    sys.exit(1)
   
 if __name__=="__main__":
   main()
