@@ -516,7 +516,8 @@ ALTERA_LOGDIR=altera_log
 HWSIM_LOGDIR=hwsim_log
 GXEMUL_LOGDIR=gxemul_log
 GXEMUL_BINDIR?=/usr/groups/ctsrd/gxemul/CTSRD-CHERI-gxemul-testversion
-GXEMUL_OPTS=-V -E oldtestmips -M 3072 -i -p "end"
+GXEMUL_TRACE_OPTS?=-i
+GXEMUL_OPTS=-V -E oldtestmips -M 3072 $(GXEMUL_TRACE_OPTS) -p "end"
 
 RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
