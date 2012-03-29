@@ -65,6 +65,11 @@ ifneq ($(NOFUZZ),1)
 TESTDIRS +=  $(TESTDIR)/fuzz
 endif
 
+ifeq ($(BRIEF_GXEMUL),1)
+GXEMUL_LOG_FILTER=grep -A100 'cpu0:    pc = '
+else
+GXEMUL_LOG_FILTER=cat
+endif
 
 RAW_FRAMEWORK_FILES=				\
 		test_raw_template.s		\
@@ -738,12 +743,14 @@ $(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
 #
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 || true
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
+        $(GXEMUL_LOG_FILTER) >$@ || true
 
 
 $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< >$@ 2>&1 || true
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
+        $(GXEMUL_LOG_FILTER) >$@ || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
