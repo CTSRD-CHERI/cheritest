@@ -433,6 +433,7 @@ TEST_TRAPI_FILES=				\
 		test_tnei_lt.s
 
 FUZZ_SCRIPT:=fuzzing/fuzz.py
+FUZZ_SCRIPT_OPTS?=
 FUZZ_TEST_DIR:=tests/fuzz
 ifneq ($(NOFUZZ),1)
 FUZZ_TEST_FILES:=$(notdir $(wildcard $(FUZZ_TEST_DIR)/*.s))
@@ -758,7 +759,7 @@ fuzz_run_tests: $(GXEMUL_FUZZ_TEST_LOGS) $(SIM_FUZZ_TEST_LOGS)
 fuzz_run_tests_cached: $(GXEMUL_FUZZ_TEST_CACHED_LOGS) $(SIM_FUZZ_TEST_CACHED_LOGS)
 
 fuzz_generate: $(FUZZ_SCRIPT)
-	python $(FUZZ_SCRIPT) -d $(FUZZ_TEST_DIR)
+	python $(FUZZ_SCRIPT) $(FUZZ_SCRIPT_OPTS) -d $(FUZZ_TEST_DIR)
 
 # The rather unpleasant side-effect of snorting too much candy floss...
 nose_fuzz: $(SIM) fuzz_run_tests
