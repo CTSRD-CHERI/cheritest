@@ -49,13 +49,13 @@ start:
 		#
 
 		dla	$gp, dword
-    dli	$a0, 0x00000000FFFFFFFF
-    and $gp, $gp, $a0
+		dli	$a0, 0x00000000FFFFFFFF
+		and $gp, $gp, $a0
 		dli	$t0, 0x9800000000000000		# Cached, non-coherenet
 		daddu	$gp, $gp, $t0
 
-		# Initialize link register to something we won't touch.
-		lld $a0, 64($gp)
+		# Initialize link register to the store address.
+		lld 	$k0, 0($gp)
 		
 		# Store and load a double word into double word storage
 		dli	$a0, 0xfedcba9876543210
@@ -64,22 +64,26 @@ start:
 
 		# Store and load double with sign extension
 		daddiu	$gp, $gp, 8			# @positive
+		lld 	$k0, 0($gp)
 		dli	$a2, 1
 		scd	$a2, 0($gp)
 		ld	$a3, 0($gp)
 
 		daddiu	$gp, $gp, 8			# @negative
+		lld 	$k0, 0($gp)
 		dli	$a4, -1
 		scd	$a4, 0($gp)
 		ld	$a5, 0($gp)
 
 		# Store and load double words at non-zero offsets
 		daddiu	$gp, $gp, 8			# @val1
+		lld 	$k0, 8($gp)
 		dli	$a6, 2
 		scd	$a6, 8($gp)
 		ld	$a7, 8($gp)
 
 		daddiu	$gp, $gp, 8			# @val2
+		lld 	$k0, -8($gp)
 		dli	$s0, 1
 		scd	$s0, -8($gp)
 		ld	$s1, -8($gp)
