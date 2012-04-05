@@ -87,6 +87,13 @@ start:
 		dli	$s0, 1
 		sc	$s0, -4($gp)
 		lw	$s1, -4($gp)
+		
+		# Initialize link register to a different address.
+		ll 	$k0, 16($gp)
+		# Fail to store and load a word into word storage
+		dli	$s2, 0x01234567
+		sc	$s2, -20($gp)			# @dword
+		lwu	$s3, -20($gp)
 
 		# Dump registers in the simulator
 		mtc0	$v0, $26

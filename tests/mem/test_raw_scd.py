@@ -80,3 +80,13 @@ class test_raw_scd(BaseCHERITestCase):
     def test_load_neg_offset(self):
         '''Load of conditionally stored word from negative offset'''
         self.assertRegisterEqual(self.MIPS.s1, 1, "Load of conditionally stored word at negative offset failed")
+        
+    @attr('llsc')
+    def test_store_load_linked_not_matching(self):
+        '''Store conditional of word which should fail due to unmatching load linked address'''
+        self.assertRegisterEqual(self.MIPS.s2, 0, "Store conditional of word to a different address than the link register succeeded")
+
+    @attr('llsc')
+    def test_load_load_linked_not_matching(self):
+        '''Load of conditionally stored word from negative offset'''
+        self.assertRegisterEqual(self.MIPS.s3, 0xfedcba9876543210, "Load of failed conditionally stored word returned an unexpected value")
