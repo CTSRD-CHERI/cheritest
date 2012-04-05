@@ -40,28 +40,34 @@ def make_list(s):
 interesting_imm_values=make_list('''
 0x0
 0x1
+# Max 5/6-bit shifts
 0x1f
 0x3f
+# -1
 0xffff
-0xefff
+# min
 0x8000
+# max
+0xefff
 ''')
 
-non_zero_interesting_reg_values=make_list('''
+non_zero_interesting_reg32_values=make_list('''
+# 1,-1
 0x1
-0x2
 0xffffffffffffffff
+# 32-bit min, max
 0xffffffff80000000
-0x7fffffffffffffff
 0x000000007fffffff
-0xffffffff
-0x80000000
-0xfffffffffffffffe
-0x7ffffffffffffffe
-0x000000007ffffffe
+''')
+
+non_zero_interesting_reg_values=non_zero_interesting_reg32_values + make_list('''
+# 64-bit min, max
+0x8000000000000000
+0x7fffffffffffffff
 random
 ''')
 
+interesting_reg32_values=['0']+non_zero_interesting_reg32_values
 # Note that 0x8000000000000000 is zero when viewed as a 32-bit integer
 interesting_reg_values=['0','0x8000000000000000']+non_zero_interesting_reg_values
 
@@ -150,6 +156,13 @@ mul_ops=make_list("""
     DMULTU
 """)
 
+maddsub_ops=make_list('''
+    MADD
+    MADDU
+    MSUB
+    MSUBU
+''')
+
 div_ops=make_list("""
     DIV
     DIVU
@@ -214,10 +227,6 @@ TLBWI Write Indexed TLB Entry
 TLBWR Write Random TLB Entry
 WAIT Enter Standby Mode
 """
-
-#MADD
-#MSUB
-#MULI
 
 def generate_tests(options, group, variables):
     """
@@ -349,6 +358,19 @@ def generate_mul_single(options):
           ('nops', [0,1,2,4,8,16]),
         ])
 
+int
+def generate_maddsub_single(options):
+    return generate_tests(
+        options,
+        "maddsub_single",
+        [ ('op0', maddsub_ops),
+          ('hi_val', interesting_reg32_values), 
+          ('lo_val', interesting_reg32_values),
+          ('a0_val', interesting_reg32_values), 
+          ('a1_val', interesting_reg32_values),
+          ('nops', [0]),
+        ])
+
 def generate_div_single(options):
     return generate_tests(
         options,
@@ -358,7 +380,6 @@ def generate_div_single(options):
           ('a1_val', non_zero_interesting_reg_values),
           ('nops', [0,1,2,4,8,16]),
         ])
-
 
 def generate_tlb(options):
     return generate_tests(
@@ -454,6 +475,7 @@ if __name__=="__main__":
     tests+=generate_arithmetic_single_reg_reg(options)
     tests+=generate_arithmetic_single_reg_imm(options)
     tests+=generate_mul_single(options)
+    tests+=generate_maddsub_single(options)
     tests+=generate_div_single(options)
     tests+=generate_load(options)
     tests+=generate_store(options)
