@@ -4,3 +4,4 @@ mem.bin
 gxemul_log/
 nosetests.xml
 nosetests_cached.xml
+nosetest*.xml

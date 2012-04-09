@@ -61,14 +61,12 @@ non_zero_interesting_reg32_values=make_list('''
 ''')
 
 non_zero_interesting_reg_values=non_zero_interesting_reg32_values + make_list('''
-# 64-bit min, max
-0x8000000000000000
+# 64-bit max. Note that 0x8000000000000000 is zero when viewed as a 32-bit integer
 0x7fffffffffffffff
 random
 ''')
 
 interesting_reg32_values=['0']+non_zero_interesting_reg32_values
-# Note that 0x8000000000000000 is zero when viewed as a 32-bit integer
 interesting_reg_values=['0','0x8000000000000000']+non_zero_interesting_reg_values
 
 reg_reg_ops=make_list("""
