@@ -1,5 +1,4 @@
 #-
-# Copyright) 2011 Robert N. M. Watson
 # Copyright (c) 2011 Robert M. Norton
 # All rights reserved.
 #
