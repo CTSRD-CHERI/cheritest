@@ -82,7 +82,7 @@ probe_test_start:
 		nop
 		nop
 		nop
-		dmfc0	$a0, $0			# Read index, which should be six
+		mfc0	$a0, $0			# Read index, which should be six
 		
 		# Search TLB for another value
 		li $a1, 0xffff
@@ -96,7 +96,7 @@ probe_test_start:
 		nop
 		nop
 		nop
-		dmfc0	$a1, $0			# Read index, which should be negative
+		mfc0	$a1, $0			# Read index, which should be negative
 		
 		bnez	$t0, probe_test_start
 		daddi	$t0, -1
