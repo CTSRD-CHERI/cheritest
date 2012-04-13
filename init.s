@@ -62,6 +62,8 @@ start:
 	        # Switch to 64-bit mode (no effect on cheri, but required for gxemul)
 	        mfc0    $at, $12
 	        or      $at, $at, 0xe0
+                dli	$t1, 1 << 30
+                or      $at, $at, $t1 	# Enable CP2
 	        mtc0    $at, $12
 
 		#
