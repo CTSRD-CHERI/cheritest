@@ -500,7 +500,7 @@ TEST_CYCLE_LIMIT=1000000
 # tests to current categories.
 #
 
-CHERIROOT?=../../cheri2/trunk
+CHERIROOT?=../../cheri/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
