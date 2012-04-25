@@ -265,6 +265,7 @@ TEST_MEM_FILES=					\
 		test_hardware_mappings_write.s	\
 		test_memory_flush		\
 		test_sd_burst.s			\
+		test_storeload.s		\
 		test_sync.s
 
 TEST_LLSC_FILES=				\
@@ -578,7 +579,7 @@ hardware-setup:
 	- killall -9 system-console
 	- rm /tmp/cheri_debug_listen_socket
 	$(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.py > /local/scratch/output.txt &
-	
+
 hardware-cleanup:
 	- killall -9 altera_socket_tunnel.py
 	- killall -9 system-console
@@ -596,7 +597,6 @@ $(CHERISOCKET):
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	$(SIM) &
-	
 
 # Because fuzz testing deals with lots of small files it is preferable to use
 # find | xargs to remove them. For other cleans it is probably better to 
@@ -620,7 +620,7 @@ clean: cleantest
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
 .SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
     $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
-	
+
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	make -C $(TOOLS_DIR_ABS)/debug/ cherictl
 
@@ -717,7 +717,7 @@ $(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
 	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(PWD)/$@ && \
 	rm -r $$TMPDIR
 	sleep .1
-	
+
 #
 # Target to run the hardware test suite on the simulator.
 $(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
