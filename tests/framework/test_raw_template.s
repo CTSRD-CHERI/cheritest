@@ -41,6 +41,17 @@
 
 		.global start
 start:
+		# Enable CP2
+	        mfc0    $at, $12
+		dli	$t1, 1 << 30
+		or      $at, $at, $t1 	
+	        mtc0    $at, $12
+	        nop
+	        nop
+	        nop
+	        nop
+	        nop
+	        
 		# Test here
 		nop
 
