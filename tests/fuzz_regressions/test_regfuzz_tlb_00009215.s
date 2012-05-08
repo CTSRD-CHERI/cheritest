@@ -127,6 +127,11 @@ test:   .ent    test
 		daddu   $s1, $s0, $a1		# Construct an address
 
 		tlbwi					# Write Indexed TLB Entry
+		
+		nop
+		nop
+		nop
+		nop
 
 		mfc0  $t0, $12                        # Read status reg
 		or    $t0, ((2 << 3) | 2)		# Set the mode, exl
@@ -159,8 +164,9 @@ testcode:
 		syscall
 
 exception_handler:
-		dmfc0	$s3, $8	# BadVAddr
-		dmfc0	$s4, $4	# Context
+		dmfc0	$s3, $8	# BadVAddr   
+		andi    $s4, $0, 0
+		#dmfc0	$s4, $4	# Context -- undefined in the spec
 		#dmfc0	$s5, $20	# XContext -- broken on gxmeul
 		dmfc0	$s6, $10	# EntryHi
 		dmfc0   $s7, $12      # Status
