@@ -71,6 +71,15 @@ test:		.ent test
 		msub	$t0, $t1
 		mfhi	$a6
 		mflo	$a7
+		
+		li	$t0, 2048
+		li	$t1, 256
+		li	$t2, 4
+		mthi	$0
+		mtlo	$t0
+		msub	$t1, $t2
+		mfhi	$s0
+		mflo	$s1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

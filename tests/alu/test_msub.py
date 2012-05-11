@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 William Morland
+# Copyright (c) 2012 Jonathan Woodruff
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -49,3 +50,8 @@ class test_msub(BaseCHERITestCase):
 		'''Test msub with a negative number'''
 		self.assertRegisterEqual(self.MIPS.a6, 0x80, "Subtraction of negative number incorrect")
 		self.assertRegisterEqual(self.MIPS.a7, 0xfffffffffffff5e9, "Lo incorrectly affected by addition in the higher range")
+		
+	def test_msub_after_mtlo(self):
+		'''Test msub following mtlo'''
+		self.assertRegisterEqual(self.MIPS.s0, 0, "Multiply subtract immediatly after mtlo had the wrong hi register")
+		self.assertRegisterEqual(self.MIPS.s1, 1024, "Multiply subtract immediatly after mtlo had the wrong lo register")
