@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 William M. Morland
+# Copyright (c) 2012 Jonathan Woodruff
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -81,6 +82,16 @@ test:		.ent test
 		div     $zero, $t0, $t1
 		mfhi    $s0
 		mflo	$s1
+		
+		# Below is a case found in the freeBSD kernel,
+		# mult followed immediatly by div.
+		li	$t0, 25
+		li	$t1, 4
+		li	$t2, 5
+		mul	$t0, $t1, $t0
+		div	$zero, $t0, $t2
+		mfhi	$s2
+		mflo	$s3
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

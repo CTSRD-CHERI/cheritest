@@ -55,3 +55,8 @@ class test_div(BaseCHERITestCase):
 		Expected behaviour is undefined...'''
 		self.assertRegisterEqual(self.MIPS.s0, 0, "Overflow modulo failed")
 		self.assertRegisterEqual(self.MIPS.s1, 0xffffffff80000000, "Overflow quotient failed")
+		
+	def test_overflow(self):
+		'''Test div follwing mult, as found in freeBSD kernel'''
+		self.assertRegisterEqual(self.MIPS.s2, 0, "Hi incorrect after mult followed by div.")
+		self.assertRegisterEqual(self.MIPS.s3, 20, "Lo incorrect after mult followed by div.")
