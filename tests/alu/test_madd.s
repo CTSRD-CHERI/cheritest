@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 William M. Morland
+# Copyright (c) 2012 Jonathan D. Woodruff
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -71,12 +72,16 @@ test:		.ent test
 		mfhi	$a6
 		mflo	$a7
 		
-		li	$t0, 256
+		# This madd case models one found in the freeBSD kernel
+		dla	$t0, 0x9000000000000000
+		li	$s0, 256
+		sd	$s0, 0($t0)
 		li	$t1, 4
 		li	$t2, 128
 		li	$t3, 8
 		mthi	$0
 		mtlo	$0
+		ld	$t0, 0($t0)
 		mult	$t0, $t1
 		madd	$t2, $t3
 		mfhi	$s0
