@@ -49,3 +49,8 @@ class test_madd(BaseCHERITestCase):
 		'''Test MADD of a negative result'''
 		self.assertRegisterEqual(self.MIPS.a6, 0xffffffffff1d3ad9, "An incorrect amount was subtracted from hi")
 		self.assertRegisterEqual(self.MIPS.a7, 0x6a4c3827, "Lo was changed incorrectly")
+		
+	def test_mult_madd(self):
+		'''Test MADD immediately following a MULT'''
+		self.assertRegisterEqual(self.MIPS.s1, 2048, "MADD following MULT directly gave the wrong result in Lo.")
+		self.assertRegisterEqual(self.MIPS.s0, 0, "MADD following MULT directly gave the wrong result in Hi.")

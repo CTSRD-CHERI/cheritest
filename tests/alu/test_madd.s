@@ -70,6 +70,17 @@ test:		.ent test
 		madd	$t0, $t1
 		mfhi	$a6
 		mflo	$a7
+		
+		li	$t0, 256
+		li	$t1, 4
+		li	$t2, 128
+		li	$t3, 8
+		mthi	$0
+		mtlo	$0
+		mult	$t0, $t1
+		madd	$t2, $t3
+		mfhi	$s0
+		mflo	$s1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
