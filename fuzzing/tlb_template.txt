@@ -152,8 +152,12 @@ testcode:
 
 exception_handler:
 		dmfc0	$$s3, $$8	# BadVAddr
-		dmfc0	$$s4, $$4	# Context
-		#dmfc0	$$s5, $$20	# XContext -- broken on gxmeul? Updated on address error exception when context isn't.
+                # Context and XContext are commented out because
+                # cheri and gxemul disagree on whether they should
+                # be updated in the case of non-TLB address exceptions,
+                # which is left undefined by the spec.
+		#dmfc0	$$s4, $$4	# Context
+		#dmfc0	$$s5, $$20	# XContext
 		dmfc0	$$s6, $$10	# EntryHi
 		dmfc0   $$s7, $$12      # Status
 		and     $$s7, 2		# Extract EXL bit
