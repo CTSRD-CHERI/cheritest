@@ -100,7 +100,7 @@ test:		.ent test
 		# If we do two load linkeds in a row, we get the second one.
 		#
 		ll	$t0, word1
-		ll	$t0, word2
+		ll	$t0, word3
 		nop
 		nop
 		nop

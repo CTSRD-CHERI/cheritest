@@ -59,7 +59,7 @@ class test_cp0_lladdr(BaseCHERITestCase):
     @attr('llsc')
     def test_lladdr_double_ll(self):
 	'''Test that if a second ll occurs before sc, sc will see the second lladdr'''
-	self.assertRegisterEqual(self.MIPS.a5, self.MIPS.s1, "lladdr after double ll incorrect")
+	self.assertRegisterEqual(self.MIPS.a5, self.MIPS.s2, "lladdr after double ll incorrect")
 
     @attr('llsc')
     def test_lladdr_double_lld(self):
