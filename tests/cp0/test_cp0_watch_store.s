@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
 #               2012 Jonathan D. Woodruff
+#               2012 Robert M. Norton        
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -35,7 +36,7 @@
 .set noat
 
 #
-# Exception after multiply, mflo and mfhi in the exception handler.
+# Test the watchpoint functionality for store accesses.
 #
 
 		.global test
@@ -72,12 +73,12 @@ test:		.ent test
 		# Save the desired EPC value for this exception so we can
 		# check it later.
 		#
-		dla	$a0, desired_epc
-		# Make a watch point at this address to cause an exception.
-                ori     $a1, $a0, 6      # Set read/instruction bits in watchlo
-                dmtc0   $a1, $18
-                li      $t0, 0x40000000
-                dmtc0   $t0, $19         # Set global bit in watchHi
+		dla	$a0, testdata
+		# Make a watch point at this address
+		ori	$a1, $a0, 1     # Set write watch bit
+		dmtc0	$a1, $18        # Set watchLo
+                dli     $t0, 0x40000000 # Set global bit, zero mask
+                dmtc0   $t0, $19        # Set watchHi
 		nop
 		nop
 		nop
@@ -85,23 +86,24 @@ test:		.ent test
 		nop
 		nop
 		nop
-		
 
 		#
-		# Trigger exception.
+		# Trigger watch 
 		#
-		dli	$t0, 100
-		dli	$t1, 200
-		mult	$t0, $t1
 desired_epc:
-		mflo	$t0
-		mult	$a0, $a1
+		sd      $t0, 0($a0)
+
+                # Note that a load should NOT trigger the watchpoint.
+                ld      $t0, 0($a0)        
 
 		#
 		# Exception return.
 		#
 		li	$a1, 1
 		mfc0	$a6, $12	# Status register after ERET
+
+                dmfc0   $a6, $18        # Read back watchLo
+                dla     $a7, desired_epc
 
 return:
 		ld	$fp, 16($sp)
@@ -125,11 +127,13 @@ bev0_handler:
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
-		mflo	$s0
-		mfhi	$s1
 		nop			# NOPs to avoid hazard with ERET
 		nop			# XXXRW: How many are actually
 		nop			# required here?
 		nop
 		eret
 		.end bev0_handler
+
+.data
+testdata:
+        .dword 0xdeadbeefdeadbeef

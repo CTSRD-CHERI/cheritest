@@ -311,7 +311,10 @@ TEST_CP0_FILES=					\
 		test_tne_eq.s			\
 		test_tne_gt.s			\
 		test_tne_lt.s			\
-		test_cp0_compare.s
+		test_cp0_compare.s              \
+		test_cp0_watch_instr.s          \
+		test_cp0_watch_load.s           \
+		test_cp0_watch_store.s
 
 TEST_CP2_FILES=					\
 		test_cp2_reg_init.s		\
