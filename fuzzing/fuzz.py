@@ -413,7 +413,7 @@ def generate_tlb(options):
           ),
           (
                 'cached', 
-                [0,1,2,3] # Currently has no effect on cheri or gxemul!
+                [0,1] # gxemul dose not simulate a cache but this doesn't matter for test
           ),
         ]
     )

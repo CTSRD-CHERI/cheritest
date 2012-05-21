@@ -127,11 +127,19 @@ test:   .ent    test
                 daddu $$s2, $$s1, 8                     # Compute address to jump to
                 dmtc0 $$s2, $$14                        # Set EPC
                 mtc0  $$t0, $$12                        # Set status reg
-                eret                                    # We need to use an eret otherwise weird things might happen...
+                nop
+                nop
+                nop
+                nop
+                eret                                    # Use eret to (possibly) enter user mode.
 		
-after_test:		
-		or      $$t0, $$a0, 0x0800000000000000  # Set the cachable bit in address so that we are sure to get a fresh value.
-		ld      $$a7, 0($$t0)			# Load testdata unmapped, cached to check store worked.
+after_test:
+.if $cached
+		or      $$t0, $$a0, 0x0800000000000000  # Set the cachable bit in address
+.else
+                and     $$t0, $$a0, 0xf7ffffffffffffff  # Clear the cachable bit.
+.endif
+		ld      $$a7, 0($$t0)			# Load testdata unmapped to check store worked.
 exit:
 		ld      $$ra, 0($$sp)
 		ld      $$fp, 8($$sp)
