@@ -36,14 +36,14 @@
 # cheri both fail to perform the accesses in the same way (because of a badly
 # programmed TLB).
 
-# index: 47==0x2f
-# cached: 0==0x0
+# index: 0==0x0
+# cached: 1==0x1
 # asid: 255==0xff
 # valid: 1==0x1
 # mode: 2==0x2
-# segment: 0==0x0
-# page: 67108864==0x4000000
-# dirty: 1==0x1
+# segment: 1==0x1
+# page: 262144==0x40000
+# dirty: 0==0x0
 
 .set mips64
 .set noreorder
@@ -73,13 +73,13 @@
 
 # Test parameters:
 # mode:	   2
-# page:    67108864
-# segment: 0
+# page:    262144
+# segment: 1
 # asid:    255
-# index:   47
+# index:   0
 # valid:   1
-# dirty:   1
-# cached:  0
+# dirty:   0
+# cached:  1
 
 .global test
 test:   .ent    test
@@ -101,17 +101,17 @@ test:   .ent    test
 
 		dla     $a0, testdata			# Load address of testdata in bram
 
-		dli 	$t0, 47			# TLB index
+		dli 	$t0, 0			# TLB index
 		dmtc0	$t0, $0			# TLB index = t0
 
-		dli     $a1, ((0 << 62)|(67108864 << 13))		# TLB HI address (BRAM) Virtual address 63:62 == 00 means kernel user segment
+		dli     $a1, ((1 << 62)|(262144 << 13))		# TLB HI address (BRAM) Virtual address 63:62 == 00 means kernel user segment
 		or      $a6, $a1, 255               # Or in the asid
 		dmtc0	$a6, $10			# TLB HI address
 
 		and     $a2, $a0, 0xffffffe000	# Get physical page (PFN) of testdata (40 bits less 13 low order bits)
 		dsrl    $a3, $a2, (12-6)		# Put PFN in correct position for EntryLow
-		or      $a3, ((1<<1)|(1<<2)) # Set valid, dirty bits
-.if 0 
+		or      $a3, ((1<<1)|(0<<2)) # Set valid, dirty bits
+.if 1 
 		or      $a3, 0x10   			# uncached
 .else
 		or      $a3, 0x18   			# cacheable
@@ -141,7 +141,7 @@ test:   .ent    test
                 eret                                    # Use eret to (possibly) enter user mode.
 		
 after_test:
-.if 0
+.if 1
 		or      $t0, $a0, 0x0800000000000000  # Set the cachable bit in address
 .else
                 and     $t0, $a0, 0xf7ffffffffffffff  # Clear the cachable bit.

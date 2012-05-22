@@ -36,13 +36,13 @@
 # cheri both fail to perform the accesses in the same way (because of a badly
 # programmed TLB).
 
-# index: 47==0x2f
+# index: 1==0x1
 # cached: 0==0x0
 # asid: 255==0xff
-# valid: 1==0x1
+# valid: 0==0x0
 # mode: 2==0x2
-# segment: 0==0x0
-# page: 67108864==0x4000000
+# segment: 3==0x3
+# page: 262143==0x3ffff
 # dirty: 1==0x1
 
 .set mips64
@@ -73,11 +73,11 @@
 
 # Test parameters:
 # mode:	   2
-# page:    67108864
-# segment: 0
+# page:    262143
+# segment: 3
 # asid:    255
-# index:   47
-# valid:   1
+# index:   1
+# valid:   0
 # dirty:   1
 # cached:  0
 
@@ -101,16 +101,16 @@ test:   .ent    test
 
 		dla     $a0, testdata			# Load address of testdata in bram
 
-		dli 	$t0, 47			# TLB index
+		dli 	$t0, 1			# TLB index
 		dmtc0	$t0, $0			# TLB index = t0
 
-		dli     $a1, ((0 << 62)|(67108864 << 13))		# TLB HI address (BRAM) Virtual address 63:62 == 00 means kernel user segment
+		dli     $a1, ((3 << 62)|(262143 << 13))		# TLB HI address (BRAM) Virtual address 63:62 == 00 means kernel user segment
 		or      $a6, $a1, 255               # Or in the asid
 		dmtc0	$a6, $10			# TLB HI address
 
 		and     $a2, $a0, 0xffffffe000	# Get physical page (PFN) of testdata (40 bits less 13 low order bits)
 		dsrl    $a3, $a2, (12-6)		# Put PFN in correct position for EntryLow
-		or      $a3, ((1<<1)|(1<<2)) # Set valid, dirty bits
+		or      $a3, ((0<<1)|(1<<2)) # Set valid, dirty bits
 .if 0 
 		or      $a3, 0x10   			# uncached
 .else
