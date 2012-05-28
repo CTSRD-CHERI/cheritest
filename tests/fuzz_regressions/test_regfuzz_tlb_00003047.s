@@ -112,9 +112,9 @@ test:   .ent    test
 		dsrl    $a3, $a2, (12-6)		# Put PFN in correct position for EntryLow
 		or      $a3, ((1<<1)|(1<<2)) # Set valid, dirty bits
 .if 1 
-		or      $a3, 0x10   			# uncached
-.else
 		or      $a3, 0x18   			# cacheable
+.else
+		or      $a3, 0x10   			# uncached
 .endif
 .if 255 == 0
 		or      $a3, 0x1   			# Set global bit
