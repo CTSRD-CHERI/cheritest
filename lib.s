@@ -93,11 +93,11 @@ memcpy_done:
 		.data
 bev0_handler_targets:
 	.rept EXCV_NUM
-		.dword	0x0
+		.dword	unhandled_exception
 	.endr
 bev1_handler_targets:
 	.rept EXCV_NUM
-		.dword	0x0
+		.dword	unhandled_exception
 	.endr
 		.text
 .global set_bev0_tlb_handler
@@ -405,3 +405,14 @@ bev_clear:
 		jr	$ra
 		nop			# branch-delay slot
 		.end bev_clear
+
+#
+# Default handler for exceptions which just dies horribly. 
+#
+		.text
+		.global unhandled_exception
+		.ent unhandled_exception
+unhandled_exception:
+		b       .
+		nop			# branch-delay slot
+		.end unhandled_exception
