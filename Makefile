@@ -702,6 +702,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
 	cp $(PWD)/$< mem.bin && \
+	$(MEMCONV) bsim && \
 	$(MEMCONV) bsimc2 && \
 	sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' \
 	    < $(CHERICONF) > $$TMPDIR/simconfig && \
