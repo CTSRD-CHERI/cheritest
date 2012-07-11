@@ -47,7 +47,7 @@ test:		.ent test
 
 		dla	$t0, data
 		dli	$t2, 0x0123456789abcdef
-		csdr	$t2, $c1, $t0
+		csdr	$t2, $t0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

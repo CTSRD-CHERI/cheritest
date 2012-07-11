@@ -58,94 +58,94 @@ loop:
 		# Save out all capability registers but $kcc and $kdc.
 		#
 		dla	$t0, data
-		cscr	$c0, $c30, $t0
+		cscr	$c0, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c1, $c30, $t0
+		cscr	$c1, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c2, $c30, $t0
+		cscr	$c2, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c3, $c30, $t0
+		cscr	$c3, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c4, $c30, $t0
+		cscr	$c4, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c5, $c30, $t0
+		cscr	$c5, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c6, $c30, $t0
+		cscr	$c6, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c7, $c30, $t0
+		cscr	$c7, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c8, $c30, $t0
+		cscr	$c8, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c9, $c30, $t0
+		cscr	$c9, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c10, $c30, $t0
+		cscr	$c10, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c11, $c30, $t0
+		cscr	$c11, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c12, $c30, $t0
+		cscr	$c12, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c13, $c30, $t0
+		cscr	$c13, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c14, $c30, $t0
+		cscr	$c14, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c15, $c30, $t0
+		cscr	$c15, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c16, $c30, $t0
+		cscr	$c16, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c17, $c30, $t0
+		cscr	$c17, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c18, $c30, $t0
+		cscr	$c18, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c19, $c30, $t0
+		cscr	$c19, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c20, $c30, $t0
+		cscr	$c20, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c21, $c30, $t0
+		cscr	$c21, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c22, $c30, $t0
+		cscr	$c22, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c23, $c30, $t0
+		cscr	$c23, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c24, $c30, $t0
+		cscr	$c24, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c25, $c30, $t0
+		cscr	$c25, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c26, $c30, $t0
+		cscr	$c26, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c27, $c30, $t0
+		cscr	$c27, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c28, $c30, $t0
+		cscr	$c28, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c31, $c30, $t0
+		cscr	$c31, $t0($c30)
 
 		#
 		# Scrub capability registers in between to make sure that
@@ -279,94 +279,94 @@ loop:
 		# Now reverse the process.
 		#
 		dla	$t0, data
-		clcr	$c0, $c30, $t0
+		clcr	$c0, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c1, $c30, $t0
+		clcr	$c1, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c2, $c30, $t0
+		clcr	$c2, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c3, $c30, $t0
+		clcr	$c3, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c4, $c30, $t0
+		clcr	$c4, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c5, $c30, $t0
+		clcr	$c5, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c6, $c30, $t0
+		clcr	$c6, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c7, $c30, $t0
+		clcr	$c7, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c8, $c30, $t0
+		clcr	$c8, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c9, $c30, $t0
+		clcr	$c9, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c10, $c30, $t0
+		clcr	$c10, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c11, $c30, $t0
+		clcr	$c11, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c12, $c30, $t0
+		clcr	$c12, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c13, $c30, $t0
+		clcr	$c13, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c14, $c30, $t0
+		clcr	$c14, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c15, $c30, $t0
+		clcr	$c15, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c16, $c30, $t0
+		clcr	$c16, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c17, $c30, $t0
+		clcr	$c17, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c18, $c30, $t0
+		clcr	$c18, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c19, $c30, $t0
+		clcr	$c19, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c20, $c30, $t0
+		clcr	$c20, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c21, $c30, $t0
+		clcr	$c21, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c22, $c30, $t0
+		clcr	$c22, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c23, $c30, $t0
+		clcr	$c23, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c24, $c30, $t0
+		clcr	$c24, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c25, $c30, $t0
+		clcr	$c25, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c26, $c30, $t0
+		clcr	$c26, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c27, $c30, $t0
+		clcr	$c27, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c28, $c30, $t0
+		clcr	$c28, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c31, $c30, $t0
+		clcr	$c31, $t0($c30)
 
 		daddiu	$t3, $t3, -1
 		bne	$t3, $zero, loop

@@ -48,8 +48,8 @@ test:		.ent test
 		dla	$t0, data
 		daddiu	$t1, $t0, 4
 
-		clwr	$a0, $c1, $t0		# 64-bit aligned
-		clwr	$a1, $c1, $t1		# 32-bit aligned
+		clwr	$a0, $t0($c1)		# 64-bit aligned
+		clwr	$a1, $t1($c1)		# 32-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -44,26 +44,26 @@ start:
 		csetlen $c1,  $c2, $a3
 		cmove    $c1,  $c2
 		candperm $c1,  $c2, $a3
-		cscr     $c1,  $c2, $a3
-		clcr     $c1,  $c2, $a3
-		clb      $a1,  $c2, 0x7
-		clh      $a1,  $c2, 0xf
-		clw      $a1,  $c2, 0xff
-		cld      $a1,  $c2, 0x7ff
-		clbr     $a1,  $c2, $a3
-		clhr     $a1,  $c2, $a3
-		clwr     $a1,  $c2, $a3
-		cldr     $a1,  $c2, $a3
-		csb      $a1,  $c2, 0x7
-		csh      $a1,  $c2, 0xf
-		csw      $a1,  $c2, 0xff
-		csd      $a1,  $c2, 0x7ff
-		csbr     $a1,  $c2, $a3
-		cshr     $a1,  $c2, $a3
-		cswr     $a1,  $c2, $a3
-		csdr     $a1,  $c2, $a3
-		cjr      $c1,  $3
-		cjalr    $c1,  $3
+		cscr     $c1,  $a3($c2)
+		clcr     $c1,  $a3($c2)
+		clb      $a1,  0x7($c2)
+		clh      $a1,  0xf($c2)
+		clw      $a1,  0xff($c2)
+		cld      $a1,  0x7ff($c2)
+		clbr     $a1,  $a3($c2)
+		clhr     $a1,  $a3($c2)
+		clwr     $a1,  $a3($c2)
+		cldr     $a1,  $a3($c2)
+		csb      $a1,  0x7($c2)
+		csh      $a1,  0xf($c2)
+		csw      $a1,  0xff($c2)
+		csd      $a1,  0x7ff($c2)
+		csbr     $a1,  $a3($c2)
+		cshr     $a1,  $a3($c2)
+		cswr     $a1,  $a3($c2)
+		csdr     $a1,  $a3($c2)
+		cjr      $3($c1)
+		cjalr    $3($c1)
 		csealcode $c1,  $c2
 		csealdata $c1,  $c2, $c3
 		cunseal  $c1,  $c2, $c3

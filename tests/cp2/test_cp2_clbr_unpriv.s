@@ -64,10 +64,10 @@ test:		.ent test
 		dli	$t2, 6
 		dli	$t3, 7
 
-		clbr	$a0, $c1, $t0		# 64-bit aligned
-		clbr	$a1, $c1, $t1		# 32-bit aligned
-		clbr	$a2, $c1, $t2		# 16-bit aligned
-		clbr	$a3, $c1, $t3		# 8-bit aligned
+		clbr	$a0, $t0($c1)		# 64-bit aligned
+		clbr	$a1, $t1($c1)		# 32-bit aligned
+		clbr	$a2, $t2($c1)		# 16-bit aligned
+		clbr	$a3, $t3($c1)		# 8-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -60,13 +60,13 @@ test:		.ent test
 		csetlen	$c1, $c1, $t1
 
 		dli	$t2, 0x0123
-		csh	$t2, $c1, 0
+		csh	$t2, 0($c1)
 		dli	$t2, 0x4567
-		csh	$t2, $c1, 2
+		csh	$t2, 2($c1)
 		dli	$t2, 0x89ab
-		csh	$t2, $c1, 4
+		csh	$t2, 4($c1)
 		dli	$t2, 0xcdef
-		csh	$t2, $c1, 6
+		csh	$t2, 6($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

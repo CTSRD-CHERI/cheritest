@@ -60,9 +60,9 @@ test:		.ent test
 		csetlen	$c1, $c1, $t1
 
 		dli	$t2, 0x01234567
-		csw	$t2, $c1, 0
+		csw	$t2, 0($c1)
 		dli	$t2, 0x89abcdef
-		csw	$t2, $c1, 4
+		csw	$t2, 4($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

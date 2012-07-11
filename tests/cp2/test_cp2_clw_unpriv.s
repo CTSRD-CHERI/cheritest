@@ -59,8 +59,8 @@ test:		.ent test
 		dsub		$t1, 16
 		csetlen	$c1, $c1, $t1
 
-		clw	$a0, $c1, 0		# 64-bit aligned
-		clw	$a1, $c1, 4		# 32-bit aligned
+		clw	$a0, 0($c1)		# 64-bit aligned
+		clw	$a1, 4($c1)		# 32-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

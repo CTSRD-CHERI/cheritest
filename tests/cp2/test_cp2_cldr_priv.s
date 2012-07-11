@@ -47,7 +47,7 @@ test:		.ent test
 
 		dla	$t0, data
 
-		cldr	$a0, $c1, $t0		# 64-bit aligned
+		cldr	$a0, $t0($c1)		# 64-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

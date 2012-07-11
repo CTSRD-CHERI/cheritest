@@ -60,21 +60,21 @@ test:		.ent test
 		csetlen	$c1, $c1, $t1
 
 		dli	$t2, 0x01
-		csb	$t2, $c1, 0
+		csb	$t2, 0($c1)
 		dli	$t2, 0x23
-		csb	$t2, $c1, 1
+		csb	$t2, 1($c1)
 		dli	$t2, 0x45
-		csb	$t2, $c1, 2
+		csb	$t2, 2($c1)
 		dli	$t2, 0x67
-		csb	$t2, $c1, 3
+		csb	$t2, 3($c1)
 		dli	$t2, 0x89
-		csb	$t2, $c1, 4
+		csb	$t2, 4($c1)
 		dli	$t2, 0xab
-		csb	$t2, $c1, 5
+		csb	$t2, 5($c1)
 		dli	$t2, 0xcd
-		csb	$t2, $c1, 6
+		csb	$t2, 6($c1)
 		dli	$t2, 0xef
-		csb	$t2, $c1, 7
+		csb	$t2, 7($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

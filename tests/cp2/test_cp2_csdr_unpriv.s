@@ -61,7 +61,7 @@ test:		.ent test
 
 		dli	$t3, 0
 		dli	$t2, 0x0123456789abcdef
-		csdr	$t2, $c1, $t3
+		csdr	$t2, $t3($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.
