@@ -42,10 +42,10 @@ class test_cp0_reg_init(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.a1, 0x0, "Unexpected CP0 wired register value on reset")
 
     ## Hard to know what the count register should be, but we might reasonably
-    ## guess that it's in the range 50 to 600.  This might require tuning, but
+    ## guess that it's in the below range.  This might require tuning, but
     ## will hopefully detect problems such as "very large number".
     def test_count_reg(self):
-        self.assertRegisterInRange(self.MIPS.a2, 100, 20000, "Unexpected CP0 count cycle register value on reset")
+        self.assertRegisterInRange(self.MIPS.a2, 100, 40000, "Unexpected CP0 count cycle register value on reset")
 
     ## Preferable that the compare register be 0, to maximise time available to
     ## the OS before a timer interrupt fires.
