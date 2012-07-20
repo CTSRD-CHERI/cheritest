@@ -393,7 +393,8 @@ TEST_MEM_UNALIGN_FILES=				\
 		test_ld_unalign.s		\
 		test_sh_unalign.s		\
 		test_sw_unalign.s		\
-		test_sd_unalign.s
+		test_sd_unalign.s               \
+		test_beq_lb.s
 
 TEST_BEV1_FILES=				\
 		test_exception_bev1_trap.s
