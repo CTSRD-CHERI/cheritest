@@ -143,7 +143,7 @@ skip_new_entry:
 		nop
 		nop
 		nop
-		tlbwr								# Write Random
+		tlbwi							# Write Indexed to ensure a fill on every miss
 		mtc0 $at, $25
 
 		nop			# NOPs to avoid hazard with ERET
