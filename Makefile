@@ -367,7 +367,8 @@ TEST_CP2_FILES=					\
 		test_cp2_c0_sh.s		\
 		test_cp2_c0_sb.s		\
 		test_cp2_exception_epcc.s       \
-		test_cp2_exception_pipeline.s
+		test_cp2_exception_pipeline.s   \
+                test_cp2_tlb_exception_fill.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
