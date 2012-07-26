@@ -190,7 +190,8 @@ RAW_BRANCH_FILES=				\
 		test_raw_bnel_lt.s		\
 		test_raw_jr.s			\
 		test_raw_jal.s			\
-		test_raw_jalr.s
+		test_raw_jalr.s                 \
+		test_raw_tlb_j.s
 
 RAW_MEM_FILES=					\
 		test_raw_lb.s			\
