@@ -53,7 +53,7 @@ test:		.ent test
 		#
 		# We want $c1.length to be 8.
 		#
-		dli	$t1, 10
+		dli	$t1, 8
 		csetlen	$c1, $c1, $t1
 
 		#

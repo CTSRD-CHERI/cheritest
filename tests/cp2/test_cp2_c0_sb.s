@@ -54,7 +54,7 @@ test:		.ent test
 		# We want $c1.length to be 16.
 		#
 		cgetleng	$t1, $c1
-		dli		$t1, 16
+		dli		$t1, 8
 		csetlen	$c1, $c1, $t1
 
 		#
