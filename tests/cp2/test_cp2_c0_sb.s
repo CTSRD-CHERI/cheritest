@@ -51,11 +51,10 @@ test:		.ent test
 		cincbase	$c1, $c1, $t0
 
 		#
-		# We want $c1.length to be 16 -- query the current $c1,
-		# subtract 16, and then pass that to csetlen.
+		# We want $c1.length to be 16.
 		#
 		cgetleng	$t1, $c1
-		dsub		$t1, 16
+		dli		$t1, 16
 		csetlen	$c1, $c1, $t1
 
 		#
