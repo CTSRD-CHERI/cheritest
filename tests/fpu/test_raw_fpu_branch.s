@@ -1,0 +1,64 @@
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
+
+# Tests to exercise the branching instructions.
+
+        .text
+        .global start
+        .ent start
+start:     
+        # First enable CP1 
+        dli $t1, 1 << 29
+        or $at, $at, $t1    # Enable CP1    
+	    mtc0 $at, $12 
+
+        # Individual tests
+        
+        # BC1F (Taken)
+        ctc1 $0, $f31
+        li $t2, 4
+        mtc1 $t2, $f3
+        li $t1, 3
+        bc1f 8
+        li $s0, 0
+        mtc1 $t1, $f3
+        mfc1 $s0, $f3
+        
+        # BC1T (Not Taken)
+        mtc1 $t2, $f3
+        bc1t 8
+        li $s1, 0
+        mtc1 $t1, $f3
+        mfc1 $s1, $f3
+        
+        # Set FCSR (FCC[0] == 1)
+        lui $t0, 0x0080
+        ctc1 $t0, $f31
+        
+        # BC1F (Not Taken)
+        mtc1 $t2, $f4
+        bc1f 8
+        li $s2, 0
+        mtc1 $t1, $f4
+        mfc1 $s2, $f4
+        
+        # BC1T (Taken)
+        mtc1 $t2, $f5
+        bc1t 8
+        li $s3, 0
+        mtc1 $t1, $f5
+        mfc1 $s3, $f5
+        
+        # Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
+
+		# Terminate the simulator
+		mtc0 $at, $23
+end:
+		b end
+		nop
+		.end start

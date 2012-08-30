@@ -71,6 +71,10 @@ else
 GXEMUL_LOG_FILTER=cat
 endif
 
+ifdef COP1
+		TESTDIRS += $(TESTDIR)/fpu
+endif
+
 RAW_FRAMEWORK_FILES=				\
 		test_raw_template.s		\
 		test_raw_reg_init.s		\
@@ -227,6 +231,30 @@ RAW_CP0_FILES=					\
 
 RAW_CP2_FILES=					\
 		test_raw_capinstructions.s
+		
+RAW_FPU_FILES =                \
+        test_raw_fpu_cntrl.s    \
+        test_raw_fpu_abs.s      \
+        test_raw_fpu_add.s      \
+        test_raw_fpu_sub.s      \
+        test_raw_fpu_mul.s      \
+        test_raw_fpu_div.s      \
+        test_raw_fpu_neg.s      \
+        test_raw_fpu_recip.s    \
+        test_raw_fpu_sqrt.s     \
+        test_raw_fpu_rsqrt.s    \
+        test_raw_fpu_cf.s       \
+        test_raw_fpu_cun.s      \
+        test_raw_fpu_ceq.s      \
+        test_raw_fpu_cueq.s     \
+        test_raw_fpu_colt.s     \
+        test_raw_fpu_cult.s     \
+        test_raw_fpu_cole.s     \
+        test_raw_fpu_cule.s     \
+        test_raw_fpu_branch.s   \
+        test_raw_fpu_mov_gpr.s  \
+        test_raw_fpu_mov_cc.s   \
+        test_raw_fpu_pair.s
 
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
@@ -481,6 +509,10 @@ TEST_FILES=					\
 		$(TEST_TRAPI_FILES)             \
 		$(FUZZ_TEST_FILES)              \
 		$(FUZZ_REGRESSION_TEST_FILES)
+		
+ifdef COP1
+    TEST_FILES += $(RAW_FPU_FILES)
+endif
 
 #
 # Omit certain categories of tests due to gxemul functional omissions:
