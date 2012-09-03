@@ -456,6 +456,7 @@ def generate_jump_register(options):
             ('targetreg', ['$a0', '$ra']),
             ('destreg', ['$zero','$ra','$a1']),
             ('offset', map(lambda x: x*4, [-5,-4,-2,1,2,4,5])),
+            ('jitter', ['-3', '-2', '-1', '0', '1', '2', 3])
         ))
 
 if __name__=="__main__":

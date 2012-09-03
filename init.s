@@ -62,8 +62,13 @@ start:
 	        # Switch to 64-bit mode (no effect on cheri, but required for gxemul)
 	        mfc0    $at, $12
 	        or      $at, $at, 0xe0
+	        # Also enable timer interrupts
+	        or      $at, $at, (1 << 15)
+	        or      $at, $at, 1
                 dli	$t1, 1 << 30
                 or      $at, $at, $t1 	# Enable CP2
+	        # Clear pending timer interrupts before we enable them
+	        mtc0    $zero, $11
 	        mtc0    $at, $12
 
 		#
@@ -150,10 +155,21 @@ exception_count_handler:
 	        addi    $k0, $k0, 1
 	        sd      $k0, ($ra)
 
+		# If this is a timer interrupt, then return to the current instruction
+		dmfc0	$k0, $13
+		andi	$k0, $k0, 0x8000
+		beq	$zero, $k0, increment_pc 
+		nop
+		# Clear the timer interrupt
+		mtc0	$zero, $11
+		b skip_increment
+		nop
+increment_pc:
 		# Skip the instruction which caused exception and return
 		dmfc0	$k0, $14	# EPC
 		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
+skip_increment:
 
 	        ld	$ra, 24($sp)
 		ld	$fp, 16($sp)

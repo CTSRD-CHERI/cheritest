@@ -39,6 +39,12 @@ $params_str
 
 .global test
 test:   .ent    test
+	dmfc0    $$t0, $$9
+	addi     $$t0, 41
+	addi     $$t0, $jitter
+	dmtc0    $$t0, $$11
+	dli      $$t0, 0x0d0d0d0d0d0d0d0d
+
 	daddu   $$sp, -16
 	sd	$$ra, 0($$sp)
 	sd      $$fp, 8($$sp)
