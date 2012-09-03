@@ -555,7 +555,7 @@ SIM        := ${CHERIROOT_ABS}/sim
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
-SIM_TRACE_OPTS?=+trace +cTrace +showTranslations
+SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
