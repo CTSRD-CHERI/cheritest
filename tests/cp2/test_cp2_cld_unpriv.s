@@ -57,7 +57,7 @@ test:		.ent test
 		dli	$t1, 8
 		csetlen	$c1, $c1, $t1
 
-		cld	$a0, 0($c1)		# 64-bit aligned
+		cldi	$a0, 0($c1)		# 64-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

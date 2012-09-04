@@ -58,7 +58,7 @@ test:		.ent test
 		csetlen	$c1, $c1, $t1
 
 		dli	$t2, 0x0123456789abcdef
-		csd	$t2, 0($c1)
+		csdi	$t2, 0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.
