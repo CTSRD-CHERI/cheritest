@@ -52,9 +52,9 @@ test:		.ent test
 		cgetbase	$t0, $c2	# should return 0x0
 		sd	$t0, 0($s0)
 
-		# Test cgetleng
+		# Test cgetlen
 		dli	$t1, 100
-		cgetleng	$t1, $c2	# should return 0xff...ff
+		cgetlen	$t1, $c2	# should return 0xff...ff
 		sd	$t1, 8($s0)
 
 		# Test cgetperm

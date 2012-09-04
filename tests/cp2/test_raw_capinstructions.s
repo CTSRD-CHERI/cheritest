@@ -36,7 +36,7 @@
 		.global start
 start:
 		cgetbase $a1,  $c2
-		cgetleng $a1,  $c2
+		cgetlen  $a1,  $c2
 		cgetperm $a1,  $c2
 		cgettype $a1,  $c2
 		csettype $c1,  $c2, $a3

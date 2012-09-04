@@ -61,7 +61,7 @@ test:		.ent test
 		dli	$t1, 0
 		daddiu	$t1, $t1, 0x100
 		csetlen	$c3, $c3, $t1
-		cgetleng	$a1, $c3
+		cgetlen	$a1, $c3
 
 		# Test candperm
 		dli	$t2, 0

@@ -49,9 +49,9 @@ test:		.ent test
 		dli	$a0, 0x2000
 		dli	$a1, 0x3000
 
-		cgetleng	$a0, $c2
+		cgetlen	$a0, $c2
 		csetlen	$c2, $c2, $t0
-		cgetleng	$a1, $c2
+		cgetlen	$a1, $c2
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

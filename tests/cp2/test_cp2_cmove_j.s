@@ -74,7 +74,7 @@ dest:
 		cgetperm	$a0, $c3
 		cgettype	$a1, $c3
 		cgetbase	$a2, $c3
-		cgetleng	$a3, $c3
+		cgetlen 	$a3, $c3
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
