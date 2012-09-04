@@ -128,7 +128,7 @@ class test_cp2_exception_epcc(BaseCHERITestCase):
 
     @attr('capabilities')
     def test_sandbox_epcc_perms(self):
-        self.assertRegisterEqual(self.MIPS.c3.perms, 0x0001, "sandbox EPCC perms incorrect")
+        self.assertRegisterEqual(self.MIPS.c3.perms, 0x0003, "sandbox EPCC perms incorrect")
 
     @attr('capabilities')
     def test_sandbox_epcc_ctype(self):
