@@ -35,33 +35,63 @@
 
 		.global start
 start:
-		cgetbase $a1,  $c2
-		cgetlen  $a1,  $c2
+                # get fields of a capability
 		cgetperm $a1,  $c2
 		cgettype $a1,  $c2
+		cgetbase $a1,  $c2
+		cgetlen  $a1,  $c2
+                cgettag  $a1,  $c2
+                cgetunsealed $a1, $c2
+
+                # set the fields of a capability
+		candperm $c1,  $c2, $a3
 		csettype $c1,  $c2, $a3
 		cincbase $c1,  $c2, $a3
-		csetlen $c1,  $c2, $a3
+		csetlen  $c1,  $c2, $a3
+                ccleartag $c1
+
 		cmove    $c1,  $c2
-		candperm $c1,  $c2, $a3
-		cscr     $c1,  $a3($c2)
-		clcr     $c1,  $a3($c2)
-		clbi      $a1,  0x7($c2)
-		clhi      $a1,  0xf($c2)
-		clwi      $a1,  0xff($c2)
-		cldi      $a1,  0x7ff($c2)
+
+                # store/load capability
+		csc      $c1,  $a3($c2)
+		clc      $c1,  $a3($c2)
+
+                # store/load capability (old instruction)
+		cscr      $c1,  $a3($c2)
+		clcr      $c1,  $a3($c2)
+
+                # load via capability
+                clb      $a1,  $a3($c2)
+                clh      $a1,  $a3($c2)
+                clw      $a1,  $a3($c2)
+                cld      $a1,  $a3($c2)
+
+                # load via capability (old instruction)
+		clbi     $a1,  0x7($c2)
+		clhi     $a1,  0xf($c2)
+		clwi     $a1,  0xff($c2)
+		cldi     $a1,  0x7ff($c2)
 		clbr     $a1,  $a3($c2)
 		clhr     $a1,  $a3($c2)
 		clwr     $a1,  $a3($c2)
 		cldr     $a1,  $a3($c2)
-		csbi      $a1,  0x7($c2)
-		cshi      $a1,  0xf($c2)
-		cswi      $a1,  0xff($c2)
-		csdi      $a1,  0x7ff($c2)
+ 
+                # store via capability
+                clb     $a1,  $a3($c2)
+                clh      $a1,  $a3($c2)
+                clw      $a1,  $a3($c2)
+                cld      $a1,  $a3($c2)
+
+                # store via capability (old instruction)
+		csbi     $a1,  0x7($c2)
+		cshi     $a1,  0xf($c2)
+		cswi     $a1,  0xff($c2)
+		csdi     $a1,  0x7ff($c2)
 		csbr     $a1,  $a3($c2)
 		cshr     $a1,  $a3($c2)
 		cswr     $a1,  $a3($c2)
 		csdr     $a1,  $a3($c2)
+
 		cjr      $3($c1)
 		cjalr    $3($c1)
 		csealcode $c1,  $c2
