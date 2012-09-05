@@ -354,6 +354,7 @@ TEST_CP2_FILES=					\
 		test_cp2_getsetleng.s		\
 		test_cp2_getandperm.s		\
 		test_cp2_getcleartag.s		\
+		test_cp2_getunsealed.s		\
 		test_cp2_cmove.s		\
 		test_cp2_cscr.s			\
 		test_cp2_clcr.s			\
