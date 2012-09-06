@@ -358,6 +358,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cmove.s		\
 		test_cp2_cscr.s			\
 		test_cp2_clcr.s			\
+		test_cp2_tagmem.s		\
 		test_cp2_cswitch.s		\
 		test_cp2_cswitch_clr.s		\
 		test_cp2_cswitch_clr_20.s	\
