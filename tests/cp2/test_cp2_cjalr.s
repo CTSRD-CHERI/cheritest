@@ -39,7 +39,7 @@
 
 .sandbox:
 		dli	$a0, 1
-		cjr	$t0($c24)
+		cjr	$ra($c24)
 
 		.global test
 test:		.ent test
@@ -48,12 +48,18 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		dli	$a0, 2
-		# PC is saved in $t0.
-		# This is not the usual calling convention!
-		# Alteratively, could have pushed the link register onto
-		# the stack and then saved PC in the link register.
-		cjalr	$t0($c24)
+		dla	$a0, sandbox
+		# Save $ra so we can return from this subroutine
+		move	$a1, $ra
+		# PC will be savced in $ra
+		# PCC will be saved in $c24
+		cjalr	$a0($c0)
+		# I'm not sure if this a branch delay slot
+		nop
+		nop
+		# restore return address
+		move $ra, $a1
+		
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
