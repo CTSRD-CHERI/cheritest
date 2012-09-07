@@ -64,6 +64,10 @@ test:		.ent test
 		#
 		dla	$t0, cap1
 		cscr	$c2, $t0($c0)
+                nop
+                nop
+                nop
+                nop
 
 		# Load back in as general-purpose registers to check values
 		ld	$a0, 0($t0)
