@@ -40,6 +40,7 @@
 .sandbox:
 		dli	$a0, 1
 		cjr	$ra($c24)
+		nop	# Probably a branch-delay slot
 
 		.global test
 test:		.ent test
