@@ -66,7 +66,7 @@ class test_cp0_reg_init(BaseCHERITestCase):
     ## We should have interrupts enabled for all sources.
     def test_status_im(self):
         '''Test status register to confirm that interrupts are disabled for all sources (IM)'''
-        self.assertRegisterEqual((self.MIPS.a4 >> 8) & 0xff, 0x00, "Unexpected CP0 interrupt mask value on reset")
+        self.assertRegisterEqual((self.MIPS.a4 >> 8) & 0xff, 0x80, "Unexpected CP0 interrupt mask value on reset")
 
     ## We should be in 64-bit kernel mode.
     def test_status_kx(self):
@@ -98,7 +98,7 @@ class test_cp0_reg_init(BaseCHERITestCase):
     ## We expect interrupts enabled
     def test_status_ie(self):
         '''Test status register to confirm that interrupts are disabled (IE)'''
-        self.assertRegisterEqual(self.MIPS.a4 & 0x1, 0, "Unexpected CP0 interrupts enabled value on reset")
+        self.assertRegisterEqual(self.MIPS.a4 & 0x1, 1, "Unexpected CP0 interrupts enabled value on reset")
  
     ## It doesn't really matter what vendor we report as, but we should indicate
     ## that we are R4400ish
