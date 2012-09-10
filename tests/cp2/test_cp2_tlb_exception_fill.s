@@ -84,7 +84,7 @@ test:		.ent test
 		dli $a3, 0x40000
 		dli $a4, 0
 write_loop:
-                cscr $c2, $a4($c0)
+                csc $c2, $a4($c0)
 		daddi $a4, $a4, 64
 		bnez $a3, write_loop
 		daddi $a3, $a3, -64
@@ -92,7 +92,7 @@ write_loop:
 		dli $a3, 0x40000
 read_loop:
 		daddi $a4, $a4, -64
-                clcr $c2, $a4($c0)
+                clc $c2, $a4($c0)
 		beq $a5, $a4, skip_add
 		nop
 		addi $a6, $a6, 1

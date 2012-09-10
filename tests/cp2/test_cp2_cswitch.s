@@ -51,187 +51,187 @@ test:		.ent test
 		# Save out all capability registers but $kcc and $kdc.
 		#
 		dla	$t0, data
-		cscr	$c0, $t0($c30)
+		csc	$c0, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c1, $t0($c30)
+		csc	$c1, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c2, $t0($c30)
+		csc	$c2, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c3, $t0($c30)
+		csc	$c3, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c4, $t0($c30)
+		csc	$c4, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c5, $t0($c30)
+		csc	$c5, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c6, $t0($c30)
+		csc	$c6, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c7, $t0($c30)
+		csc	$c7, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c8, $t0($c30)
+		csc	$c8, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c9, $t0($c30)
+		csc	$c9, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c10, $t0($c30)
+		csc	$c10, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c11, $t0($c30)
+		csc	$c11, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c12, $t0($c30)
+		csc	$c12, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c13, $t0($c30)
+		csc	$c13, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c14, $t0($c30)
+		csc	$c14, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c15, $t0($c30)
+		csc	$c15, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c16, $t0($c30)
+		csc	$c16, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c17, $t0($c30)
+		csc	$c17, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c18, $t0($c30)
+		csc	$c18, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c19, $t0($c30)
+		csc	$c19, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c20, $t0($c30)
+		csc	$c20, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c21, $t0($c30)
+		csc	$c21, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c22, $t0($c30)
+		csc	$c22, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c23, $t0($c30)
+		csc	$c23, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c24, $t0($c30)
+		csc	$c24, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c25, $t0($c30)
+		csc	$c25, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c26, $t0($c30)
+		csc	$c26, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c27, $t0($c30)
+		csc	$c27, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c28, $t0($c30)
+		csc	$c28, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		cscr	$c31, $t0($c30)
+		csc	$c31, $t0($c30)
 
 		#
 		# Now reverse the process.
 		#
 		dla	$t0, data
-		clcr	$c0, $t0($c30)
+		clc	$c0, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c1, $t0($c30)
+		clc	$c1, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c2, $t0($c30)
+		clc	$c2, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c3, $t0($c30)
+		clc	$c3, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c4, $t0($c30)
+		clc	$c4, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c5, $t0($c30)
+		clc	$c5, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c6, $t0($c30)
+		clc	$c6, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c7, $t0($c30)
+		clc	$c7, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c8, $t0($c30)
+		clc	$c8, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c9, $t0($c30)
+		clc	$c9, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c10, $t0($c30)
+		clc	$c10, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c11, $t0($c30)
+		clc	$c11, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c12, $t0($c30)
+		clc	$c12, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c13, $t0($c30)
+		clc	$c13, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c14, $t0($c30)
+		clc	$c14, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c15, $t0($c30)
+		clc	$c15, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c16, $t0($c30)
+		clc	$c16, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c17, $t0($c30)
+		clc	$c17, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c18, $t0($c30)
+		clc	$c18, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c19, $t0($c30)
+		clc	$c19, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c20, $t0($c30)
+		clc	$c20, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c21, $t0($c30)
+		clc	$c21, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c22, $t0($c30)
+		clc	$c22, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c23, $t0($c30)
+		clc	$c23, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c24, $t0($c30)
+		clc	$c24, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c25, $t0($c30)
+		clc	$c25, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c26, $t0($c30)
+		clc	$c26, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c27, $t0($c30)
+		clc	$c27, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c28, $t0($c30)
+		clc	$c28, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		clcr	$c31, $t0($c30)
+		clc	$c31, $t0($c30)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

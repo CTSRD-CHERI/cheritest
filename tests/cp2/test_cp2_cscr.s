@@ -51,6 +51,15 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
+		# Set the permissions field so we can tell if it is stored
+		# at the right palce in memory. The permissions are
+		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
+		# Permit_Store_Capability, Permit_Load_Capability,
+		# Permit_Store_Ephemeral.
+		#
+		dli $t2, 0x7f
+		candperm $c2, $c2, $t2
+		#
 		# Tweak capability type field so that we can tell if type and
 		# base are in the right order.
 		#
@@ -63,7 +72,7 @@ test:		.ent test
 		# XXXRW: Fix to use indexed address syntax once available.
 		#
 		dla	$t0, cap1
-		cscr	$c2, $t0($c0)
+		csc	$c2, $t0($c0)
 
 		# Load back in as general-purpose registers to check values
 		ld	$a0, 0($t0)

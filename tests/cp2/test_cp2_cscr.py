@@ -42,13 +42,13 @@ class test_cp2_cscr(BaseCHERITestCase):
 
     @attr('capabilities')
     def test_cp2_cscr_dword0(self):
-        '''Test that cscr stored u, perms fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0xffff000000000000, "cscr stored incorrect u, perms fields")
+        '''Test that cscr stored perms, u fields correctly'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000000000000ff, "cscr stored incorrect u, perms fields")
 
     @attr('capabilities')
     def test_cp2_cscr_dword1(self):
-        '''Test that cscr stored the ctype field correctly'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000001, "cscr stored incorrect ctype")
+        '''Test that cscr stored the otype field correctly'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000001, "cscr stored incorrect otype")
 
     @attr('capabilities')
     def test_cp2_cscr_dword2(self):
