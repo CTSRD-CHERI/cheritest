@@ -111,9 +111,18 @@ start:
 		cunseal   $c1,  $c2, $c3
 
                 # jumps
-		cjr       $3($c1)
-		cjalr     $3($c1)
+		dla       $t1, l0
+		cjr       $t1($c0)
+		# branch delay slot
+		nop
 
+l0:
+		dla       $t1, l1
+		cjalr     $t1($c0)
+		# branch delay slot
+		nop
+
+l1:
                 # crossing protection domains
 		ccall    $c1,  $c2
 		creturn
