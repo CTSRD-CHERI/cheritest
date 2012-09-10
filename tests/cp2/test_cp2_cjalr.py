@@ -39,3 +39,8 @@ class test_cp2_cjalr(BaseCHERITestCase):
     def test_cp2_cjalr1(self):
         '''Test that sandbox has been called'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "sandbox was not called")
+
+    @attr('capabilities')
+    def test_cp2_cjalr2(self):
+        '''Test that sandbox was run with restricted permissions'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x7f, "sandbox was not run with restricted permissions")

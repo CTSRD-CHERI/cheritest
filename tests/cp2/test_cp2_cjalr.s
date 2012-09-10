@@ -38,7 +38,16 @@
 #
 
 .sandbox:
+		# Put a value in $a0 so that later on we can check that this
+		#  subroutine was called
 		dli	$a0, 1
+
+		# sandbox should be running with a PCC that gives resticted
+		# permissions. Save it to $c2 so that we can check PCC.perms
+		# later on.
+		cgetpcc $a2($c2)
+
+		# Return from the sandboxed subroutine
 		cjr	$ra($c24)
 		nop	# Probably a branch-delay slot
 
@@ -49,15 +58,26 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		dla	$a0, sandbox
+		# Restrict the PCC capability that sandbox will run with.
+		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
+		# Permit_Load_Capability, Permit_Store_Capability, 
+		# Permit_Store_Ephemeral_Capability.
+
+		dli $t1, 0x7f
+		candperm $c1, $c0, $t1
+
 		# Save $ra so we can return from this subroutine
 		move	$a1, $ra
+
+		dla	$a0, sandbox
 		# PC will be savced in $ra
 		# PCC will be saved in $c24
-		cjalr	$a0($c0)
+		cjalr	$a0($c1)
 		# I'm not sure if this a branch delay slot
 		nop
 		nop
+
+		cgetperm $a3, $c2
 		# restore return address
 		move $ra, $a1
 		
