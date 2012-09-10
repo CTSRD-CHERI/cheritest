@@ -37,7 +37,7 @@
 # Test capability jump and link register
 #
 
-.sandbox:
+sandbox:
 		# Put a value in $a0 so that later on we can check that this
 		#  subroutine was called
 		dli	$a0, 1
