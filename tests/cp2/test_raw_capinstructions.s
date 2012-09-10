@@ -42,6 +42,7 @@ start:
 		cgetlen   $a1,  $c2
                 cgettag   $a1,  $c2
                 cgetunsealed $a1, $c2
+		cgetpcc   $a1($c2)
 
                 # set the fields of a capability
 		dli       $a3,  0
