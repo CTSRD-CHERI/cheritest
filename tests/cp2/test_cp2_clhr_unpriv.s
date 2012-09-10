@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test clhr (load half word via capability, offset by register) using a
+# Test clh (load half word via capability, offset by register) using a
 # capability restricted to a specific portion of the global address space.
 #
 
@@ -61,9 +61,9 @@ test:		.ent test
 		dli	$t1, 4
 		dli	$t2, 6
 
-		clhr	$a0, $t0($c1)		# 64-bit aligned
-		clhr	$a1, $t1($c1)		# 32-bit aligned
-		clhr	$a2, $t2($c1)		# 16-bit aligned
+		clh	$a0, $t0($c1)		# 64-bit aligned
+		clh	$a1, $t1($c1)		# 32-bit aligned
+		clh	$a2, $t2($c1)		# 16-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

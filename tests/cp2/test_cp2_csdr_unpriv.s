@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test csdr (store double word via capability, offset by register) using a
+# Test csd (store double word via capability, offset by register) using a
 # constrained capability.
 #
 
@@ -59,7 +59,7 @@ test:		.ent test
 
 		dli	$t3, 0
 		dli	$t2, 0x0123456789abcdef
-		csdr	$t2, $t3($c1)
+		csd	$t2, $t3($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

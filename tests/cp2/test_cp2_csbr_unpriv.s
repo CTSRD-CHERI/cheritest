@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test csbr (store byte via capability, offset by register) using a
+# Test csb (store byte via capability, offset by register) using a
 # constrained capability.
 #
 
@@ -59,28 +59,28 @@ test:		.ent test
 
 		dli	$s0, 0
 		dli	$t2, 0x01
-		csbr	$t2, $s0($c1)
+		csb	$t2, $s0($c1)
 		dli	$s0, 1
 		dli	$t2, 0x23
-		csbr	$t2, $s0($c1)
+		csb	$t2, $s0($c1)
 		dli	$s0, 2
 		dli	$t2, 0x45
-		csbr	$t2, $s0($c1)
+		csb	$t2, $s0($c1)
 		dli	$s0, 3
 		dli	$t2, 0x67
-		csbr	$t2, $s0($c1)
+		csb	$t2, $s0($c1)
 		dli	$s0, 4
 		dli	$t2, 0x89
-		csbr	$t2, $s0($c1)
+		csb	$t2, $s0($c1)
 		dli	$s0, 5
 		dli	$t2, 0xab
-		csbr	$t2, $s0($c1)
+		csb	$t2, $s0($c1)
 		dli	$s0, 6
 		dli	$t2, 0xcd
-		csbr	$t2, $s0($c1)
+		csb	$t2, $s0($c1)
 		dli	$s0, 7
 		dli	$t2, 0xef
-		csbr	$t2, $s0($c1)
+		csb	$t2, $s0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test cldr (load double word via capability, offset by register) using a
+# Test cld (load double word via capability, offset by register) using a
 # fully privileged capability.
 #
 
@@ -47,7 +47,7 @@ test:		.ent test
 
 		dla	$t0, data
 
-		cldr	$a0, $t0($c1)		# 64-bit aligned
+		cld	$a0, $t0($c1)		# 64-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test cldr (load double word via capability, offset by register) using a
+# Test cld (load double word via capability, offset by register) using a
 # capability restricted to a specific portion of the global address space.
 #
 
@@ -59,7 +59,7 @@ test:		.ent test
 
 		dli	$t0, 0
 
-		cldr	$a0, $t0($c1)		# 64-bit aligned
+		cld	$a0, $t0($c1)		# 64-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

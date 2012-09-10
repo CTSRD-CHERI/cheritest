@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test clwr (load word via capability, offset by register) using a capability
+# Test clw (load word via capability, offset by register) using a capability
 # restricted to a specific portion of the global address space.
 #
 
@@ -60,8 +60,8 @@ test:		.ent test
 		dli	$t0, 0
 		dli	$t1, 4
 
-		clwr	$a0, $t0($c1)		# 64-bit aligned
-		clwr	$a1, $t1($c1)		# 32-bit aligned
+		clw	$a0, $t0($c1)		# 64-bit aligned
+		clw	$a1, $t1($c1)		# 32-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

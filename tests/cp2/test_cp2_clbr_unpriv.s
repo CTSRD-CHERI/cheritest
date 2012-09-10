@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test clbr (load byte via capability, offset by register) using a capability
+# Test clb (load byte via capability, offset by register) using a capability
 # restricted to a specific portion of the global address space.
 #
 
@@ -62,10 +62,10 @@ test:		.ent test
 		dli	$t2, 6
 		dli	$t3, 7
 
-		clbr	$a0, $t0($c1)		# 64-bit aligned
-		clbr	$a1, $t1($c1)		# 32-bit aligned
-		clbr	$a2, $t2($c1)		# 16-bit aligned
-		clbr	$a3, $t3($c1)		# 8-bit aligned
+		clb	$a0, $t0($c1)		# 64-bit aligned
+		clb	$a1, $t1($c1)		# 32-bit aligned
+		clb	$a2, $t2($c1)		# 16-bit aligned
+		clb	$a3, $t3($c1)		# 8-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
