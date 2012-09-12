@@ -359,6 +359,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cmove.s		\
 		test_cp2_cscr.s			\
 		test_cp2_clcr.s			\
+		test_cp2_cjr.s			\
 		test_cp2_cjalr.s		\
 		test_cp2_tagmem.s		\
 		test_cp2_tagstore.s		\
