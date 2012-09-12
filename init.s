@@ -1,6 +1,8 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
 # All rights reserved.
+# Copyright (c) 2012 David Chisnall
+# All rights reserved.
 #
 # This software was developed by SRI International and the University of
 # Cambridge Computer Laboratory under DARPA/AFRL contract (FA8750-10-C-0237)
@@ -181,6 +183,27 @@ skip_increment:
 		nop
 		eret
 		.end exception_count_handler
+
+
+.set at
+# install_tlb_entry(tlb_entry, physical_base, virtual_base)
+.global install_tlb_entry
+install_tlb_entry:
+		dmtc0        $zero, $5               # Write 0 to page mask i.e. 4k pages
+		dmtc0        $a0, $0                 # TLB index
+		dmtc0        $a2, $10                # TLB HI address
+		and          $t1, $a1, 0xfffffff000  # Get physical page (PFN) of the physical address (40 bits less 12 low order bits)
+		dsrl         $t2, $t1, 6             # Put PFN in correct position for EntryLow
+		or           $t2, 0x13               # Set valid and global bits, uncached
+		dmtc0        $t2, $2                 # TLB EntryLow0
+		daddu        $t3, $t2, 0x40          # Add one to PFN for EntryLow1
+		dmtc0        $t3, $3                 # TLB EntryLow1
+		tlbwi                                # Write Indexed TLB Entry
+		nop
+		nop
+		jr           $ra
+	nop
+.end install_tlb_entry
 
 	        .data
 		.align 3
