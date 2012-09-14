@@ -57,14 +57,17 @@ class test_cp2_cmove_j(BaseCHERITestCase):
         '''Test that cmove retained the length field correctly'''
         self.assertRegisterEqual(self.MIPS.a3, 0x200, "cmove failed to retain correct length")
 
+    @attr('capabilities')
     def test_branch_delay(self):
         '''Test that branch delay was executed.'''
         self.assertRegisterEqual(self.MIPS.a4, 0x1, "branch delay not executed")
 
+    @attr('capabilities')
     def test_jump_taken(self):
         '''Test jump taken.'''
         self.assertRegisterEqual(self.MIPS.a5, 0x0, "jump did not skip over instruction.")
 
+    @attr('capabilities')
     def test_jump_dest(self):
         '''Test jump destination reached.'''
         self.assertRegisterEqual(self.MIPS.a6, 0x1, "jump did not reach destination.")
