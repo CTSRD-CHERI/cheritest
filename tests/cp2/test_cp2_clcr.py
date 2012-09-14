@@ -38,7 +38,7 @@ class test_cp2_clcr(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_clcr_getperm(self):
         '''Test that clcr loaded u, perms fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0xffff, "clcr read back incorrect perms")
+        self.assertRegisterEqual(self.MIPS.a0, 0x7fff, "clcr read back incorrect perms")
 
     @attr('capabilities')
     def test_cp2_clcr_gettype(self):
