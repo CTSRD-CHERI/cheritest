@@ -93,6 +93,7 @@ test:		.ent test
 		dli	$t0, 100
 		dli	$t1, 200
 		mult	$t0, $t1
+		nop                     # Nop because the watchHi and Lo registers might fire early.
 desired_epc:
 		mflo	$t0
 		mult	$a0, $a1
