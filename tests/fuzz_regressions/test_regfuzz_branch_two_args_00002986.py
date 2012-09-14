@@ -7,7 +7,7 @@ expected_uncached=[
     0x202020202020202,
     0x303030303030303,
     0x7fffffff,
-    0x9000000040000338,
+    0x9000000040000358,
     0x92fab75ffc8e4345,
     0x707070707070707,
     0x808080808080808,
@@ -33,7 +33,7 @@ expected_uncached=[
     0x1c1c1c1c1c1c1c1c,
     0x9000000000007fe0,
     0x9000000000008000,
-    0x9000000040000338,
+    0x9000000040000358,
   ]
 expected_cached=[
     0x0,
@@ -41,7 +41,7 @@ expected_cached=[
     0x202020202020202,
     0x303030303030303,
     0x7fffffff,
-    0x9800000040000358,
+    0x9800000040000378,
     0x92fab75ffc8e4345,
     0x707070707070707,
     0x808080808080808,
@@ -67,7 +67,7 @@ expected_cached=[
     0x1c1c1c1c1c1c1c1c,
     0x9800000000007fe0,
     0x9800000000008000,
-    0x9800000040000358,
+    0x9800000040000378,
   ]
 class test_regfuzz_branch_two_args_00002986(BaseCHERITestCase):
   def test_registers_expected(self):

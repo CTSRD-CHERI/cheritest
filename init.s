@@ -47,6 +47,12 @@
 		.global start
 		.ent start
 start:
+                dmfc0   $k0, $15
+                srl     $k0, 24
+                and     $k0, 0xff  # get thread ID
+thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
+                nop
+        
 		# Set up stack and stack frame
 		dla	$fp, __sp
 		dla	$sp, __sp
