@@ -96,10 +96,10 @@ test:		.ent test
 
 		#
 		# Prepare $c1 to point at the space between 'sandbox_begin'
-		# and 'sandbox_end'.  Restrict to Non_Ephemeral and
-                # Permit_Execute permissions.
+		# and 'sandbox_end'.  Restrict to Non_Ephemeral, Permit_Execute
+                # and Permit_Read permissions.
 		#
-		dli	$t0, 0x0003
+		dli	$t0, 0x0007
 		candperm	$c1, $c1, $t0
 		dla	$a7, sandbox_begin
 		cincbase	$c1, $c1, $a7
