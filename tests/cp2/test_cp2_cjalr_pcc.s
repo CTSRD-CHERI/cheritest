@@ -37,6 +37,12 @@
 # Test that capability jump and link register changes PCC.
 #
 
+sandbox:
+		cgetpcc $t0($c2)
+		cjr $ra($c24)
+		# branch delat slot
+		nop
+
 		.global test
 test:		.ent test
 		daddu 	$sp, $sp, -32
@@ -52,24 +58,13 @@ test:		.ent test
 		dli $t0, 0x7f
 		candperm $c1, $c0, $t0
 
-		# Jump to L1, saving $pcc in $rcc and copying $c1 into $pcc.
-		dla	$t0, L1
+		dla	$t0, sandbox
 		cjalr	$t0($c1)
 		# branch delay slot
 		nop
 
-L1:
-		# Jump to L2, saving the new $pcc in $rcc and copying $c0
-		# into $pcc.
-		dla $t0, L2
-		cjalr 	$t0($c0)
-		# branch delay slot
-		nop
-
-L2:
-
-		# Check what is in RCC
-		cgetperm $a0, $c24
+		# Check what was in the PCC
+		cgetperm $a0, $c2
 		
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
