@@ -45,9 +45,13 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dla	$t0, cap1
-		cmove   $c1, $c0
-                csc     $c1, $t0($c0)
+                csc     $c0, $t0($c0)
+		# Load the capability back in from memory, and check that
+		# it has the right tag.
                 clc     $c2, $t0($c0)
+		# Load a0 with a value that can't possibly be a tag, so we
+		# can check whether the cgettag worked.
+		dli	$a0, 2
                 cgettag $a0, $c2
 
                 dli     $a1, 0
@@ -56,8 +60,10 @@ test:		.ent test
 		# Should also clear the tag bit
                 csd     $a1, $t1($c0)
                 clc     $c2, $t0($c0)
+		# Load a1 with a value that can't possibly be a tag,
+		# so we can check that cgettag worked.
 		dli	$a1, 2
-                cgettag $a1, $c1
+                cgettag $a1, $c2
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
