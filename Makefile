@@ -392,6 +392,7 @@ TEST_CP2_FILES=					\
 		test_cp2_clhu_unpriv.s		\
 		test_cp2_clwu_priv.s		\
 		test_cp2_clwu_unpriv.s		\
+		test_cp2_signex.s		\
 		test_cp2_c0_ld.s		\
 		test_cp2_c0_lwu.s		\
 		test_cp2_c0_lhu.s		\
