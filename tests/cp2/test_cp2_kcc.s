@@ -37,6 +37,22 @@
 # Test access to KCC (kernel code capability)
 #
 
+sandbox:
+		dla $t0, data
+		# KCC is $c29
+		cincbase $c29, $c0, $t0
+		dli $t0, 8
+		csetlen $c29, $c29, $t0
+		dli $t0, 0x7f
+		candperm $c29, $c29, $t0
+
+		dli $t0, 0
+		cld $a0, $t0($c29)
+
+		cjr $ra($c24)
+		# branch delay slot
+		nop
+
 		.global test
 test:		.ent test
 		daddu 	$sp, $sp, -32
@@ -52,32 +68,13 @@ test:		.ent test
 		dli $t0, 0x107f
 		candperm $c1, $c0, $t0
 
-		# Jump to L1, with $pcc replaced with $c1
-		dla	$t0, L1
+		dla     $a0, 0
+
+		dla	$t0, sandbox
 		cjalr	$t0($c1)
 		# branch delay slot
 		nop
 
-L1:
-		dla $t0, data
-		# KCC is $c29
-		cincbase $c29, $c0, $t0
-		dli $t0, 8
-		csetlen $c29, $c29, $t0
-		dli $t0, 0x7f
-		candperm $c29, $c29, $t0
-
-		dli $a0, 0
-		dli $t0, 0
-		cld $a0, $t0($c29)
-
-		# Restore PCC
-		dla $t0, L1
-		cjr $t0($c24)
-		# branch delay slot
-
-L2:
-		
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
