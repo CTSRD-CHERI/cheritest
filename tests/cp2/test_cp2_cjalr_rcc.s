@@ -48,17 +48,16 @@ test:		.ent test
 		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
 		# Permit_Load_Capability, Permit_Store_Capability, 
 		# Permit_Store_Ephemeral_Capability.
-
-		dli $t0, 0x7f
+		dli      $t0, 0x7f
 		candperm $c1, $c0, $t0
 
 		# Clear RCC. so that we can tell when PCC has been saved there
-		dli $t0, 0
-		candperm $c24, $c24, $t0
-		csetlen $c24, $c24, $t0
-		dli $t0, 4
-		csettype $c24, $c24, $t0
+		dli      $t0, 4
 		cincbase $c24, $c24, $t0
+		csettype $c24, $c24, $t0
+		csetlen  $c24, $c24, $t0
+		dli      $t0, 0
+		candperm $c24, $c24, $t0
 		
 		# Jump to L1, with $pcc replaced with $c1
 		dla	$t0, L1
