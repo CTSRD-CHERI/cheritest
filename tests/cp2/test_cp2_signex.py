@@ -38,7 +38,7 @@ class test_cp2_signex(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_signex1(self):
         '''Test that clb sign-extends the result'''
-        self.assertRegisterEqual(self.MIPS.a0, 0xfffffffffffffffffe,
+        self.assertRegisterEqual(self.MIPS.a0, 0xfffffffffffffffe,
             "clb of negative value returned incorrect result")
 
     @attr('capabilities')
