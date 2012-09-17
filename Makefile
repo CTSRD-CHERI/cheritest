@@ -364,6 +364,8 @@ TEST_CP2_FILES=					\
 		test_cp2_cjalr_pcc.s		\
 		test_cp2_cjalr.s		\
 		test_cp2_kcc.s			\
+		test_cp2_kr1c.s			\
+		test_cp2_kr2c.s			\
 		test_cp2_kdc.s			\
 		test_cp2_tagmem.s		\
 		test_cp2_tagstore.s		\
