@@ -38,19 +38,19 @@ class test_cp2_cjalr_rcc(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_cjalr_rcc1(self):
         '''Test that RCC.perms was changed by cjalr'''
-        self.assertRegisterEqual(self.MIPS.a0, 0, "RCC.perms was not set correctly by cjalr")
+        self.assertRegisterEqual(self.MIPS.a0, 0x7fff, "RCC.perms was not set correctly by cjalr")
 
     @attr('capabilities')
     def test_cp2_cjalr_rcc2(self):
         '''Test that RCC.otype was changed by cjalr'''
-        self.assertRegisterEqual(self.MIPS.a1, 8, "RCC.otype was not set correctly by cjalr")
+        self.assertRegisterEqual(self.MIPS.a1, 0, "RCC.otype was not set correctly by cjalr")
 
     @attr('capabilities')
     def test_cp2_cjalr_rcc3(self):
         '''Test that RCC.base was changed by cjalr'''
-        self.assertRegisterEqual(self.MIPS.a2, 4, "RCC.base was not set correctly by cjalr")
+        self.assertRegisterEqual(self.MIPS.a2, 0, "RCC.base was not set correctly by cjalr")
 
     @attr('capabilities')
     def test_cp2_cjalr_rcc4(self):
         '''Test that RCC.len was changed by cjalr'''
-        self.assertRegisterEqual(self.MIPS.a3, 4, "RCC.len was not set correctly by cjalr")
+        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "RCC.len was not set correctly by cjalr")

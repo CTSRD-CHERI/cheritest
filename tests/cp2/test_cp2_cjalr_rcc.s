@@ -72,6 +72,13 @@ L1:
 		cgetbase $a2, $c24
 		cgetlen  $a3, $c24
 		
+		# Restore the old PCC
+		dla     $t0, L2
+		cjr     $t0($c24)
+		# branch delay slot
+		nop
+
+L2:
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
