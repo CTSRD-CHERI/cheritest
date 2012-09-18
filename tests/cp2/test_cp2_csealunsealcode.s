@@ -1,4 +1,4 @@
-#
+#-
 # Copyright (c) 2012 Michael Roe
 # All rights reserved.
 #
@@ -27,23 +27,46 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
-from nose.plugins.attrib import attr
+
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
 #
-# Test csealcode
+# Test cunseal on a code capability
 #
 
-class test_cp2_csealcode(BaseCHERITestCase):
-    @attr('capabilities')
-    def test_cp2_csealcode1(self):
-        '''Test that csealcode clears the unsealed bit'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "csealcode did not clear the u bit")
+# In this test, sandbox isn't actually called, but its address is used
+# as an otype.
+sandbox:
+		creturn
 
-    @attr('capabilities')
-    def test_cp2_sealcode2(self):
-        '''Test that csealcode sets the otype field'''
-        self.assertRegisterEqual(self.MIPS.a1, 0,
-            "csealcode did not set the otype field correctly")
+		.global test
+test:		.ent test
+		daddu 	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
 
+		dla      $t0, sandbox
+		csettype $c1, $c0, $t0
+		csealcode $c2, $c1
+                cunseal  $c3, $c2, $c1
+
+ 		cgetunsealed $a0, $c3
+		cgettype $a1, $c3
+		dla      $t0, sandbox
+		dsubu    $a1, $a1, $t0
+		
+
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
+		.end	test
+
+		.data
+		.align 3
+data:		.dword	0xfedcba9876543210

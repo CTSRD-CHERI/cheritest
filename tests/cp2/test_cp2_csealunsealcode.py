@@ -31,19 +31,19 @@ from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test csealcode
+# Test cunseal on a code capability
 #
 
-class test_cp2_csealcode(BaseCHERITestCase):
+class test_cp2_csealunsealcode(BaseCHERITestCase):
     @attr('capabilities')
-    def test_cp2_csealcode1(self):
-        '''Test that csealcode clears the unsealed bit'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "csealcode did not clear the u bit")
+    def test_cp2_csealunsealcode1(self):
+        '''Test that cunseal sets the unsealed bit'''
+        self.assertRegisterEqual(self.MIPS.a0, 1,
+            "cunseal did not set the u bit")
 
     @attr('capabilities')
-    def test_cp2_sealcode2(self):
-        '''Test that csealcode sets the otype field'''
+    def test_cp2_sealunsealcode2(self):
+        '''Test that cunseal sets the otype field'''
         self.assertRegisterEqual(self.MIPS.a1, 0,
-            "csealcode did not set the otype field correctly")
+            "cunseal did not set the otype field correctly")
 
