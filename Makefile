@@ -398,6 +398,7 @@ TEST_CP2_FILES=					\
 		test_cp2_signex.s		\
 		test_cp2_csealcode.s		\
 		test_cp2_csealunsealcode.s	\
+		test_cp2_csealdata.s		\
 		test_cp2_c0_ld.s		\
 		test_cp2_c0_lwu.s		\
 		test_cp2_c0_lhu.s		\
