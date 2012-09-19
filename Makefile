@@ -369,6 +369,7 @@ TEST_CP2_FILES=					\
 		test_cp2_kdc.s			\
 		test_cp2_tagmem.s		\
 		test_cp2_tagstore.s		\
+		test_cp2_tagstorec0.s		\
 		test_cp2_cswitch.s		\
 		test_cp2_cswitch_clr.s		\
 		test_cp2_cswitch_clr_20.s	\
