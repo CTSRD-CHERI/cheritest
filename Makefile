@@ -424,7 +424,8 @@ TEST_CP2_FILES=					\
 		test_cp2_exception_pipeline.s   \
                 test_cp2_tlb_exception_fill.s   \
 		test_cp2_cmove_j.s		\
-		test_cp2_x_bounds.s
+		test_cp2_x_bounds.s		\
+		test_cp2_x_clbu_tag.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
