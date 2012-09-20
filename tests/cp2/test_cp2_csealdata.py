@@ -62,6 +62,6 @@ class test_cp2_csealdata(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_sealdata5(self):
         '''Test that csealdata sets the perms field'''
-        self.assertRegisterEqual(self.MIPS.a3, 0xd,
+        self.assertRegisterEqual(self.MIPS.a4, 0xd,
             "csealdata did not set the perms field correctly")
 
