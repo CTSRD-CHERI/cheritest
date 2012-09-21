@@ -416,3 +416,17 @@ unhandled_exception:
 		b       .
 		nop			# branch-delay slot
 		.end unhandled_exception
+
+#
+# __assert(line number)
+# Leaves the line number in v0 (and a0), dumps registers and aborts the
+# simulator.
+# 
+		.text
+		.global __assert_fail
+		.ent __assert_fail
+__assert_fail:
+		dadd $v0, $a0, $zero
+		mtc0 $at, $26
+		mtc0 $at, $23
+.end __assert_fail

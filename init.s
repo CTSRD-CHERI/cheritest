@@ -118,7 +118,8 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		mtlo	$at
 
 		# Invoke test function test() provided by individual tests.
-		jal test
+		la   $25, test
+		jalr $25
 		nop			# branch-delay slot
 
 		# Check the prid to see if running on simulator or gxemul
@@ -193,6 +194,7 @@ skip_increment:
 
 .set at
 # install_tlb_entry(tlb_entry, physical_base, virtual_base)
+.ent install_tlb_entry
 .global install_tlb_entry
 install_tlb_entry:
 		dmtc0        $zero, $5               # Write 0 to page mask i.e. 4k pages

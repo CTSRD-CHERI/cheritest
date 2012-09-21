@@ -59,7 +59,8 @@ TESTDIRS=					\
 		$(TESTDIR)/cache		\
 		$(TESTDIR)/cp0                  \
 		$(TESTDIR)/cp2                  \
-		$(TESTDIR)/fuzz_regressions
+		$(TESTDIR)/fuzz_regressions     \
+		$(TESTDIR)/c
 
 ifneq ($(NOFUZZ),1)
 TESTDIRS +=  $(TESTDIR)/fuzz
@@ -701,6 +702,9 @@ $(OBJDIR)/test_%.o : test_%.s
 
 $(OBJDIR)/test_%.o : test_%.c
 	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+
+$(OBJDIR)/test_clang%.o : test_clang%.c
+	clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< 
 
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
