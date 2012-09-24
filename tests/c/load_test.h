@@ -40,15 +40,19 @@ static TYPE PREFIX(_data)[] = {1, 2, 3, 4, 5, 6, 7, 8};
 
 int PREFIX(_test)(void)
 {
+  __capability TYPE *datacp = (__capability TYPE*)PREFIX(_data);
 
-  int i = 0;
-  __capability TYPE *datacp;
-
-  datacp = (__capability TYPE*)PREFIX(_data);
-
-  for (i=0; i<(sizeof(PREFIX(_data))/sizeof(*PREFIX(_data))); i++)
+  for (int i=0; i<(sizeof(PREFIX(_data))/sizeof(*PREFIX(_data))); i++)
   {
+#if NOP_HACK
+    TYPE a = datacp[i];
+    TYPE b = PREFIX(_data)[i];
+    DEBUG_NOP();
+    DEBUG_NOP();
+    assert(a == b);
+#else
     assert(datacp[i] == PREFIX(_data)[i]);
+#endif
   }
 
   return 0;
