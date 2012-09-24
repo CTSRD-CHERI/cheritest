@@ -13,3 +13,7 @@ void  __assert(int cond, int line)
 #define DEBUG_DUMP_REG(regno, val) \
     __asm__ volatile ("addi $" #regno ", %0, 0" : : "r" (val) : #regno);
 
+// Add a nop
+#define DEBUG_NOP() \
+	__asm__ volatile ("nop")
+
