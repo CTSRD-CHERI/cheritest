@@ -427,6 +427,7 @@ unhandled_exception:
 		.ent __assert_fail
 __assert_fail:
 		dadd $v0, $a0, $zero
+		daddi $v1, $zero, 0xffff
 		mtc0 $at, $26
 		mtc0 $at, $23
 .end __assert_fail

@@ -8,3 +8,8 @@ void  __assert(int cond, int line)
 	}
 }
 #define assert(cond) __assert(cond, __LINE__)
+
+// Dumps a value into a specified register.  Useful for debugging test cases.
+#define DEBUG_DUMP_REG(regno, val) \
+    __asm__ volatile ("addi $" #regno ", %0, 0" : : "r" (val) : #regno);
+
