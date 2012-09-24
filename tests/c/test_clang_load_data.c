@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012 Michael Roe
+ * Copyright (c) 2012 David Chisnall
  * All rights reserved.
  *
  * This software was developed by SRI International and the University of
@@ -30,31 +30,40 @@
 
 #include "assert.h"
 
-#define N_DATA 8
-typedef unsigned char int8_t;
-static int8_t data[N_DATA] = {1, 2, 3, 4, 5, 6, 7, 8};
-
-int test_clang_int8()
-{
-  int i;
-  __capability int8_t *datacp;
-
-  datacp = (__capability int8_t *) data;
-
-  for (i=0; i<N_DATA; i++)
-    if (datacp[i] != data[i])
-      return -1;
-
-  return 0;
-}
+#define TYPE signed char
+#define NAME i8
+#include "load_test.h"
+#define TYPE unsigned char
+#define NAME u8
+#include "load_test.h"
+#define TYPE signed short
+#define NAME i16
+#include "load_test.h"
+#define TYPE unsigned short
+#define NAME u16
+#include "load_test.h"
+#define TYPE signed int
+#define NAME i32
+#include "load_test.h"
+#define TYPE unsigned int
+#define NAME u32
+#include "load_test.h"
+#define TYPE signed long long
+#define NAME i64
+#include "load_test.h"
+#define TYPE unsigned long long
+#define NAME u64
+#include "load_test.h"
 
 int test(void)
 {
-  int rc;
-
-  rc = test_clang_int8();
-
-  assert(rc == 0);
-
-  return 0;
+	u8_test();
+	i8_test();
+	u16_test();
+	i16_test();
+	u32_test();
+	i32_test();
+	u64_test();
+	i64_test();
+	return 0;
 }
