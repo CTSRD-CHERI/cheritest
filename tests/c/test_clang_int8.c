@@ -28,12 +28,10 @@
  * SUCH DAMAGE.
  */
 
-#include <sys/types.h>
-
-#include "chericap.h"
 #include "assert.h"
 
 #define N_DATA 8
+typedef unsigned char int8_t;
 static int8_t data[N_DATA] = {1, 2, 3, 4, 5, 6, 7, 8};
 
 int test_clang_int8()
