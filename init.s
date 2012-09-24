@@ -118,7 +118,7 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		mtlo	$at
 
 		# Invoke test function test() provided by individual tests.
-		la   $25, test
+		dla   $25, test
 		jalr $25
 		nop			# branch-delay slot
 
