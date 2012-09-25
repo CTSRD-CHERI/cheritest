@@ -45,12 +45,5 @@ class test_cp2_load_pipeline(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_load_pipeline_2(self):
         '''Test pipeline hazard when result of clbu used in arithmetic'''
-        self.assertRegisterEqual(self.MIPS.a1, 0xfedc,
+        self.assertRegisterEqual(self.MIPS.a1, 1,
             "arithmetic operation immediately after load gave incorrect result")
-
-    @attr('capabilities')
-    def test_cp2_zeroex3(self):
-        '''Test that clwu zero-extends the result'''
-        self.assertRegisterEqual(self.MIPS.a2, 0xfedcba98,
-            "clwu of negative value returned incorrect result")
-
