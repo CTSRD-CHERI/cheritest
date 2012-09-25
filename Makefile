@@ -378,6 +378,7 @@ TEST_CP2_FILES=					\
 		test_cp2_mem_mod_pipeline.s	\
 		test_cp2_get_alu_pipeline.s	\
 		test_cp2_get_mem_pipeline.s	\
+		test_cp2_load_pipeline.s	\
 		test_cp2_cldr_priv.s		\
 		test_cp2_clwr_priv.s		\
 		test_cp2_clhr_priv.s		\
