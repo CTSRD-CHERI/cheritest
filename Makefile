@@ -430,7 +430,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
 		test_cp2_x_clbu_perm.s		\
-		test_cp2_x_clbu_sealed.s
+		test_cp2_x_clbu_sealed.s	\
+		test_cp2_x_csc_align.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
