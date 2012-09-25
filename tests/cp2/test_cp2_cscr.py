@@ -43,7 +43,7 @@ class test_cp2_cscr(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_cscr_dword0(self):
         '''Test that cscr stored perms, u fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x00000000000001ff, "cscr stored incorrect u, perms fields")
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000000000003ff, "cscr stored incorrect u, perms fields")
 
     @attr('capabilities')
     def test_cp2_cscr_dword1(self):

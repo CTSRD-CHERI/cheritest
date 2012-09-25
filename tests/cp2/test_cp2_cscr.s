@@ -55,13 +55,14 @@ test:		.ent test
 		# at the right palce in memory. The permissions are
 		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
 		# Permit_Store_Capability, Permit_Load_Capability,
-		# Permit_Store_Ephemeral.
+		# Permit_Store_Ephemeral, and Permit_Set_Type.
 		#
-		dli $t2, 0x7f
+		dli $t2, 0x17f
 		candperm $c2, $c2, $t2
 		#
 		# Tweak capability type field so that we can tell if type and
-		# base are in the right order.
+		# base are in the right order.  This will also set the permit_seal
+		# permission bit, making the permissions field 0xff.
 		#
 		dli	$t2, 0x1
 		csettype	$c2, $c2, $t2
