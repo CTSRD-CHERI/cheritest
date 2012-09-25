@@ -51,21 +51,21 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
+		# Tweak capability type field so that we can tell if type and
+		# base are in the right order.
+		#
+		dli	$t2, 0x1
+		csettype	$c2, $c2, $t2
+
+		#
 		# Set the permissions field so we can tell if it is stored
 		# at the right palce in memory. The permissions are
 		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
 		# Permit_Store_Capability, Permit_Load_Capability,
-		# Permit_Store_Ephemeral, and Permit_Set_Type.
+		# Permit_Store_Ephemeral.
 		#
-		dli $t2, 0x17f
+		dli $t2, 0x7f
 		candperm $c2, $c2, $t2
-		#
-		# Tweak capability type field so that we can tell if type and
-		# base are in the right order.  This will also set the permit_seal
-		# permission bit, making the permissions field 0xff.
-		#
-		dli	$t2, 0x1
-		csettype	$c2, $c2, $t2
 
 		#
 		# Store at cap1 in memory.
@@ -75,7 +75,11 @@ test:		.ent test
 		dla	$t0, cap1
 		csc	$c2, $t0($c0)
 
+		#
 		# Load back in as general-purpose registers to check values
+		#
+		# $a0 will be the perms field (0x7f) shifted left one bit,
+		# plus the u bit (0x1) giving 0xff.
 		ld	$a0, 0($t0)
 		ld	$a1, 8($t0)
 		ld	$a2, 16($t0)
