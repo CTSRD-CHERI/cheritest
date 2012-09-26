@@ -130,7 +130,7 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		nop
 	
 		# Dump capability registers in the simulator
-		mfc2 $k0, $0, 4
+		mtc2 $k0, $0, 4
 		nop
 		nop
 skip_cp2_dump:
