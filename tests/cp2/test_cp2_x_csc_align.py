@@ -42,6 +42,7 @@ class test_cp2_x_csc_align(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.a0, 0,
             "csc wrote to an unaligned address")
 
+    @attr('capabilities')
     def test_cp2_x_csc_align_2(self):
         '''Test csc did not write to an unaligned address'''
         self.assertRegisterEqual(self.MIPS.a1, 0,
