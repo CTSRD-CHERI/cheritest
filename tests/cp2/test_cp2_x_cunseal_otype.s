@@ -94,7 +94,7 @@ test:		.ent test
 		# Create a capability for a different type
 		#
 	
-		dla	$t1, sandbox1
+		dla	$t1, sandbox2
 		cmove   $c3, $c0
 		csettype $c3, $c3, $t1
 
