@@ -232,7 +232,7 @@ RAW_CP0_FILES=					\
 
 RAW_CP2_FILES=					\
 		test_raw_capinstructions.s
-		
+
 RAW_FPU_FILES =                \
         test_raw_fpu_cntrl.s    \
         test_raw_fpu_abs.s      \
@@ -510,6 +510,18 @@ TEST_TRAPI_FILES=				\
 		test_tnei_lt_sign.s		\
 		test_tnei_lt.s
 
+# Don't attempt to build clang tests unless CLANG is set to 1, because clang might not be available
+# This will cause clang tests to fail but that is better than make falling over.
+ifeq ($(CLANG),1)
+TEST_CLANG_FILES=test_clang_cast.c              \
+                 test_clang_toy.c               \
+                 test_clang_load_data.c         \
+                 test_clang_store_data.c
+else
+TEST_CLANG_FILES=
+endif
+
+
 FUZZ_SCRIPT:=fuzzing/fuzz.py
 FUZZ_SCRIPT_OPTS?=
 FUZZ_TEST_DIR:=tests/fuzz
@@ -542,8 +554,10 @@ TEST_FILES=					\
 		$(TEST_MEM_UNALIGN_FILES)	\
 		$(TEST_TRAPI_FILES)             \
 		$(FUZZ_TEST_FILES)              \
-		$(FUZZ_REGRESSION_TEST_FILES)
-		
+		$(FUZZ_REGRESSION_TEST_FILES)   \
+		$(TEST_CLANG_FILES)
+
+
 ifdef COP1
     TEST_FILES += $(RAW_FPU_FILES)
 endif
