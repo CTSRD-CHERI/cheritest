@@ -466,6 +466,7 @@ TEST_BEV1_FILES=				\
 
 TEST_TLB_FILES=                                 \
 		test_tlb_load_0.s               \
+		test_tlb_load_1.s               \
 		test_tlb_probe.s		\
 		test_tlb_exception_fill.s	\
 		test_tlb_instruction_miss.s		\
