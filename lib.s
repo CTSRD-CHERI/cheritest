@@ -426,8 +426,18 @@ unhandled_exception:
 		.global __assert_fail
 		.ent __assert_fail
 __assert_fail:
+		# Store the first argument in v0.  On a successful test result, the
+		# test will return 0 (in v0), so a non-zero value here on exit means
+		# that the test failed.
 		dadd $v0, $a0, $zero
+		# Store -1 in v1 so it's easy to visually spot that a test failed from
+		# a register dump
 		daddi $v1, $zero, 0xffff
+		# TODO: Export the registers and die when not running in the simulator.
+		# Dump MIPS registers
 		mtc0 $at, $26
+		# Dump capability registers
+		mtc2 $k0, $0, 4
+		# Kill the simulator
 		mtc0 $at, $23
 .end __assert_fail
