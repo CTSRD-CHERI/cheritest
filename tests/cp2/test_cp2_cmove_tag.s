@@ -56,8 +56,8 @@ test:		.ent test
 		# into c2.
 		cmove	$c2, $c1
 
-		cgetunsealed $a1, $c2 # Should be 0
-		cgetbase $a2, $c2     # Should be 0x100
+		cgettag $a1, $c2 	# Should be 0
+		cgetbase $a2, $c2     	# Should be 0x100
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
