@@ -74,7 +74,7 @@ test:		.ent test
 		#
 		
 		dli $t0, 0xbf
-		candperm $c2, $c0, $t1
+		candperm $c2, $c0, $t0
 
 		# Try to store the ephemeral capability via a capbility
 		# that doesn't permit this.
