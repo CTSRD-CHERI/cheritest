@@ -48,7 +48,7 @@ test:		.ent test
 		# Put a non-zero value in c2.base, so we can tell when
 		# c2 has been changed.
 		dli		$t0, 0x100
-		cincbase	$c2, $c0, $t0
+		cincbase	$c1, $c0, $t0
 
 		ccleartag $c1
 
@@ -56,8 +56,8 @@ test:		.ent test
 		# into c2.
 		cmove	$c2, $c1
 
-		cgettag $a1, $c2 	# Should be 0
-		cgetbase $a2, $c2     	# Should be 0x100
+		cgettag $a0, $c2 	# Should be 0
+		cgetbase $a1, $c2     	# Should be 0x100
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

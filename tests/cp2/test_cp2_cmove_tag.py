@@ -43,4 +43,4 @@ class test_cp2_cmove_tag(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_cmove_tag_2(self):
         '''Test that cmove copied the base field'''
-        self.assertRegisterEqual(self.MIPS.a1, 0, "cmove failed to copy base when tag bit was unset")
+        self.assertRegisterEqual(self.MIPS.a1, 0x100, "cmove failed to copy base when tag bit was unset")
