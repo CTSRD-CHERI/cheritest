@@ -45,14 +45,14 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		# Put a non-zero value in c2.base, so we can tell when
+		# Put a non-zero value in c1.base, so we can tell when
 		# c2 has been changed.
 		dli		$t0, 0x100
 		cincbase	$c1, $c0, $t0
 
 		ccleartag $c1
 
-		# Move should copy c1's tag and it current value (base=0)
+		# Move should copy c1's tag and it's current value (base=0x100)
 		# into c2.
 		cmove	$c2, $c1
 
