@@ -34,8 +34,8 @@
 .set noat
 
 #
-# Test that if we set non-default values in a capability register, cmove to
-# another register, that we can read the same non-default values back.
+# Test that cmove can copy a capability register, even if it's tag bit
+# is unset.
 #
 
 		.global test
@@ -45,19 +45,21 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		# Put a non-zero value in c1.base, so we can tell when
+		# Put a non-zero value in c2.base, so we can tell when
 		# c2 has been changed.
 		dli		$t0, 0x100
-		cincbase	$c1, $c0, $t0
+		cincbase	$c2, $c0, $t0
 
+		# ccleartag will clear c1's tag bit and set the other
+		# fields (including base) to zero.
 		ccleartag $c1
 
-		# Move should copy c1's tag and it's current value (base=0x100)
+		# Move should copy c1's tag and its current value (base=0)
 		# into c2.
 		cmove	$c2, $c1
 
 		cgettag $a0, $c2 	# Should be 0
-		cgetbase $a1, $c2     	# Should be 0x100
+		cgetbase $a1, $c2     	# Should be 0
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
