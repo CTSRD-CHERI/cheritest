@@ -436,7 +436,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_clbu_sealed.s	\
 		test_cp2_x_csc_align.s		\
 		test_cp2_x_csc_ephemeral.s	\
-		test_cp2_x_cunseal_otype.s
+		test_cp2_x_cunseal_otype.s	\
+		test_cp2_x_csealdata_tag.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
