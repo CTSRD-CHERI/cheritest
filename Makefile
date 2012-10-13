@@ -445,7 +445,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cgettag_reg		\
 		test_cp2_x_cgetunsealed_reg	\
 		test_cp2_x_cgetperm_reg		\
-		test_cp2_x_cgettype_reg
+		test_cp2_x_cgettype_reg		\
+		test_cp2_x_cgetpcc_reg
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
