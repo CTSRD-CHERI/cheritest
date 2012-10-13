@@ -443,7 +443,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cgetbase_reg		\
 		test_cp2_x_cgetlen_reg		\
 		test_cp2_x_cgettag_reg		\
-		test_cp2_x_cgetunsealed_reg
+		test_cp2_x_cgetunsealed_reg	\
+		test_cp2_x_cgetperm_reg
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
