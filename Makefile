@@ -448,7 +448,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cgettype_reg.s	\
 		test_cp2_x_cgetpcc_reg.s	\
 		test_cp2_cunseal_ephemeral.s	\
-		test_cp2_x_cgetcause_perm.s
+		test_cp2_x_cgetcause_perm.s	\
+		test_cp2_x_cld_priority.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
