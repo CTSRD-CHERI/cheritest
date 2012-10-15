@@ -440,14 +440,15 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cunseal_otype.s	\
 		test_cp2_x_csealdata_tag.s	\
 		test_cp2_x_csealdata_reg.s	\
-		test_cp2_x_cgetbase_reg		\
-		test_cp2_x_cgetlen_reg		\
-		test_cp2_x_cgettag_reg		\
-		test_cp2_x_cgetunsealed_reg	\
-		test_cp2_x_cgetperm_reg		\
-		test_cp2_x_cgettype_reg		\
-		test_cp2_x_cgetpcc_reg		\
-		test_cp2_cunseal_ephemeral
+		test_cp2_x_cgetbase_reg.s	\
+		test_cp2_x_cgetlen_reg.s	\
+		test_cp2_x_cgettag_reg.s	\
+		test_cp2_x_cgetunsealed_reg.s	\
+		test_cp2_x_cgetperm_reg.s	\
+		test_cp2_x_cgettype_reg.s	\
+		test_cp2_x_cgetpcc_reg.s	\
+		test_cp2_cunseal_ephemeral.s	\
+		test_cp2_x_cgetcause_perm.s
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
