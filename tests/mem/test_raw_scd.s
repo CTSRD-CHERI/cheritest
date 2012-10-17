@@ -42,7 +42,15 @@
 		.text
 		.global start
 start:
-		#
+                # Avoid a race in multithreaded mode by only continuing
+                # with a single thread
+                dmfc0   $k0, $15
+                srl     $k0, 24
+                and     $k0, 0xff  # get thread ID
+thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
+                nop
+
+	        #
 		# Store conditional only works against addresses in cached
 		# memory.  Calculate a cached address for our data segment,
 		# and store pointer in $gp.
