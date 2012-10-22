@@ -73,7 +73,7 @@ test:		.ent test
 		# XXXRW: Fix to use indexed address syntax once available.
 		#
 		dla	$t0, cap1
-		csc	$c2, $t0($c0)
+		cscr	$c2, $t0($c0)
 
 		#
 		# Load back in as general-purpose registers to check values

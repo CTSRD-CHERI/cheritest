@@ -45,10 +45,10 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dla	$t0, cap1
-                csc     $c0, $t0($c0)
+                cscr     $c0, $t0($c0)
 		# Load the capability back in from memory, and check that
 		# it has the right tag.
-                clc     $c2, $t0($c0)
+                clcr     $c2, $t0($c0)
 		# Load a0 with a value that can't possibly be a tag, so we
 		# can check whether the cgettag worked.
 		dli	$a0, 2
@@ -58,7 +58,7 @@ test:		.ent test
 		# Write to the 'otype' field of cap1
 		# Should also clear the tag bit
                 sd      $a1, 8($t0)
-                clc     $c2, $t0($c0)
+                clcr     $c2, $t0($c0)
 		# Load a1 with a value that can't possibly be a tag,
 		# so we can check that cgettag worked.
 		dli	$a1, 2

@@ -58,12 +58,12 @@ test:		.ent test
 		# XXXRW: Fix to use indexed address syntax once available.
 		#
 		dla	$t0, cap1
-		csc	$c2, $t0($c0)
+		cscr	$c2, $t0($c0)
 
 		#
 		# Load back into another capability register
 		#
-		clc	$c3, $t0($c0)
+		clcr	$c3, $t0($c0)
 
 		#
 		# Extract various values into general-purpose registers for

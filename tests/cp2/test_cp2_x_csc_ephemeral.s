@@ -80,7 +80,7 @@ test:		.ent test
 		# that doesn't permit this.
 
 		dla     $t0, cap1
-		csc     $c1, $t0($c2) # This should raise an exception
+		cscr     $c1, $t0($c2) # This should raise an exception
 
 		# Check that the store didn't happen.
 		cld     $a0, $t0($c0)

@@ -74,10 +74,10 @@ test:		.ent test
 		# and load it back in again. The write to the otype field
 		# should clear the tag bit.
 		dla	$t0, cap1
-		csc	$c1, $t0($c0)
+		cscr	$c1, $t0($c0)
 		dli	$t1, 0
 		sd	$t1, 8($t0)
-		clc	$c1, $t0($c0)
+		clcr	$c1, $t0($c0)
 
 		#
 		# Read its tag field to check

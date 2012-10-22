@@ -79,9 +79,9 @@ test:		.ent test
 		# and load it back in again. The write to the otype field
 		# should clear the tag bit.
 		dla	$t1, cap1
-		csc	$c2, $t1($c0)
+		cscr	$c2, $t1($c0)
 		sd	$t0, 8($t1)
-		clc	$c2, $t1($c0)
+		clcr	$c2, $t1($c0)
 
 		csealdata $c1, $c1, $c2 # This should raise an exception
 
