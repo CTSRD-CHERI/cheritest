@@ -55,10 +55,14 @@ start:
 
 		cmove     $c1,  $c2
 
-                # store/load capability
+                # store/load capability, register offset
                 dla       $a3,  cap1
 		csc       $c1,  $a3($c2)
 		clc       $c1,  $a3($c2)
+
+		# store/load capability, immediate offset
+		csci      $c1,  0($c2)
+		clci	  $c1,  0($c2)
 
                 # store/load capability (old instruction)
 		# cscr      $c1,  $a3($c2)
