@@ -64,6 +64,10 @@ start:
 		csci      $c1,  0($c2)
 		clci	  $c1,  0($c2)
 
+		# store/load capability, register and immediate offset
+		csc	  $c1,  $a3, 0($c2)
+		clc       $c1,  $a3, 0($c2)
+
                 # load via capability, sign extend
                 clb       $a1,  $a3($c2)
                 clh       $a1,  $a3($c2)
