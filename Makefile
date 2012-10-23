@@ -439,6 +439,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csc_align.s		\
 		test_cp2_x_csc_ephemeral.s	\
 		test_cp2_x_csc_perm.s		\
+		test_cp2_x_csc_underflow.s	\
 		test_cp2_x_cunseal_otype.s	\
 		test_cp2_x_csealdata_tag.s	\
 		test_cp2_x_csealdata_reg.s	\
