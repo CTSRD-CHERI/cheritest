@@ -39,6 +39,6 @@ class test_cp2_x_cld_priority(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_x_cld_prority_1(self):
         '''Test cld set cause code to Access KR1C Violation'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x37d,
+        self.assertRegisterEqual(self.MIPS.a3, 0x1d1b,
             "cld did not set cause code to Access KR1C Violation")
 
