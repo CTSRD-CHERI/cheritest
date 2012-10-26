@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test clb (load byte via capability, offset by immediate) using a capability
+# Test clbi (load byte via capability, offset by immediate) using a capability
 # restricted to a specific portion of the global address space.
 #
 

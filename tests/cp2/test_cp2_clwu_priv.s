@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test clwu (load word via capability, offset by register) using a fully
+# Test clwur (load word via capability, offset by register) using a fully
 # privileged capability.
 #
 
@@ -48,8 +48,8 @@ test:		.ent test
 		dla	$t0, data
 		daddiu	$t1, $t0, 4
 
-		clwu	$a0, $t0($c1)		# 64-bit aligned
-		clwu	$a1, $t1($c1)		# 32-bit aligned
+		clwur	$a0, $t0($c1)		# 64-bit aligned
+		clwur	$a1, $t1($c1)		# 32-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

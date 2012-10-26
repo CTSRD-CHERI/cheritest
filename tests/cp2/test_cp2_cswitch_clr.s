@@ -54,94 +54,94 @@ test:		.ent test
 		# Save out all capability registers but $kcc and $kdc.
 		#
 		dla	$t0, data
-		csc	$c0, $t0($c30)
+		cscr	$c0, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c1, $t0($c30)
+		cscr	$c1, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c2, $t0($c30)
+		cscr	$c2, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c3, $t0($c30)
+		cscr	$c3, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c4, $t0($c30)
+		cscr	$c4, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c5, $t0($c30)
+		cscr	$c5, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c6, $t0($c30)
+		cscr	$c6, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c7, $t0($c30)
+		cscr	$c7, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c8, $t0($c30)
+		cscr	$c8, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c9, $t0($c30)
+		cscr	$c9, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c10, $t0($c30)
+		cscr	$c10, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c11, $t0($c30)
+		cscr	$c11, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c12, $t0($c30)
+		cscr	$c12, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c13, $t0($c30)
+		cscr	$c13, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c14, $t0($c30)
+		cscr	$c14, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c15, $t0($c30)
+		cscr	$c15, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c16, $t0($c30)
+		cscr	$c16, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c17, $t0($c30)
+		cscr	$c17, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c18, $t0($c30)
+		cscr	$c18, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c19, $t0($c30)
+		cscr	$c19, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c20, $t0($c30)
+		cscr	$c20, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c21, $t0($c30)
+		cscr	$c21, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c22, $t0($c30)
+		cscr	$c22, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c23, $t0($c30)
+		cscr	$c23, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c24, $t0($c30)
+		cscr	$c24, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c25, $t0($c30)
+		cscr	$c25, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c26, $t0($c30)
+		cscr	$c26, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c27, $t0($c30)
+		cscr	$c27, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c28, $t0($c30)
+		cscr	$c28, $t0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc	$c31, $t0($c30)
+		cscr	$c31, $t0($c30)
 
 		#
 		# Scrub capability registers in between to make sure that

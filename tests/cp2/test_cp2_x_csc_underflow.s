@@ -73,7 +73,7 @@ test:		.ent test
 		csci    $c0, -32($c1) # This should raise an exception
 
 		dla	$t0, underflow
-		cld     $a0, $t0($c0)
+		cldr    $a0, $t0($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

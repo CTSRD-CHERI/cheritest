@@ -68,16 +68,27 @@ start:
 		csc	  $c1,  $a3, 0($c2)
 		clc       $c1,  $a3, 0($c2)
 
-                # load via capability, sign extend
-                clb       $a1,  $a3($c2)
-                clh       $a1,  $a3($c2)
-                clw       $a1,  $a3($c2)
-                cld       $a1,  $a3($c2)
+                # load via capability, sign extend, register offset
+                clbr      $a1,  $a3($c2)
+                clhr      $a1,  $a3($c2)
+                clwr      $a1,  $a3($c2)
+                cldr      $a1,  $a3($c2)
 
-		# load via capability, zero extend
-		clbu      $a1,  $a3($c2)
-		clhu      $a1,  $a3($c2)
-		clwu      $a1,  $a3($c2)
+		# load via capability, zero extend, register offset
+		clbur     $a1,  $a3($c2)
+		clhur     $a1,  $a3($c2)
+		clwur     $a1,  $a3($c2)
+
+		# load via capability, sign extend, register and immediate
+                clb       $a1,  $a3, 0($c2)
+                clh       $a1,  $a3, 0($c2)
+                clw       $a1,  $a3, 0($c2)
+                cld       $a1,  $a3, 0($c2)
+
+		# load via capability, zero extend, register and immediate
+                clbu      $a1,  $a3, 0($c2)
+                clhu      $a1,  $a3, 0($c2)
+                clwu      $a1,  $a3, 0($c2)
 
                 # load via capability (old instruction)
 		# clbi      $a1,  0x7($c2)

@@ -75,10 +75,10 @@ test:		.ent test
 
 		# Check that the store didn't happen.
 		# $t0 is double-word aligned, so it is safe to read it with
-		# cld.
-		cld     $a0, $t0($c0)
+		# cldr.
+		cldr    $a0, $t0($c0)
 		daddiu  $t0, $t0, 8
-		cld     $a1, $t0($c0)
+		cldr    $a1, $t0($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

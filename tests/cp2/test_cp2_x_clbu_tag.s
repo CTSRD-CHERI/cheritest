@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test that clbu raises an exception if tag bit is not set on the capability
+# Test that clbur raises an exception if tag bit is not set on the capability
 # register (i.e. it doesn't contain a capability).
 #
 
@@ -89,7 +89,7 @@ test:		.ent test
 		#
 		dli     $a0, 0
 		dli     $t0, 0
-		clbu    $a0, $t0($c1) # This should raise a C2E exception
+		clbur   $a0, $t0($c1) # This should raise a C2E exception
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

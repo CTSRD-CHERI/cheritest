@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test clh (load half word via capability, offset by immediate) using a
+# Test clhi (load half word via capability, offset by immediate) using a
 # capability restricted to a specific portion of the global address space.
 #
 

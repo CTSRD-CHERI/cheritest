@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test that clb raises an exception if the offset is outside the range
+# Test that clbur raises an exception if the offset is outside the range
 # of the capability.
 #
 
@@ -75,7 +75,7 @@ test:		.ent test
 
 		dli     $a0, 0
 		dli     $t0, 9
-		clbu    $a0, $t0($c1) # This should raise a C2E exception
+		clbur   $a0, $t0($c1) # This should raise a C2E exception
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

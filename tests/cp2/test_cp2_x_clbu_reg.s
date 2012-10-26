@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test that clbu raises an exception if the capability register is one of
+# Test that clbur raises an exception if the capability register is one of
 # the reserved registers, and the corresponding bit in PCC is not set.
 #
 
@@ -45,7 +45,7 @@ sandbox:
 		#
 		dli     $a0, 0
 		dli     $t0, 0
-		clbu    $a0, $t0($c27) # This should raise a C2E exception
+		clbur   $a0, $t0($c27) # This should raise a C2E exception
 
 		cjr     $ra($c24)
 		# branch delay slot

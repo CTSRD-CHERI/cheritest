@@ -83,9 +83,9 @@ test:		.ent test
 		cscr     $c1, $t0($c2) # This should raise an exception
 
 		# Check that the store didn't happen.
-		cld     $a0, $t0($c0)
+		cldr    $a0, $t0($c0)
 		daddiu  $t0, $t0, 8
-		cld     $a1, $t0($c0)
+		cldr    $a1, $t0($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -34,8 +34,7 @@
 .set noat
 
 #
-# Test clw (load word via capability, offset by register) using a capability
-# restricted to a specific portion of the global address space.
+# Test that the signed load instructions sign-extend the value that is loaded.
 #
 
 		.global test
@@ -60,9 +59,9 @@ test:		.ent test
 		# The most significant bit of data is high, so the signed
 		# load operations should sign-extend it.
 		dli	$t0, 0
-		clb	$a0, $t0($c1)
-		clh	$a1, $t0($c1)
-		clw	$a2, $t0($c1)
+		clbr	$a0, $t0($c1)
+		clhr	$a1, $t0($c1)
+		clwr	$a2, $t0($c1)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

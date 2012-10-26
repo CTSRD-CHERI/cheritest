@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test cld (load double word via capability, offset by immediate) using a
+# Test cldi (load double word via capability, offset by immediate) using a
 # capability restricted to a specific portion of the global address space.
 #
 

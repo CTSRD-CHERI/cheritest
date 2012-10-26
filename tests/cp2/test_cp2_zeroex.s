@@ -60,9 +60,9 @@ test:		.ent test
 		# The most significant bit of data is high, but unsigned
 		# load operations should zero-extend it.
 		dli	$t0, 0
-		clbu	$a0, $t0($c1)
-		clhu	$a1, $t0($c1)
-		clwu	$a2, $t0($c1)
+		clbur	$a0, $t0($c1)
+		clhur	$a1, $t0($c1)
+		clwur	$a2, $t0($c1)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
