@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test csd (store double word via capability, offset by immediate) using a
+# Test csdi (store double word via capability, offset by immediate) using a
 # constrained capability.
 #
 

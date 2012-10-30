@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test csw (store word via capability, offset by register) using a
+# Test cswr (store word via capability, offset by register) using a
 # privileged capability.
 #
 
@@ -47,11 +47,11 @@ test:		.ent test
 
 		dla	$t0, data
 		dli	$t2, 0x01234567
-		csw	$t2, $t0($c1)
+		cswr	$t2, $t0($c1)
 
 		daddiu	$t0, 4
 		dli	$t2, 0x89abcdef
-		csw	$t2, $t0($c1)
+		cswr	$t2, $t0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

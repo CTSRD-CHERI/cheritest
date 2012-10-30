@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test csh (store half word via capability, offset by immediate) using a
+# Test cshi (store half word via capability, offset by immediate) using a
 # constrained capability.
 #
 

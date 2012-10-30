@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test csw (store word via capability, offset by immediate) using a
+# Test cswi (store word via capability, offset by immediate) using a
 # constrained capability.
 #
 

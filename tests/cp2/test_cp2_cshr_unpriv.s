@@ -59,16 +59,16 @@ test:		.ent test
 
 		dli	$s0, 0
 		dli	$t2, 0x0123
-		csh	$t2, $s0($c1)
+		cshr	$t2, $s0($c1)
 		dli	$s0, 2
 		dli	$t2, 0x4567
-		csh	$t2, $s0($c1)
+		cshr	$t2, $s0($c1)
 		dli	$s0, 4
 		dli	$t2, 0x89ab
-		csh	$t2, $s0($c1)
+		cshr	$t2, $s0($c1)
 		dli	$s0, 6
 		dli	$t2, 0xcdef
-		csh	$t2, $s0($c1)
+		cshr	$t2, $s0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

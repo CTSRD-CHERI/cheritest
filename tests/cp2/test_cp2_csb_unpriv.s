@@ -34,7 +34,7 @@
 .set noat
 
 #
-# Test csb (store byte via capability, offset by immediate) using a
+# Test csbi (store byte via capability, offset by immediate) using a
 # constrained capability.
 #
 
