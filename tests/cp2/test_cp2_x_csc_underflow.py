@@ -47,3 +47,9 @@ class test_cp2_x_csc_underflow(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "csc did not raise an exception when the total offset was negative")
 
+    @attr('capabilities')
+    def test_cp2_x_csc_underflow_3(self):
+        '''Test capability cause is set correctly when the total offset is negative'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0101,
+            "Capability cause was not set correctly when the total offset was negative")
+
