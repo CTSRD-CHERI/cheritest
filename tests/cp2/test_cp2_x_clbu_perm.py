@@ -47,3 +47,10 @@ class test_cp2_x_clbu_perm(BaseCHERITestCase):
         '''Test clbu raises an exception when doesn't have Permit_Load permission'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "clbu did not raise an exception when didn't have Permit_Load permission")
+
+    @attr('capabilities')
+    def test_cp2_x_clbu_perm_3(self):
+        '''Test capability cause is set correctly when doesn't have Permit_Load permission'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x1201,
+            "Capability cause was not set correctly when didn't have Permit_Load permission")
+

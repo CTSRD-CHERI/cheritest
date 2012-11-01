@@ -47,3 +47,10 @@ class test_cp2_x_csc_ephemeral(BaseCHERITestCase):
         '''Test csc raises an exception when the capbility is ephemeral and we don't have Permit_Store_Ephemeral permission'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "csc did not raise an exception when the capability was ephemeral")
+    @attr('capabilities')
+
+    def test_cp2_x_csc_ephermeral_3(self):
+        '''Test capability cause is set correctly when don't have Permit_Store_Ephemeral permission'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x1602,
+            "Capability cause was not set correctly when didn't have Permit_Store_Ephemeral permission")
+

@@ -41,9 +41,15 @@ class test_cp2_x_cgetbase_reg(BaseCHERITestCase):
         '''Test cgetbase did not read via a reserved register'''
         self.assertRegisterEqual(self.MIPS.a0, 1,
             "cgetbase read a reserved register")
-
     @attr('capabilities')
     def test_cp2_x_cgetbase_reg_2(self):
         '''Test cgetbase raised a C2E exception when register was reserved'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "cgetbase did not raise an exception when register was reserved")
+
+    @attr('capabilities')
+    def test_cp2_x_cgetbase_reg_3(self):
+        '''Test capability cause register is set correctly when register is reseerved'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x1d1b,
+            "Capability cause was not set correctly when register was reserved")
+

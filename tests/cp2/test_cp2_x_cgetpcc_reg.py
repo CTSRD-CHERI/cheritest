@@ -53,3 +53,10 @@ class test_cp2_x_cgetpcc_reg(BaseCHERITestCase):
         '''Test cgetpcc raised a C2E exception when register was reserved'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "cgetpcc did not raise an exception when register was reserved")
+
+    @attr('capabilities')
+    def test_cp2_x_cgetpcc_reg_4(self):
+        '''Test capability cause was set correctly when register was reserved'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x1d1b,
+            "Capability cause was not set correctly when register was reserved")
+

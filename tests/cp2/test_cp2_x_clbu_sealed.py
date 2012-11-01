@@ -46,3 +46,10 @@ class test_cp2_x_clbu_sealed(BaseCHERITestCase):
         '''Test clbu raises an exception when capability is sealed'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "clbu did not raise an exception when capability was sealed")
+
+    @attr('capabilities')
+    def test_cp2_x_clbu_sealed_3(self):
+        '''Test capability cause is set correctly  when capability is sealed'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0301,
+            "Capability cause was not set correctly when capability was sealed")
+

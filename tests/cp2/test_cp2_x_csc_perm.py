@@ -47,3 +47,9 @@ class test_cp2_x_csc_perm(BaseCHERITestCase):
         '''Test csc raises an exception when it does not have Permit_Store_Capability permission'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "csc did not raise an exception when it did not have Permit_Store_Capability permission")
+    @attr('capabilities')
+
+    def test_cp2_x_csc_perm_3(self):
+        '''Test capability cause was set correctly when didn't have Permit_Store_Capability permission'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x1502,
+            "Capability cause was not set correctly when didn't have Permit_Store_Capability permission")

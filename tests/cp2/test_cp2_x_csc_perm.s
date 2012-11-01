@@ -76,7 +76,7 @@ test:		.ent test
 		dli $t0, 0x1df
 		candperm $c2, $c0, $t0
 
-		# Try to store the capability via a capbility
+		# Try to store the capability via a capability
 		# that doesn't permit this.
 
 		dla     $t0, cap1
@@ -97,6 +97,7 @@ test:		.ent test
 		.ent bev0_handler
 bev0_handler:
 		li	$a2, 1
+		cgetcause $a3
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
