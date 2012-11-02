@@ -64,16 +64,39 @@ test:		.ent test
 		# Load back into another capability register
 		#
 		clcr	$c3, $t0($c0)
-
+		
+		#
+		# Invalidate the line in the L1
+		#
+  addi $t1, $t0, 16384
+  clcr	$c16, $t1($c0)
+  
+  #
+		# Load from the L2 into another capability register
+		#
+		clcr	$c4, $t0($c0)
+		
+		#
+		# Invalidate the line in the L1 & L2
+		#
+  addi $t1, $t0, 16384
+  addi $t1, $t1, 16384
+  addi $t1, $t1, 16384
+  addi $t1, $t1, 16384
+  clcr	$c16, $t1($c0)
+  
+  #
+		# Load from the L2 into another capability register
+		#
+		clcr	$c5, $t0($c0)
+  
 		#
 		# Extract various values into general-purpose registers for
 		# checking.
 		#
-		cgetperm	$a0, $c3
-		cgettype	$a1, $c3
-		cgetbase	$a2, $c3
-		cgetlen		$a3, $c3
-		cgettag  	$a4, $c3
+		cgettag  $a0, $c3
+		cgettag  $a1, $c4
+		cgettag  $a2, $c5
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

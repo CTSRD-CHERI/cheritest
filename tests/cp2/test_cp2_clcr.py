@@ -58,4 +58,4 @@ class test_cp2_clcr(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_clcr_gettag(self):
         '''Test that clcr loaded the tag correctly'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000001, "clcr load has the correct tag")
+        self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000001, "clcr load has the correct tag")

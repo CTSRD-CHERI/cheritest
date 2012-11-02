@@ -361,6 +361,7 @@ TEST_CP2_FILES=					\
 		test_cp2_ccleartag_base.s	\
 		test_cp2_cscr.s			\
 		test_cp2_clcr.s			\
+		test_cp2_clcr_tag.s		\
 		test_cp2_csci.s			\
 		test_cp2_csc_neg.s		\
 		test_cp2_cjr.s			\
