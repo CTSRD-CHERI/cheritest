@@ -50,6 +50,6 @@ class test_cp2_x_cunseal_otype(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_x_cunseal_otype_3(self):
         '''Test capability cause was set correcly when otypes did't match'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0401,
+        self.assertRegisterEqual(self.MIPS.a3, 0x0403,
             "Capability cause was not set correcly when otypes didn't match")
 
