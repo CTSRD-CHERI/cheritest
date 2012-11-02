@@ -47,3 +47,9 @@ class test_cp2_x_csealdata_tag(BaseCHERITestCase):
         '''Test csealdata raised a C2E exception when capability tag was unset'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "csealdata did not raise an exception when capability tag was unset")
+
+    @attr('capabilities')
+    def test_cp2_x_csealdata_tag_3(self):
+        '''Test csealdata set capability cause correctly when tag was unset'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0202,
+            "csealdata did not set capability cause correctly when capability tag was unset")
