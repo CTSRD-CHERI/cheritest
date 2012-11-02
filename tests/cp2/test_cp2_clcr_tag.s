@@ -68,7 +68,7 @@ test:		.ent test
 		#
 		# Invalidate the line in the L1
 		#
-  addi $t1, $t0, 16384
+		dla $t1, cap1 + 16384
   clcr	$c16, $t1($c0)
   
   #
@@ -79,10 +79,7 @@ test:		.ent test
 		#
 		# Invalidate the line in the L1 & L2
 		#
-  addi $t1, $t0, 16384
-  addi $t1, $t1, 16384
-  addi $t1, $t1, 16384
-  addi $t1, $t1, 16384
+		dla $t1, cap1 + 16384*4
   clcr	$c16, $t1($c0)
   
   #
