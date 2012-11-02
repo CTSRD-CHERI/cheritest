@@ -85,6 +85,7 @@ test:		.ent test
 
 		dla     $t0, sandbox
 		cjalr   $t0($c1) 	# This should raise an exception
+		nop			# Branch delay slot
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
