@@ -73,6 +73,7 @@ test:		.ent test
 		cgettype	$a1, $c3
 		cgetbase	$a2, $c3
 		cgetlen		$a3, $c3
+		cgettag  $a4, $c3
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

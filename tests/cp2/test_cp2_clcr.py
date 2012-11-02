@@ -54,3 +54,8 @@ class test_cp2_clcr(BaseCHERITestCase):
     def test_cp2_clcr_getleng(self):
         '''Test that clcr loaded the length field correctly'''
         self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "clcr loaded incorrect length")
+        
+    @attr('capabilities')
+    def test_cp2_clcr_gettag(self):
+        '''Test that clcr loaded the tag correctly'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000001, "clcr load has the correct tag")
