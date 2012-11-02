@@ -34,8 +34,7 @@
 .set noat
 
 #
-# Test that clb raises an exception if the offset is outside the range
-# of the capability.
+# Test that csc raises an exception if the address is not aligned.
 #
 
 		.global test
@@ -90,6 +89,7 @@ test:		.ent test
 		.ent bev0_handler
 bev0_handler:
 		li	$a2, 1
+		mfc0	$a3, $13	# Cause register
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14

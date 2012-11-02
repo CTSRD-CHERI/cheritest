@@ -53,3 +53,9 @@ class test_cp2_x_csc_align(BaseCHERITestCase):
         '''Test csc raises an exception when the address is unaligned'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "csc did not raise an exception when the address was unaligned")
+
+    @attr('capabilities')
+    def test_cp2_x_csc_align_4(self):
+        '''Test CP0 cause register was set correctly when address was unaligned'''
+        self.assertRegisterEqual(self.MIPS.a3, 5*4,
+            "CP0 status was not set to AdES when the address was unaligned")
