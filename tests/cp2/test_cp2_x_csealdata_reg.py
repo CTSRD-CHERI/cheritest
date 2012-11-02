@@ -47,3 +47,9 @@ class test_cp2_x_csealdata_reg(BaseCHERITestCase):
         '''Test csealdata raised a C2E exception when register was reserved'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "csealdata did not raise an exception when ct was reserved")
+    @attr('capabilities')
+
+    def test_cp2_x_csealdata_reg_3(self):
+        '''Test csealdata set capability cause correctly when register was reserved'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x1c1d,
+            "csealdata did not set capability cause correctly when ct was reserved")
