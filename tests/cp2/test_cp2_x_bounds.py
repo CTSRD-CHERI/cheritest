@@ -51,6 +51,6 @@ class test_cp2_x_bounds(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_x_bounds_3(self):
         '''Test capability cause is set when read beyond end of array'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x11,
+        self.assertRegisterEqual(self.MIPS.a3, 0x0101,
             "capability cause register not set correctly when read beyond end of array")
 
