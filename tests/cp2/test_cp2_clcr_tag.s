@@ -58,6 +58,7 @@ test:		.ent test
 		# XXXRW: Fix to use indexed address syntax once available.
 		#
 		dla	$t0, cap1
+		clcr	$c16, $t0($c0)
 		cscr	$c2, $t0($c0)
 
 		#
@@ -69,9 +70,9 @@ test:		.ent test
 		# Invalidate the line in the L1
 		#
 		dla $t1, cap1 + 16384
-  clcr	$c16, $t1($c0)
+		cscr	$c16, $t1($c0)
   
-  #
+		#
 		# Load from the L2 into another capability register
 		#
 		clcr	$c4, $t0($c0)
@@ -80,12 +81,23 @@ test:		.ent test
 		# Invalidate the line in the L1 & L2
 		#
 		dla $t1, cap1 + 16384*4
-  clcr	$c16, $t1($c0)
+		cscr	$c16, $t1($c0)
   
-  #
-		# Load from the L2 into another capability register
+		#
+		# Load from the DRAM into another capability register
 		#
 		clcr	$c5, $t0($c0)
+
+		#
+                # Invalidate the line in the tag cache & L1 & L2
+                #
+                dla $t1, cap1 + 16384*512
+                cscr    $c16, $t1($c0)
+
+                #
+                # Load both tag and data from the DRAM into capability register
+                #
+                clcr    $c6, $t0($c0)
   
 		#
 		# Extract various values into general-purpose registers for
@@ -94,6 +106,7 @@ test:		.ent test
 		cgettag  $a0, $c3
 		cgettag  $a1, $c4
 		cgettag  $a2, $c5
+		cgettag  $a3, $c6
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

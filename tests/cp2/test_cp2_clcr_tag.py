@@ -47,5 +47,10 @@ class test_cp2_clcr_tag(BaseCHERITestCase):
         
     @attr('capabilities')
     def test_cp2_clcr_gettag_DRAM(self):
-        '''Test that clcr loaded the tag correctly from DRAM'''
+        '''Test that clcr loaded the tag correctly from the tag cache.'''
         self.assertRegisterEqual(self.MIPS.a2, 0x0000000000000001, "clcr load from DRAM has the correct tag")
+
+    @attr('capabilities')
+    def test_cp2_clcr_gettag_DRAM(self):
+        '''Test that clcr loaded the tag correctly from DRAM'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0000000000000001, "clcr load from DRAM has the correct tag")
