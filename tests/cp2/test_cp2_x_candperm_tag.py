@@ -31,25 +31,25 @@ from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test that csetlen raises a C2E exception if the tag bit is not set on
+# Test that candperm raises a C2E exception if the tag bit is not set on
 # the capability register.
 #
 
-class test_cp2_x_csetlen_tag(BaseCHERITestCase):
+class test_cp2_x_candperm_tag(BaseCHERITestCase):
     @attr('capabilities')
-    def test_cp2_x_setlen_tag_1(self):
-        '''Test csetlen did not set the length of an untagged capability'''
-        self.assertRegisterEqual(self.MIPS.a0, 8,
-            "csetlen set the length of a capability with tag bit unset")
+    def test_cp2_x_candperm_tag_1(self):
+        '''Test candperm did not change the permissions of an untagged capability'''
+        self.assertRegisterEqual(self.MIPS.a0, 7,
+            "candperm changed the permissions of a capability with tag bit unset")
 
     @attr('capabilities')
-    def test_cp2_x_csetlen_tag_2(self):
-        '''Test cincbase raised a C2E exception when capability tag was unset'''
+    def test_cp2_x_candperm_tag_2(self):
+        '''Test candperm raised a C2E exception when capability tag was unset'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
-            "csetlen did not raise an exception when capability tag was unset")
+            "candperm did not raise an exception when capability tag was unset")
 
     @attr('capabilities')
-    def test_cp2_x_csetlen_tag_3(self):
+    def test_cp2_x_candperm_tag_3(self):
         '''Test capability cause is set correctly when capability tag was unset'''
         self.assertRegisterEqual(self.MIPS.a3, 0x0201,
             "Capability cause was not set correcly when capability tag was unset")
