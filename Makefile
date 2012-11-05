@@ -455,8 +455,10 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cgetperm_reg.s	\
 		test_cp2_x_cgettype_reg.s	\
 		test_cp2_x_cgetpcc_reg.s	\
-		test_cp2_cunseal_ephemeral.s	\
 		test_cp2_x_cgetcause_perm.s	\
+		test_cp2_x_cincbase_tag.s	\
+		test_cp2_x_csetlen_tag.s	\
+		test_cp2_cunseal_ephemeral.s	\
 		test_cp2_x_cld_priority.s	\
 		test_cp2_x_fetch.s		\
 		test_cp2_x_cjalr_perm.s		\
