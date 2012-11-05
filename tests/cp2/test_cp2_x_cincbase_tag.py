@@ -38,9 +38,9 @@ from nose.plugins.attrib import attr
 class test_cp2_x_cincbase_tag(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_x_cincbase_tag_1(self):
-        '''Test cincbasedid not increment an untagged capability'''
+        '''Test cincbase did not increment an untagged capability'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
-            "clbu read via a capability with tag bit unset")
+            "cincbase incremented a capability with tag bit unset")
 
     @attr('capabilities')
     def test_cp2_x_cincbase_tag_2(self):
