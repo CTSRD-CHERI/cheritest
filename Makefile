@@ -464,6 +464,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cld_priority.s	\
 		test_cp2_x_fetch.s		\
 		test_cp2_x_cjalr_perm.s		\
+		test_cp2_x_cjr_ephemeral.s	\
 		test_cp2_x_cjalr_ephemeral.s
 
 TEST_ALU_OVERFLOW_FILES=			\
