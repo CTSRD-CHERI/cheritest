@@ -35,8 +35,8 @@ from nose.plugins.attrib import attr
 # is moved between registers
 #
 
-class test_cp2_mem_get_pipeline(BaseCHERITestCase):
+class test_cp2_mod_mod_pipeline(BaseCHERITestCase):
     @attr('capabilities')
-    def test_cp2_mem_get_pipeline_1(self):
+    def test_cp2_mod_mod_pipeline_1(self):
         '''Test that csetlen sets length immediately after cmove'''
-        self.assertRegisterEqual(self.MIPS.a0, 0, "csetlen didn't set length after cmove")
+        self.assertRegisterEqual(self.MIPS.a0, 0, "csetlen didn't set length immediately after cmove")
