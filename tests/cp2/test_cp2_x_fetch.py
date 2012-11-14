@@ -48,3 +48,10 @@ class test_cp2_x_fetch(BaseCHERITestCase):
         '''Test instruction fetch raises an exception'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "Instruction fetch did not raise an exception when PCC.length exceeded")
+
+    @attr('capabilities')
+    def test_cp2_x_fetch_3(self):
+        '''Test that exception during instruction fetch sets cause register'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x01ff,
+            "Exception during Instruction fetch did not set cause register correctly")
+

@@ -92,6 +92,7 @@ finally:
 		.ent bev0_handler
 bev0_handler:
 		li	$a2, 1
+		cgetcause $a3
 		cmove   $c31, $c0
 		dla	$k0, finally
 		dmtc0	$k0, $14
