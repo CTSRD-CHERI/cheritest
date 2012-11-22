@@ -401,7 +401,7 @@ def generate_tlb(options):
           ),
           (
                 'index', 
-                [0,1,21,47]
+                [0,1,31,47]
           ),
           (
                 'valid',
