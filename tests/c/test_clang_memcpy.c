@@ -120,7 +120,7 @@ int test(void)
 	copy = memcpy(&t2, &t1.pad0[1], sizeof(t1) - 1);
 	assert(copy == &t2);
 	// This should have invalidated the capability
-	assert(__builtin_cheri_get_cap_tag(t2.y) == 0);
+	assert(!__builtin_cheri_get_cap_tag(t2.y));
 	// Check that the non-capability data has been copied correctly
 	for (int i=0 ; i<31 ; i++)
 	{
