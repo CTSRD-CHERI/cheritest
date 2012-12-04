@@ -11,7 +11,7 @@ void  __assert(int cond, int line)
 
 // Dumps a value into a specified register.  Useful for debugging test cases.
 #define DEBUG_DUMP_REG(regno, val) \
-    __asm__ volatile ("addi $" #regno ", %0, 0" : : "r" (val) : #regno);
+    __asm__ volatile ("dadd $" #regno ", %0, $0" : : "r" (val) : #regno);
 
 // Add a nop
 #define DEBUG_NOP() \
