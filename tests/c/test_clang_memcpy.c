@@ -6,10 +6,10 @@ typedef __SIZE_TYPE__ size_t;
 #define memcpy smemcpy
 
 __capability void *cmemcpy(__capability void *dst,
-                           __capability void *src,
+                           __capability const void *src,
                            size_t len);
 void *memcpy(void *dst,
-             void *src,
+             const void *src,
              size_t len);
 #define CAP(x) ((__capability void*)x)
 
