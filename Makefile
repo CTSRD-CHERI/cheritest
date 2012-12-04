@@ -765,7 +765,7 @@ $(OBJDIR)/test_%.o : test_%.s
 # Once the assembler works, we can try this version too:
 #clang  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 $(OBJDIR)/test_clang%.o : test_clang%.c
-	clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O0 -ffunction-sections
+	clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
 	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
