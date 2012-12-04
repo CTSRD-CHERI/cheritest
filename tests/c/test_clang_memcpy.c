@@ -120,9 +120,7 @@ int test(void)
 	copy = memcpy(&t2, &t1.pad0[1], sizeof(t1) - 1);
 	assert(copy == &t2);
 	// This should have invalidated the capability
-	// FIXME: Unfortunately, we can't test this at the moment because this
-	// appears to crash clang...
-	// assert(!__builtin_cheri_get_cap_tag(t2.y));
+	assert(__builtin_cheri_get_cap_tag(t2.y) == 0);
 	// Check that the non-capability data has been copied correctly
 	for (int i=0 ; i<31 ; i++)
 	{
