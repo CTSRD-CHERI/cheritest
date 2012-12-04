@@ -518,15 +518,16 @@ fast_path:                       # At this point, src and dst are known to have
 	beqzl   $v1, aligned_copy    # If we have an aligned copy (which we probably
 	                             # do) then skip the slow part
 	
-	nop
+	dsub    $a2, $a0, $a1        # $12 = amount left to copy (delay slot, only
+	                             # executed if branch is taken)
 unaligned_start:
 	clb      $a2, $a1, 0($c2)
-	csb      $a2, $a1, 0($c1)
 	daddi    $a1, $a1, 1
 	bne      $v1, $a1, unaligned_start 
+	csb      $a2, $a1, -1($c1)
 
+	dsub     $a2, $a0, $a1        # $12 = amount left to copy
 aligned_copy:
-	dsub    $a2, $a0, $a1        # $12 = amount left to copy
 	addi    $at, $zero, 0xFFE0
 	and     $a2, $a2, $at        # a2 = number of 32-byte aligned bytes to copy
 	dadd    $a2, $a2, $a1        # ...plus the number already copied.
@@ -534,9 +535,8 @@ aligned_copy:
 copy_caps:
 	clc     $c3, $a1, 0($c2)
 	daddi   $a1, $a1, 32
-	csc     $c3, $a1, -32($c1)
 	bne     $a1, $a2, copy_caps
-	nop
+	csc     $c3, $a1, -32($c1)
 
 	dsub    $v1, $a0, $a2        # Subtract the number of bytes copied from the
 	                             # number to copy.  This should give the number
@@ -547,10 +547,9 @@ copy_caps:
 	dadd    $v1, $a1, $v1
 unaligned_end:
 	clb      $a2, $a1, 0($c2)
-	csb      $a2, $a1, 0($c1)
 	daddi    $a1, $a1, 1
 	bne      $v1, $a1, unaligned_end
-	nop
+	csb      $a2, $a1, -1($c1)
 
 cmemcpy_return:
 	jr       $ra                 # Return value remains in c1
@@ -558,10 +557,9 @@ cmemcpy_return:
 
 slow_memcpy_loop:                # byte-by-byte copy
 	clb      $a2, $a1, 0($c2)
-	csb      $a2, $a1, 0($c1)
 	daddi    $a1, $a1, 1
 	bne      $a0, $a1, slow_memcpy_loop
-	nop
+	csb      $a2, $a1, -1($c1)
 	jr       $ra                 # Return value remains in c1
 	nop
 .end cmemcpy
