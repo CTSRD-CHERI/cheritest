@@ -30,6 +30,7 @@
 
 import tools.gxemul, tools.sim
 import os, re, itertools
+from nose.plugins.attrib import attr
 
 # Parameters from the environment
 # Cached or uncached mode.
@@ -43,6 +44,7 @@ TEST_DIR ='tests/c'
 #Not derived from unittest.testcase because we wish test_clang to
 #return a generator.
 class TestClang(object):
+    @attr('clang')
     def test_clang(self):
         if ONLY_TEST:
             yield ('check_answer', ONLY_TEST)
