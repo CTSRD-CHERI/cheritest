@@ -28,6 +28,8 @@
 # SUCH DAMAGE.
 #
 
+.include "macros.s"
+        
 .set mips64
 .set noreorder
 .set nobopt
@@ -563,3 +565,51 @@ slow_memcpy_loop:                # byte-by-byte copy
 	jr       $ra                 # Return value remains in c1
 	nop
 .end cmemcpy
+
+#
+# Get the ID of the current thread. Reads CP0 register 15
+# (processor ID, so needs appropriate privilege).
+# Args: None
+# Returns: (Up to) 8-bit thread ID
+#
+        .ent get_thread_id
+        .global get_thread_id
+get_thread_id:
+        dmfc0    $v0, $15            # load processor ID register, d prevents sign extension
+        jr       $ra                 # return
+        srl      $v0, 24             # shift down thread id (delay slot)
+        .end get_thread_id
+
+#
+#  Wait for all threads to reach a certain point. This is done using per thread
+#  counters. On entry to the barrier we increment this thread's counter then loop
+#  waiting for all other threads' counters to equal or exceed our own. Only works
+#  for a SINGLE CORE. Does not handle wrapping of the 8-bit counters. Needs
+#  sufficient privilege to access the current thread ID.
+#  Args: $a0 - A pointer to an array of bytes (one per thread) to use as counters 
+#      -- typically allocated using the mkBarrier macro.
+#  Returns: The value of the counter (i.e. the number of times the barrier has been called so far)
+#
+        .ent thread_barrier
+        .global thread_barrier
+thread_barrier:
+        dmfc0    $t0, $15            # load processor ID register, d prevents sign extension
+        srl      $t0, 24             # shift down thread id
+        dadd     $t1, $a0, $t0       # address of flag for this thread
+        lbu      $v0, 0($t1)         # load flag value
+        add      $v0, 1              # increment
+        sb       $v0, 0($t1)         # store new value
+barrier_loop:
+        li       $t0, (thread_count-1) # Number of threads
+        dadd     $t1, $a0, $t0       # address of first counter
+thread_loop:
+        lbu      $t2, 0($t1)         # load counter value
+        subu     $t3, $v0, $t2       # difference of counters
+        bgtz     $t3, barrier_loop   # loop again if some thread has not reached barrier
+        subu     $t0, 1              # decrement thread counter (delay slot)
+        bgez     $t0, thread_loop    # next thread
+        dadd     $t1, $a0, $t0       # address of next counter  (delay slot)
+        # Barrier complete
+        jr       $ra                 # return
+        nop                          # (delay slot)
+        .end thread_barrier

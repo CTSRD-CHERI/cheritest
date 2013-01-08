@@ -60,7 +60,8 @@ TESTDIRS=					\
 		$(TESTDIR)/cp0                  \
 		$(TESTDIR)/cp2                  \
 		$(TESTDIR)/fuzz_regressions     \
-		$(TESTDIR)/c
+		$(TESTDIR)/c                    \
+		$(TESTDIR)/mt
 
 ifneq ($(NOFUZZ),1)
 TESTDIRS +=  $(TESTDIR)/fuzz

@@ -30,6 +30,8 @@
 # SUCH DAMAGE.
 #
 
+.include "macros.s"
+        
 .set mips64
 .set noreorder
 .set nobopt
@@ -47,17 +49,21 @@
 		.global start
 		.ent start
 start:
-                dmfc0   $k0, $15
-                srl     $k0, 24
-                and     $k0, 0xff  # get thread ID
-thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
-                nop
+                jal     get_thread_id
+                nop                         # (delay slot)
         
 		# Set up stack and stack frame
 		dla	$fp, __sp
-		dla	$sp, __sp
-		daddu 	$sp, $sp, -32
+                sll     $t0, $v0, 10 # Allocate 1k stack per thread. XXX need to fix __heap_top__
+                dsubu   $fp, $t0
+		daddu 	$sp, $fp, -32
 
+        
+                dla     $a0, reset_barrier
+                dla     $ra, all_threads    # skip exception handler install on non-zero threads
+                bgtz    $v0, thread_barrier # spin if not thread 0
+                nop
+        
 		# Install default exception handlers
 		dla	$a0, exception_count_handler
 		jal 	bev0_handler_install
@@ -67,6 +73,7 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		jal	bev1_handler_install
 		nop
 
+all_threads:
 	        # Switch to 64-bit mode (no effect on cheri, but required for gxemul)
 	        mfc0    $at, $12
 	        or      $at, $at, 0xe0
@@ -213,7 +220,23 @@ install_tlb_entry:
 	nop
 .end install_tlb_entry
 
+#
+# By default threads other than thread 0 will enter a barrier on reset.
+# This function causes thread 0 to enter the barrier, thereby releasing the
+# other threads from their prison.
+# Args: None
+# Returns: Nothing
+.global other_threads_go
+.ent other_threads_go        
+other_threads_go:
+                dla          $a0, reset_barrier      # Load barrier data
+                j            thread_barrier          # Tail call to the barrier
+                nop                                  # (delay slot)
+.end other_threads_go
+
 	        .data
 		.align 3
 exception_count:
 		.dword	0x0
+reset_barrier:
+                mkBarrier
