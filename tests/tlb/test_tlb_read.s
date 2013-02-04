@@ -37,11 +37,11 @@ test:   .ent    test
  		dmtc0	$zero, $5       	# Write 0 to page mask i.e. 4k pages
  		li	$a0, 0x6
 		dmtc0	$a0, $0			# TLB index
-		li	$a0, 0x2000
+		dli	$a0, 0xc000000000002005
 		dmtc0	$a0, $10		# TLB HI address
-		li	$a0, 0x3010
+		li	$a0, 0x3017
 		dmtc0	$a0, $2			# TLB EntryLow0 = k0 (Low half of TLB entry for even virtual address (VPN))
-		li	$a0, 0x4010
+		li	$a0, 0x4011
 		dmtc0	$a0, $3			# TLB EntryLow1 = k0 (Low half of TLB entry for odd virtual address (VPN))
 		tlbwi				# Write Indexed TLB Entry
 		
