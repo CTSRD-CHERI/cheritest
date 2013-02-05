@@ -76,7 +76,7 @@ test:		.ent test
 		#
 		dla	$s0, bytes
 desired_epc:
-		ld	$a7, 1($s0)
+		sw	$a7, 1($s0)
 		daddi $s0, $s0, 1
 
 		#
