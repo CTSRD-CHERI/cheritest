@@ -50,3 +50,6 @@ class test_sd_unalign(BaseCHERITestCase):
 
     def test_not_exl_after_handler(self):
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
+
+    def test_badvaddr(self):
+        self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s0, "BadVAddr equal to Unaligned Address")

@@ -41,6 +41,9 @@ class test_sh_unalign(BaseCHERITestCase):
 
     def test_exl_in_handler(self):
         self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
+        
+    def test_badvaddr(self):
+        self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s0, "BadVAddr equal to Unaligned Address")
 
     def test_cause_bd(self):
         self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")

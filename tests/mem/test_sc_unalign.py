@@ -46,6 +46,10 @@ class test_sc_unalign(BaseCHERITestCase):
     @attr('llsc')
     def test_exl_in_handler(self):
         self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
+        
+    @attr('llsc')
+    def test_badvaddr(self):
+        self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s0, "BadVAddr equal to Unaligned Address")
 
     @attr('llsc')
     def test_cause_bd(self):

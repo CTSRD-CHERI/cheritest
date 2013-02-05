@@ -74,9 +74,10 @@ test:		.ent test
 		#
 		# Trigger exception.
 		#
-		dla	$t0, bytes
+		dla	$s0, bytes
 desired_epc:
-		scd	$a7, 1($t0)
+		scd	$a7, 1($s0)
+		daddi $s0, $s0, 1
 
 		#
 		# Exception return.
@@ -104,6 +105,7 @@ bev0_handler:
 		mfc0	$a3, $12	# Status register
 		mfc0	$a4, $13	# Cause register
 		dmfc0	$a5, $14	# EPC
+		dmfc0	$a7, $8   # bad virtual address
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
 		nop			# NOPs to avoid hazard with ERET
