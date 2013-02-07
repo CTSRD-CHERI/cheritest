@@ -635,7 +635,9 @@ TEST_CYCLE_LIMIT=1000000
 # tests to current categories.
 #
 
-CHERIROOT?=../../cheri/trunk
+# Set CHERI_VER to 2 to test cheri2
+CHERI_VER?=
+CHERIROOT?=../../cheri$(CHERI_VER)/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
@@ -649,6 +651,9 @@ SIM        := ${CHERIROOT_ABS}/sim
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
+ifeq ($(CHERI_VER),2)
+NOSEFLAGS?=-A "not capabilities and not clang and not lladdr"
+endif
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
@@ -775,7 +780,7 @@ $(OBJDIR)/test_%.o : test_%.c
 	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym CHERI_VER=$(CHERI_VER) -o $@ $<
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< 
 
 #
