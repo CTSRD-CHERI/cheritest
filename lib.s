@@ -89,7 +89,7 @@ memcpy_done:
 # BEV=0 and BEV=1.  The handler to install is at address a0, and will be
 # jumped to unconditionally.
 #
-# This function invokes memcpy(), which will stop on a2, t0, and v0.
+# This function invokes memcpy(), which will stomp on a2, t0, and v0.
 #
 
 		.data
