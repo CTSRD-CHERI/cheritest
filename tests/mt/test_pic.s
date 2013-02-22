@@ -33,19 +33,16 @@
 
 .global test
 test:   .ent    test
-        dla     $a0, 0x9800000003f80400
-        li      $at, 0x1
-        sd      $at, 16($a0)  # unmask int 0
-        sd      $at, 128($a0) # map int 0 to int 1...
-        sd      $at, 0($a0)   # set int 0
-        ld      $a1, 16($a0)  # read mask
-        ld      $a2, 24($a0)  # read raw ints
-        ld      $a3, 32($a0)  # read masked ints
-        ld      $a4, 128($a0) # read map 0
-        ld      $a5, 136($a0) # read map 2
-
-        dmfc0   $a6, $13
-
+        dla     $a0, 0x900000007f804000  # PIC_BASE
+        dla     $t0, 0x80000004          # enable irq 2, forward to IP4
+        sd      $t0, 16($a0)
+        dadd    $a1, $a0, 0x2000         # PIC_IP_READ_BASE        
+        li      $t0, 6
+        sd      $t0, 128($a1)            # set irq 2 and 1
+        ld      $a2, 0($a1)              # read irq pending
+        dmfc0   $a3, $13                 # read cause reg
+        sd      $t0, 256($a1)            # clear irq 2
+        ld      $a4, 0($a1)              # read irq pending
 	jr      $ra
 	nop
 .end    test
