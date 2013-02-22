@@ -349,6 +349,9 @@ TEST_CP0_FILES=					\
 		test_cp0_user.s                 \
 		test_cp0_ri.s
 
+ifeq ($(CHERI_VER),2)
+TEST_CP2_FILES=
+else
 TEST_CP2_FILES=					\
 		test_cp2_reg_init.s		\
 		test_cp2_reg_name.s		\
@@ -475,6 +478,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cjalr_ephemeral.s	\
 		test_cp2_x_sb_perm.s		\
 		test_cp2_x_cincbase_delay.s
+endif
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
