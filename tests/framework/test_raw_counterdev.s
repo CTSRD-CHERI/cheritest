@@ -41,7 +41,7 @@
 
 		.global start
 start:
-		dli	$t0, 0x900000007f004000
+		dli	$t0, 0x900000007f800000
 
 		#
 		# Read three times, we'll make sure they are all different.

@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 class test_raw_counterdev(BaseCHERITestCase):
     @attr('counterdev')
     def test_t0(self):
-        self.assertRegisterEqual(self.MIPS.t0, 0x900000007f004000, "Unexpected counter address")
+        self.assertRegisterEqual(self.MIPS.t0, 0x900000007f800000, "Unexpected counter address")
 
     @attr('counterdev')
     def test_a0_a1(self):
