@@ -458,6 +458,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csealdata_tag.s	\
 		test_cp2_x_csealdata_reg.s	\
 		test_cp2_x_csealdata_perm.s	\
+		test_cp2_x_csealdata_pri.s	\
 		test_cp2_x_cgetbase_reg.s	\
 		test_cp2_x_cgetlen_reg.s	\
 		test_cp2_x_cgettag_reg.s	\
