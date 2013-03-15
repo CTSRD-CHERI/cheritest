@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2011 Robert N. M. Watson, 2013 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,11 +33,13 @@ from nose.plugins.attrib import attr
 class test_cp2_clld(BaseCHERITestCase):
 
     @attr('llsc')
+    @attr('capabilities')
     def test_cp2_clld_1(self):
 	'''That an uninterrupted clld+cscd succeeds'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted clld+cscd failed")
 
     @attr('llsc')
+    @attr('capabilities')
     def test_cp2_clld_2(self):
 	'''That an uninterrupted clld+cscd stored the right value'''
 	self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "Uninterrupted clld+cscd stored wrong value")
