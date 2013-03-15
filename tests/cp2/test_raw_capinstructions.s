@@ -139,6 +139,14 @@ start:
 		csealdata $c1,  $c2, $c3
 		cunseal   $c1,  $c2, $c3
 
+		# load linked/store conditional
+		clld      $t1, $a3, 0($c2)
+		cscd      $t1, $a3, 0($c2)
+		clldr     $t1, $a3($c2)
+		cscdr     $t1, $a3($c2)
+		clldi     $t1, 0($c2)
+		cscdi     $t1, 0($c2)
+
                 # jumps
 		dla       $t1, l0
 		cjr       $t1($c0)
