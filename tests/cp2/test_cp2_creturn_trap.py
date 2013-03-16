@@ -46,5 +46,18 @@ class test_cp2_creturn_trap(BaseCHERITestCase):
     def test_cp_creturn2(self):
         '''Test that creturn sets the cap cause register'''
         self.assertRegisterEqual(self.MIPS.a3, 0x0604,
-            "ccall did not set capability cause correctly")
+            "creturn did not set capability cause correctly")
+
+    @attr('capabilities')
+    def test_cp_creturn3(self):
+        '''Test that $kcc is copied to $pcc when trap handler runs'''
+        self.assertRegisterEqual(self.MIPS.a4, 0x7fff,
+            "creturn did not set capability cause correctly")
+
+    @attr('capabilities')
+    def test_cp_creturn4(self):
+        '''Test that creturn restored full perms to $pcc'''
+        self.assertRegisterEqual(self.MIPS.a6, 0x7fff,
+            "creturn did not restore full perms to $pcc")
+
 

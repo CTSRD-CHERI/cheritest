@@ -34,13 +34,8 @@
 .set noat
 
 #
-# Test ccall
+# Test CReturn
 #
-
-# In this test, sandbox isn't actually called, but its address is used
-# as an otype.
-sandbox:
-		creturn
 
 		.global test
 test:		.ent test
@@ -70,6 +65,17 @@ test:		.ent test
 		jal memcpy
 		nop			# branch-delay slot
 
+		# Discard the permissions to access the reserved registers
+		# After this, we're running in a sandbox.
+		dli     $t0, 0x1ff
+		candperm $c1, $c0, $t0
+		dla     $t0, sandbox
+		cjr     $t0($c1)
+		nop
+
+
+sandbox:
+
 		# $a2 will be set to 1 if the normal trap handler is called,
 		# 2 if the ccall trap handler is called.
 		dli	$a2, 0
@@ -77,6 +83,12 @@ test:		.ent test
 		creturn
 		nop
 
+		# The creturn should have restored all privileges to $pcc.
+		# Check that it has.
+		cgetpcc $t0($c1)
+		cgetperm $a6, $c1
+		
+		
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
@@ -102,6 +114,14 @@ bev0_handler:
 bev0_ccall_handler:
 		li      $a2, 2
 		cgetcause $a3
+		# When the exception happened, $kcc should have been copied
+		# to $pcc.
+		cgetpcc $k0($c1)
+		cgetperm $a4, $c1
+		# Move $pcc to $epcc so when we return to user space from
+		# the trap handler, the user space program will have got
+		# full privileges.
+		cmove $c31, $c1
 		dmfc0   $a5, $14
 		daddiu  $k0, $a5, 4 # Bump EPC forward one instruction
 		dmtc0   $k0, $14
