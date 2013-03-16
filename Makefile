@@ -444,6 +444,7 @@ TEST_CP2_FILES=					\
 		test_cp2_c0_sealed.s		\
 		test_cp2_clld.s			\
 		test_cp2_ccall.s		\
+		test_cp2_creturn_trap.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
