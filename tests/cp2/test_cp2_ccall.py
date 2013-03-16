@@ -38,6 +38,12 @@ class test_cp2_ccall(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_ccall1(self):
         '''Test that ccall causes a trap'''
-        self.assertRegisterEqual(self.MIPS.a2, 5,
+        self.assertRegisterEqual(self.MIPS.a2, 2,
             "ccall did not cause the right trap handler to be run")
+
+    @attr('capabilities')
+    def test_cp_ccall2(self):
+        '''Test that ccall sets the cap cause register'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0504,
+            "ccall did not set capability cause correctly")
 

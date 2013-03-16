@@ -94,7 +94,11 @@ test:		.ent test
 		# Make $c4 a code capability for sandbox
 		csealcode $c4, $c1
 
-		ccall    $c4, $c3
+		# $a2 will be set to 1 if the normal trap handler is called,
+		# 2 if the ccall trap handler is called.
+		dli	$a2, 0
+
+		ccall   $c4, $c3
 		nop
 
 		ld	$fp, 16($sp)
@@ -120,7 +124,7 @@ bev0_handler:
 
 		.ent bev0_ccall_handler
 bev0_ccall_handler:
-		li      $a2, 0x5
+		li      $a2, 2
 		cgetcause $a3
 		dmfc0   $a5, $14
 		daddiu  $k0, $a5, 4 # Bump EPC forward one instruction
