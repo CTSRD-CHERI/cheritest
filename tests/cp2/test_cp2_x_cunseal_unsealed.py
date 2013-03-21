@@ -50,6 +50,6 @@ class test_cp2_x_cunseal_unsealed(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_x_cunseal_unsealed_3(self):
         '''Test capability cause was set correcly when capability was already unsealed'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0301,
+        self.assertRegisterEqual(self.MIPS.a3, 0x0302,
             "Capability cause was not set correcly when capability was already unsealed")
 
