@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2012 Michael Roe
+# Copyright (c) 2013 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -37,6 +37,17 @@
 # Test CReturn
 #
 
+sandbox:
+
+		# $a2 will be set to 1 if the normal trap handler is called,
+		# 2 if the ccall/creturn trap handler is called.
+		dli	$a2, 0
+
+		creturn
+		nop 		# branch delay slot
+		j	L1
+		nop
+
 		.global test
 test:		.ent test
 		daddu 	$sp, $sp, -32
@@ -55,7 +66,7 @@ test:		.ent test
 		nop
 
 		#
-		# Set up trap handler for CCall
+		# Set up trap handler for CCall/CReturn
 		#
 
 		dli	$a0, 0xffffffff80000280
@@ -65,23 +76,51 @@ test:		.ent test
 		jal memcpy
 		nop			# branch-delay slot
 
+		#
+		# Create a capability for the trusted system stack
+		#
+
+		dla	$t0, trusted_system_stack
+		cincbase $c1, $c0, $t0
+		dli     $t0, 96
+		csetlen $c1, $c1, $t0
+		dla	$t0, tsscap
+		cscr    $c1, $t0($c0)
+
+		#
+		# Initialize the pointer into the trusted system stack
+		#
+
+		dla	$t0, tssptr
+		dli	$t1, 0
+		csdr	$t1, $t0($c0)
+
+		#
+		# Fake the effect of having done a CCall without using
+		# the CCall instruction
+		#
+
+		dla	$t1, L1
+		csdi    $t1, 0($c1)
+		csci    $c0, 32($c1)
+		csci	$c0, 64($c1)
+
+		#
 		# Discard the permissions to access the reserved registers
-		# After this, we're running in a sandbox.
+		#
+
 		dli     $t0, 0x1ff
 		candperm $c1, $c0, $t0
+
+		#
+		# Run 'sandbox' with restricted permissions
+		#
+
 		dla     $t0, sandbox
 		cjr     $t0($c1)
-		nop
+		nop	# branch delay slot
 
-
-sandbox:
-
-		# $a2 will be set to 1 if the normal trap handler is called,
-		# 2 if the ccall trap handler is called.
-		dli	$a2, 0
-
-		creturn
-		nop
+L1:
 
 		# The creturn should have restored all privileges to $pcc.
 		# Check that it has.
@@ -116,15 +155,45 @@ bev0_ccall_handler:
 		cgetcause $a3
 		# When the exception happened, $kcc should have been copied
 		# to $pcc.
-		cgetpcc $k0($c1)
-		cgetperm $a4, $c1
-		# Move $pcc to $epcc so when we return to user space from
-		# the trap handler, the user space program will have got
-		# full privileges.
-		cmove $c31, $c1
-		dmfc0   $a5, $14
-		daddiu  $k0, $a5, 4 # Bump EPC forward one instruction
-		dmtc0   $k0, $14
+		cgetpcc $k0($c28)
+		cgetperm $a4, $c28
+
+		#
+		# Load a capability for the trusted system stack into
+		# kernel reserved capability register 2 ($c28)
+		#
+		# $c27 should already be a capability for the kernel's
+		# data segment
+		#
+
+		dla     $k0, tsscap
+		clcr	$c28, $k0($c27)
+
+		#
+		# Pop the EPCC off the trusted system stack, so it will
+		# restored to the user's PCC when this exception handler
+		# returns to user space.
+		#
+
+		dla	$k0, tssptr
+		cldr	$k0, $k0($c27)
+		clc	$c31, $k0, 32($c28)
+
+		#
+		# Pop the return address off the trusted system stack into
+		# EPC, so it will be returned to when this exception handler
+		# returns to user space.
+		#
+
+		dla	$k0, tssptr
+		cldr	$k0, $k0($c27)
+		cldr	$k0, $k0($c28)
+		dmtc0	$k0, $14
+
+		# cmove $c31, $c1
+		# dmfc0   $a5, $14
+		# daddiu  $k0, $a5, 4 # Bump EPC forward one instruction
+		# dmtc0   $k0, $14
 		nop
 		nop
 		nop
@@ -140,5 +209,29 @@ bev0_ccall_handler_stub:
 		.end bev0_ccall_handler_stub
 
 		.data
+
 		.align 3
-data:		.dword	0xfedcba9876543210
+tssptr:
+		.dword 0
+
+		.align 5
+tsscap:
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+
+		.align 5
+trusted_system_stack:
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
+		.dword 0
