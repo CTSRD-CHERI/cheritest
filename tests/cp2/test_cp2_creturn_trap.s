@@ -170,14 +170,25 @@ bev0_ccall_handler:
 		clcr	$c28, $k0($c27)
 
 		#
+		# Make $k0 the current offset into the trusted system stack.
+		#
+
+		dla	$k0, tssptr
+		cldr	$k0, $k0($c27)
+
+		#
 		# Pop the EPCC off the trusted system stack, so it will
 		# restored to the user's PCC when this exception handler
 		# returns to user space.
 		#
 
-		dla	$k0, tssptr
-		cldr	$k0, $k0($c27)
 		clc	$c31, $k0, 32($c28)
+
+		#
+		# Pop the IDC ($c26) off the trusted system stack.
+		#
+
+		clc     $c26, $k0, 64($c28)
 
 		#
 		# Pop the return address off the trusted system stack into
@@ -185,15 +196,9 @@ bev0_ccall_handler:
 		# returns to user space.
 		#
 
-		dla	$k0, tssptr
-		cldr	$k0, $k0($c27)
 		cldr	$k0, $k0($c28)
 		dmtc0	$k0, $14
 
-		# cmove $c31, $c1
-		# dmfc0   $a5, $14
-		# daddiu  $k0, $a5, 4 # Bump EPC forward one instruction
-		# dmtc0   $k0, $14
 		nop
 		nop
 		nop
