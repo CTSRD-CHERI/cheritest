@@ -43,4 +43,4 @@ class test_template(BaseCHERITestCase):
     @attr('capabilities')
     def test_template_c0(self):
         ## Access capability register by number
-        self.MIPS.c0.base
+        self.MIPS.cp2[0].base
