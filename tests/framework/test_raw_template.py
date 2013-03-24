@@ -42,4 +42,4 @@ class test_raw_template(BaseCHERITestCase):
         ## Access register by number
         self.MIPS[0]
         ## Access capability register by number
-        self.MIPS.cp2[0]
+        self.MIPS.cp2[0].base
