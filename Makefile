@@ -570,10 +570,12 @@ TEST_TRAPI_FILES=				\
 # Don't attempt to build clang tests unless CLANG is set to 1, because clang might not be available
 # This will cause clang tests to fail but that is better than make falling over.
 ifeq ($(CLANG),1)
-TEST_CLANG_FILES=test_clang_cast.c              \
-                 test_clang_toy.c               \
-                 test_clang_load_data.c         \
-                 test_clang_store_data.c
+TEST_CLANG_FILES=\
+		test_clang_cast.c              \
+		test_clang_toy.c               \
+		test_clang_memcpy.c            \
+		test_clang_load_data.c         \
+		test_clang_store_data.c
 else
 TEST_CLANG_FILES=
 endif
