@@ -101,43 +101,43 @@ class test_cp2_exception_epcc(BaseCHERITestCase):
     #
     @attr('capabilities')
     def test_presandbox_epcc_unsealed(self):
-        self.assertRegisterEqual(self.MIPS.c2.u, 1, "pre-sandbox EPCC unsealed incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[31].u, 1, "pre-sandbox EPCC unsealed incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_perms(self):
-        self.assertRegisterEqual(self.MIPS.c2.perms, 0x7fff, "pre-sandbox EPCC perms incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[31].perms, 0x7fff, "pre-sandbox EPCC perms incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_ctype(self):
-        self.assertRegisterEqual(self.MIPS.c2.ctype, 0x0, "pre-sandbox EPCC ctype incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[31].ctype, 0x0, "pre-sandbox EPCC ctype incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_base(self):
-        self.assertRegisterEqual(self.MIPS.c2.base, 0x0, "pre-sandbox EPCC base incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[31].base, 0x0, "pre-sandbox EPCC base incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_length(self):
-        self.assertRegisterEqual(self.MIPS.c2.length, 0xffffffffffffffff, "pre-sandbox EPCC length incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[31].length, 0xffffffffffffffff, "pre-sandbox EPCC length incorrect")
 
     #
     # Check that the post-sandbox EPCC is as expected: sandboxed.
     #
     @attr('capabilities')
     def test_sandbox_epcc_unsealed(self):
-        self.assertRegisterEqual(self.MIPS.c3.u, 1, "sandbox EPCC unsealed incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].u, 1, "sandbox EPCC unsealed incorrect")
 
     @attr('capabilities')
     def test_sandbox_epcc_perms(self):
-        self.assertRegisterEqual(self.MIPS.c3.perms, 0x0007, "sandbox EPCC perms incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0007, "sandbox EPCC perms incorrect")
 
     @attr('capabilities')
     def test_sandbox_epcc_ctype(self):
-        self.assertRegisterEqual(self.MIPS.c3.ctype, 0x0, "sandbox EPCC ctype incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].ctype, 0x0, "sandbox EPCC ctype incorrect")
 
     @attr('capabilities')
     def test_sandbox_epcc_base(self):
-        self.assertRegisterEqual(self.MIPS.c3.base, self.MIPS.a7, "sandbox EPCC base incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].base, self.MIPS.a7, "sandbox EPCC base incorrect")
 
     @attr('capabilities')
     def test_sandbox_epcc_length(self):
-        self.assertRegisterEqual(self.MIPS.c3.length, self.MIPS.s0, "sandbox EPCC length incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].length, self.MIPS.s0, "sandbox EPCC length incorrect")
