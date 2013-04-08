@@ -295,6 +295,7 @@ TEST_ALU_FILES=					\
 TEST_MEM_FILES=					\
 		test_hardware_mappings.s	\
 		test_hardware_mappings_write.s	\
+		test_ld_cancelled.s			\
 		test_memory_flush		\
 		test_sd_burst.s			\
 		test_storeload.s		\
