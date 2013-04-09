@@ -577,7 +577,8 @@ TEST_CLANG_FILES=\
 		test_clang_memcpy.c		\
 		test_clang_load_data.c		\
 		test_clang_store_data.c		\
-		test_clang_struct.c
+		test_clang_struct.c		\
+		test_clang_opaque.c
 else
 TEST_CLANG_FILES=
 endif
