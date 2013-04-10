@@ -57,4 +57,6 @@ int test(void)
 
   e = example_constructor();
   assert(e->x == 0);
+
+  return 0;
 }
