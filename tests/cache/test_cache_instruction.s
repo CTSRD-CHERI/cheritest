@@ -58,13 +58,11 @@ test:		.ent test
 		mfc0	$s1, $16
 
 		#
-		# Calculate a physical address and save it in $gp.  Various
-		# virtual addreses, to be stored in $t0, will be generated
-		# using it.
+		# Calculate a physical address of the count register and 
+		# save it in $gp.  Various virtual addreses, to be stored 
+		# in $t0, will be generated using it.
 		#
-		dla	$gp, dword
-		dli	$t0, 0x00ffffffffffffff
-		and	$gp, $gp, $t0
+		dli	$gp, 0x000000007f800000
 
 		#
 		# Read via uncached address.
@@ -81,15 +79,13 @@ test:		.ent test
 		ld	$a1, 0($t0)
 		
 		#
-		# (2) Write via cached address; writes through to L2 cache and keeps in L1.
+		# (2) Read via cached address; brings line into data cache.
 		#
-		dli	$t0, 0x9800000000000000
-		daddu	$t0, $gp, $t0
-		ld	$a1, 0($t0)
+		ld	$a2, 0($t0)
 		
 		#
-		# (3) series of cache instructions to writeback cache lines.  
-		# These should be nops for our write-through.
+		# (3) series of cache instructions to writeback cache lines from the L1 data.  
+		# These should be nops for our L1 data cache which is write-through.
 		#
 		cache 0x19, 0($t0)
 		cache 0x19, 8($t0) 
@@ -97,12 +93,22 @@ test:		.ent test
 		cache 0x19, 18($t0) 
 		
 		#
-		# (4) series of cache instructions to writeback/invalidate data cache lines.  
+		# (4) Read again via cached address.  Should still be in cache and unchanged.
+		#
+		ld	$a3, 0($t0)
+		
+		#
+		# (4) series of cache instructions to writeback/invalidate data cache lines from data L1.  
 		#
 		cache 0x1, 0($t0)
 		cache 0x1, 8($t0) 
 		cache 0x1, 10($t0) 
 		cache 0x1, 18($t0) 
+		
+		#
+		# (4) Read again via cached address.  Should come from L2 cache and unchanged.
+		#
+		ld	$a4, 0($t0)
 		
 		#
 		# (5) series of cache instructions to invalidate data cache lines.  
@@ -113,12 +119,49 @@ test:		.ent test
 		cache 0x11, 18($t0) 
 		
 		#
+		# (4) Read again via cached address.  Should come from L2 cache and unchanged.
+		#
+		ld	$a5, 0($t0)
+		
+		#
+		# (5) series of cache instructions to invalidate data cache and L2 cache lines.  
+		#
+		cache 0x13, 0($t0)
+		cache 0x13, 8($t0) 
+		cache 0x13, 10($t0) 
+		cache 0x13, 18($t0) 
+		cache 0x11, 0($t0)
+		cache 0x11, 8($t0) 
+		cache 0x11, 10($t0) 
+		cache 0x11, 18($t0) 
+		
+		#
+		# (4) Read again via cached address.  Should be updated as it is coming from memory.
+		#
+		ld	$a6, 0($t0)
+		
+		#
+		# (5) series of cache instructions to invalidate L2 cache lines.  
+		#
+		cache 0x13, 0($t0)
+		cache 0x13, 8($t0) 
+		cache 0x13, 10($t0) 
+		cache 0x13, 18($t0) 
+		
+		#
+		# (4) Read again via cached address.  Should still be in L1.
+		#
+		ld	$a7, 0($t0)
+		
+		#
 		# (6) series of cache instructions to writeback/invalidate instruction cache lines.  
 		#
 		cache 0x0, 0($t0)
 		cache 0x0, 8($t0) 
 		cache 0x0, 10($t0) 
 		cache 0x0, 18($t0) 
+		
+		# Have not constructed a test for this yet.
 		
 		#
 		# (6) series of cache instructions to invalidate instruction cache lines.  
@@ -127,6 +170,8 @@ test:		.ent test
 		cache 0x10, 8($t0) 
 		cache 0x10, 10($t0) 
 		cache 0x10, 18($t0) 
+		
+		# Have not constructed a test for this yet.
 		
 		#
 		# (7) series of cache instructions to writeback/invalidate data cache lines on a hit.
@@ -137,6 +182,8 @@ test:		.ent test
 		cache 0x15, 8($t0) 
 		cache 0x15, 10($t0) 
 		cache 0x15, 18($t0) 
+		
+		# Have not constructed a test for this yet.
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
