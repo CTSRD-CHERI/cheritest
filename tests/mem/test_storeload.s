@@ -59,10 +59,27 @@ test:		.ent test
 
 
                 dla     $a0, bytes
-                dli     $a1, 0xfeedbeefdeadbeef
+                dli     $a1, 0x5656565656565656
+                li      $t0, 0
+
+                # exeucte the test in a loop to pre-cache the instructions
+loop:
+                nop
+                nop
                 ld      $a2, 0($a0)
-                sd      $a1, 0($a0)
                 ld      $a3, 0($a0)
+                ld      $a4, 0($a0)
+                sd      $a1, 0($a0)
+                ld      $a5, 0($a0)
+                ld      $a6, 0($a0)
+                ld      $a7, 0($a0)
+                nop
+                nop
+                sd      $a1, 0($a0)
+                # change the stored value second time round to actually do the test
+                dli     $a1, 0xfeedbeefdeadbeef
+                beqz    $t0, loop
+                add     $t0, 1
         
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

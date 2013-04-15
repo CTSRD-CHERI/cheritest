@@ -31,8 +31,18 @@
 from cheritest_tools import BaseCHERITestCase
 
 class test_storeload(BaseCHERITestCase):
-    def test_initial_value(self):
+    def test_initial_value1(self):
         self.assertRegisterEqual(self.MIPS.a2, 0x5656565656565656, "Unexpected initial data value.")
+    def test_initial_value2(self):
+        self.assertRegisterEqual(self.MIPS.a3, 0x5656565656565656, "Unexpected initial data value.")
+    def test_initial_value3(self):
+        self.assertRegisterEqual(self.MIPS.a4, 0x5656565656565656, "Unexpected initial data value.")
 
-    def test_returned(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0xfeedbeefdeadbeef , "Load following store did not retrieve correct value. ")
+    def test_returned1(self):
+        self.assertRegisterEqual(self.MIPS.a5, 0xfeedbeefdeadbeef , "Load following store did not retrieve correct value. ")
+
+    def test_returned2(self):
+        self.assertRegisterEqual(self.MIPS.a6, 0xfeedbeefdeadbeef , "Load following store did not retrieve correct value. ")
+
+    def test_returned3(self):
+        self.assertRegisterEqual(self.MIPS.a7, 0xfeedbeefdeadbeef , "Load following store did not retrieve correct value. ")
