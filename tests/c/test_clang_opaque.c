@@ -30,6 +30,8 @@
 
 #include "assert.h"
 
+typedef __SIZE_TYPE__ size_t;
+
 struct example {
   int x;
 };
@@ -44,14 +46,22 @@ static struct example example_object = {0};
 
 static char *entry[] = {0};
 
+#if 0
+/* extern __capability void *cheri_create_template(size_t offset); */
+#endif
+
 void example_init(void)
 {
 /*
  * example_key will be used to seal and unseal variables of type example_t.
- * Here, we should its otype with a csettype instruction. For the moment,
- * let its otype default to zero.
  */
+#if 0
+  /* Eventually, we'll initialize example_key like this: */
+  /* example_key = cheri_create_template(0x1234); */
+#else
+  /* For now, initialize its otype field to zero, like this: */
   example_key = (__capability void *) entry;
+#endif
 }
 
 example_t example_constructor(void)
@@ -78,6 +88,16 @@ int example_method(example_t o)
   return o->x;
 }
 
+static void invoke_callback()
+{
+  example_t e;
+  int rc;
+
+  e = (example_t) &example_object;
+  rc = example_method(e);
+  assert(e->x == 1);
+}
+
 int test(void)
 {
 example_t e;
@@ -85,8 +105,13 @@ int r;
 
   example_init();
   e = example_constructor();
+  assert(e->x == 0);
+  invoke_callback();
+
+/*
   r = example_method(e);
   assert(e->x == 1);
+*/
 
   return 0;
 }
