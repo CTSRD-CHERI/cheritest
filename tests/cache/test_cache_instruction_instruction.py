@@ -38,29 +38,8 @@ from nose.plugins.attrib import attr
 # present, which might cause it not to incorrectly fire for gxemul.
 #
 
-class test_cache_instruction(BaseCHERITestCase):
+class test_cache_instruction_instruction(BaseCHERITestCase):
 
     @attr('cache')
-    def test_initial_uncached_read(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0, "Initial read of count register is incorrect")
-        
-    def test_initial_cached_read(self):
-        self.assertRegisterEqual(self.MIPS.a1, 1, "Initial cached read failure")
-        
-    def test_second_cached_read(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "Second cached read failure")
-        
-    def test_after_L1_writeback_cached_read(self):
-        self.assertRegisterEqual(self.MIPS.a3, 1, "Cached read after data L1 writeback is incorrect")
-        
-    def test_after_L1_writeback_invalidate_cached_read(self):
-        self.assertRegisterEqual(self.MIPS.a4, 1, "Cached read after data L1 writeback/invalidate is incorrect")
-        
-    def test_after_L1_invalidate_cached_read(self):
-        self.assertRegisterEqual(self.MIPS.a5, 1, "Cached read after data L1 invalidate is incorrect")
-        
-    def test_after_L1_and_L2_invalidate_cached_read(self):
-        self.assertRegisterEqual(self.MIPS.a6, 2, "Cached read after data and L2 invalidate is incorrect")
-        
-    def test_after_L2_invalidate_cached_read(self):
-        self.assertRegisterEqual(self.MIPS.a7, 2, "Cached read after L2 invalidate is incorrect")
+    def test_completion(self):
+        self.assertRegisterEqual(self.MIPS.a0, 0, "Simple register load didn't work.")

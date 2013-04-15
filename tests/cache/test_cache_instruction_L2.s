@@ -79,111 +79,74 @@ test:		.ent test
 		ld	$a1, 0($t0)
 		
 		#
-		# (2) Read via cached address; brings line into data cache.
+		# (2) series of cache instructions to invalidate data cache and L2 cache lines.  
+		#
+		cache 0x13, 0($t0)
+		cache 0x11, 0($t0)
+		
+		#
+		# (2) Read again via cached address.  Should be updated as it is coming from memory.
 		#
 		ld	$a2, 0($t0)
 		
 		#
-		# (3) series of cache instructions to writeback cache lines from the L1 data.  
-		# These should be nops for our L1 data cache which is write-through.
+		# (3) series of cache instructions to invalidate L2 cache lines.  
 		#
-		cache 0x19, 0($t0)
-		cache 0x19, 8($t0) 
-		cache 0x19, 10($t0) 
-		cache 0x19, 18($t0) 
+		cache 0x13, 0($t0)
 		
 		#
-		# (4) Read again via cached address.  Should still be in cache and unchanged.
+		# (3) Read again via cached address.  Should still be in L1.
 		#
 		ld	$a3, 0($t0)
 		
 		#
-		# (4) series of cache instructions to writeback/invalidate data cache lines from data L1.  
+		# Generate address to writable word.  
 		#
-		cache 0x1, 0($t0)
-		cache 0x1, 8($t0) 
-		cache 0x1, 10($t0) 
-		cache 0x1, 18($t0) 
+		dla  $gp, dword
+		dli	$t0, 0x9800000000000000
+		dli $t1, 0x00FFFFFFFFFFFFFF
+		and $gp, $gp, $t1
+		or  $t0, $t0, $gp
 		
 		#
-		# (4) Read again via cached address.  Should come from L2 cache and unchanged.
+		# (4) Read initial value of writable word.  
 		#
-		ld	$a4, 0($t0)
+		ld $a4, 0($t0)
 		
 		#
-		# (5) series of cache instructions to invalidate data cache lines.  
+		# (5) Store new value to writable word.  
+		#
+		li $t1, 5
+		sd $t1, 0($t0)
+		
+		#
+		# (5) writeback and invalidate L2 cache lines.  
+		#
+		cache 0x01, 0($t0)
+		cache 0x03, 0($t0)
+		
+		#
+		# (5) Read written back value of writable word.  
+		#
+		ld $a5, 0($t0)
+		
+		#
+		# (6) Store new value to writable word.  
+		#
+		li $t1, 6
+		sd $t1, 0($t0)
+		
+		#
+		# (6) Just invalidate L2 cache lines.  
 		#
 		cache 0x11, 0($t0)
-		cache 0x11, 8($t0) 
-		cache 0x11, 10($t0) 
-		cache 0x11, 18($t0) 
-		
-		#
-		# (4) Read again via cached address.  Should come from L2 cache and unchanged.
-		#
-		ld	$a5, 0($t0)
-		
-		#
-		# (5) series of cache instructions to invalidate data cache and L2 cache lines.  
-		#
 		cache 0x13, 0($t0)
-		cache 0x13, 8($t0) 
-		cache 0x13, 10($t0) 
-		cache 0x13, 18($t0) 
-		cache 0x11, 0($t0)
-		cache 0x11, 8($t0) 
-		cache 0x11, 10($t0) 
-		cache 0x11, 18($t0) 
 		
 		#
-		# (4) Read again via cached address.  Should be updated as it is coming from memory.
+		# (6) Read writable word after invalidated write.  
 		#
-		ld	$a6, 0($t0)
+		ld $a6, 0($t0)
 		
-		#
-		# (5) series of cache instructions to invalidate L2 cache lines.  
-		#
-		cache 0x13, 0($t0)
-		cache 0x13, 8($t0) 
-		cache 0x13, 10($t0) 
-		cache 0x13, 18($t0) 
-		
-		#
-		# (4) Read again via cached address.  Should still be in L1.
-		#
-		ld	$a7, 0($t0)
-		
-		#
-		# (6) series of cache instructions to writeback/invalidate instruction cache lines.  
-		#
-		cache 0x0, 0($t0)
-		cache 0x0, 8($t0) 
-		cache 0x0, 10($t0) 
-		cache 0x0, 18($t0) 
-		
-		# Have not constructed a test for this yet.
-		
-		#
-		# (6) series of cache instructions to invalidate instruction cache lines.  
-		#
-		cache 0x10, 0($t0)
-		cache 0x10, 8($t0) 
-		cache 0x10, 10($t0) 
-		cache 0x10, 18($t0) 
-		
-		# Have not constructed a test for this yet.
-		
-		#
-		# (7) series of cache instructions to writeback/invalidate data cache lines on a hit.
-		# We conservitively just invalidate the index.
-		# No need to writeback with a write-through cache.  
-		#
-		cache 0x15, 0($t0)
-		cache 0x15, 8($t0) 
-		cache 0x15, 10($t0) 
-		cache 0x15, 18($t0) 
-		
-		# Have not constructed a test for this yet.
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

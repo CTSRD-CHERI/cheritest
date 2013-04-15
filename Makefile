@@ -312,7 +312,9 @@ TEST_LLSC_FILES=				\
 
 TEST_CACHE_FILES=				\
 		test_hardware_mapping_cached_read.s \
-		test_cache_instruction.s
+		test_cache_instruction_data.s \
+		test_cache_instruction_instruction.s \
+		test_cache_instruction_L2.s
 
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
