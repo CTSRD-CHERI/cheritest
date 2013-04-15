@@ -34,6 +34,7 @@
 .set noat
 
 		.global start
+		.ent start
 start:
                 # get fields of a capability
 		cgetperm  $a1,  $c2
@@ -59,6 +60,10 @@ start:
 		csc	  $c1,  $a3, 0($c2)
 		clc       $c1,  $a3, 0($c2)
 
+		# negative immmediate offset
+		csc       $c1,  $a3, -1($c2)
+		clc       $c1,  $a3, -1($c2)
+
                 # store/load capability, register offset
                 dla       $a3,  cap1
 		cscr      $c1,  $a3($c2)
@@ -73,6 +78,12 @@ start:
                 clh       $a1,  $a3, 0($c2)
                 clw       $a1,  $a3, 0($c2)
                 cld       $a1,  $a3, 0($c2)
+
+		# negative immediate offset
+		clb       $a1,  $a3, -1($c2)
+		clh       $a1,  $a3, -1($c2)
+		clw       $a1,  $a3, -1($c2)
+		cld       $a1,  $a3, -1($c2)
 
                 # load via capability, sign extend, register offset
                 clbr      $a1,  $a3($c2)
@@ -106,6 +117,12 @@ start:
                 csh       $a1,  $a3, 0($c2)
                 csw       $a1,  $a3, 0($c2)
                 csd       $a1,  $a3, 0($c2)
+
+		# negative immediate offset
+		csb       $a1, $a3, -1($c2)
+		csh       $a1, $a3, -1($c2)
+		csw       $a1, $a3, -1($c2)
+		csd       $a1, $a3, -1($c2)
 
                 # store via capability, register offset
                 csbr      $a1,  $a3($c2)
@@ -174,6 +191,7 @@ l1:
 end:
 		b end
 		nop
+		.end start
 
 		.data
 		.align	5                  # Must 256-bit align capabilities
