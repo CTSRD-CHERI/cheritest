@@ -31,4 +31,4 @@ from cheritest_tools import BaseCHERITestCase
 
 class test_tlb_user_mode(BaseCHERITestCase):
     def test_flag_set(self):
-        self.assertRegisterEqual(self.MIPS.a5, 0x1, "Failed to execute code at virtual address.")
+        self.assertRegisterEqual(self.MIPS.a5, 0x2, "Failed to execute code at virtual address.")

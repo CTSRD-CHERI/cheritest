@@ -53,7 +53,7 @@ test:   .ent    test
 		dla     $a0, testcode		# Load address of testdata in bram
 		and     $a2, $a0, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
 		dsrl    $a3, $a2, 6		# Put PFN in correct position for EntryLow
-		or      $a3, 0x13   		# Set valid and global bits, uncached
+		or      $a3, 0x1a   		# Set valid and global bits, cached
 		dmtc0	$a3, $2			# TLB EntryLow0
 		daddu 	$a4, $a3, 0x40		# Add one to PFN for EntryLow1
 		dmtc0	$a4, $3			# TLB EntryLow1
@@ -73,7 +73,10 @@ after_syscall:
 .end    test
 	
 testcode:
+        .rept 10
 		nop
+        .endr
+                beqz    $a5, testcode
 		add	$a5, 1			# Set the test flag
 		syscall
 		nop
