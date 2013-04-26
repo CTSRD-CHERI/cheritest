@@ -869,7 +869,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	    < $(CHERICONF) > $$TMPDIR/simconfig && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
-	$(SIM) +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+	$(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@ && \
 	rm -r $$TMPDIR
 
@@ -984,3 +984,5 @@ gxemul-build:
 	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
 
+cleanerror:
+	find log -size 0 | xargs rm 
