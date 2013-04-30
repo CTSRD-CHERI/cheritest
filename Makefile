@@ -985,4 +985,4 @@ gxemul-build:
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
 
 cleanerror:
-	find log -size 0 | xargs rm 
+	find log -size 0 | xargs -r --verbose rm 
