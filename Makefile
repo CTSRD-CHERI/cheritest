@@ -352,9 +352,7 @@ TEST_CP0_FILES=					\
 		test_cp0_user.s                 \
 		test_cp0_ri.s
 
-ifeq ($(CHERI_VER),2)
-TEST_CP2_FILES=
-else
+ifeq ($(TEST_CP2),1)
 TEST_CP2_FILES=					\
 		test_cp2_reg_init.s		\
 		test_cp2_reg_name.s		\
@@ -657,6 +655,8 @@ TEST_CYCLE_LIMIT=1000000
 
 # Set CHERI_VER to 2 to test cheri2
 CHERI_VER?=
+# Set to 0 to disable capability tests
+TEST_CP2?=1
 CHERIROOT?=../../cheri$(CHERI_VER)/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
@@ -671,9 +671,15 @@ SIM        := ${CHERIROOT_ABS}/sim
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
+NOSEPRED=
 ifeq ($(CHERI_VER),2)
-NOSEFLAGS?=-A "not capabilities and not clang and not lladdr"
+NOSEPRED+=not clang
+NOSEPRED+=and not lladdr
 endif
+ifneq ($(TEST_CP2),1)
+NOSEPRED+=and not capabilities
+endif
+NOSEFLAGS?=-A "$(NOSEPRED)"
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
