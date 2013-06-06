@@ -177,6 +177,14 @@ l0:
 		nop
 
 l1:
+		cmove    $c1, $c0
+                cbtt     $c1, l2
+                # branch delay slot
+l2:
+                ccleartag $c1
+		cbtf     $c1, l3
+
+l3:
                 # crossing protection domains
 		ccall    $c1,  $c2
 		creturn
