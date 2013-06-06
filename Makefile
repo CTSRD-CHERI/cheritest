@@ -46,6 +46,8 @@
 # "make gxemul-test" runs the tests through gxemul
 #
 
+TEST_CP2?=1
+
 #
 # List of directories in which to find test source and .py files.
 #
@@ -656,7 +658,6 @@ TEST_CYCLE_LIMIT=1000000
 # Set CHERI_VER to 2 to test cheri2
 CHERI_VER?=
 # Set to 0 to disable capability tests
-TEST_CP2?=1
 CHERIROOT?=../../cheri$(CHERI_VER)/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
@@ -679,7 +680,9 @@ endif
 ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities
 endif
+ifneq ($(NOSEPRED),)
 NOSEFLAGS?=-A "$(NOSEPRED)"
+endif
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
