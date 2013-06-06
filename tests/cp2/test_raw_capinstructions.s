@@ -178,11 +178,14 @@ l0:
 
 l1:
 		cmove    $c1, $c0
-                cbtt     $c1, l2
+                cbts     $c1, l2
                 # branch delay slot
+		nop
 l2:
                 ccleartag $c1
-		cbtf     $c1, l3
+		cbtu     $c1, l3
+		# branch delay slot
+		nop
 
 l3:
                 # crossing protection domains
