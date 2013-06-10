@@ -450,6 +450,7 @@ TEST_CP2_FILES=					\
 		test_cp2_creturn_trap.s		\
 		test_cp2_cbtu.s			\
 		test_cp2_cbts.s			\
+		test_cp2_branchtag.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\

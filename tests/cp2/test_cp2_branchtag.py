@@ -32,16 +32,16 @@ from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Check basic behaviour of cgetleng and csetlen.
+# Check basic behaviour of cbtu and cbts.
 #
 
 class test_cp2_branchtag(BaseCHERITestCase):
     @attr('capabilities')
-    def test_cp2_getcleartag1(self):
-        '''Test that cgettag returns correct initial value'''
-        self.assertRegisterEqual(self.MIPS.a0, 7, "cgettag returns incorrect initial value")
+    def test_cp2_branchtag_1(self):
+        '''Test that cbts behaves correctly'''
+        self.assertRegisterEqual(self.MIPS.a0, 7, "cbts did not behave correctly")
 
     @attr('capabilities')
-    def test_cp2_getcleartag2(self):
-        '''Test that cgettag returns correct value after ccleartag'''
-        self.assertRegisterEqual(self.MIPS.a1, 7, "cgettag returns incorrect value after ccleartag")
+    def test_cp2_branchtag_2(self):
+        '''Test that cbtu behaves correctly'''
+        self.assertRegisterEqual(self.MIPS.a1, 7, "cbtu did not behave correctly")
