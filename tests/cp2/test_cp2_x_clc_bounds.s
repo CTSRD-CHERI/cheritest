@@ -64,6 +64,7 @@ test:		.ent test
 		dli	$a0, 0
 		dli	$a2, 0 # $a2 will be set to 1 if an exception is raised
 		dli	$a3, 0
+		csetlen $c2, $c2, $0 # Initialize length to 0 to test if load occured.
 		clc	$c2, $zero, 32($c1) # This should raise an exception
 		cgetlen $a0, $c2
 
