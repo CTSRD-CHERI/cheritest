@@ -95,6 +95,10 @@ test:   .ent    test
 		dla	$a0, exception_handler
 		jal 	bev0_handler_install
 		nop		
+		
+		# Enable large TLB in CHERI1
+		dli   $t0, 0xffff
+		dmtc0	$t0, $16, 6			# ConfigReg = t0
 
 		dli     $t0, 0x0
  		dmtc0	$t0, $5                       # Write 0 to page mask i.e. 4k pages
