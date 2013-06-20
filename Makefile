@@ -968,7 +968,7 @@ nosetest: all $(CHERI_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit $(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetest_cached: all $(CHERI_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/sim CACHED=1 nosetests $(NOSEFLAGS) $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit $(NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest: hardware-setup all $(ALTERA_TEST_LOGS) hardware-cleanup
 	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
