@@ -67,6 +67,7 @@ test:		.ent test
 		dli	$a4, 0
 		dli	$a5, 0
 		dli	$a6, 0
+                dli     $a7, 1
 
 		#
 		# Save the desired EPC value for this exception so we can
@@ -78,8 +79,9 @@ test:		.ent test
 		# Trigger exception.
 		#
 		li	$t0, 0x80000000
+		sub	$a7, $t0, $t0   # Should not overflow
 desired_epc:
-		sub	$t0, $t0, $t0
+		sub	$t0, $0, $t0    # Should overflow
 
 		#
 		# Exception return.
