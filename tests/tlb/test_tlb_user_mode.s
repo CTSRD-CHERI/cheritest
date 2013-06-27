@@ -59,7 +59,7 @@ test:   .ent    test
 		dmtc0	$a4, $3			# TLB EntryLow1
 		tlbwi				# Write Indexed TLB Entry
 
-		dli	$a5, 0			# Initialise test flag
+		dli	$a5, 4			# Initialise test flag
 	
 		and     $k0, $a0, 0xfff		# Get offset of testdata within page.
 		jr 	$k0			# Jump to virtual address
@@ -76,8 +76,8 @@ testcode:
         .rept 10
 		nop
         .endr
-                beqz    $a5, testcode
-		add	$a5, 1			# Set the test flag
+                bgtz    $a5, testcode
+		sub	$a5, 1			# Set the test flag
 		syscall
 		nop
 
