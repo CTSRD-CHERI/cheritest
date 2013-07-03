@@ -13,7 +13,12 @@ start:
         dli $t1, 1 << 29
         or $at, $at, $t1    # Enable CP1    
 	    mtc0 $at, $12 
-	    
+        nop
+        nop
+        nop
+        nop
+        nop    
+    
 	    # Setup parameters
 	    
 	    mtc1 $0, $f31
@@ -54,7 +59,7 @@ start:
         # C.UEQ.PS (True)
         c.ueq.PS $f5, $f5
         cfc1 $s2, $f25
-        ctc1 $0, $f31
+        ctc1 $0, $f25
         
         # C.UEQ.S (False)
         c.ueq.S $f3, $f4

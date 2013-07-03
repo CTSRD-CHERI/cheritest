@@ -13,7 +13,12 @@ start:
         dli $t1, 1 << 29
         or $at, $at, $t1    # Enable CP1    
 	    mtc0 $at, $12 
-	    
+        nop
+        nop
+        nop
+        nop
+        nop
+    
 	    # Setup parameters
 	    
 	    mtc1 $0, $f31
@@ -49,7 +54,7 @@ start:
         # C.ULE.PS (True)
         c.ule.PS $f23, $f23
         cfc1 $s2, $f25
-        mtc1 $0, $f31
+        ctc1 $0, $f31
         
         # C.ULE.S (False)
         c.ule.S $f3, $f4

@@ -13,6 +13,10 @@ start:
         dli $t1, 1 << 29
         or $at, $at, $t1    # Enable CP1    
 	    mtc0 $at, $12 
+        nop
+        nop
+        nop
+        nop
 
         # Individual tests
         

@@ -13,8 +13,14 @@ start:
         dli $t1, 1 << 29
         or $at, $at, $t1    # Enable CP1    
 	    mtc0 $at, $12 
+        nop
+        nop
+        nop
+        nop
+        nop
 
         # Individual tests
+	# START TEST
         
         # SUB.D
         lui $t0, 0x4000
@@ -25,7 +31,7 @@ start:
         dmtc1 $t1, $f16
         sub.D $f11, $f15, $f16
         dmfc1 $s0, $f11
-        
+ 
         # SUB.S
         lui $t0, 0x4000     # 2.0
         lui $t1, 0x4080     # 4.0
@@ -33,23 +39,25 @@ start:
         dmtc1 $t1, $f6
         sub.S $f5, $f5, $f6
         dmfc1 $s1, $f5
-        
-        # SUB.PS
-        lui $t0, 0x4000
-        dsll $t0, $t0, 32   # 2.0
-        ori $t1, $0, 0x4080
-        dsll $t1, $t1, 16   # 4.0
-        or $t0, $t0, $t1
-        dmtc1 $t0, $f5
-        lui $t0, 0x4000
-        dsll $t0, $t0, 32
-        ori $t1, $0, 0x3F80
-        dsll $t1, $t1, 16   # 1.0
-        or $t0, $t0, $t1
-        dmtc1 $t0, $f6
-        sub.PS $f5, $f5, $f6
-        dmfc1 $s2, $f5
-        
+
+        # Loading (75, -32)
+        add $s2, $0, $0
+        ori $s2, $s2, 0x4296
+        dsll $s2, $s2, 32
+        ori $s2, $s2, 0xC200
+        dsll $s2, $s2, 16
+        dmtc1 $s2, $f0
+        # Loading (50, -64)
+        add $s2, $0, $0
+        ori $s2, $s2, 0x4248
+        dsll $s2, $s2, 32
+        ori $s2, $s2, 0xC280
+        dsll $s2, $s2, 16
+        dmtc1 $s2, $f1
+        # Performing operation
+        sub.ps $f0, $f0, $f1
+        dmfc1 $s2, $f0
+
         # SUB.PS (QNaN)
         lui $t2, 0x7F81
         dsll $t2, $t2, 32   # QNaN
@@ -68,6 +76,9 @@ start:
         sub.S $f22, $f22, $f22
         dmfc1 $s4, $f22        
 
+
+	# END TEST
+       
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26
 		nop

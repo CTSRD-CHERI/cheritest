@@ -13,25 +13,49 @@ start:
         dli $t1, 1 << 29
         or $at, $at, $t1    # Enable CP1    
 	    mtc0 $at, $12 
-
+        nop
+        nop
+        nop
+        nop
+        nop
+	    
         # Individual tests
+        # START TEST
         
         mtc1 $0, $f31
-        
+
         # DIV.D
-        lui $t0, 0xFFF0
-        dsll $t0, $t0, 32   # -Inf
-        dmtc1 $t0, $f9
-        dmtc1 $0, $f8
-        div.D $f7, $f9, $f8
-        dmfc1 $s0, $f7
-        
+
+        # Loading 3456.3
+        add $s0, $0, $0
+        ori $s0, $s0, 0x40AB
+        dsll $s0, $s0, 16
+        ori $s0, $s0, 0x0099
+        dsll $s0, $s0, 16
+        ori $s0, $s0, 0x9999
+        dsll $s0, $s0, 16
+        ori $s0, $s0, 0x999A
+        dmtc1 $s0, $f0
+        # Loading 12.45
+        add $s0, $0, $0
+        ori $s0, $s0, 0x4028
+        dsll $s0, $s0, 16
+        ori $s0, $s0, 0xE666
+        dsll $s0, $s0, 16
+        ori $s0, $s0, 0x6666
+        dsll $s0, $s0, 16
+        ori $s0, $s0, 0x6666
+        dmtc1 $s0, $f1
+        # Performing operation
+        div.d $f0, $f0, $f1
+        dmfc1 $s0, $f0
+             
         # DIV.S
         lui $t0, 0x41A0     # 20.0
         mtc1 $t0, $f10
         lui $t0, 0x40A0     # 5.0
         mtc1 $t0, $f11
-        div.S $f10, $f11
+        div.S $f10, $f10, $f11
         mfc1 $s1, $f10
         
         # DIV.D (QNaN)
@@ -50,6 +74,8 @@ start:
         mtc1 $t1, $f22
         div.S $f22, $f22, $f21
         mfc1 $s4, $f22
+
+        # END TEST
         
         # Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

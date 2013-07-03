@@ -13,9 +13,14 @@ start:
         dli $t1, 1 << 29
         or $at, $at, $t1    # Enable CP1    
 	    mtc0 $at, $12 
+        nop
+        nop
+        nop
+        nop
 
         # Individual tests
-        
+        # START TEST
+
         # RECIP.D
         lui $t0, 0x4030
         dsll $t0, $t0, 32   # 16.0
@@ -40,8 +45,8 @@ start:
         ctc1 $t0, $f31      # Enable flush to zero on denorm.
         lui $t0, 0x7F7F     # Some single greater than 2^(e_max-1)
         mtc1 $t0, $f7
-        recip.S $f7, $f7
-        mfc1 $s4, $f7  
+
+        # END TEST
         
         # Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26
