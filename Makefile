@@ -690,6 +690,9 @@ NOSEPRED=not false
 ifeq ($(CHERI_VER),2)
 NOSEPRED+=and not clang
 NOSEPRED+=and not lladdr
+NOSEPRED+=and not bigtlb
+else
+NOSEPRED+=and not smalltlb
 endif
 ifdef COP1
 NOSEPRED+=and not nofloat
