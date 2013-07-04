@@ -686,10 +686,15 @@ SIM        := ${CHERIROOT_ABS}/sim
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
-NOSEPRED=
+NOSEPRED=not false
 ifeq ($(CHERI_VER),2)
-NOSEPRED+=not clang
+NOSEPRED+=and not clang
 NOSEPRED+=and not lladdr
+endif
+ifdef COP1
+NOSEPRED+=and not nofloat
+else
+NOSEPRED+=and not float
 endif
 ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities
