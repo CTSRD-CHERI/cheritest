@@ -145,7 +145,7 @@ class test_cp0_reg_init(BaseCHERITestCase):
     @attr('nofloat')
     @attr('smalltlb')
     def test_config1_reg_smalltlb(self):
-        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(0,64-1,3,4,0,1,4,0,0,0,0,1,0,0,0), "Unexpected CP0 config1 register value on reset")
+        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(0,64-1,1,4,0,1,4,0,0,0,0,1,0,0,0), "Unexpected CP0 config1 register value on reset")
 
 
     ## XXX:
