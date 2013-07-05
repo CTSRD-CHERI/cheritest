@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2011 (holder)
+# Copyright (c) 2012 Robert N. M. Watson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
