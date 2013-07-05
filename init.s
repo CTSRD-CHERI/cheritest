@@ -1,6 +1,5 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
-# All rights reserved.
 # Copyright (c) 2012 David Chisnall
 # All rights reserved.
 #
