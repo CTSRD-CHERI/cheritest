@@ -504,7 +504,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_lb_sealed.s		\
 		test_cp2_x_cincbase_delay.s	\
 		test_cp2_x_cbtu_reg.s		\
-		test_cp2_x_cbts_reg.s
+		test_cp2_x_cbts_reg.s		\
+		test_cp2_x_swc1_perm.s
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
