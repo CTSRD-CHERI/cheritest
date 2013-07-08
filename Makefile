@@ -658,7 +658,7 @@ endif
 #              cache semantics.
 # cheri - gxemul is simply not CHERI
 #
-GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev and not capabilities and not cheri"
+GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev and not capabilities and not cheri and not float and not smalltlb and not bigtlb"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
