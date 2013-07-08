@@ -76,7 +76,7 @@ test:		.ent test
 		cmove   $c2, $c0
 
 		#
-		# Make $c0 a read-only capability
+		# Make $c0 a write-only capability
 		#
 
 		dli     $t0, 0xb # Permit_Load not granted
