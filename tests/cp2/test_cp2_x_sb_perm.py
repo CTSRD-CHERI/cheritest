@@ -51,5 +51,5 @@ class test_cp2_x_sb_perm(BaseCHERITestCase):
     def test_cp2_x_sb_perm_3(self):
         '''Test capability cause is set correctly when doesn't have Permit_Store permission'''
         self.assertRegisterEqual(self.MIPS.a3, 0x1300,
-            "Capability cause was not set correctly when didn't have Permit_Load permission")
+            "Capability cause was not set correctly when didn't have Permit_Store permission")
 
