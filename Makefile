@@ -658,7 +658,7 @@ endif
 #              cache semantics.
 # cheri - gxemul is simply not CHERI
 #
-GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev and not capabilities and not cheri and not float and not smalltlb and not bigtlb"
+GXEMUL_NOSEFLAGS=-A "not llsc and not cache and not bev1 and not trapi and not counterdev and not watch and not capabilities and not cheri and not float and not smalltlb and not bigtlb"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -1008,11 +1008,11 @@ hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 	    $(TESTDIRS) || true
 
 gxemul-nosetest: all $(GXEMUL_TEST_LOGS)
-	PYTHONPATH=tools/gxemul CACHED=0 nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
+	PYTHONPATH=tools/gxemul CACHED=0 nosetests $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-nosetest_cached: all $(GXEMUL_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/gxemul CACHED=1 nosetests $(NOSEFLAGS) $(GXEMUL_NOSEFLAGS) \
+	PYTHONPATH=tools/gxemul CACHED=1 nosetests $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-build:

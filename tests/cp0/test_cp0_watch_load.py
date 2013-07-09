@@ -29,28 +29,35 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_cp0_watch_load(BaseCHERITestCase):
+    @attr('watch')
     def test_watchLo_readback(self):
         '''Test that CP0 watchLo register write succeeded'''
         self.assertRegisterEqual(self.MIPS.a0 & 0xfffffff8, self.MIPS.a6 & 0xfffffff8, "CP0 watchLo register write failed")
 
+    @attr('watch')
     def test_interrupt_fired(self):
         '''Test that watch triggered interrupt'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "Exception didn't fire")
 
+    @attr('watch')
     def test_eret_happened(self):
         '''Test that eret occurred'''
         self.assertRegisterEqual(self.MIPS.a1, 1, "Exception didn't return")
 
+    @attr('watch')
     def test_cause_code(self):
         '''Test that exception code is set to "watch" in cause register.'''
         self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 23, "Cause not set to watch.")
 
+    @attr('watch')
     def test_exl_in_handler(self):
         '''Test EXL set in status register.'''
         self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
 
+    @attr('watch')
     def test_epc_in_handler(self):
         '''Test that EPC matches desired value (rounded down to 8 byte alignment)'''
         self.assertRegisterEqual(self.MIPS.a5 & 0xfffffffffffffff8, self.MIPS.a7 & 0xfffffffffffffff8, "EPC not correct in exception handler")
