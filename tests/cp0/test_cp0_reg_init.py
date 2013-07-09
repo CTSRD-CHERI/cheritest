@@ -131,7 +131,7 @@ class test_cp0_reg_init(BaseCHERITestCase):
     @attr('nofloat')
     @attr('bigtlb')
     @attr('capabilities')
-    def test_config1_reg(self):
+    def test_config1_reg_nofloat(self):
         self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,3,4,0,3,4,0,1,0,0,0,0,0,0), "Unexpected CP0 config1 register value on reset")
 
     ## CHERI1 configuration with FPU, capabilities and a large TLB
@@ -147,6 +147,10 @@ class test_cp0_reg_init(BaseCHERITestCase):
     def test_config1_reg_smalltlb(self):
         self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(0,64-1,1,4,0,1,4,0,0,0,0,1,0,0,0), "Unexpected CP0 config1 register value on reset")
 
+    # GXEMUL configuration
+    @attr('gxemutlb')
+    def test_config1_reg_other(self):
+        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(0,48-1,3,4,1,3,4,1,0,0,0,0,0,0,1), "Unexpected CP0 config1 register value on reset")
 
     ## XXX:
     def test_xcontext_reg(self):
