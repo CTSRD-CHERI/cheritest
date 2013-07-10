@@ -29,8 +29,13 @@
 from cheritest_tools import BaseCHERITestCase
 
 class test_raw_fpu_cf(BaseCHERITestCase):
-    def test_cf(self):
-        '''Test we can compare false'''
+    def test_cf_single(self):
         self.assertRegisterEqual(self.MIPS.s0, 0x0, "Failed to compare false 2.0, 2.0 in single precision")
+
+    def test_cf_double(self):
+        '''Test we can compare false in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0, "Failed to compare false 2.0, 1.0 in double precision")
+
+    def test_cf_paired(self):
+        '''Test we can compare false a paired single'''
         self.assertRegisterEqual(self.MIPS.s2, 0x0, "Failed to compare false 2.0, 1.0 and 1.0, 2.0 in paired single precision")
