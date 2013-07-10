@@ -28,11 +28,14 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_mult_exception(BaseCHERITestCase):
     
+    @attr('watch')
     def test_lo_is_correct(self):
         self.assertRegisterEqual(self.MIPS.s0, 20000, "Lo register incorrect during exception")
         
+    @attr('watch')
     def test_hi_is_correct(self):
         self.assertRegisterEqual(self.MIPS.s1, 0, "Hi register incorrect during exception")
