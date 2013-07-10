@@ -56,7 +56,12 @@ class test_cp0_reg_init(BaseCHERITestCase):
     ## most are don't cares.  What we do care about is initial user/kernel
     ## mode, etc, so check them.
     ##
-    ## Report no coprocessors enabled; CP0 is always available in kernel mode.
+    ## According to the MIPS specification, the initial state of the CU bits
+    ## is undefined.
+    ##
+    ## For CHERI, Report no coprocessors enabled; CP0 is always available in
+    ## kernel mode.
+    @attr('cheri')
     def test_status_cu(self):
         self.assertRegisterEqual((self.MIPS.a4) >> 28 & 0x1, 0, "Unexpected CP0 coprocessor availability on reset")
 
