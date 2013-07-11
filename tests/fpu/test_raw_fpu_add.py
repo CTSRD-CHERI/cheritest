@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_add(BaseCHERITestCase):
     def test_add_single(self):
@@ -37,6 +38,7 @@ class test_raw_fpu_add(BaseCHERITestCase):
         '''Test we can add in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x4000000000000000, "Failed to add 1.0 and 1.0 in double precision")
 
+    @attr('floatpaired')
     def test_add_paired(self):
         '''Test we can add paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x000000004250C28f, "Failed paired single add")

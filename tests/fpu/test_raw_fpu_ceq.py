@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_ceq(BaseCHERITestCase):
     def test_ceq_single(self):
@@ -39,6 +40,7 @@ class test_raw_fpu_ceq(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s1, 0x1, "Failed to compare equal 2.0, 2.0 in in double precision")
         self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to compare equal 2.0, 1.0 in double precision")
 
+    @attr('floatpaired')
     def test_ceq_paired(self):
         '''Test we can compare equal paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x3, "Failed to compare equal 2.0, 1.0 and 2.0, 1.0 in paired single precision")

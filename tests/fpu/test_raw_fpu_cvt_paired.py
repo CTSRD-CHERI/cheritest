@@ -27,9 +27,11 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_cvt_paired(BaseCHERITestCase):
 
+    @attr('floatpaired')
     def test_convert_ps_to_s(self):
         '''Test we can convert paired single to single'''
         self.assertRegisterEqual(self.MIPS.a0, 0x33333333, "Didn't extract lower single.")

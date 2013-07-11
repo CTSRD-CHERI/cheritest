@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_cf(BaseCHERITestCase):
     def test_cf_single(self):
@@ -36,6 +37,7 @@ class test_raw_fpu_cf(BaseCHERITestCase):
         '''Test we can compare false in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0, "Failed to compare false 2.0, 1.0 in double precision")
 
+    @attr('floatpaired')
     def test_cf_paired(self):
         '''Test we can compare false a paired single'''
         self.assertRegisterEqual(self.MIPS.s2, 0x0, "Failed to compare false 2.0, 1.0 and 1.0, 2.0 in paired single precision")

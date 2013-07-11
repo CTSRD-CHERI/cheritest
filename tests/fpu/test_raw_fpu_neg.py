@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_neg(BaseCHERITestCase):
     def test_neg_single(self):
@@ -37,6 +38,7 @@ class test_raw_fpu_neg(BaseCHERITestCase):
         '''Test we can negate in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0220555500000000, "Failed to negate a double")
 
+    @attr('floatpaired')
     def test_neg_paired(self):
         '''Test we can negate paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x3F800000C0000000, "Failed to negate -1.0, 2.0 in paired single precision")

@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_cueq(BaseCHERITestCase):
     def test_cueq_single(self):
@@ -41,6 +42,7 @@ class test_raw_fpu_cueq(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to compare unordered 2.0, 1.0 in double precision")
         self.assertRegisterEqual(self.MIPS.s7, 0x1, "Failed to compare equal 2.0, 2.0 in in double precision")
 
+    @attr('floatpaired')
     def test_cueq_paired(self):
         '''Test we can compare unordered or equal paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x3, "Failed to compare unordered 0, QNaN and 0, QNaN in paired single precision")

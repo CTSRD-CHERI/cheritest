@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_sub(BaseCHERITestCase):
     def test_sub_single(self):
@@ -37,6 +38,7 @@ class test_raw_fpu_sub(BaseCHERITestCase):
         '''Test we can subtract in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x3FF0000000000000, "Failed to subtract 1.0 from 2.0 in double precision")
 
+    @attr('floatpaired')
     def test_sub_paired(self):
         '''Test we can subtract paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x41C8000042000000, "Failed paired single subtract.")

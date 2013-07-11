@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_colt(BaseCHERITestCase):
     def test_colt_single(self):
@@ -39,6 +40,7 @@ class test_raw_fpu_colt(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s1, 0x1, "Failed to compare less than 1.0, 2.0 in double precision")
         self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to compare less than 2.0, 2.0 in double precision")
 
+    @attr('floatpaired')
     def test_colt_paired(self):
         '''Test we can compare less than paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x1, "Failed to compare less than 2.0, 1.0 and 1.0, 2.0 in paired single precision")

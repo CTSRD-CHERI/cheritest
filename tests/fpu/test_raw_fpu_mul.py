@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_mul(BaseCHERITestCase):
     def test_mul_single(self):
@@ -37,6 +38,7 @@ class test_raw_fpu_mul(BaseCHERITestCase):
         '''Test we can multiply in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x4010000000000000, "Failed to multiply 2.0 and 2.0 in double precision")
 
+    @attr('floatpaired')
     def test_mul_paired(self):
         '''Test we can multiply paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x4140000043674C08, "Failed paired single multiply.")
