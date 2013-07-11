@@ -49,17 +49,6 @@ start:
 
         # START TEST
 
-        # Convert PS to S
-        li $a0, 0xDDDDDDDD
-        li $a1, 0x33333333 
-        dsll $a0, $a0, 32
-        or $a0, $a0, $a1
-        dmtc1 $a0, $f0
-        cvt.s.pl $f1, $f0
-        cvt.s.pu $f2, $f0
-        dmfc1 $a0, $f1
-        dmfc1 $a1, $f2
- 
         # Convert to single from word
         li $t0, 1
         mtc1 $t0, $f0
