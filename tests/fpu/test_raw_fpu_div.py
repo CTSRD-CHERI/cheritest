@@ -29,11 +29,15 @@
 from cheritest_tools import BaseCHERITestCase
 
 class test_raw_fpu_div(BaseCHERITestCase):
-    def test_div(self):
-        '''Test we can divide'''
+    def test_div_single(self):
+        '''Test we can divide in single precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x40800000, "Failed to divide 20.0 by 5.0 in single precision")
+
+    def test_div_double(self):
+        '''Test we can divide in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x407159D4C0000000, "Double precision division failed")
 
     def test_div_edge_cases(self):
+        '''Test edge cases of floating point division'''
         self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "Failed to echo QNaN");
         self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to flush denormalised result");

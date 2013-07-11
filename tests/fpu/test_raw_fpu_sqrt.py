@@ -29,10 +29,14 @@
 from cheritest_tools import BaseCHERITestCase
 
 class test_raw_fpu_sqrt(BaseCHERITestCase):
-    def test_sqrt(self):
-        '''Test we can take square roots'''
+    def test_sqrt_single(self):
+        '''Test we can take square roots in single precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x41000000, "Failed to take the square root of 64.0 in single precision")
+
+    def test_sqrt_double(self):
+        '''Test we can take square roots in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x40358FD340000000, "Failed double sqrt")
 
     def test_sqrt_edge_cases(self):
+        '''Test edge cases of floating point square root'''
         self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "Failed to echo QNaN");
