@@ -441,6 +441,8 @@ __assert_fail:
 		# Dump capability registers
 		.if(CHERI_VER != 2 && TEST_CP2 == 1)
 		  mtc2 $k0, $0, 4
+		.else
+		  nop
 		.endif
 		# Kill the simulator
 		mtc0 $at, $23
