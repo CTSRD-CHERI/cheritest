@@ -51,8 +51,13 @@ start:
         mtc1 $s0, $f0 # move 1 to copro
         dla $t0, positive # load the address
         swc1 $f0, 0($t0) # store 1 in the memory
-        lwc1 $f0, 0($t0) # load it back out from the memory 
+        lwc1 $f0, 0($t0) # load it back out from the memory
+        lwc1 $f1, 4($t0) # load it surroundings
+        dla $t0, padding
+        ldc1 $f2, 0($t0)
         mfc1 $s0, $f0 # move it back into s0
+        mfc1 $s4, $f1
+        dmfc1 $s5, $f2
 
         lui $s1, 0xBF80 # -1
         mtc1 $s1, $f1
@@ -88,7 +93,8 @@ end:
         
 
         .data
-positive:   .word   0xdeadbeef
+padding:    .dword  0x2020202030303030
+positive:   .dword  0xdeadbeef10101010
 negative:   .word   0xdeadbeef
 loc1:       .word   0xdeadbeef
 loc2:       .word   0xdeadbeef

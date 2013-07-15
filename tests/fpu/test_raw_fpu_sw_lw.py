@@ -32,6 +32,8 @@ class test_raw_fpu_sw_lw(BaseCHERITestCase):
     def test_positive(self):
         '''Test can save and load positive float'''
         self.assertRegisterEqual(self.MIPS.s0, 0x3F800000, 'Failed to save and load 1.')
+        self.assertRegisterEqual(self.MIPS.s4, 0x10101010, 'Overwrote surrounding data on save.')
+        self.assertRegisterEqual(self.MIPS.s5, 0x2020202030303030, 'Overwrote surroundings.')
 
     def test_negative(self):
         '''Test can save and load negative float'''
