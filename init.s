@@ -136,10 +136,10 @@ all_threads:
 		nop
 	
 		# Dump capability registers in the simulator
-.if(CHERI_VER == 2)
+.if(CHERI_VER == 2 || TEST_CP2 == 0)
 		nop  # cheri2 would throw reserved instruction exception. Use a nop to keep binary size the same.
 .else
-		mtc2 $k0, $0, 4
+		#mtc2 $k0, $0, 4
 .endif
 		nop
 		nop

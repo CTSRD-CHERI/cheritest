@@ -439,7 +439,9 @@ __assert_fail:
 		# Dump MIPS registers
 		mtc0 $at, $26
 		# Dump capability registers
-		mtc2 $k0, $0, 4
+		.if(CHERI_VER != 2 && TEST_CP2 == 1)
+		  mtc2 $k0, $0, 4
+		.endif
 		# Kill the simulator
 		mtc0 $at, $23
 .end __assert_fail

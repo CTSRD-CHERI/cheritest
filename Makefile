@@ -836,7 +836,7 @@ $(OBJDIR)/test_%.o : test_%.c
 	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym CHERI_VER=$(CHERI_VER) -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym CHERI_VER=$(CHERI_VER) --defsym  TEST_CP2=$(TEST_CP2) -o $@ $<
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< 
 
 #
