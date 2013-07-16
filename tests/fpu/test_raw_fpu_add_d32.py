@@ -1,10 +1,11 @@
 #-
-# Copyright (c) 2013-2013 Ben Thorner, Colin Rothwell
+# Copyright (c) 2013 Michael Roe
 # All rights reserved.
 #
-# This software was developed by Ben Thorner as part of his summer internship
-# and Colin Rothwell as part of his final year undergraduate project.
-# 
+# This software was developed by SRI International and the University of
+# Cambridge Computer Laboratory under DARPA/AFRL contract (FA8750-10-C-0237)
+# ("CTSRD"), as part of the DARPA CRASH research programme.
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -26,12 +27,13 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
+
 from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 class test_raw_fpu_add_d32(BaseCHERITestCase):
 
-    def test_raw_fpu_add_d32_lower(self):
+    def test_raw_fpu_add_d32(self):
         '''Test can add in double precision when in 32-bit mode'''
 	self.assertRegisterEqual(self.MIPS.a0, 0, "Failed to add 1.0 and 1.0 in double precision")
         self.assertRegisterEqual(self.MIPS.a1, 0x40000000, "Failed to add 1.0 and 1.0 in double precision")

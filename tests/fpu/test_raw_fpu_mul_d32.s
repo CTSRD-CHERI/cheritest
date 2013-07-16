@@ -27,14 +27,13 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-
 .set mips64
 .set noreorder
 .set nobopt
 .set noat
 
 #
-# Test double-precision subtraction when the FPU is in 32-bit mode
+# Test double-precision multiplication when the FPU is in 32-bit mode
 #
         .text
         .global start
@@ -53,18 +52,14 @@ start:
 
         
 	#
-	# Calculate 2.0 - 1.0 in double precision
+	# Calculate 1.0 + 1.0 in double precision
 	#
 
 	li $t0, 0	# 2.0, least significant 32 bits
 	mtc1 $t0, $f12
 	lui $t0, 0x4000 # 2.0, most significant 32 bits
 	mtc1 $t0, $f13
-	li $t0, 0	# 1.0, least significant 32 bits
-	mtc1 $t0, $f14
-	lui $t0, 0x3ff0	# 1.0, most significant 32 bits
-	mtc1 $t0, $f15
-	sub.d $f12, $f12, $f14
+	mul.d $f12, $f12, $f12
 	mfc1 $a0, $f12
 	mfc1 $a1, $f13
 

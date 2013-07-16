@@ -263,6 +263,7 @@ RAW_FPU_FILES =                \
 	test_raw_fpu_cvt_paired.s \
 	test_raw_fpu_add_d32.s \
 	test_raw_fpu_sub_d32.s \
+	test_raw_fpu_mul_d32.s \
 		test_raw_fpu_cvt.log	\
 		test_raw_fpu_cvtw.log	\
 		test_raw_fpu_movci.log	\

@@ -28,56 +28,12 @@
 # SUCH DAMAGE.
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
-#
-# Test double-precision subtraction when the FPU is in 32-bit mode
-#
-        .text
-        .global start
-        .ent start
-start:     
-	mfc0 $t0, $12
-        dli $t1, 1 << 29	# Enable CP1
-        or $t0, $t0, $t1    
-	li $t1, 1 << 26		# Put FPU into 32 bit mode
-	nor $t1, $t1, $t1
-	and $t0, $t0, $t1
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+class test_raw_fpu_mul_d32(BaseCHERITestCase):
 
-        
-	#
-	# Calculate 2.0 - 1.0 in double precision
-	#
-
-	li $t0, 0	# 2.0, least significant 32 bits
-	mtc1 $t0, $f12
-	lui $t0, 0x4000 # 2.0, most significant 32 bits
-	mtc1 $t0, $f13
-	li $t0, 0	# 1.0, least significant 32 bits
-	mtc1 $t0, $f14
-	lui $t0, 0x3ff0	# 1.0, most significant 32 bits
-	mtc1 $t0, $f15
-	sub.d $f12, $f12, $f14
-	mfc1 $a0, $f12
-	mfc1 $a1, $f13
-
-
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
-
-	# Terminate the simulator
-	mtc0 $at, $23
-end:
-	b end
-	nop
-
-.end start
+    def test_raw_fpu_mul_d32_lower(self):
+        '''Test can multiply in double precision when in 32-bit mode'''
+	self.assertRegisterEqual(self.MIPS.a0, 0, "Failed to multiply 2.0 and 2.0 in double precision")
+        self.assertRegisterEqual(self.MIPS.a1, 0x40100000, "Failed to multiply 2.0 and 2.0 in double precision")
