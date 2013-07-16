@@ -712,6 +712,7 @@ NOSEPRED+=and not capabilities and not clang
 endif
 ifneq ($(NOSEPRED),)
 NOSEFLAGS?=-A "$(NOSEPRED)"
+NOSEFLAGS_UNCACHED?=-A "$(NOSEPRED) and not cached"
 endif
 
 VPATH=$(TESTDIRS)
@@ -979,7 +980,7 @@ fuzz_generate: $(FUZZ_SCRIPT)
 # The rather unpleasant side-effect of snorting too much candy floss...
 nose_fuzz: $(SIM) fuzz_run_tests
 	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit \
-	    --xunit-file=nosetests_fuzz.xml $(NOSEFLAGS) tests/fuzz || true
+	    --xunit-file=nosetests_fuzz.xml $(NOSEFLAGS_UNCACHED) tests/fuzz || true
 
 nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
 	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit \
@@ -989,14 +990,14 @@ nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
 nosetest: all $(CHERI_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit --xunit-file=nosetests_uncached.xml \
-		$(NOSEFLAGS) $(TESTDIRS) || true
+		$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetest_cached: all $(CHERI_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit --xunit-file=nosetests_cached.xml \
                $(NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest: hardware-setup all $(ALTERA_TEST_LOGS) hardware-cleanup
-	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
+	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS_UNCACHED) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 altera-nosetest_cached: hardware-setup all $(ALTERA_TEST_CACHED_LOGS) hardware-cleanup
@@ -1004,7 +1005,7 @@ altera-nosetest_cached: hardware-setup all $(ALTERA_TEST_CACHED_LOGS) hardware-c
 	    $(TESTDIRS) || true
 
 hwsim-nosetest: $(CHERISOCKET) all $(HWSIM_TEST_LOGS)
-	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
+	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS_UNCACHED) $(HWSIM_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
