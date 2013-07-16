@@ -695,7 +695,6 @@ NOFUZZ?=0
 SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
 NOSEPRED=not false
 ifeq ($(CHERI_VER),2)
-NOSEPRED+=and not clang
 NOSEPRED+=and not lladdr
 NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb
@@ -709,7 +708,7 @@ else
 NOSEPRED+=and not float
 endif
 ifneq ($(TEST_CP2),1)
-NOSEPRED+=and not capabilities
+NOSEPRED+=and not capabilities and not clang
 endif
 ifneq ($(NOSEPRED),)
 NOSEFLAGS?=-A "$(NOSEPRED)"
