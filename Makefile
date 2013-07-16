@@ -710,6 +710,9 @@ endif
 ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities and not clang
 endif
+ifdef CHERI_MICRO
+NOSEPRED+=and not watch
+endif
 ifneq ($(NOSEPRED),)
 NOSEFLAGS?=-A "$(NOSEPRED)"
 NOSEFLAGS_UNCACHED?=-A "$(NOSEPRED) and not cached"
