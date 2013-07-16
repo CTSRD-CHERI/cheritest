@@ -35,7 +35,7 @@ class test_raw_fpu_div_d32(BaseCHERITestCase):
 
     def test_raw_fpu_div_d32_lower(self):
         '''Test can multiply in double precision when in 32-bit mode'''
-	self.assertRegisterEqual(self.MIPS.a0 & 0xffffffff, 0xd1bc2504, "Failed to divide 3456.3 by 12.45 in double precision"
+	self.assertRegisterEqual(self.MIPS.a0 & 0xffffffff, 0xd1bc2504, "Failed to divide 3456.3 by 12.45 in double precision")
 
     def test_raw_fpu_div_d32_upper(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x407159d4, "Failed to divide 3456.3 by 12.45 in double precision")
