@@ -33,48 +33,56 @@ from nose.plugins.attrib import attr
 class test_cp2_clld(BaseCHERITestCase):
 
     @attr('llsc')
+    @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_1(self):
 	'''That an uninterrupted clld+cscd succeeds'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted clld+cscd failed")
 
     @attr('llsc')
+    @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_2(self):
 	'''That an uninterrupted clld+cscd stored the right value'''
 	self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "Uninterrupted clld+cscd stored wrong value")
 
     @attr('llsc')
+    @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_3(self):
 	'''That an uninterrupted clld+cld+cscd succeeds'''
 	self.assertRegisterEqual(self.MIPS.a2, 1, "Uninterrupted clld+cld+cscd failed")
 
     @attr('llsc')
+    @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_4(self):
 	'''That an uninterrupted clld+add+cscd succeeds'''
 	self.assertRegisterEqual(self.MIPS.a3, 1, "Uninterrupted clld+add+cscd failed")
 
     @attr('llsc')
+    @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_5(self):
 	'''That an uninterrupted clld+add+cscd stored the right value'''
 	self.assertRegisterEqual(self.MIPS.a4, 0, "Uninterrupted clld+add+cscd stored wrong value")
 
     @attr('llsc')
+    @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_6(self):
 	'''That an clld+csd+cscd spanning fails'''
 	self.assertRegisterEqual(self.MIPS.t0, 0, "Interrupted clld+csd+cscd succeeded")
 
     @attr('llsc')
+    @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_7(self):
 	'''That an clld+cscd spanning a store to the line does not store'''
 	self.assertRegisterNotEqual(self.MIPS.a6, 1, "Interrupted clld+csd+cscd stored value")
 
     @attr('llsc')
+    @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_8(self):
 	'''That an clld+cscd spanning a trap fails'''
