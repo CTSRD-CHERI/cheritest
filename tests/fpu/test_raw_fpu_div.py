@@ -27,12 +27,14 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_div(BaseCHERITestCase):
     def test_div_single(self):
         '''Test we can divide in single precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x40800000, "Failed to divide 20.0 by 5.0 in single precision")
 
+    @attr('float64')
     def test_div_double(self):
         '''Test we can divide in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x407159D4C0000000, "Double precision division failed")

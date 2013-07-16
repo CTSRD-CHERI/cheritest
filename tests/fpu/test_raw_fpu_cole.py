@@ -36,6 +36,7 @@ class test_raw_fpu_cole(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s3, 0x0, "Failed to compare less than or equal 2.0, 1.0 in single precision")
         self.assertRegisterEqual(self.MIPS.s6, 0x1, "Failed to compare less than or equal 1.0, 2.0 in single precision")
 
+    @attr('float64')
     def test_cole_double(self):
         '''Test we can compare less than or equal in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x1, "Failed to compare less than or equal 2.0, 2.0 in in double precision")

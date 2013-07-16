@@ -30,13 +30,14 @@ from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 class test_raw_fpu_abs(BaseCHERITestCase):
-    def test_abs_double(self):
-        '''Test we can take absolute value of a double'''
-        self.assertRegisterEqual(self.MIPS.s0, 0x07FF000000000000, "Failed to take absolute of double")
-
     def test_abs_single(self):
         '''Test we can take absolute value of a float'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0FFF0000, "Failed to take absolute of single")
+
+    @attr('float64')
+    def test_abs_double(self):
+        '''Test we can take absolute value of a double'''
+        self.assertRegisterEqual(self.MIPS.s0, 0x07FF000000000000, "Failed to take absolute of double")
 
     @attr('floatpaired')
     def test_abs_paired(self):

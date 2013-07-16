@@ -33,6 +33,7 @@ class test_raw_fpu_cf(BaseCHERITestCase):
     def test_cf_single(self):
         self.assertRegisterEqual(self.MIPS.s0, 0x0, "Failed to compare false 2.0, 2.0 in single precision")
 
+    @attr('float64')
     def test_cf_double(self):
         '''Test we can compare false in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0, "Failed to compare false 2.0, 1.0 in double precision")

@@ -34,6 +34,7 @@ class test_raw_fpu_add(BaseCHERITestCase):
         '''Test we can add in single precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x40000000, "Failed to add 1.0 and 1.0 in single precision")
 
+    @attr('float64')
     def test_add_double(self):
         '''Test we can add in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x4000000000000000, "Failed to add 1.0 and 1.0 in double precision")

@@ -34,6 +34,7 @@ class test_raw_fpu_sub(BaseCHERITestCase):
         '''Test we can subtract in single precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0xFFFFFFFFC0000000, "Failed to subtract 4.0 from 2.0 in single precision")
 
+    @attr('float64')
     def test_sub_double(self):
         '''Test we can subtract in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x3FF0000000000000, "Failed to subtract 1.0 from 2.0 in double precision")

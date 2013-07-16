@@ -34,6 +34,7 @@ class test_raw_fpu_neg(BaseCHERITestCase):
         '''Test we can negate in single precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x85300000, "Failed to negate a single")
 
+    @attr('float64')
     def test_neg_double(self):
         '''Test we can negate in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0220555500000000, "Failed to negate a double")

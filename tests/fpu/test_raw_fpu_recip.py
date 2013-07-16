@@ -36,6 +36,7 @@ class test_raw_fpu_recip(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s1, 0x7F800000, "Failed to take the reciprocal of 0.0 in single precision")
 
     @attr('floatrecip')
+    @attr('float64')
     def test_recip_double(self):
         '''Test we can take reciprocals in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x3FB0000000000000, "Failed to take the reciprocal of 16.0 in double precision")

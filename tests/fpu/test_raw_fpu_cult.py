@@ -37,6 +37,7 @@ class test_raw_fpu_cult(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s6, 0x1, "Failed to compare unordered or less than 2.0, QNaN in single precision")
         self.assertRegisterEqual(self.MIPS.a1, 0x0, "Failed to compare unordered or less than 2.0, 2.0 in single precision")
 
+    @attr('float64')
     def test_cult_double(self):
         '''Test we can compare unordered or less than in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x1, "Failed to compare unordered or less than 1.0, 2.0 in in double precision")

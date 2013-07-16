@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_cvt(BaseCHERITestCase):
     def test_convert_word_to_single(self):
@@ -35,6 +36,7 @@ class test_raw_fpu_cvt(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.t1, 0x4C00041A, "Didn't convert non exact to FP")
         self.assertRegisterEqual(self.MIPS.t2, 0xFFFFFFFFC1B80000, "Didn't convert -23 to FP")
 
+    @attr('float64')
     def test_convert_double_to_single(self):
         '''Test we can convert doubles to singles'''
         self.assertRegisterEqual(self.MIPS.s0, 0x3F800000, "Didn't convert 1 from double.")
@@ -42,6 +44,7 @@ class test_raw_fpu_cvt(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s2, 0xffffffffc36aa188, "Didn't convert -234.6311 from double")
         self.assertRegisterEqual(self.MIPS.s3, 0x4f0c0473, "Didn't convert large number from double.")
 
+    @attr('float64')
     def test_convert_singles_to_doubles(self):
         '''Test we can convert singles to doubles'''
         self.assertRegisterEqual(self.MIPS.s4, 0x3FF0000000000000, "Didn't convert 1 to double.")

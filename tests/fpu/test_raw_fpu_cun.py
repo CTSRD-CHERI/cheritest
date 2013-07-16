@@ -35,6 +35,7 @@ class test_raw_fpu_cun(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s0, 0x1, "Failed to compare unordered QNaN, QNaN in single precision")
         self.assertRegisterEqual(self.MIPS.s3, 0x0, "Failed to compare unordered 2.0, 2.0 in single precision")
 
+    @attr('float64')
     def test_cun_double(self):
         '''Test we can compare unordered in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x1, "Failed to compare unordered QNaN, QNaN in double precision")

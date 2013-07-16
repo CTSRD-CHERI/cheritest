@@ -34,6 +34,7 @@ class test_raw_fpu_mul(BaseCHERITestCase):
         '''Test we can multiply in single precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x41800000, "Failed to multiply 4.0 and 4.0 in single precision")
 
+    @attr('float64')
     def test_mul_double(self):
         '''Test we can multiply in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x4010000000000000, "Failed to multiply 2.0 and 2.0 in double precision")
