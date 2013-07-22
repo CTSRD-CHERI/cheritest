@@ -31,12 +31,8 @@
 from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_div_d32(BaseCHERITestCase):
+class test_raw_fpu_cole_single(BaseCHERITestCase):
 
-    def test_raw_fpu_div_d32_lower(self):
-        '''Test can divide in double precision when in 32-bit mode'''
-	self.assertRegisterEqual(self.MIPS.a0 & 0xffffffff, 0xd1bc2504, "Failed to divide 3456.3 by 12.45 in double precision")
-
-    def test_raw_fpu_div_d32_upper(self):
-        '''Test can divide in double precision when in 32-bit mode'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x407159d4, "Failed to divide 3456.3 by 12.45 in double precision")
+    def test_raw_fpu_cole_single(self):
+        '''Test single-precision ordered, less than, or equal'''
+	self.assertRegisterEqual(self.MIPS.a0, 0x8, "Compare ordered, less than, or equal failed")

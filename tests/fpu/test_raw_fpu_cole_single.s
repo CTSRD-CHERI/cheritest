@@ -27,16 +27,74 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-from cheritest_tools import BaseCHERITestCase
-from nose.plugins.attrib import attr
+#
+# Test single-precision 'ordered, less than, or equal' (c.ole.s)
+#
+        .text
+        .global start
+        .ent start
+start:     
+	mfc0 $t0, $12
+        lui $t1, 0x2000		# Enable CP1
+        or $t0, $t0, $t1    
+	mtc0 $t0, $12 
+        nop
+        nop
+        nop
 
-class test_raw_fpu_div_d32(BaseCHERITestCase):
+        
+	li $a0, 0
 
-    def test_raw_fpu_div_d32_lower(self):
-        '''Test can divide in double precision when in 32-bit mode'''
-	self.assertRegisterEqual(self.MIPS.a0 & 0xffffffff, 0xd1bc2504, "Failed to divide 3456.3 by 12.45 in double precision")
+	lui $t0, 0x3f80 	# 1.0
+	mtc1 $t0, $f12
 
-    def test_raw_fpu_div_d32_upper(self):
-        '''Test can divide in double precision when in 32-bit mode'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x407159d4, "Failed to divide 3456.3 by 12.45 in double precision")
+	lui $t0, 0x4000		# 2.0	
+	mtc1 $t0, $f14
+
+	c.ole.s $f14, $f12
+	nop
+	nop
+	nop
+
+	bc1t L1
+	nop	# branch delay slot
+	ori $a0, $a0, 0x8
+
+L1:
+	c.ole.s $f12, $f14
+	nop
+	nop
+	nop
+
+	bc1t L2
+	nop	# branch delay slot
+	ori $a0, $a0, 0x4
+
+L2:
+	c.ole.s $f12, $f12
+	nop
+	nop
+	nop
+
+	bc1t L3
+	nop	# branch delay slot
+	ori $a0, $a0, 0x2
+
+L3:
+	# Dump registers on the simulator (gxemul dumps regs on exit)
+	mtc0 $at, $26
+	nop
+	nop
+
+	# Terminate the simulator
+	mtc0 $at, $23
+end:
+	b end
+	nop
+
+.end start
