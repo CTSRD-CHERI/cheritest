@@ -40,7 +40,7 @@ class test_raw_fpu_cvt(BaseCHERITestCase):
     def test_convert_double_to_single(self):
         '''Test we can convert doubles to singles'''
         self.assertRegisterEqual(self.MIPS.s0, 0x3F800000, "Didn't convert 1 from double.")
-        self.assertRegisterEqual(self.MIPS.s1, 0x3e2aaaaa, "Didn't convert 1/6 from double.")
+        self.assertRegisterEqual(self.MIPS.s1, 0x3e2aaaab, "Didn't convert 1/6 from double.")
         self.assertRegisterEqual(self.MIPS.s2, 0xffffffffc36aa188, "Didn't convert -234.6311 from double")
         self.assertRegisterEqual(self.MIPS.s3, 0x4f0c0473, "Didn't convert large number from double.")
 

@@ -35,4 +35,4 @@ class test_raw_fpu_cvt_d32(BaseCHERITestCase):
 
     def test_raw_fpu_cvt_d32(self):
         '''Test can convert from double to single precision when in 32-bit mode'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x3fc55555, "Failed to convert double to single precision")
+        self.assertRegisterEqual(self.MIPS.a1, 0x3e2aaaab, "Failed to convert double to single precision")

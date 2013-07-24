@@ -62,7 +62,7 @@ start:
 	ori $t0, 0x5555
 	mtc1 $t0, $f12
 	cvt.s.d $f12, $f12
-	mfc1 $a1, $f13
+	mfc1 $a1, $f12
 
 
 	# Dump registers on the simulator (gxemul dumps regs on exit)
