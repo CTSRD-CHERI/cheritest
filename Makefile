@@ -655,7 +655,7 @@ TEST_FILES=					\
 
 
 ifdef COP1
-    TEST_FILES += $(RAW_FPU_FILES) $(FPU_FILES)
+    TEST_FILES += $(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
 #
