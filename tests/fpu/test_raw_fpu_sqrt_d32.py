@@ -33,6 +33,7 @@ from nose.plugins.attrib import attr
 
 class test_raw_fpu_sqrt_d32(BaseCHERITestCase):
 
+    @attr('float32')
     def test_raw_fpu_sqrt_d32_upper(self):
         '''Test can take square root in double precision when in 32-bit mode'''
 	self.assertRegisterEqual(self.MIPS.a1, 0x40358fd3, "Failed to compute sqrt(494.912) in double precision")

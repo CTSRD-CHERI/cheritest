@@ -33,6 +33,7 @@ from nose.plugins.attrib import attr
 
 class test_raw_fpu_add_d32(BaseCHERITestCase):
 
+    @attr('float32')
     def test_raw_fpu_add_d32(self):
         '''Test can add in double precision when in 32-bit mode'''
 	self.assertRegisterEqual(self.MIPS.a0, 0, "Failed to add 1.0 and 1.0 in double precision")
