@@ -37,7 +37,7 @@ class test_raw_fpu_sqrt(BaseCHERITestCase):
     @attr('float64')
     def test_sqrt_double(self):
         '''Test we can take square roots in double precision'''
-        self.assertRegisterEqual(self.MIPS.s1, 0x40358FD340000000, "Failed double sqrt")
+        self.assertRegisterEqual(self.MIPS.s1, 0x40358fd34fb3f65b, "Failed double sqrt")
 
     def test_sqrt_edge_cases(self):
         '''Test edge cases of floating point square root'''
