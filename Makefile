@@ -373,6 +373,9 @@ TEST_CP0_FILES=					\
 		test_cp0_user.s                 \
 		test_cp0_ri.s
 
+TEST_FPU_FILES=					\
+		test_fpu_x_div.s
+
 ifeq ($(TEST_CP2),1)
 TEST_CP2_FILES=					\
 		test_cp2_reg_init.s		\
@@ -652,7 +655,7 @@ TEST_FILES=					\
 
 
 ifdef COP1
-    TEST_FILES += $(RAW_FPU_FILES)
+    TEST_FILES += $(RAW_FPU_FILES) $(FPU_FILES)
 endif
 
 #
