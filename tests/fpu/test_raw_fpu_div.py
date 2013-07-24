@@ -37,7 +37,7 @@ class test_raw_fpu_div(BaseCHERITestCase):
     @attr('float64')
     def test_div_double(self):
         '''Test we can divide in double precision'''
-        self.assertRegisterEqual(self.MIPS.s0, 0x407159D4C0000000, "Double precision division failed")
+        self.assertRegisterEqual(self.MIPS.s0, 0x407159d4d1bc2504, "Double precision division failed")
 
     def test_div_edge_cases(self):
         '''Test edge cases of floating point division'''
