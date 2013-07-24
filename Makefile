@@ -316,7 +316,8 @@ TEST_MEM_FILES=					\
 		test_memory_flush		\
 		test_sd_burst.s			\
 		test_storeload.s		\
-		test_sync.s
+		test_sync.s                     \
+		test_mem_alias_data.s
 
 TEST_LLSC_FILES=				\
 		test_ll_unalign.s		\
