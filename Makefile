@@ -268,6 +268,8 @@ RAW_FPU_FILES =                \
 	test_raw_fpu_sqrt_d32.s \
 	test_raw_fpu_cole_single.s \
 	test_raw_fpu_colt_single.s \
+	test_raw_fpu_cule_single.s \
+	test_raw_fpu_cult_single.s \
 		test_raw_fpu_cvt.log	\
 		test_raw_fpu_cvtw.log	\
 		test_raw_fpu_movci.log	\
