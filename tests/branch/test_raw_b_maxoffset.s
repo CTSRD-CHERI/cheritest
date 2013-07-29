@@ -46,20 +46,41 @@ start:
 		li	$t2, 0
 		li	$t3, 0
 
-		li	$t0, 1
-		b	branch_target
-		li	$t1, 1		# branch-delay slot
-.rept 0x7fff-2
+		dla $s0, branch        # load the address of the branch
+		dli $t0, 0x8000000     # set the distance we want to move the target
+		dsub $s1, $s0, $t0     # generate the target address
+		lw $s2,16($s0)
+		sw $s2,16($s1)
+		lw $s2,20($s0)
+		sw $s2,20($s1)
+		lw $s2,24($s0)
+		sw $s2,24($s1)
+		lw $s2,28($s0)
+		sw $s2,28($s1)
+		lw $s2,32($s0)
+		sw $s2,32($s1)
+		dli $t0, 0x801fffc     # set the distance we want to move the branch
+		dsub $s1, $s0, $t0     # generate the target address
+		lw $s2, 0($s0)         # move the words to the target
+		sw $s2, 0($s1)
+		lw $s2, 4($s0)
+		sw $s2, 4($s1)
+		lw $s2, 8($s0)
+		sw $s2, 8($s1)
+		lw $s2,12($s0)
+		sw $s2,12($s1)
+		jr $s1                 # jump to the branch
 		nop
-.endr
+branch:
+		li	$t0, 1
+		b	0x1fffc
+		li	$t1, 1		# branch-delay slot
 		li	$t2, 1
 branch_target:
 		li	$t3, 1
 
 		# Dump registers in the simulator
 		mtc0	$v0, $26
-		nop
-		nop
 
 		# Terminate the simulator
 		mtc0	$v0, $23
