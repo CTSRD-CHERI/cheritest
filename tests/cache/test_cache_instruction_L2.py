@@ -41,27 +41,37 @@ from nose.plugins.attrib import attr
 class test_cache_instruction_L2(BaseCHERITestCase):
 
     @attr('cache')
+    @attr('counterdev')
     def test_initial_uncached_read(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "Initial read of count register is incorrect")
         
+    @attr('cache')
+    @attr('counterdev')
     def test_initial_cached_read(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "Initial cached read failure")
         
+    @attr('cache')
+    @attr('counterdev')
     @attr('invalidateL2')
     def test_after_L1_and_L2_invalidate_cached_read(self):
         '''Test read after invalidate data and L2 cache'''
         self.assertRegisterEqual(self.MIPS.a2, 2, "Cached read after data and L2 invalidate is incorrect")
         
+    @attr('cache')
+    @attr('counterdev')
     @attr('invalidateL2')
     def test_after_L2_invalidate_cached_read(self):
         '''Test read after invalidate L2 cache'''
         self.assertRegisterEqual(self.MIPS.a3, 2, "Cached read after L2 invalidate is incorrect")
         
+    @attr('cache')
     def test_initial_writable_location(self):
         self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef, "Initial writable value is incorrect")
         
+    @attr('cache')
     def test_written_back_writable_location(self):
         self.assertRegisterEqual(self.MIPS.a5, 5, "Written back writable value is incorrect")
         
+    @attr('cache')
     def test_invalidated_writable_location(self):
         self.assertRegisterEqual(self.MIPS.a6, 5, "Writable location not invalidated")
