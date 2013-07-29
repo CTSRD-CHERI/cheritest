@@ -32,13 +32,16 @@ from cheritest_tools import BaseCHERITestCase
 
 class test_raw_b_maxoffset(BaseCHERITestCase):
     def test_t0(self):
-        self.assertRegisterEqual(self.MIPS.t0, 1, "instruction before branch missed")
+        self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before branch missed")
 
     def test_t1(self):
-        self.assertRegisterEqual(self.MIPS.t1, 1, "instruction in branch-delay slot missed")
+        '''Test instruction in branch delay slot is executed'''
+        self.assertRegisterEqual(self.MIPS.a1, 1, "instruction in branch-delay slot missed")
 
     def test_t2(self):
-        self.assertRegisterNotEqual(self.MIPS.t2, 1, "branch failed to skip instruction")
+        '''Test instruction after branch delay slot is not executed'''
+        self.assertRegisterNotEqual(self.MIPS.a2, 1, "branch failed to skip instruction")
 
     def test_t3(self):
-        self.assertRegisterEqual(self.MIPS.t3, 1, "branch target missed")
+        '''Test instruction at branch target is executed'''
+        self.assertRegisterEqual(self.MIPS.a3, 1, "branch target missed")

@@ -41,10 +41,10 @@
 
 		.global start
 start:
-		li	$t0, 0
-		li	$t1, 0
-		li	$t2, 0
-		li	$t3, 0
+		li	$a0, 0
+		li	$a1, 0
+		li	$a2, 0
+		li	$a3, 0
 
 		dla $s0, branch        # load the address of the branch
 		dli $t0, 0x8000000     # set the distance we want to move the target
@@ -84,12 +84,12 @@ start:
 		jr $s1                 # jump to the branch
 		nop
 branch:
-		li	$t0, 1
+		li	$a0, 1
 		b	0x1fffc
-		li	$t1, 1		# branch-delay slot
-		li	$t2, 1
+		li	$a1, 1		# branch-delay slot
+		li	$a2, 1
 branch_target:
-		li	$t3, 1
+		li	$a3, 1
 
 		# Dump registers in the simulator
 		mtc0	$v0, $26
