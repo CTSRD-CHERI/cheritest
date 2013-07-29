@@ -27,8 +27,11 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_pair(BaseCHERITestCase):
+
+    @attr('floatpaired')
     def test_pair(self):
         '''Test we can do pairwise merging'''
         self.assertRegisterEqual(self.MIPS.a0, 0x3F80000040000000, "Failed to merge paired lower, lower")
