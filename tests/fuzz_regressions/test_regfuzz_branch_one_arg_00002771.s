@@ -53,30 +53,26 @@ test:   .ent    test
 	li      $s3, 0
 	li      $s4, 0
 	li      $s5, 0
-
-.if -131072 < 0
-    	j       branch			# Skip over the padding to save time
+	
+	dli	$a0, 0x9800000010000000
+	dla	$a1, target
+	jal	memcpy
+	li	$a2, 0x80		# 32 instructions, more than enough
+	dli	$a0, 0x9800000010000000 + 131072 - 4
+	dla	$a1, branch
+	jal	memcpy
+	li	$a2, 0x80		# 32 instructions, more than enough
+	dli	$a0, 0x9800000010000000 + 131072 - 4
+	jr	$a0
 	add     $s0, 1			# Branch delay
 	add     $s1, 1			# Not executed
 target:	add     $s2, 1			# should land here (offset<0)
-	j	out   			# Skip to end of test
+	b	out   			# Skip to end of test
 	add     $s3, 1			# Branch delay
-.rept   -4-(-131072)/4			# Might be < 0 for some offsets i.e. no padding
 	j	.			# Padding (minefield, not executed)
-.endr
-.endif # -131072 < 0
 branch:	BLTZALL     $a0, .+-131072+4	# Add 4 because AS offset is relative to . but MIPS is relative to .+4
 	add     $s4, 1  		# Delay slot, executed twice if offset==0!
 	add     $s5, 1  		# Might not be executed if branch taken
-.if -131072 > 0
-	j       target			# Skip over the padding to save time
-	add	$s0, 1			# Branch delay
-.rept  (-131072)/4 - 5			# Might be < 0 for some offsets i.e. no padding
-	j	.      	 	    	# Padding (minefield, not executed)
-.endr
-	add     $s1, 1			# Not executed except when offset is 3 or 4
-target:	add     $s2, 1			# should land here (offset>0)
-.endif # -131072 > 0
 out:	move    $a1, $ra		# Hide away the value of ra from the branch
 	ld      $ra, 0($sp)
 	ld      $fp, 8($sp)
