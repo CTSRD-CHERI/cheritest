@@ -705,6 +705,7 @@ NOFUZZ?=0
 SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
 NOSEPRED=not false
 ifeq ($(CHERI_VER),2)
+NOSEPRED+=and not invalidateL2
 NOSEPRED+=and not lladdr
 NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb

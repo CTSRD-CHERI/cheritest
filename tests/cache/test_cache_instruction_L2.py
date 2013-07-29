@@ -47,10 +47,14 @@ class test_cache_instruction_L2(BaseCHERITestCase):
     def test_initial_cached_read(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "Initial cached read failure")
         
+    @attr('invalidateL2')
     def test_after_L1_and_L2_invalidate_cached_read(self):
+        '''Test read after invalidate data and L2 cache'''
         self.assertRegisterEqual(self.MIPS.a2, 2, "Cached read after data and L2 invalidate is incorrect")
         
+    @attr('invalidateL2')
     def test_after_L2_invalidate_cached_read(self):
+        '''Test read after invalidate L2 cache'''
         self.assertRegisterEqual(self.MIPS.a3, 2, "Cached read after L2 invalidate is incorrect")
         
     def test_initial_writable_location(self):
