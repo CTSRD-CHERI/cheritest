@@ -49,6 +49,7 @@ class test_raw_fpu_cntrl(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s7, 0x0003F07C, "CMFC failed to interpret $f31 for $f26")
         self.assertRegisterEqual(self.MIPS.a0, 0x0, "CMFC failed to interpret $f31 for $f25")
 
+    @attr('floatpaired')
     def test_fir(self):
         '''Test that we get the correct value out of the FIR'''
         self.assertRegisterEqual(self.MIPS.t9, 0x470000, "Incorrect value from FIR")
