@@ -31,15 +31,15 @@ from cheritest_tools import BaseCHERITestCase
 class test_raw_fpu_sw_lw(BaseCHERITestCase):
     def test_positive(self):
         '''Test can save and load positive float'''
-        self.assertRegisterEqual(self.MIPS.s0, 0x3F800000, 'Failed to save and load 1.')
-        self.assertRegisterEqual(self.MIPS.s4, 0x10101010, 'Overwrote surrounding data on save.')
-        self.assertRegisterEqual(self.MIPS.s5, 0x2020202030303030, 'Overwrote surroundings.')
+        self.assertRegisterEqual(self.MIPS.s1, 0x3f800000, "Failed to save and load 1.0")
+        self.assertRegisterEqual(self.MIPS.s2, 0x10101010, "swc1 overwrote word after")
+        self.assertRegisterEqual(self.MIPS.s3, 0x20202020, "swc1 overwrote word before")
 
     def test_negative(self):
         '''Test can save and load negative float'''
-        self.assertRegisterEqual(self.MIPS.s1, 0xFFFFFFFFBF800000, 'Failed to save and load -1.')
+        self.assertRegisterEqual(self.MIPS.s4, 0xffffffffbf800000, "Failed to save and load -1")
 
     def test_offset(self):
         '''Test we can store floats at location offsets.'''
-        self.assertRegisterEqual(self.MIPS.s2, 0x41800000, 'Failed to save and load offset 0.')
-        self.assertRegisterEqual(self.MIPS.s3, 0x3D800000, 'Failed to save and load offset 4.')
+        self.assertRegisterEqual(self.MIPS.s5, 0x41800000, 'Failed to load from offset 8')
+        self.assertRegisterEqual(self.MIPS.s6, 0x3D800000, 'Failed to store at offset 8')
