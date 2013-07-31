@@ -114,6 +114,8 @@ start:
         cvt.d.s $f9, $f9
         dmfc1 $s6, $f9
 
+        cfc1 $s7, $f31          # Get floating point rounding mode
+
        # END TEST
 
         # Dump reigsters and terminate
