@@ -29,6 +29,9 @@
 from cheritest_tools import BaseCHERITestCase
 
 class test_raw_fpu_mov_gpr(BaseCHERITestCase):
+from nose.plugins.attrib import attr
+
+    @attr('floatcmove')
     def test_mov_gpr(self):
         '''Test we can move conditional on a GPR'''
         self.assertRegisterEqual(self.MIPS.s0, 0x41000000, "Failed MOVN on condition true in single precision");
