@@ -27,6 +27,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_cntrl(BaseCHERITestCase):
     def test_movc(self):
@@ -53,10 +54,17 @@ class test_raw_fpu_cntrl(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.t9, 0x470000, "Incorrect value from FIR")
         # I've left Impl, ProcessorID and Revision to be 0.
         
-    def test_cmov(self):
+    def test_cmov_single(self):
         '''Test to ensure we can move values between FPRs'''
         self.assertRegisterEqual(self.MIPS.t8, 0x41000000, "CMOV failed for single precision")
+
+    @attr('float64')
+    def test_cmov_double(self):
         self.assertRegisterEqual(self.MIPS.t3, 0x4000000000000000, "CMOV failed for double precision")
+
+
+    @attr('floatpaired')
+    def test_cmov_paired(self):
         self.assertRegisterEqual(self.MIPS.t2, 0x4000000041000000, "CMOV failed for paired single precision")
 
     def test_register_name_collisions(self):
