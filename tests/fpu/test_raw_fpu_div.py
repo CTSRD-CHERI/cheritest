@@ -39,7 +39,11 @@ class test_raw_fpu_div(BaseCHERITestCase):
         '''Test we can divide in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x407159d4d1bc2504, "Double precision division failed")
 
-    def test_div_edge_cases(self):
-        '''Test edge cases of floating point division'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "Failed to echo QNaN");
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to flush denormalised result");
+    @attr('float64')
+    def test_div_double_qnan(self):
+        '''Test double precision division of QNaN'''
+        self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "div.d failed to echo QNaN");
+
+    def test_div_single_denorm(self):
+        '''Test that single precision division flushes a denormalized result to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "div.s failed to flush denormalised result");

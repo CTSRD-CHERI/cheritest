@@ -42,7 +42,11 @@ class test_raw_fpu_recip(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s0, 0x3FB0000000000000, "Failed to take the reciprocal of 16.0 in double precision")
 
     @attr('floatrecip')
-    def test_recip_edge_cases(self):
-        '''Test edge cases of floating point reciprocal'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "Failed to echo QNaN")
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to flush denormalised result")
+    def test_recip_double_qnan(self):
+        '''Test double precision reciprocal of QNaN'''
+        self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "recip.d failed to echo QNaN")
+
+    @attr('floatrecip')
+    def test_recip_single_denorm(self):
+        '''Test that single precision reciprocal flushes a denormalized result to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "recip.s failed to flush denormalised result")

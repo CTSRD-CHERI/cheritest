@@ -42,6 +42,6 @@ class test_raw_fpu_rsqrt(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s1, 0x3FC0000000000000, "Failed recip root double")
 
     @attr('floatrsqrt')
-    def test_rsqrt_edge_case(self):
-        '''Test edge cases of reciprocal square root'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "Failed to echo QNaN")
+    def test_rsqrt_double_qnan(self):
+        '''Test double precision reciprocal square root of QNaN'''
+        self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "rsqrt.d failed to echo QNaN")

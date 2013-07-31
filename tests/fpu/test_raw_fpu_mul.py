@@ -46,7 +46,7 @@ class test_raw_fpu_mul(BaseCHERITestCase):
 
     @attr('floatpaired')
     def test_mul_paired_qnan(self):
-        '''Test that mul.ps when one of the pair is QNaN'''
+        '''Test paired single multiplication when one of the pair is QNaN'''
         self.assertRegisterEqual(self.MIPS.s3, 0x7F81000040800000, "mul.ps failed to echo QNaN")
 
     def test_mul_single_denorm(self):

@@ -45,6 +45,6 @@ class test_raw_fpu_add(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s2, 0x000000004250C28f, "Failed paired single add")
         self.assertRegisterEqual(self.MIPS.s3, 0x4000000040800000, "Failed to add 1.0, 2.0 and 1.0, 2.0 in paired single precision")
 
-    def test_add_edge_cases(self):
-        '''Test edge cases of floating point addition'''
+    def test_add_single_denorm(self):
+        '''Test that single precision addition flushes a denormalized result to zero'''
         self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to flush denormalised result")
