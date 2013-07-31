@@ -27,12 +27,16 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_sd_ld(BaseCHERITestCase):
+
+    @attr('float64')
     def test_preloaded(self):
         '''Test can load double from memory'''
         self.assertRegisterEqual(self.MIPS.s0, 0x0123456789abcdef, 'Failed to load preloaded double.')
 
+    @attr('float64')
     def test_offset(self):
         '''Test we can store doubles at location offsets.'''
         self.assertRegisterEqual(self.MIPS.s1, 0xBED0000000000000, 'Failed to save and load offset 0.')
