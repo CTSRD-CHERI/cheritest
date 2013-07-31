@@ -44,7 +44,11 @@ class test_raw_fpu_mul(BaseCHERITestCase):
         '''Test we can multiply paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x4140000043674C08, "Failed paired single multiply.")
 
-    def test_mul_edge_cases(self):
-        '''Test edge cases of floating point multiplication'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7F81000040800000, "Failed to echo QNaN")
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to flush denormalised result")
+    @attr('floatpaired')
+    def test_mul_paired_qnan(self):
+        '''Test that mul.ps when one of the pair is QNaN'''
+        self.assertRegisterEqual(self.MIPS.s3, 0x7F81000040800000, "mul.ps failed to echo QNaN")
+
+    def test_mul_single_denorm(self):
+        '''Test that mul.s flushes a denormalized result to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "mul.s failed to flush denormalised result")

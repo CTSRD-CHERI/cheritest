@@ -44,7 +44,11 @@ class test_raw_fpu_abs(BaseCHERITestCase):
         '''Test we can take absolute values of paired single'''
         self.assertRegisterEqual(self.MIPS.s2, 0x3F80000040000000, "Failed to take absolute of paired single")
 
-    def test_abs_edge_cases(self):
-        '''Test edge cases of abs'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7F81000040000000, "Failed to echo QNaN")
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to flush denormalised result")
+    @attr('floatpaired')
+    def test_abs_paired_qnan(self):
+        '''Test abs of a paired single where one element is QNaN'''
+        self.assertRegisterEqual(self.MIPS.s3, 0x7F81000040000000, "abs.ps failed to echo QNaN")
+
+    def test_abs_single_denorm(self):
+        '''Test that sub.s flushes denormalized results to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "sub.s failed to flush denormalised result")

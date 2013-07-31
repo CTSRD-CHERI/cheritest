@@ -44,7 +44,11 @@ class test_raw_fpu_neg(BaseCHERITestCase):
         '''Test we can negate paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x3F800000C0000000, "Failed to negate -1.0, 2.0 in paired single precision")
 
-    def test_neg_edge_cases(self):
-        '''Test edge cases of floating point negation'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7F810000C0000000, "Failed to echo QNaN");
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to flush denormalised result");
+    @attr('floatpaired')
+    def test_neg_paired_qnan(self):
+        '''Test negation of a paired single when one of the pair is QNaN'''
+        self.assertRegisterEqual(self.MIPS.s3, 0x7F810000C0000000, "neg.ps failed to echo QNaN");
+
+    def test_neg_single_denorm(self):
+        '''Test that neg.s flushes a denormalized result to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "neg.s failed to flush denormalised result");

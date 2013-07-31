@@ -44,7 +44,11 @@ class test_raw_fpu_sub(BaseCHERITestCase):
         '''Test we can subtract paired singles'''
         self.assertRegisterEqual(self.MIPS.s2, 0x41C8000042000000, "Failed paired single subtract.")
 
-    def test_sub_edge_cases(self):
-        '''Test edge cases of floating point subtraction'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7F81000000000000, "Failed to echo QNaN")
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to flush denormalised result")
+    @attr('floatpaired')
+    def test_sub_paired_qnan(self):
+        '''Test subtract of a paired single when one of the pair is QNaN'''
+        self.assertRegisterEqual(self.MIPS.s3, 0x7F81000000000000, "sub.ps failed to echo QNaN")
+
+    def test_sub_single_denorm(self):
+        '''Test that subtract flushes a denormalized result to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "sub.s failed to flush denormalised result")
