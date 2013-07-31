@@ -27,9 +27,9 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_mov_gpr(BaseCHERITestCase):
-from nose.plugins.attrib import attr
 
     @attr('floatcmove')
     def test_mov_gpr(self):
