@@ -65,13 +65,16 @@ class test_cache_instruction_L2(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.a3, 2, "Cached read after L2 invalidate is incorrect")
         
     @attr('cache')
+    @attr('invalidateL2')
     def test_initial_writable_location(self):
         self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef, "Initial writable value is incorrect")
         
     @attr('cache')
+    @attr('invalidateL2')
     def test_written_back_writable_location(self):
         self.assertRegisterEqual(self.MIPS.a5, 5, "Written back writable value is incorrect")
         
     @attr('cache')
+    @attr('invalidateL2')
     def test_invalidated_writable_location(self):
         self.assertRegisterEqual(self.MIPS.a6, 5, "Writable location not invalidated")
