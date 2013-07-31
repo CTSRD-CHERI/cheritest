@@ -27,8 +27,11 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_mov_cc(BaseCHERITestCase):
+
+    @attr('floatcmove')
     def test_mov_cc(self):
         '''Test we can move on CCs'''
         self.assertRegisterEqual(self.MIPS.s0, 0x41000000, "Failed MOVF on condition true in single precision");
