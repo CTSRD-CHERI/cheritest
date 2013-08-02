@@ -44,4 +44,4 @@ class test_raw_fpu_cvtw(BaseCHERITestCase):
     def test_convert_fraction_to_word(self):
         '''Test we can convert fractional values to word'''
         self.assertRegisterEqual(self.MIPS.s3, 107, "Didn't convert 107.325 to word")
-        self.assertRegisterEqual(self.MIPS.s4, 6, "Didn't convert 6.66 to word")
+        self.assertRegisterEqual(self.MIPS.s4, 6, "Didn't truncate 6.66 to word")

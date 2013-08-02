@@ -43,7 +43,7 @@ class test_raw_fpu_round_single(BaseCHERITestCase):
 
     def test_raw_fpu_round_single_1(self):
         '''Test default rounding mode'''
-	self.assertRegisterEqual(self.MIPS.a1, 0xffffffff, "-0.75 did not round to -1")
+	self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "-0.75 did not round to -1")
 
     def test_raw_fpu_round_single_2(self):
         '''Test default rounding mode'''
