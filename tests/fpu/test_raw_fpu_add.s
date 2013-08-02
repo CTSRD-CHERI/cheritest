@@ -96,7 +96,7 @@ start:
 
         # ADD.S (Denorm)
         lui $t0, 0x0100
-        mtc1 $t0, $f31      # Enable flush to zero on denorm.
+        ctc1 $t0, $f31      # Enable flush to zero on denorm.
         lui $t1, 0x1
         dmtc1 $t1, $f22
         add.S $f22, $f22, $f22

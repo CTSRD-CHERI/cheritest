@@ -51,4 +51,5 @@ class test_raw_fpu_neg(BaseCHERITestCase):
 
     def test_neg_single_denorm(self):
         '''Test that neg.s flushes a denormalized result to zero'''
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "neg.s failed to flush denormalised result");
+        # We ignore the sign
+        self.assertRegisterEqual(self.MIPS.s4 & 0x7FFFFFFF, 0x0, "neg.s failed to flush denormalised result");

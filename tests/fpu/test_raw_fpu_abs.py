@@ -50,5 +50,5 @@ class test_raw_fpu_abs(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s3, 0x7F81000040000000, "abs.ps failed to echo QNaN")
 
     def test_abs_single_denorm(self):
-        '''Test that sub.s flushes denormalized results to zero'''
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "sub.s failed to flush denormalised result")
+        '''Test that abs.s flushes denormalized results to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "abs.s failed to flush denormalised result")
