@@ -39,18 +39,18 @@ class test_raw_fpu_qnan_single(BaseCHERITestCase):
 
     def test_raw_fpu_qnan_single_1(self):
         '''Test single precision add of QNaN'''
-	self.assertRegisterEqual(self.MIPS.a0, 0x7fc00000, "add.s did not echo QNaN")
+	self.assertRegisterEqual(self.MIPS.a0, 0x7f900000, "add.s did not echo QNaN")
 
     def test_raw_fpu_qnan_single_2(self):
         '''Test single precision subtract of QNaN'''
-	self.assertRegisterEqual(self.MIPS.a1, 0x7fc00000, "sub.s did not echo QNaN")
+	self.assertRegisterEqual(self.MIPS.a1, 0x7f900000, "sub.s did not echo QNaN")
 
     def test_raw_fpu_qnan_single_3(self):
         '''Test single precision multiply of QNaN'''
-	self.assertRegisterEqual(self.MIPS.a2, 0x7fc00000, "mul.s did not echo QNaN")
+	self.assertRegisterEqual(self.MIPS.a2, 0x7f900000, "mul.s did not echo QNaN")
 
     def test_raw_fpu_qnan_single_4(self):
         '''Test single precision divide of QNaN'''
-	self.assertRegisterEqual(self.MIPS.a3, 0x7fc00000, "div.s did not echo QNaN")
+	self.assertRegisterEqual(self.MIPS.a3, 0x7f900000, "div.s did not echo QNaN")
 
 

@@ -48,7 +48,7 @@ start:
         nop
         nop
 
-	lui $t0, 0x7fc0		# QNaN
+	lui $t0, 0x7f90		# QNaN
 	mtc1 $t0, $f1
 
 	li $t0, 0
