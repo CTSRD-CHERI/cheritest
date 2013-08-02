@@ -376,7 +376,8 @@ TEST_CP0_FILES=					\
 		test_cp0_ri.s
 
 TEST_FPU_FILES=					\
-		test_fpu_x_div.s
+		test_fpu_x_div.s		\
+		test_fpu_x_c_nan.s
 
 ifeq ($(TEST_CP2),1)
 TEST_CP2_FILES=					\
