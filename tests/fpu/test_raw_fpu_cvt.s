@@ -75,7 +75,7 @@ start:
 
         li $s1, 0x3FC55555 # ~ 1/6
         dsll $s1, $s1, 32 # shift top bits to correct place
-        li $t3, 0x5530AED6 # load bottom bits
+        li $t3, 0x55555555 # load bottom bits
         or $s1, $s1, $t3
         dmtc1 $s1, $f4
         cvt.s.d $f4, $f4
