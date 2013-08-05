@@ -55,10 +55,19 @@ test:   .ent    test
 		#
 		jal	bev_clear
 		nop
+
 		dla	$a0, bev0_handler
-		jal	bev0_handler_install
+		jal	set_bev0_common_handler
 		nop
 
+		dla	$a0, bev0_handler
+		jal	set_bev0_xtlb_handler
+		nop
+
+
+		dli	$s0, 0
+		dli	$s1, 0
+		dli	$s2, 0
 
                 dla     $a0, desired_epc1
                 dla     $a2, 0x0001000000100000
@@ -66,6 +75,10 @@ desired_epc1:	ld      $a5, 0($a2)		# Load from bad user space virtual address (v
                 move    $a1, $s0                # stash EPC
                 move    $a3, $s1                # stash bad addr
                 move    $a4, $s2                # stash cause
+
+		dli	$s0, 0
+		dli	$s1, 0
+		dli	$s2, 0
 
                 dla     $a5, desired_epc2
                 dla     $a7, 0x9801000000100000
