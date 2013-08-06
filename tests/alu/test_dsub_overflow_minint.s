@@ -80,9 +80,10 @@ test:		.ent test
 		# Trigger exception.
 		#
 		dli	$t0, 0x8000000000000000
-                dsub    $a7, $t0, $t0   # Should not overflow
+		dli	$a7, 0x1234
 desired_epc:
 		dsub	$t0, $0, $t0    # Should overflow
+                dsub    $a7, $t0, $t0   # Should not overflow
 
 		#
 		# Exception return.

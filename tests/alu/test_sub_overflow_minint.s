@@ -79,9 +79,9 @@ test:		.ent test
 		# Trigger exception.
 		#
 		li	$t0, 0x80000000
-		sub	$a7, $t0, $t0   # Should not overflow
 desired_epc:
 		sub	$t0, $0, $t0    # Should overflow
+		sub	$a7, $t0, $t0   # Should not overflow
 
 		#
 		# Exception return.

@@ -32,6 +32,7 @@ from cheritest_tools import BaseCHERITestCase
 
 class test_dsub_overflow_minint(BaseCHERITestCase):
     def test_epc(self):
+        '''Test that an exception was raised when subtracting MININT from zero'''
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 
     def test_returned(self):
@@ -53,6 +54,7 @@ class test_dsub_overflow_minint(BaseCHERITestCase):
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
 
     def test_sub_not_overflow(self):
+        '''Test that subtracting MININT from itself gives zero'''
         self.assertRegisterEqual(self.MIPS.a7, 0, "incorrect result for non-overflowed sub.")
 
     def test_result_not_written(self):
