@@ -1033,11 +1033,11 @@ hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 	    $(TESTDIRS) || true
 
 gxemul-nosetest: all $(GXEMUL_TEST_LOGS)
-	PYTHONPATH=tools/gxemul CACHED=0 nosetests --with-xunit --xunit-file=nosetests_uncached.xml $(GXEMUL_NOSEFLAGS) \
+	PYTHONPATH=tools/gxemul CACHED=0 nosetests --with-xunit --xunit-file=nosetests_gxemul_uncached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-nosetest_cached: all $(GXEMUL_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/gxemul CACHED=1 nosetests --with-xunit --xunit-file=nosetests_cached.xml $(GXEMUL_NOSEFLAGS) \
+	PYTHONPATH=tools/gxemul CACHED=1 nosetests --with-xunit --xunit-file=nosetests_gxemul_cached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-build:
