@@ -28,12 +28,19 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_instruction_miss(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a5, 0xbeef, "Translated instructions didn't run")
+
+    @attr('tlb')
     def test_badVaddr(self):
         self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a6, "Bad Virtual Address is incorrect")
+
+    @attr('tlb')
     def test_badVictim(self):
         self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a7, "EPC is incorrect")
     

@@ -28,7 +28,10 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_user_mode(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_flag_set(self):
         self.assertRegisterEqual(self.MIPS.a5, 0xffffffffffffffff, "Failed to execute code at virtual address.")

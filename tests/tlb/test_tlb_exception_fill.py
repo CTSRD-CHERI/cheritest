@@ -28,10 +28,15 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_exception_fill(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a1, self.MIPS.a2, "Load worked")
+
+    @attr('tlb')
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a6, 0, "Virtual address load loop did not match load loop for some values.")
     

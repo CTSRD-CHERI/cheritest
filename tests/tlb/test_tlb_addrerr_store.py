@@ -28,6 +28,7 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 # Register assignment:
 # a0 - desired epc 1
@@ -42,17 +43,29 @@ from cheritest_tools import BaseCHERITestCase
 # s1 - cause 2
 
 class test_tlb_addrerr_store(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_epc1(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a1, "Wrong EPC 1")
+
+    @attr('tlb')
     def test_badvaddr1(self):
         '''Test BadVAddr after load from bad user space address'''
         self.assertRegisterEqual(self.MIPS.a2, self.MIPS.a3, "Wrong badaddr 1")
+
+    @attr('tlb')
     def test_cause1(self):
         self.assertRegisterEqual(self.MIPS.a4 & 0xff, 0x14, "Wrong cause 1")
+
+    @attr('tlb')
     def test_epc2(self):
         self.assertRegisterEqual(self.MIPS.a5, self.MIPS.a6, "Wrong EPC 2")
+
+    @attr('tlb')
     def test_badvaddr2(self):
         '''Test BadVAddr after load from bad kernel space address'''
         self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s0, "Wrong badaddr 2")
+
+    @attr('tlb')
     def test_cause2(self):
         self.assertRegisterEqual(self.MIPS.s1 & 0xff, 0x14, "Wrong cause 2")

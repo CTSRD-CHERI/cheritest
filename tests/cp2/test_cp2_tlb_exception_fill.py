@@ -31,10 +31,14 @@ from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 class test_cp2_tlb_exception_fill(BaseCHERITestCase):
+
     @attr('capabilities')
-    def test_epc(self):
+    @attr('tlb')
+    def test_epc_1(self):
         self.assertRegisterEqual(self.MIPS.a1, self.MIPS.a2, "Load worked")
+
     @attr('capabilities')
-    def test_epc(self):
+    @attr('tlb')
+    def test_epc_2(self):
         self.assertRegisterEqual(self.MIPS.a3, 0, "Virtual address load loop did not complete.")
     

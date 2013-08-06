@@ -28,7 +28,10 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_store_0(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_store_succeeded(self):
         self.assertRegisterEqual(self.MIPS.a5, 0x0123456789abcdef, "Store to virtual address failed.")

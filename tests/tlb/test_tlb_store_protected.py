@@ -28,17 +28,22 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_store_protected(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_epc_correct(self):
         self.assertRegisterEqual(self.MIPS.a7, 0, "EPC not set to address of illegal store instruction.")
 
+    @attr('tlb')
     def test_cause_correct(self):
         self.assertRegisterEqual(self.MIPS.a6 & 0x7C, 0x4, "Cause not set to expected value.")
 
+    @attr('tlb')
     def test_badvaddr_correct(self):
         self.assertRegisterEqual(self.MIPS.s0, 0x0, "BadVAddr not set to expected value.")
 
-
+    @attr('tlb')
     def test_store_blocked(self):
         self.assertRegisterEqual(self.MIPS.a5, 0xfedcba9876543210, "Store to protected memory not blocked.")
