@@ -36,7 +36,8 @@ from cheritest_tools import BaseCHERITestCase
 
 class test_raw_tlb_j(BaseCHERITestCase):
     def test_before_jr(self):
-        self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before jr missed")
+        '''Test that instruction before TLB miss is executed'''
+        self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before TLB miss was not executed")
 
     def test_after_miss1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "instruction after exception executed")
@@ -48,6 +49,7 @@ class test_raw_tlb_j(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.a3, 0, "instruction after exception executed")
 
     def test_jr_target(self):
+        '''Test that execute instruction after returning from TLB miss handler'''
         self.assertRegisterEqual(self.MIPS.a4, 5, "instruction at jump target not executed")
 
     def test_miss_vector(self):
