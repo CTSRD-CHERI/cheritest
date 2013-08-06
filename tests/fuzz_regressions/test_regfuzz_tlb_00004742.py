@@ -1,4 +1,5 @@
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 import os
 import tools.sim
 expected_uncached=[
@@ -70,6 +71,8 @@ expected_cached=[
     0x98000000400003ac,
   ]
 class test_regfuzz_tlb_00004742(BaseCHERITestCase):
+
+  @attr('tlb')
   def test_registers_expected(self):
     cached=bool(int(os.getenv('CACHED',False)))
     expected=expected_cached if cached else expected_uncached
