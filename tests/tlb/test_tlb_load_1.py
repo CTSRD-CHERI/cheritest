@@ -28,8 +28,11 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_load_1(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_load_succeeded(self):
         self.assertRegisterEqual(self.MIPS.a4, 0xba9876543210fead, "Load from virtual address failed.")
         self.assertRegisterEqual(self.MIPS.a5, 0xfedcba9876543210, "Load from virtual address failed.")
