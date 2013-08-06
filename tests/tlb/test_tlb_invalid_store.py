@@ -49,17 +49,25 @@ from cheritest_tools import BaseCHERITestCase
 class test_tlb_invalid_store(BaseCHERITestCase):
     def test_badvaddr(self):
         self.assertRegisterEqual(self.MIPS.s0, self.MIPS.a4, "Wrong BadVaddr")
+
     def test_context(self):
         self.assertRegisterEqual(self.MIPS.s1, (self.MIPS.a4 & 0xffffe000)>>9, "Wrong Context") # TODO test page table base
+
     def test_xcontext(self):
         self.assertRegisterEqual(self.MIPS.s2, (self.MIPS.a4 & 0xffffe000)>>9, "Wrong XContext") # TODO test page table base
+
     def test_entryhi(self):
         self.assertRegisterEqual(self.MIPS.s3, self.MIPS.a4 & 0xfffff000, "Wrong EntryHi")
+
     def test_status(self):
         self.assertRegisterEqual(self.MIPS.s4 & 2, 2, "Wrong EXL")
+
     def test_cause(self):
         self.assertRegisterEqual(self.MIPS.s5 & 0x7c, 0xc, "Wrong Exception Code")
+
     def test_epc(self):
+        '''Test EPC after TLB Invalid exception'''
         self.assertRegisterEqual(self.MIPS.a6, self.MIPS.s6, "Wrong EPC")
+
     def test_testdata(self):
         self.assertRegisterEqual(self.MIPS.a7, 0xfedcba9876543210, "Wrong testdata")
