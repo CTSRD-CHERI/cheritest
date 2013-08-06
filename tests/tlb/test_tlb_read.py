@@ -28,15 +28,26 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_read(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_tlb_read_page_mask(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0, "TLB read of the page mask is incorrect.")
+
+    @attr('tlb')
     def test_tlb_read_index(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x6, "Index value is unexpected after TLB read.")
+
+    @attr('tlb')
     def test_tlb_read_entryHi(self):
         self.assertRegisterEqual(self.MIPS.a2, 0xc000000000002005, "TLB read of EntryHi is incorrect.")
+
+    @attr('tlb')
     def test_tlb_read_entryLo0(self):
         self.assertRegisterEqual(self.MIPS.a3, 0x3017, "TLB read of EntryLo0 is incorrect.")
+
+    @attr('tlb')
     def test_tlb_read_entryLo1(self):
         self.assertRegisterEqual(self.MIPS.a4, 0x4011, "TLB read of EntryLo1 is incorrect.")

@@ -28,10 +28,14 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_load_asid(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_load1_succeeded(self):
         self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef, "Load from virtual address ASID=2 failed.")
 
+    @attr('tlb')
     def test_load2_succeeded(self):
         self.assertRegisterEqual(self.MIPS.a5, 0xfedcba9876543210, "Load from virtual address ASID=1 failed.")

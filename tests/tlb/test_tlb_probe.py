@@ -28,9 +28,14 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_probe(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_tlb_probe_succeeded(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x6, "TLB probe find failed.")
+
+    @attr('tlb')
     def test_tlb_probe_miss_is_correct(self):
         self.assertRegisterEqual(self.MIPS.a1 & 0xffffffff80000000, 0xffffffff80000000, "TLB probe miss failed.")
