@@ -34,11 +34,6 @@ class test_cp2_tlb_exception_fill(BaseCHERITestCase):
 
     @attr('capabilities')
     @attr('tlb')
-    def test_epc_1(self):
-        self.assertRegisterEqual(self.MIPS.a1, self.MIPS.a2, "Load worked")
-
-    @attr('capabilities')
-    @attr('tlb')
-    def test_epc_2(self):
+    def test_cp2_tlb_exception_fill(self):
         self.assertRegisterEqual(self.MIPS.a3, 0, "Virtual address load loop did not complete.")
     
