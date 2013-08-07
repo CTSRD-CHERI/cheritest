@@ -87,7 +87,6 @@ test:
 .ent bev0_handler
 bev0_handler:
 	li	$a2, 1
-	cgetcause $a3
 	dmfc0	$a5, $14	# EPC
 	daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 	dmtc0	$k0, $14

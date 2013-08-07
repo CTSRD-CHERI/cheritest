@@ -65,6 +65,15 @@ test:
         nop
         nop
 
+	cfc1 $t0, $f31		# Enable exception on invalid operation
+	li $t1, 0x800
+	or $t0, $t0, $t1
+	ctc1 $t1, $f31
+	nop
+	nop
+	nop
+	nop
+
 	lui $t0, 0x7f90 	# QNaN
 	mtc1 $t0, $f1
 	li $t0, 0		# 0.0
@@ -81,7 +90,6 @@ test:
 .ent bev0_handler
 bev0_handler:
 	li	$a2, 1
-	cgetcause $a3
 	dmfc0	$a5, $14	# EPC
 	daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 	dmtc0	$k0, $14
