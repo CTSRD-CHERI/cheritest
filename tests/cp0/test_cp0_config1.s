@@ -51,7 +51,7 @@ test:		.ent test
 		dsrl	$a2, $a0, 3
 		andi	$a2, $a2, 0x1	# Watch register config
 		
-		dsrl	$a3, $a0, 7
+		dsrl	$a3, $a0, 6
 		andi	$a3, $a3, 0x1	# CP2 config
 
 		ld	$fp, 16($sp)
