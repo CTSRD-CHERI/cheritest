@@ -37,6 +37,7 @@ from nose.plugins.attrib import attr
 
 class test_fpu_x_c_nan(BaseCHERITestCase):
 
+    @attr('floatexception')
     def test_fpu_x_c_nan(self):
         '''Test comparing with NaN raises an exception'''
 	self.assertRegisterEqual(self.MIPS.a2, 1, "Comparison with NaN did not raise an exception")
