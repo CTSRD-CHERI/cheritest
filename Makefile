@@ -273,6 +273,7 @@ RAW_FPU_FILES =                \
 	test_raw_fpu_cult_single.s \
 	test_raw_fpu_cueq_single.s \
 	test_raw_fpu_ceq_single.s \
+	test_raw_fpu_cun_single.s \
 	test_raw_fpu_round_single.s \
 	test_raw_fpu_qnan_single.s \
 	test_raw_fpu_underflow.s \
