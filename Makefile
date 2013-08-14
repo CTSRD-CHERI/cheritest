@@ -276,6 +276,7 @@ RAW_FPU_FILES =                \
 	test_raw_fpu_cun_single.s \
 	test_raw_fpu_round_single.s \
 	test_raw_fpu_ceil_single.s \
+	test_raw_fpu_floor_single.s \
 	test_raw_fpu_qnan_single.s \
 	test_raw_fpu_underflow.s \
 		test_raw_fpu_cvt.log	\
