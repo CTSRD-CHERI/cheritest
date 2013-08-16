@@ -415,8 +415,8 @@ bev_clear:
 		.global unhandled_exception
 		.ent unhandled_exception
 unhandled_exception:
-		b       .
-		nop			# branch-delay slot
+		b .
+		mtc0 $at, $23        
 		.end unhandled_exception
 
 #
