@@ -151,13 +151,14 @@ class test_cp0_reg_init(BaseCHERITestCase):
         '''Test initial value of CP0.config1'''
         self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,3,4,0,3,4,0,1,0,0,1,0,0,1), "Unexpected CP0 config1 register value on reset")
 
-    ## CHERI2 configuration with no FPU, watch register, no capabilities, and a small TLB
+    ## CHERI2 configuration with no FPU, watch register, capabilities, and a small TLB
     @attr('nofloat')
     @attr('watch')
     @attr('smalltlb')
+    @attr('capabilities')
     def test_config1_reg_smalltlb(self):
         '''Test initial value of CP0.config1'''
-        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(0,64-1,3,3,1,3,3,1,0,0,0,1,0,0,0), "Unexpected CP0 config1 register value on reset")
+        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(0,64-1,3,3,1,3,3,1,1,0,0,1,0,0,0), "Unexpected CP0 config1 register value on reset")
 
     # GXEMUL configuration
     @attr('gxemultlb')
