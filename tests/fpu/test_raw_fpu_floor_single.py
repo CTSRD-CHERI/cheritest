@@ -43,22 +43,22 @@ class test_raw_fpu_floor_single(BaseCHERITestCase):
 
     def test_raw_fpu_floor_single_1(self):
         '''Test floor operation'''
-	self.assertRegisterEqual(self.MIPS.a1, 0xffffffff, "-0.75 did not round down to -1")
+	self.assertRegisterEqual(self.MIPS.a1 & 0xffffffff, 0xffffffff, "-0.75 did not round down to -1")
 
     def test_raw_fpu_floor_single_2(self):
         '''Test floor operation'''
-	self.assertRegisterEqual(self.MIPS.a2, 0xffffffff, "-0.5 did not round down to -1")
+	self.assertRegisterEqual(self.MIPS.a2 & 0xffffffff, 0xffffffff, "-0.5 did not round down to -1")
 
     def test_raw_fpu_floor_single_3(self):
         '''Test floor operation'''
-	self.assertRegisterEqual(self.MIPS.a3, 0, "-0.25 did not round down to -1")
+	self.assertRegisterEqual(self.MIPS.a3 & 0xffffffff, 0xffffffff, "-0.25 did not round down to -1")
 
     def test_raw_fpu_floor_single_4(self):
         '''Test floor operation'''
-	self.assertRegisterEqual(self.MIPS.s0, 0, "0.5 did not round down to 0")
+	self.assertRegisterEqual(self.MIPS.a4, 0, "0.5 did not round down to 0")
 
     def test_raw_fpu_floor_single_5(self):
         '''Test floor operation'''
-	self.assertRegisterEqual(self.MIPS.s1, 1, "1.5 did not round down to 2")
+	self.assertRegisterEqual(self.MIPS.a5, 1, "1.5 did not round down to 1")
 
 

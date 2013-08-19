@@ -55,10 +55,10 @@ class test_raw_fpu_ceil_single(BaseCHERITestCase):
 
     def test_raw_fpu_ceil_single_4(self):
         '''Test ceiling operation'''
-	self.assertRegisterEqual(self.MIPS.s0, 1, "0.5 did not round up to 1")
+	self.assertRegisterEqual(self.MIPS.a4, 1, "0.5 did not round up to 1")
 
     def test_raw_fpu_ceil_single_5(self):
         '''Test ceiling operation'''
-	self.assertRegisterEqual(self.MIPS.s1, 2, "1.5 did not round up to 2")
+	self.assertRegisterEqual(self.MIPS.a5, 2, "1.5 did not round up to 2")
 
 
