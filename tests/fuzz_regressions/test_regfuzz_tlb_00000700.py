@@ -72,6 +72,7 @@ expected_cached=[
   ]
 class test_regfuzz_tlb_00000700(BaseCHERITestCase):
   @attr('tlb')
+  @attr('enablelargetlb')
   def test_registers_expected(self):
     cached=bool(int(os.getenv('CACHED',False)))
     expected=expected_cached if cached else expected_uncached
