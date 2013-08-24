@@ -280,6 +280,7 @@ RAW_FPU_FILES =                \
 	test_raw_fpu_qnan_single.s \
 	test_raw_fpu_underflow.s \
 	test_raw_fpu_div_small.s \
+	test_fpu_x_disabled.s \
 		test_raw_fpu_cvt.log	\
 		test_raw_fpu_cvtw.log	\
 		test_raw_fpu_movci.log	\
