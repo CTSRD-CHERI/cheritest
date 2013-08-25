@@ -40,7 +40,7 @@
 
 sandbox:
 		#
-		# $c27 is KR1C, a reseved register
+		# $c27 is KR1C, a reserved register
 		#
 		dli     $a0, 0
 		dli     $t0, 1		# This makes the offset unaligned
