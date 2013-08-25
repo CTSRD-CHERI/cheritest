@@ -524,6 +524,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cunseal_ephemeral.s	\
 		test_cp2_x_cunseal_unsealed.s	\
 		test_cp2_x_cld_priority.s	\
+		test_cp2_x_cld_pri2.s		\
 		test_cp2_x_fetch.s		\
 		test_cp2_x_cjalr_perm.s		\
 		test_cp2_x_cjr_ephemeral.s	\
