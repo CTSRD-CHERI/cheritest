@@ -76,7 +76,7 @@ test:		.ent test
 
 		dla     $t0, data
 		cincbase $c27, $c0, $t0
-		dli     $t0, 8
+		dli     $t0, 9
                 csetlen $c27, $c27, $t0
 		dli     $t0, 0x7
 		candperm $c27, $c27, $t0
