@@ -97,6 +97,7 @@ static void print_children(xmlNode *node)
 
 int main(int argc, char **argv)
 {
+char buff[16];
 xmlDoc *doc;
 xmlNode *root;
 xmlTextReaderPtr reader;
@@ -151,6 +152,21 @@ int skip = 0;
   printf("failures = %d\n", failures);
   printf("errors = %d\n", errors);
   printf("skip = %d\n", skip);
+
+  doc = xmlNewDoc(BAD_CAST "1.0");
+  root = xmlNewNode(NULL, BAD_CAST "testsuite");
+  xmlNewProp(root, BAD_CAST "name", BAD_CAST "nosetests");
+  xmlDocSetRootElement(doc, root);
+  sprintf(buff, "%d", tests);
+  xmlNewProp(root, BAD_CAST "tests", BAD_CAST buff);
+  sprintf(buff, "%d", failures);
+  xmlNewProp(root, BAD_CAST "failures", BAD_CAST buff);
+  sprintf(buff, "%d", errors);
+  xmlNewProp(root, BAD_CAST "errors", BAD_CAST buff);
+  sprintf(buff, "%d", skip);
+  xmlNewProp(root, BAD_CAST "skip", BAD_CAST buff);
+
+  xmlSaveFormatFileEnc("-", doc, "UTF-8", 1);
 
   return 0;
 }
