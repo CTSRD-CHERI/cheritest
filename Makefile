@@ -1019,11 +1019,18 @@ nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
 
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
-nosetest: all $(CHERI_TEST_LOGS)
+nosetest: nosetests_uncached.xml
+
+nosetest_cached: nosetests_cached.xml
+
+nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
+	./xmlcat nosetests_uncached.xml nosetests_cached.xml > nosetests_combined.xml
+
+nosetests_uncached.xml: all $(CHERI_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit --xunit-file=nosetests_uncached.xml \
 		$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
-nosetest_cached: all $(CHERI_TEST_CACHED_LOGS)
+nosetests_cached.xml: all $(CHERI_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit --xunit-file=nosetests_cached.xml \
                $(NOSEFLAGS) $(TESTDIRS) || true
 
@@ -1056,6 +1063,9 @@ gxemul-build:
 	wget https://github.com/CTSRD-CHERI/gxemul/zipball/8d92b42a6ccdb7d94a2ad43f7e5e70d17bb7839c -O tools/gxemul/gxemul-testversion.zip --no-check-certificate
 	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
+
+xmlcat: xmlcat.c
+	gcc -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
 
 cleanerror:
 	find log -size 0 | xargs -r --verbose rm 

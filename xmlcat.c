@@ -98,10 +98,13 @@ static void print_children(xmlNode *node)
 int main(int argc, char **argv)
 {
 char buff[16];
-xmlDoc *doc;
-xmlNode *root;
+xmlDoc *doc_in;
+xmlDoc *doc_out;
+xmlNode *root_in;
+xmlNode *root_out;
 xmlTextReaderPtr reader;
 xmlAttr *attr;
+xmlNode *children;
 int i;
 int rc;
 int tests = 0;
@@ -109,18 +112,25 @@ int errors = 0;
 int failures = 0;
 int skip = 0;
 
+  doc_out = xmlNewDoc(BAD_CAST "1.0");
+  root_out = xmlNewNode(NULL, BAD_CAST "testsuite");
+  xmlNewProp(root_out, BAD_CAST "name", BAD_CAST "nosetests");
+  xmlDocSetRootElement(doc_out, root_out);
+
   for (i=1; i<argc; i++)
   {
-    doc = xmlReadFile(argv[i], NULL, 0);
+    doc_in = xmlReadFile(argv[i], NULL, 0);
 
-    if (doc == NULL)
+    if (doc_in == NULL)
     {
       fprintf(stderr, "Failed to open %s\n", argv[i]);
       return -1;
     }
-    root = xmlDocGetRootElement(doc);
-    printf("%s\n", root->name);
-    attr = root->properties;
+    root_in = xmlDocGetRootElement(doc_in);
+#if 0
+    printf("%s\n", root_in->name);
+#endif
+    attr = root_in->properties;
     while (attr)
     {
       if (strcmp(attr->name, "tests") == 0)
@@ -145,28 +155,32 @@ int skip = 0;
       }
       attr = attr->next;
     }
-    xmlFreeDoc(doc);
+    children = root_in->children;
+    while (children)
+    {
+      xmlAddChild(root_out, xmlCopyNode(children, 1));
+      children = children->next;
+    }
+    xmlFreeDoc(doc_in); 
   }
 
+#if 0
   printf("tests = %d\n", tests);
   printf("failures = %d\n", failures);
   printf("errors = %d\n", errors);
   printf("skip = %d\n", skip);
+#endif
 
-  doc = xmlNewDoc(BAD_CAST "1.0");
-  root = xmlNewNode(NULL, BAD_CAST "testsuite");
-  xmlNewProp(root, BAD_CAST "name", BAD_CAST "nosetests");
-  xmlDocSetRootElement(doc, root);
   sprintf(buff, "%d", tests);
-  xmlNewProp(root, BAD_CAST "tests", BAD_CAST buff);
+  xmlNewProp(root_out, BAD_CAST "tests", BAD_CAST buff);
   sprintf(buff, "%d", failures);
-  xmlNewProp(root, BAD_CAST "failures", BAD_CAST buff);
+  xmlNewProp(root_out, BAD_CAST "failures", BAD_CAST buff);
   sprintf(buff, "%d", errors);
-  xmlNewProp(root, BAD_CAST "errors", BAD_CAST buff);
+  xmlNewProp(root_out, BAD_CAST "errors", BAD_CAST buff);
   sprintf(buff, "%d", skip);
-  xmlNewProp(root, BAD_CAST "skip", BAD_CAST buff);
+  xmlNewProp(root_out, BAD_CAST "skip", BAD_CAST buff);
 
-  xmlSaveFormatFileEnc("-", doc, "UTF-8", 1);
+  xmlSaveFormatFileEnc("-", doc_out, "UTF-8", 1);
 
   return 0;
 }
