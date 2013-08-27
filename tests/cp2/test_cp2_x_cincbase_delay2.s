@@ -66,7 +66,7 @@ test:		.ent test
 		cincbase $c1, $c0, $t0
 		dli     $t0, 8
                 csetlen $c1, $c1, $t0
-		dli     $t0, 0x7
+		dli     $t0, 0x5
 		candperm $c1, $c1, $t0
 
 		#
