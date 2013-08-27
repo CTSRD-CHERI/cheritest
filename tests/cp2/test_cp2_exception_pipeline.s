@@ -83,10 +83,13 @@ test:		.ent test
 		csettype	$c5, $c5, $t3  # not executed
 
 		# Create a test capability for loading and storing
-		dli     $t0, 0x100
-		cincbase	$c6, $c6, $t0
+		dla		$t0, data
+		cincbase	$c6, $c0, $t0
+		dli     	$t0, 32
 		csetlen		$c6, $c6, $t0
+		dli		$t0, 0x1ff
 		candperm	$c6, $c6, $t0
+		dli		$t0, 0
 		csettype	$c6, $c6, $t0
 		
 		# Test cscr
