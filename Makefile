@@ -537,6 +537,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cincbase_delay2.s	\
 		test_cp2_x_cbtu_reg.s		\
 		test_cp2_x_cbts_reg.s		\
+		test_cp2_x_csettype_perm.s	\
 		test_cp2_x_swc1_perm.s
 endif
 
