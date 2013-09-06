@@ -48,6 +48,7 @@
 #
 
 TEST_CP2?=1
+CLANG?=1
 
 #
 # List of directories in which to find test source and .py files.
@@ -739,6 +740,9 @@ NOSEPRED+=and not float
 endif
 ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities and not clang
+endif
+ifneq ($(CLANG),1)
+NOSEPRED+=and not clang
 endif
 ifdef CHERI_MICRO
 NOSEPRED+=and not tlb and not cache and not invalidateL2
