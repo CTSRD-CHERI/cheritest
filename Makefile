@@ -282,6 +282,7 @@ RAW_FPU_FILES =                \
 	test_raw_fpu_qnan_single.s \
 	test_raw_fpu_underflow.s \
 	test_raw_fpu_div_small.s \
+	test_fpu_exception_pipeline.s \
 	test_fpu_x_disabled.s \
 		test_raw_fpu_cvt.log	\
 		test_raw_fpu_cvtw.log	\
@@ -387,6 +388,7 @@ TEST_CP0_FILES=					\
 		test_cp0_ri.s
 
 TEST_FPU_FILES=					\
+		test_fpu_exception_pipeline.s	\
 		test_fpu_x_div.s		\
 		test_fpu_x_underflow.s		\
 		test_fpu_x_overflow.s		\
