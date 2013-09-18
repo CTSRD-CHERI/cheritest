@@ -37,8 +37,9 @@
 
 start:
         # Enable CP1
+	mfc0 $t0, $12
         dli $t1, 1 << 29
-        or $t0, $t1, $t1
+        or $t0, $t0, $t1
         mtc0 $t0, $12
         nop
         nop
