@@ -61,8 +61,13 @@ test:		.ent test
 		dli	$t0, 8
 		csetlen $c1, $c0, $t0
 
-		cmove	$c2, $c0
-		dli $t0, 9
+		#
+		# c1.length is 8, so the type can be set to any value in the
+		# range 0 .. 7. 8 is one outside this range, so should raise
+		# an exception.
+		#
+
+		dli $t0, 8
 		csettype $c2, $c1, $t0	# This should raise an exception
 
 		cgettype $a0, $c2	# Check csettype failed
