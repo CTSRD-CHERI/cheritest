@@ -89,6 +89,19 @@ test:		.ent test
                 csdr    $t1, $t0($c0)
 
 		#
+		# Remove the permission to access reserved registers from
+		# PCC. (CCall should work even if the caller does not have
+		# permission to access reserved registers).
+		#
+
+		cgetpcc $t1($c1)
+		dli	$t0, 0x1ff
+		candperm $c1, $c1, $t0
+		dla	$t0, L1
+		cjr	$t0($c1)
+		nop		# branch delay slot
+L1:
+		#
                 # Make $c4 a template capability for a user-defined type
 		# whose otype is equal to the address of sandbox.
 		#
@@ -117,6 +130,15 @@ test:		.ent test
 		#
 
                 csealdata $c2, $c3, $c4
+
+		#
+		# Remove the permissions to access reserved registers from
+		# $c4, so the sandboxed code can't escape the sandbox by
+		# using reserved registers.
+		#
+
+		dli $t0, 0x1ff
+		candperm $c4, $c4, $t0
 
 		#
 		# Make $c1 a code capability for sandbox
