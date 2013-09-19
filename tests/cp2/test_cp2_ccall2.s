@@ -257,11 +257,42 @@ do_ccall:
 		csd	$t0, $k0, 64($c28)
 
 		#
-		# Move $c1.otype into EPC, so that when we return it will be
-		# to the entry point of the invoked sandbox
+		# Set the otype of the Kernel Data Capability ($c27) to
+		# the type of the code capability the user is trying to
+		# invoke. KDC has access to everything, so is permitted to
+		# do this. XXX: should we use a different reserved register
+		# for this?
 		#
 
-		cgettype $t0, $c1	# XXX : assumes ccall $c1, $c2
+		cgettype $t0, $c1
+		csettype $c27, $c27, $t0
+
+		#
+		# Check that the data capability passed to the kernel by the
+		# user has the same otype as the code capability. It's a
+		# security error if they don't match.
+		#
+
+		cgettype $t1, $c2
+		bne	$t0, $t1, ccall_fails
+
+		#
+		# Unseal the code capability into EPCC (which will become
+		# the user's PCC after eret)
+		#
+		# XXX: We ought to have done more checks that $c1 is valid.
+		# The user can make the kernel die horribly by passing a
+		# bad $c1.
+		#
+
+		cunseal $c31, $c1, $c27
+
+		#
+		# Move $c1.otype into EPC, so that when we return PC will be
+		# set to the entry point of the invoked sandbox
+		#
+
+		cgettype $t0, $c1
 		dmtc0   $t0, $14
 		nop
 		nop
@@ -316,6 +347,16 @@ do_creturn:
                 nop
                 nop
                 eret
+		nop
+
+		#
+		# Die horribly if there's a security error. XXX: This ought
+		# to do more to return cleanly to user space.
+		#
+ccall_fails:
+		eret
+		nop
+
 		.end bev0_ccall_handler
 
 		.ent bev0_ccall_handler_stub
