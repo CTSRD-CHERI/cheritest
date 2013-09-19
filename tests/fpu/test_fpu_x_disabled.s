@@ -75,6 +75,15 @@ test:
 .ent bev0_handler
 bev0_handler:
 	li	$a2, 1
+
+	mfc0	$a3, $13
+	srl	$a3, $a3, 2
+	andi	$a3, $a3, 0x1f	# ExcCode
+
+	mfc0	$a4, $13
+	srl	$a4, $a4, 28
+	andi	$a4, $a4, 0x3
+
 	dmfc0	$a5, $14	# EPC
 	daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 	dmtc0	$k0, $14
