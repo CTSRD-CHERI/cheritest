@@ -255,7 +255,7 @@ do_ccall:
 		#
 
 		dmfc0	$t0, $14	# XXX: corrupts $t0
-		daddi	$t0, $t0, 4
+		daddi	$t0, $t0, 8	# XXX: 2 instructions. Why???
 		csd	$t0, $k0, 64($c28)
 
 		#
