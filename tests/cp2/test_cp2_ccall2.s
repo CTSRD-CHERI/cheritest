@@ -38,8 +38,11 @@
 #
 
 sandbox:
+		cmove	$c0, $c26
 		dli	$a2, 42
+		csdi	$a2, 0($c26)
 		creturn
+		nop	# branch delay slot
 
 		.global test
 test:		.ent test
@@ -104,9 +107,8 @@ L1:
 		#
                 # Make $c4 a template capability for a user-defined type
 		# whose otype is equal to the address of sandbox.
-		#
 
-		dla      $t0, sandbox
+		dla	$t0, sandbox
 		csettype $c4, $c0, $t0
 
 		#
@@ -288,11 +290,19 @@ do_ccall:
 		cunseal $c31, $c1, $c27
 
 		#
-		# Move $c1.otype into EPC, so that when we return PC will be
-		# set to the entry point of the invoked sandbox
+		# Unseal the data capability into IDC ($c26)
+		#
+
+		cunseal $c26, $c2, $c27
+
+		#
+		# Move $c1.otype - $c1.base into EPC, so that when we return 
+                # PC will be set to the entry point of the invoked sandbox
 		#
 
 		cgettype $t0, $c1
+		cgetbase $t1, $c1
+		dsub $t0, $t0, $t1
 		dmtc0   $t0, $14
 		nop
 		nop
