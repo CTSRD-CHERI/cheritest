@@ -136,7 +136,7 @@ all_threads:
 		nop
 	
 		# Dump capability registers in the simulator
-.if(TEST_CP2 == 0)
+.if(CHERI_VER == 2)
 		nop  # cheri2 would throw reserved instruction exception. Use a nop to keep binary size the same.
 .else
 		mtc2 $k0, $0, 4
@@ -203,11 +203,11 @@ skip_increment:
 
 
 .set at
-# install_tlb_entry(tlb_entry, physical_base, virtual_base)
+# install_tlb_entry(tlb_entry, physical_base, virtual_base, page_mask)
 .ent install_tlb_entry
 .global install_tlb_entry
 install_tlb_entry:
-		dmtc0        $zero, $5               # Write 0 to page mask i.e. 4k pages
+		dmtc0        $a3, $5                 # Write page mask i.e. 0 for 4k pages, 0x3FF for 4M pages
 		dmtc0        $a0, $0                 # TLB index
 		dmtc0        $a2, $10                # TLB HI address
 		and          $t1, $a1, 0xfffffff000  # Get physical page (PFN) of the physical address (40 bits less 12 low order bits)

@@ -3,6 +3,8 @@
 # All rights reserved.
 # Copyright (c) 2012 David Chisnall
 # All rights reserved.
+# Copyright (c) 2013 Jonathan D. Woodruff
+# All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -41,24 +43,25 @@ test:   .ent    test
 		dla     $a1, testdata            # Physical address testdata
 		addi    $a2, $zero, 0x200
 		dsll    $a2, 13                  # Virtual address 0x400000
-		li	$a3, 0                   # Page mask of 0 (4k page)
+		li	$a3, 0x3FF               # Page mask of 10 1s, 1024*4k = 4M page
 		jal     install_tlb_entry
 		nop
 
-		addi    $a0, $zero, 1            # TLB entry 1
-		dla     $a1, testdata2           # Physical address testdata2
-		addi    $a2, $zero, 0x400
-		dsll    $a2, 29                  # Virtual address 0x8000000000
-		li	$a3, 0                   # Page mask of 0 (4k page)
-		jal     install_tlb_entry
-		nop
-
+		dla	$a1, testdata
+		andi	$a1, $a1, 0xFFFF         # Keep the bottom 16 bits of the address
 		addi    $a4, $zero, 0x200        # Load testdata via its virtual address into a5
 		dsll    $a4, $a4, 13
-		ld      $a5, 0($a4)
-		addi    $a4, $zero, 0x400        # Load testdata2 via its virtual address into a4
-		dsll    $a4, $a4, 29
-		ld      $a4, 0($a4)
+		or	$a4, $a4, $a1	
+		ld      $a6, 0($a4)              # Load testdata into a5 via full TLB lookup 
+		ld      $a7, 0($a4)              # Load testdata again via TLB cache
+		
+		dla	$a1, testdata2
+		andi	$a1, $a1, 0xFFFF         # Keep the bottom 16 bits of the address
+		addi    $a4, $zero, 0x200        # Load testdata2 via its virtual address into a4
+		dsll    $a4, $a4, 13
+		or	$a4, $a4, $a1
+		ld      $a5, 0($a4)              # Load testdata2 via same page
+		ld      $a4, 0($a4)              # Load testdata2 again to test any caching
 
 		jr      $s0
 		nop
