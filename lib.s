@@ -439,7 +439,7 @@ __assert_fail:
 		# Dump MIPS registers
 		mtc0 $at, $26
 		# Dump capability registers
-		.if(CHERI_VER != 2 && TEST_CP2 == 1)
+		.if(TEST_CP2 == 1)
 		  mtc2 $k0, $0, 4
 		.else
 		  nop
