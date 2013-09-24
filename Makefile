@@ -735,6 +735,7 @@ NOSEPRED+=and not invalidateL2
 NOSEPRED+=and not lladdr
 NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb
+NOSEPRED+=and not largepage
 else
 NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb

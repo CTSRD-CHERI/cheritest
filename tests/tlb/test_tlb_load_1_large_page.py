@@ -28,8 +28,10 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_tlb_load_1_large_page(BaseCHERITestCase):
+    @attr('largepage')
     def test_load_succeeded(self):
         self.assertRegisterEqual(self.MIPS.a4, 0xba9876543210fead, "Initial load from large page at 8k failed.")
         self.assertRegisterEqual(self.MIPS.a5, 0xba9876543210fead, "Second load from large page at 8k failed.")
