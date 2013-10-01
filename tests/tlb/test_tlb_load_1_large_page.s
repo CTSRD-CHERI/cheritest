@@ -43,7 +43,7 @@ test:   .ent    test
 		dla     $a1, testdata            # Physical address testdata
 		addi    $a2, $zero, 0x200
 		dsll    $a2, 13                  # Virtual address 0x400000
-		li	$a3, 0x3FF               # Page mask of 10 1s, 1024*4k = 4M page
+		li	$a3, 0x7FE000            # Page mask of 10 1s, 1024*4k = 4M page
 		jal     install_tlb_entry
 		nop
 
