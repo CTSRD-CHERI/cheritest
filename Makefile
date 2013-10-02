@@ -865,7 +865,7 @@ clean: cleantest
     $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
 
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
-	make -C $(TOOLS_DIR_ABS)/debug/ cherictl
+	$(MAKE) -C $(TOOLS_DIR_ABS)/debug/ cherictl
 
 #
 # Targets for unlinked .o files.  The same .o files can be used for both
@@ -928,9 +928,9 @@ $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
 $(OBJDIR)/%.hex : $(OBJDIR)/%.mem
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp $(PWD)/$< mem.bin && \
+	cp $(CURDIR)/$< mem.bin && \
 	$(MEMCONV) verilog && \
-	cp initial.hex $(PWD)/$@ && \
+	cp initial.hex $(CURDIR)/$@ && \
 	rm -r $$TMPDIR
 
 #
@@ -946,7 +946,7 @@ $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
 $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp $(PWD)/$< mem.bin && \
+	cp $(CURDIR)/$< mem.bin && \
 	$(MEMCONV) bsim && \
 	$(MEMCONV) bsimc2 && \
 	sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' \
@@ -954,7 +954,7 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	$(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
-	    $(PWD)/$@ && \
+	    $(CURDIR)/$@ && \
 	rm -r $$TMPDIR
 
 #
@@ -964,8 +964,8 @@ $(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
 	while ! test -e /tmp/cheri_debug_listen_socket; do sleep 0.1; done
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp $(PWD)/$< mem.hex && \
-	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(PWD)/$@ && \
+	cp $(CURDIR)/$< mem.hex && \
+	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(CURDIR)/$@ && \
 	rm -r $$TMPDIR
 	sleep .1
 
@@ -976,8 +976,8 @@ $(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
 	while ! test -e /tmp/cheri_debug_listen_socket; do sleep 0.1; done
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp $(PWD)/$< mem.hex && \
-	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(PWD)/$@ && \
+	cp $(CURDIR)/$< mem.hex && \
+	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(CURDIR)/$@ && \
 	rm -r $$TMPDIR
 	killall -9 bluetcl
 	rm /tmp/cheri_debug_listen_socket
