@@ -465,8 +465,8 @@ __assert_fail:
 .global smemcpy
 .ent smemcpy 
 smemcpy:
-	CIncBase $c1, $c0, $a0      # Get the destination capability
-	CIncBase $c2, $c0, $a1      # Get the source capability
+	CIncBase $c3, $c0, $a0      # Get the destination capability
+	CIncBase $c4, $c0, $a1      # Get the source capability
 	b        cmemcpy            # Jump to the capability version
 	daddi    $a0, $a2, 0        # Move the length to arg0 (delay slot)
 .end smemcpy
@@ -476,8 +476,8 @@ smemcpy:
 # __capability void *cmemcpy(__capability void *dst,
 #                            __capability void *src,
 #                            size_t len)
-# dst: $c1
-# src: $c2
+# dst: $c3
+# src: $c4
 # len: $4
 # Copies len bytes from src to dst.  Returns dst.
 		.text
@@ -490,8 +490,8 @@ cmemcpy:
 	# Note: We use v0 to store the base linear address because memcpy() must
 	# return that value in v0, allowing cmemcpy() to be tail-called from
 	# memcpy().  This is in the delay slot, so it happens even if len == 0.
-	CGetBase $v0, $c1            # v0 = linear address of dst
-	CGetBase $v1, $c2            # v1 = linear address of src
+	CGetBase $v0, $c3            # v0 = linear address of dst
+	CGetBase $v1, $c4            # v1 = linear address of src
 	andi     $12, $v0, 0x1f      # t4 = dst % 32
 	andi     $13, $v1, 0x1f      # t5 = src % 32
 	daddi    $a1, $zero, 0       # Store 0 in $a1 - we'll use that for the
@@ -527,10 +527,10 @@ fast_path:                       # At this point, src and dst are known to have
 	dsub    $a2, $a0, $a1        # $12 = amount left to copy (delay slot, only
 	                             # executed if branch is taken)
 unaligned_start:
-	clb      $a2, $a1, 0($c2)
+	clb      $a2, $a1, 0($c4)
 	daddi    $a1, $a1, 1
 	bne      $v1, $a1, unaligned_start 
-	csb      $a2, $a1, -1($c1)
+	csb      $a2, $a1, -1($c3)
 
 	dsub     $a2, $a0, $a1        # $12 = amount left to copy
 aligned_copy:
@@ -539,10 +539,10 @@ aligned_copy:
 	dadd    $a2, $a2, $a1        # ...plus the number already copied.
 
 copy_caps:
-	clc     $c3, $a1, 0($c2)
+	clc     $c5, $a1, 0($c4)
 	daddi   $a1, $a1, 32
 	bne     $a1, $a2, copy_caps
-	csc     $c3, $a1, -32($c1)
+	csc     $c5, $a1, -32($c3)
 
 	dsub    $v1, $a0, $a2        # Subtract the number of bytes copied from the
 	                             # number to copy.  This should give the number
@@ -552,20 +552,20 @@ copy_caps:
 	nop
 	dadd    $v1, $a1, $v1
 unaligned_end:
-	clb      $a2, $a1, 0($c2)
+	clb      $a2, $a1, 0($c4)
 	daddi    $a1, $a1, 1
 	bne      $v1, $a1, unaligned_end
-	csb      $a2, $a1, -1($c1)
+	csb      $a2, $a1, -1($c3)
 
 cmemcpy_return:
 	jr       $ra                 # Return value remains in c1
 	nop
 
 slow_memcpy_loop:                # byte-by-byte copy
-	clb      $a2, $a1, 0($c2)
+	clb      $a2, $a1, 0($c4)
 	daddi    $a1, $a1, 1
 	bne      $a0, $a1, slow_memcpy_loop
-	csb      $a2, $a1, -1($c1)
+	csb      $a2, $a1, -1($c3)
 	jr       $ra                 # Return value remains in c1
 	nop
 .end cmemcpy
