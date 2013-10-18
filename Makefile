@@ -1,4 +1,3 @@
-.PRECIOUS: log/%.log
 #
 # Build system for CHERI regression tests.  Tests fall into three categories:
 #
@@ -79,6 +78,18 @@ endif
 
 ifdef COP1
 		TESTDIRS += $(TESTDIR)/fpu
+endif
+
+ifdef COP1_ONLY
+		TESTDIRS = $(TESTDIR)/fpu
+endif
+
+ifdef TEST_TRACE
+		TESTDIRS += $(TESTDIR)/trace
+endif
+
+ifdef TEST_TRACE_ONLY
+		TESTDIRS = $(TESTDIR)/trace
 endif
 
 RAW_FRAMEWORK_FILES=				\
@@ -628,6 +639,8 @@ TEST_TRAPI_FILES=				\
 		test_tnei_lt_sign.s		\
 		test_tnei_lt.s
 
+RAW_TRACE_FILES=test_raw_trace.s
+
 # Don't attempt to build clang tests unless CLANG is set to 1, because clang might not be available
 # This will cause clang tests to fail but that is better than make falling over.
 ifeq ($(CLANG),1)
@@ -684,6 +697,17 @@ ifdef COP1
     TEST_FILES += $(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
+ifdef COP1_ONLY
+	TEST_FILES = $(RAW_FPU_FILES) $(TEST_FPU_FILES)
+endif
+
+ifdef TEST_TRACE
+	TEST_FILES += $(RAW_TRACE_FILES)
+else
+ifdef TEST_TRACE_ONLY
+	TEST_FILES = $(RAW_TRACE_FILES)
+endif
+endif
 #
 # Omit certain categories of tests due to gxemul functional omissions:
 #
@@ -720,15 +744,25 @@ CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
 CHERICONF?=$(CHERIROOT_ABS)/simconfig
+TRACECONF?=$(CHERIROOT_ABS)/traceconfig
 TOOLS_DIR = ${CHERILIBS_ABS}/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
+CHERICTL=$(TOOLS_DIR_ABS)/debug/cherictl
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
 CHERISOCKET:= /tmp/cheri_debug_listen_socket
 SIM        := ${CHERIROOT_ABS}/sim
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
-SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
+ifdef DEBUG
+	SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter +debug
+else
+ifdef TRACE
+	SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
+else
+	SIM_TRACE_OPTS=
+endif
+endif
 NOSEPRED=not false
 ifeq ($(CHERI_VER),2)
 NOSEPRED+=and not invalidateL2
@@ -810,6 +844,28 @@ SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED
 GXEMUL_FUZZ_TEST_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_LOGS))
 GXEMUL_FUZZ_TEST_CACHED_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_CACHED_LOGS))
 
+REWRITE_PISM_CONF = sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' < $(1) > $(2)
+COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(CHERICONF),$$TMPDIR/simconfig) && \
+	$(call REWRITE_PISM_CONF,$(TRACECONF),$$TMPDIR/traceconfig)
+
+PREPARE_TEST = \
+	TMPDIR=$$(mktemp -d) && \
+	cd $$TMPDIR && \
+	cp $(PWD)/$(1) mem.bin && \
+	$(MEMCONV) bsim && \
+	$(MEMCONV) bsimc2 && \
+	$(COPY_PISM_CONFS)
+
+RUN_TEST = \
+	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+	CHERI_CONFIG=$$TMPDIR/simconfig \
+	$(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+	    $(PWD)/$@
+
+CLEAN_TEST = rm -r $$TMPDIR
+
+WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
+
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 AS=mips64-as
 
@@ -835,8 +891,7 @@ $(CHERISOCKET):
 	cd $$TMPDIR && \
 	cp ${CHERIROOT_ABS}/sw/mem.bin mem.bin && \
 	$(MEMCONV) bsim && \
-	sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' \
-		< $(CHERICONF) > $$TMPDIR/simconfig && \
+	$(COPY_PISM_CONFS) && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	$(SIM) &
@@ -939,23 +994,30 @@ $(OBJDIR)/%.hex : $(OBJDIR)/%.mem
 $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
 	mips64-objdump -xsSD $< > $@
 
+$(LOGDIR)/test_raw_trace.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace.trace
+$(LOGDIR)/test_raw_trace_cached.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace_cached.trace
+
+# The trace files need interaction from cherictl
+# We fork the test, and use cherictl
+# test_raw_trac, because % must be non-empty...
+#
+$(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.mem $(SIM) $(CHERICTL)
+	rm -f $$CHERI_TRACE_FILE
+	$(call PREPARE_TEST,$<) && \
+	((CHERI_DEBUG_SOCKET_PATH=$$TMPDIR/sock \
+	CHERI_TRACE_FILE=$(CHERI_TRACE_FILE) \
+	$(RUN_TEST); \
+	$(CLEAN_TEST)) &) && \
+	$(call WAIT_FOR_SOCKET,$$TMPDIR/sock) && \
+	$(CHERICTL) setreg -r 12 -v 1 -p $$TMPDIR/sock && \
+	$(CHERICTL) memtrace -v 6 -p $$TMPDIR/sock
+
 #
 # Target to execute a Bluespec simulation of the test suite; memConv.py needs
 # fixing so that it accepts explicit sources and destinations but for now we
 # can use a temporary directory so that parallel builds work.
 $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
-	TMPDIR=$$(mktemp -d) && \
-	cd $$TMPDIR && \
-	cp $(CURDIR)/$< mem.bin && \
-	$(MEMCONV) bsim && \
-	$(MEMCONV) bsimc2 && \
-	sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' \
-	    < $(CHERICONF) > $$TMPDIR/simconfig && \
-	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
-	CHERI_CONFIG=$$TMPDIR/simconfig \
-	$(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
-	    $(CURDIR)/$@ && \
-	rm -r $$TMPDIR
+	$(call PREPARE_TEST,$<) && $(RUN_TEST); $(CLEAN_TEST)
 
 #
 # Target to do a run of the test suite on hardware.
