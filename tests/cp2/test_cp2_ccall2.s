@@ -259,6 +259,26 @@ do_ccall:
 		csd	$t0, $k0, 64($c28)
 
 		#
+		# Check that $c1 and $c2 are valid capabilities (tag set)
+		#
+
+		cgettag $t0, $c1
+		beq	$t0, $zero, ccall_fails
+
+		cgettag	$t0, $c2
+		beq	$t0, $zero, ccall_fails
+
+		#
+		# Check that $c1 and $c2 are sealed
+		#
+
+		cgetunsealed $t0, $c1
+		bne	$t0, $zero, ccall_fails
+
+		cgetunsealed $t0, $c2
+		bne	$t0, $zero, ccall_fails
+
+		#
 		# Set the otype of the Kernel Data Capability ($c27) to
 		# the type of the code capability the user is trying to
 		# invoke. KDC has access to everything, so is permitted to
