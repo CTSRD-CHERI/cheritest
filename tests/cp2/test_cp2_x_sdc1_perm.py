@@ -60,3 +60,4 @@ class test_cp2_x_sdc1_perm(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.a3, 0x1300,
             "Capability cause was not set correctly when sdc1 didn't have Permit_Store permission")
 
+

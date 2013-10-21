@@ -142,5 +142,3 @@ bev0_common_handler_stub:
 		.align	3
 data:		.dword	0x0123456789abcdef
 		.dword  0x0123456789abcdef
-
-
