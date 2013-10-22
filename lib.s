@@ -584,6 +584,14 @@ get_thread_id:
         srl      $v0, 24             # shift down thread id (delay slot)
         .end get_thread_id
 
+        .ent get_core_id
+        .global get_core_id
+get_core_id:
+	mfc0     $v0, $15, 1         # load core ID from proc ID shadow register
+        jr       $ra
+        srl      $v0, 24
+        .end get_core_id
+
 #
 #  Wait for all threads to reach a certain point. This is done using per thread
 #  counters. On entry to the barrier we increment this thread's counter then loop

@@ -49,8 +49,20 @@
 		.ent start
 start:
                 jal     get_thread_id
+                #jal     get_core_id
                 nop                         # (delay slot)
-        
+       
+#core_check:
+#		bne     $v0, $0, infinite_loop
+#                beq     $v0, $0, continue
+#                nop
+
+#infinite_loop:
+#		mfc0    $v0, $15, 1
+#                bne     $v0, $0, infinite_loop
+#                nop
+
+#continue:                 
 		# Set up stack and stack frame
 		dla	$fp, __sp
                 sll     $t0, $v0, 10 # Allocate 1k stack per thread. XXX need to fix __heap_top__
