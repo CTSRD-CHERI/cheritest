@@ -43,7 +43,7 @@ class test_raw_fpu_trunc_d64(BaseCHERITestCase):
 	self.assertRegisterEqual(self.MIPS.a0 , 0, "-0.75 did not round up to 0")
 
     @attr('float64')
-    def test_raw_fpu_trunc_64_2(self):
+    def test_raw_fpu_trunc_d64_2(self):
         '''Test double precision trunc of -0.5'''
 	self.assertRegisterEqual(self.MIPS.a1 , 0, "-0.5 did not round up to 0")
 

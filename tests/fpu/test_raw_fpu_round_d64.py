@@ -60,6 +60,6 @@ class test_raw_fpu_round_d64(BaseCHERITestCase):
     @attr('float64')
     def test_raw_fpu_round_d64_5(self):
         '''Test double precision round of 1.5'''
-	self.assertRegisterEqual(self.MIPS.a4, 2, "1.5 did not round up to 1")
+	self.assertRegisterEqual(self.MIPS.a4, 2, "1.5 did not round up to 2")
 
 
