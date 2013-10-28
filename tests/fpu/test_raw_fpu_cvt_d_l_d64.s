@@ -60,7 +60,7 @@ start:
 	cvt.d.l $f2, $f2
 	dmfc1 $a1, $f2
 
-	lui $t0, 1
+	li $t0, 1
 	sll $t0, $t0, 32
 	ori $t0, $t0, 1
 	dmtc1 $t0, $f2
