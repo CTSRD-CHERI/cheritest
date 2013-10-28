@@ -61,7 +61,7 @@ start:
 	dmfc1 $a1, $f2
 
 	li $t0, 1
-	sll $t0, $t0, 32
+	dsll $t0, $t0, 32
 	ori $t0, $t0, 1
 	dmtc1 $t0, $f2
 	cvt.d.l $f2, $f2
