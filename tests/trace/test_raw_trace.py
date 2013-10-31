@@ -1,5 +1,6 @@
 #-
-# Copyright (c) 2013Colin Rothwell All rights reserved.
+# Copyright (c) 2013 Colin Rothwell
+# All rights reserved.
 #
 # This software was developed by and Colin Rothwell as part of his summer
 # internship.

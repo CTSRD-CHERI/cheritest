@@ -1,9 +1,15 @@
 #-
-# Copyright (c) 2013-2013 Ben Thorner, Colin Rothwell, Michael Roe
+# Copyright (c) 2012 Ben Thorner
+# Copyright (c) 2013 Colin Rothwell
+# Copyright (c) 2013 Michael Roe
 # All rights reserved.
 #
 # This software was developed by Ben Thorner as part of his summer internship
 # and Colin Rothwell as part of his final year undergraduate project.
+#
+# This software was developed by SRI International and the University of
+# Cambridge Computer Laboratory under DARPA/AFRL contract (FA8750-10-C-0237)
+# ("CTSRD"), as part of the DARPA CRASH research programme.
 # 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions

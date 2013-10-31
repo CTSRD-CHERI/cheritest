@@ -1,8 +1,6 @@
 #-
 # Copyright (c) 2012 Robert M. Norton
-# All rights reserved.
 # Copyright (c) 2012 David Chisnall
-# All rights reserved.
 # Copyright (c) 2013 Jonathan D. Woodruff
 # All rights reserved.
 #

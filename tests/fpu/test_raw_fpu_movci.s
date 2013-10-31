@@ -1,5 +1,6 @@
 #-
-# Copyright (c) 2013-2013 Ben Thorner, Colin Rothwell
+# Copyright (c) 2012 Ben Thorner
+# Copyright (c) 2013 Colin Rothwell
 # All rights reserved.
 #
 # This software was developed by Ben Thorner as part of his summer internship
