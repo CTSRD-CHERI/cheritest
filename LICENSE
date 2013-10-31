@@ -2,13 +2,15 @@ The following license applies to the CHERI unit test suite.  If you make
 substantive changes to the suite, please add your copyright to this file
 as well.
 
-Copyright (c) 2011-2012 Robert N. M. Watson
+Copyright (c) 2011-2013 Robert N. M. Watson
 Copyright (c) 2011 Steven J. Murdoch
 Copyright (c) 2011 William M. Morland
 Copyright (c) 2011-2013 Jonathan D. Woodruff
 Copyright (c) 2011-2013 Michael Roe
-Copyright (c) 2012 David Chisnall
-Copyright (c) 2013 Robert M. Norton
+Copyright (c) 2011-2013 Robert M. Norton
+Copyright (c) 2012-2013 David Chisnall
+Copyright (c) 2012 Ben Thorner
+Copyright (c) 2013 Colin Rothwell
 All rights reserved.
 
 This software was developed by SRI International and the University of
