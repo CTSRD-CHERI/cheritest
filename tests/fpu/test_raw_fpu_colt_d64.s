@@ -54,11 +54,11 @@ start:
 
 	lui $t0, 0x3FF0 	# 1.0
 	dsll $t0, $t0, 32
-	mtc1 $t0, $f12
+	dmtc1 $t0, $f12
 
 	lui $t0, 0x4000		# 2.0	
 	dsll $t0, $t0, 32
-	mtc1 $t0, $f14
+	dmtc1 $t0, $f14
 
 	c.olt.d $f14, $f12
 	nop
@@ -90,6 +90,31 @@ L2:
 	ori $a0, $a0, 0x2
 
 L3:
+
+	lui $t0, 0x3f1a	# 0.0001
+	ori $t0, $t0, 0x36e2
+	dsll $t0, $t0, 16
+	ori $t0, 0xeb1c
+	dsll $t0, $t0, 16
+	ori $t0, $t0, 0x432d
+	dmtc1 $t0, $f8
+
+	lui $t0, 0xbff0 # -1
+	dsll $t0, $t0, 32
+	dmtc1 $t0, $f10
+
+	dli $a1, 0
+	c.olt.d $f10, $f8
+
+	nop
+	nop
+	nop
+	bc1t L4
+
+	dli $a1, 1
+
+L4:
+
 	# Dump registers on the simulator (gxemul dumps regs on exit)
 	mtc0 $at, $26
 	nop
