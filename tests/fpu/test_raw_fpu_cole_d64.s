@@ -54,11 +54,11 @@ start:
 
 	lui $t0, 0x3FF0 	# 1.0
 	dsll $t0, $t0, 32
-	mtc1 $t0, $f12
+	dmtc1 $t0, $f12
 
 	lui $t0, 0x4000		# 2.0	
 	dsll $t0, $t0, 32
-	mtc1 $t0, $f14
+	dmtc1 $t0, $f14
 
 	c.ole.d $f14, $f12
 	nop
