@@ -33,6 +33,7 @@ from nose.plugins.attrib import attr
 
 class test_raw_fpu_colt_d64(BaseCHERITestCase):
 
+    @attr('float64')
     def test_raw_fpu_colt_d64(self):
         '''Test double-precision ordered and less than'''
 	self.assertRegisterEqual(self.MIPS.a0, 0xa, "Double-precision compare ordered and less than gave an incorrect result")

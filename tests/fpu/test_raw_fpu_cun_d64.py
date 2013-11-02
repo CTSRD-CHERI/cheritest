@@ -33,6 +33,7 @@ from nose.plugins.attrib import attr
 
 class test_raw_fpu_cun_d64(BaseCHERITestCase):
 
+    @attr('float64')
     def test_raw_fpu_cun_d64(self):
         '''Test double-precision compare unordered'''
 	self.assertRegisterEqual(self.MIPS.a0, 0xe, "Double-precision compare unordered gave incorrect result")
