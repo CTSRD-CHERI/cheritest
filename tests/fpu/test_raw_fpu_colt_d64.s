@@ -110,6 +110,7 @@ L3:
 	nop
 	nop
 	bc1t L4
+	nop	# branch delay slot
 
 	dli $a1, 1
 
