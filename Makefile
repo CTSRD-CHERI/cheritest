@@ -375,9 +375,10 @@ TEST_LLSC_FILES=				\
 
 TEST_CACHE_FILES=				\
 		test_hardware_mapping_cached_read.s \
-		test_cache_instruction_data.s \
+		test_cache_instruction_data.s   \
 		test_cache_instruction_instruction.s \
-		test_cache_instruction_L2.s
+		test_cache_instruction_L2.s     \
+                test_coherence_mechanism.s
 
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
@@ -773,7 +774,7 @@ SIM        := ${CHERIROOT_ABS}/sim
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
-	SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter +debug
+	SIM_TRACE_OPTS?=+debug +trace +cTrace +showTranslations +instructionBasedCycleCounter +debug
 else
 ifdef TRACE
 	SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
