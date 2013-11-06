@@ -61,7 +61,39 @@ test:		.ent test
 		#
 		# Branch if core ID is not zero
 		#
+                bne     $zero, $t1, testMem
+                nop
+                dli     $t2, 0x9800000000001234 
+                sd      $zero, 0($t2)
+                ld      $t1, 0($t2)   
+                daddu   $a1, $zero, $t1
+                nop
+                nop
+                nop
+                nop
+		nop
+		nop
+		nop
+		ld      $t1, 0($t2)
+		daddu   $a2, $zero, $t1
+                j       finish
 
+testMem:
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		dli     $t2, 0x9800000000001234
+		ld      $t3, 0($t2)
+		daddu   $t1, $zero, 1234
+		sd 	$t1, 0($t2)
+
+finish:
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
