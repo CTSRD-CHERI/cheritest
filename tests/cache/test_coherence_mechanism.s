@@ -56,8 +56,11 @@ test:		.ent test
 		# Check core ID is set to zero
 		#
 		mfc0	$t1, $15, 1
-		daddu   $a0, $zero, $t1
+		slti    $a0, $t1, 256
 		
+		#
+		# Branch if core ID is not zero
+		#
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

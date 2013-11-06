@@ -44,5 +44,5 @@ class test_coherence_mechanism(BaseCHERITestCase):
     @attr('cache')
     @attr('counterdev')
     def test_initial_uncached_read(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0, "Initial read of coreID register failed")
+        self.assertRegisterEqual(self.MIPS.a0, 1, "Initial read of coreID register failed")
 
