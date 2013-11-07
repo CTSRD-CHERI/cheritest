@@ -63,7 +63,7 @@ start:
 		#
 		# Write to cached mem location and test
 		#
-		sw      $zero, 0($t2) 
+		sw      $t1, 0($t2) 
 		lw      $t3, 0($t2)
 		daddu   $a2, $zero, $t3
 
