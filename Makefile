@@ -378,7 +378,8 @@ TEST_CACHE_FILES=				\
 		test_cache_instruction_data.s   \
 		test_cache_instruction_instruction.s \
 		test_cache_instruction_L2.s     \
-                test_coherence_mechanism.s
+                test_coherence_mechanism.s      \
+		test_raw_coherence_mechanism.s
 
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
