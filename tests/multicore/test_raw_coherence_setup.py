@@ -30,7 +30,7 @@
 #
 from cheritest_tools import BaseCHERITestCase
 
-class test_raw_coherence_mechanism(BaseCHERITestCase):
+class test_raw_coherence_setup(BaseCHERITestCase):
     def test_coreid_register(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "Initial read of coreID register failed")
 
@@ -39,16 +39,3 @@ class test_raw_coherence_mechanism(BaseCHERITestCase):
 
     def test_cache_coherent_write(self):
         self.assertRegisterEqual(self.MIPS.a2, 1, "Core One produced incoherent data")
-
-    def test_core_0_branch(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero failed to execute the branch")
-
-    def test_core_1_branch(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One failed to execute the branch")
-
-    def test_core_0_sync(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero failed to sync")
-
-    def test_core_1_sync(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One failed to sync")
-
