@@ -48,7 +48,6 @@
 
 TEST_CP2?=1
 CLANG?=1
-MULTI?=0
 
 #
 # List of directories in which to find test source and .py files.
@@ -65,11 +64,14 @@ TESTDIRS=					\
 		$(TESTDIR)/cp2                  \
 		$(TESTDIR)/fuzz_regressions     \
 		$(TESTDIR)/c                    \
-		$(TESTDIR)/mt			\
-		$(TESTDIR)/multicore
+		$(TESTDIR)/mt			
+
+ifeq ($(MULTI),1)
+TESTDIRS += $(TESTDIR)/multicore
+endif
 
 ifneq ($(NOFUZZ),1)
-TESTDIRS +=  $(TESTDIR)/fuzz
+TESTDIRS += $(TESTDIR)/fuzz
 endif
 
 ifeq ($(BRIEF_GXEMUL),1)
@@ -781,6 +783,7 @@ CHERISOCKET:= /tmp/cheri_debug_listen_socket
 SIM        := ${CHERIROOT_ABS}/sim
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
+MULTI?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
 	SIM_TRACE_OPTS?=+debug +trace +cTrace +showTranslations +instructionBasedCycleCounter +debug
