@@ -48,6 +48,7 @@
 
 TEST_CP2?=1
 CLANG?=1
+MULTI?=0
 
 #
 # List of directories in which to find test source and .py files.
@@ -783,7 +784,6 @@ CHERISOCKET:= /tmp/cheri_debug_listen_socket
 SIM        := ${CHERIROOT_ABS}/sim
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
-MULTI?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
 	SIM_TRACE_OPTS?=+debug +trace +cTrace +showTranslations +instructionBasedCycleCounter +debug
