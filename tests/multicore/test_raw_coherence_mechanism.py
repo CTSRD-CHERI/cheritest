@@ -34,15 +34,21 @@ class test_raw_coherence_mechanism(BaseCHERITestCase):
     def test_coreid_register(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "Initial read of coreID register failed")
 
-    def test_cached_memory_location(self):
+    def test_cache_coherent_memory(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero has failed a write to memory")
 
-    def test_cached_memory_write(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0, "Core One produced incoherent data")
+    def test_cache_coherent_write(self):
+        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One produced incoherent data")
 
     def test_core_0_branch(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero executed the branch")
+        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero failed to execute the branch")
 
     def test_core_1_branch(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One executed the branch")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One failed to execute the branch")
+
+    def test_core_0_sync(self):
+        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero failed to sync")
+
+    def test_core_1_sync(self):
+        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One failed to sync")
 

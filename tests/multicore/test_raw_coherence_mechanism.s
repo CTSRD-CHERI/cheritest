@@ -77,10 +77,21 @@ start:
 
 core_0:
 		daddu   $a3, $zero, $t1
+		sw	$zero, 0($t2)
+		lw      $t3, 0($t2)
+		beqz    $t3, core_0
+		nop
+		daddu   $a5, $zero, $t3
 		j       finish		
 
 core_1:		
 		daddu   $a4, $zero, $t1
+		lw	$t3, 0($t2)
+		bnez    $t3, core_1
+		nop
+		sw      $t1, 0($t2)
+		lw	$t3, 0($t2)	
+		daddu   $a6, $zero, $t3
 		j       finish
 
 finish:
