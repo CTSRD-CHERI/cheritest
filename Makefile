@@ -48,6 +48,7 @@
 
 TEST_CP2?=1
 CLANG?=1
+MULTI?=0
 
 #
 # List of directories in which to find test source and .py files.
@@ -64,7 +65,8 @@ TESTDIRS=					\
 		$(TESTDIR)/cp2                  \
 		$(TESTDIR)/fuzz_regressions     \
 		$(TESTDIR)/c                    \
-		$(TESTDIR)/mt
+		$(TESTDIR)/mt			\
+		$(TESTDIR)/multicore
 
 ifneq ($(NOFUZZ),1)
 TESTDIRS +=  $(TESTDIR)/fuzz
@@ -377,9 +379,7 @@ TEST_CACHE_FILES=				\
 		test_hardware_mapping_cached_read.s \
 		test_cache_instruction_data.s   \
 		test_cache_instruction_instruction.s \
-		test_cache_instruction_L2.s     \
-                test_coherence_mechanism.s      \
-		test_raw_coherence_mechanism.s
+		test_cache_instruction_L2.s     
 
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
@@ -676,6 +676,13 @@ else
 TEST_CLANG_FILES=
 endif
 
+# Don't attempt multicore tests as the processor under test might be a single core.
+ifeq ($(MULTI),1)
+TEST_MULTICORE_FILES=\
+		test_raw_coherence_mechanism.s
+else
+TEST_MULTICORE_FILES=
+endif
 
 FUZZ_SCRIPT:=fuzzing/fuzz.py
 FUZZ_SCRIPT_OPTS?=
@@ -710,7 +717,8 @@ TEST_FILES=					\
 		$(TEST_TRAPI_FILES)             \
 		$(FUZZ_TEST_FILES)              \
 		$(FUZZ_REGRESSION_TEST_FILES)   \
-		$(TEST_CLANG_FILES)
+		$(TEST_CLANG_FILES)		\
+		$(TEST_MULTICORE_FILES)
 
 
 ifdef COP1
@@ -804,6 +812,9 @@ NOSEPRED+=and not capabilities and not clang
 endif
 ifneq ($(CLANG),1)
 NOSEPRED+=and not clang
+endif
+ifneq ($(MULTI),1)
+NOSEPRED+=and not multicore
 endif
 ifdef CHERI_MICRO
 NOSEPRED+=and not tlb and not cache and not invalidateL2

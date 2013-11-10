@@ -28,79 +28,21 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
+from cheritest_tools import BaseCHERITestCase
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+class test_raw_coherence_mechanism(BaseCHERITestCase):
+    def test_coreid_register(self):
+        self.assertRegisterEqual(self.MIPS.a0, 1, "Initial read of coreID register failed")
 
-#
-# Exercise cache instructions
-#
-# Execute a series of cache instructions that are found in the kernel.  We
-# currently don't check if they are correct, but merely check that they don't
-# lock up the processor.  Since we have a write-through L1 cache, the only 
-# function of the cache instructions is to synchronize L1 instruction and data
-# caches.  We don't currently support cache instructions to the L2.
-# 
-#
+    def test_cached_memory_location(self):
+        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero has failed a write to memory")
 
-		.global test
-test:		.ent test
-                daddu    $sp, $sp, -32
-		sd       $ra, 24($sp)
-		sd       $fp, 16($sp)
-		daddu    $fp, $sp, 32
+    def test_cached_memory_write(self):
+        self.assertRegisterEqual(self.MIPS.a2, 0, "Core One produced incoherent data")
 
-		#
-		# Check core ID is set to zero
-		#
-		mfc0	$t1, $15, 1
-		slti    $a0, $t1, 256
-		
-		#
-		# Branch if core ID is not zero
-		#
-                bne     $zero, $t1, testMem
-                nop
-                dli     $t2, 0x9800000000001234 
-                sd      $zero, 0($t2)
-                ld      $t1, 0($t2)   
-                daddu   $a1, $zero, $t1
-                nop
-                nop
-                nop
-                nop
-		nop
-		nop
-		nop
-		ld      $t1, 0($t2)
-		daddu   $a2, $zero, $t1
-                j       finish
+    def test_core_0_branch(self):
+        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero executed the branch")
 
-testMem:
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		dli     $t2, 0x9800000000001234
-		ld      $t3, 0($t2)
-		daddu   $t1, $zero, 1234
-		sd 	$t1, 0($t2)
+    def test_core_1_branch(self):
+        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One executed the branch")
 
-finish:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
-
-# A double word of data that we will load and store via various
-# hardware-defined mappings.
-dword:		.dword	0x0123456789abcdef

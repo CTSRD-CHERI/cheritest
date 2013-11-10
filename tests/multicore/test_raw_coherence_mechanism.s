@@ -28,31 +28,70 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
-from nose.plugins.attrib import attr
+
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
 #
-# XXX: our test code saves the CP0 config register in self.MIPS.s1 so that
-# we can determine how this test should behave.  Our test cases don't
-# currently check that, so may return undesired failures.  The third check
-# below should be conditioned on (DC > 0) || (SC == 1) -- i.e., a cache is
-# present, which might cause it not to incorrectly fire for gxemul.
+# Exercise cache instructions
+#
+# Execute a series of cache instructions that are found in the kernel.  We
+# currently don't check if they are correct, but merely check that they don't
+# lock up the processor.  Since we have a write-through L1 cache, the only 
+# function of the cache instructions is to synchronize L1 instruction and data
+# caches.  We don't currently support cache instructions to the L2.
+# 
 #
 
-class test_coherence_mechanism(BaseCHERITestCase):
+		.global start
+start:		
+		#
+		# Check core ID is set to zero
+		#
+		mfc0	$t1, $15, 1
+		slti    $a0, $t1, 256
 
-    @attr('cache')
-    @attr('counterdev')
-    def test_initial_uncached_read(self):
-        self.assertRegisterEqual(self.MIPS.a0, 1, "Initial read of coreID register failed")
+		#
+		# Test memory location in cached space
+		#
+		dli     $t2, 0x9800000000001234
+		lw      $t3, 0($t2)
+		daddu   $a1, $zero, $t3
 
-    @attr('cache')
-    @attr('counterdev')
-    def test_initial_uncached_read(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero has failed a write to memory")
+		#
+		# Write to cached mem location and test
+		#
+		sw      $t1, 0($t2) 
+		lw      $t3, 0($t2)
+		daddu   $a2, $zero, $t3
 
-    @attr('cache')
-    @attr('counterdev')
-    def test_initial_uncached_read(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0, "Core One produced incoherent data")
+		#
+		# Q: What did one core say to the other?
+		# A: Please "Share" and "Like" too
+		#
+		mfc0    $t1, $15, 1
+		bnez    $t1, core_1		
+		nop
 
+core_0:
+		daddu   $a3, $zero, $t1
+		j       finish		
+
+core_1:		
+		daddu   $a4, $zero, $t1
+		j       finish
+
+finish:
+		# Dump registers in the simulator
+		mtc0    $v0, $26 
+		nop
+		nop                
+
+                # Terminate the simulator 
+                mtc0    $v0, $23 
+
+end:
+		b       end
+		nop
