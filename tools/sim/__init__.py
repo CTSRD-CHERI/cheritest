@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Steven J. Murdoch
+# Copyright (c) 2013 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -159,3 +160,50 @@ class CapMipsStatus(MipsStatus):
         v.append("PCC: %s"%(self.pcc))
         return MipsStatus.__repr__(self) + "\n" + "\n".join(v)
 
+MIPS_ICACHE_TAG_RE=re.compile(r'^DEBUG ICACHE TAG ENTRY\s*([0-9]+) Valid=([01]) Tag value=([0-9a-fA-F]+)$')
+
+class ICacheException(Exception):
+    pass
+
+class ICacheTag(object):
+    def __init__(self, index, valid, value):
+        self.index = int(index)
+        self.valid = (valid == '1')
+        self.value = int(value,16)
+
+    def __repr__(self):
+        return 'idx:%3d valid:%r value:0x%x'%(self.index, self.valid, self.value)
+
+class ICacheStatus(object):
+    '''Represents the status of the Instruction Cache, populated by parsing
+    a log file. If x is a ICacheStatus object, tags can be accessed by name
+    as x.[TAG_INDEX].'''
+    def __init__(self, fh):
+        self.fh = fh
+        self.start_pos = self.fh.tell()
+        self.icache_tags = [None] * 512
+        self.parse_log()
+        for i in range(512):
+            if self.icache_tags[i] is None:
+                raise ICacheException("Failed to parse icache tag %d from %s"%(i,self.fh))
+
+    def parse_log(self):
+        '''Parse a log file and populate self.icache_tags'''
+        for line in self.fh:
+            line = line.strip()
+            icache_groups = MIPS_ICACHE_TAG_RE.search(line)
+            if (icache_groups):
+                tag_idx = int(icache_groups.group(1))
+                self.icache_tags[tag_idx] = ICacheTag(*icache_groups.groups()[0:3])
+
+    def __getitem__(self, key):
+        '''Return a tag by index'''
+        if not type(key) is int or key < 0 or key > 511:
+            raise ICacheException("Not a valid tag index", key)
+        return self.icache_tags[key]
+
+    def __repr__(self):
+        v = []
+        for i in range(len(self.icache_tags)):
+            v.append("%r\n"%(self.icache_tags[i]))
+        return "\n".join(v)

@@ -2,6 +2,7 @@
 
 #-
 # Copyright (c) 2011 Steven J. Murdoch
+# Copyright (c) 2013 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -142,6 +143,90 @@ class BaseCHERITestCase(unittest.TestCase):
                 msg = msg + ": "
             self.fail(msg + "0x%016x is outside of [0x%016x,0x%016x]"%(
                 reg_val, expected_min, expected_max))
+
+class BaseICacheCHERITestCase(BaseCHERITestCase):
+    '''Abstract base class for test cases for the CHERI Instruction Cache.'''
+
+    LOG_DIR = os.environ.get("LOGDIR", "log")
+    LOG_FN = None
+    ICACHE = None
+    ICACHE_EXCEPTION = None
+    ## Trigger a test failure (for testing the test-cases)
+    ALWAYS_FAIL = is_envvar_true("DEBUG_ALWAYS_FAIL")
+
+    @classmethod
+    def setUpClass(self):
+        '''Parse the log file and instantiate MIPS'''
+        super(BaseCHERITestCase, self).setUpClass()
+        self.cached = bool(int(os.environ.get("CACHED", "0")))
+        if self.LOG_FN is None:
+            if self.cached:
+                self.LOG_FN = self.__name__ + "_cached.log"
+            else:
+                self.LOG_FN = self.__name__ + ".log"
+        fh = open(os.path.join(self.LOG_DIR, self.LOG_FN), "rt")
+        try:
+            self.ICACHE = ICacheStatus(fh)
+        except ICacheException, e:
+            self.ICACHE_EXCEPTION = e
+
+    def setUp(self):
+        super(BaseCHERITestCase, self).setUp()
+        if not self.ICACHE_EXCEPTION is None:
+            raise self.ICACHE_EXCEPTION
+
+    def assertTagValid(self, tag_idx, msg=None):
+        '''Convenience method which outputs the values of tag it is not valid (preceded by msg, if given)'''
+        tag = self.ICACHE[tag_idx]
+        if self.ALWAYS_FAIL:
+            tag.valid = False
+        if (tag.valid == False):
+            if msg is None:
+                msg = ""
+            else:
+                msg = msg + ": "
+            self.fail(msg + "tag=>%r"%(tag))
+
+    def assertTagInvalid(self, tag_idx, msg=None):
+        '''Convenience method which outputs the values of tag it is valid (preceded by msg, if given)'''
+        tag = self.ICACHE[tag_idx]
+        if self.ALWAYS_FAIL:
+            tag.valid = True
+        if (tag.valid == True):
+            if msg is None:
+                msg = ""
+            else:
+                msg = msg + ": "
+            self.fail(msg + "tag=>%r"%(tag))
+
+    def assertTagExpectedValue(self, tag_idx, expected_value, msg=None):
+        '''Check that the contents of a tag, specified by its number,
+        matches the expected value. If the contents do not match, output the
+        register name, expected value, and actual value (preceded by msg, if
+        given).'''
+        tag = self.ICACHE[tag_idx]
+        if self.ALWAYS_FAIL:
+            tag.valid = False
+        if (tag.valid == False or tag.value != expected_value):
+            if msg is None:
+                msg = ""
+            else:
+                msg = msg + ": "
+            self.fail(msg + "tag=>%r, expected_value=>%x"%(tag, expected_value))
+
+    def assertTagInRange(self, tag_idx, expected_min, expected_max, msg=None):
+        '''Check that a register value is in a specified inclusive range. If
+        not, fails the test case outputing details preceded by msg, if given.'''
+        tag = self.ICACHE[tag_idx]
+        if self.ALWAYS_FAIL:
+            expected_min=1
+            expected_max=0
+        if tag.valid == False or tag.value < expected_min or tag.value > expected_max:
+            if msg is None:
+                msg = ""
+            else:
+                msg = msg + ": "
+            self.fail(msg + "tag=>%r, range=>[0x%016x,0x%016x]"%(tag, expected_min, expected_max))
 
 def main():
     import sys

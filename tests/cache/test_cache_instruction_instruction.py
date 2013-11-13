@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2013 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -27,19 +28,25 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
+from cheritest_tools import BaseICacheCHERITestCase
 from nose.plugins.attrib import attr
 
 #
 # XXX: our test code saves the CP0 config register in self.MIPS.s1 so that
-# we can determine how this test should behave.  Our test cases don't
-# currently check that, so may return undesired failures.  The third check
+# we can determine how this test should behave. Our test cases don't
+# currently check that, so may return undesired failures. The third check
 # below should be conditioned on (DC > 0) || (SC == 1) -- i.e., a cache is
 # present, which might cause it not to incorrectly fire for gxemul.
 #
 
-class test_cache_instruction_instruction(BaseCHERITestCase):
+class test_cache_instruction_instruction(BaseICacheCHERITestCase):
 
     @attr('cache')
     def test_completion(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0, "Simple register load didn't work.")
+        self.assertTagInvalid ( 10  , "icache line index 10  was not invalidated" )
+        self.assertTagValid   ( 20  , "icache line index 20  was not fetched"     )
+        self.assertTagInvalid ( 132 , "icache line index 132 was not invalidated" )
+        self.assertTagValid   ( 227 , "icache line index 227 was not fetched"     )
+        self.assertTagValid   ( 83  , "icache line index 83  was not fetched"     )
+        self.assertTagValid   ( 500 , "icache line index 500 was not fetched"     )
+        self.assertTagInvalid ( 404 , "icache line index 404 was not invalidated" )

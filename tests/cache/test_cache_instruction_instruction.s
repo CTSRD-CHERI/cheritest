@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2013 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,52 +34,113 @@
 .set nobopt
 .set noat
 
-#
-# Exercise instruction cache instructions
-#
-# Execute a series of instruction cache instructions that are found in the kernel.  
-# We currently don't check if they are correct, but merely check that they don't
-# lock up the processor.
-# 
-#
+idx10:      # need to be copied at 0x9800000000000140
+            dli     $t0, 0x9800000000000280 # dest
+            jr      $t0
+idx10_end:  move    $t0, $zero    # branch-delay slot
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-		
-		# Load one register value that can be tested if the test successfully reaches completion
-		li $a0, 0
-		
-		#
-		# (1) series of cache instructions to writeback/invalidate instruction cache lines.  
-		#
-		cache 0x0, 0($t0)
-		cache 0x0, 8($t0) 
-		cache 0x0, 10($t0) 
-		cache 0x0, 18($t0) 
-		
-		# Have not constructed a test for this yet.
-		
-		#
-		# (2) series of cache instructions to invalidate instruction cache lines.  
-		#
-		cache 0x10, 0($t0)
-		cache 0x10, 8($t0) 
-		cache 0x10, 10($t0) 
-		cache 0x10, 18($t0) 
-		
-		# Have not constructed a test for this yet.
+idx20:      # need to be copied at 0x9800000000000280
+            dli     $t0, 0x9800000000001080 # dest
+            jr      $t0
+idx20_end:  move    $t0, $zero    # branch-delay slot
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+idx132:     # need to be copied at 0x9800000000001080
+            dli     $t0, 0x9800000000001c60 # dest
+            jr      $t0
+idx132_end: move    $t0, $zero    # branch-delay slot
 
-# A double word of data that we will load and store via various
-# hardware-defined mappings.
-dword:		.dword	0x0123456789abcdef
+idx227:     # need to be copied at 0x9800000000001c60
+            dli     $t0, 0x9800000000000a60 # dest
+            jr      $t0
+idx227_end: move    $t0, $zero    # branch-delay slot
+
+idx83:      # need to be copied at 0x9800000000000a60
+            dli     $t0, 0x9800000000003e80 # dest
+            jr      $t0
+idx83_end:  move    $t0, $zero    # branch-delay slot
+
+idx500:     # need to be copied at 0x9800000000003e80
+            dli     $t0, 0x9800000000003280 # dest
+            jr      $t0
+idx500_end: move    $t0, $zero    # branch-delay slot
+
+idx404:     # need to be copied at 0x9800000000003280
+            dla     $t0, finish
+            jr      $t0
+idx404_end: move    $t0, $zero    # branch-delay slot
+
+        .global test
+test:   .ent    test
+        daddu   $sp, $sp, -32
+        sd      $ra, 24($sp)
+        sd      $fp, 16($sp)
+        daddu   $fp, $sp, 32
+
+        dli     $a0, 0x9800000000000140 # dest
+        dla     $a1, idx10              # src
+        dli     $a2, idx10_end-idx10    # len
+        jal     memcpy
+        nop
+
+        dli     $a0, 0x9800000000000280 # dest
+        dla     $a1, idx20              # src
+        dli     $a2, idx20_end-idx20    # len
+        jal     memcpy
+        nop
+
+        dli     $a0, 0x9800000000001080 # dest
+        dla     $a1, idx132             # src
+        dli     $a2, idx132_end-idx132  # len
+        jal     memcpy
+        nop
+
+        dli     $a0, 0x9800000000001c60 # dest
+        dla     $a1, idx227             # src
+        dli     $a2, idx227_end-idx227  # len
+        jal     memcpy
+        nop
+
+        dli     $a0, 0x9800000000000a60 # dest
+        dla     $a1, idx83              # src
+        dli     $a2, idx83_end-idx83    # len
+        jal     memcpy
+        nop
+
+        dli     $a0, 0x9800000000003e80 # dest
+        dla     $a1, idx500             # src
+        dli     $a2, idx500_end-idx500  # len
+        jal     memcpy
+        nop
+
+        dli     $a0, 0x9800000000003280 # dest
+        dla     $a1, idx404             # src
+        dli     $a2, idx404_end-idx404  # len
+        jal     memcpy
+        nop
+
+        #start fetching instruction cache lines at different indexes
+        dli     $t0, 0x9800000000000140
+        jr      $t0
+        move    $t0, $zero    # branch-delay slot
+
+finish:
+
+        # invalidate some of the cache lines
+        dli     $t0, 0x9800000000000140 # idx10
+        cache   0x0, 0($t0)
+        dli     $t0, 0x9800000000001080 # idx132
+        cache   0x0, 0($t0)
+        dli     $t0, 0x9800000000003280 # idx404
+        cache   0x0, 0($t0)
+
+        # Dump the ICache tags in the simulator
+        mtc0    $v0, $26, 1
+        nop
+        nop
+
+        ld      $fp, 16($sp)
+        ld      $ra, 24($sp)
+        daddu   $sp, $sp, 32
+        jr      $ra
+        nop            # branch-delay slot
+        .end    test
