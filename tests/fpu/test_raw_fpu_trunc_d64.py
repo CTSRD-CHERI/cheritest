@@ -67,4 +67,9 @@ class test_raw_fpu_trunc_d64(BaseCHERITestCase):
         '''Test trunc of single precision to 64 bit int'''
         self.assertRegisterEqual(self.MIPS.a5, 0x100000200, "2^32 + 2^9 was not correctly converted from single precision to a 64 bit integer")
 
+    @attr('float64')
+    def test_raw_fpu_trunc_d64_7(self):
+        '''Test trunc of double precision to 64 bit int'''
+        self.assertRegisterEqual(self.MIPS.a6, 0x10000000000001, "2^52 + 1 was not correctly converted from double precision to a 64 bit integer")
+
 

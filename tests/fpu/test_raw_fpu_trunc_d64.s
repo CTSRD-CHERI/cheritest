@@ -86,6 +86,13 @@ start:
 	trunc.l.s $f2, $f2
 	dmfc1 $a5, $f2
 
+	lui $t0, 0x4330
+	dsll $t0, $t0, 32
+	ori $t0, $t0, 0x0001
+	mtc1 $t0, $f2
+	trunc.l.d $f2, $f2
+	dmfc1 $a6, $f2
+
 	# Dump registers on the simulator (gxemul dumps regs on exit)
 	mtc0 $at, $26
 	nop
