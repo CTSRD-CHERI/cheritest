@@ -1,7 +1,4 @@
 *.hex
-*.bak
-mem.bin
-gxemul_log/
-nosetests.xml
+*.pyc
 nosetests_cached.xml
-nosetest*.xml
+nosetests_uncached.xml
