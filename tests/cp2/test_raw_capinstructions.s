@@ -53,6 +53,7 @@ start:
 		cincbase  $c1,  $c2, $a3
 		csetlen   $c1,  $c2, $a3
                 ccleartag $c1
+		csetcause $a3
 
 		cmove     $c1,  $c2
 
