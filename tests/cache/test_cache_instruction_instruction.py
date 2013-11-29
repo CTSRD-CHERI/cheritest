@@ -42,6 +42,7 @@ from nose.plugins.attrib import attr
 class test_cache_instruction_instruction(BaseICacheCHERITestCase):
 
     @attr('cache')
+    @attr('dumpicache')
     def test_completion(self):
         self.assertTagInvalid ( 10  , "icache line index 10  was not invalidated" )
         self.assertTagValid   ( 20  , "icache line index 20  was not fetched"     )

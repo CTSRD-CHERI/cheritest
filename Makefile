@@ -802,6 +802,7 @@ NOSEPRED+=and not lladdr
 NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not largepage
+NOSEPRED+=and not dumpicache
 else
 NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb
