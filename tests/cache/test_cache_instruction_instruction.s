@@ -132,6 +132,10 @@ finish:
         cache   0x0, 0($t0)
         dli     $t0, 0x9800000000003280 # idx404
         cache   0x0, 0($t0)
+        nop
+        nop
+        nop
+        nop
 
         # Dump the ICache tags in the simulator
         mtc0    $v0, $26, 1
