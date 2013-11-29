@@ -440,7 +440,7 @@ __assert_fail:
 		mtc0 $at, $26
 		# Dump capability registers
 		.if(TEST_CP2 == 1)
-		  mtc2 $k0, $0, 4
+		  mtc2 $k0, $0, 6
 		.else
 		  nop
 		.endif
