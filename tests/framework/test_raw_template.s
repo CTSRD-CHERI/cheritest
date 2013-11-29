@@ -61,7 +61,7 @@ start:
 		nop
 
 		# Dump capability registers in the simulator
-		mtc2 $v0, $0, 4
+		mtc2 $v0, $0, 6
 		nop
 		nop
 
