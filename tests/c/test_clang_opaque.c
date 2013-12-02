@@ -59,8 +59,8 @@ void example_init(void)
   /* Eventually, we'll initialize example_key like this: */
   /* example_key = cheri_create_template(0x1234); */
 #else
-  /* For now, initialize its otype field to zero, like this: */
-  example_key = (__capability void *) entry;
+  /* For now, initialize its otype field to &entry, like this: */
+  example_key = __builtin_cheri_set_cap_type((__capability void *) entry, 0);
 #endif
 }
 
