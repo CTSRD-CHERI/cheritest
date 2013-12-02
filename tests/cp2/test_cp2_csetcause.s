@@ -48,6 +48,7 @@ test:		.ent test
 		csetcause $t0
 		cgetcause $a0
 		dli	$t0, 0x0101
+		csetcause $t0
 		cgetcause $a1
 
 		ld	$fp, 16($sp)
