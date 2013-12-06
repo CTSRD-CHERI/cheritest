@@ -54,6 +54,20 @@ test:		.ent test
                 cscr     $c1, $t0($c0)
                 clcr     $c2, $t0($c0)
                 cgettag $a1, $c1
+                
+                # Exercise a potential victim buffer in the tag cache.
+                dla	$t1, cap1-0x4000000	# A conflicting address
+                dla	$t2, cap1+0x1000	# A different address
+                cmove	$c1, $c0
+                # Store a valid cap to an address that conflicts with one in the cache.
+                cscr	$c1, $t1($c0)
+                # Load data from the old address, swapping with the victim buffer.
+                clcr	$c2, $t0($c0)
+                # Load another address, evicting the victim buffer
+		clcr	$c3, $t2($c0)
+		# Load the evicted address to see if it has the tag set
+		clcr	$c1, $t1($c0)
+		cgettag	$a2, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

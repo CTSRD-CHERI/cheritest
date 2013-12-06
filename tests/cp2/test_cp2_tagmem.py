@@ -44,3 +44,8 @@ class test_cp2_tagmem(BaseCHERITestCase):
     def test_cp2_getcleartag2(self):
         '''Test that cgettag returns correct value after clear, store and load'''
         self.assertRegisterEqual(self.MIPS.a1, 0, "cgettag returns incorrect value after clear, store and load")
+        
+    @attr('capabilities')
+    def test_cp2_tagmem1(self):
+        '''Test that cgettag returns correct value after eviction and load'''
+        self.assertRegisterEqual(self.MIPS.a2, 1, "cgettag returns incorrect value after eviction and load")
