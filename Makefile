@@ -419,7 +419,8 @@ TEST_CP0_FILES=					\
 		test_cp0_watch_load.s           \
 		test_cp0_watch_store.s          \
 		test_cp0_user.s                 \
-		test_cp0_ri.s
+		test_cp0_ri.s			\
+		test_cp0_counter.s
 
 TEST_FPU_FILES=					\
 		test_fpu_exception_pipeline.s	\
