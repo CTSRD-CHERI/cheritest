@@ -685,8 +685,9 @@ endif
 # Don't attempt multicore tests as the processor under test might be a single core.
 ifeq ($(MULTI),1)
 TEST_MULTICORE_FILES=\
-		test_raw_coherence_setup.s  \
-		test_raw_coherent_sync.s
+		test_raw_coherence_setup.s      \
+		test_raw_coherent_sync.s        \
+                test_raw_pic_default.s
 else
 TEST_MULTICORE_FILES=
 endif
