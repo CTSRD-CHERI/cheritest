@@ -54,10 +54,41 @@ test:		.ent test
 
 		dli	$t3, 20
 loop:
+		# Load the appropriate base address.
+		# These 4 alias to force conflicts and writebacks in the
+		# tag cache.
+		andi	$t9, $t3, 3
+		beqz	$t9, loadthree
+		addi	$t9, $t9, -1
+		beqz	$t9, loadtwo
+		addi	$t9, $t9, -1
+		beqz	$t9, loadone
+		nop
+loadzero:
+		dli	$t8, 0x9800000000000000
+		b	dostore
+		nop
+loadone:
+		dli	$t8, 0x9800000001000000
+		b	dostore
+		nop
+loadtwo:
+		dli	$t8, 0x9800000002000000
+		b	dostore
+		nop
+loadthree:
+		dli	$t8, 0x9800000003000000
+		b	dostore
+		nop
+dostore:
+		addi	$t9, $t3, -16
+		blez	$t9, invalidatecaps
+		nop
+		
 		#
 		# Save out all capability registers but $kcc and $kdc.
 		#
-		dla	$t0, data
+		move	$t0, $t8
 		cscr	$c0, $t0($c30)
 
 		daddiu	$t0, $t0, 32
@@ -147,6 +178,7 @@ loop:
 		daddiu	$t0, $t0, 32
 		cscr	$c31, $t0($c30)
 
+invalidatecaps:
 		#
 		# Scrub capability registers in between to make sure that
 		# fields are being properly restored.
@@ -274,11 +306,11 @@ loop:
 		csettype	$c31, $c31, $t2
 		cincbase	$c31, $c31, $t0
 		candperm	$c31, $c31, $t1
-
+loadcaps:
 		#
 		# Now reverse the process.
 		#
-		dla	$t0, data
+		move	$t0, $t8
 		clcr	$c0, $t0($c30)
 
 		daddiu	$t0, $t0, 32
@@ -367,7 +399,7 @@ loop:
 
 		daddiu	$t0, $t0, 32
 		clcr	$c31, $t0($c30)
-
+done:
 		daddiu	$t3, $t3, -1
 		bne	$t3, $zero, loop
 		nop
