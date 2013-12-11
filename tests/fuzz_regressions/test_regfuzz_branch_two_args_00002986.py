@@ -1,4 +1,5 @@
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 import os
 import tools.sim
 expected_uncached=[
@@ -27,7 +28,7 @@ expected_uncached=[
     0x1616161616161616,
     0x1717171717171717,
     0x1818181818181818,
-    0x9000000040000ac8,
+    0x9000000040000b54,
     0x0,
     0x1b1b1b1b1b1b1b1b,
     0x1c1c1c1c1c1c1c1c,
@@ -61,7 +62,7 @@ expected_cached=[
     0x1616161616161616,
     0x1717171717171717,
     0x1818181818181818,
-    0x9800000040000ae8,
+    0x9800000040000b74,
     0x0,
     0x1b1b1b1b1b1b1b1b,
     0x1c1c1c1c1c1c1c1c,
@@ -70,6 +71,7 @@ expected_cached=[
     0x98000000400003ac,
   ]
 class test_regfuzz_branch_two_args_00002986(BaseCHERITestCase):
+  
   def test_registers_expected(self):
     cached=bool(int(os.getenv('CACHED',False)))
     expected=expected_cached if cached else expected_uncached

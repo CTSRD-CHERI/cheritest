@@ -35,8 +35,11 @@ def export_test(test_name, options):
     cached_gxemul_status   = tools.gxemul.MipsStatus(cached_gxemul_log)
 
     new_name=options.name if options.name else test_name
-
+    attrs = ""
+    if test_name.find('tlb') != -1:
+        attrs=attrs + "@attr('tlb')"
     print """from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 import os
 import tools.sim
 expected_uncached=["""
@@ -48,12 +51,13 @@ expected_cached=["""
         print "    0x%x," % cached_gxemul_status[reg]
     print """  ]
 class %(testname)s(BaseCHERITestCase):
+  %(attrs)s
   def test_registers_expected(self):
     cached=bool(int(os.getenv('CACHED',False)))
     expected=expected_cached if cached else expected_uncached
     for reg in xrange(len(tools.sim.MIPS_REG_NUM2NAME)):
       self.assertRegisterExpected(reg, expected[reg])
-""" % {'testname':new_name}
+""" % {'attrs':attrs, 'testname':new_name}
 
 if __name__=="__main__":
     from optparse import OptionParser
