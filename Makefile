@@ -531,6 +531,7 @@ TEST_CP2_FILES=					\
 		test_cp2_floatstore.s		\
 		test_cp2_csb_neg.s		\
 		test_cp2_csetcause.s		\
+		test_cp2_sbx_j.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
@@ -792,7 +793,7 @@ SIM        := ${CHERIROOT_ABS}/sim
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
-	SIM_TRACE_OPTS?=+debug +trace +cTrace +showTranslations +instructionBasedCycleCounter +debug
+	SIM_TRACE_OPTS?= +trace +cTrace +showTranslations +instructionBasedCycleCounter +debug
 else
 ifdef TRACE
 	SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
