@@ -48,19 +48,8 @@
 		.global start
 		.ent start
 start:
-                jal     get_thread_id
-                #jal     get_core_id
+                jal     get_corethread_id   # v0 = core ID * num threads + thread ID
                 nop                         # (delay slot)
-       
-#core_check:
-#		bne     $v0, $0, infinite_loop
-#                beq     $v0, $0, continue
-#                nop
-
-#infinite_loop:
-#		mfc0    $v0, $15, 1
-#                bne     $v0, $0, infinite_loop
-#                nop
 
 #continue:                 
 		# Set up stack and stack frame
@@ -71,9 +60,11 @@ start:
 
         
                 dla     $a0, reset_barrier
-                dla     $ra, all_threads    # skip exception handler install on non-zero threads
-                bgtz    $v0, thread_barrier # spin if not thread 0
+                dla     $ra, all_threads    # cheeky tail call to skip exception handler install on non-zero threads
+                bgtz    $v0, thread_barrier # enter barrier and spin if not thread 0
                 nop
+
+                # Thread 0 Code
         
 		# Install default exception handlers
 		dla	$a0, exception_count_handler

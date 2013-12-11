@@ -571,48 +571,97 @@ slow_memcpy_loop:                # byte-by-byte copy
 .end cmemcpy
 
 #
-# Get the ID of the current thread. Reads CP0 register 15
+# Get the ID of the current thread. Reads CP0 register 15, select 2
 # (processor ID, so needs appropriate privilege).
 # Args: None
-# Returns: (Up to) 8-bit thread ID
+# Returns: (Up to) 16-bit thread ID
 #
-        .ent get_thread_id
-        .global get_thread_id
-get_thread_id:
-        dmfc0    $v0, $15            # load processor ID register, d prevents sign extension
+        global_func get_thread_id
+        dmfc0    $v0, $15, 2         # load processor ID register, select 2
         jr       $ra                 # return
-        srl      $v0, 24             # shift down thread id (delay slot)
+        and      $v0, 0xffff         # mask off max thread id
         .end get_thread_id
 
-#        .ent get_core_id
-#        .global get_core_id
-#get_core_id:
-#	mfc0     $v0, $15, 1         # load core ID from proc ID shadow register
-#        jr       $ra
-#        srl      $v0, 24
-#        .end get_core_id
+#
+# Get the maximum ID of any thread on this CPU i.e. the number hw threads-1.
+# Reads CP0 register 15, select 2 (processor ID, so needs appropriate privilege).
+# Args: None
+# Returns: (Up to) 16-bit max thread ID
+#
+        global_func get_max_thread_id
+        dmfc0    $v0, $15, 2         # load processor ID register, select 2
+        jr       $ra                 # return
+        srl      $v0, 16             # top 16 bits contain max thread ID
+        .end get_max_thread_id
 
+# As get_thread_id, but for core number
+        global_func get_core_id
+        dmfc0    $v0, $15, 1         # load processor ID register, select 1
+        jr       $ra                 # return
+        and      $v0, 0xffff         # mask off max core id
+        .end get_core_id
+# As get_max_thread_id, but for max core number
+        global_func get_max_core_id
+        dmfc0    $v0, $15, 1         # load processor ID register, select 1
+        jr       $ra                 # return
+        srl      $v0, 16             # top 16 bits contain max core ID
+        .end get_max_core_id
+
+#
+# Get an ID in range [0, num cores * num threads)  which combines the current
+# core and threadID i.e. a unique identifier for this hw thread in the whole
+# system. Also returns, in $v1, the maximum such ID.
+# Args: None
+# Returns: in v0: current core ID * num threads + current thread ID
+#          in v1: num cores * num threads - 1
+# Clobbers: t0, t1, t2, t3
+#
+        global_func get_corethread_id
+	mfc0  $t0, $15	        # prid register
+	and   $t0, 0xff00       #
+	xor   $t0, 0x8900       #
+        li    $v1, 1            # one core on gxemul
+	beqz  $t0, 1f           # return if on gxemul 
+        li    $v0, 0            # return 0 on gxemul
+        dmfc0 $t0, $15, 1       # t0 = core ID / max core
+        srl   $t1, $t0, 16      # t1 = max core ID
+        add   $t1, 1            # t1 = num cores
+        and   $v0, $t0, 0xffff  # v0 = current core ID
+        dmfc0 $t0, $15, 2       # t0 = thread ID / num threads
+        srl   $v1, $t0, 16      # v1 = max thread ID
+        add   $v1, 1            # v1 = num threads
+        and   $t0, 0xffff       # t0 = thread ID
+        mul   $v0, $v0, $v1     # v0 = current core * num threads 
+        add   $v0, $t0          # v0 = current core * num threads + thread ID
+        mul   $v1, $v1, $t1     # v1 = num cores * num threads
+1: 
+        jr    $ra               # return
+        sub   $v1, 1            # v1 = num cores * num threads - 1 (delay)
+        .end get_corethread_id
+        
 #
 #  Wait for all threads to reach a certain point. This is done using per thread
 #  counters. On entry to the barrier we increment this thread's counter then loop
-#  waiting for all other threads' counters to equal or exceed our own. Only works
-#  for a SINGLE CORE. Does not handle wrapping of the 8-bit counters. Needs
-#  sufficient privilege to access the current thread ID.
+#  waiting for all other threads' counters to equal or exceed our own. Does not
+#  handle wrapping of the 8-bit counters. Needs sufficient privilege to access
+#  the current thread ID.
 #  Args: $a0 - A pointer to an array of bytes (one per thread) to use as counters 
 #      -- typically allocated using the mkBarrier macro.
 #  Returns: The value of the counter (i.e. the number of times the barrier has been called so far)
+#  Clobbers: t0,t1,t2,t3,v0,v1        
 #
         .ent thread_barrier
         .global thread_barrier
 thread_barrier:
-        dmfc0    $t0, $15            # load processor ID register, d prevents sign extension
-        srl      $t0, 24             # shift down thread id
-        dadd     $t1, $a0, $t0       # address of flag for this thread
+        prelude
+        bal      get_corethread_id
+        nop                          # delay
+        dadd     $t1, $a0, $v0       # address of flag for this thread
         lbu      $v0, 0($t1)         # load flag value
         add      $v0, 1              # increment
         sb       $v0, 0($t1)         # store new value
 barrier_loop:
-        li       $t0, (thread_count-1) # Number of threads
+        move     $t0, $v1            # Number of threads
         dadd     $t1, $a0, $t0       # address of first counter
 thread_loop:
         lbu      $t2, 0($t1)         # load counter value
@@ -622,6 +671,7 @@ thread_loop:
         bgez     $t0, thread_loop    # next thread
         dadd     $t1, $a0, $t0       # address of next counter  (delay slot)
         # Barrier complete
+        epilogue
         jr       $ra                 # return
         nop                          # (delay slot)
         .end thread_barrier

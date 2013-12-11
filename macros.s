@@ -28,16 +28,39 @@
 # SUCH DAMAGE.
 #
 
-# Number of threads per core for multi-threaded tests.
-# Hard coded to 2 at the moment. Single-threaded tests should
-# run fine even if there is only one hw thread.
-thread_count = 2
+# Macro for declaring an exported function. Just saves some typing.
+.macro global_func name
+        .ent \name
+        .global \name
+\name :
+.endm
+
+# Decrement stack pointer by 32 and save stack and
+# frame pointer.
+.macro prelude
+	daddu	$sp, $sp, -32
+	sd	$ra, 24($sp)
+	sd	$fp, 16($sp)
+	daddu	$fp, $sp, 32
+.endm
+
+.macro epilogue
+        ld      $ra, 24($sp)
+        ld      $fp, 16($sp)
+        daddu   $sp, 32
+.endm
+        
+# The maximum number of hw threads (threads*cores) we expect for
+# any configuration. This is so that we can allocate a conservative
+# amount of space for static per thread structures. May need to
+# increase in future.
+max_thread_count = 32
 
 # Create the data structure used for thread barriers.
 # Should be placed in .data section.
 # No particular alignment is required.
 .macro mkBarrier
-        .rept thread_count
+        .rept max_thread_count
         .byte 0
         .endr
 .endm
