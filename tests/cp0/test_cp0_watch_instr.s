@@ -39,6 +39,9 @@
 # Test the watchpoint functionality for instruction accesses.
 #
 
+# On cheri2 watchpoints are only accurate to 8 bytes, so control the alignment of
+# the test to ensure that desired_epc has correct alignment.
+                .align  8
 		.global test
 test:		.ent test
 		daddu 	$sp, $sp, -32
