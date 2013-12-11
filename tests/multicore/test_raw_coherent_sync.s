@@ -46,7 +46,7 @@
 #
 
 		.global start
-start:		
+start:
 		#
 		# Check core ID is set to zero
 		#
@@ -61,38 +61,57 @@ start:
 		daddu   $a1, $zero, $t3
 
 		#
-		# Write to cached mem location and test
+		# Setup Stack
 		#
-		sw      $t1, 0($t2) 
-		lw      $t3, 0($t2)
-		daddu   $a2, $zero, $t3
-
-		#
-		# Q: What did one core say to the other?
-		# A: Please "Share" and "Like" too
-		#
-		mfc0    $t1, $15, 1
-		bnez    $t1, core_1		
+		mfc0    $k0, $12
+		li      $k1, 0xF0000000 
+		or      $k0, $k0, $k1 
+		mtc0    $k0, $12 
+		dla     $sp, __sp
+		mfc0    $t0, $15, 1
+		andi    $t0, $t0, 0xFFFF
+		dli     $k0, 0x400  
+		mul     $k0, $k0, $t0    
+		daddu   $sp, $sp, $k0
+		daddu   $sp, $sp, -64 
+		
+		bnez    $t0, core_1
 		nop
+		j       core_0 
+		nop   
 
 core_0:
-		daddu   $a3, $zero, $t1
+		addi    $t3, $zero, 12
+		sw      $t3, 0($t2)
+		nop
+		nop
+		nop
+		nop	
+		nop	
+		nop	
+		nop
 		sw	$zero, 0($t2)
 		lw      $t3, 0($t2)
 		beqz    $t3, core_0
 		nop
-		daddu   $a5, $zero, $t3
-		j       finish		
+		j       finish
+		nop		
 
 core_1:		
-		daddu   $a4, $zero, $t1
 		lw	$t3, 0($t2)
 		bnez    $t3, core_1
 		nop
-		sw      $t1, 0($t2)
-		lw	$t3, 0($t2)	
-		daddu   $a6, $zero, $t3
+		nop
+		nop
+		nop
+		nop	
+		nop	
+		nop	
+		nop
+		addi    $t3, $t3, 100
+		sw      $t3, 0($t2)	
 		j       finish
+		nop
 
 finish:
 		# Dump registers in the simulator

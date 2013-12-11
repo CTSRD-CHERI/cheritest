@@ -51,7 +51,10 @@ start:
 		# Check core ID is set to zero
 		#
 		mfc0	$t1, $15, 1
-		slti    $a0, $t1, 256
+		andi    $t2, $t1, 0xFFFF
+		srl     $t3, $t1, 16
+		addi    $t3, $t3, 1
+		slt     $a0, $t2, $t3
 
 		#
 		# Test memory location in cached space

@@ -35,7 +35,7 @@ class test_raw_coherence_setup(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.a0, 1, "Initial read of coreID register failed")
 
     def test_cache_coherent_memory(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero has failed a write to memory")
+        self.assertRegisterEqual(self.MIPS.a1, 0, "Core has failed a write to memory")
 
     def test_cache_coherent_write(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One produced incoherent data")
+        self.assertRegisterEqual(self.MIPS.a2, 0, "Core produced incoherent data")

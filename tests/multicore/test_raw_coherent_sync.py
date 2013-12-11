@@ -37,18 +37,17 @@ class test_raw_coherent_sync(BaseCHERITestCase):
     def test_cache_coherent_memory(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "Core Zero has failed a write to memory")
 
-    def test_cache_coherent_write(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "Core One produced incoherent data")
+#    def test_core_0_branch(self):
+#        self.assertRegisterEqual(self.MIPS.a3, 0, "Core Zero failed to execute the branch")
 
-    def test_core_0_branch(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0, "Core Zero failed to execute the branch")
+#    def test_core_1_branch(self):
+#        self.assertRegisterEqual(self.MIPS.a4, 1, "Core One failed to execute the branch")
 
-    def test_core_1_branch(self):
-        self.assertRegisterEqual(self.MIPS.a4, 1, "Core One failed to execute the branch")
+#    def test_core_0_sync(self):
+#        self.assertRegisterEqual(self.MIPS.a5, 0, "Core Zero failed to sync")
 
-    def test_core_0_sync(self):
-        self.assertRegisterEqual(self.MIPS.a5, 0, "Core Zero failed to sync")
+#    def test_core_1_sync(self):
+#        self.assertRegisterEqual(self.MIPS.a6, 1, "Core One failed to sync")
 
-    def test_core_1_sync(self):
-        self.assertRegisterEqual(self.MIPS.a6, 1, "Core One failed to sync")
-
+    def test_llsc_raw_sync(self):
+        self.assertRegisterEqual(self.MIPS.v1, 0, "LL/SC failed")
