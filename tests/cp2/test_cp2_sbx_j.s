@@ -40,6 +40,7 @@
 sandbox:
 		dli     $a0, 1
 		j	20
+		nop
 		cjr     $ra($c24)
 		nop			# Branch delay slot
 		cjr     $ra($c24)
