@@ -585,7 +585,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csettype_perm.s	\
 		test_cp2_x_csettype_bounds.s	\
 		test_cp2_x_swc1_perm.s		\
-		test_cp2_x_sdc1_perm.s
+		test_cp2_x_sdc1_perm.s          \
+		test_cp2_disabled_exception.s
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
