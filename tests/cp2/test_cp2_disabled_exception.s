@@ -71,7 +71,12 @@ test:		.ent test
                 li	$t1, 1 << 30
                 nor     $t1, $0          # invert to form mask
                 and     $at, $at, $t1
-	        mtc0    $at, $12        
+	        mtc0    $at, $12
+	        nop
+	        nop
+	        nop
+	        nop
+	        nop
 
 expected_epc:
                 # Attempt to clear tag on cp0. This should cause exception
