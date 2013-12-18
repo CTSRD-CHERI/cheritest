@@ -59,8 +59,8 @@ test:		.ent test
 
 		dli	$a0, 0
 
-		mtc0	$t0, $4, 2
-
+		dmtc0	$t0, $4, 2
+		
 		# The rdhwr instruction is from MIP32r2, so this test is not
 		# expected to work on earlier MIPS revisions.
 
