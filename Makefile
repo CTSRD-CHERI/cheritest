@@ -543,11 +543,13 @@ TEST_CP2_FILES=					\
 		test_cp2_x_clbu_sealed.s	\
 		test_cp2_x_csb_perm.s		\
 		test_cp2_x_csc_align.s		\
+		test_cp2_x_csc_vaddr.s		\
 		test_cp2_x_csc_ephemeral.s	\
 		test_cp2_x_csc_perm.s		\
 		test_cp2_x_csc_underflow.s	\
 		test_cp2_x_clc_perm.s		\
 		test_cp2_x_clc_align.s		\
+		test_cp2_x_clc_vaddr.s		\
 		test_cp2_x_clc_priority.s	\
 		test_cp2_x_clc_bounds.s		\
 		test_cp2_x_cunseal_otype.s	\
