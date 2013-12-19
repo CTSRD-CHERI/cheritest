@@ -30,7 +30,7 @@
 .set mips64
 .set noreorder
 .set nobopt
-
+        
 .global test
 test:   .ent    test
 		dli     $k0, 0x0
@@ -40,8 +40,8 @@ test:   .ent    test
 
 		# Set up TLB entry for testdata1
 		dmtc0	$zero, $0		        # TLB index = 0
-		li      $at, 1			      # ASID=1
-		dmtc0	$at, $10		        # TLB HI address (BRAM) Virtual address (first page, ASID=1) 63:62 == 00 means kernel user address space
+		li      $t0, 1			      # ASID=1
+		dmtc0	$t0, $10		        # TLB HI address (BRAM) Virtual address (first page, ASID=1) 63:62 == 00 means kernel user address space
 		and     $a2, $a0, 0xffffffe000	# Get physical page (PFN) of testdata (40 bits less 13 low order bits)
 		dsrl    $a2, $a2, 6		   # Put PFN in correct position for EntryLow
 		or      $a2, 0x12   		   # Set valid and uncached bits
@@ -50,10 +50,10 @@ test:   .ent    test
 		tlbwi				              # Write Indexed TLB Entry
 	
 		# Set up TLB entry for testdata2
-		li      $at, 1
-		dmtc0	$at, $0			# TLB index = 1
-		li      $at, 2 			# ASID=2
-		dmtc0	$at, $10		# TLB HI address (BRAM) Virtual address (first page, ASID=2) 63:62 == 00 means kernel user address space
+		li      $t0, 1
+		dmtc0	$t0, $0			# TLB index = 1
+		li      $t0, 2 			# ASID=2
+		dmtc0	$t0, $10		# TLB HI address (BRAM) Virtual address (first page, ASID=2) 63:62 == 00 means kernel user address space
 		and     $a3, $a1, 0xffffffe000	# Get physical page (PFN) of testdata (40 bits less 13 low order bits)
 		dsrl    $a3, $a3, 6		# Put PFN in correct position for EntryLow
 		or      $a3, 0x12   		# Set valid and uncached bits
@@ -61,8 +61,8 @@ test:   .ent    test
 		dmtc0	$zero, $3		# TLB EntryLow1 = 0 (invalid)
 		tlbwi				# Write Indexed TLB Entry	
 
-		li      $at, 2
-		dmtc0   $at, $10                # ASID=2
+		li      $t0, 2
+		dmtc0   $t0, $10                # ASID=2
     nop
     nop
     nop
@@ -71,8 +71,8 @@ test:   .ent    test
     nop
 		ld      $a4, 0($0)		# Test read from virtual address.
 
-		li      $at, 1
-		dmtc0   $at, $10                # ASID=1
+		li      $t0, 1
+		dmtc0   $t0, $10                # ASID=1
     nop
     nop
     nop

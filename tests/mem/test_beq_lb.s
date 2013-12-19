@@ -47,7 +47,7 @@ test:
                 li      $a2, 0
                 li      $a3, 0
                 li      $a0, 1          # start
-                la      $t0, testdata
+                dla     $t0, testdata
                 lb      $t1, 0($t0)
                 lb      $t2, 0($t0)
                 beq     $t1, $t2, branch_target
