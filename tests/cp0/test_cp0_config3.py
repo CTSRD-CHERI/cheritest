@@ -31,7 +31,7 @@ from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Tets the CP0 config1 register
+# Test the CP0 config3 register
 #
 
 class test_cp0_config3(BaseCHERITestCase):
@@ -50,7 +50,7 @@ class test_cp0_config3(BaseCHERITestCase):
             "CP0.config2.bpg is not set")
 
     @attr('config3')
-    @attr('cheri')
+    @attr('userlocal')
     def test_cp0_config3_ulri(self):
         '''Test CP0.Config3.ulri is set'''
         self.assertRegisterEqual((self.MIPS.a4 >> 13) & 1, 1,

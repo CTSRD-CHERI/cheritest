@@ -31,7 +31,7 @@ from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Tets the CP0 config1 register
+# Test the CP0 config1 register
 #
 
 class test_cp0_config1(BaseCHERITestCase):
