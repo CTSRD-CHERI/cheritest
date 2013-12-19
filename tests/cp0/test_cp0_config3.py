@@ -43,13 +43,6 @@ class test_cp0_config3(BaseCHERITestCase):
             "CP0 does not have config register 3")
 
     @attr('config3')
-    @attr('largepage')
-    def test_cp0_config3_big_page(self):
-        '''Test CP0.Config3.big_page is set'''
-        self.assertRegisterEqual((self.MIPS.a3 >> 30) & 1, 1,
-            "CP0.config2.bpg is not set")
-
-    @attr('config3')
     @attr('userlocal')
     def test_cp0_config3_ulri(self):
         '''Test CP0.Config3.ulri is set'''
