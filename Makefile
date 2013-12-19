@@ -819,7 +819,7 @@ NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb
 endif
 ifdef COP1
-NOSEPRED+=and not nofloat and not float32 and not floatexception
+NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags
 else
 NOSEPRED+=and not float
 endif
