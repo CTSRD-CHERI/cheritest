@@ -68,7 +68,7 @@ class BaseCHERITestCase(unittest.TestCase):
                 self.LOG_FN = self.__name__ + ".log"
         fh = open(os.path.join(self.LOG_DIR, self.LOG_FN), "rt")
         try:
-            self.MIPS = CapMipsStatus(fh)
+            self.MIPS = MipsStatus(fh)
         except MipsException, e:
             self.MIPS_EXCEPTION = e
 
@@ -232,7 +232,7 @@ def main():
     import sys
     if len(sys.argv) != 2:
         print "Usage: %0 LOGFILE"%sys.argv[0]
-    regs = CapMipsStatus(file(sys.argv[1], "rt"))
+    regs = MipsStatus(file(sys.argv[1], "rt"))
     print regs
 
 if __name__=="__main__":
