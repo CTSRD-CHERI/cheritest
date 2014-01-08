@@ -319,6 +319,7 @@ RAW_FPU_FILES =                \
 	test_fpu_x_disabled.s \
 	test_fpu_x_ldc1_disabled.s \
 	test_fpu_x_mthc1.s \
+	test_raw_fpu_bc1t_pipeline.s \
 		test_raw_fpu_cvt.log	\
 		test_raw_fpu_cvtw.log	\
 		test_raw_fpu_movci.log	\
