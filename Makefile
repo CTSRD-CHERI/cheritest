@@ -852,6 +852,9 @@ endif
 ifneq ($(MULTI),1)
 NOSEPRED+=and not multicore
 endif
+ifneq ($(MT),1)
+NOSEPRED+=and not mt
+endif
 ifdef CHERI_MICRO
 NOSEPRED+=and not tlb and not cache and not invalidateL2
 endif
