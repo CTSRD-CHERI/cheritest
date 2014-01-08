@@ -49,6 +49,7 @@
 TEST_CP2?=1
 CLANG?=1
 MULTI?=0
+MT?=0
 
 #
 # List of directories in which to find test source and .py files.
@@ -69,6 +70,10 @@ TESTDIRS=					\
 
 ifeq ($(MULTI),1)
 TESTDIRS += $(TESTDIR)/multicore
+endif
+
+ifeq ($(MT),1)
+TESTDIRS += $(TESTDIR)/mt
 endif
 
 ifneq ($(NOFUZZ),1)
@@ -706,6 +711,13 @@ else
 TEST_MULTICORE_FILES=
 endif
 
+ifeq ($(MT),1)
+TEST_MT_FILES=\
+		test_ipc.s
+else
+TEST_MT_FILES=
+endif
+
 FUZZ_SCRIPT:=fuzzing/fuzz.py
 FUZZ_SCRIPT_OPTS?=
 FUZZ_TEST_DIR:=tests/fuzz
@@ -740,7 +752,8 @@ TEST_FILES=					\
 		$(FUZZ_TEST_FILES)              \
 		$(FUZZ_REGRESSION_TEST_FILES)   \
 		$(TEST_CLANG_FILES)		\
-		$(TEST_MULTICORE_FILES)
+		$(TEST_MULTICORE_FILES)         \
+		$(TEST_MT_FILES)
 
 
 ifdef COP1
