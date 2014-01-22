@@ -856,7 +856,7 @@ ifneq ($(MT),1)
 NOSEPRED+=and not mt
 endif
 ifdef CHERI_MICRO
-NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb
+NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
 endif
 ifneq ($(NOSEPRED),)
 NOSEFLAGS?=-A "$(NOSEPRED)"
