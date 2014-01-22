@@ -30,16 +30,21 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_cp0_rdhwr_user(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_exception_fired(self):
         '''Test that rdhwr throws an exception if don't have permission'''
         self.assertRegisterEqual(self.MIPS.a5, 1, "rdhwr did not throw an exception when didn't have permission")
 
+    @attr('tlb')
     def test_cause_code(self):
         '''Test that rdhwr sets the exception code to "reserved instruction" if don't have permission.'''
         self.assertRegisterEqual((self.MIPS.a7 >> 2) & 0x1f, 10, "rdhwr did not set cause to reserved instruction exception.")
 
+    @attr('tlb')
     def test_exl_in_handler(self):
         '''Test EXL set in status register.'''
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 1, "EXL not set in exception handler")

@@ -29,16 +29,21 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_cp0_user(BaseCHERITestCase):
+
+    @attr('tlb')
     def test_exception_fired(self):
         '''Test that cp unusable exception happened'''
         self.assertRegisterEqual(self.MIPS.a5, 1, "Exception didn't fire")
 
+    @attr('tlb')
     def test_cause_code(self):
         '''Test that exception code is set to "cp unusable" in cause register.'''
         self.assertRegisterEqual((self.MIPS.a7 >> 2) & 0x1f, 11, "Cause not set to cp unusable.")
 
+    @attr('tlb')
     def test_exl_in_handler(self):
         '''Test EXL set in status register.'''
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 1, "EXL not set in exception handler")
