@@ -37,20 +37,44 @@ from nose.plugins.attrib import attr
 
 class test_raw_fpu_qnan_single(BaseCHERITestCase):
 
+    @attr('floatechonan')
     def test_raw_fpu_qnan_single_1(self):
         '''Test single precision add of QNaN'''
 	self.assertRegisterEqual(self.MIPS.a0, 0x7f900000, "add.s did not echo QNaN")
 
+#
+# This test for a 'not a number' value really should test that the fraction
+# part is non-zero, as this denotes +/- infinity rather than NaN/
+#
     def test_raw_fpu_qnan_single_2(self):
+        '''Test single precision add of QNaN'''
+	self.assertRegisterEqual(self.MIPS.a0 & 0xff800000, 0x7f800000, "add.s did not return QNaN")
+
+    @attr('floatechonan')
+    def test_raw_fpu_qnan_single_3(self):
         '''Test single precision subtract of QNaN'''
 	self.assertRegisterEqual(self.MIPS.a1, 0x7f900000, "sub.s did not echo QNaN")
 
-    def test_raw_fpu_qnan_single_3(self):
+    def test_raw_fpu_qnan_single_4(self):
+        '''Test single precision subtract of QNaN'''
+	self.assertRegisterEqual(self.MIPS.a1 & 0xff800000, 0x7f800000, "sub.s did not return QNaN")
+
+    @attr('floatechonan')
+    def test_raw_fpu_qnan_single_5(self):
         '''Test single precision multiply of QNaN'''
 	self.assertRegisterEqual(self.MIPS.a2, 0x7f900000, "mul.s did not echo QNaN")
 
-    def test_raw_fpu_qnan_single_4(self):
+    def test_raw_fpu_qnan_single_6(self):
+        '''Test single precision multiply of QNaN'''
+	self.assertRegisterEqual(self.MIPS.a2 & 0xff800000, 0x7f800000, "mul.s did not return QNaN")
+
+    @attr('floatechonan')
+    def test_raw_fpu_qnan_single_7(self):
         '''Test single precision divide of QNaN'''
 	self.assertRegisterEqual(self.MIPS.a3, 0x7f900000, "div.s did not echo QNaN")
+
+    def test_raw_fpu_qnan_single_8(self):
+        '''Test single precision divide of QNaN'''
+	self.assertRegisterEqual(self.MIPS.a3 & 0xff800000, 0x7f800000, "div.s did not return QNaN")
 
 
