@@ -369,6 +369,9 @@ TEST_ALU_FILES=					\
 		test_sltiu.s			\
 		test_sltu.s
 
+TEST_BRANCH_FILES =				\
+		test_bltzall_large.s
+
 TEST_MEM_FILES=					\
 		test_hardware_mappings.s	\
 		test_hardware_mappings_write.s	\
@@ -739,6 +742,7 @@ TEST_FILES=					\
 		$(RAW_CP0_FILES)		\
 		$(TEST_FRAMEWORK_FILES)		\
 		$(TEST_ALU_FILES)		\
+		$(TEST_BRANCH_FILES)		\
 		$(TEST_MEM_FILES)		\
 		$(TEST_LLSC_FILES)		\
 		$(TEST_CACHE_FILES)		\
