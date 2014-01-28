@@ -61,6 +61,9 @@ test:
         nop
         nop
         nop
+	nop
+	nop
+	nop
 
 	lui $t0, 0x3f80 	# 1.0
 	mtc1 $t0, $f12		# This should raise an exception
