@@ -51,16 +51,42 @@ probe_test_start:
 		dmtc0	$a3, $3			# TLB EntryLow1 = k0 (Low half of TLB entry for odd virtual address (VPN))
 		tlbwi				# Write Indexed TLB Entry
 		
-		# Write two similiar entries
-		li	$a0, 0x1
-		dmtc0	$a0, $0
+		li	$a0, 0
+		dmtc0	$a0, $0			# TLB Index
 		li	$a0, 0x2000
-		dmtc0	$zero, $10
-		li	$a0, 0x11
+		dmtc0	$a0, $10		# EntryHi
+		tlbwi
+
+		li	$a0, 1
 		dmtc0	$a0, $0
 		li	$a0, 0x4000
-		dmtc0	$zero, $10
-		
+		dmtc0	$a0, $10
+		tlbwi
+
+		li	$a0, 2
+		dmtc0	$a0, $0
+		li	$a0, 0x6000
+		dmtc0	$a0, $10
+		tlbwi
+
+		li	$a0, 3
+		dmtc0	$a0, $0
+		li	$a0, 0x8000
+		dmtc0	$a0, $10
+		tlbwi
+
+		li	$a0, 4
+		dmtc0	$a0, $0
+		li	$a0, 0xa000
+		dmtc0	$a0, $10
+		tlbwi
+
+		li	$a0, 5
+		dmtc0	$a0, $0
+		li	$a0, 0xc000
+		dmtc0	$a0, $10
+		tlbwi
+
 		nop
 		nop
 		nop
