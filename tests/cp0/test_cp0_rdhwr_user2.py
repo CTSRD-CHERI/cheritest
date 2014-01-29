@@ -32,6 +32,7 @@ from nose.plugins.attrib import attr
 
 class test_cp0_rdhwr_user2(BaseCHERITestCase):
 
+    @attr('tlb')
     @attr('rdhwr')
     @attr('userlocal')
     def test_cp0_rdhwr_user2_1(self):
