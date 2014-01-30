@@ -823,6 +823,7 @@ and not invalidateL2    \
 and not rdhwr           \
 and not config3         \
 and not userlocal       \
+and not mt              \
 "
 
 #
