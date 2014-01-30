@@ -363,6 +363,7 @@ TEST_ALU_FILES=					\
 		test_madd.s			\
 		test_msub.s			\
 		test_maddu.s			\
+		test_msubu.s			\
 		test_mul_div_loop.s		\
 		test_mult_exception.s		\
 		test_slt.s			\
