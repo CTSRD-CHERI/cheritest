@@ -33,16 +33,6 @@
 .set nobopt
 .set noat
 
-#
-# This test checks two properties of eret:
-#
-# (1) It must clear the EXL flag in the status register
-# (2) It must jump to EPC without a branch delay slot
-#
-# In the future, it might be useful to also have an error trap test that works
-# with ERL rather than EXL.
-#
-
 		.global start
 start:		.ent start
 		move $a0, $0
