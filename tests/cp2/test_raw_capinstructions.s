@@ -165,6 +165,14 @@ start:
 		clldi     $t1, 0($c2)
 		cscdi     $t1, 0($c2)
 
+		# check capability fields
+		cmove $c1, $c0
+		cmove $c2, $c0
+		dli $a2, 0
+		ccheckperm $c1, $a2
+		cchecktype $c1, $c2
+		
+		
                 # jumps
 		dla       $t1, l0
 		cjr       $t1($c0)
