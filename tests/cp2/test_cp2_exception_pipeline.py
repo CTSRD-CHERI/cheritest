@@ -52,7 +52,7 @@ class test_cp2_exception_pipeline(BaseCHERITestCase):
     @attr('capabilities')
     def test_candperms(self):
         # Should be unchanged from default
-        self.assertRegisterEqual(self.MIPS.c4.perms, 0x7fff, "candperms instruction was not properly flushed from pipeline")
+        self.assertRegisterEqual(self.MIPS.c4.perms, 0x7fffffff, "candperms instruction was not properly flushed from pipeline")
     @attr('capabilities')
     def test_csettype(self):
         # Should be unchanged from default
@@ -68,6 +68,6 @@ class test_cp2_exception_pipeline(BaseCHERITestCase):
     def test_clcr(self):
         # The c7 register should be unchanged from its default value
         self.assertRegisterEqual(self.MIPS.c7.ctype, 0, "clcr instruction was not properly flushed from pipeline")
-        self.assertRegisterEqual(self.MIPS.c7.perms, 0x7fff, "clcr instruction was not properly flushed from pipeline")
+        self.assertRegisterEqual(self.MIPS.c7.perms, 0x7fffffff, "clcr instruction was not properly flushed from pipeline")
         self.assertRegisterEqual(self.MIPS.c7.base, 0, "clcr instruction was not properly flushed from pipeline")
         self.assertRegisterEqual(self.MIPS.c7.length, 0xffffffffffffffff, "clcr instruction was not properly flushed from pipeline")

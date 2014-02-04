@@ -105,7 +105,7 @@ class test_cp2_exception_epcc(BaseCHERITestCase):
 
     @attr('capabilities')
     def test_presandbox_epcc_perms(self):
-        self.assertRegisterEqual(self.MIPS.cp2[31].perms, 0x7fff, "pre-sandbox EPCC perms incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[31].perms, 0x7fffffff, "pre-sandbox EPCC perms incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_ctype(self):

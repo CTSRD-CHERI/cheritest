@@ -54,7 +54,7 @@ class test_cp2_reg_init(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.pcc.base, 0x0, "CP2 PCC base incorrectly initialised")
         self.assertRegisterEqual(self.MIPS.pcc.length, 0xffffffffffffffff, "CP2 PCC length incorrectly initialised")
         self.assertRegisterEqual(self.MIPS.pcc.ctype, 0x0, "CP2 PCC ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.pcc.perms, 0x7fff, "CP2 PCC perms incorrectly initialised")
+        self.assertRegisterEqual(self.MIPS.pcc.perms, 0x7fffffff, "CP2 PCC perms incorrectly initialised")
         self.assertRegisterEqual(self.MIPS.pcc.u, 1, "CP2 PCC unsealed incorrectly initialised")
 
     @attr('capabilities')
@@ -79,7 +79,7 @@ class test_cp2_reg_init(BaseCHERITestCase):
     def test_cp2_reg_init_rest_perms(self):
         '''Test that CP2 general-purpose register perms are correctly initialised'''
         for i in range(1, 26):
-            self.assertRegisterEqual(self.MIPS.cp2[i].perms, 0x7fff, "CP2 capability register perms incorrectly initialised")
+            self.assertRegisterEqual(self.MIPS.cp2[i].perms, 0x7fffffff, "CP2 capability register perms incorrectly initialised")
 
     @attr('capabilities')
     def test_cp2_reg_init_rest_unsealed(self):

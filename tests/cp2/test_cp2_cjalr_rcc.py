@@ -38,7 +38,7 @@ class test_cp2_cjalr_rcc(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_cjalr_rcc1(self):
         '''Test that RCC.perms was changed by cjalr'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x7fff, "RCC.perms was not set correctly by cjalr")
+        self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "RCC.perms was not set correctly by cjalr")
 
     @attr('capabilities')
     def test_cp2_cjalr_rcc2(self):
