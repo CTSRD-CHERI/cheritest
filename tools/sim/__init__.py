@@ -49,9 +49,9 @@ for num, name in enumerate(MIPS_REG_NUM2NAME):
 THREAD_RE=re.compile(r'======  Thread\s+([0-9]+)\s+======$')
 MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+) (0x................)$')
 MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC (0x................)$')
-CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC u:(.) perms:(0x.{4}) ' +
+CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC u:(.) perms:(0x.{8}) ' +
                            r'type:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
-CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+) u:(.) perms:(0x.{4}) ' +
+CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+) u:(.) perms:(0x.{8}) ' +
                             r'type:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
 
 class MipsException(Exception):
@@ -66,7 +66,7 @@ class Capability(object):
         self.length = int(length, 16)
 
     def __repr__(self):
-        return 'u:%x perms:0x%04x type:0x%016x base:0x%016x length:0x%016x'%(
+        return 'u:%x perms:0x%08x type:0x%016x base:0x%016x length:0x%016x'%(
             self.u, self.perms, self.ctype, self.base, self.length)
 
 class ThreadStatus(object):
