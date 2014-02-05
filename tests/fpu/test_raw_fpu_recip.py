@@ -48,6 +48,7 @@ class test_raw_fpu_recip(BaseCHERITestCase):
         self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "recip.d failed to echo QNaN")
 
     @attr('floatrecip')
+    @attr('floatrecipflushesdenorm')
     def test_recip_single_denorm(self):
         '''Test that single precision reciprocal flushes a denormalized result to zero'''
         self.assertRegisterEqual(self.MIPS.s4, 0x0, "recip.s failed to flush denormalised result")
