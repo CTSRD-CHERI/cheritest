@@ -40,5 +40,5 @@ class test_cp2_x_ccheckperm(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_x_ccheckperm_2(self):
         '''Test that ccheckperm set the capability cause register when don't have excute permission'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1101, "ccheckperm did not raise an exception")
+        self.assertRegisterEqual(self.MIPS.a3, 0x1101, "ccheckperm did not set cap cause register correctly")
 
