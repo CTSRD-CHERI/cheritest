@@ -28,7 +28,9 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_ld_cancelled(BaseCHERITestCase):
+    @attr('counterdev')
     def test_count(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x0, "Cancelled load had side effects.")
