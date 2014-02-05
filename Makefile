@@ -610,7 +610,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_swc1_perm.s		\
 		test_cp2_x_sdc1_perm.s          \
 		test_cp2_disabled_exception.s	\
-		test_cp2_ccheckperm.s
+		test_cp2_ccheckperm.s           \
+		test_cp2_x_ccheckperm.s
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
