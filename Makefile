@@ -914,6 +914,7 @@ GXEMUL_LOGDIR=gxemul_log
 GXEMUL_BINDIR?=/usr/groups/ctsrd/gxemul/CTSRD-CHERI-gxemul-testversion
 GXEMUL_TRACE_OPTS?=-i
 GXEMUL_OPTS=-V -E oldtestmips -M 3072 $(GXEMUL_TRACE_OPTS) -p "end"
+L3_LOGDIR=l3_log
 
 RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
@@ -950,6 +951,8 @@ GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
+L3_TEST_LOGS := $(addsuffix _l3.log,$(addprefix \
+	$(L3_LOGDIR)/,$(TESTS)))
 
 SIM_FUZZ_TEST_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_LOGS))
 SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED_LOGS))
@@ -1019,6 +1022,7 @@ cleantest:
 	rm -f $(CHERI_TEST_LOGS) $(CHERI_TEST_CACHED_LOGS)
 	rm -f $(GXEMUL_TEST_LOGS) $(GXEMUL_TEST_CACHED_LOGS)
 	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
+	rm -f $(L3_TEST_LOGS)
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
@@ -1178,6 +1182,13 @@ $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
         $(GXEMUL_LOG_FILTER) >$@ || true
 
+$(L3_LOGDIR):
+	mkdir $(L3_LOGDIR)
+
+$(L3_LOGDIR)/%_l3.log: $(OBJDIR)/%.hex $(L3_LOGDIR)
+	echo "L3: " $<
+	l3mips --cycles 2000 $< > $@ 2> $@.err || true
+
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
 	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=tools nosetests $(NOSEFLAGS) $(TESTDIRS)
@@ -1250,6 +1261,8 @@ gxemul-build:
 	wget https://github.com/CTSRD-CHERI/gxemul/zipball/8d92b42a6ccdb7d94a2ad43f7e5e70d17bb7839c -O tools/gxemul/gxemul-testversion.zip --no-check-certificate
 	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
+
+l3-nosetest: all $(L3_TEST_LOGS)
 
 xmlcat: xmlcat.c
 	gcc -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm

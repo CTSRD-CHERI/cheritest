@@ -61,7 +61,11 @@ start:
 		nop
 
 		# Dump capability registers in the simulator
+.if(TEST_CP2 == 1)
 		mtc2 $v0, $0, 6
+.else
+		nop
+.endif
 		nop
 		nop
 
