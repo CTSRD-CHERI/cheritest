@@ -1051,7 +1051,7 @@ $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_A
 #
 $(OBJDIR)/test_%.o : test_%.s
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< 
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -o $@ $<
 
 # Once the assembler works, we can try this version too:
 #clang  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
