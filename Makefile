@@ -830,6 +830,13 @@ and not userlocal       \
 and not mt              \
 "
 
+L3_NOSEFLAGS=-A "\
+not capabilities \
+and not counterdev \
+and not float \
+and not mt \
+and not tlb \
+"
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
@@ -951,7 +958,7 @@ GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
-L3_TEST_LOGS := $(addsuffix _l3.log,$(addprefix \
+L3_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 
 SIM_FUZZ_TEST_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_LOGS))
@@ -1182,12 +1189,12 @@ $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
         $(GXEMUL_LOG_FILTER) >$@ || true
 
-$(L3_LOGDIR):
-	mkdir $(L3_LOGDIR)
+l3tosim: l3tosim.c
+	gcc -o l3tosim l3tosim.c
 
-$(L3_LOGDIR)/%_l3.log: $(OBJDIR)/%.hex $(L3_LOGDIR)
-	echo "L3: " $<
-	l3mips --cycles 2000 $< > $@ 2> $@.err || true
+$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex 
+	test -d $(L3_LOGDIR) || mkdir $(L3_LOGDIR)
+	l3mips --cycles 10000 $< 2> $@.err | ./l3tosim > $@ || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
@@ -1263,6 +1270,7 @@ gxemul-build:
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
 
 l3-nosetest: all $(L3_TEST_LOGS)
+	PYTHONPATH=tools/sim LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
 	gcc -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
