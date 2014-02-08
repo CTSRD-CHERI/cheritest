@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2013 Jonathan Woodruff
+# Copyright (c) 2013 Jonathan D. Woodruff
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
