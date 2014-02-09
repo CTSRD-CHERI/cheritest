@@ -1,6 +1,6 @@
 #-
 # Copyright (c) 2012 Robert M. Norton
-# Copyright (c) 2012 Jonathan D. Woodruff
+# Copyright (c) 2012 Jonathan Woodruff
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

@@ -1,6 +1,6 @@
 #-
 # Copyright (c) 2012 Robert M. Norton
-# Copyright (c) 2013 Jonathan D. Woodruff
+# Copyright (c) 2013 Jonathan Woodruff
 # Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
