@@ -29,28 +29,38 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_add_overflow_wrong_sign(BaseCHERITestCase):
+
+    @attr('ignorebadex')
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 
+    @attr('ignorebadex')
     def test_returned(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by add instruction")
 
+    @attr('ignorebadex')
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 1, "add exception handler not run")
 
+    @attr('ignorebadex')
     def test_exl_in_handler(self):
         self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
 
+    @attr('ignorebadex')
     def test_cause_bd(self):
         self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")
 
+    @attr('ignorebadex')
     def test_cause_code(self):
         self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 12, "Code not set to Ov")
 
+    @attr('ignorebadex')
     def test_not_exl_after_handler(self):
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
 
+    @attr('ignorebadex')
     def test_result_not_written(self):
         self.assertRegisterEqual(self.MIPS.t0, 0xdeadbeefdeadbeef, "Result register should not be written on exception.")
