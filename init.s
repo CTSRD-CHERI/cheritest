@@ -57,8 +57,15 @@ start:
                 sll     $t0, $v0, 10 # Allocate 1k stack per thread. XXX need to fix __heap_top__
                 dsubu   $fp, $t0
 		daddu 	$sp, $fp, -32
-
-        
+/*
+		mfc0    $t0, $15, 1
+		andi    $t0, $t0, 0xFFFF
+		dli     $k0, 0x400  
+		mul     $k0, $k0, $t0  
+		daddu   $sp, $sp, $k0  
+		daddu   $sp, $sp, -64       
+		nop  
+*/        
                 dla     $a0, reset_barrier
                 dla     $ra, all_threads    # cheeky tail call to skip exception handler install on non-zero threads
                 bgtz    $v0, thread_barrier # enter barrier and spin if not thread 0

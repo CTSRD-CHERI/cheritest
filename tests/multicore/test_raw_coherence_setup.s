@@ -75,6 +75,27 @@ start:
 		nop
 		nop                
 
+		nop
+		nop                
+		nop
+		nop                
+		nop
+		nop                
+		nop
+		nop
+		nop                
+		nop
+		nop                
+		nop
+		nop	
+		nop
+		nop                
+		nop
+		nop                
+		nop
+		nop		
+		nop
+
                 # Terminate the simulator 
                 mtc0    $v0, $23 
 

@@ -1,6 +1,11 @@
 #-
-# Copyright (c) 2012 Robert M. Norton
+# Copyright (c) 2013 Alan A. Mujumdar
+# Copyright (c) 2011 Robert N. M. Watson
 # All rights reserved.
+#
+# This software was developed by SRI International and the University of
+# Cambridge Computer Laboratory under DARPA/AFRL contract (FA8750-10-C-0237)
+# ("CTSRD"), as part of the DARPA CRASH research programme.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -22,34 +27,9 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
+#
+from cheritest_tools import BaseCHERITestCase
 
-# Simple TLB test which configures a TLB entry for the lowest virtual
-# page in the xuseg segment and attempts a store via it.
-
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
-
-.global test
-test:   
-        dla     $a0, 0x900000007f804000  # PIC_BASE
-        dla     $t0, 0x80000004          # enable irq 2, forward to IP4
-        sd      $t0, 16($a0)
-        dadd    $a1, $a0, 0x2000         # PIC_IP_READ_BASE        
-        li      $t0, 6
-        sd      $t0, 128($a1)            # set irq 2 and 1
-        ld      $a2, 0($a1)              # read irq pending
-        dmfc0   $a3, $13                 # read cause reg
-        sd      $t0, 256($a1)            # clear irq 2
-        ld      $a4, 0($a1)              # read irq pending
-	#jr      $ra
-	#nop
-        mtc0    $v0, $26 
-        nop    
-        nop  
-        mtc0    $v0, $23   
-
-end:
-	b       end
-	nop
+class test_raw_coherence_mp_loop(BaseCHERITestCase):
+    def test_message_passing(self):
+        self.assertRegisterEqual(self.MIPS.a0, 1, "Inital value was read instead of the new value")
