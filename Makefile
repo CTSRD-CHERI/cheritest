@@ -961,6 +961,8 @@ GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 L3_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
+L3_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
+	$(L3_LOGDIR)/,$(TESTS)))
 
 SIM_FUZZ_TEST_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_LOGS))
 SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED_LOGS))
@@ -1030,7 +1032,7 @@ cleantest:
 	rm -f $(CHERI_TEST_LOGS) $(CHERI_TEST_CACHED_LOGS)
 	rm -f $(GXEMUL_TEST_LOGS) $(GXEMUL_TEST_CACHED_LOGS)
 	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
-	rm -f $(L3_TEST_LOGS)
+	rm -f $(L3_TEST_LOGS) $(L3_TEST_CACHED_LOGS)
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
@@ -1272,6 +1274,9 @@ gxemul-build:
 
 l3-nosetest: all $(L3_TEST_LOGS)
 	PYTHONPATH=tools/sim LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
+
+l3-nosetest-cached: all $(L3_TEST_CACHED_LOGS)
+	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3_cached.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
 	gcc -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
