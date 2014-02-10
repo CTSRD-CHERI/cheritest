@@ -839,6 +839,7 @@ and not capabilities \
 and not counterdev \
 and not float \
 and not ignorebadex \
+and not llscnotmatching \
 and not mt \
 and not tlb \
 "
