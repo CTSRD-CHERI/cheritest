@@ -67,6 +67,7 @@ start:
 		j       core_0_wait 
 		nop   
 
+# Ensure that both cores have completed the stack setup and are in sync                
 core_0_wait:
                 addi    $t1, $zero, 1234
                 dli     $t2, 0x9800000000001110
@@ -89,6 +90,8 @@ core_1_wait:
                 j       core_1_wait
                 nop
 
+# Core 0 sets initial values (zero's) in two memory location (x and y)
+# Each memory location is then changed to 1's in the order x then y
 core_0:
                 dli     $t3, 0x9800000000001120
                 dli     $a4, 0x9800000000001124
@@ -103,6 +106,9 @@ core_0:
 		j       core_0_finish
 		nop		
 
+# Core 1 checks memory location y to see if its init value has been changed
+# If it has then memory location x is read
+# If x is still zero then this is a serious coherence failure
 core_1:		
 	        dli     $t3, 0x9800000000001120
                 dli     $a4, 0x9800000000001124
@@ -112,6 +118,7 @@ core_1:
 		j       core_1_finish
 		nop
 
+# Ensure that both cores have completed running the test
 core_0_finish:
                 dli     $t2, 0x9800000000001130
                 dli     $t3, 0x9800000000001134
@@ -141,6 +148,11 @@ finish:
 		nop                
 
                 # Terminate the simulator 
+                # many nop's are needed to ensure that both cores have enough
+                # time to dump the register file. From experiments its clear
+                # that even when cores in sync, one of them will kill the 
+                # simulator before the second one has had a chance to finish
+                # the dump 
                 nop
                 nop 
                 nop
