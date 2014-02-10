@@ -27,35 +27,36 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
 
-class test_raw_addu(BaseCHERITestCase):
-    def test_independent_inputs(self):
-        '''Check that simple addu worked, no input modification'''
-        self.assertRegisterEqual(self.MIPS.s3, 1, "addu modified first input")
-        self.assertRegisterEqual(self.MIPS.s4, 2, "addu modified second input")
-        self.assertRegisterEqual(self.MIPS.a0, 3, "addu failed")
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-    def test_into_first_input(self):
-        self.assertRegisterEqual(self.MIPS.a1, 3, "addu into first input failed")
+#
+# Test the 32-bit addu operation with the upper 32 bits of a 64 bit register
+# not being a valid sign extension of a 32-bit value. The result is
+# "unpredictable" according to the MIPS spec, but BERI ignores the top 32
+# bits.
+#
 
-    def test_into_second_input(self):
-        self.assertRegisterEqual(self.MIPS.a2, 3, "addu into second input failed")
+		.global start
+start:
+		dli	$t0, 0x0010000000000000		# top 32b -> 0's
+		dli	$t1, 0x0000000000000001
+		addu	$s1, $t0, $t1
 
-    def test_into_both_input(self):
-        self.assertRegisterEqual(self.MIPS.a3, 2, "addu into both inputs failed")
+		dli	$t0, 0xffeffffffffffffe		# top 32b -> 1's
+		dli	$t1, 0x0000000000000001
+		addu	$s2, $t0, $t1
 
-    def test_pipeline(self):
-        self.assertRegisterEqual(self.MIPS.a4, 6, "addu-to-addu pipeline failed")
+		# Dump registers in the simulator
+		mtc0 $v0, $26
+		nop
+		nop
 
-    def test_pos_neg_to_zero(self):
-        self.assertRegisterEqual(self.MIPS.a5, 0, "positive plus negative to zero failed")
-
-    def test_neg_neg_to_neg(self):
-        self.assertRegisterEqual(self.MIPS.a6, 0xfffffffffffffffe, "negative plus negative to 64-bit sign-extended negative failed")
-
-    def test_neg_pos_to_pos(self):
-        self.assertRegisterEqual(self.MIPS.a7, 1, "negative plus positive to positive failed")
-
-    def test_neg_pos_to_neg(self):
-        self.assertRegisterEqual(self.MIPS.s0, 0xffffffffffffffff, "positive plus negative to 64-bit sign-extended negative failed")
+		# Terminate the simulator
+	        mtc0 $v0, $23
+end:
+		b end
+		nop

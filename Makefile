@@ -120,6 +120,7 @@ RAW_ALU_FILES=					\
 		test_raw_addi.s			\
 		test_raw_addiu.s		\
 		test_raw_addu.s			\
+		test_raw_addu_ex.s		\
 		test_raw_and.s			\
 		test_raw_arithmetic_combo.s	\
 		test_raw_sub.s			\
