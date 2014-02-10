@@ -84,16 +84,6 @@ start:
 		li	$s0, 1
 		add	$s0, $s0, -2	# to 0xffffffffffffffff
 
-		#
-		# Muck around with higher 32 bits in a way that should be
-		# masked in the output due to sign extension at 32 bits.
-		#
-		dli	$t0, 0x0010000000000000		# top 32b -> 0's
-		addiu	$s1, $t0, 1
-
-		dli	$t0, 0xffeffffffffffffe		# top 32b -> 1's
-		addiu	$s2, $t0, 1
-
 		# Dump registers in the simulator
 		mtc0 $v0, $26
 		nop
