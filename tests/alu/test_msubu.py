@@ -38,13 +38,13 @@ class test_msubu(BaseCHERITestCase):
 
     def test_msubu_2(self):
 	'''Test low word of msubu result, positive argument'''
-        self.assertRegisterEqual(self.MIPS.a1, 4, "maddu gave incorrect result")
+        self.assertRegisterEqual(self.MIPS.a1, 4, "msubu gave incorrect result")
 
     def test_msubu_3(self):
-        '''Test high word of maddu result, negative argument'''
-        self.assertRegisterEqual(self.MIPS.a2, 0xfffffffffffffffe, "maddu gave incorrect result")
+        '''Test high word of msubu result, negative argument'''
+        self.assertRegisterEqual(self.MIPS.a2, 0xfffffffffffffffe, "msubu gave incorrect result")
 
     def test_msub_4(self):
-        '''Test low word of subu result, negative argument'''
-        self.assertRegisterEqual(self.MIPS.a3, 6, "maddu gave incorrect result")
+        '''Test low word of msubu result, negative argument'''
+        self.assertRegisterEqual(self.MIPS.a3, 6, "msubu gave incorrect result")
 
