@@ -59,9 +59,3 @@ class test_raw_subu(BaseCHERITestCase):
 
     def test_neg_pos_to_neg(self):
         self.assertRegisterEqual(self.MIPS.s0, 0xffffffffffffffff, "positive minus positive to 64-bit sign-extended negative failed")
-
-    def test_pos_sign_extend(self):
-        self.assertRegisterEqual(self.MIPS.s1, 1, "positive 64-bit sign extend failed")
-
-    def test_neg_sign_extend(self):
-        self.assertRegisterEqual(self.MIPS.s2, 0xfffffffffffffffe, "negative 64-bit sign extend failed")
