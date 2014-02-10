@@ -833,7 +833,8 @@ and not mt              \
 "
 
 L3_NOSEFLAGS=-A "\
-not capabilities \
+not beriinitial \
+and not capabilities \
 and not counterdev \
 and not float \
 and not ignorebadex \

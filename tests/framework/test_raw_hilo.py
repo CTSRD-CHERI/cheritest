@@ -28,10 +28,13 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_hilo(BaseCHERITestCase):
+    @attr('beriinitial')
     def test_init_hi(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "HI non-zero on reset")
 
+    @attr('beriinitial')
     def test_init_lo(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "LO non-zero on reset")
