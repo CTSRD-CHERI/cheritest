@@ -835,6 +835,7 @@ L3_NOSEFLAGS=-A "\
 not capabilities \
 and not counterdev \
 and not float \
+and not ignorebadex \
 and not mt \
 and not tlb \
 "
