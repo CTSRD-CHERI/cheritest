@@ -27,35 +27,33 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
 
-class test_raw_sub(BaseCHERITestCase):
-    def test_independent_inputs(self):
-        '''Check that simple sub worked, no input modification'''
-        self.assertRegisterEqual(self.MIPS.s3, 2, "sub modified first input")
-        self.assertRegisterEqual(self.MIPS.s4, 1, "sub modified second input")
-        self.assertRegisterEqual(self.MIPS.a0, 1, "sub failed")
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-    def test_into_first_input(self):
-        self.assertRegisterEqual(self.MIPS.a1, 1, "sub into first input failed")
+# Test the 32-bit 'sub' instruction with registers whose upper 32 bits are
+# not the valid sign extension of the lower 32 bits. The result is
+# "unpredictable" according to the MIPS specification.
 
-    def test_into_second_input(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "sub into second input failed")
+		.global start
+start:
+		dli	$t0, 0x0010000000000002		# top 32b -> 0's
+		dli	$t1, 0x0000000000000001
+		sub	$s1, $t0, $t1
 
-    def test_into_both_input(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0, "sub into both inputs failed")
+		dli	$t0, 0xffefffffffffffff		# top 32b -> 1's
+		dli	$t1, 0x0000000000000001
+		sub	$s2, $t0, $t1
 
-    def test_pipeline(self):
-        self.assertRegisterEqual(self.MIPS.a4, 1, "sub-to-sub pipeline failed")
+		# Dump registers in the simulator
+		mtc0 $v0, $26
+		nop
+		nop
 
-    def test_pos_neg_to_zero(self):
-        self.assertRegisterEqual(self.MIPS.a5, 0, "positive minus negative to zero failed")
-
-    def test_neg_neg_to_neg(self):
-        self.assertRegisterEqual(self.MIPS.a6, 0xfffffffffffffffe, "negative minus negative to negative failed")
-
-    def test_neg_pos_to_pos(self):
-        self.assertRegisterEqual(self.MIPS.a7, 1, "negative minus positive to positive failed")
-
-    def test_neg_pos_to_neg(self):
-        self.assertRegisterEqual(self.MIPS.s0, 0xffffffffffffffff, "positive minus negative to negative failed")
+		# Terminate the simulator
+	        mtc0 $v0, $23
+end:
+		b end
+		nop
