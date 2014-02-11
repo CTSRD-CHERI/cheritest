@@ -70,7 +70,7 @@ test:		.ent test
 		dli	$a5, 0
 
 		#
-		# Set up a taken branh with a trap instruction in the
+		# Set up a taken branch with a trap instruction in the
 		# branch-delay slot.  EPC should point at the branch, not the
 		# trap instruction.
 		#
