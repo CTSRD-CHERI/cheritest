@@ -62,84 +62,51 @@ start:
 		daddu   $sp, $sp, $k0
 		daddu   $sp, $sp, -64 
 		
-		bnez    $t0, core_1_wait
+		bnez    $t0, core_1
 		nop
-		j       core_0_wait 
+		j       core_0 
 		nop   
-
-# Ensure that both cores have completed the stack setup and are in sync                
-core_0_wait:
-                addi    $t1, $zero, 1234
-                dli     $t2, 0x9800000000001110
-                dli     $t3, 0x9800000000001114 
-                sw      $t1, 0($t2)
-                lw      $t1, 0($t3)
-                bnez    $t1, core_0
-                nop
-                j       core_0_wait
-                nop
-
-core_1_wait:
-                addi    $t1, $zero, 1234
-                dli     $t2, 0x9800000000001114
-                dli     $t3, 0x9800000000001110 
-                sw      $t1, 0($t2)
-                lw      $t1, 0($t3)
-                bnez    $t1, core_1
-                nop
-                j       core_1_wait
-                nop
 
 # Core 0 sets initial values (zero's) in two memory location (x and y)
 # Each memory location is then changed to 1's in the order x then y
 core_0:
-                dli     $t3, 0x9800000000001120
-                dli     $a4, 0x9800000000001124
+                # setup test address 
+                dla     $gp, dword  
+                dli     $t0, 0x00ffffffffffffff 
+                and     $gp, $gp, $t0
+                dli     $t0, 0x9800000000000000
+                daddu   $t0, $gp, $t0 
+
                 addi    $t1, $zero, 0
-                sw      $t1, 0($t3)
+                sw      $t1, 0($t0)
                 addi    $t2, $zero, 0
-                sw      $t2, 0($a4)
+                sw      $t2, 8($t0)
                 addi    $t1, $t1, 1
-                sw      $t1, 0($t3)
+                sw      $t1, 0($t0)
                 addi    $t2, $t2, 1
-                sw      $t2, 0($a4)
-		j       core_0_finish
+                sw      $t2, 8($t0)
+		j       finish
 		nop		
 
 # Core 1 checks memory location y to see if its init value has been changed
 # If it has then memory location x is read
 # If x is still zero then this is a serious coherence failure
 core_1:		
-	        dli     $t3, 0x9800000000001120
-                dli     $a4, 0x9800000000001124
-                lw      $t2, 0($a4)
+                # setup test address 
+                dla     $gp, dword  
+                dli     $t0, 0x00ffffffffffffff 
+                and     $gp, $gp, $t0
+                dli     $t0, 0x9800000000000000
+                daddu   $t0, $gp, $t0 
+                j       core_1_test
+                nop
+
+core_1_test:
+                lw      $t2, 8($t0)
 		beqz    $t2, core_1
-                lw      $a0, 0($t3)	
-		j       core_1_finish
+                lw      $a0, 0($t0)	
+		j       finish
 		nop
-
-# Ensure that both cores have completed running the test
-core_0_finish:
-                dli     $t2, 0x9800000000001130
-                dli     $t3, 0x9800000000001134
-                addi    $a4, $zero, 1
-                sw      $a4, 0($t3)
-                lw      $t1, 0($t2)
-                beqz    $t1, core_0_finish
-                nop
-                j       finish
-                nop
-
-core_1_finish:
-                dli     $t2, 0x9800000000001130
-                dli     $t3, 0x9800000000001134
-                addi    $a4, $zero, 1
-                sw      $a4, 0($t2)
-                lw      $t1, 0($t3)
-                beqz    $t1, core_1_finish
-                nop
-                j       finish
-                nop
 
 finish:
 		# Dump registers in the simulator
@@ -183,3 +150,5 @@ finish:
 end:
 		b       end
 		nop
+
+dword:          .dword  0x0123456789abcdef
