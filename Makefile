@@ -841,6 +841,7 @@ L3_NOSEFLAGS=-A "\
 not beriinitial \
 and not capabilities \
 and not counterdev \
+and not dumpicache \
 and not float \
 and not ignorebadex \
 and not llscnotmatching \
