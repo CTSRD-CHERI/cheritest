@@ -62,33 +62,10 @@ start:
 		daddu   $sp, $sp, $k0
 		daddu   $sp, $sp, -64 
 		
-		bnez    $t0, core_1_wait
+		bnez    $t0, core_1
 		nop
-		j       core_0_wait 
+		j       core_0 
 		nop   
-
-# Ensure that both cores have completed the stack setup and are in sync                
-core_0_wait:
-                addi    $t1, $zero, 1234
-                dli     $t2, 0x9800000000001110
-                dli     $t3, 0x9800000000001114 
-                sw      $t1, 0($t2)
-                lw      $t1, 0($t3)
-                bnez    $t1, core_0
-                nop
-                j       core_0_wait
-                nop
-
-core_1_wait:
-                addi    $t1, $zero, 1234
-                dli     $t2, 0x9800000000001114
-                dli     $t3, 0x9800000000001110 
-                sw      $t1, 0($t2)
-                lw      $t1, 0($t3)
-                bnez    $t1, core_1
-                nop
-                j       core_1_wait
-                nop
 
 # Core 0 sets initial values (zero's) in two memory location (x and y)
 # Each memory location is then changed to 1's in the order x then y
@@ -111,7 +88,7 @@ core_0:
                 ld      $a2, 0($t0)
                 ld      $a3, 0($t0)
 	
-		j       core_0_finish
+		j       finish
 		nop		
 
 # Core 1 checks memory location y to see if its init value has been changed
@@ -134,31 +111,8 @@ core_1_loads:
                 nop
                 ld      $a0, 0($t0)
                 ld      $a1, 0($t0)
-		j       core_1_finish
+		j       finish
 		nop
-
-# Ensure that both cores have completed running the test
-core_0_finish:
-                dli     $t2, 0x9800000000001130
-                dli     $t3, 0x9800000000001134
-                addi    $a4, $zero, 1
-                sw      $a4, 0($t3)
-                lw      $t1, 0($t2)
-                beqz    $t1, core_0_finish
-                nop
-                j       finish
-                nop
-
-core_1_finish:
-                dli     $t2, 0x9800000000001130
-                dli     $t3, 0x9800000000001134
-                addi    $a4, $zero, 1
-                sw      $a4, 0($t2)
-                lw      $t1, 0($t3)
-                beqz    $t1, core_1_finish
-                nop
-                j       finish
-                nop
 
 finish:
 		# Dump registers in the simulator
