@@ -28,11 +28,17 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_mtc0_sign_extend(BaseCHERITestCase):
+
+    def test_mtc0_lui(self):
+        '''Test we can load a negative 32-bit value into $a0'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000000ffff0000, "LUI instruction failed")
+
+    @attr('mtc0signex')
     def test_mtc0_signext(self):
         '''MTC0 should sign extend (some documentation suggests all 64-bits should be copied but sign-extension is logical and in line with other operations and GXemul)'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x00000000ffff0000, "LUI instruction failed")
         self.assertRegisterEqual(self.MIPS.a0|0xffffffff00000000, self.MIPS.a2, "Value not copied in and out of EPC correctly")
 
     def test_mfc0_signext_mtc0(self):
