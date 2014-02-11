@@ -846,6 +846,7 @@ and not ignorebadex \
 and not llscnotmatching \
 and not mt \
 and not tlb \
+and not watch \
 "
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
