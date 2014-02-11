@@ -73,6 +73,10 @@ test:		.ent test
 
 		#
 		# Trigger exception.
+                #
+                # The result is "unpredictable" accoeding ti the MIPS
+		# specification, because there is no matching LL.
+		# BERI will raise an exception due to the unaligned address.
 		#
 		dla	$s0, bytes
 desired_epc:
