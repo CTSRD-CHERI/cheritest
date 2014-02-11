@@ -62,14 +62,15 @@ start:
 		daddu   $sp, $sp, $k0
 		daddu   $sp, $sp, -64 
 		
-		bnez    $t0, core_1
+		bnez    $t0, core_1_corr1
 		nop
-		j       core_0 
+		j       core_0_corr1 
 		nop   
 
+# CoRR1 Test 
 # Core 0 sets initial values (zero's) in two memory location (x and y)
 # Each memory location is then changed to 1's in the order x then y
-core_0:
+core_0_corr1:
                 # setup test address
                 dla     $gp, dword
                 dli     $t0, 0x00ffffffffffffff
@@ -88,13 +89,14 @@ core_0:
                 ld      $a2, 0($t0)
                 ld      $a3, 0($t0)
 	
-		j       finish
+		j       core_0_coww
 		nop		
 
+# CoRR1 Test
 # Core 1 checks memory location y to see if its init value has been changed
 # If it has then memory location x is read
 # If x is still zero then this is a serious coherence failure
-core_1:		
+core_1_corr1:		
                 # setup test address
                 dla     $gp, dword
                 dli     $t0, 0x00ffffffffffffff
@@ -111,9 +113,39 @@ core_1_loads:
                 nop
                 ld      $a0, 0($t0)
                 ld      $a1, 0($t0)
-		j       finish
+		j       core_1_coww
 		nop
 
+#CoWW Test
+core_0_coww:
+                addi    $t1, $zero, 7
+                addi    $t2, $zero, 9
+                sw      $t1, 0($t0)
+                sw      $t2, 0($t0)
+                j       core_0_corw 
+                nop
+
+core_1_coww:
+                ld      $a2, 0($t0)
+                j       core_1_corw
+                nop
+
+#CoRW1 Test
+core_0_corw:
+                addi    $t1, $zero, 3
+                lw      $a0, 16($t0)  
+                sw      $t1, 16($t0)
+                j       finish
+                nop
+
+core_1_corw:
+                addi    $t1, $zero, 6
+                lw      $a3, 24($t0)  
+                sw      $t1, 24($t0)
+                j       finish
+                nop
+               
+# End all tests
 finish:
 		# Dump registers in the simulator
 		mtc0    $v0, $26 
