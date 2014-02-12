@@ -30,19 +30,27 @@
 from cheritest_tools import BaseCHERITestCase
 
 class test_raw_sll(BaseCHERITestCase):
-        def test_a1(self):
-		'''Test a SLL of zero'''
-		self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")
-		self.assertRegisterEqual(self.MIPS.a1, 0x0000000076543210, "Shift of zero resulting in truncation failed")
+    def test_a1(self):
+        '''Test a SLL of zero'''
+        self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")
+        self.assertRegisterEqual(self.MIPS.a1, 0x0000000076543210, "Shift of zero resulting in truncation failed")
 
-	def test_a2(self):
-		'''Test a SLL of one'''
-		self.assertRegisterEqual(self.MIPS.a2, 0xffffffffeca86420, "Shift of one resulting in sign extension failed")
+    def test_a2(self):
+       '''Test a SLL of one'''
+       self.assertRegisterEqual(self.MIPS.a2, 0xffffffffeca86420, "Shift of one resulting in sign extension failed")
 
-	def test_a3(self):
-		'''Test a SLL of sixteen'''
-		self.assertRegisterEqual(self.MIPS.a3, 0x0000000032100000, "Shift of sixteen failed")
+    def test_a3(self):
+        '''Test a SLL of sixteen'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0000000032100000, "Shift of sixteen failed")
 
-	def test_a4(self):
-		'''Test a SLL of 31(max)'''
-		self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000000, "Shift of thirty-one (max) failed")
+    def test_a4(self):
+        '''Test a SLL of 31(max)'''
+        self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000000, "Shift of thirty-one (max) failed")
+
+    def test_a5(self):
+        '''Test that 0xfedcba98 was loaded into a5'''
+        self.assertRegisterEqual(self.MIPS.a5, 0xfedcba98, "dli did not correctly load 0xfedcba98")
+
+    def test_a6(self):
+        '''Test a SLL of zero resulting in sign extension'''
+        self.assertRegisterEqual(self.MIPS.a6, 0xfffffffffedcba98, "SLL of zero did not sign extend the result")

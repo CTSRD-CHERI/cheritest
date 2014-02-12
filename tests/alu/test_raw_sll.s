@@ -50,6 +50,9 @@ start:
 		sll	$a3, $a0, 16
 		sll	$a4, $a0, 31
 
+		dli	$a5, 0xfedcba98
+		sll	$a6, $a5, 0
+
 		# Dump registers in the simulator
 		mtc0 $v0, $26
 		nop
