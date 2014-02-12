@@ -38,6 +38,9 @@
 # Any extra padding added on the right should be zero.  There should be sign
 # extension in the 32-bit result for the upper 32 bits
 #
+# Unlike most other 32-bit operations, SLL does not require the operand to
+# be a valid sign-extension of a 32-bit value.
+#
 
 		.global start
 start:
