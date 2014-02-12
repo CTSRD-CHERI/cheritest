@@ -1,6 +1,5 @@
 #-
 # Copyright (c) 2011 William M. Morland
-# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -42,17 +41,16 @@
 
 		.global start
 start:
-		li	$t0, 0x76543210
-		sra	$a0, $t0, 0
-		sra	$a1, $t0, 1
-		sra	$a2, $t0, 16
-		sra	$a3, $t0, 31
+		dli	$a0, 0xfedcba9876543210
+		sra	$a1, $a0, 0
+		sra	$a2, $a0, 1
+		sra	$a3, $a0, 16
+		sra	$a4, $a0, 31
 
-		li	$t1, 0xfedcba98
-		sra	$a4, $t1, 0
-		sra	$a5, $t1, 1
-		sra	$a6, $t1, 16
-		sra	$a7, $t1, 31
+		dli	$a5, 0x00000000ffffffff
+		sra	$a6, $a5, 0
+		sra	$a7, $a5, 1
+		sra	$t0, $a5, 16
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
