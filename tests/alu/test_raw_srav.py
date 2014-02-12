@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2011 William M. Morland
+# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -28,34 +28,39 @@
 # SUCH DAMAGE.
 #
 from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
 class test_raw_srav(BaseCHERITestCase):
-        def test_a1(self):
-		'''Test a SRAV of zero'''
-		self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")
-		self.assertRegisterEqual(self.MIPS.a1, 0x0000000076543210, "Shift of zero resulting in truncation failed")
 
-	def test_a2(self):
-		'''Test a SRAV of one'''
-		self.assertRegisterEqual(self.MIPS.a2, 0x000000003b2a1908, "Shift of one failed")
+    def test_srav_0(self):
+        '''Test SRAV by 0 bits'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x76543210, "SRAV by 0 bits failed")
 
-	def test_a3(self):
-		'''Test a SRAV of sixteen'''
-		self.assertRegisterEqual(self.MIPS.a3, 0x0000000000007654, "Shift of sixteen failed")
+    def test_srav_1(self):
+        '''Test SRAV by 1 bit'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x3b2a1908, "SRAV by 1 bit failed")
 
-	def test_a4(self):
-		'''Test a SRAV of 31(max)'''
-		self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000000, "Shift of thirty-one (max) failed")
+    def test_srav_16(self):
+        '''Test SRAV by 16 bits'''
+        self.assertRegisterEqual(self.MIPS.a2, 0x7654, "SRAV by 16 bits failed")
 
-	def test_a6(self):
-		'''Test a SRAV of zero with sign extension'''
-		self.assertRegisterEqual(self.MIPS.a5, 0x00000000ffffffff, "Initial value from dli failed to load")
-		self.assertRegisterEqual(self.MIPS.a6, 0xffffffffffffffff, "Shift of zero with sign extension failed")
+    def test_srav_31(self):
+        '''Test SRAV by 31 bits'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0, "SRAV by 31 bits failed")
 
-	def test_a7(self):
-		'''Test a SRAV of one with sign extension'''
-		self.assertRegisterEqual(self.MIPS.a7, 0xffffffffffffffff, "Shift of one with sign extension failed")
+    def test_srav_0_neg(self):
+        '''Test SRAV by 0 bits of a negative value'''
+        self.assertRegisterEqual(self.MIPS.a4, 0xfffffffffedcba98, "SRAV by 0 bits of a negative value failed")
 
-	def test_t0(self):
-		'''Test a SRAV of sixteen with sign extension'''
-		self.assertRegisterEqual(self.MIPS.t0, 0xffffffffffffffff, "Shift of sixteen with sign extension failed")
+    def test_srav_1_neg(self):
+        '''Test SRAV by 1 bits of a negative value'''
+        self.assertRegisterEqual(self.MIPS.a5, 0xffffffffff6e5d4c, "SRAV by 1 bit of a negative value failed")
+
+    def test_srav_16_neg(self):
+        '''Test SRAV by 16 bits of a negative value'''
+        self.assertRegisterEqual(self.MIPS.a6, 0xfffffffffffffedc, "SRAV by 16 bits of a negative value failed")
+
+    def test_srav_31_neg(self):
+        '''Test SRAV by 31 bits of a negative value'''
+        self.assertRegisterEqual(self.MIPS.a7, 0xffffffffffffffff, "SRAV by 31 bits of a negative value failed")
+

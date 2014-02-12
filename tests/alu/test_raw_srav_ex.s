@@ -1,6 +1,5 @@
 #-
 # Copyright (c) 2011 William M. Morland
-# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -34,28 +33,37 @@
 .set nobopt
 .set noat
 
+#
+# Tests the Shift Right Arithmetic Variable instruction which is a 32-bit
+# instruction.  Any new far left bits should  be correctly sign extended.
+# There should be sign extension in the 32-bit result for the upper 32 bits.
+#
 
 		.global start
 start:
-		li	$t0, 0x76543210
-		li	$t1, 0
-		srav	$a0, $t0, $t1
-		li	$t1, 1
-		srav	$a1, $t0, $t1
-		li	$t1, 16
-		srav	$a2, $t0, $t1
-		li	$t1, 31
-		srav	$a3, $t0, $t1
+		dli	$a0, 0xfedcba9876543210
 
-		li	$t0, 0xfedcba98
-		li	$t1, 0
-		srav	$a4, $t0, $t1
-		li	$t1, 1
-		srav	$a5, $t0, $t1
-		li	$t1, 16
-		srav	$a6, $t0, $t1
-		li	$t1, 31
-		srav	$a7, $t0, $t1
+		li	$a1, 0
+		srav	$a1, $a0, $a1
+
+		li	$a2, 1
+		srav	$a2, $a0, $a2
+
+		li	$a3, 16
+		srav	$a3, $a0, $a3
+
+		li	$a4, 31
+		srav	$a4, $a0, $a4
+
+		dli	$a5, 0x00000000ffffffff
+		li	$a6, 0 
+		srav	$a6, $a5, $a6
+
+		li	$a7, 1
+		srav	$a7, $a5, $a7
+
+		li	$t0, 16
+		srav	$t0, $a5, $t0
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
