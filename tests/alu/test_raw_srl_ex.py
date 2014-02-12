@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2014 Michael Roe
+# Copyright (c) 2011 William M. Morland
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -30,37 +30,31 @@
 from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_srl(BaseCHERITestCase):
+class test_raw_srl_ex(BaseCHERITestCase):
 
-    def test_srl_0(self):
-        '''Test SRL by 0 bits'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x76543210, "SRL by 0 bits failed")
+        @attr('ignorebadex')
+        def test_a1(self):
+		'''Test a SRL of zero'''
+		self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")
+		self.assertRegisterEqual(self.MIPS.a1, 0x0000000076543210, "Shift of zero resulting in truncation failed")
 
-    def test_srl_1(self):
-        '''Test SRL by 1 bit'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x3b2a1908, "SRL by 1 bit failed")
+        @attr('ignorebadex')
+	def test_a2(self):
+		'''Test a SRL of one'''
+		self.assertRegisterEqual(self.MIPS.a2, 0x000000003b2a1908, "Shift of one failed")
 
-    def test_srl_16(self):
-        '''Test SRL by 16 bits'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x7654, "SRL by 16 bits failed")
+        @attr('ignorebadex')
+	def test_a3(self):
+		'''Test a SRL of sixteen'''
+		self.assertRegisterEqual(self.MIPS.a3, 0x0000000000007654, "Shift of sixteen failed")
 
-    def test_srl_31(self):
-        '''Test SRL by 31 bits'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0, "SRL by 31 bits failed")
+        @attr('ignorebadex')
+	def test_a4(self):
+		'''Test a SRL of 31(max)'''
+		self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000000, "Shift of thirty-one (max) failed")
 
-    def test_srl_0_neg(self):
-        '''Test SRL by 0 bits of a negative value'''
-        self.assertRegisterEqual(self.MIPS.a4, 0xfffffffffedcba98, "SRL by 0 bits of a negative value failed")
-
-    def test_srl_1_neg(self):
-        '''Test SRL by 1 bits of a negative value'''
-        self.assertRegisterEqual(self.MIPS.a5, 0x7f6e5d4c, "SRL by 1 bit of a negative value failed")
-
-    def test_srl_16_neg(self):
-        '''Test SRL by 16 bits of a negative value'''
-        self.assertRegisterEqual(self.MIPS.a6, 0xfedc, "SRL by 16 bits of a negative value failed")
-
-    def test_srl_31_neg(self):
-        '''Test SRL by 31 bits of a negative value'''
-        self.assertRegisterEqual(self.MIPS.a7, 0x1, "SRL by 31 bits of a negative value failed")
-
+        @attr('ignorebadex')
+	def test_a6(self):
+		'''Test a SRL of zero with sign extension'''
+		self.assertRegisterEqual(self.MIPS.a5, 0x00000000ffffffff, "Initial value from dli failed to load")
+		self.assertRegisterEqual(self.MIPS.a6, 0xffffffffffffffff, "Shift of zero with sign extension failed")

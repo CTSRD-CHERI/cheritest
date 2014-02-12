@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 William M. Morland
+# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -34,21 +35,22 @@
 .set noat
 
 #
-# Tests the Shift Right Logical instruction which is a 32-bit instruction.
-# Any extra padding added on the left should be zero rather than sign extended
-# There should be sign extension in the 32-bit result for the upper 32 bits.
+# Test the SRL (Shift Right Logical) instruction.
 #
 
 		.global start
 start:
-		dli	$a0, 0xfedcba9876543210
-		srl	$a1, $a0, 0
-		srl	$a2, $a0, 1
-		srl	$a3, $a0, 16
-		srl	$a4, $a0, 31
+		li	$t0, 0x76543210
+		srl	$a0, $t0, 0
+		srl	$a1, $t0, 1
+		srl	$a2, $t0, 16
+		srl	$a3, $t0, 31
 
-		dli	$a5, 0x00000000ffffffff
-		srl	$a6, $a5, 0
+		li	$t1, 0xfedcba98
+		srl	$a4, $t1, 0
+		srl	$a5, $t1, 1
+		srl	$a6, $t1, 16
+		srl	$a7, $t1, 31
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26

@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2014 Michael Roe
+# Copyright (c) 2011 William M. Morland
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -27,40 +27,36 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
-from nose.plugins.attrib import attr
 
-class test_raw_srl(BaseCHERITestCase):
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-    def test_srl_0(self):
-        '''Test SRL by 0 bits'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x76543210, "SRL by 0 bits failed")
+#
+# Tests the Shift Right Logical instruction which is a 32-bit instruction.
+# Any extra padding added on the left should be zero rather than sign extended
+# There should be sign extension in the 32-bit result for the upper 32 bits.
+#
 
-    def test_srl_1(self):
-        '''Test SRL by 1 bit'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x3b2a1908, "SRL by 1 bit failed")
+		.global start
+start:
+		dli	$a0, 0xfedcba9876543210
+		srl	$a1, $a0, 0
+		srl	$a2, $a0, 1
+		srl	$a3, $a0, 16
+		srl	$a4, $a0, 31
 
-    def test_srl_16(self):
-        '''Test SRL by 16 bits'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x7654, "SRL by 16 bits failed")
+		dli	$a5, 0x00000000ffffffff
+		srl	$a6, $a5, 0
 
-    def test_srl_31(self):
-        '''Test SRL by 31 bits'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0, "SRL by 31 bits failed")
+		# Dump registers in the simulator
+		mtc0 $v0, $26
+		nop
+		nop
 
-    def test_srl_0_neg(self):
-        '''Test SRL by 0 bits of a negative value'''
-        self.assertRegisterEqual(self.MIPS.a4, 0xfffffffffedcba98, "SRL by 0 bits of a negative value failed")
-
-    def test_srl_1_neg(self):
-        '''Test SRL by 1 bits of a negative value'''
-        self.assertRegisterEqual(self.MIPS.a5, 0x7f6e5d4c, "SRL by 1 bit of a negative value failed")
-
-    def test_srl_16_neg(self):
-        '''Test SRL by 16 bits of a negative value'''
-        self.assertRegisterEqual(self.MIPS.a6, 0xfedc, "SRL by 16 bits of a negative value failed")
-
-    def test_srl_31_neg(self):
-        '''Test SRL by 31 bits of a negative value'''
-        self.assertRegisterEqual(self.MIPS.a7, 0x1, "SRL by 31 bits of a negative value failed")
-
+		# Terminate the simulator
+	        mtc0 $v0, $23
+end:
+		b end
+		nop
