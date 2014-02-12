@@ -564,6 +564,7 @@ TEST_CP2_FILES=					\
 		test_cp2_sandbox_jal.s		\
 		test_cp2_ccheckperm.s		\
 		test_cp2_cchecktype.s		\
+		test_cp2_cfromptr_null.s	\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\

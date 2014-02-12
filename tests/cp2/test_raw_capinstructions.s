@@ -201,6 +201,8 @@ l3:
 		ccall    $c1,  $c2
 		creturn
 
+		cfromptr $c3, $c1, $zero
+
 		# Dump registers in the simulator
 		mtc0 $v0, $26
 		nop
