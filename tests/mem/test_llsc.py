@@ -65,7 +65,7 @@ class test_llsc(BaseCHERITestCase):
     @attr('llsc')
     @attr('cached')
     def test_ll_sw_sc_failure(self):
-	'''That an ll+sw+sc spanning fails'''
+	'''That an ll+sw+sc spanning a store to the line fails'''
 	self.assertRegisterEqual(self.MIPS.t0, 0, "Interrupted ll+sw+sc succeeded")
 
     @attr('llsc')
