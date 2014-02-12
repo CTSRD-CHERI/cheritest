@@ -27,69 +27,15 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
+from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+class test_raw_addi_ex(BaseCHERITestCase):
 
-#
-# Simple test for addi -- not intended to rigorously check arithmetic
-# correctness, rather, register behaviour and instruction interpretation.
-# Overflow is left to higher-level tests, as exceptions are implied.
-#
+    @attr('ignorebadex')
+    def test_pos_sign_extend(self):
+        self.assertRegisterEqual(self.MIPS.s1, 1, "positive 64-bit sign extend failed")
 
-		.global start
-start:
-		#
-		# addi with independent input and output; preserve input for
-		# test framework so we can check it wasn't improperly
-		# modified.
-		#
-		li	$a0, 1
-		addi	$a1, $a0, 1
-
-		#
-		# addi with input as the output
-		#
-		li	$a2, 1
-		addi	$a2, $a2, 1
-
-		#
-		# Feed output of one straight into the input of another.
-		#
-		li	$a3, 1
-		addi	$a3, $a3, 1
-		addi	$a3, $a3, 1
-
-		#
-		# check that immediate is sign-extended
-		#
-		li	$a4, 1
-		addi	$a4, $a4, -1
-
-		#
-		# simple exercises for signed arithmetic
-		#
-		li	$a5, 1
-		addi	$a5, $a5, -1	# to zero
-
-		li	$a6, -1
-		add	$a6, $a6, -1	# to negative
-
-		li	$a7, -1
-		addi	$a7, $a7, 2	# to positive
-
-		li	$s0, 1
-		add	$s0, $s0, -2	# to negative
-
-		# Dump registers in the simulator
-		mtc0 $v0, $26
-		nop
-		nop
-
-		# Terminate the simulator
-	        mtc0 $v0, $23
-end:
-		b end
-		nop
+    @attr('ignorebadex')
+    def test_neg_sign_extend(self):
+        self.assertRegisterEqual(self.MIPS.s2, 0xffffffffffffffff, "negative 64-bit sign extend failed")
