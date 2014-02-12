@@ -849,10 +849,14 @@ and not counterdev \
 and not dumpicache \
 and not float \
 and not ignorebadex \
+and not invalidateL2 \
 and not llscnotmatching \
 and not mt \
 and not mtc0signex \
 and not tlb \
+and not smalltlb \
+and not bigtlb \
+and not gxemultlb \
 and not watch \
 "
 #
