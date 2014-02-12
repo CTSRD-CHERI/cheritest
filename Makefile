@@ -146,10 +146,11 @@ RAW_ALU_FILES=					\
 		test_raw_srl.s			\
 		test_raw_srl_ex.s		\
 		test_raw_srlv.s			\
+		test_raw_srlv_ex.s		\
 		test_raw_sra.s			\
 		test_raw_sra_ex.s		\
 		test_raw_srav.s			\
-		test_raw_srav_ex.s			\
+		test_raw_srav_ex.s		\
 		test_raw_dsll.s			\
 		test_raw_dsllv.s		\
 		test_raw_dsll32.s		\

@@ -1,6 +1,5 @@
 #-
 # Copyright (c) 2011 William M. Morland
-# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -28,45 +27,34 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
+from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+class test_raw_srlv_ex(BaseCHERITestCase):
 
-#
-# Test the SRLV (Shift Right Logical Variable) instruction.
-#
+    @attr('ignorebadex')
+    def test_a1(self):
+        '''Test a SRLV of zero'''
+        self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")
+        self.assertRegisterEqual(self.MIPS.a1, 0x0000000076543210, "Shift of zero resulting in truncation failed")
 
-		.global start
-start:
-		li	$t0, 0x76543210
-		li	$t1, 0
-		srlv	$a0, $t0, $t1
-		li	$t1, 1
-		srlv	$a1, $t0, $t1
-		li	$t1, 16
-		srlv	$a2, $t0, $t1
-		li	$t1, 31
-		srlv	$a3, $t0, $t1
+    @attr('ignorebadex')
+    def test_a2(self):
+        '''Test a SRLV of one'''
+        self.assertRegisterEqual(self.MIPS.a2, 0x000000003b2a1908, "Shift of one failed")
 
-		li	$t0, 0xfedcba98
-		li	$t1, 0
-		srlv	$a4, $t0, $t1
-		li	$t1, 1
-		srlv	$a5, $t0, $t1
-		li	$t1, 16
-		srlv	$a6, $t0, $t1
-		li	$t1, 31
-		srlv	$a7, $t0, $t1
+    @attr('ignorebadex')
+    def test_a3(self):
+        '''Test a SRLV of sixteen'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0000000000007654, "Shift of sixteen failed")
 
-		# Dump registers in the simulator
-		mtc0 $v0, $26
-		nop
-		nop
+    @attr('ignorebadex')
+    def test_a4(self):
+        '''Test a SRLV of 31(max)'''
+        self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000000, "Shift of thirty-one (max) failed")
 
-		# Terminate the simulator
-	        mtc0 $v0, $23
-end:
-		b end
-		nop
+    @attr('ignorebadex')
+    def test_a6(self):
+        '''Test a SRLV of zero with sign extension'''
+        self.assertRegisterEqual(self.MIPS.a5, 0x00000000ffffffff, "Initial value from dli failed to load")
+        self.assertRegisterEqual(self.MIPS.a6, 0xffffffffffffffff, "Shift of zero with sign extension failed")
