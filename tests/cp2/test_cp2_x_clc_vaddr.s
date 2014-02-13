@@ -82,7 +82,7 @@ test:		.ent test
 		#
 
                 cmove     $c2, $c1
-		ccleartag $c1
+		cfromptr  $c1, $c1, $0
 
                 # Calculate offset of 'cap1' from 'data'
                 dla     $a6, cap1

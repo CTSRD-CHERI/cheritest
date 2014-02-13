@@ -79,7 +79,7 @@ test:		.ent test
 		# Clear $c1 so we can tell if the load happened
 		#
 
-		ccleartag $c1
+		cfromptr  $c1, $c1, $0
 
 		#
 		# Reload from an unaligned address
