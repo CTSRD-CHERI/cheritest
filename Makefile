@@ -848,6 +848,7 @@ L3_NOSEFLAGS=-A "\
 not beri \
 and not beriinitial \
 and not capabilities \
+and not clang \
 and not comparereg \
 and not config3 \
 and not counterdev \
