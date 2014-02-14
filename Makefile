@@ -853,6 +853,7 @@ and not invalidateL2 \
 and not llscnotmatching \
 and not mt \
 and not mtc0signex \
+and not rdhwr \
 and not tlb \
 and not smalltlb \
 and not bigtlb \
