@@ -62,7 +62,7 @@ class test_cp0_reg_init(BaseCHERITestCase):
     ##
     ## For CHERI, Report no coprocessors enabled; CP0 is always available in
     ## kernel mode.
-    @attr('cheri')
+    @attr('beri')
     def test_status_cu(self):
         self.assertRegisterEqual((self.MIPS.a4) >> 28 & 0x1, 0, "Unexpected CP0 coprocessor availability on reset")
 
@@ -108,11 +108,12 @@ class test_cp0_reg_init(BaseCHERITestCase):
  
     ## It doesn't really matter what vendor we report as, but we should indicate
     ## that we are R4400ish
-    @attr('cheri')
+    @attr('beri')
     def test_prid_imp_reg(self):
         '''Test that the PRId register indicates a R4400ish vendor'''
         self.assertRegisterEqual((self.MIPS.a5 >> 8) & 0xff, 0x04, "Unexpected CP0 vendor value on reset")
 
+    @attr('beri')
     def test_config_reg(self):
         '''Test initial value of CP0.config0'''
         self.assertRegisterEqual(self.MIPS.a6, 0x8000c083, "Unexpected CP0 config register value on reset")

@@ -819,7 +819,7 @@ and not counterdev      \
 and not watch           \
 and not capabilities    \
 and not clang           \
-and not cheri           \
+and not beri            \
 and not nofloat         \
 and not floatpaired     \
 and not floatindexed    \
@@ -843,7 +843,8 @@ and not mt              \
 "
 
 L3_NOSEFLAGS=-A "\
-not beriinitial \
+not beri \
+and not beriinitial \
 and not capabilities \
 and not counterdev \
 and not dumpicache \
