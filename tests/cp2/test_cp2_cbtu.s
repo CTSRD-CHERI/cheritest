@@ -53,7 +53,7 @@ L1:
 		nop
 		dli	$a1, 0
 		dli	$a2, 0
-		ccleartag $c1
+		ccleartag $c1, $c1
 		cbtu	$c1, L2	# This branch should be taken
 		dli	$a2, 1  # Branch delay slot is executed even if branch
 		dli	$a1, 1

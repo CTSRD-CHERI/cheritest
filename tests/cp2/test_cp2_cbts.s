@@ -53,7 +53,7 @@ test:		.ent test
 L1:
 		nop
 		dli	$a1, 0
-		ccleartag $c1
+		ccleartag $c1, $c1
 		cbts	$c1, L2	# This branch should not be taken
 		nop 		# Branch delay slot
 		dli	$a1, 1

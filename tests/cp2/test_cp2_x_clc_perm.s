@@ -87,7 +87,7 @@ test:		.ent test
 		# Clear c1, so we can tell if it has been reloaded
 		#
 
-		ccleartag $c1
+		cfromptr $c1, $c0, $zero
 		
 		#
 		# Try to load the capability via a capability

@@ -79,7 +79,7 @@ test:		.ent test
 		# Clear $c0's tag, so it isn't a valid capability
 		#
 
-		ccleartag $c0
+		ccleartag $c0, $c0
 
 
 		dla	$t1, data

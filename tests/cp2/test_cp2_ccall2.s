@@ -159,7 +159,7 @@ L1:
 		# Clear $c0 so that the sandbox doesn't have access to it
 		#
 
-		ccleartag $c0
+		cfromptr $c0, $c0, $zero
 
 		#
 		# Invoke the sandbox

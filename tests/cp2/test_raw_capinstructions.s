@@ -52,7 +52,7 @@ start:
 		csettype  $c1,  $c2, $a3
 		cincbase  $c1,  $c2, $a3
 		csetlen   $c1,  $c2, $a3
-                ccleartag $c1
+                ccleartag $c1,  $c2
 		csetcause $a3
 
 		cmove     $c1,  $c2
@@ -191,7 +191,7 @@ l1:
                 # branch delay slot
 		nop
 l2:
-                ccleartag $c1
+                ccleartag $c1, $c1
 		cbtu     $c1, l3
 		# branch delay slot
 		nop

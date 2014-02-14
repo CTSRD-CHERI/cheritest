@@ -48,8 +48,9 @@ test:		.ent test
 		dli	$a0, 2
 		dli	$a1, 2
 
+		cmove	$c2, $c0
 		cgettag	$a0, $c2
-		ccleartag $c2
+		ccleartag $c2, $c2
 		cgettag	$a1, $c2
 
 		ld	$fp, 16($sp)

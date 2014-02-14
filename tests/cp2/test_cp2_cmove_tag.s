@@ -50,9 +50,8 @@ test:		.ent test
 		dli		$t0, 0x100
 		cincbase	$c2, $c0, $t0
 
-		# ccleartag will clear c1's tag bit and set the other
-		# fields (including base) to zero.
-		ccleartag $c1
+		# Clear c1's tag bit
+		ccleartag $c1, $c0
 
 		# Move should copy c1's tag and its current value (base=0)
 		# into c2.

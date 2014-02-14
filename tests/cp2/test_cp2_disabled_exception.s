@@ -79,9 +79,9 @@ test:		.ent test
 	        nop
 
 expected_epc:
-                # Attempt to clear tag on cp0. This should cause exception
+                # Attempt to clear tag. This should cause exception
                 # as cp2 is disabled.
-                ccleartag $c0
+                ccleartag $c1, $c0
 
 return:
                 # Re-enable CP2 in status register 

@@ -47,7 +47,7 @@ test:		.ent test
 
 		dli	$a1, 0
 
-		ccleartag $c0
+		ccleartag $c0, $c0
 
 		cgetlen $a1, $c1
 
