@@ -30,7 +30,7 @@
 from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
-class test_lldscd(BaseCHERITestCase):
+class test_lldscd_span(BaseCHERITestCase):
 
     @attr('llsc')
     @attr('cached')
