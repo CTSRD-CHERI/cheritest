@@ -46,12 +46,6 @@ class test_llsc(BaseCHERITestCase):
 
     @attr('llsc')
     @attr('cached')
-    def test_ll_ld_sc_success(self):
-	'''That an uninterrupted ll+ld+sc succeeds'''
-	self.assertRegisterEqual(self.MIPS.a2, 1, "Uninterrupted ll+ld+sc failed")
-
-    @attr('llsc')
-    @attr('cached')
     def test_ll_add_sc_success(self):
 	'''That an uninterrupted ll+add+sc succeeds'''
 	self.assertRegisterEqual(self.MIPS.a3, 1, "Uninterrupted ll+add+sc failed")
@@ -61,18 +55,6 @@ class test_llsc(BaseCHERITestCase):
     def test_ll_add_sc_value(self):
 	'''That an uninterrupted ll+add+sc stored the right value'''
 	self.assertRegisterEqual(self.MIPS.a4, 0, "Uninterrupted ll+add+sc stored wrong value")
-
-    @attr('llsc')
-    @attr('cached')
-    def test_ll_sw_sc_failure(self):
-	'''That an ll+sw+sc spanning a store to the line fails'''
-	self.assertRegisterEqual(self.MIPS.t0, 0, "Interrupted ll+sw+sc succeeded")
-
-    @attr('llsc')
-    @attr('cached')
-    def test_ll_sw_sc_value(self):
-	'''That an ll+sc spanning a store to the line does not store'''
-	self.assertRegisterNotEqual(self.MIPS.a6, 1, "Interrupted ll+sw+sc stored value")
 
     @attr('llsc')
     @attr('cached')

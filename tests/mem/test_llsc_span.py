@@ -27,81 +27,28 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
+from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
-.set mips64
-.set noreorder
-.set nobopt
+class test_llsc_span(BaseCHERITestCase):
 
-#
-# Check that various operations interrupt load linked + store conditional.
-#
+    @attr('llsc')
+    @attr('cached')
+    @attr('llscspan')
+    def test_ll_ld_sc_success(self):
+	'''That ll+ld+sc succeeds'''
+	self.assertRegisterEqual(self.MIPS.a2, 1, "ll+ld+sc failed")
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+    @attr('llsc')
+    @attr('cached')
+    @attr('llscspan')
+    def test_ll_sw_sc_failure(self):
+	'''That an ll+sw+sc spanning a store to the line fails'''
+	self.assertRegisterEqual(self.MIPS.t0, 0, "ll+sw+sc succeeded")
 
-		#
-		# Set up nop exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		#
-		# Uninterrupted access; check to make sure the right value
-		# comes back.
-		#
-		ll	$a0, word
-		sc	$a0, word
-		lwu	$a1, word
-
-		#
-		# Check to make sure we are allowed to increment the loaded
-		# number, so we can do atomic arithmetic.
-		#
-		ll	$a3, word
-		addiu	$a3, $a3, 1
-		sc	$a3, word
-		lwu	$a4, word
-
-		#
-		# Trap between ll and sc; check to make sure that the sc not
-		# only returns failure, but doesn't store.
-		#
-		ll	$a7, word
-		tnei	$zero, 1
-		sc	$a7, word
-
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
-
-
-#
-# No-op exception handler to return back after the tnei and confirm that the
-# following sc fails.  This code assumes that the trap isn't from a branch-
-# delay slot.
-
-#
-		.ent bev0_handler
-bev0_handler:
-		dmfc0	$k0, $14	# EPC
-		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
-		.end bev0_handler
-
-		.data
-word:		.word	0xffffffff
+    @attr('llsc')
+    @attr('cached')
+    @attr('llscspan')
+    def test_ll_sw_sc_value(self):
+	'''That an ll+sc spanning a store to the line does not store'''
+	self.assertRegisterNotEqual(self.MIPS.a6, 1, "ll+sw+sc stored value")

@@ -400,6 +400,7 @@ TEST_LLSC_FILES=				\
 		test_sc_unalign.s		\
 		test_scd_unalign.s		\
 		test_llsc.s			\
+		test_llsc_span.s		\
 		test_lldscd.s			\
 		test_cp0_lladdr.s
 
@@ -846,12 +847,14 @@ L3_NOSEFLAGS=-A "\
 not beri \
 and not beriinitial \
 and not capabilities \
+and not config3 \
 and not counterdev \
 and not dumpicache \
 and not float \
 and not ignorebadex \
 and not invalidateL2 \
 and not llscnotmatching \
+and not llscspan \
 and not mt \
 and not mtc0signex \
 and not rdhwr \

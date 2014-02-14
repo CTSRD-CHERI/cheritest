@@ -33,7 +33,10 @@
 .set nobopt
 
 #
-# Check that various operations interrupt load linked + store conditional.
+# Test what happens when there is a normal load or store operation between
+# load linked and store conditional. In MIPS 32 and MIP 64, it is unpredictable
+# whether the SC succeeds or fails. In BERI, a store will cause the SC to fail
+# but a load will not.
 #
 
 		.global test
@@ -53,29 +56,22 @@ test:		.ent test
 		nop
 
 		#
-		# Uninterrupted access; check to make sure the right value
-		# comes back.
+		# Load the word into another register between ll and sc; this
+		# shouldn't cause the store to fail.
 		#
-		ll	$a0, word
-		sc	$a0, word
-		lwu	$a1, word
+		ll	$a2, word
+		lwu	$t0, word
+		sc	$a2, word
 
 		#
-		# Check to make sure we are allowed to increment the loaded
-		# number, so we can do atomic arithmetic.
+		# Store to word between ll and sc; check to make sure that
+		# the sc not only returns failure, but doesn't store.
 		#
-		ll	$a3, word
-		addiu	$a3, $a3, 1
-		sc	$a3, word
-		lwu	$a4, word
-
-		#
-		# Trap between ll and sc; check to make sure that the sc not
-		# only returns failure, but doesn't store.
-		#
-		ll	$a7, word
-		tnei	$zero, 1
-		sc	$a7, word
+		li	$t0, 1
+		ll	$a5, word
+		sw	$a5, word
+		sc	$t0, word
+		lwu	$a6, word
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
