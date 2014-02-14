@@ -858,6 +858,7 @@ and not tlb \
 and not smalltlb \
 and not bigtlb \
 and not gxemultlb \
+and not userlocal \
 and not watch \
 "
 #
