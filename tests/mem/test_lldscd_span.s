@@ -27,37 +27,78 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
-from nose.plugins.attrib import attr
 
-class test_lldscd(BaseCHERITestCase):
+.set mips64
+.set noreorder
+.set nobopt
 
-    @attr('llsc')
-    @attr('cached')
-    def test_lld_scd_success(self):
-	'''That an uninterrupted lld+scd succeeds'''
-        self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted lld+scd failed")
+#
+# Test what happens when there is a normal load or store operation between
+# lld and scd. Whether the SC succeeds or fails is "unpredictable" in the
+# MIPS32 and MIPS64 spec. In BERI, a store will cause the SC to fail but a
+# load will not.
+#
 
-    @attr('llsc')
-    @attr('cached')
-    def test_lld_scd_value(self):
-	'''That an uninterrupted lld+scd stored the right value'''
-	self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "Uninterrupted lld+scd stored wrong value")
+		.global test
+test:		.ent test
+		daddu 	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
 
-    @attr('llsc')
-    @attr('cached')
-    def test_lld_add_scd_success(self):
-	'''That an uninterrupted lld+add+scd succeeds'''
-	self.assertRegisterEqual(self.MIPS.a3, 1, "Uninterrupted lld+add+scd failed")
+		#
+		# Set up nop exception handler.
+		#
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
+		nop
 
-    @attr('llsc')
-    @attr('cached')
-    def test_lld_add_scd_value(self):
-	'''That an uninterrupted lld+add+scd stored the right value'''
-	self.assertRegisterEqual(self.MIPS.a4, 0, "Uninterrupted lld+add+scd stored wrong value")
+		#
+		# Load the double word into another register between lld and
+		# scd; this shouldn't cause the store to fail.
+		#
+		lld	$a2, dword
+		ld	$t0, dword
+		scd	$a2, dword
 
-    @attr('llsc')
-    @attr('cached')
-    def test_lld_tnei_scd_failure(self):
-	'''That an lld+scd spanning a trap fails'''
-	self.assertRegisterEqual(self.MIPS.a7, 0, "Interrupted lld+tnei+scd succeeded")
+		#
+		# Store to double word between lld and scd; check to make
+		# sure that the scd not only returns failure, but doesn't
+		# store.
+		#
+		li	$t0, 1
+		lld	$a5, dword
+		sd	$a5, dword
+		scd	$t0, dword
+		ld	$a6, dword
+
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
+		.end	test
+
+
+#
+# No-op exception handler to return back after the tnei and confirm that the
+# following sc fails.  This code assumes that the trap isn't from a branch-
+# delay slot.
+
+#
+		.ent bev0_handler
+bev0_handler:
+		dmfc0	$k0, $14	# EPC
+		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+		nop			# NOPs to avoid hazard with ERET
+		nop			# XXXRW: How many are actually
+		nop			# required here?
+		nop
+		eret
+		.end bev0_handler
+
+		.data
+dword:		.dword	0xffffffffffffffff

@@ -402,6 +402,7 @@ TEST_LLSC_FILES=				\
 		test_llsc.s			\
 		test_llsc_span.s		\
 		test_lldscd.s			\
+		test_lldscd_span.s		\
 		test_cp0_lladdr.s
 
 TEST_CACHE_FILES=				\

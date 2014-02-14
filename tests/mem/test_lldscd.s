@@ -62,14 +62,6 @@ test:		.ent test
 		ld	$a1, dword
 
 		#
-		# Load the double word into another register between lld and
-		# scd; this shouldn't cause the store to fail.
-		#
-		lld	$a2, dword
-		ld	$t0, dword
-		scd	$a2, dword
-
-		#
 		# Check to make sure we are allowed to increment the loaded
 		# number, so we can do atomic arithmetic.
 		#
@@ -77,17 +69,6 @@ test:		.ent test
 		addiu	$a3, $a3, 1
 		scd	$a3, dword
 		ld	$a4, dword
-
-		#
-		# Store to double word between lld and scd; check to make
-		# sure that the scd not only returns failure, but doesn't
-		# store.
-		#
-		li	$t0, 1
-		lld	$a5, dword
-		sd	$a5, dword
-		scd	$t0, dword
-		ld	$a6, dword
 
 		#
 		# Trap between lld and scd; check to make sure that the scd
