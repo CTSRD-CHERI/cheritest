@@ -56,6 +56,7 @@ start:		.ent start
 		srl $a0, $a0, 4
 		ddivu $0, $a1, $a0
 		mflo $a1
+		sll $a1, $a1, 0
 		div $0, $a1, $a0
 		mflo $a1
 		xori $a1, $a1, 40971
