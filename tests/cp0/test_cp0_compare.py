@@ -30,6 +30,7 @@
 from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
+@attr('comparereg')
 class test_cp0_compare(BaseCHERITestCase):
     def test_compare_readback(self):
         '''Test that CP0 compare register write succeeded'''
