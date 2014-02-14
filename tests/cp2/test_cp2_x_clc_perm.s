@@ -88,6 +88,7 @@ test:		.ent test
 		#
 
 		cfromptr $c1, $c0, $zero
+		ccleartag $c1, $c1
 		
 		#
 		# Try to load the capability via a capability
