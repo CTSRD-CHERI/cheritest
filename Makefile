@@ -1224,7 +1224,7 @@ $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 l3tosim: l3tosim.c
 	gcc -o l3tosim l3tosim.c
 
-$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex 
+$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim
 	test -d $(L3_LOGDIR) || mkdir $(L3_LOGDIR)
 	l3mips --cycles 10000 $< 2> $@.err | ./l3tosim > $@ || true
 
