@@ -863,6 +863,7 @@ and not llscspan \
 and not mt \
 and not mtc0signex \
 and not rdhwr \
+and not swi \
 and not tlb \
 and not smalltlb \
 and not bigtlb \

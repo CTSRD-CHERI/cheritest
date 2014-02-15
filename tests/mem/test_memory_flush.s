@@ -1,5 +1,7 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2012 Jonathan Woodruff
+# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -34,7 +36,9 @@
 .set noat
 
 #
-# Exercise trap instruction 'tne' (trap on not equal), less than case.
+# Test the case where there is a store instruction immediately after a
+# software interrupt. The store should be cancelled. This is a regression
+# test for a pipeline bug in CHERI1.
 #
 
 		.global test
@@ -63,9 +67,14 @@ test:		.ent test
 		dli	$a4, 0
 		dli	$a5, 0
 		dli	$a6, 0
+
+		#
+		# Enable software interrupts
+		#
+
 		mfc0	$t0, $12
 		ori	$t0, 0x3e1
-		mtc0	$t0, $12	# Enable software interrupts
+		mtc0	$t0, $12
 		nop
 		nop
 		nop
@@ -80,9 +89,26 @@ test:		.ent test
 		nop
 		nop
 		nop
+
+		#
+		# Trigger a software interrupt by writing to bit IP0
+		# (interrupt pending) of the CP0 cause register.
+		#
+
 		li	$t0, 0x100
 		mtc0	$t0, $13
+
+		#
+		# The following store should be cancelled when the software
+		# interrupt fires.
+		#
+
 		sd	$a0, 0($a0)
+
+		#
+		# Check that the store didn't happen.
+		#
+
 		ld	$a1, 0($a0)
 
 return:
