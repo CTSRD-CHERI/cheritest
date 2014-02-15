@@ -46,7 +46,7 @@ test:
 	dli       $a1, 0
 
 	# c0 should have a valid cap, c1 an invalid one
-	CClearTag $c1
+	ccleartag $c1, $c0
 
 	# Check that the branches are taken when they should be and that their
 	# delay slots execute.
