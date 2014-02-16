@@ -43,24 +43,24 @@ test:   .ent    test
 		jal     bev_clear
 		nop
 		
+		#
 		# Install exception handler
+		#
+
 		dla	$a0, exception_handler
 		jal 	bev0_handler_install
 		nop
 
 		#
-		# Put a valid capability in 'cap'
+                # To test user code we must set up a TLB entry.
+		#
+	
+		#
+		# Write 0 to page mask i.e. 4k pages
 		#
 
-		dli	$t0, 64
-		cincbase $c1, $c0, $t0
-		csetlen $c1, $c1, $t0
-		dla	$t0, cap
-		cscr	$c1, $t0($c0)
+ 		dmtc0	$zero, $5               
 
-                # To test user code we must set up a TLB entry.
-	
- 		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
 		dmtc0	$zero, $0		# TLB index 
 		dmtc0	$zero, $10		# TLB entryHi
 
@@ -70,8 +70,17 @@ test:   .ent    test
 		dla     $a1, testcode		# Load address of testcode
 		and     $a0, $a1, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
 		dsrl    $a0, $a0, 6		# Put PFN in correct position for EntryLow
-		ori     $a0, $a0, 0x13  	# Set valid and global bits, uncached
-		dli	$t0, 0x3
+		#
+		# Set global, valid and dirty bits, cached noncoherent
+		#
+
+		ori     $a0, $a0, 0x1f  	
+
+		#
+		# Set the 'disable capability load' bit
+		#
+
+		dli	$t0, 0x1
 		dsll	$t0, $t0, 62
 		or	$a0, $a0, $t0
 
@@ -107,16 +116,42 @@ testcode:
 		dli	$a5, 1			# Set the test flag
 
 		#
-		# Clear $c1 so we can tell if the clcr suceeded
+		# Check that non-capability loads and stores work
 		#
 
-		cmove	$c1, $c0
+		ld 	$t0, 0($a2)
+
+		dli	$a5, 2
+
+		dli	$t0, 0xdead
+		sd	$t0, 0($a2)
+
+		dli	$a5, 3
+
+		#
+		# Store a valid capability to 'cap'
+		#
+
+		dli	$t0, 64
+		cincbase $c1, $c0, $t0
+		csetlen	$c1, $c1, $t0
+		cscr	$c1, $a2($c0)
+
+		dli	$a5, 4
+
+		#
+		# Clear $c2 so we can tell if the clcr suceeded
+		#
+
+		cmove	$c2, $c0
 
 		#
 		# This should raise an exception
 		#
 
-		clcr	$c1, $a2($c0)
+		clcr	$c2, $a2($c0)
+
+		dli	$a5, 5
 
 		#
 		# If it doesn't, return to kernel mode anyway
@@ -131,8 +166,8 @@ exception_handler:
 		# Check to see if the capability load succeeded
 		#
 
-		cgetbase $a3, $c1
-		cgetlen	 $a4, $c1
+		cgetbase $a3, $c2
+		cgetlen	 $a4, $c2
 
                 dmfc0   $a6, $12                # Read status
                 dmfc0   $a7, $13                # Read cause

@@ -33,11 +33,6 @@ from nose.plugins.attrib import attr
 class test_cp2_x_clc_tlb(BaseCHERITestCase):
 
     @attr('capabilities')
-    def test_cp2_clc_tlb_called(self):
-        '''Test that the user-mode code was run'''
-        self.assertRegisterEqual(self.MIPS.a5, 1, "User mode was not run")
-
-    @attr('capabilities')
     def test_cp2_clc_tlb_base(self):
         '''Test that capability load failed when TLB entry prohibited load'''
         self.assertRegisterEqual(self.MIPS.a3, 0x0, "clc loaded c1.base even though capbility load inhibit bit was set in the TLB")
@@ -46,4 +41,14 @@ class test_cp2_x_clc_tlb(BaseCHERITestCase):
     def test_cp2_clc_tlb_length(self):
         '''Test that capability load failed when TLB entry prohibited load'''
         self.assertRegisterEqual(self.MIPS.a4, 0xffffffffffffffff, "clc loaded c1.length even though capbility load inhibit bit was set in the TLB")
+
+    @attr('capabilities')
+    def test_cp2_clc_tlb_progress(self):
+        '''Test that test reaches the end of stage 4'''
+        self.assertRegisterEqual(self.MIPS.a5, 4, "Test did not make it to the end of stage 4")
+
+    @attr('capabilities')
+    def test_cp2_clc_tlb_cause(self):
+        '''Test that CP0 cause register is set correctly'''
+        self.assertRegisterEqual((self.MIPS.a7 >> 2) & 0x1f, 16, "CP0.Cause.ExcCode was not set correctly when capability load failed due to capability load inhibited in the TLB entry")
 
