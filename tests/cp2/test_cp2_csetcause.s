@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2013 Michael Roe
+# Copyright (c) 2013-2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -50,6 +50,9 @@ test:		.ent test
 		dli	$t0, 0x0101
 		csetcause $t0
 		cgetcause $a1
+		dli	$t0, 0x81ff
+		csetcause $t0
+		cgetcause $a2
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

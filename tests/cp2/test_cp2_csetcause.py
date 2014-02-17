@@ -45,3 +45,9 @@ class test_cp2_csetcause(BaseCHERITestCase):
     def test_cp2_csetcause_2(self):
         '''Test that csetcause set the cause register to 0x0101'''
         self.assertRegisterEqual(self.MIPS.a1, 0x0101, "csetcause did not set the cause register to 0x0101")
+
+    @attr('capabilities')
+    def test_cp2_csetcause_3(self):
+        '''Test that csetcause set the cause register to 0x81ff'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x81ff, "csetcause did not set the cause register to 0x81ff (user-defined cause code)")
+
