@@ -51,6 +51,6 @@ class test_cp2_x_ctoptr_length(BaseCHERITestCase):
     @attr('capabilities')
     def test_cp2_x_ctoptr_length_4(self):
         '''Test ctoptr sets capability cause when cb.base < ct.base'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0101,
+        self.assertRegisterEqual(self.MIPS.a3, 0x0102,
             "ctoptr did not set Capability cause correcly when cb.base < ct.base")
 
