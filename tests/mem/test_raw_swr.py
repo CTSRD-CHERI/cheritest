@@ -43,9 +43,9 @@ class test_raw_swr(BaseCHERITestCase):
 		self.assertRegisterEqual(self.MIPS.a2, 0xdcba980098000000, "SWR with half word offset failed")
 
 	def test_a3(self):
-		'''Test SWR with one byte offset'''
+		'''Test SWR with three byte offset'''
 		self.assertRegisterEqual(self.MIPS.a3, 0xdcba9800fedcba98, "SWR with three byte offset failed")
 
 	def test_a4(self):
-		'''Test SWR with three byte offset'''
+		'''Test SWR with one byte offset'''
 		self.assertRegisterEqual(self.MIPS.a4, 0xdcba9800ba98ba98, "SWR with one byte offset failed")
