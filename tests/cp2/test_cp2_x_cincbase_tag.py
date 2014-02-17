@@ -44,7 +44,7 @@ class test_cp2_x_cincbase_tag(BaseCHERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_cincbase_tag_2(self):
-        '''Test cincbaseraised a C2E exception when capability tag was unset'''
+        '''Test cincbase raised a C2E exception when capability tag was unset'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "cincbase did not raise an exception when capability tag was unset")
 
