@@ -202,6 +202,7 @@ l3:
 		creturn
 
 		cfromptr $c3, $c1, $zero
+		ctoptr	 $t0, $c1, $c2
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
