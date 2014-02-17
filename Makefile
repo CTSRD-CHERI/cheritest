@@ -338,12 +338,12 @@ RAW_FPU_FILES =                \
 	test_raw_fpu_movt_s_pipeline.s \
 	test_raw_fpu_movf_s_pipeline.s \
 	test_raw_fpu_movt_pipeline.s \
-		test_raw_fpu_cvt.log	\
-		test_raw_fpu_cvtw.log	\
-		test_raw_fpu_movci.log	\
-		test_raw_fpu_sd_ld.log	\
-		test_raw_fpu_sw_lw.log	\
-		test_raw_fpu_xc1.log	\
+	test_raw_fpu_cvt.s	\
+	test_raw_fpu_cvtw.s	\
+	test_raw_fpu_movci.s	\
+	test_raw_fpu_sd_ld.s	\
+	test_raw_fpu_sw_lw.s	\
+	test_raw_fpu_xc1.s
 
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
