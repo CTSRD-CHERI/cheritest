@@ -1034,7 +1034,7 @@ WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 AS=mips64-as
 LD=sde-ld
-OBJCOPY=sde-objcopy
+OBJCOPY=mips64-objcopy
 OBJDUMP=mips64-objdump
 
 all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
