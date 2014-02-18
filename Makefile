@@ -1035,6 +1035,7 @@ MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 AS=mips64-as
 LD=sde-ld
 OBJCOPY=sde-objcopy
+OBJDUMP=mips64-objdump
 
 all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
 
@@ -1160,7 +1161,7 @@ $(OBJDIR)/%.hex : $(OBJDIR)/%.mem
 # Provide an annotated disassembly for the ELF image to be used in diagnosis.
 #
 $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
-	mips64-objdump -xsSD $< > $@
+	$(OBJDUMP) -xsSD $< > $@
 
 $(LOGDIR)/test_raw_trace.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace.trace
 $(LOGDIR)/test_raw_trace_cached.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace_cached.trace
