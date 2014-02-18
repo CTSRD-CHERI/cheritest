@@ -1033,6 +1033,8 @@ WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 AS=mips64-as
+LD=sde-ld
+OBJCOPY=sde-objcopy
 
 all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
 
@@ -1113,11 +1115,11 @@ $(OBJDIR)/%.o: %.s
 #
 
 $(OBJDIR)/test_raw_%.elf : $(OBJDIR)/test_raw_%.o $(RAW_LDSCRIPT)
-	sde-ld -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
+	$(LD) -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	sde-ld -EB -G0 -T$(TEST_LDSCRIPT) $(TEST_INIT_OBJECT) \
+	$(LD) -EB -G0 -T$(TEST_LDSCRIPT) $(TEST_INIT_OBJECT) \
 	    $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
 
 #
@@ -1126,13 +1128,13 @@ $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \
 
 $(OBJDIR)/test_raw_%_cached.elf : $(OBJDIR)/test_raw_%.o \
 	    $(TEST_INIT_CACHED_OBJECT) $(RAW_CACHED_LDSCRIPT)
-	sde-ld -EB -G0 -T$(RAW_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
+	$(LD) -EB -G0 -T$(RAW_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
 	    $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	sde-ld -EB -G0 -T$(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
+	$(LD) -EB -G0 -T$(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
 
 #
@@ -1140,7 +1142,7 @@ $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
 # or hardware.
 #
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
-	sde-objcopy -S -O binary $< $@
+	$(OBJCOPY) -S -O binary $< $@
 
 #
 # Convert ELF images to raw memory images that can be loaded into simulators
