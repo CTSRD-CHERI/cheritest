@@ -196,28 +196,28 @@ install_bev0_stubs:
 		dli	$a0, 0xffffffff80000000
 		dla	$a1, bev0_tlb_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
-		dsll	$a2, 2		# Convert to byte count
+		dsll	$a2, $a2, 2	# Convert to byte count
 		jal memcpy
 		nop
 
 		dli	$a0, 0xffffffff80000080
 		dla	$a1, bev0_xtlb_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
-		dsll	$a2, 2		# Convert to byte count
+		dsll	$a2, $a2, 2	# Convert to byte count
 		jal memcpy
 		nop
 
 		dli	$a0, 0xffffffffa0000100 # NB same same, but different!
 		dla	$a1, bev0_cache_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
-		dsll	$a2, 2		# Convert to byte count
+		dsll	$a2, $a2, 2	# Convert to byte count
 		jal memcpy
 		nop
 	
 		dli	$a0, 0xffffffff80000180
 		dla	$a1, bev0_common_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
-		dsll	$a2, 2		# Convert to byte count
+		dsll	$a2, $a2, 2	# Convert to byte count
 		jal memcpy
 		nop			# branch-delay slot
 
@@ -241,28 +241,28 @@ install_bev1_stubs:
 		dli	$a0, 0xffffffffbfc00200
 		dla	$a1, bev1_tlb_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
-		dsll	$a2, 2		# Convert to byte count
+		dsll	$a2, $a2, 2	# Convert to byte count
 		jal memcpy
 		nop
 
 		dli	$a0, 0xffffffffbfc00280
 		dla	$a1, bev1_xtlb_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
-		dsll	$a2, 2		# Convert to byte count
+		dsll	$a2, $a2, 2		# Convert to byte count
 		jal memcpy
 		nop
 
 		dli	$a0, 0xffffffffbfc00300
 		dla	$a1, bev1_cache_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
-		dsll	$a2, 2		# Convert to byte count
+		dsll	$a2, $a2, 2		# Convert to byte count
 		jal memcpy
 		nop
 	
 		dli	$a0, 0xffffffffbfc00380
 		dla	$a1, bev1_common_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
-		dsll	$a2, 2		# Convert to byte count
+		dsll	$a2, $a2, 2	# Convert to byte count
 		jal memcpy
 		nop			# branch-delay slot
 
