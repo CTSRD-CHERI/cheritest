@@ -397,7 +397,7 @@ bev_clear:
 
 		mfc0	$t0, $12
 		dli	$t1, 1 << 22	# BEV bit
-		nor	$t1, $t1
+		nor	$t1, $t1, $t1
 		and	$t0, $t0, $t1
 		mtc0	$t0, $12
 
@@ -579,7 +579,7 @@ slow_memcpy_loop:                # byte-by-byte copy
         global_func get_thread_id
         dmfc0    $v0, $15, 2         # load processor ID register, select 2
         jr       $ra                 # return
-        and      $v0, 0xffff         # mask off max thread id
+        and      $v0, $v0, 0xffff    # mask off max thread id
         .end get_thread_id
 
 #
@@ -591,20 +591,20 @@ slow_memcpy_loop:                # byte-by-byte copy
         global_func get_max_thread_id
         dmfc0    $v0, $15, 2         # load processor ID register, select 2
         jr       $ra                 # return
-        srl      $v0, 16             # top 16 bits contain max thread ID
+        srl      $v0, $v0, 16        # top 16 bits contain max thread ID
         .end get_max_thread_id
 
 # As get_thread_id, but for core number
         global_func get_core_id
         dmfc0    $v0, $15, 1         # load processor ID register, select 1
         jr       $ra                 # return
-        and      $v0, 0xffff         # mask off max core id
+        and      $v0, $v0, 0xffff    # mask off max core id
         .end get_core_id
 # As get_max_thread_id, but for max core number
         global_func get_max_core_id
         dmfc0    $v0, $15, 1         # load processor ID register, select 1
         jr       $ra                 # return
-        srl      $v0, 16             # top 16 bits contain max core ID
+        srl      $v0, $v0, 16        # top 16 bits contain max core ID
         .end get_max_core_id
 
 #
@@ -618,8 +618,8 @@ slow_memcpy_loop:                # byte-by-byte copy
 #
         global_func get_corethread_id
 	mfc0  $t0, $15	        # prid register
-	and   $t0, 0xff00       #
-	xor   $t0, 0x8900       #
+	and   $t0, $t0, 0xff00  #
+	xor   $t0, $t0, 0x8900  #
         li    $v1, 1            # one core on gxemul
 	beqz  $t0, 1f           # return if on gxemul 
         li    $v0, 0            # return 0 on gxemul
@@ -630,7 +630,7 @@ slow_memcpy_loop:                # byte-by-byte copy
         dmfc0 $t0, $15, 2       # t0 = thread ID / num threads
         srl   $v1, $t0, 16      # v1 = max thread ID
         add   $v1, 1            # v1 = num threads
-        and   $t0, 0xffff       # t0 = thread ID
+        and   $t0, $t0, 0xffff  # t0 = thread ID
         mul   $v0, $v0, $v1     # v0 = current core * num threads 
         add   $v0, $t0          # v0 = current core * num threads + thread ID
         mul   $v1, $v1, $t1     # v1 = num cores * num threads
