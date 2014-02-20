@@ -222,7 +222,7 @@ install_tlb_entry:
 		dmtc0        $a2, $10                # TLB HI address
 		and          $t1, $a1, 0xfffffff000  # Get physical page (PFN) of the physical address (40 bits less 12 low order bits)
 		dsrl         $t2, $t1, 6             # Put PFN in correct position for EntryLow
-		or           $t2, 0x13               # Set valid and global bits, uncached
+		ori          $t2, $t2, 0x13          # Set valid and global bits, uncached
 		dmtc0        $t2, $2                 # TLB EntryLow0
 		daddu        $t3, $t2, 0x40          # Add one to PFN for EntryLow1
 		dmtc0        $t3, $3                 # TLB EntryLow1
