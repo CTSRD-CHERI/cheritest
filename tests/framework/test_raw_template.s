@@ -60,15 +60,6 @@ start:
 		nop
 		nop
 
-		# Dump capability registers in the simulator
-.if(TEST_CP2 == 1)
-		mtc2 $v0, $0, 6
-.else
-		nop
-.endif
-		nop
-		nop
-
 		# Terminate the simulator
 	        mtc0 $v0, $23
 end:

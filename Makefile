@@ -104,6 +104,7 @@ endif
 
 RAW_FRAMEWORK_FILES=				\
 		test_raw_template.s		\
+		test_raw_cp2_template.s		\
 		test_raw_reg_init.s		\
 		test_raw_hilo.s			\
 		test_raw_dli.s			\

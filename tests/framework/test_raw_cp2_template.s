@@ -27,17 +27,46 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
-from nose.plugins.attrib import attr
 
-class test_raw_template(BaseCHERITestCase):
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-    def test_template(self):
-        ## Check equality
-        self.assertRegisterEqual(0, 0, "Failure description here")
-        ## Check inequality
-        self.assertRegisterNotEqual(0, 1, "Failure description here")
-        ## Access register by name
-        self.MIPS.zero
-        ## Access register by number
-        self.MIPS[0]
+#
+# Short block comment describing the test: what instruction/behaviour are we
+# investigating; what properties are we testing, what properties are deferred
+# to other tests?  What might we want to test as well in the future?
+#
+
+		.global start
+start:
+		# Enable CP2
+	        mfc0    $at, $12
+		dli	$t1, 1 << 30
+		or      $at, $at, $t1 	
+	        mtc0    $at, $12
+	        nop
+	        nop
+	        nop
+	        nop
+	        nop
+	        
+		# Test here
+		nop
+
+		# Dump registers in the simulator
+		mtc0 $v0, $26
+		nop
+		nop
+
+		# Dump capability registers in the simulator
+		mtc2 $v0, $0, 6
+		nop
+		nop
+
+		# Terminate the simulator
+	        mtc0 $v0, $23
+end:
+		b end
+		nop

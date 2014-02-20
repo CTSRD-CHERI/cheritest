@@ -30,14 +30,10 @@
 from cheritest_tools import BaseCHERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_template(BaseCHERITestCase):
+class test_raw_cp2_template(BaseCHERITestCase):
 
-    def test_template(self):
-        ## Check equality
-        self.assertRegisterEqual(0, 0, "Failure description here")
-        ## Check inequality
-        self.assertRegisterNotEqual(0, 1, "Failure description here")
-        ## Access register by name
-        self.MIPS.zero
-        ## Access register by number
-        self.MIPS[0]
+    @attr('capabilities')
+    def test_raw_cp2_template_1(self):
+        ## Access capability register by number
+        '''Template for a raw CP2 test'''
+        self.assertRegisterEqual(self.MIPS.cp2[0].base, 0, "Failure description here")
