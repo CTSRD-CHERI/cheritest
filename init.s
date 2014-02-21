@@ -138,26 +138,32 @@ all_threads:
 		jalr $25
 		nop			# branch-delay slot
 
-		# Check the prid to see if running on simulator or gxemul
-		mfc0 $k0, $15	        # prid register
-		and  $k0, $k0, 0xff00
-		xor  $k0, $k0, 0x8900
-		beqz $k0, skip_cp2_dump # Skip cp2 dump on gxemul
+		#
+		# Check to see if coprocessor 2 (capability unit) is present,
+		# and dump out its registers if it is.
+		#
+
+		mfc0 $k0, $16, 1	# config1 register
+		andi $k0, $k0, 0x40	# CP2 available bit
+		beqz $k0, skip_cp2_dump 
 		nop
 	
+		#
 		# Dump capability registers in the simulator
-.if(TEST_CP2 == 1)
+		#
+
 		mtc2 $k0, $0, 6
-.else
-		nop  # cheri2 would throw reserved instruction exception. Use a nop to keep binary size the same.
-.endif
 		nop
 		nop
+
 skip_cp2_dump:
 		# Load the exception count into k0 so that it is visible in register dump
 		ld      $k0, exception_count
 		
+		#
 		# Dump registers on the simulator (gxemul dumps regs on exit)
+		#
+
 		mtc0 $at, $26
 		nop
 		nop
