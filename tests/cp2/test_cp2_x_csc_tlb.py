@@ -33,11 +33,13 @@ from nose.plugins.attrib import attr
 class test_cp2_x_csc_tlb(BaseCHERITestCase):
 
     @attr('capabilities')
+    @attr('tlb')
     def test_cp2_clc_tlb_progress(self):
         '''Test that test finishes at the end of stage 3'''
         self.assertRegisterEqual(self.MIPS.a5, 3, "Test did not finish at the end of stage 3")
 
     @attr('capabilities')
+    @attr('tlb')
     def test_cp2_clc_tlb_cause(self):
         '''Test that CP0 cause register is set correctly'''
         self.assertRegisterEqual((self.MIPS.a7 >> 2) & 0x1f, 17, "CP0.Cause.ExcCode was not set correctly when capability store failed due to capability store inhibited in the TLB entry")
