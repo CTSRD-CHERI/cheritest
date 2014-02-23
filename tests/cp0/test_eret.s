@@ -58,6 +58,7 @@ test:		.ent test
 		nop
 		nop
 		nop
+		nop			# XXX: How many are required here?
 		mfc0	$a0, $12	# Saved to let us check EXL stuck
 
 		# Configure a target EPC
