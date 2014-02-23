@@ -57,7 +57,7 @@ start:
 
 	        # Value too big for 32-bit shift so should be treated as zero.
 	        li      $a5, 32
-	        sll     $a5, $a0, $a5
+	        sllv     $a5, $a0, $a5
 
 		# Dump registers in the simulator
 		mtc0 $v0, $26
