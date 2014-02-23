@@ -83,7 +83,7 @@ loop:
                 sd      $t1, 0($a1)
                 dli     $t1, 0x2021222324252627
                 sd      $t1, 0($a2)
-                bgt     $t0, $0, loop
+                bgtz    $t0, loop
                 sub     $t0, 1
         
 return:
