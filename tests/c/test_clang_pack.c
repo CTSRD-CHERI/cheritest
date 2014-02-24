@@ -43,7 +43,14 @@ struct packed_s {
   char c;
 };
 
-static struct packed_s x;
+static volatile struct packed_s x;
+
+void check_struct()
+{
+  assert(x.a == 0x00);
+  assert(x.b == 0x01020304);
+  assert(x.c == 0x05);
+}
 
 int test(void)
 {
@@ -54,11 +61,7 @@ char *cp;
   x.c = 0x05;
   x.b = 0x01020304;
 
-  cp = (char *) &x;
-  for (i=0; i<6; i++)
-  {
-    assert(*cp == i);
-    cp++;
-  }
+  check_struct();
+
   return (0);
 }
