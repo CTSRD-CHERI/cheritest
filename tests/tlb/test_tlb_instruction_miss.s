@@ -106,11 +106,11 @@ tlb_stuff:
 		move	$a6, $t0				# Get bad virtual address
 		dmfc0	$a7, $14				# Get victim address
 		dli 	$t3, 0xFFFFE000			# Mask off the page offset
-		and		$t0, $t0, $t3
-		dror	$a2, $t0, 6             # Put PFN in correct position for EntryLow
-		or		$a2, 0x17				# Set valid and uncached bits
+		and	$t0, $t0, $t3
+		dsrl	$a2, $t0, 6             # Put PFN in correct position for EntryLow
+		or	$a2, 0x17				# Set valid and uncached bits
 		dmtc0   $a2, $2					# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
-		ori		$a2, 0x1000				# Set the 13th bit for to insert the upper physical address
+		ori	$a2, 0x1000				# Set the 13th bit for to insert the upper physical address
 		dmtc0   $a2, $3					# TLB EntryLow1 = a2 (Upper half of TLB entry for even virtual $
 		nop
 		nop
