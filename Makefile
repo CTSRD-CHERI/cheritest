@@ -278,6 +278,7 @@ RAW_FPU_FILES =                \
 		test_raw_fpu_mul.s      \
 		test_raw_fpu_div.s      \
 		test_raw_fpu_neg.s      \
+		test_raw_fpu_neg_qnan.s \
 		test_raw_fpu_recip.s    \
 		test_raw_fpu_sqrt.s     \
 		test_raw_fpu_rsqrt.s    \
