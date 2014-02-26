@@ -319,6 +319,7 @@ RAW_FPU_FILES =                \
 		test_raw_fpu_floor_single.s \
 		test_raw_fpu_trunc_single.s \
 		test_raw_fpu_qnan_single.s \
+		test_raw_fpu_qnan_s2.s \
 		test_raw_fpu_underflow.s \
 		test_raw_fpu_div_small.s \
 		test_raw_fpu_denorm.s \
