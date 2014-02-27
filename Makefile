@@ -273,6 +273,7 @@ RAW_CP2_FILES=					\
 RAW_FPU_FILES =                \
 		test_raw_fpu_cntrl.s    \
 		test_raw_fpu_abs.s      \
+		test_raw_fpu_abs_qnan.s \
 		test_raw_fpu_add.s      \
 		test_raw_fpu_sub.s      \
 		test_raw_fpu_mul.s      \
