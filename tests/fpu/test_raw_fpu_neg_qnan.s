@@ -57,6 +57,10 @@ start:
 	neg.s $f1, $f1
 	mfc1 $a0, $f1
 
+	cfc1 $a1, $31		# FCSR
+	dsrl $a1, $a1, 19	# ABS2008 bit. 1 if neg behaves as in 
+	andi $a1, 0x01		# IEEE 754-2008, 0 for legacy MIPS.
+
 	# Dump registers on the simulator (gxemul dumps regs on exit)
 
 	mtc0 $at, $26

@@ -45,3 +45,6 @@ class test_raw_fpu_neg_qnan(BaseCHERITestCase):
         '''Test single precision neg of QNaN'''
 	self.assertRegisterEqual(self.MIPS.a0 & 0x7f800000, 0x7f800000, "neg.s did not return QNaN")
 
+    def test_raw_fpu_neg_qnan_2(self):
+        '''Test that neg has legacy MIPS behavior, not IEEE 754-2008'''
+        self.assertRegisterEqual(self.MIPS.a1, 0, "FCSR.ABS2008 was set")

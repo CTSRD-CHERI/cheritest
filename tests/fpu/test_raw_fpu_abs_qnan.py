@@ -45,3 +45,7 @@ class test_raw_fpu_abs_qnan(BaseCHERITestCase):
         '''Test single precision abs of QNaN'''
 	self.assertRegisterEqual(self.MIPS.a0 & 0x7f800000, 0x7f800000, "abs.s did not return QNaN")
 
+    @attr('floatlegacyabs')
+    def test_raw_fpu_abs_qnan_2(self):
+        '''Test that abs has legacy MIPS behaviour, not IEEE 754-2008'''
+        self.assertRegisterEqual(self.MIPS.a1, 0, "FCSR.ABS2008 was set")
