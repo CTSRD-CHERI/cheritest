@@ -42,6 +42,6 @@ class test_raw_fpu_neg_qnan(BaseCHERITestCase):
 # part is non-zero, as this denotes +/- infinity rather than NaN/
 #
     def test_raw_fpu_neg_qnan_1(self):
-        '''Test single precision add of QNaN'''
+        '''Test single precision neg of QNaN'''
 	self.assertRegisterEqual(self.MIPS.a0 & 0x7f800000, 0x7f800000, "neg.s did not return QNaN")
 
