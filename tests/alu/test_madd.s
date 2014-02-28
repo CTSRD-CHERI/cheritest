@@ -9,7 +9,7 @@
 #
 # @BERI_LICENSE_HEADER_START@
 #
-# Licensed to BERI Open Systems C.I.C (BERI) under one or more contributor
+# Licensed to BERI Open Systems C.I.C. (BERI) under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
 # additional information regarding copyright ownership.  BERI licenses this
 # file to you under the BERI Hardware-Software License, Version 1.0 (the
