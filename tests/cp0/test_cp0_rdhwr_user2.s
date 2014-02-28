@@ -81,7 +81,7 @@ test:   .ent    test
 		dla     $a0, testcode		# Load address of testcode
 		and     $a2, $a0, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
 		dsrl    $a3, $a2, 6		# Put PFN in correct position for EntryLow
-		or      $a3, 0x13   		# Set valid and global bits, uncached
+		or      $a3, 0x1b   		# Set valid and global bits, cached
 		dmtc0	$a3, $2			# TLB EntryLow0
 		daddu 	$a4, $a3, 0x40		# Add one to PFN for EntryLow1
 		dmtc0	$a4, $3			# TLB EntryLow1
@@ -113,7 +113,15 @@ testcode:
 		add	$a5, 1			# Set the test flag
 		.set push
 		.set mips32r2
-		rdhwr 	$a1, $29
+		li      $t0, 1
+		# a bug in cheri2 meant the rdhwr didn't get forwarded properly so run this twice to make sure it is in cache.
+1:
+		nop
+		nop
+		rdhwr   $t1, $29
+		or      $a1, $t1, 0             # move to check forwarding
+		bnez    $t0, 1b
+		li      $t0, 0
 		.set pop
 		syscall 0			# Return to kernel mode
 
