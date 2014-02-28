@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2013 Michael Roe
+# Copyright (c) 2013-2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -53,37 +53,38 @@ start:
 	lui $t0, 0xbfe8 # -0.75
 	dsll $t0, $t0, 32
 	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
+	trunc.l.d $f2, $f2
 	dmfc1 $a0, $f2
 
 	lui $t0, 0xbfe0 # -0.5
 	dsll $t0, $t0, 32
 	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
+	trunc.l.d $f2, $f2
 	dmfc1 $a1, $f2
 
 	lui $t0, 0xbfd0 # -0.25
 	dsll $t0, $t0, 32
 	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
+	trunc.l.d $f2, $f2
 	dmfc1 $a2, $f2
 
 	lui $t0, 0x3fe0 # 0.5
 	dsll $t0, $t0, 32
 	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
+	trunc.l.d $f2, $f2
 	dmfc1 $a3, $f2
 
 	lui $t0, 0x3ff8 # 1.5
 	dsll $t0, $t0, 32
 	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
+	trunc.l.d $f2, $f2
 	dmfc1 $a4, $f2
 
-	lui $t0, 0x4f80
+	lui $t0, 0x4330
+	dsll $t0, $t0, 32
 	ori $t0, $t0, 0x0001
 	mtc1 $t0, $f2
-	trunc.l.s $f2, $f2
+	trunc.l.d $f2, $f2
 	dmfc1 $a5, $f2
 
 	# Dump registers on the simulator (gxemul dumps regs on exit)

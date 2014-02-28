@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2013 Michael Roe
+# Copyright (c) 2013-2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -27,74 +27,44 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
 
 #
-# Test double-precision truncate when the FPU is in 64-bit mode
+# Test double-precision truncate operation when the FPU is in 64 bit mode
 #
-        .text
-        .global start
-        .ent start
-start:     
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	li $t1, 1 << 26		# Put FPU into 64 bit mode
-	or $t0, $t0, $t1
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
 
-        
-	lui $t0, 0xbfe8 # -0.75
-	dsll $t0, $t0, 32
-	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
-	dmfc1 $a0, $f2
+from cheritest_tools import BaseCHERITestCase
+from nose.plugins.attrib import attr
 
-	lui $t0, 0xbfe0 # -0.5
-	dsll $t0, $t0, 32
-	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
-	dmfc1 $a1, $f2
+class test_raw_fpu_trunc_l_d64(BaseCHERITestCase):
 
-	lui $t0, 0xbfd0 # -0.25
-	dsll $t0, $t0, 32
-	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
-	dmfc1 $a2, $f2
+    @attr('float64')
+    def test_raw_fpu_trunc_l_d64_1(self):
+        '''Test double precision trunc.l of -0.75'''
+	self.assertRegisterEqual(self.MIPS.a0 , 0, "-0.75 did not round up to 0")
 
-	lui $t0, 0x3fe0 # 0.5
-	dsll $t0, $t0, 32
-	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
-	dmfc1 $a3, $f2
+    @attr('float64')
+    def test_raw_fpu_trunc_l_d64_2(self):
+        '''Test double precision trunc.l of -0.5'''
+	self.assertRegisterEqual(self.MIPS.a1 , 0, "-0.5 did not round up to 0")
 
-	lui $t0, 0x3ff8 # 1.5
-	dsll $t0, $t0, 32
-	dmtc1 $t0, $f2
-	trunc.w.d $f2, $f2
-	dmfc1 $a4, $f2
+    @attr('float64')
+    def test_raw_fpu_trunc_l_d64_3(self):
+        '''Test double precision trunc.l of -0.25'''
+	self.assertRegisterEqual(self.MIPS.a2, 0, "-0.25 did not round up to 0")
 
-	lui $t0, 0x4f80
-	ori $t0, $t0, 0x0001
-	mtc1 $t0, $f2
-	trunc.l.s $f2, $f2
-	dmfc1 $a5, $f2
+    @attr('float64')
+    def test_raw_fpu_trunc_l_d64_4(self):
+        '''Test double precision trunc.l of 0.5'''
+	self.assertRegisterEqual(self.MIPS.a3, 0, "0.5 did not round down to 0")
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+    @attr('float64')
+    def test_raw_fpu_trunc_l_d64_5(self):
+        '''Test double precision trunc.l of 1.5'''
+	self.assertRegisterEqual(self.MIPS.a4, 1, "1.5 did not round down to 1")
 
-	# Terminate the simulator
-	mtc0 $at, $23
-end:
-	b end
-	nop
+    @attr('float64')
+    def test_raw_fpu_trunc_l_d64_6(self):
+        '''Test trunc of double precision to 64 bit int'''
+        self.assertRegisterEqual(self.MIPS.a5, 0x10000000000001, "2^52 + 1 was not correctly converted from double precision to a 64 bit integer")
 
-.end start
+
