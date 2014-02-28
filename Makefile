@@ -332,11 +332,13 @@ RAW_FPU_FILES =                \
 		test_raw_fpu_ceil_d64.s \
 		test_raw_fpu_ceil_l_d64.s \
 		test_raw_fpu_round_d64.s \
+		test_raw_fpu_round_l_d64.s \
 		test_raw_fpu_cvt_s_w.s \
 		test_raw_fpu_cvt_s_l_d64.s \
 		test_raw_fpu_cvt_w_d_d64.s \
 		test_raw_fpu_cvt_d_w_d64.s \
 		test_raw_fpu_cvt_d_l_d64.s \
+		test_raw_fpu_cvt_l_d_d64.s \
 		test_fpu_exception_pipeline.s \
 		test_fpu_x_disabled.s \
 		test_fpu_x_ldc1_disabled.s \
