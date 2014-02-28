@@ -29,7 +29,7 @@
 #
 
 #
-# Test double-precision round operation when the FPU is in 64 bit mode
+# Test double-precision floor operation when the FPU is in 64 bit mode
 #
 
 from cheritest_tools import BaseCHERITestCase
@@ -59,7 +59,7 @@ class test_raw_fpu_floor_d64(BaseCHERITestCase):
 
     @attr('float64')
     def test_raw_fpu_floor_d64_5(self):
-        '''Test double precision round of 1.5'''
+        '''Test double precision floor of 1.5'''
 	self.assertRegisterEqual(self.MIPS.a4, 1, "1.5 did not round down to 1")
 
 
