@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -36,7 +36,7 @@ from nose.plugins.attrib import attr
 # present, which might cause it not to incorrectly fire for gxemul.
 #
 
-class test_cache_instruction_data(BaseCHERITestCase):
+class test_cache_instruction_data(BaseBERITestCase):
 
     @attr('cache')
     @attr('counterdev')

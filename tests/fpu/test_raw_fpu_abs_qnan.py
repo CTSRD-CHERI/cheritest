@@ -29,10 +29,10 @@
 # Test abs.s of "Quiet Not a Number" (QNaN)
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_abs_qnan(BaseCHERITestCase):
+class test_raw_fpu_abs_qnan(BaseBERITestCase):
 
 #
 # This test for a 'not a number' value really should test that the fraction

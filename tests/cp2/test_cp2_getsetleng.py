@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Check basic behaviour of cgetleng and csetlen.
 #
 
-class test_cp2_getsetleng(BaseCHERITestCase):
+class test_cp2_getsetleng(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_getleng1(self):
         '''Test that cgetleng returns correct initial value'''

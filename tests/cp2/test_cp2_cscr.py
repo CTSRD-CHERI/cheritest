@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that storing a capability to memory works.
 #
 
-class test_cp2_cscr(BaseCHERITestCase):
+class test_cp2_cscr(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cscr_underflow(self):
         '''Test that cscr didn't overwrite dword before requested addr'''

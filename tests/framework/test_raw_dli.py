@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_dli(BaseCHERITestCase):
+class test_raw_dli(BaseBERITestCase):
     def test_reg_values(self):
         '''Test dli instruction across all general-purpose registers'''
         for i in range(32):

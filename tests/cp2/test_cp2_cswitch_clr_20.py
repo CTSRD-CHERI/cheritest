@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Full capability context switch test -- with clear.  20 times.
 #
 
-class test_cp2_cswitch_clr_20(BaseCHERITestCase):
+class test_cp2_cswitch_clr_20(BaseBERITestCase):
     @attr('capabilities')
     def test_unsealed(self):
         for i in range(0, 28):

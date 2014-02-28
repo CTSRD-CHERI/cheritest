@@ -25,8 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_tgeu_lt(BaseCHERITestCase):
+class test_tgeu_lt(BaseBERITestCase):
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "tgeu trapped when less than")

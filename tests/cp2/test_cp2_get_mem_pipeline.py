@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # store instructions.
 #
 
-class test_cp2_get_mem_pipeline(BaseCHERITestCase):
+class test_cp2_get_mem_pipeline(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cgetbase_mem(self):
         '''Test that cgetbase results visible to store instructions'''

@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cueq_single(BaseCHERITestCase):
+class test_raw_fpu_cueq_single(BaseBERITestCase):
 
     def test_raw_fpu_cueq_single(self):
         '''Test single-precision unordered or equal'''

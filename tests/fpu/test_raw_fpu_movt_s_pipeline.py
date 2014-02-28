@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_movt_s_pipeline(BaseCHERITestCase):
+class test_raw_fpu_movt_s_pipeline(BaseBERITestCase):
 
     @attr('floatcmove')
     @attr('float_compare_pipeline')

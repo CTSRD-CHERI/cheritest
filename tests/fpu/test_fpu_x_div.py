@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_fpu_x_div(BaseCHERITestCase):
+class test_fpu_x_div(BaseBERITestCase):
 
     @attr('floatexception')
     def test_fpu_x_div(self):

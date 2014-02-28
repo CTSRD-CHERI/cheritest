@@ -21,7 +21,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 # Register assignment:
@@ -36,7 +36,7 @@ from nose.plugins.attrib import attr
 # s0 - actual  badvaddr 2
 # s1 - cause 2
 
-class test_tlb_addrerr_store(BaseCHERITestCase):
+class test_tlb_addrerr_store(BaseBERITestCase):
 
     @attr('tlb')
     def test_epc1(self):

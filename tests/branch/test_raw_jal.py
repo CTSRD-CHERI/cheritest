@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_jal(BaseCHERITestCase):
+class test_raw_jal(BaseBERITestCase):
     def test_jal(self):
         self.assertRegisterEqual(self.MIPS.t0, 1, "instruction before jal missed")
 

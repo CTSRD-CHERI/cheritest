@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # the capability.
 #
 
-class test_cp2_x_csettype_bounds(BaseCHERITestCase):
+class test_cp2_x_csettype_bounds(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_csettype_bounds_1(self):
         '''Test csettype did not set the type when it was outside the bounds of the capability'''

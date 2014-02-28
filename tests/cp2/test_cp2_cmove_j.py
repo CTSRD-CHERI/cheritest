@@ -26,7 +26,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -34,7 +34,7 @@ from nose.plugins.attrib import attr
 # A CP2 instruction followed by a jump caused the jump to be skipped.
 #
 
-class test_cp2_cmove_j(BaseCHERITestCase):
+class test_cp2_cmove_j(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cmove_uperms(self):
         '''Test that cmove retained u, perms fields correctly'''

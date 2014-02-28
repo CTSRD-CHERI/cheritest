@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 # a0: paddr of testdata
@@ -45,7 +45,7 @@ from nose.plugins.attrib import attr
 # s5: Cause
 # s6: EPC	
 
-class test_tlb_invalid_store(BaseCHERITestCase):
+class test_tlb_invalid_store(BaseBERITestCase):
 
     @attr('tlb')
     def test_badvaddr(self):

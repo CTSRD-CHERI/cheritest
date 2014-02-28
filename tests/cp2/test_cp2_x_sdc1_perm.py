@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # c0 does not grant Permit_Store.
 #
 
-class test_cp2_x_sdc1_perm(BaseCHERITestCase):
+class test_cp2_x_sdc1_perm(BaseBERITestCase):
     @attr('capabilities')
     @attr('float')
     @attr('float64')

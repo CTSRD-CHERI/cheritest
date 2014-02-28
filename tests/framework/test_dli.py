@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_dli(BaseCHERITestCase):
+class test_dli(BaseBERITestCase):
     def test_li(self):
         '''Check that intended 32-bit constant turns up in t0'''
         self.assertRegisterEqual(self.MIPS.t0, 0x76543210, "32-bit register load from immediate failed")

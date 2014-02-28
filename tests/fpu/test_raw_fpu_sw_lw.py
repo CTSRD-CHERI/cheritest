@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_fpu_sw_lw(BaseCHERITestCase):
+class test_raw_fpu_sw_lw(BaseBERITestCase):
     def test_positive(self):
         '''Test can save and load positive float'''
         self.assertRegisterEqual(self.MIPS.s1, 0x3f800000, "Failed to save and load 1.0")

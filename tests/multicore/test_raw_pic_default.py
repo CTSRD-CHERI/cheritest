@@ -26,9 +26,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_pic_default(BaseCHERITestCase):
+class test_raw_pic_default(BaseBERITestCase):
     def test_pic_base(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "Null")
 

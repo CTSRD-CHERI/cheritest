@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Check basic behaviour of cgetbase and cincbase.
 #
 
-class test_cp2_getincbase(BaseCHERITestCase):
+class test_cp2_getincbase(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_getbase1(self):
         '''Test that cgetbase returns correct initial value'''

@@ -29,10 +29,10 @@
 # Test single-precision ceiling operation
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_ceil_single(BaseCHERITestCase):
+class test_raw_fpu_ceil_single(BaseBERITestCase):
 
     def test_raw_fpu_ceil_single_mode(self):
         '''Test ceiling operation'''

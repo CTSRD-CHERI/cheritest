@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # permission.
 #
 
-class test_cp2_x_csc_perm(BaseCHERITestCase):
+class test_cp2_x_csc_perm(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_csc_perm_1(self):
         '''Test csc did not store a capability without Permit_Store_Capability'''

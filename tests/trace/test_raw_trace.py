@@ -25,14 +25,14 @@
 #
 
 import sys
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
 
 def read_trace_records(trace_file_name, record_count, record_width=32):
     with open(trace_file_name, 'rb') as trace_file:
         return trace_file.read(record_count * record_width)
 
-class test_raw_trace(BaseCHERITestCase):
+class test_raw_trace(BaseBERITestCase):
     def test_uncached(self):
         '''Test trace from uncached memory is as expected'''
         actual = read_trace_records('log/test_raw_trace.trace', 5)

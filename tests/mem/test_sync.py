@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # assumes a single-processor implementation and doesn't test that sync
 # actually synchronises.
 #
-class test_sync(BaseCHERITestCase):
+class test_sync(BaseBERITestCase):
     def test_sync(self):
         '''Test that dli after sync worked'''
         self.assertRegisterEqual(self.MIPS.a0, 100, "instruction stream interrupted")

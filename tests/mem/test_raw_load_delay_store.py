@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_load_delay_store(BaseCHERITestCase):
+class test_raw_load_delay_store(BaseBERITestCase):
     def test_0nop(self):
         self.assertRegisterEqual(self.MIPS.t0, 0xfedcba9876543210, "load to store with zero NOPs failed")
 

@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_scd(BaseCHERITestCase):
+class test_raw_scd(BaseBERITestCase):
     @attr('llsc')
     def test_store(self):
         '''Store conditional of word to double word'''

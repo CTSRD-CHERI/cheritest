@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -34,7 +34,7 @@ from nose.plugins.attrib import attr
 # segment).
 #
 
-class test_cp2_x_fetch(BaseCHERITestCase):
+class test_cp2_x_fetch(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_fetch_1(self):
         '''Test cannot run code beyond PCC.length'''

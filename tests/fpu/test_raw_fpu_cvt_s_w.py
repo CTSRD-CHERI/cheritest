@@ -30,10 +30,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cvt_s_w(BaseCHERITestCase):
+class test_raw_fpu_cvt_s_w(BaseBERITestCase):
 
     def test_raw_fpu_cvt_s_w_1(self):
         '''Test we can convert 1 (32 bit int) to single precision'''

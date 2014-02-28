@@ -26,9 +26,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_dsub_overflow_minint(BaseCHERITestCase):
+class test_dsub_overflow_minint(BaseBERITestCase):
     def test_epc(self):
         '''Test that an exception was raised when subtracting MININT from zero'''
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")

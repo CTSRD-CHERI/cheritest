@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_code_rom_relocation(BaseCHERITestCase):
+class test_code_rom_relocation(BaseBERITestCase):
     def test_t0(self):
         self.assertRegisterEqual(self.MIPS.t0, 1, "instruction before jump missed")
 

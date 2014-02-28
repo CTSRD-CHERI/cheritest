@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that capability jump and link register saves PCC to RCC.
 #
 
-class test_cp2_cjalr_rcc(BaseCHERITestCase):
+class test_cp2_cjalr_rcc(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cjalr_rcc1(self):
         '''Test that RCC.perms was changed by cjalr'''

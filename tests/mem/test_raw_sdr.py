@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_sdr(BaseCHERITestCase):
+class test_raw_sdr(BaseBERITestCase):
 	def test_a1(self):
 		self.assertRegisterEqual(self.MIPS.a1, 0x1000000000000000, "SDR with zero offset failed")
 

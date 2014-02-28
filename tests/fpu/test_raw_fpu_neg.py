@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_neg(BaseCHERITestCase):
+class test_raw_fpu_neg(BaseBERITestCase):
     def test_neg_single(self):
         '''Test we can negate in single precision'''
         self.assertRegisterEqual(self.MIPS.s0 & 0xffffffff, 0x85300000, "Failed to negate a single")

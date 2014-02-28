@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test CBTU (capability branch if tag is unset)
 #
 
-class test_cp2_cbtu(BaseCHERITestCase):
+class test_cp2_cbtu(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cbtu_1(self):
         '''Test that cbtu does not branch if the tag is set'''

@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # permission.
 #
 
-class test_cp2_x_clc_perm(BaseCHERITestCase):
+class test_cp2_x_clc_perm(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_clc_perm_1(self):
         '''Test clc did not load a capability without Permit_Load_Capability'''

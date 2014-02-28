@@ -28,10 +28,10 @@
 #
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_fpu_x_mthc1(BaseCHERITestCase):
+class test_fpu_x_mthc1(BaseBERITestCase):
 
     @attr('float64')
     @attr('nomthc1')

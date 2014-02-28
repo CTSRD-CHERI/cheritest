@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # than an address error.
 #
 
-class test_cp2_x_cld_priority(BaseCHERITestCase):
+class test_cp2_x_cld_priority(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cld_priority_1(self):
         '''Test cld set cause code to Access KR1C Violation'''

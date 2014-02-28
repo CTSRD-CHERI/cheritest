@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that cmove can copy a capability register whose unsealed bit is cleared
 #
 
-class test_cp2_cmove_sealed(BaseCHERITestCase):
+class test_cp2_cmove_sealed(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cmove_sealed_1(self):
         '''Test that cmove copied unsealed bit'''

@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_bne_gt(BaseCHERITestCase):
+class test_raw_bne_gt(BaseBERITestCase):
     def test_before_bne(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before forward bne missed")
 

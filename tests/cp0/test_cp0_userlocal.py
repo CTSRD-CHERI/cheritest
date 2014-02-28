@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -36,7 +36,7 @@ from nose.plugins.attrib import attr
 # expected to work on CPUs that don't implement user local.
 #
 
-class test_cp0_userlocal(BaseCHERITestCase):
+class test_cp0_userlocal(BaseBERITestCase):
 
     @attr('rdhwr')
     @attr('userlocal')

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test double-precision subtraction when the CPU is in 32-bit mode
 #
 
-class test_raw_fpu_sub_d32(BaseCHERITestCase):
+class test_raw_fpu_sub_d32(BaseBERITestCase):
 
     @attr('float32')
     def test_raw_fpu_sub_d32(self):

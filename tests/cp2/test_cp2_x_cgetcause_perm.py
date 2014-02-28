@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that cgetcause raises an exception if PCC.perms.Access_EPCC is not set.
 #
 
-class test_cp2_x_cgetcause_perm(BaseCHERITestCase):
+class test_cp2_x_cgetcause_perm(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cgetcause_perm_1(self):
         '''Test cgetcause did not read cause without having permission'''

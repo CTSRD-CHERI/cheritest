@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_break(BaseCHERITestCase):
+class test_break(BaseBERITestCase):
     def test_break_epc(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 

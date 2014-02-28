@@ -26,7 +26,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -34,7 +34,7 @@ from nose.plugins.attrib import attr
 # unusable exception.
 #
 
-class test_cp2_disabled_exception(BaseCHERITestCase):
+class test_cp2_disabled_exception(BaseBERITestCase):
 
     @attr('capabilities')
     def test_exception_counter(self):

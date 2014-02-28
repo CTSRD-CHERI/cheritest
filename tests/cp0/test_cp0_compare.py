@@ -25,11 +25,11 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 @attr('comparereg')
-class test_cp0_compare(BaseCHERITestCase):
+class test_cp0_compare(BaseBERITestCase):
     def test_compare_readback(self):
         '''Test that CP0 compare register write succeeded'''
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a1, "CP0 compare register write failed")

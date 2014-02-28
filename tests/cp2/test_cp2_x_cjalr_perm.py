@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that cjalr raises an exception if the capability lacks Permit_Execute
 #
 
-class test_cp2_x_cjalr_perm(BaseCHERITestCase):
+class test_cp2_x_cjalr_perm(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cjalr_perm_1(self):
         '''Test cjalr did not jump when did not have Permit_Execute'''

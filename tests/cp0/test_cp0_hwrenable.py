@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp0_hwrenable(BaseCHERITestCase):
+class test_cp0_hwrenable(BaseBERITestCase):
 
     @attr('rdhwr')
     def test_cp0_hwrenable_1(self):

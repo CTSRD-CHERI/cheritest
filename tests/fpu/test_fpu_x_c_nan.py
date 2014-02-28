@@ -29,10 +29,10 @@
 # Test that comparing an IEEE 'not a number' value raises an exception
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_fpu_x_c_nan(BaseCHERITestCase):
+class test_fpu_x_c_nan(BaseBERITestCase):
 
     @attr('floatexception')
     def test_fpu_x_c_nan(self):

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test CBTS (capability branch if tag is set)
 #
 
-class test_cp2_cbts(BaseCHERITestCase):
+class test_cp2_cbts(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cbts_1(self):
         '''Test that cbts branches if the tag is set'''

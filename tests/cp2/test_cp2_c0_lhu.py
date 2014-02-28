@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test lhu (load half word unsigned) indirected via a constrained c0.
 #
 
-class test_cp2_c0_lhu(BaseCHERITestCase):
+class test_cp2_c0_lhu(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_lhu_64aligned(self):
         '''Test a 64-bit aligned half-word load via a constrained c0'''

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that capability jump and link register alters PCC.
 #
 
-class test_cp2_cjalr_pcc(BaseCHERITestCase):
+class test_cp2_cjalr_pcc(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cjalr_pcc1(self):
         '''Test that PCC.perms was changed by cjalr'''

@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cvt(BaseCHERITestCase):
+class test_raw_fpu_cvt(BaseBERITestCase):
     def test_convert_rounding_mode(self):
         self.assertRegisterEqual(self.MIPS.s7 & 0x3, 0, "FP rounding mode is not round to nearest even")
 

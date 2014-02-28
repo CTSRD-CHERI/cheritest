@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that lbu raises a C2E exception if c0 is sealed.
 #
 
-class test_cp2_x_lb_sealed(BaseCHERITestCase):
+class test_cp2_x_lb_sealed(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_lb_sealed_1(self):
         '''Test lb did not read when c0 was sealed'''

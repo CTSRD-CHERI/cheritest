@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test sd (store double word) indirected via a constrainted c0.
 #
 
-class test_cp2_c0_sd(BaseCHERITestCase):
+class test_cp2_c0_sd(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_c0_sd_underflow(self):
         '''Test that sd via constrained c0 did not underflow'''

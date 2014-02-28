@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_hilo(BaseCHERITestCase):
+class test_hilo(BaseBERITestCase):
     def test_hilo_set_hi(self):
         self.assertRegisterEqual(self.MIPS.a2, 0xe624379d7daf6318, "HI not preserved across set/get")
 

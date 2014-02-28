@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Check basic behaviour of cgettype and csettype.
 #
 
-class test_cp2_getsettype(BaseCHERITestCase):
+class test_cp2_getsettype(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_gettype1(self):
         '''Test that cgettype returns correct initial value'''

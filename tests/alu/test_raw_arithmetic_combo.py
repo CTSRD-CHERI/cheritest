@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_arithmetic_combo(BaseCHERITestCase):
+class test_raw_arithmetic_combo(BaseBERITestCase):
     def test_a0(self):
         '''Test that stages of the arithmetic combo test produced the correct result.'''
         self.assertRegisterEqual(self.MIPS.s0, 0x0000002800000014, "Stage 1 Incorrect")

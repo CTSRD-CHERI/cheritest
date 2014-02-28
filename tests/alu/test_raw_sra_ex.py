@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_sra_ex(BaseCHERITestCase):
+class test_raw_sra_ex(BaseBERITestCase):
 
         @attr('ignorebadex')
         def test_a1(self):

@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_teqi_gt(BaseCHERITestCase):
+class test_teqi_gt(BaseBERITestCase):
     @attr('trapi')
     def test_teqi_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "teqi trapped when greater than")

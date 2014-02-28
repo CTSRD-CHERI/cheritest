@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_addu(BaseCHERITestCase):
+class test_raw_addu(BaseBERITestCase):
     def test_independent_inputs(self):
         '''Check that simple addu worked, no input modification'''
         self.assertRegisterEqual(self.MIPS.s3, 1, "addu modified first input")

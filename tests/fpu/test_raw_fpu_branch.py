@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_fpu_branch(BaseCHERITestCase):
+class test_raw_fpu_branch(BaseBERITestCase):
     def test_bc1t(self):
         '''Test that branch on true branches are taken'''
         self.assertRegisterEqual(self.MIPS.s4, 0xFEEDBED, "Branch wasn't taken")

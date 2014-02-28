@@ -25,84 +25,84 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_a0(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_a1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_a2(self):
         self.assertRegisterEqual(self.MIPS.a2, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_a3(self):
         self.assertRegisterEqual(self.MIPS.a3, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_a4(self):
         self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_a5(self):
         self.assertRegisterEqual(self.MIPS.a5, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_a6(self):
         self.assertRegisterEqual(self.MIPS.a6, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_a7(self):
         self.assertRegisterEqual(self.MIPS.a7, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_t0(self):
         self.assertRegisterEqual(self.MIPS.t0, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_t1(self):
         self.assertRegisterEqual(self.MIPS.t1, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_t2(self):
         self.assertRegisterEqual(self.MIPS.t2, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_t3(self):
         self.assertRegisterEqual(self.MIPS.t3, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_s0(self):
         self.assertRegisterEqual(self.MIPS.s0, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_s1(self):
         self.assertRegisterEqual(self.MIPS.s1, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_s2(self):
         self.assertRegisterEqual(self.MIPS.s2, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_s3(self):
         self.assertRegisterEqual(self.MIPS.s3, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_s4(self):
         self.assertRegisterEqual(self.MIPS.s4, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_s5(self):
         self.assertRegisterEqual(self.MIPS.s5, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_s6(self):
         self.assertRegisterEqual(self.MIPS.s6, 0x0123456789abcdef, "sd burst to ld incorrect value")
 
-class test_sd_burst(BaseCHERITestCase):
+class test_sd_burst(BaseBERITestCase):
     def test_s7(self):
         self.assertRegisterEqual(self.MIPS.s7, 0x0123456789abcdef, "sd burst to ld incorrect value")

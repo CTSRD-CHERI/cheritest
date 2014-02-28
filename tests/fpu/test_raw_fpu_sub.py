@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_sub(BaseCHERITestCase):
+class test_raw_fpu_sub(BaseBERITestCase):
     def test_sub_single(self):
         '''Test we can subtract in single precision'''
         self.assertRegisterEqual(self.MIPS.s1 & 0xffffffff, 0xC0000000, "Failed to subtract 4.0 from 2.0 in single precision")

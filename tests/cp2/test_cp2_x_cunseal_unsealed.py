@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that cunseal raises a C2E exception if the capability isn't sealed
 #
 
-class test_cp2_x_cunseal_unsealed(BaseCHERITestCase):
+class test_cp2_x_cunseal_unsealed(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cunseal_unsealed_1(self):
         '''Test cunseal did not unseal an already unsealed capability'''

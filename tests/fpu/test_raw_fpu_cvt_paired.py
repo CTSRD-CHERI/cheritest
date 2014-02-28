@@ -29,10 +29,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cvt_paired(BaseCHERITestCase):
+class test_raw_fpu_cvt_paired(BaseBERITestCase):
 
     @attr('floatpaired')
     def test_convert_ps_to_s(self):

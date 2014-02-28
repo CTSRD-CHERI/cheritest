@@ -29,10 +29,10 @@
 # Test single-precision rounding mode
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_round_single(BaseCHERITestCase):
+class test_raw_fpu_round_single(BaseBERITestCase):
 
     def test_raw_fpu_round_single_mode(self):
         '''Test default rounding mode'''

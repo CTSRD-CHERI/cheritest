@@ -30,10 +30,10 @@
 # instruction in progress in the FPU.
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_fpu_exception_pipeline(BaseCHERITestCase):
+class test_fpu_exception_pipeline(BaseBERITestCase):
 
     def test_fpu_exception_pipeline_1(self):
         '''Test mtc1 was cancelled by exception'''

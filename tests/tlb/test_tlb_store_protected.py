@@ -21,10 +21,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_tlb_store_protected(BaseCHERITestCase):
+class test_tlb_store_protected(BaseBERITestCase):
 
     @attr('tlb')
     def test_epc_correct(self):

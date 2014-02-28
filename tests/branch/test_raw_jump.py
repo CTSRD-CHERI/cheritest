@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_jump(BaseCHERITestCase):
+class test_raw_jump(BaseBERITestCase):
     def test_j_before(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before j missed")
 

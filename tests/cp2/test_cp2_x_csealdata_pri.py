@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test exception priorities in csealdata
 #
 
-class test_cp2_x_csealdata_pri(BaseCHERITestCase):
+class test_cp2_x_csealdata_pri(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_csealdata_pri_1(self):

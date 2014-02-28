@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_ddiv(BaseCHERITestCase):
+class test_ddiv(BaseBERITestCase):
 	def test_pos_pos(self):
 		'''Test of positive number divided by positive number'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xdebc9a78563412, "Modulo failed")

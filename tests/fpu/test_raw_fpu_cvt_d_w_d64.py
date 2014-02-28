@@ -29,10 +29,10 @@
 # Test conversion from a 32-bit int to a double-precision floating point value
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cvt_d_w_d64(BaseCHERITestCase):
+class test_raw_fpu_cvt_d_w_d64(BaseBERITestCase):
 
     @attr('float64')
     def test_raw_fpu_cvt_d_w_d64_1(self):

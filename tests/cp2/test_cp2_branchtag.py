@@ -26,14 +26,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Check basic behaviour of cbtu and cbts.
 #
 
-class test_cp2_branchtag(BaseCHERITestCase):
+class test_cp2_branchtag(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_branchtag_1(self):
         '''Test that cbts behaves correctly'''

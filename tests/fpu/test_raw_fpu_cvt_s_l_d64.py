@@ -29,10 +29,10 @@
 # Test conversion from a 64-bit int to a single-precision floating point value
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cvt_s_l_d64(BaseCHERITestCase):
+class test_raw_fpu_cvt_s_l_d64(BaseBERITestCase):
 
     @attr('float64')
     def test_raw_fpu_cvt_s_l_d64_1(self):

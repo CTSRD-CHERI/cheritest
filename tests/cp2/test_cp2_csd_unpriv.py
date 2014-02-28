@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # constrained capability.
 #
 
-class test_cp2_csd_unpriv(BaseCHERITestCase):
+class test_cp2_csd_unpriv(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_csd_underflow(self):
         '''Test that csd did not write below constrained capability'''

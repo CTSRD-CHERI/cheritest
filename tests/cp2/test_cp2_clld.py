@@ -26,10 +26,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp2_clld(BaseCHERITestCase):
+class test_cp2_clld(BaseBERITestCase):
 
     @attr('llsc')
     @attr('cached')

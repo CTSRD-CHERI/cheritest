@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test access to Kernel Reserved Capability 1
 #
 
-class test_cp2_kr1c(BaseCHERITestCase):
+class test_cp2_kr1c(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_kr1c1(self):
         '''Test load doubleword via KR1C'''

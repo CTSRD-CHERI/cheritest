@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cule(BaseCHERITestCase):
+class test_raw_fpu_cule(BaseBERITestCase):
     def test_cule_single(self):
         '''Test we can compare unordered or less than or equal in single precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x1, "Failed to compare unordered or less than or equal 2.0, 2.0 in single precision")

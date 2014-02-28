@@ -26,9 +26,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_b_maxoffset(BaseCHERITestCase):
+class test_raw_b_maxoffset(BaseBERITestCase):
     def test_t0(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before branch missed")
 

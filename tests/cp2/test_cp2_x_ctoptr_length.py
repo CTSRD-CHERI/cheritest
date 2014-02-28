@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # does not lie within the range of $ct.
 #
 
-class test_cp2_x_ctoptr_length(BaseCHERITestCase):
+class test_cp2_x_ctoptr_length(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_ctoptr_length_1(self):
         '''Test ctoptr did not change destination register when an exception was raised'''

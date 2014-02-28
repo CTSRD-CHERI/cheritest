@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -45,7 +45,7 @@ from nose.plugins.attrib import attr
 #    registers, which is highly desirable for the general-purpose range.
 #
 
-class test_cp2_reg_init(BaseCHERITestCase):
+class test_cp2_reg_init(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_reg_init_pcc(self):
         '''Test that CP2 register PCC is correctly initialised'''

@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cule_single(BaseCHERITestCase):
+class test_raw_fpu_cule_single(BaseBERITestCase):
 
     def test_raw_fpu_cule_single(self):
         '''Test single-precision ordered, less than, or equal'''

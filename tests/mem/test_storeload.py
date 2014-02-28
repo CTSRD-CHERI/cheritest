@@ -26,9 +26,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_storeload(BaseCHERITestCase):
+class test_storeload(BaseBERITestCase):
     def test_initial_value1(self):
         self.assertRegisterEqual(self.MIPS.a2, 0x5656565656565656, "Unexpected initial data value.")
     def test_initial_value2(self):

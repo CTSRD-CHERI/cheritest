@@ -29,10 +29,10 @@
 # Test single-precision truncate operation
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_trunc_single(BaseCHERITestCase):
+class test_raw_fpu_trunc_single(BaseBERITestCase):
 
     def test_raw_fpu_trunc_single_mode(self):
         '''Test default rounding mode is round to nearest'''

@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # the capability register.
 #
 
-class test_cp2_x_cincbase_tag(BaseCHERITestCase):
+class test_cp2_x_cincbase_tag(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cincbase_tag_1(self):
         '''Test cincbase did not increment an untagged capability'''

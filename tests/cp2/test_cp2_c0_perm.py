@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # c0.perm.Permit_Store is unset.
 #
 
-class test_cp2_c0_perm(BaseCHERITestCase):
+class test_cp2_c0_perm(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_c0_perm_1(self):
         '''Test that lb worked when c0.perm.Permit_Store was unset'''

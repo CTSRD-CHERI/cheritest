@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Check storing non-capbility data clears the tag bit
 #
 
-class test_cp2_tagstore(BaseCHERITestCase):
+class test_cp2_tagstore(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_tagstore1(self):
         '''Test that cgettag returns correct value after store and load'''

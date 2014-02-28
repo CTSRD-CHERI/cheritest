@@ -26,9 +26,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_mem_alias_data(BaseCHERITestCase):
+class test_mem_alias_data(BaseBERITestCase):
     def test_expected_values(self):
         v0=0x0001020304050607
         v1=0x1011121314151617

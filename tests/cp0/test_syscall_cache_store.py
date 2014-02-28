@@ -25,8 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_syscall_cache_store(BaseCHERITestCase):
+class test_syscall_cache_store(BaseBERITestCase):
     def test_syscall_cache_store_returned(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "no return after syscalls")

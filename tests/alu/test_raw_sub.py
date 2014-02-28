@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_sub(BaseCHERITestCase):
+class test_raw_sub(BaseBERITestCase):
     def test_independent_inputs(self):
         '''Check that simple sub worked, no input modification'''
         self.assertRegisterEqual(self.MIPS.s3, 2, "sub modified first input")

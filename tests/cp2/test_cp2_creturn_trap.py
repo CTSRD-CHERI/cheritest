@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that the CReturn instruction causes a trap to the CCall exception handler
 #
 
-class test_cp2_creturn_trap(BaseCHERITestCase):
+class test_cp2_creturn_trap(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_creturn1(self):

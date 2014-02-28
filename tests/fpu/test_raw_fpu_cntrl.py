@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cntrl(BaseCHERITestCase):
+class test_raw_fpu_cntrl(BaseBERITestCase):
     def test_movc(self):
         '''Test to ensure we can move 32 bits between COP1 and GPR registers'''
         self.assertRegisterEqual(self.MIPS.s0, 9, "MOVC failed")

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test capability jump register
 #
 
-class test_cp2_cjr(BaseCHERITestCase):
+class test_cp2_cjr(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cjr1(self):
         '''Test that PCC.perms was changed by cjr'''

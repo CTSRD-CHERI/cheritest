@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that csc raises an exception if the total offset is negative.
 #
 
-class test_cp2_x_csc_underflow(BaseCHERITestCase):
+class test_cp2_x_csc_underflow(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_csc_underflow_1(self):
         '''Test csc does not write to memory when total offset is negative'''

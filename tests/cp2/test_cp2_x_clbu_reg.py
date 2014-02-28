@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # of the reserved registers, and the corresponding bit in PCC is not set.
 #
 
-class test_cp2_x_clbu_reg(BaseCHERITestCase):
+class test_cp2_x_clbu_reg(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_clbu_reg_1(self):
         '''Test clbu did not read via a reserved register'''

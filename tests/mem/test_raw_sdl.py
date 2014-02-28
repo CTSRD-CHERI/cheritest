@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_sdl(BaseCHERITestCase):
+class test_raw_sdl(BaseBERITestCase):
 	def test_a1(self):
 		self.assertRegisterEqual(self.MIPS.a1, 0xfedcba9876543210, "SDL with zero offset failed")
 

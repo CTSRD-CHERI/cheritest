@@ -25,8 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_cglobals(BaseCHERITestCase):
+class test_cglobals(BaseBERITestCase):
     def test_retval(self):
         self.assertRegisterEqual(self.MIPS.v0, 4, "Global values incorrectly initialised")

@@ -26,9 +26,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_beq_lb(BaseCHERITestCase):
+class test_beq_lb(BaseBERITestCase):
 
     def test_before_beq(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before beq missed")

@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_fpu_cvtw(BaseCHERITestCase):
+class test_raw_fpu_cvtw(BaseBERITestCase):
     def test_convert_one_to_word(self):
         '''Test we can convert 1.0f to word'''
         self.assertRegisterEqual(self.MIPS.s0, 1, "Didn't convert 1 to word")

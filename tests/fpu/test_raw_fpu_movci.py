@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_movci(BaseCHERITestCase):
+class test_raw_fpu_movci(BaseBERITestCase):
 
     @attr('floatcmove')
     def test_movf(self):

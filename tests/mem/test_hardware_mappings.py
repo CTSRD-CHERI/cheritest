@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_hardware_mappings(BaseCHERITestCase):
+class test_hardware_mappings(BaseBERITestCase):
     def test_ckseg1(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0123456789abcdef, "ckseg1 load failure")
 

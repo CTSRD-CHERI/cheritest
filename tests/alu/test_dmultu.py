@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_dmultu(BaseCHERITestCase):
+class test_dmultu(BaseBERITestCase):
 	def test_pos_pos(self):
 		'''Test of positive number multiplied by positive number'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xffdc972fa5fa2, "Load from hi or mult failed")

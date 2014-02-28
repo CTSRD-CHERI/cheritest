@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -36,7 +36,7 @@ from nose.plugins.attrib import attr
 # present, which might cause it not to incorrectly fire for gxemul.
 #
 
-class test_hardware_mapping_cached_read(BaseCHERITestCase):
+class test_hardware_mapping_cached_read(BaseBERITestCase):
     @attr('cache')
     def test_uncached_read0(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0123456789abcdef, "Initial uncached read failure")

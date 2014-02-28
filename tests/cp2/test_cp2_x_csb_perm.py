@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that csb raises a C2E exception if it does not have Permit_Store.
 #
 
-class test_cp2_x_csb_perm(BaseCHERITestCase):
+class test_cp2_x_csb_perm(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_csb_perm_1(self):
         '''Test csb did not write without Permit_Store permission'''

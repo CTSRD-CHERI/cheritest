@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_slti(BaseCHERITestCase):
+class test_slti(BaseBERITestCase):
     def test_eq(self):
         '''set on less than immediate: equal, non-negative'''
         self.assertRegisterEqual(self.MIPS.a0, 0, "slti returned true for equal, non-negative")

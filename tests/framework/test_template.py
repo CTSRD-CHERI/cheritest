@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_template(BaseCHERITestCase):
+class test_template(BaseBERITestCase):
     def test_template(self):
         ## Check equality
         self.assertRegisterEqual(0, 0, "Failure description here")

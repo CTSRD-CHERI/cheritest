@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # privileged capability.
 #
 
-class test_cp2_csdr_priv(BaseCHERITestCase):
+class test_cp2_csdr_priv(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_csdr_underflow(self):
         '''Test that csdr did not write below target address'''

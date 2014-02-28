@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # is moved between registers
 #
 
-class test_cp2_mod_mod_pipeline(BaseCHERITestCase):
+class test_cp2_mod_mod_pipeline(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_mod_mod_pipeline_1(self):
         '''Test that csetlen sets length immediately after cmove'''

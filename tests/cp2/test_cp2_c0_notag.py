@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test a capability instruction that doesn't use c0, when c0.tag is unset
 #
 
-class test_cp2_c0_notag(BaseCHERITestCase):
+class test_cp2_c0_notag(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_c0_notag_1(self):
         '''Test that cgetlen of c1 worked when c0.tag was unset'''

@@ -26,10 +26,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp0_ri(BaseCHERITestCase):
+class test_cp0_ri(BaseBERITestCase):
     @attr('nofloat')
     def test_interrupt_fired(self):
         '''Test that ri triggered exception'''

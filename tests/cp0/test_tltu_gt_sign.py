@@ -25,8 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_tltu_gt_sign(BaseCHERITestCase):
+class test_tltu_gt_sign(BaseBERITestCase):
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "tltu trapped when greater than (but less than if signed)")

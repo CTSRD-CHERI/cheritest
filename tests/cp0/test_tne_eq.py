@@ -25,8 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_tne_eq(BaseCHERITestCase):
+class test_tne_eq(BaseBERITestCase):
     def test_tne_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "tne trapped when equal")

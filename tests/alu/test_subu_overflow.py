@@ -25,8 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_subu_overflow(BaseCHERITestCase):
+class test_subu_overflow(BaseBERITestCase):
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "subu triggered overflow exception")

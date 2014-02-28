@@ -42,13 +42,13 @@ def is_envvar_true(var):
     not set to "0"'''
     return os.environ.get(var, "0") != "0"
 
-class BaseCHERITestCase(unittest.TestCase):
-    '''Abstract base class for test cases for the CHERI CPU running under BSIM.
+class BaseBERITestCase(unittest.TestCase):
+    '''Abstract base class for test cases for the BERI CPU running under BSIM.
     Concrete subclasses may override class variables LOG_DIR (for the location
     of the log directory, defaulting to "log") and LOG_FN (for the name of the
     log file within LOG_DIR, defaulting to the class name appended with
     ".log"). Subclasses will be provided with the class variable MIPS, containing
-    an instance of MipsStatus representing the state of the CHERI CPU.'''
+    an instance of MipsStatus representing the state of the BERI CPU.'''
 
     LOG_DIR = os.environ.get("LOGDIR", "log")
     LOG_FN = None
@@ -144,8 +144,8 @@ class BaseCHERITestCase(unittest.TestCase):
             self.fail(msg + "0x%016x is outside of [0x%016x,0x%016x]"%(
                 reg_val, expected_min, expected_max))
 
-class BaseICacheCHERITestCase(BaseCHERITestCase):
-    '''Abstract base class for test cases for the CHERI Instruction Cache.'''
+class BaseICacheBERITestCase(BaseBERITestCase):
+    '''Abstract base class for test cases for the BERI Instruction Cache.'''
 
     LOG_DIR = os.environ.get("LOGDIR", "log")
     LOG_FN = None
@@ -157,7 +157,7 @@ class BaseICacheCHERITestCase(BaseCHERITestCase):
     @classmethod
     def setUpClass(self):
         '''Parse the log file and instantiate MIPS'''
-        super(BaseCHERITestCase, self).setUpClass()
+        super(BaseBERITestCase, self).setUpClass()
         self.cached = bool(int(os.environ.get("CACHED", "0")))
         if self.LOG_FN is None:
             if self.cached:
@@ -171,7 +171,7 @@ class BaseICacheCHERITestCase(BaseCHERITestCase):
             self.ICACHE_EXCEPTION = e
 
     def setUp(self):
-        super(BaseCHERITestCase, self).setUp()
+        super(BaseBERITestCase, self).setUp()
         if not self.ICACHE_EXCEPTION is None:
             raise self.ICACHE_EXCEPTION
 

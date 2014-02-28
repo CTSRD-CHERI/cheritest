@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_nor(BaseCHERITestCase):
+class test_raw_nor(BaseBERITestCase):
     def nor_zeros(self):
         self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "0 nor 0")
 

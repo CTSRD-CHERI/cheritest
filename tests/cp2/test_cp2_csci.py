@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that storing a capability with an immediate offset works.
 #
 
-class test_cp2_csci(BaseCHERITestCase):
+class test_cp2_csci(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_csci_underflow(self):
         '''Test that csci didn't overwrite dword before requested addr'''

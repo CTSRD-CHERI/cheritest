@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # range of the capability.
 #
 
-class test_cp2_x_bounds(BaseCHERITestCase):
+class test_cp2_x_bounds(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_bounds_1(self):
         '''Test clbu did not read beyond the end of the array'''

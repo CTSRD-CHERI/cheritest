@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test the CP0 config3 register
 #
 
-class test_cp0_config3(BaseCHERITestCase):
+class test_cp0_config3(BaseBERITestCase):
 
     @attr('config3')
     def test_cp0_config3_exists(self):

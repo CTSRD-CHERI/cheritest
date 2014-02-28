@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_exception_bev0_trap(BaseCHERITestCase):
+class test_exception_bev0_trap(BaseBERITestCase):
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "EPC not set properly")
 

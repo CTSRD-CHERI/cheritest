@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_sra(BaseCHERITestCase):
+class test_raw_sra(BaseBERITestCase):
 
     def test_sra_0(self):
         '''Test SRA by 0 bits'''

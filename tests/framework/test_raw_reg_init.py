@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_reg_init(BaseCHERITestCase):
+class test_raw_reg_init(BaseBERITestCase):
     def test_reg_init(self):
         '''Test that state of all registers is zero on CPU init'''
         for i in range(32):

@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_mfc0_dmfc0(BaseCHERITestCase):
+class test_raw_mfc0_dmfc0(BaseBERITestCase):
     def test_dmfc0_correct(self):
         '''Check that the value from the EPC is the label'''
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a2, "Read from EPC, with dmfc0, was not the same as desired label")

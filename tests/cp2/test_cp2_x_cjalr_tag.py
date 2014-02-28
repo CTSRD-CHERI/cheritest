@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # the capability register.
 #
 
-class test_cp2_x_cjalr_tag(BaseCHERITestCase):
+class test_cp2_x_cjalr_tag(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cjalr_tag_1(self):
         '''Test cjalr did not branch to an untagged capability'''

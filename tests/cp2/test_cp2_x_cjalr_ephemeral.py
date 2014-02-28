@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that cjalr raises an exception if the capability is ephemeral
 #
 
-class test_cp2_x_cjalr_ephemeral(BaseCHERITestCase):
+class test_cp2_x_cjalr_ephemeral(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cjalr_ephemeral_1(self):
         '''Test cjalr did not jump when capability was ephemeral'''

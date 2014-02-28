@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_mult_exception(BaseCHERITestCase):
+class test_mult_exception(BaseBERITestCase):
     
     @attr('watch')
     def test_lo_is_correct(self):

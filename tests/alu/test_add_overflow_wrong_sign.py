@@ -26,10 +26,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_add_overflow_wrong_sign(BaseCHERITestCase):
+class test_add_overflow_wrong_sign(BaseBERITestCase):
 
     @attr('ignorebadex')
     def test_epc(self):

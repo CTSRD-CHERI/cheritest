@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_madd(BaseCHERITestCase):
+class test_madd(BaseBERITestCase):
 	def test_zero(self):
 		'''Test that hi and lo are zeroed'''
 		self.assertRegisterEqual(self.MIPS.a0, 0, "Hi was not zeroed")

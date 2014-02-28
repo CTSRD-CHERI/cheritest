@@ -37,13 +37,13 @@ def is_envvar_true(var):
     not set to "0"'''
     return os.environ.get(var, "0") != "0"
 
-class BaseCHERITestCase(unittest.TestCase):
-    '''Abstract base class for test cases for the CHERI CPU running under gxemul. 
+class BaseBERITestCase(unittest.TestCase):
+    '''Abstract base class for test cases for the BERI CPU running under gxemul. 
     Concrete subclasses may override class variables LOG_DIR (for the location
     of the log directory, defaulting to "log") and LOG_FN (for the name of the
     log file within LOG_DIR, defaulting to the class name appended with
     ".log"). Subclasses will be provided with the class variable MIPS, containing
-    an instance of MipsStatus representing the state of the CHERI CPU.'''
+    an instance of MipsStatus representing the state of the BERI CPU.'''
 
     LOG_DIR = "gxemul_log"
     LOG_FN = None

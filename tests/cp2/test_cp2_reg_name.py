@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -35,7 +35,7 @@ from nose.plugins.attrib import attr
 # XXXRW: Once we support aliases such as $c2_pcc, we should also check those.
 #
 
-class test_cp2_reg_name(BaseCHERITestCase):
+class test_cp2_reg_name(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_reg_name_pcc(self):
         self.assertRegisterEqual(self.MIPS.pcc.ctype, 0, "CP2 PCC name mismatch")

@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_tltiu_gt(BaseCHERITestCase):
+class test_tltiu_gt(BaseBERITestCase):
     @attr('trapi')
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "tltiu trapped when greater than")

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that clbu raises a C2E exception if the capability is sealed.
 #
 
-class test_cp2_x_clbu_sealed(BaseCHERITestCase):
+class test_cp2_x_clbu_sealed(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_clbu_sealed_1(self):
         '''Test clbu did not read a sealed array'''

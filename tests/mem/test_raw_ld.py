@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_ld(BaseCHERITestCase):
+class test_raw_ld(BaseBERITestCase):
     def test_a0(self):
         '''Test load double word instruction'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Double word load failed")

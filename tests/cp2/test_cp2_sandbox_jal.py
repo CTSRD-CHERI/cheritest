@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that jal (jump and link) works in a sandbox
 #
 
-class test_cp2_sandbox_jal(BaseCHERITestCase):
+class test_cp2_sandbox_jal(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_sandbox_jal_1(self):
         '''Test cjalr entered sandbox'''

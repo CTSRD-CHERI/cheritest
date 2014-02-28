@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_sw(BaseCHERITestCase):
+class test_raw_sw(BaseBERITestCase):
     def test_a0(self):
         '''Test unsigned load of stored word from double word'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfedcba98, "Unsigned load of word from double word failed")

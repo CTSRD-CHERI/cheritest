@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that the signed load operations sign-extend the value that is loaded.
 #
 
-class test_cp2_signex(BaseCHERITestCase):
+class test_cp2_signex(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_signex1(self):
         '''Test that clb sign-extends the result'''

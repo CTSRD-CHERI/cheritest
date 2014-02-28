@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_movz_movn_pipeline(BaseCHERITestCase):
+class test_movz_movn_pipeline(BaseBERITestCase):
     def test_movz_pipeline_true(self):
         '''Test that result of MOVZ test is correct.'''
         self.assertRegisterEqual(self.MIPS.s0, 0xFFFFFFFFFFFFFFFF, "MOVZ moved when it shouldn't have.")

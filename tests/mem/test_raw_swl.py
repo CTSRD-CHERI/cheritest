@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_swl(BaseCHERITestCase):
+class test_raw_swl(BaseBERITestCase):
 	def test_a0(self):
 		'''Test SWL with zero offset'''
 		self.assertRegisterEqual(self.MIPS.a0, 0xfffffffffedcba98, "SWL with zero offset failed")

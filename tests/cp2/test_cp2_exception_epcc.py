@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -36,7 +36,7 @@ from nose.plugins.attrib import attr
 # which we try to check here.
 #
 
-class test_cp2_exception_epcc(BaseCHERITestCase):
+class test_cp2_exception_epcc(BaseBERITestCase):
 
     #
     # Check that various stages of the test did actually run.

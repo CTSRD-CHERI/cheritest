@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # Permit_Store.
 #
 
-class test_cp2_x_swc1_perm(BaseCHERITestCase):
+class test_cp2_x_swc1_perm(BaseBERITestCase):
     @attr('capabilities')
     @attr('float')
     def test_cp2_x_swc1_perm_1(self):

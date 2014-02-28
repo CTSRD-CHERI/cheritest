@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_lh(BaseCHERITestCase):
+class test_raw_lh(BaseBERITestCase):
     def test_a0(self):
         '''Test unsigned load half word from double word'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfedc, "Unsigned half word load from double word failed")

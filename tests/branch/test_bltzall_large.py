@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test bltzall with a large offset
 #
 
-class test_bltzall_large(BaseCHERITestCase):
+class test_bltzall_large(BaseBERITestCase):
 
     @attr('beri')
     def test_bltzall_large_1(self):

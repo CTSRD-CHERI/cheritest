@@ -29,10 +29,10 @@
 # Test floating point operations that give a denormalized result
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_denorm(BaseCHERITestCase):
+class test_raw_fpu_denorm(BaseBERITestCase):
 
     def test_raw_fpu_denorm_add(self):
         '''Test that add.s flushes a denormalized result to zero'''

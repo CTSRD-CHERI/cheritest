@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Check basic behaviour of cgetpcc.
 #
 
-class test_cp2_getpcc(BaseCHERITestCase):
+class test_cp2_getpcc(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_getpcc1(self):
         '''Test that cgetpcc returns correct base'''

@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_or(BaseCHERITestCase):
+class test_raw_or(BaseBERITestCase):
     def or_zeros(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0000000000000000, "0 or 0")
 

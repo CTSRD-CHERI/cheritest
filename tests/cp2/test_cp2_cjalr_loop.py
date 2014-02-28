@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test capability jump and link register
 #
 
-class test_cp2_cjalr_loop(BaseCHERITestCase):
+class test_cp2_cjalr_loop(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cjalr1(self):
         '''Test that sandbox has been called'''

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test csealdata
 #
 
-class test_cp2_csealdata(BaseCHERITestCase):
+class test_cp2_csealdata(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_csealdata1(self):
         '''Test that csealdata clears the unsealed bit'''

@@ -31,7 +31,7 @@
 #
 
 
-from cheritest_tools import BaseICacheCHERITestCase
+from beritest_tools import BaseICacheBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -42,7 +42,7 @@ from nose.plugins.attrib import attr
 # present, which might cause it not to incorrectly fire for gxemul.
 #
 
-class test_cache_instruction_instruction(BaseICacheCHERITestCase):
+class test_cache_instruction_instruction(BaseICacheBERITestCase):
 
     @attr('cache')
     @attr('dumpicache')

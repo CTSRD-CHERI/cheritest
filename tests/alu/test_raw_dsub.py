@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_dsub(BaseCHERITestCase):
+class test_raw_dsub(BaseBERITestCase):
     def test_independent_inputs(self):
         '''Check that simple dadd worked, no input modification'''
         self.assertRegisterEqual(self.MIPS.s3, 2, "dsub modified first input")

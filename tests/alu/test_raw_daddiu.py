@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_daddiu(BaseCHERITestCase):
+class test_raw_daddiu(BaseBERITestCase):
     def test_independent_inputs(self):
         '''Check that simple add worked, no input modification'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "daddiu modified input")

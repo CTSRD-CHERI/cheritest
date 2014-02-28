@@ -25,8 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_cretval(BaseCHERITestCase):
+class test_cretval(BaseBERITestCase):
     def test_v0(self):
         self.assertRegisterEqual(self.MIPS.v0, 100, "Return value corrupted on return from C function");

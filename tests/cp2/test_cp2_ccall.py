@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that the CCall instruction causes a trap to the CCall exception handler
 #
 
-class test_cp2_ccall(BaseCHERITestCase):
+class test_cp2_ccall(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_ccall1(self):
         '''Test that ccall causes a trap'''

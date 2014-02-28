@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Check basic behaviour of cgetunsealed.
 #
 
-class test_cp2_getunsealed(BaseCHERITestCase):
+class test_cp2_getunsealed(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_getunsealed1(self):
         '''Test that cgetunsealed returns correct initial value'''

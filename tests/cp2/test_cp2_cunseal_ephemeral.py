@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test cunseal on an ephemeral capability
 #
 
-class test_cp2_cunseal_ephemeral(BaseCHERITestCase):
+class test_cp2_cunseal_ephemeral(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cunseal_ephemeral_1(self):
         '''Test that cunseal clears the Non_Ephemeral bit'''

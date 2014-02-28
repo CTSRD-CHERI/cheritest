@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_bgezl_eq_back(BaseCHERITestCase):
+class test_raw_bgezl_eq_back(BaseBERITestCase):
     def test_before_bgezl(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before backward bgezl missed")
 

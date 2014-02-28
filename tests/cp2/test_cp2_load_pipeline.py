@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # operation.
 #
 
-class test_cp2_load_pipeline(BaseCHERITestCase):
+class test_cp2_load_pipeline(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_load_pipeline_1(self):
         '''Test that clbu loads the correct value eventually'''

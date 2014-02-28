@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_dli_sign(BaseCHERITestCase):
+class test_raw_dli_sign(BaseBERITestCase):
     def test_li_sign(self):
         '''Test that 32-bit negative immediate is sign-extended'''
         self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "Sign-extended negative 32-bit load immediate failed")

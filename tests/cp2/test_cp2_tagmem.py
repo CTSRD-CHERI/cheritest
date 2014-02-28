@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Check basic behaviour of cgetleng and csetlen.
 #
 
-class test_cp2_tagmem(BaseCHERITestCase):
+class test_cp2_tagmem(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_tagmem1(self):
         '''Test that cgettag returns correct value after store and load'''

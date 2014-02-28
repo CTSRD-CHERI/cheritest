@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test a ccall/creturn sequence
 #
 
-class test_cp2_ccall2(BaseCHERITestCase):
+class test_cp2_ccall2(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_ccall2_1(self):
         '''Test that ccall runs the sandbox'''

@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # is to be stored is not aligned on a 32-byte boundary.
 #
 
-class test_cp2_x_csc_ephemeral(BaseCHERITestCase):
+class test_cp2_x_csc_ephemeral(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_csc_ephemeral_1(self):
         '''Test csc did not store an ephemeral capability'''

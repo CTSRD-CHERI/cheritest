@@ -26,9 +26,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_coherence_setup(BaseCHERITestCase):
+class test_raw_coherence_setup(BaseBERITestCase):
     def test_coreid_register(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "Initial read of coreID register failed")
 

@@ -25,12 +25,12 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 import unittest
 import nose
 
-class test_cp0_reg_init(BaseCHERITestCase):
+class test_cp0_reg_init(BaseBERITestCase):
     def test_context_reg(self):
         '''Test context register default value'''
         self.assertRegisterEqual(self.MIPS.a0, 0x0, "Unexpected CP0 context register value on reset")

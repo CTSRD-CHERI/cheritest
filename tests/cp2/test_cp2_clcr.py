@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that loading a capability after store to memory works.
 #
 
-class test_cp2_clcr(BaseCHERITestCase):
+class test_cp2_clcr(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_clcr_getperm(self):
         '''Test that clcr loaded u, perms fields correctly'''

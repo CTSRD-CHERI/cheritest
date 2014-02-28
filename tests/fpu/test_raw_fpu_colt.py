@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_colt(BaseCHERITestCase):
+class test_raw_fpu_colt(BaseBERITestCase):
     def test_colt_single(self):
         '''Test we can compare less than in single precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x1, "Failed to compare less than 1.0, 2.0 in single precision")

@@ -1,4 +1,4 @@
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 import os
 import tools.sim
@@ -70,7 +70,7 @@ expected_cached=[
     0x9800000000008000,
     0x98000000400003ac,
   ]
-class test_regfuzz_tlb_00003146(BaseCHERITestCase):
+class test_regfuzz_tlb_00003146(BaseBERITestCase):
   @attr('tlb')
   def test_registers_expected(self):
     cached=bool(int(os.getenv('CACHED',False)))

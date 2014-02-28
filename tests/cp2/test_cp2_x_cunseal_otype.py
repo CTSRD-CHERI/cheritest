@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that cunseal raises a C2E exception if the otypes don't match.
 #
 
-class test_cp2_x_cunseal_otype(BaseCHERITestCase):
+class test_cp2_x_cunseal_otype(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cunseal_otype_1(self):
         '''Test cunseal did not unseal with the wrong otype'''

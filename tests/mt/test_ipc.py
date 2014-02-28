@@ -21,11 +21,11 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 @attr('mt')
-class test_ipc(BaseCHERITestCase):
+class test_ipc(BaseBERITestCase):
     def test_cause_t0(self):
         self.assertRegisterEqual(self.MIPS.threads[0].s0 & 0xffff, 0x800, "Thread 0 cause register not interrupt on IP3")
 

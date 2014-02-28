@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that a floating point store clears the tag bit
 #
 
-class test_cp2_floatstore(BaseCHERITestCase):
+class test_cp2_floatstore(BaseBERITestCase):
     @attr('capabilities')
     @attr('float')
     def test_cp2_floatstore_1(self):

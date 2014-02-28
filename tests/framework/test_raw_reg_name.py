@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
 #
 # This test makes sure that the python framework agrees with the assembler as
@@ -35,7 +35,7 @@ from cheritest_tools import BaseCHERITestCase
 # bugs/mismatches.
 #
 
-class test_raw_reg_name(BaseCHERITestCase):
+class test_raw_reg_name(BaseBERITestCase):
     def test_reg_zero(self):
 	'''Test register $zero'''
 	self.assertRegisterEqual(self.MIPS.zero, 0, "register $zero mismatch")

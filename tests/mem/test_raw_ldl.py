@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_ldl(BaseCHERITestCase):
+class test_raw_ldl(BaseBERITestCase):
 	def test_offset_zero(self):
 		self.assertRegisterEqual(self.MIPS.a1, 0xfedcba9876543210, "LDL with zero offset failed")
 

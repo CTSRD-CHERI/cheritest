@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_ssnop(BaseCHERITestCase):
+class test_raw_ssnop(BaseBERITestCase):
     def test_ssnop(self):
         '''Test that registers are unmodified after SSNOP'''
         for i in range(32):

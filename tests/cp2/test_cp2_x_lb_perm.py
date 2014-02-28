@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that lbu raises a C2E exception if c0 does not grant Permit_Load.
 #
 
-class test_cp2_x_lb_perm(BaseCHERITestCase):
+class test_cp2_x_lb_perm(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_lb_perm_1(self):
         '''Test lbu did not read without Permit_Load permission'''

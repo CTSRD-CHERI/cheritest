@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # unprivileged capability.
 #
 
-class test_cp2_clhu_unpriv(BaseCHERITestCase):
+class test_cp2_clhu_unpriv(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_clhu_64aligned(self):
         '''Test a 64-bit aligned half-word load via an unprivileged capability'''

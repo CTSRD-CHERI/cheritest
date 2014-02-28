@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that j (jump) works in a sandbox
 #
 
-class test_cp2_sbx_j(BaseCHERITestCase):
+class test_cp2_sbx_j(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_sbx_j_1(self):
         '''Test cjalr entered sandbox'''

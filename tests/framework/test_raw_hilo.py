@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_hilo(BaseCHERITestCase):
+class test_raw_hilo(BaseBERITestCase):
     @attr('beriinitial')
     def test_init_hi(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "HI non-zero on reset")

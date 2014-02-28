@@ -29,10 +29,10 @@
 # Test floating point division of a small number by itself
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_div_small(BaseCHERITestCase):
+class test_raw_fpu_div_small(BaseBERITestCase):
 
     def test_raw_fpu_div_small_1(self):
         '''Test division of 2^-37 by itself'''

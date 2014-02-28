@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_eret(BaseCHERITestCase):
+class test_eret(BaseBERITestCase):
     def test_a0(self):
         '''Confirm EXL was set by test code'''
         self.assertRegisterEqual((self.MIPS.a0 >> 1) & 0x1, 1, "Unable to set EXL")

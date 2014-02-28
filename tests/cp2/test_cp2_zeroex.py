@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that the unsigned load operations zero-extend the value that is loaded.
 #
 
-class test_cp2_zeroex(BaseCHERITestCase):
+class test_cp2_zeroex(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_zeroex1(self):
         '''Test that clbu zero-extends the result'''

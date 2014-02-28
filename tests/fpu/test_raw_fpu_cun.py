@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cun(BaseCHERITestCase):
+class test_raw_fpu_cun(BaseBERITestCase):
     def test_cun_single(self):
         '''Test we can compare unordered in single precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x1, "Failed to compare unordered QNaN, QNaN in single precision")

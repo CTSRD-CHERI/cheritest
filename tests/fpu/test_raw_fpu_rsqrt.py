@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_rsqrt(BaseCHERITestCase):
+class test_raw_fpu_rsqrt(BaseBERITestCase):
     @attr('floatrsqrt')
     def test_rsqrt_single(self):
         '''Test we can take reciprocal square roots in single precision'''

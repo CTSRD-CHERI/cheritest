@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp2_ctoptr_null(BaseCHERITestCase):
+class test_cp2_ctoptr_null(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_ctoptr_null_1(self):

@@ -21,10 +21,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_tlb_store_0(BaseCHERITestCase):
+class test_tlb_store_0(BaseBERITestCase):
 
     @attr('tlb')
     def test_store_succeeded(self):

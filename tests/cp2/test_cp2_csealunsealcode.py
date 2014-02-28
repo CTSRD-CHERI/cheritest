@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test cunseal on a code capability
 #
 
-class test_cp2_csealunsealcode(BaseCHERITestCase):
+class test_cp2_csealunsealcode(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_csealunsealcode1(self):
         '''Test that cunseal sets the unsealed bit'''

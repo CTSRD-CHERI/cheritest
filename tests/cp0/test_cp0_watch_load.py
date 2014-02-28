@@ -26,10 +26,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp0_watch_load(BaseCHERITestCase):
+class test_cp0_watch_load(BaseBERITestCase):
     @attr('watch')
     def test_watchLo_readback(self):
         '''Test that CP0 watchLo register write succeeded'''

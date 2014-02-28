@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_tnei_eq_sign(BaseCHERITestCase):
+class test_tnei_eq_sign(BaseBERITestCase):
     @attr('trapi')
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "tnei trapped when equal (negative)")

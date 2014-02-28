@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_maddu(BaseCHERITestCase):
+class test_maddu(BaseBERITestCase):
 
     def test_maddu_1(self):
 	'''Test high word of maddu result, positive argument'''

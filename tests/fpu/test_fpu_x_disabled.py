@@ -29,10 +29,10 @@
 # Test floating point division of a small number by itself
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_fpu_x_disabled(BaseCHERITestCase):
+class test_fpu_x_disabled(BaseBERITestCase):
 
     def test_fpu_x_disabled_1(self):
         '''Test that a floating point operation raises an exception if the FPU is disabled'''

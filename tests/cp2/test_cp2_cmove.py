@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # can be read back correctly.
 #
 
-class test_cp2_cmove(BaseCHERITestCase):
+class test_cp2_cmove(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cmove_uperms(self):
         '''Test that cmove retained u, perms fields correctly'''

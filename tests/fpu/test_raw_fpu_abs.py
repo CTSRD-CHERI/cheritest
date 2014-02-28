@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_abs(BaseCHERITestCase):
+class test_raw_fpu_abs(BaseBERITestCase):
     def test_abs_single(self):
         '''Test we can take absolute value of a float'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0FFF0000, "Failed to take absolute of single")

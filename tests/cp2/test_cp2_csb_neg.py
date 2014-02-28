@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test that csb with a negative immediate offset works.
 #
 
-class test_cp2_csb_neg(BaseCHERITestCase):
+class test_cp2_csb_neg(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_csb_neg_1(self):
         '''Test that csb with negative immediate wrote to the correct address'''

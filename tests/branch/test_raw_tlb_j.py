@@ -26,14 +26,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 # Test for a sequence of instructions on Cheri2 that triggered a bug.
 # Problem occurs when a branch is already past execute when an exception
 # occurs which lands on a branch.
 
-class test_raw_tlb_j(BaseCHERITestCase):
+class test_raw_tlb_j(BaseBERITestCase):
 
     @attr('tlb')
     def test_before_jr(self):

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test cfromptr with a non-NULL pointer.
 #
 
-class test_cp2_cfromptr(BaseCHERITestCase):
+class test_cp2_cfromptr(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_cfromptr_perm(self):

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test the CP0 config1 register
 #
 
-class test_cp0_config1(BaseCHERITestCase):
+class test_cp0_config1(BaseBERITestCase):
 
     @attr('float')
     def test_cp0_config1_float(self):

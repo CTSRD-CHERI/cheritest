@@ -26,7 +26,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -34,7 +34,7 @@ from nose.plugins.attrib import attr
 # is to be loaded is not aligned on a 32-byte boundary and that vaddr is correct.
 #
 
-class test_cp2_x_clc_vaddr(BaseCHERITestCase):
+class test_cp2_x_clc_vaddr(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_clc_align_1(self):
         '''Test clc did not load from an unaligned address'''

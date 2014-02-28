@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_cache_write_to_use(BaseCHERITestCase):
+class test_raw_cache_write_to_use(BaseBERITestCase):
     def test_a0(self):
         '''Test series of byte stores in the L2'''
         self.assertRegisterEqual(self.MIPS.a1, 0x0101010101010101, "Series of byte stores in the L2 failed")

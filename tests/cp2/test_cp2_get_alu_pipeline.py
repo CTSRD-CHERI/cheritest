@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
@@ -33,7 +33,7 @@ from nose.plugins.attrib import attr
 # ALU instructions.
 #
 
-class test_cp2_get_alu_pipeline(BaseCHERITestCase):
+class test_cp2_get_alu_pipeline(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cgetbase_alu(self):
         '''Test that cgetbase results visible to ALU'''

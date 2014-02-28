@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_mul_div_loop(BaseCHERITestCase):
+class test_mul_div_loop(BaseBERITestCase):
     def test_a0(self):
         '''Test that result of multiply and divide loop test is correct.'''
         self.assertRegisterEqual(self.MIPS.s7, 0x0000000000058980, "Final Multiply Result is Incorrect")

@@ -25,9 +25,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_bgezal_lt(BaseCHERITestCase):
+class test_raw_bgezal_lt(BaseBERITestCase):
 
     def test_before_bgezal(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before bgezal missed")

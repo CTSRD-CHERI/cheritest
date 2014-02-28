@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_mtc0_sign_extend(BaseCHERITestCase):
+class test_raw_mtc0_sign_extend(BaseBERITestCase):
 
     def test_mtc0_lui(self):
         '''Test we can load a negative 32-bit value into $a0'''

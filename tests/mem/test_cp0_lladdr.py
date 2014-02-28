@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp0_lladdr(BaseCHERITestCase):
+class test_cp0_lladdr(BaseBERITestCase):
     @attr('llsc')
     @attr('lladdr')
     def test_lladdr_reset(self):

@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test lbu (load byte unsigned) indirected via a constrainted c0.
 #
 
-class test_cp2_c0_lbu(BaseCHERITestCase):
+class test_cp2_c0_lbu(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_lbu_64aligned(self):
         '''Test a 64-bit aligned byte load via a constrained c0'''

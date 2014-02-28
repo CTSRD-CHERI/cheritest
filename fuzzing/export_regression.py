@@ -36,7 +36,7 @@ def export_test(test_name, options):
     attrs = ""
     if test_name.find('tlb') != -1:
         attrs=attrs + "@attr('tlb')"
-    print """from cheritest_tools import BaseCHERITestCase
+    print """from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 import os
 import tools.sim
@@ -48,7 +48,7 @@ expected_cached=["""
     for reg in xrange(len(tools.gxemul.MIPS_REG_NUM2NAME)):
         print "    0x%x," % cached_gxemul_status[reg]
     print """  ]
-class %(testname)s(BaseCHERITestCase):
+class %(testname)s(BaseBERITestCase):
   %(attrs)s
   def test_registers_expected(self):
     cached=bool(int(os.getenv('CACHED',False)))

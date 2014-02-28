@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_cf(BaseCHERITestCase):
+class test_raw_fpu_cf(BaseBERITestCase):
     def test_cf_single(self):
         self.assertRegisterEqual(self.MIPS.s0, 0x0, "Failed to compare false 2.0, 2.0 in single precision")
 

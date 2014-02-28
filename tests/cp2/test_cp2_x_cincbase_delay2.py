@@ -25,14 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
 # Test what happens when cincbase raises a C2E exception in a branch delay slot
 #
 
-class test_cp2_x_cincbase_delay2(BaseCHERITestCase):
+class test_cp2_x_cincbase_delay2(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cincbase_delay2_1(self):
         '''Test cincbase did not increment a sealed capability'''

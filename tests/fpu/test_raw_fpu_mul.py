@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_mul(BaseCHERITestCase):
+class test_raw_fpu_mul(BaseBERITestCase):
     def test_mul_single(self):
         '''Test we can multiply in single precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x41800000, "Failed to multiply 4.0 and 4.0 in single precision")
