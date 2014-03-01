@@ -1002,6 +1002,19 @@ TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 
+TEST_PYTHON := \
+	$(addsuffix .py,$(addprefix tests/framework/,$(basename $(RAW_FRAMEWORK_FILES) $(TEST_FRAMEWORK_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/alu/,$(basename $(RAW_ALU_FILES) $(TEST_ALU_FILES) $(TEST_ALU_OVERFLOW_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/branch/,$(basename $(RAW_BRANCH_FILES) $(TEST_BRANCH_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/cp0/,$(basename $(RAW_CP0_FILES) $(TEST_CP0_FILES) $(TEST_TRAPI_FILES) $(TEST_BEV1_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/cp2/,$(basename $(TEST_CP2_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/fpu/,$(basename $(RAW_FPU_FILES) $(TEST_FPU_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/mem/,$(basename $(RAW_LLSC_FILES) $(TEST_LLSC_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/mem/,$(basename $(RAW_MEM_FILES) $(TEST_MEM_FILES) $(TEST_MEM_UNALIGN_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/tlb/,$(basename $(TEST_TLB_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/mt/,$(basename $(TEST_MT_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/multicore/,$(basename $(TEST_MULTICORE_FILES))))
+
 CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(LOGDIR)/,$(TESTS)))
@@ -1301,11 +1314,11 @@ nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 # This is done because Jenkins will complain if it doens't get a fresh XML
 # file each time.
 
-nosetests_uncached.xml: $(CHERI_TEST_LOGS) FORCE
+nosetests_uncached.xml: $(CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit --xunit-file=nosetests_uncached.xml \
 		$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
-nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) FORCE
+nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit --xunit-file=nosetests_cached.xml \
                $(NOSEFLAGS) $(TESTDIRS) || true
 
@@ -1325,11 +1338,11 @@ hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-gxemul-nosetest: $(GXEMUL_TEST_LOGS) FORCE
+gxemul-nosetest: $(GXEMUL_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/gxemul CACHED=0 nosetests --with-xunit --xunit-file=nosetests_gxemul_uncached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-gxemul-nosetest_cached: $(GXEMUL_TEST_CACHED_LOGS) FORCE
+gxemul-nosetest_cached: $(GXEMUL_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/gxemul CACHED=1 nosetests --with-xunit --xunit-file=nosetests_gxemul_cached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
@@ -1339,10 +1352,10 @@ gxemul-build:
 	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
 
-l3-nosetest: $(L3_TEST_LOGS) FORCE
+l3-nosetest: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
-l3-nosetest-cached: $(L3_TEST_CACHED_LOGS) FORCE
+l3-nosetest-cached: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3_cached.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
