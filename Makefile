@@ -1055,6 +1055,9 @@ all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_
 
 test: nosetest nosetest_cached
 
+.PHONY: FORCE
+FORCE:
+
 hardware-setup:
 	- killall -9 altera_socket_tunnel.py
 	- killall -9 system-console
@@ -1291,11 +1294,16 @@ nosetest_cached: nosetests_cached.xml
 nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 	./xmlcat nosetests_uncached.xml nosetests_cached.xml > nosetests_combined.xml
 
-nosetests_uncached.xml: $(CHERI_TEST_LOGS)
+#
+# Use the target FORCE to force the xmk files to be rebuilt each time.
+# This is done because Jenkins will complain if it doens't get a fresh XML
+# file each time.
+
+nosetests_uncached.xml: $(CHERI_TEST_LOGS) FORCE
 	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit --xunit-file=nosetests_uncached.xml \
 		$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
-nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS)
+nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) FORCE
 	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit --xunit-file=nosetests_cached.xml \
                $(NOSEFLAGS) $(TESTDIRS) || true
 
@@ -1315,11 +1323,11 @@ hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-gxemul-nosetest: $(GXEMUL_TEST_LOGS)
+gxemul-nosetest: $(GXEMUL_TEST_LOGS) FORCE
 	PYTHONPATH=tools/gxemul CACHED=0 nosetests --with-xunit --xunit-file=nosetests_gxemul_uncached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-gxemul-nosetest_cached: $(GXEMUL_TEST_CACHED_LOGS)
+gxemul-nosetest_cached: $(GXEMUL_TEST_CACHED_LOGS) FORCE
 	PYTHONPATH=tools/gxemul CACHED=1 nosetests --with-xunit --xunit-file=nosetests_gxemul_cached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
@@ -1329,10 +1337,10 @@ gxemul-build:
 	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
 
-l3-nosetest: $(L3_TEST_LOGS)
+l3-nosetest: $(L3_TEST_LOGS) FORCE
 	PYTHONPATH=tools/sim LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
-l3-nosetest-cached: $(L3_TEST_CACHED_LOGS)
+l3-nosetest-cached: $(L3_TEST_CACHED_LOGS) FORCE
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3_cached.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
