@@ -56,5 +56,5 @@ class test_raw_fpu_round_l_s_d64(BaseBERITestCase):
 
     @attr('float64')
     def test_raw_fpu_round_l_s_d64_5(self):
-        '''Test single precision trunc of 1.5'''
+        '''Test single precision round of 1.5'''
 	self.assertRegisterEqual(self.MIPS.a4, 2, "1.5 did not round up to 2")
