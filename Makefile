@@ -913,7 +913,7 @@ TOOLS_DIR = ${CHERILIBS_ABS}/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 CHERICTL=$(TOOLS_DIR_ABS)/debug/cherictl
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
-CHERISOCKET:= /tmp/cheri_debug_listen_socket
+CHERISOCKET:= /tmp/$(USER)_beri_debug_socket
 SIM        := ${CHERIROOT_ABS}/sim
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
