@@ -1288,11 +1288,11 @@ nosetest_cached: nosetests_cached.xml
 nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 	./xmlcat nosetests_uncached.xml nosetests_cached.xml > nosetests_combined.xml
 
-nosetests_uncached.xml: all $(CHERI_TEST_LOGS)
+nosetests_uncached.xml: $(CHERI_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit --xunit-file=nosetests_uncached.xml \
 		$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
-nosetests_cached.xml: all $(CHERI_TEST_CACHED_LOGS)
+nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit --xunit-file=nosetests_cached.xml \
                $(NOSEFLAGS) $(TESTDIRS) || true
 
@@ -1312,11 +1312,11 @@ hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-gxemul-nosetest: all $(GXEMUL_TEST_LOGS)
+gxemul-nosetest: $(GXEMUL_TEST_LOGS)
 	PYTHONPATH=tools/gxemul CACHED=0 nosetests --with-xunit --xunit-file=nosetests_gxemul_uncached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-gxemul-nosetest_cached: all $(GXEMUL_TEST_CACHED_LOGS)
+gxemul-nosetest_cached: $(GXEMUL_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/gxemul CACHED=1 nosetests --with-xunit --xunit-file=nosetests_gxemul_cached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
@@ -1326,10 +1326,10 @@ gxemul-build:
 	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
 
-l3-nosetest: all $(L3_TEST_LOGS)
+l3-nosetest: $(L3_TEST_LOGS)
 	PYTHONPATH=tools/sim LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
-l3-nosetest-cached: all $(L3_TEST_CACHED_LOGS)
+l3-nosetest-cached: $(L3_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3_cached.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
