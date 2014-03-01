@@ -330,6 +330,7 @@ RAW_FPU_FILES =                \
 		test_raw_fpu_trunc_l_s_d64.s \
 		test_raw_fpu_floor_d64.s \
 		test_raw_fpu_floor_l_d64.s \
+		test_raw_fpu_floor_l_s_d64.s \
 		test_raw_fpu_ceil_d64.s \
 		test_raw_fpu_ceil_l_d64.s \
 		test_raw_fpu_ceil_l_s_d64.s \
