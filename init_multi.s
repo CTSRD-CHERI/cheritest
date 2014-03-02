@@ -41,7 +41,9 @@ multi_start:
 		dmfc0 $k0, $15, 2
 		andi $k0, $k0, 0xffff
 spin:
-		beqz $k0, spin
+		bnez $k0, spin
 		nop
 
-		b start
+                dla     $k0, start
+                jr      $k0
+                move    $k0, $zero      # branch-delay slot
