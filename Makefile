@@ -982,25 +982,32 @@ L3_LOGDIR=l3_log
 
 RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
+RAW_MULTI_LDSCRIPT=raw_multi.ld
 TEST_LDSCRIPT=test.ld
 TEST_CACHED_LDSCRIPT=test_cached.ld
+TEST_MULTI_LDSCRIPT=test_multi.ld
 
 TEST_INIT_OBJECT=$(OBJDIR)/init.o
 # Fuzz tests have a slightly different init which doesn't dump
 # capability registers and has more interesting initial register values.
 TEST_INIT_CACHED_OBJECT=$(OBJDIR)/init_cached.o
+TEST_INIT_MULTI_OBJECT=$(OBJDIR)/init_multi.o
 TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 
 TESTS := $(basename $(TEST_FILES))
 TEST_OBJS := $(addsuffix .o,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_MEMS := $(addsuffix _multi.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_HEXS := $(addsuffix .hex,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_HEXS := $(addsuffix _multi.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_DUMPS := $(addsuffix _multi.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 
 TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/framework/,$(basename $(RAW_FRAMEWORK_FILES) $(TEST_FRAMEWORK_FILES)))) \
@@ -1017,6 +1024,8 @@ TEST_PYTHON := \
 
 CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
+	$(LOGDIR)/,$(TESTS)))
+CHERI_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
 	$(LOGDIR)/,$(TESTS)))
 ALTERA_TEST_LOGS := $(addsuffix .log,$(addprefix $(ALTERA_LOGDIR)/,$(TESTS)))
 ALTERA_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
@@ -1105,20 +1114,24 @@ clean_fuzz:
 
 cleantest:
 	rm -f $(CHERI_TEST_LOGS) $(CHERI_TEST_CACHED_LOGS)
+	rm -f $(CHERI_TEST_MULTI_LOGS)
 	rm -f $(GXEMUL_TEST_LOGS) $(GXEMUL_TEST_CACHED_LOGS)
 	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
 	rm -f $(L3_TEST_LOGS) $(L3_TEST_CACHED_LOGS)
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
+	rm -f $(TEST_INIT_MULTI_OBJECT)
 	rm -f $(TEST_OBJS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
 	rm -f $(TEST_CACHED_ELFS) $(TEST_CACHED_MEMS) $(TEST_CACHED_DUMPS)
+	rm -f $(TEST_MULTI_ELFS) $(TEST_MULTI_MEMS) $(TEST_MULTI_DUMPS)
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
-.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MEMS) $(TEST_INIT_OBJECT) \
-    $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
+.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MEMS) \
+    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_INIT_MULTI_OBJECT) \
+    $(TEST_LIB_OBJECT)
 
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	$(MAKE) -C $(TOOLS_DIR_ABS)/debug/ cherictl
@@ -1168,6 +1181,21 @@ $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
 	$(LD) -EB -G0 -T$(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
+
+#
+# Targets for ELF images of tests running on multicore/multithreaded CPU.
+#
+
+$(OBJDIR)/test_raw_%_multi.elf : $(OBJDIR)/test_raw_%.o \
+	    $(TEST_INIT_MULTI_OBJECT) $(RAW_MULTI_LDSCRIPT)
+	$(LD) -EB -G0 -T$(RAW_MULTI_LDSCRIPT) $(TEST_INIT_MULTI_OBJECT) \
+	    $< -o $@ -m elf64btsmip
+
+$(OBJDIR)/test_%_multi.elf : $(OBJDIR)/test_%.o \
+	    $(TEST_MULTI_LDSCRIPT) $(TEST_INIT_MULTI_OBJECT) \
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
+	$(LD) -EB -G0 -T$(TEST_MULTI_LDSCRIPT) $(TEST_INIT_MULTI_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
 
 #
