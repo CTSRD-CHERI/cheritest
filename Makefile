@@ -898,7 +898,7 @@ and not watch \
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
-TEST_CYCLE_LIMIT=1000000
+TEST_CYCLE_LIMIT?=1000000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
@@ -1348,6 +1348,10 @@ nosetests_uncached.xml: $(CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
 
 nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit --xunit-file=nosetests_cached.xml \
+               $(NOSEFLAGS) $(TESTDIRS) || true
+
+nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim MULTI1=1 nosetests --with-xunit --xunit-file=nosetests_multi.xml \
                $(NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest: hardware-setup all $(ALTERA_TEST_LOGS) hardware-cleanup

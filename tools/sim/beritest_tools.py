@@ -61,8 +61,11 @@ class BaseBERITestCase(unittest.TestCase):
     def setUpClass(self):
         '''Parse the log file and instantiate MIPS'''
         self.cached = bool(int(os.environ.get("CACHED", "0")))
+        self.multi = bool(int(os.environ.get("MULTI1", "0")))
         if self.LOG_FN is None:
-            if self.cached:
+            if self.multi:
+                self.LOG_FN = self.__name__ + "_multi.log"
+            elif self.cached:
                 self.LOG_FN = self.__name__ + "_cached.log"
             else:
                 self.LOG_FN = self.__name__ + ".log"
@@ -159,8 +162,11 @@ class BaseICacheBERITestCase(BaseBERITestCase):
         '''Parse the log file and instantiate MIPS'''
         super(BaseBERITestCase, self).setUpClass()
         self.cached = bool(int(os.environ.get("CACHED", "0")))
+        self.multi = bool(int(os.environ.get("MULTI1", "0")))
         if self.LOG_FN is None:
-            if self.cached:
+            if self.multi:
+                self.LOG_FN = self.__name__ + "_multi.log"
+            elif self.cached:
                 self.LOG_FN = self.__name__ + "_cached.log"
             else:
                 self.LOG_FN = self.__name__ + ".log"
