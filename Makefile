@@ -1192,10 +1192,15 @@ $(OBJDIR)/test_raw_%_multi.elf : $(OBJDIR)/test_raw_%.o \
 	$(LD) -EB -G0 -T$(RAW_MULTI_LDSCRIPT) $(TEST_INIT_MULTI_OBJECT) \
 	    $< -o $@ -m elf64btsmip
 
+#
+# Non-raw multi tests do not need to be linked against init_multi.o, because
+# init.o will take care of mutiple cores/threads. Used init_cached.o instead.
+#
+
 $(OBJDIR)/test_%_multi.elf : $(OBJDIR)/test_%.o \
-	    $(TEST_MULTI_LDSCRIPT) $(TEST_INIT_MULTI_OBJECT) \
+	    $(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	$(LD) -EB -G0 -T$(TEST_MULTI_LDSCRIPT) $(TEST_INIT_MULTI_OBJECT) \
+	$(LD) -EB -G0 -T$(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
 
 #
@@ -1351,7 +1356,7 @@ nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
                $(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim MULTI1=1 nosetests --with-xunit --xunit-file=nosetests_multi.xml \
+	PYTHONPATH=tools/sim MULTI1=1 CACHED=1 nosetests --with-xunit --xunit-file=nosetests_multi.xml \
                $(NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest: hardware-setup all $(ALTERA_TEST_LOGS) hardware-cleanup
