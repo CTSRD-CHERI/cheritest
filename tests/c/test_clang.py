@@ -32,6 +32,7 @@ from nose.plugins.attrib import attr
 # Parameters from the environment
 # Cached or uncached mode.
 CACHED = bool(int(os.environ.get("CACHED", "0")))
+MULTI = bool(int(os.environ.get("MULTI1", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
@@ -51,11 +52,13 @@ class TestClang(object):
                 yield ('check_answer', test_name)
                 
     def check_answer(self, test_name):
-        if CACHED:
-            cached="_cached"
+        if MULTI:
+            suffix="_multi"
+        elif CACHED:
+            suffix="_cached"
         else:
-            cached=""
-        sim_log = open(os.path.join("log",test_name+cached+".log"), 'rt')
+            suffix=""
+        sim_log = open(os.path.join("log",test_name+suffix+".log"), 'rt')
         sim_status=tools.sim.MipsStatus(sim_log)
         regv0=sim_status[2]
         if regv0 != 0:
