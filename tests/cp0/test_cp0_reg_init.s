@@ -49,6 +49,9 @@ test:		.ent test
 		# Wired Register
 		dmfc0	$a1, $6
 
+		# HWREna Register
+		dmfc0   $s1, $7
+		
 		# Count Register
 		dmfc0	$a2, $9
 
@@ -66,7 +69,6 @@ test:		.ent test
 
 		# Config1 Register
 		dmfc0	$a7, $16, 1
-
 
 		# XContext Register
 		dmfc0	$s0, $20

@@ -34,6 +34,12 @@ from nose.plugins.attrib import attr
 # enable bit is not set.
 
 class test_cp0_rdhwr_counter(BaseBERITestCase):
+    @attr('tlb')
+    @attr('rdhwr')
+    def test_hwena_cleared(self):
+        '''Test that hwrena is cleared'''
+        self.assertRegisterEqual(self.MIPS.a4, 0, "hwrena was not cleared")	
+
 
     @attr('tlb')
     @attr('rdhwr')

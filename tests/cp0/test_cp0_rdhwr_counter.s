@@ -76,6 +76,9 @@ test:   .ent    test
                 ori     $t2, 0x12               # Set user mode, exl
                 and     $t2, 0xffffffffefffffff # Clear cu0 bit
                 dmtc0   $t2, $12                # Write status
+
+		dmfc0   $a4, $7                 # fetch HWREna to check it was cleared
+	
                 nop
                 nop
 	        eret                            # Jump to test code
