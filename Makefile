@@ -357,7 +357,8 @@ RAW_FPU_FILES =                \
 		test_raw_fpu_movci.s	\
 		test_raw_fpu_sd_ld.s	\
 		test_raw_fpu_sw_lw.s	\
-		test_raw_fpu_xc1.s
+		test_raw_fpu_xc1.s	\
+		test_raw_fpu_infinity_single.s
 
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
