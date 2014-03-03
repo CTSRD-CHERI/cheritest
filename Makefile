@@ -849,6 +849,7 @@ and not capabilities    \
 and not clang           \
 and not beri            \
 and not dumpicache	\
+and not einstr		\
 and not nofloat         \
 and not floatpaired     \
 and not floatindexed    \
@@ -880,6 +881,7 @@ and not comparereg \
 and not config3 \
 and not counterdev \
 and not dumpicache \
+and not einstr \
 and not float \
 and not ignorebadex \
 and not invalidateL2 \
