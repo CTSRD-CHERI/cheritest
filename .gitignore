@@ -2,3 +2,5 @@
 *.pyc
 nosetests_cached.xml
 nosetests_uncached.xml
+nosetests_gxemul_cached.xml
+nosetests_gxemul_uncached.xml
