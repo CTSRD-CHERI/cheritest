@@ -34,6 +34,13 @@ class test_cp0_rdhwr_user2(BaseBERITestCase):
     @attr('rdhwr')
     @attr('userlocal')
     def test_cp0_rdhwr_user2_1(self):
-        '''Test that the user local register can be from user space'''
+        '''Test that the user local register can be read from user space'''
         self.assertRegisterEqual(self.MIPS.a1, 0x123456789abcdef0, "rdhwr did not read back the expected value from the user local register")
 
+
+    @attr('tlb')
+    @attr('rdhwr')
+    @attr('usercount')
+    def test_cp0_rdhwr_user2_count(self):
+        '''Test that the user count register can be read from user space'''
+        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a3-50, self.MIPS.a3, "rdhwr counter did not approximately match cp0 count ")

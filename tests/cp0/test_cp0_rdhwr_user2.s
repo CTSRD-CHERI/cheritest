@@ -57,6 +57,7 @@ test:   .ent    test
 		#
 
 		dli	$t0, 1 << 29
+		or      $t0, 4
 		dmtc0	$t0, $7
 
 		# UserLocal is readable as hardware register 29
@@ -122,10 +123,15 @@ testcode:
 		or      $a1, $t1, 0             # move to check forwarding
 		bnez    $t0, 1b
 		li      $t0, 0
+		# test that the user count register is accessible
+		rdhwr	$a2, $2
+		
 		.set pop
 		syscall 0			# Return to kernel mode
 
 exception_handler:
+		# fetch CP0 count for comparison
+		dmfc0   $a3, $9
                 dmfc0   $a6, $12                # Read status
                 dmfc0   $a7, $13                # Read cause
 		dla	$t0, the_end
