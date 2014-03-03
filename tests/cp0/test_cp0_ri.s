@@ -71,6 +71,8 @@ test:		.ent test
 		# check it later.
 		#
 		dla	$a0, desired_epc
+		# Also load instruction encoding for later comparison
+		lwu     $a7, 0($a0)
 
 	        #
 	        # Trigger Reserved Instruction Exception.
@@ -105,6 +107,10 @@ bev0_handler:
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
+		# Fetch encoding of exception causing instruction
+		#dmfc0   $a6, $8, $1     
+		#assembler doesn't support this yet so use manual assembly...
+		.word   0x402a4001
 		nop			# NOPs to avoid hazard with ERET
 		nop			# XXXRW: How many are actually
 		nop			# required here?

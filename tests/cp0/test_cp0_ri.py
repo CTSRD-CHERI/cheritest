@@ -55,4 +55,9 @@ class test_cp0_ri(BaseBERITestCase):
         '''Test that EPC matches desired value.'''
         self.assertRegisterEqual(self.MIPS.a5, self.MIPS.a0, "EPC not correct in exception handler")
 
+    @attr('nofloat', 'einstr')
+    def test_einstr_in_handler(self):
+        '''Test that einstr matches desired value.'''
+        self.assertRegisterEqual(self.MIPS.a6, self.MIPS.a7, "EInstr not correct in exception handler")
+
 
