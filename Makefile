@@ -469,7 +469,8 @@ TEST_CP0_FILES=					\
 		test_cp0_rdhwr_user2.s		\
 		test_cp0_rdhwr_counter.s	\
 		test_cp0_hwrenable.s		\
-		test_cp0_syncistep.s
+		test_cp0_syncistep.s		\
+		test_cp0_ccres.s
 
 TEST_FPU_FILES=					\
 		test_fpu_exception_pipeline.s	\
