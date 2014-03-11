@@ -468,7 +468,8 @@ TEST_CP0_FILES=					\
 		test_cp0_rdhwr_user.s		\
 		test_cp0_rdhwr_user2.s		\
 		test_cp0_rdhwr_counter.s	\
-		test_cp0_hwrenable.s
+		test_cp0_hwrenable.s		\
+		test_cp0_syncistep.s
 
 TEST_FPU_FILES=					\
 		test_fpu_exception_pipeline.s	\
@@ -947,6 +948,7 @@ NOSEPRED+=and not dumpicache
 else
 NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb
+NOSEPRED+=and not syncistep
 endif
 ifdef COP1
 NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm
