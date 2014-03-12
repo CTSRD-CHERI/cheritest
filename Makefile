@@ -767,7 +767,8 @@ endif
 
 ifeq ($(MT),1)
 TEST_MT_FILES=\
-		test_ipc.s
+		test_ipc.s	\
+		test_mt_rdhwr.s
 else
 TEST_MT_FILES=
 endif
