@@ -913,10 +913,10 @@ TEST_CYCLE_LIMIT?=1000000
 # tests to current categories.
 #
 
-# Set CHERI_VER to 2 to test cheri2
-CHERI_VER?=
+# Set BERI_VER to 2 to test cheri2
+BERI_VER?=
 # Set to 0 to disable capability tests
-CHERIROOT?=../../cheri$(CHERI_VER)/trunk
+CHERIROOT?=../../cheri$(BERI_VER)/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
@@ -941,7 +941,7 @@ else
 endif
 endif
 NOSEPRED=not false
-ifeq ($(CHERI_VER),2)
+ifeq ($(BERI_VER),2)
 NOSEPRED+=and not invalidateL2
 NOSEPRED+=and not lladdr
 NOSEPRED+=and not bigtlb
@@ -1162,7 +1162,7 @@ $(OBJDIR)/test_%.o : test_%.c
 	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym CHERI_VER=$(CHERI_VER) --defsym  TEST_CP2=$(TEST_CP2) -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) -o $@ $<
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< 
 
 #
