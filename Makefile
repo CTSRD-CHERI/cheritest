@@ -566,7 +566,8 @@ TEST_CP2_FILES=					\
 		test_cp2_c0_sb.s		\
 		test_cp2_exception_epcc.s       \
 		test_cp2_exception_pipeline.s   \
-                test_cp2_tlb_exception_fill.s   \
+		test_cp2_tlb_exception_fill.s   \
+		test_cp2_tlb_instruction_miss.s \
 		test_cp2_cmove_j.s		\
 		test_cp2_c0_notag.s		\
 		test_cp2_c0_perm.s		\
