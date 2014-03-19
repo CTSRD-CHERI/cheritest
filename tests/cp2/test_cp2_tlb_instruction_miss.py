@@ -42,5 +42,5 @@ class test_cp2_tlb_instruction_miss(BaseBERITestCase):
 
     @attr('tlb')
     def test_badVictim(self):
-        self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a7, "EPC is incorrect")
+        self.assertRegisterEqual(0, self.MIPS.a7, "EPC is incorrect")
     
