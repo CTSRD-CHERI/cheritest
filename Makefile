@@ -358,6 +358,10 @@ RAW_FPU_FILES =                \
 		test_raw_fpu_sd_ld.s	\
 		test_raw_fpu_sw_lw.s	\
 		test_raw_fpu_xc1.s	\
+		test_raw_fpu_add_inf_single.s \
+		test_raw_fpu_sub_inf_single.s \
+		test_raw_fpu_mul_inf_single.s \
+		test_raw_fpu_div_inf_single.s \
 		test_raw_fpu_infinity_single.s
 
 TEST_FRAMEWORK_FILES=				\
