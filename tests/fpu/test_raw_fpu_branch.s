@@ -30,69 +30,71 @@
 .set nobopt
 .set noat
 
+#
 # Tests to ensure branching works as expected
+#
 
-        .text
-        .global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-        # First enable CP1 
-        dli $t1, 1 << 29
-        or $at, $at, $t1   # Enable CP1    
-	    mtc0    $at, $12 
-        nop
-        nop
-        nop
-        nop
+		# First enable CP1 
+		dli $t1, 1 << 29
+		or $at, $at, $t1	# Enable CP1    
+		mtc0 $at, $12 
+		nop
+		nop
+		nop
+		nop
 
-        li $t0, 1
-        ctc1 $t0, $f25 # Set cc[0]=1
-        bc1t branch_taken
-        nop # branch delay slot
-        b end_test
+		li $t0, 1
+		ctc1 $t0, $f25		# Set cc[0]=1
+		bc1t branch_taken
+		nop			# branch delay slot
+		b end_test
 
 branch_taken:
-        li $s4, 0x0FEEDBED
+		li $s4, 0x0FEEDBED
 
-        # Individual tests
-        
-        # BC1F (Taken)
-        ctc1 $0, $f31
-        li $t2, 4
-        mtc1 $t2, $f3
-        li $t1, 3
-        bc1f 8
-        li $s0, 0
-        mtc1 $t1, $f3
-        mfc1 $s0, $f3
-        
-        # BC1T (Not Taken)
-        mtc1 $t2, $f3
-        bc1t 8
-        li $s1, 0
-        mtc1 $t1, $f3
-        mfc1 $s1, $f3
-        
-        # Set FCSR (FCC[0] == 1)
-        lui $t0, 0x0080
-        ctc1 $t0, $f31
-        
-        # BC1F (Not Taken)
-        mtc1 $t2, $f4
-        bc1f 8
-        li $s2, 0
-        mtc1 $t1, $f4
-        mfc1 $s2, $f4
-        
-        # BC1T (Taken)
-        mtc1 $t2, $f5
-        bc1t 8
-        li $s3, 0
-        mtc1 $t1, $f5
-        mfc1 $s3, $f5
+		# Individual tests
+		
+		# BC1F (Taken)
+		ctc1 $0, $f31
+		li $t2, 4
+		mtc1 $t2, $f3
+		li $t1, 3
+		bc1f 8
+		li $s0, 0
+		mtc1 $t1, $f3
+		mfc1 $s0, $f3
+		
+		# BC1T (Not Taken)
+		mtc1 $t2, $f3
+		bc1t 8
+		li $s1, 0
+		mtc1 $t1, $f3
+		mfc1 $s1, $f3
+		
+		# Set FCSR (FCC[0] == 1)
+		lui $t0, 0x0080
+		ctc1 $t0, $f31
+		
+		# BC1F (Not Taken)
+		mtc1 $t2, $f4
+		bc1f 8
+		li $s2, 0
+		mtc1 $t1, $f4
+		mfc1 $s2, $f4
+		
+		# BC1T (Taken)
+		mtc1 $t2, $f5
+		bc1t 8
+		li $s3, 0
+		mtc1 $t1, $f5
+		mfc1 $s3, $f5
 
 end_test:
-        # Dump registers on the simulator (gxemul dumps regs on exit)
+		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26
 		nop
 		nop
