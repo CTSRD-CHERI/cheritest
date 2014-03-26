@@ -30,12 +30,10 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 class test_cp0_ri(BaseBERITestCase):
-    @attr('nofloat')
     def test_interrupt_fired(self):
         '''Test that ri triggered exception'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "Exception didn't fire")
 
-    @attr('nofloat')
     def test_eret_happened(self):
         '''Test that eret occurred'''
         self.assertRegisterEqual(self.MIPS.a1, 1, "Exception didn't return")
@@ -45,17 +43,15 @@ class test_cp0_ri(BaseBERITestCase):
         '''Test that exception code is set to "ri" in cause register.'''
         self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 10, "Cause not set to RI.")
 
-    @attr('nofloat')
     def test_exl_in_handler(self):
         '''Test EXL set in status register.'''
         self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
 
-    @attr('nofloat')
     def test_epc_in_handler(self):
         '''Test that EPC matches desired value.'''
         self.assertRegisterEqual(self.MIPS.a5, self.MIPS.a0, "EPC not correct in exception handler")
 
-    @attr('nofloat', 'einstr')
+    @attr('einstr')
     def test_einstr_in_handler(self):
         '''Test that einstr matches desired value.'''
         self.assertRegisterEqual(self.MIPS.a6, self.MIPS.a7, "EInstr not correct in exception handler")

@@ -33,7 +33,8 @@
 .set noat
 
 #
-# Test the watchpoint functionality for instruction accesses.
+# Test that an unimplemented instruction causes a "reserved instruction"
+# exception.
 #
 
 		.global test
@@ -51,6 +52,22 @@ test:		.ent test
 		dla	$a0, bev0_handler
 		jal	bev0_handler_install
 		nop
+
+		#
+		# Disable the floating point unit
+		#
+		dli	$t1, 1 << 29
+		nor	$t1, $t1, $t1
+		mfc0	$t0, $12
+		and	$t0, $t0, $t1
+		mtc0	$t0, $12
+
+		#
+		# Potential hazard between updating the status register
+		# and attempting a floating point operation; but there
+		# are plenty of other intructins between here and the
+		# floating point operation.
+		#
 
 		#
 		# Clear registers we'll use when testing results later.
@@ -76,10 +93,14 @@ test:		.ent test
 
 	        #
 	        # Trigger Reserved Instruction Exception.
-	        # A floating point instruction should do it.
-                # Unless, of course, there actually is an FP unit...
+	        # A floating point instruction should do it...
+                # ... unless there actually is an FP unit, in which case we'll
+		# still get an exception (because the FPU is disabled), but
+		# it will be coprocessor unusable rather than reserved
+		# instruction.
+		# 
 desired_epc:
-                ADD.S $f0, $f0, $f0
+                add.s $f0, $f0, $f0
 
 		#
 		# Exception return.
