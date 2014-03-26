@@ -36,38 +36,38 @@
 # In the MIPS spec, abs is what the IEEE floating point standard calls
 # 'arithmetic'.
 #
-        .text
-	.global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29			# Enable CP1
+		or $t0, $t0, $t1    
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	lui $t0, 0xff90		# QNaN, with the sign bit set
-	mtc1 $t0, $f1
+		lui $t0, 0xff90		# QNaN, with the sign bit set
+		mtc1 $t0, $f1
 
-	abs.s $f1, $f1
-	mfc1 $a0, $f1
+		abs.s $f1, $f1
+		mfc1 $a0, $f1
 
-        cfc1 $a1, $31           # FCSR
-        dsrl $a1, $a1, 19       # ABS2008 bit. 1 if abs behaves as in 
-        andi $a1, 0x01          # IEEE 754-2008, 0 for legacy MIPS.
+		cfc1 $a1, $31           # FCSR
+		dsrl $a1, $a1, 19       # ABS2008 bit. 1 if abs behaves as in 
+		andi $a1, 0x01          # IEEE 754-2008, 0 for legacy MIPS.
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
+		# Dump registers on the simulator (gxemul dumps regs on exit)
 
-	mtc0 $at, $26
-	nop
-	nop
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start
