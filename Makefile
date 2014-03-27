@@ -412,7 +412,8 @@ TEST_MEM_FILES=					\
 		test_sd_burst.s			\
 		test_storeload.s		\
 		test_sync.s                     \
-		test_mem_alias_data.s
+		test_mem_alias_data.s		\
+		test_id_coherence.s
 
 TEST_LLSC_FILES=				\
 		test_ll_unalign.s		\
@@ -979,7 +980,7 @@ ifdef CHERI_MICRO
 NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
 endif
 ifneq ($(NOSEPRED),)
-NOSEFLAGS?=-A "$(NOSEPRED)"
+NOSEFLAGS?=-A "$(NOSEPRED) and not uncached"
 NOSEFLAGS_UNCACHED?=-A "$(NOSEPRED) and not cached"
 endif
 
