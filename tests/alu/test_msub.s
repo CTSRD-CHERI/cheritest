@@ -44,7 +44,6 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		# Test itself goes here
 		li	$t0, 65535
 		li	$t1, 65537
 		mult	$t0, $t1

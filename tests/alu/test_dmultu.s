@@ -42,7 +42,6 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		# Test itself goes here
 		dli	$t0, 0x0fedcba987654321
 		dli	$t1, 0x0101010101010101 
 		#$zero prevents assembler adding checking instructions
