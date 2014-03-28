@@ -56,8 +56,8 @@ test:		.ent test
 L1:
 		or	$a4, $a3, $a0
 		sw	$a4, 0($a2)
-		cache	0x29, 0($a2)	# Flush writeback DCache to memory
-		cache	0x20, 0($a2)	# Invalidate ICache for address $a2
+		cache	0x19, 0($a2)	# Flush writeback DCache to memory
+		cache	0x10, 0($a2)	# Invalidate ICache for address $a2
 		lw	$a5, 0($a2)
 		nop
 		nop
