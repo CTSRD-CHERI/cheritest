@@ -33,96 +33,96 @@
 #
 # Test double-precision 'ordered less than' (c.olt.s)
 #
-        .text
-        .global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        lui $t1, 0x2000		# Enable CP1
-        or $t0, $t0, $t1    
-	li $t1, 1 << 26		# Put FPU into 64 bit mode
-	or $t0, $t0, $t1
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		lui $t1, 0x2000		# Enable CP1
+		or $t0, $t0, $t1    
+		li $t1, 1 << 26		# Put FPU into 64 bit mode
+		or $t0, $t0, $t1
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-        
-	li $a0, 0
+		
+		li $a0, 0
 
-	lui $t0, 0x3FF0 	# 1.0
-	dsll $t0, $t0, 32
-	dmtc1 $t0, $f12
+		lui $t0, 0x3FF0 	# 1.0
+		dsll $t0, $t0, 32
+		dmtc1 $t0, $f12
 
-	lui $t0, 0x4000		# 2.0	
-	dsll $t0, $t0, 32
-	dmtc1 $t0, $f14
+		lui $t0, 0x4000		# 2.0	
+		dsll $t0, $t0, 32
+		dmtc1 $t0, $f14
 
-	c.olt.d $f14, $f12
-	nop
-	nop
-	nop
+		c.olt.d $f14, $f12
+		nop
+		nop
+		nop
 
-	bc1t L1
-	nop	# branch delay slot
-	ori $a0, $a0, 0x8
+		bc1t L1
+		nop	# branch delay slot
+		ori $a0, $a0, 0x8
 
 L1:
-	c.olt.d $f12, $f14
-	nop
-	nop
-	nop
+		c.olt.d $f12, $f14
+		nop
+		nop
+		nop
 
-	bc1t L2
-	nop	# branch delay slot
-	ori $a0, $a0, 0x4
+		bc1t L2
+		nop	# branch delay slot
+		ori $a0, $a0, 0x4
 
 L2:
-	c.olt.d $f12, $f12
-	nop
-	nop
-	nop
+		c.olt.d $f12, $f12
+		nop
+		nop
+		nop
 
-	bc1t L3
-	nop	# branch delay slot
-	ori $a0, $a0, 0x2
+		bc1t L3
+		nop	# branch delay slot
+		ori $a0, $a0, 0x2
 
 L3:
 
-	lui $t0, 0x3f1a	# 0.0001
-	ori $t0, $t0, 0x36e2
-	dsll $t0, $t0, 16
-	ori $t0, 0xeb1c
-	dsll $t0, $t0, 16
-	ori $t0, $t0, 0x432d
-	dmtc1 $t0, $f8
+		lui $t0, 0x3f1a	# 0.0001
+		ori $t0, $t0, 0x36e2
+		dsll $t0, $t0, 16
+		ori $t0, 0xeb1c
+		dsll $t0, $t0, 16
+		ori $t0, $t0, 0x432d
+		dmtc1 $t0, $f8
 
-	lui $t0, 0xbff0 # -1
-	dsll $t0, $t0, 32
-	dmtc1 $t0, $f10
+		lui $t0, 0xbff0 # -1
+		dsll $t0, $t0, 32
+		dmtc1 $t0, $f10
 
-	dli $a1, 0
-	c.olt.d $f10, $f8
+		dli $a1, 0
+		c.olt.d $f10, $f8
 
-	nop
-	nop
-	nop
-	bc1t L4
-	nop	# branch delay slot
+		nop
+		nop
+		nop
+		bc1t L4
+		nop	# branch delay slot
 
-	dli $a1, 1
+		dli $a1, 1
 
 L4:
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start

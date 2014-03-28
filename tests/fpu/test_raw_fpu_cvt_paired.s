@@ -30,45 +30,47 @@
 .set nobopt
 .set noat
 
+#
 # Test conversion works in the coprocessor
+#
     
-        .text
-        .global start
-        .ent start
+		.text
+		.global start
+		.ent start
 
 start:
-        # Enable CP1
-        dli $t1, 1 << 29
-        or $at, $at, $t1
-        mtc0 $at, $12
-        nop
-        nop
-        nop
-        nop
+		# Enable CP1
+		dli $t1, 1 << 29
+		or $at, $at, $t1
+		mtc0 $at, $12
+		nop
+		nop
+		nop
+		nop
 
-        # START TEST
+		# START TEST
 
-        # Convert PS to S
-        li $a0, 0xDDDDDDDD
-        li $a1, 0x33333333 
-        dsll $a0, $a0, 32
-        or $a0, $a0, $a1
-        dmtc1 $a0, $f0
-        cvt.s.pl $f1, $f0
-        cvt.s.pu $f2, $f0
-        dmfc1 $a0, $f1
-        dmfc1 $a1, $f2
+		# Convert PS to S
+		li $a0, 0xDDDDDDDD
+		li $a1, 0x33333333 
+		dsll $a0, $a0, 32
+		or $a0, $a0, $a1
+		dmtc1 $a0, $f0
+		cvt.s.pl $f1, $f0
+		cvt.s.pu $f2, $f0
+		dmfc1 $a0, $f1
+		dmfc1 $a1, $f2
  
-        # END TEST
+		# END TEST
 
-        # Dump reigsters and terminate
-        mtc0 $at, $26
-        nop
-        nop
-        
-        mtc0 $at, $23
+		# Dump reigsters and terminate
+		mtc0 $at, $26
+		nop
+		nop
+		
+		mtc0 $at, $23
 
 end:
-        b end
-        nop
-        .end start
+		b end
+		nop
+		.end start

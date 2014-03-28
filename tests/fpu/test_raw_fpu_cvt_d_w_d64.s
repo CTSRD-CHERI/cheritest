@@ -34,45 +34,45 @@
 # Test conversion from 32-bit int to double-precision floating point when
 # the FPU is in 64-bit mode
 #
-        .text
-        .global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	li $t1, 1 << 26		# Put FPU into 64 bit mode
-	or $t0, $t0, $t1
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Enable CP1
+		or $t0, $t0, $t1    
+		li $t1, 1 << 26		# Put FPU into 64 bit mode
+		or $t0, $t0, $t1
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	li $t0, 0
-	mtc1 $t0, $f2
-	cvt.d.w $f2, $f2
-	dmfc1 $a0, $f2
+		li $t0, 0
+		mtc1 $t0, $f2
+		cvt.d.w $f2, $f2
+		dmfc1 $a0, $f2
 
-	li $t0, 1
-	mtc1 $t0, $f2
-	cvt.d.w $f2, $f2
-	dmfc1 $a1, $f2
+		li $t0, 1
+		mtc1 $t0, $f2
+		cvt.d.w $f2, $f2
+		dmfc1 $a1, $f2
 
-	lui $t0, 0xffff
-	ori $t0, $t0, 0xffff
-	mtc1 $t0, $f2
-	cvt.d.w $f2, $f2
-	dmfc1 $a2, $f2
+		lui $t0, 0xffff
+		ori $t0, $t0, 0xffff
+		mtc1 $t0, $f2
+		cvt.d.w $f2, $f2
+		dmfc1 $a2, $f2
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start

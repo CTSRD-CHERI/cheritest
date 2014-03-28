@@ -37,48 +37,48 @@
 
 # Test conversion works in the coprocessor
     
-        .text
-        .global start
-        .ent start
+		.text
+		.global start
+		.ent start
 
 start:
-        # Enable CP1
-        dli $t1, 1 << 29
-        or $at, $at, $t1
-        mtc0 $at, $12
-        nop
-        nop
-        nop
-        nop
+		# Enable CP1
+		dli $t1, 1 << 29
+		or $at, $at, $t1
+		mtc0 $at, $12
+		nop
+		nop
+		nop
+		nop
 
-        li $t0, 1
-        mtc1 $t0, $f0
-        cvt.s.w $f0, $f0
-        mfc1 $a0, $f0
+		li $t0, 1
+		mtc1 $t0, $f0
+		cvt.s.w $f0, $f0
+		mfc1 $a0, $f0
 
-        li $t0, 33558633 # 2 ^ 25 + 4201 - can't maintain precision
-        mtc1 $t0, $f1
-        cvt.s.w $f1, $f1
-        mfc1 $a1, $f1
+		li $t0, 33558633 # 2 ^ 25 + 4201 - can't maintain precision
+		mtc1 $t0, $f1
+		cvt.s.w $f1, $f1
+		mfc1 $a1, $f1
 
-        li $t0, -23
-        mtc1 $t0, $f2
-        cvt.s.w $f2, $f2
-        mfc1 $a2, $f2
+		li $t0, -23
+		mtc1 $t0, $f2
+		cvt.s.w $f2, $f2
+		mfc1 $a2, $f2
 
-	li $t0, 0
-	mtc1 $t0, $f2
-        cvt.s.w $f2, $f2
-        mfc1 $a3, $f2
+		li $t0, 0
+		mtc1 $t0, $f2
+		cvt.s.w $f2, $f2
+		mfc1 $a3, $f2
 
-        # Dump reigsters and terminate
-        mtc0 $at, $26
-        nop
-        nop
-        
-        mtc0 $at, $23
+		# Dump reigsters and terminate
+		mtc0 $at, $26
+		nop
+		nop
+		
+		mtc0 $at, $23
 
 end:
-        b end
-        nop
-        .end start
+		b end
+		nop
+		.end start
