@@ -29,53 +29,50 @@
 #
 # Test double-precision division when the FPU is in 32-bit mode
 #
-        .text
-        .global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        dli $t1, 1 << 29	# Enable CP1
-        or $t0, $t0, $t1    
-	li $t1, 1 << 26		# Put FPU into 32 bit mode
-	nor $t1, $t1, $t1
-	and $t0, $t0, $t1
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		dli $t1, 1 << 29	# Enable CP1
+		or $t0, $t0, $t1    
+		li $t1, 1 << 26		# Put FPU into 32 bit mode
+		nor $t1, $t1, $t1
+		and $t0, $t0, $t1
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-        
-	#
-	#
-
-	# load 3456.3 into $f12
-	lui $t0, 0x40ab
-	ori $t0, $t0, 0x0099
-	mtc1 $t0, $f13
-	lui $t0, 0x9999
-	ori $t0, $t0, 0x999a
-	mtc1 $t0, $f12
-	# load 12.45 into $f14
-	lui $t0, 0x4028
-	ori $t0, $t0, 0xe666
-	mtc1 $t0, $f15
-	lui $t0, 0x6666
-	ori $t0, $t0, 0x6666
-	mtc1 $t0, $f14
-	div.d $f12, $f12, $f14
-	mfc1 $a0, $f12
-	mfc1 $a1, $f13
+		
+		# load 3456.3 into $f12
+		lui $t0, 0x40ab
+		ori $t0, $t0, 0x0099
+		mtc1 $t0, $f13
+		lui $t0, 0x9999
+		ori $t0, $t0, 0x999a
+		mtc1 $t0, $f12
+		# load 12.45 into $f14
+		lui $t0, 0x4028
+		ori $t0, $t0, 0xe666
+		mtc1 $t0, $f15
+		lui $t0, 0x6666
+		ori $t0, $t0, 0x6666
+		mtc1 $t0, $f14
+		div.d $f12, $f12, $f14
+		mfc1 $a0, $f12
+		mfc1 $a1, $f13
 
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start

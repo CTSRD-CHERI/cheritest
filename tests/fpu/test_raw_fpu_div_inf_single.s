@@ -33,51 +33,51 @@
 #
 # Test IEEE 'infinity' value in single-precision arithmetic
 #
-        .text
-	.global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	li $t1, 1 << 26		# Put FPU into 32 bit mode
-	nor $t1, $t1, $t1
-	and $t0, $t0, $t1
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Enable CP1
+		or $t0, $t0, $t1    
+		li $t1, 1 << 26		# Put FPU into 32 bit mode
+		nor $t1, $t1, $t1
+		and $t0, $t0, $t1
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	lui $t0, 0x7f80 	# IEEE 754 +infinity
-	mtc1 $t0, $f1
+		lui $t0, 0x7f80 	# IEEE 754 +infinity
+		mtc1 $t0, $f1
 
-	lui $t0, 0x3f80		# 1.0
-	mtc1 $t0, $f2
+		lui $t0, 0x3f80		# 1.0
+		mtc1 $t0, $f2
 
-	div.s $f3, $f1, $f2
-	mfc1 $a0, $f3		# Inf/1.0 = Inf
+		div.s $f3, $f1, $f2
+		mfc1 $a0, $f3		# Inf/1.0 = Inf
 
-	div.s $f3, $f1, $f1
-	mfc1 $a1, $f3		# Inf/Inf = NaN
+		div.s $f3, $f1, $f1
+		mfc1 $a1, $f3		# Inf/Inf = NaN
 
-	li $t0, 0
-	mtc1 $t0, $f1
+		li $t0, 0
+		mtc1 $t0, $f1
 
-	div.s $f3, $f2, $f1
-	mfc1 $a2, $f3		# 1.0/0.0 = Inf
+		div.s $f3, $f2, $f1
+		mfc1 $a2, $f3		# 1.0/0.0 = Inf
 
-	div.s $f3, $f1, $f1
-	mfc1 $a3, $f3		# 0.0/0.0 = NaN
+		div.s $f3, $f1, $f1
+		mfc1 $a3, $f3		# 0.0/0.0 = NaN
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start

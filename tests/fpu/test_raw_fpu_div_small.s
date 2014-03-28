@@ -34,32 +34,32 @@
 # Test single-precision divide by a small number.
 # This is a regression test for a bug in gxemul.
 #
-        .text
-	.global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Enable CP1
+		or $t0, $t0, $t1    
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	lui $t0, 0x2d00		# 2^-37
-	mtc1 $t0, $f1
-	div.s $f2, $f1, $f1
-	mfc1 $a0, $f2
+		lui $t0, 0x2d00		# 2^-37
+		mtc1 $t0, $f1
+		div.s $f2, $f1, $f1
+		mfc1 $a0, $f2
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start
