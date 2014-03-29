@@ -38,4 +38,4 @@ class test_div_zero(BaseBERITestCase):
     @attr('divbyzero')
     def test_div_zero_2(self):
         '''Test that teq after div set CP0.Cause.ExcCode to trap exception'''
-        self.assertRegisterEqual(self.MIPS.a0, 13 << 2, "teq after div by zero did not set CP0.Cause.ExcCode to Tr")
+        self.assertRegisterEqual((self.MIPS.a0 >> 2) & 0x1f, 13, "teq after div by zero did not set CP0.Cause.ExcCode to Tr")
