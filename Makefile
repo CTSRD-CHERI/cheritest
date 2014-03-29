@@ -385,6 +385,7 @@ TEST_ALU_FILES=					\
 		test_divu.s			\
 		test_ddiv.s			\
 		test_ddivu.s			\
+		test_div_zero.s			\
 		test_mul.s			\
 		test_mult.s			\
 		test_multu.s			\
@@ -891,6 +892,7 @@ and not clang \
 and not comparereg \
 and not config3 \
 and not counterdev \
+and not divbyzero \
 and not dumpicache \
 and not einstr \
 and not float \
