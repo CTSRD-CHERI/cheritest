@@ -40,4 +40,4 @@ class test_jalr_align(BaseBERITestCase):
 
     def test_jalr_align_3(self):
         '''Test that an exception is raised after jalr to unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a1, 1, "An exception was not raised after jalr to unaligned address")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "An exception was not raised after jalr to unaligned address")
