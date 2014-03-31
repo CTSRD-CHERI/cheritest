@@ -470,6 +470,7 @@ TEST_CP0_FILES=					\
 		test_cp0_watch_load.s           \
 		test_cp0_watch_store.s          \
 		test_cp0_user.s                 \
+		test_cp0_eret_user.s            \
 		test_cp0_ri.s			\
 		test_cp0_counter.s		\
 		test_cp0_userlocal.s		\
