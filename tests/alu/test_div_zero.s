@@ -32,11 +32,14 @@
 
 #
 # Test what happens when a divide by zero is followed by a trap if equal
-# testing for the divisor being zero. Strictly speaking, this is
-# 'unpredictable' according to the MIPS spec, because the divide is done
-# before the test. However, this instruction sequence is often used by
-# compilers (e.g. gcc, LLVM), in order to do the test for zero in parallel
-# with the division.
+# testing for the divisor being zero. This instruction sequence is often
+# used by the GCC and Clang/LLVM compilers. According to the MIPS spec,
+# this is _not_ an 'unpredictable operation', but the result of the divison
+# is an 'unpredictable result'. That is, the behaviour of the CPU is defined
+# by the spec as long as the result isn't used.
+#
+# Compilers put the division and the test in this order so that the division
+# van be done in parallel with the test.
 #
 
 		.global test
@@ -73,9 +76,9 @@ test:		.ent test
 		dli	$t0, 1
 		dli	$t1, 0
 		div	$zero, $t0, $t1
-		teq	$t1, $zero
-		mflo	$a1
-		mfhi	$a3
+		teq	$t1, $zero	# Should trap
+		mflo	$a1		# Not reached, as exception handler
+		mfhi	$a3		# will return to 'exit'.
 
 exit:
 		ld	$fp, 16($sp)
@@ -90,7 +93,7 @@ bev0_handler:
 		li	$a2, 1
 		dmfc0	$a0, $13	# CP0.Cause
 		dmfc0	$a5, $14	# EPC
-		daddi	$k0, $a5, 4
+		dla	$k0, exit
 		dmtc0	$k0, $14
 		nop
 		nop

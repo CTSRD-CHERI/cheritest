@@ -892,7 +892,6 @@ and not clang \
 and not comparereg \
 and not config3 \
 and not counterdev \
-and not divbyzero \
 and not dumpicache \
 and not einstr \
 and not float \

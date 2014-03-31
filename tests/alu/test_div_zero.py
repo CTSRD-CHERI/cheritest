@@ -30,12 +30,10 @@ from nose.plugins.attrib import attr
 
 class test_div_zero(BaseBERITestCase):
 
-    @attr('divbyzero')
     def test_div_zero_1(self):
         '''Test that teq after div by zero raises an exception'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "Test for division by zero faiiled to raise an exception")
 
-    @attr('divbyzero')
     def test_div_zero_2(self):
         '''Test that teq after div set CP0.Cause.ExcCode to trap exception'''
         self.assertRegisterEqual((self.MIPS.a0 >> 2) & 0x1f, 13, "teq after div by zero did not set CP0.Cause.ExcCode to Tr")
