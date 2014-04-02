@@ -30,6 +30,5 @@ from nose.plugins.attrib import attr
 
 class test_id_coherence(BaseBERITestCase):
 
-    @attr('uncached')
     def test_id_coherence_1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x78, "Self-modifying code did not compute sum correctly")
