@@ -84,7 +84,7 @@ testcode:
 		nop
 		add	$a5, 1			# Set the test flag
 		andi	$a1, $a0, 0xfff
-		ld	$a2, 0($a1)
+		lw	$a2, 0($a1)
 		cache	0x19, 0($a1)
 		
 		syscall 0
