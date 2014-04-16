@@ -58,6 +58,7 @@ class test_cache_instruction_L2(BaseBERITestCase):
     @attr('cache')
     @attr('counterdev')
     @attr('invalidateL2')
+    @attr('invalidateL2only')
     def test_after_L2_invalidate_cached_read(self):
         '''Test read after invalidate L2 cache'''
         self.assertRegisterEqual(self.MIPS.a3, 2, "Cached read after L2 invalidate is incorrect")

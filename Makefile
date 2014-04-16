@@ -953,7 +953,7 @@ endif
 endif
 NOSEPRED=not false
 ifeq ($(BERI_VER),2)
-NOSEPRED+=and not invalidateL2
+NOSEPRED+=and not invalidateL2only
 NOSEPRED+=and not lladdr
 NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb
