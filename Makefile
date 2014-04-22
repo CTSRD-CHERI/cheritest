@@ -414,7 +414,8 @@ TEST_MEM_FILES=					\
 		test_sd_burst.s			\
 		test_storeload.s		\
 		test_sync.s                     \
-		test_mem_alias_data.s
+		test_mem_alias_data.s		\
+		test_raw_pism_truncation.s
 
 TEST_LLSC_FILES=				\
 		test_ll_unalign.s		\
@@ -917,7 +918,7 @@ and not watch \
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
-TEST_CYCLE_LIMIT?=1000000
+TEST_CYCLE_LIMIT?=1100000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
@@ -931,7 +932,8 @@ CHERIROOT?=../../cheri$(BERI_VER)/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
-CHERICONF?=$(CHERIROOT_ABS)/simconfig
+MEMCONF?=$(CHERIROOT_ABS)/memoryconfig
+PERIPHCONF?=$(CHERIROOT_ABS)/peripheralconfig
 TRACECONF?=$(CHERIROOT_ABS)/traceconfig
 TOOLS_DIR = ${CHERILIBS_ABS}/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
@@ -1068,8 +1070,9 @@ GXEMUL_FUZZ_TEST_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_LO
 GXEMUL_FUZZ_TEST_CACHED_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_CACHED_LOGS))
 
 REWRITE_PISM_CONF = sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' < $(1) > $(2)
-COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(CHERICONF),$$TMPDIR/simconfig) && \
-	$(call REWRITE_PISM_CONF,$(TRACECONF),$$TMPDIR/traceconfig)
+COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(MEMCONF),$$TMPDIR/memoryconfig) && \
+		  $(call REWRITE_PISM_CONF,$(PERIPHCONF),$$TMPDIR/peripheralconfig) && \
+		  $(call REWRITE_PISM_CONF,$(TRACECONF),$$TMPDIR/traceconfig) 
 
 PREPARE_TEST = \
 	TMPDIR=$$(mktemp -d) && \

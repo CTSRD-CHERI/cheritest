@@ -44,7 +44,7 @@ class test_cp0_reg_init(BaseBERITestCase):
     ## will hopefully detect problems such as "very large number".
     def test_count_reg(self):
         '''Test count register on reset'''
-        self.assertRegisterInRange(self.MIPS.a2, 100, 60000, "Unexpected CP0 count cycle register value on reset")
+        self.assertRegisterInRange(self.MIPS.a2, 100, 80000, "Unexpected CP0 count cycle register value on reset")
 
     ## Preferable that the compare register be 0, to maximise time available to
     ## the OS before a timer interrupt fires.

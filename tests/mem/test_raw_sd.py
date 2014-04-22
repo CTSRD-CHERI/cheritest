@@ -47,3 +47,7 @@ class test_raw_sd(BaseBERITestCase):
     def test_neg_offset(self):
         '''Test double word store, load at negative offset'''
         self.assertRegisterEqual(self.MIPS.a4, 1, "Double word store, load at negative offset failed")
+
+    def test_dram(self):
+        '''Test load of stored double word from DRAM'''
+        self.assertRegisterEqual(self.MIPS.s0, 0xfedcba9876543210, "Load from DRAM failed")

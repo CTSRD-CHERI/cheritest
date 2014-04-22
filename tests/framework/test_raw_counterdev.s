@@ -61,9 +61,13 @@ start:
 		mtc0 $v0, $26
 		nop
 		nop
+		nop
+		nop
+		nop
+		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
 end:
 		b end
 		nop

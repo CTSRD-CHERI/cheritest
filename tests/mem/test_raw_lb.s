@@ -36,6 +36,9 @@
 		.text
 		.global start
 start:
+		ld $s0, buloc
+		lbu $s1, 0($s0)
+
 		# Load a byte from double word storage
 		lbu	$a0, dword
 
@@ -70,3 +73,4 @@ positive:	.byte	0x7f
 negative:	.byte	0xff
 val1:		.byte	0x01
 val2:		.byte	0x02
+buloc:		.dword	0x900000007f002108

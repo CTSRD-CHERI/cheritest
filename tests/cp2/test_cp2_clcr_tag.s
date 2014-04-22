@@ -55,6 +55,8 @@ test:		.ent test
 		# XXXRW: Fix to use indexed address syntax once available.
 		#
 		dla	$t0, cap1
+		dli	$t1, 0xFFFFFFFF00000000
+		and	$t0, $t0, $t1
 		clcr	$c16, $t0($c0)
 		cscr	$c2, $t0($c0)
 
@@ -66,7 +68,7 @@ test:		.ent test
 		#
 		# Invalidate the line in the L1
 		#
-		dla $t1, cap1 + 16384
+		daddi	$t1, $t0, 16384
 		cscr	$c16, $t1($c0)
   
 		#
@@ -77,7 +79,8 @@ test:		.ent test
 		#
 		# Invalidate the line in the L1 & L2
 		#
-		dla $t1, cap1 + 16384*4
+		dli	$t1, 16384*4
+		dadd	$t1, $t0, $t1
 		cscr	$c16, $t1($c0)
   
 		#
@@ -88,7 +91,8 @@ test:		.ent test
 		#
                 # Invalidate the line in the tag cache & L1 & L2
                 #
-                dla $t1, cap1 + 16384*512
+		dli	$t1, 16384*512
+		dadd	$t1, $t0, $t1
                 cscr    $c16, $t1($c0)
 
                 #

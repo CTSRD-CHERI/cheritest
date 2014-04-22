@@ -33,6 +33,7 @@
 test:   
         dla     $a0, 0x900000007f804000  # PIC_BASE
         dla     $t0, 0x80000004          # enable irq 2, forward to IP4
+        ld      $s0, 8($a0)
         sd      $t0, 16($a0)
         dadd    $a1, $a0, 0x2000         # PIC_IP_READ_BASE        
         li      $t0, 6

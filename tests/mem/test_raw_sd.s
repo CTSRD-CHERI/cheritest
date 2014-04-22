@@ -66,13 +66,19 @@ start:
 		sd	$a4, -8($t1)
 		ld	$a4, -8($t1)
 
+        # Store and load to DRAM (uncached TODO: make appropriate cache etc.)
+		dla $t0, 0x9000000000000000
+		dli	$t1, 0xfedcba9876543210
+		sd $t1, 0($t0)
+		ld $s0, 0($t0)
+
 		# Dump registers in the simulator
 		mtc0	$v0, $26
 		nop
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+			mtc0 $v0, $23
 end:
 		b end
 		nop
