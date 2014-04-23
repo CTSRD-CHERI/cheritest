@@ -33,69 +33,69 @@
 .global test
 .ent test
 test:		
-	daddu 	$sp, $sp, -32
-	sd	$ra, 24($sp)
-	sd	$fp, 16($sp)
-	daddu	$fp, $sp, 32
+		daddu 	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
 
-	#
-	# Set up exception handler
-	#
+		#
+		# Set up exception handler
+		#
 
-	jal	bev_clear
-	nop
-	dla	$a0, bev0_handler
-	jal	bev0_handler_install
-	nop
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
+		nop
 
-	dli $a0, 0
-	dli $a2, 0
+		dli $a0, 0
+		dli $a2, 0
 
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Enable CP1
+		or $t0, $t0, $t1    
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	lui	$t0, 0x7654
-	ori	$t0, 0x3210
-	dmtc1	$t0, $f0
+		lui	$t0, 0x7654
+		ori	$t0, 0x3210
+		dmtc1	$t0, $f0
 
-	lui	$t0, 0xfedc
-	ori	$t0, 0xba98
+		lui	$t0, 0xfedc
+		ori	$t0, 0xba98
 
-	.set push
-	.set mips32r2
-	# If mthc1 is not implemented, this should raise an exception
-	mthc1	$t0, $f0
-	.set pop
+		.set push
+		.set mips32r2
+		# If mthc1 is not implemented, this should raise an exception
+		mthc1	$t0, $f0
+		.set pop
 
-	dmfc1	$a0, $f0
+		dmfc1	$a0, $f0
 
-	ld	$fp, 16($sp)
-	ld	$ra, 24($sp)
-	daddu	$sp, $sp, 32
-	jr	$ra
-	nop
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop
 .end test
 
 .ent bev0_handler
 bev0_handler:
-	li	$a2, 1
+		li	$a2, 1
 
-	mfc0	$a3, $13
-	srl	$a3, $a3, 2
-	andi	$a3, $a3, 0x1f	# ExcCode
+		mfc0	$a3, $13
+		srl	$a3, $a3, 2
+		andi	$a3, $a3, 0x1f	# ExcCode
 
-	dmfc0	$a5, $14	# EPC
-	daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-	dmtc0	$k0, $14
-	nop
-	nop
-	nop
-	nop
-	eret
+		dmfc0	$a5, $14	# EPC
+		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+		nop
+		nop
+		nop
+		nop
+		eret
 .end bev0_handler
 

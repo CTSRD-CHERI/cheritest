@@ -33,64 +33,64 @@
 .global test
 .ent test
 test:		
-	daddu 	$sp, $sp, -32
-	sd	$ra, 24($sp)
-	sd	$fp, 16($sp)
-	daddu	$fp, $sp, 32
+		daddu 	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
 
-	#
-	# Set up exception handler
-	#
+		#
+		# Set up exception handler
+		#
 
-	jal	bev_clear
-	nop
-	dla	$a0, bev0_handler
-	jal	bev0_handler_install
-	nop
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
+		nop
 
-	li $a2, 0
+		li $a2, 0
 
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Enable CP1
+		or $t0, $t0, $t1    
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	cfc1 $t0, $f31		# Enable exception on floating point overflow
-	li $t1, 0x200
-	or $t0, $t0, $t1
-	ctc1 $t1, $f31
-	nop
-	nop
-	nop
-	nop
+		cfc1 $t0, $f31		# Enable exception on floating point overflow
+		li $t1, 0x200
+		or $t0, $t0, $t1
+		ctc1 $t1, $f31
+		nop
+		nop
+		nop
+		nop
 
-	lui $t0, 0x7f00 	# 2^127
-	mtc1 $t0, $f12
-	lui $t0, 0x4000		# 2.0
-	mtc1 $t0, $f14
-	mul.s $f12, $f12, $f14 	# Should raise an exception
-	mfc1 $a0, $f12
+		lui $t0, 0x7f00 	# 2^127
+		mtc1 $t0, $f12
+		lui $t0, 0x4000		# 2.0
+		mtc1 $t0, $f14
+		mul.s $f12, $f12, $f14 	# Should raise an exception
+		mfc1 $a0, $f12
 
-	ld	$fp, 16($sp)
-	ld	$ra, 24($sp)
-	daddu	$sp, $sp, 32
-	jr	$ra
-	nop
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop
 .end test
 
 .ent bev0_handler
 bev0_handler:
-	li	$a2, 1
-	dmfc0	$a5, $14	# EPC
-	daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-	dmtc0	$k0, $14
-	nop
-	nop
-	nop
-	nop
-	eret
+		li	$a2, 1
+		dmfc0	$a5, $14	# EPC
+		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+		nop
+		nop
+		nop
+		nop
+		eret
 .end bev0_handler
 

@@ -32,65 +32,65 @@
 
 .global test
 .ent test
-test:		
-	daddu 	$sp, $sp, -32
-	sd	$ra, 24($sp)
-	sd	$fp, 16($sp)
-	daddu	$fp, $sp, 32
+test:			
+		daddu 	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
 
-	#
-	# Set up exception handler
-	#
+		#
+		# Set up exception handler
+		#
 
-	jal	bev_clear
-	nop
-	dla	$a0, bev0_handler
-	jal	bev0_handler_install
-	nop
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
+		nop
 
-	li $a2, 0
+		li $a2, 0
 
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Disable CP1
-        nor $t1, $t1, $t1
-        and $t0, $t0, $t1    
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
-	nop
-	nop
-	nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Disable CP1
+		nor $t1, $t1, $t1
+		and $t0, $t0, $t1    
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
 
-	lui $t0, 0x3f80 	# 1.0
-	mtc1 $t0, $f12		# This should raise an exception
+		lui $t0, 0x3f80 	# 1.0
+		mtc1 $t0, $f12		# This should raise an exception
 
-	ld	$fp, 16($sp)
-	ld	$ra, 24($sp)
-	daddu	$sp, $sp, 32
-	jr	$ra
-	nop
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop
 .end test
 
 .ent bev0_handler
 bev0_handler:
-	li	$a2, 1
+		li	$a2, 1
 
-	mfc0	$a3, $13
-	srl	$a3, $a3, 2
-	andi	$a3, $a3, 0x1f	# ExcCode
+		mfc0	$a3, $13
+		srl	$a3, $a3, 2
+		andi	$a3, $a3, 0x1f	# ExcCode
 
-	mfc0	$a4, $13
-	srl	$a4, $a4, 28
-	andi	$a4, $a4, 0x3
+		mfc0	$a4, $13
+		srl	$a4, $a4, 28
+		andi	$a4, $a4, 0x3
 
-	dmfc0	$a5, $14	# EPC
-	daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-	dmtc0	$k0, $14
-	nop
-	nop
-	nop
-	nop
-	eret
+		dmfc0	$a5, $14	# EPC
+		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+		nop
+		nop
+		nop
+		nop
+		eret
 .end bev0_handler
 
