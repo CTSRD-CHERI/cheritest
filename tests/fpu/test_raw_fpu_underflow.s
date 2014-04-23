@@ -33,34 +33,34 @@
 #
 # Test that floating point underflow sets a flag in the FP status register
 #
-        .text
-	.global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29			# Enable CP1
+		or $t0, $t0, $t1    
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	lui $t0, 0x0080 	# 2^-126
-	mtc1 $t0, $f12
-	mul.s $f12, $f12, $f12 	# Should set the underflow flag
-	mfc1 $a0, $f12
+		lui $t0, 0x0080 	# 2^-126
+		mtc1 $t0, $f12
+		mul.s $f12, $f12, $f12 	# Should set the underflow flag
+		mfc1 $a0, $f12
 
-	cfc1 $a1, $f31
+		cfc1 $a1, $f31
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start

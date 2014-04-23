@@ -33,50 +33,50 @@
 #
 # Test single-precision "Quiet Not a Number" (QNaN)
 #
-        .text
-	.global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Enable CP1
+		or $t0, $t0, $t1    
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	lui $t0, 0x7f90		# QNaN
-	mtc1 $t0, $f1
+		lui $t0, 0x7f90		# QNaN
+		mtc1 $t0, $f1
 
-	li $t0, 0
-	mtc1 $t0, $f2
-	add.s $f2, $f2, $f1
-	mfc1 $a0, $f2
+		li $t0, 0
+		mtc1 $t0, $f2
+		add.s $f2, $f2, $f1
+		mfc1 $a0, $f2
 
-	li $t0, 0
-	mtc1 $t0, $f2
-	sub.s $f2, $f1, $f2
-	mfc1 $a1, $f2
+		li $t0, 0
+		mtc1 $t0, $f2
+		sub.s $f2, $f1, $f2
+		mfc1 $a1, $f2
 
-	lui $t0, 0x3f80		# 1.0
-	mtc1 $t0, $f2
-	mul.s $f2, $f2, $f1
-	mfc1 $a2, $f2
+		lui $t0, 0x3f80		# 1.0
+		mtc1 $t0, $f2
+		mul.s $f2, $f2, $f1
+		mfc1 $a2, $f2
 
-	lui $t0, 0x3f80		# 1.0
-	mtc1 $t0, $f2
-	div.s $f2, $f1, $f2
-	mfc1 $a3, $f2
+		lui $t0, 0x3f80		# 1.0
+		mtc1 $t0, $f2
+		div.s $f2, $f1, $f2
+		mfc1 $a3, $f2
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start

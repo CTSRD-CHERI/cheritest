@@ -33,59 +33,59 @@
 #
 # Test single-precision truncate operation
 #
-        .text
-	.global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        li $t1, 1 << 29		# Enable CP1
-        or $t0, $t0, $t1    
-	li $t1, 1 << 26		# Put FPU into 32 bit mode
-	nor $t1, $t1, $t1
-	and $t0, $t0, $t1
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Enable CP1
+		or $t0, $t0, $t1    
+		li $t1, 1 << 26		# Put FPU into 32 bit mode
+		nor $t1, $t1, $t1
+		and $t0, $t0, $t1
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-	cfc1 $a0, $f31		# Get floating point rounding mode
-	li $t0, 0x3
-	and $a0, $a0, $t0
+		cfc1 $a0, $f31		# Get floating point rounding mode
+		li $t0, 0x3
+		and $a0, $a0, $t0
 
-	lui $t0, 0xbf40		# -0.75
-	mtc1 $t0, $f1
-	trunc.w.s $f1, $f1
-	mfc1 $a1, $f1
+		lui $t0, 0xbf40		# -0.75
+		mtc1 $t0, $f1
+		trunc.w.s $f1, $f1
+		mfc1 $a1, $f1
 
-	lui $t0, 0xbf00		# -0.5
-	mtc1 $t0, $f1
-	trunc.w.s $f1, $f1
-	mfc1 $a2, $f1
+		lui $t0, 0xbf00		# -0.5
+		mtc1 $t0, $f1
+		trunc.w.s $f1, $f1
+		mfc1 $a2, $f1
 
-	lui $t0, 0xbe80		# -0.25
-	mtc1 $t0, $f1
-	trunc.w.s $f1, $f1
-	mfc1 $a3, $f1
+		lui $t0, 0xbe80		# -0.25
+		mtc1 $t0, $f1
+		trunc.w.s $f1, $f1
+		mfc1 $a3, $f1
 
-	lui $t0, 0x3f00		# 0.5
-	mtc1 $t0, $f1
-	trunc.w.s $f1, $f1
-	mfc1 $a4, $f1
+		lui $t0, 0x3f00		# 0.5
+		mtc1 $t0, $f1
+		trunc.w.s $f1, $f1
+		mfc1 $a4, $f1
 
-	lui $t0, 0x3fc0		# 1.5
-	mtc1 $t0, $f1
-	trunc.w.s $f1, $f1
-	mfc1 $a5, $f1
+		lui $t0, 0x3fc0		# 1.5
+		mtc1 $t0, $f1
+		trunc.w.s $f1, $f1
+		mfc1 $a5, $f1
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start

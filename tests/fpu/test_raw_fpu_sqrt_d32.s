@@ -33,45 +33,45 @@
 #
 # Test double-precision subtraction when the FPU is in 32-bit mode
 #
-        .text
-        .global start
-        .ent start
+		.text
+		.global start
+		.ent start
 start:     
-	mfc0 $t0, $12
-        dli $t1, 1 << 29	# Enable CP1
-        or $t0, $t0, $t1    
-	li $t1, 1 << 26		# Put FPU into 32 bit mode
-	nor $t1, $t1, $t1
-	and $t0, $t0, $t1
-	mtc0 $t0, $12 
-        nop
-        nop
-        nop
+		mfc0 $t0, $12
+		dli $t1, 1 << 29	# Enable CP1
+		or $t0, $t0, $t1    
+		li $t1, 1 << 26		# Put FPU into 32 bit mode
+		nor $t1, $t1, $t1
+		and $t0, $t0, $t1
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-        
-	#
-	# Calculate sqrt(464.912) in double precision
-	#
+		
+		#
+		# Calculate sqrt(464.912) in double precision
+		#
 
-	lui $t0, 0x407d
-	ori $t0, $t0, 0x0e97
-	mtc1 $t0, $f13
-	lui $t0, 0x8d4f
-	ori $t0, $t0, 0xdf3b
-	sqrt.d $f12, $f12
-	mfc1 $a0, $f12
-	mfc1 $a1, $f13
+		lui $t0, 0x407d
+		ori $t0, $t0, 0x0e97
+		mtc1 $t0, $f13
+		lui $t0, 0x8d4f
+		ori $t0, $t0, 0xdf3b
+		sqrt.d $f12, $f12
+		mfc1 $a0, $f12
+		mfc1 $a1, $f13
 
 
-	# Dump registers on the simulator (gxemul dumps regs on exit)
-	mtc0 $at, $26
-	nop
-	nop
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
 
-	# Terminate the simulator
-	mtc0 $at, $23
+		# Terminate the simulator
+		mtc0 $at, $23
 end:
-	b end
-	nop
+		b end
+		nop
 
 .end start
