@@ -27,9 +27,9 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-from cheritest_tools import BaseCHERITestCase
+from beritest_tools import BaseBERITestCase
 
-class test_raw_pism_truncation(BaseCHERITestCase):
+class test_raw_pism_truncation(BaseBERITestCase):
     def test_addressing(self):
         '''Test PISM isn't mangling addresses.'''
         self.assertRegisterEqual(self.MIPS.a0, 0x1111, "Load of stored double word failed")
