@@ -52,100 +52,86 @@ start:
 		or      $k0, $k0, $k1 
 		mtc0    $k0, $12 
 		dla     $sp, __sp
+
+		# Get the total number of cores
 		mfc0    $t0, $15, 1
+		srl     $t1, $t0, 16
+		daddu   $t1, $t1, 1
+		# Get core ID
 		andi    $t0, $t0, 0xFFFF
+
+		# Offset stack
 		dli     $k0, 0x400  
 		mul     $k0, $k0, $t0    
 		daddu   $sp, $sp, $k0
 		daddu   $sp, $sp, -64 
-		
-		bnez    $t0, core_1
-		nop
-		j       core_0 
-		nop   
 
-# Core 0 sets initial values (zero's) in two memory location (x and y)
-# Each memory location is then changed to 1's in the order x then y
+		# Generate shared memory address. Used by all cores
+		dli     $t2, 0x9800000000A00000
+		dli     $t8, 0x9800000000B00000
+
+		# Initialise registers
+		dli     $a0, 0
+		dli     $a1, 0
+		dli     $a2, 0
+		dli     $a3, 0
+		dli     $a4, 0
+		dli     $a5, 0
+		dli     $a6, 0
+		dli     $a7, 0
+		dli     $t9, 0
+
+		# Set a branch comparison values
+		dli     $t3, 1234
+		dli     $a2, 100 
+		dli     $a6, 150  
+
+		# Core 0 executes code different to other cores
+		addu    $t0, $t0, 1
+		beq     $t0, $t1, core_last
+		subu    $t0, $t0, 1
+		bnez    $t0, core_other
+		nop
+
 core_0:
-                # setup test address 
-                dla     $gp, dword  
-                dli     $t0, 0x00ffffffffffffff 
-                and     $gp, $gp, $t0
-                dli     $t0, 0x9800000000000000
-                daddu   $t0, $gp, $t0 
+		# Core 0 increments a counter
+		addu    $a1, $a1, 1
+		ld      $a0, 0($t2)		# This is done to match
+						# the number of instructions
+						# all other cores execute
+		bne     $a1, $a2, core_0
+		nop
+		j       dump			# Once the count value has been 
+		sd      $t3, 0($t2)		# reached, the RegFile is dumped
+						# The core also updates a shared
+						# value so other cores can break
 
-                addi    $t1, $zero, 0
-                sw      $t1, 0($t0)
-                addi    $t2, $zero, 0
-                sw      $t2, 8($t0)
-                addi    $t1, $t1, 1
-                sw      $t1, 0($t0)
-                addi    $t2, $t2, 1
-                sw      $t2, 8($t0)
-		j       finish
-		nop		
-
-# Core 1 checks memory location y to see if its init value has been changed
-# If it has then memory location x is read
-# If x is still zero then this is a serious coherence failure
-core_1:		
-                # setup test address 
-                dla     $gp, dword  
-                dli     $t0, 0x00ffffffffffffff 
-                and     $gp, $gp, $t0
-                dli     $t0, 0x9800000000000000
-                daddu   $t0, $gp, $t0 
-                j       core_1_test
-                nop
-
-core_1_test:
-                lw      $t2, 8($t0)
-		beqz    $t2, core_1
-                lw      $a0, 0($t0)	
-		j       finish
+core_last:
+		addu    $a1, $a1, 1
+		ld      $a0, 0($t2)	
+		bne     $a1, $a6, core_last
 		nop
 
-finish:
+core_other:		
+		addu    $a1, $a1, 1		# Increment counter
+		ld      $a0, 0($t2)		
+		bne     $a0, $t3, core_other	# Check if Core 0 has updated the
+		nop				# shared memory value
+
+dump:
 		# Dump registers in the simulator
 		mtc0    $v0, $26 
 		nop
-		nop                
+		j       finish
+		sd      $t0, 0($t8)                
 
-                # Terminate the simulator 
-                # many nop's are needed to ensure that both cores have enough
-                # time to dump the register file. From experiments its clear
-                # that even when cores in sync, one of them will kill the 
-                # simulator before the second one has had a chance to finish
-                # the dump 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-
+finish:
+		ld      $t9, 0($t8)		# Wait for other cores to finish  
+		addu    $t9, $t9, 1		
+		bne     $t1, $t9, finish	
+		nop	
                 mtc0    $v0, $23 
 
 end:
 		b       end
 		nop
-
-dword:          .dword  0x0123456789abcdef
