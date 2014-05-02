@@ -32,39 +32,17 @@
 .set noat
 
 #
-# Exercise cache instructions
-#
-# Execute a series of cache instructions that are found in the kernel.  We
-# currently don't check if they are correct, but merely check that they don't
-# lock up the processor.  Since we have a write-through L1 cache, the only 
-# function of the cache instructions is to synchronize L1 instruction and data
-# caches.  We don't currently support cache instructions to the L2.
-# 
+# Check that all the cores in the system are alive and function correctly
 #
 
 		.global start
 start:
-		#
-		# Setup Stack
-		#
-		mfc0    $k0, $12
-		li      $k1, 0xF0000000 
-		or      $k0, $k0, $k1 
-		mtc0    $k0, $12 
-		dla     $sp, __sp
-
 		# Get the total number of cores
 		mfc0    $t0, $15, 1
 		srl     $t1, $t0, 16
 		daddu   $t1, $t1, 1
 		# Get core ID
 		andi    $t0, $t0, 0xFFFF
-
-		# Offset stack
-		dli     $k0, 0x400  
-		mul     $k0, $k0, $t0    
-		daddu   $sp, $sp, $k0
-		daddu   $sp, $sp, -64 
 
 		# Generate shared memory address. Used by all cores
 		dli     $t2, 0x9800000000A00000

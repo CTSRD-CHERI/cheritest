@@ -45,76 +45,74 @@
 		.global start
 start:
 		#
-		# Check core ID is set to zero
+		# Initialise registers
 		#
-		mfc0	$t1, $15, 1
-		slti    $a0, $t1, 256
+		dli     $a0, 0
+		dli     $a1, 0
+		dli     $a2, 0
+		dli     $a3, 0
+		dli     $a4, 0
+		dli     $a5, 0
+		dli     $a6, 0
+		dli     $a7, 0
+		dli     $t0, 0
+		dli     $t1, 0
+		dli     $t2, 0
+		dli     $t3, 0
+		dli     $t8, 0
+		dli     $t9, 0
+		dli     $k0, 0
+		dli     $k1, 0
 
 		#
-		# Test memory location in cached space
+		# Check core ID and total core number 
 		#
-		dli     $t2, 0x9800000000001234
-		lw      $t3, 0($t2)
-		daddu   $a1, $zero, $t3
-
-		#
-		# Setup Stack
-		#
-		mfc0    $k0, $12
-		li      $k1, 0xF0000000 
-		or      $k0, $k0, $k1 
-		mtc0    $k0, $12 
-		dla     $sp, __sp
-		mfc0    $t0, $15, 1
+		mfc0	$t0, $15, 1
+		srl     $t1, $t0, 16
+		daddu   $t1, $t1, 1
 		andi    $t0, $t0, 0xFFFF
-		dli     $k0, 0x400  
-		mul     $k0, $k0, $t0    
-		daddu   $sp, $sp, $k0
-		daddu   $sp, $sp, -64 
-		
-		bnez    $t0, core_1
-		nop
-		j       core_0 
-		nop   
+
+
+		#
+		# Set memory addresses and loop counters
+		#
+		dli     $t2, 0x9800000000100000
+		dli     $t3, 0x9800000000200000
+		dli     $a0, 0xFFF
+		dli     $a1, 0xABC
+		dli     $a2, 0xB
+
+		#
+		# Branch cores based on ID
+		#
+		bnez    $t0, core_other
+		nop 
 
 core_0:
-		addi    $t3, $zero, 12
-		sw      $t3, 0($t2)
-		nop
-		nop
-		nop
-		nop	
-		nop	
-		nop	
-		nop
-		sw	$zero, 0($t2)
-		lw      $t3, 0($t2)
-		beqz    $t3, core_0
+		daddu   $a3, $a3, 1
+		bne     $a0, $a3, core_0
 		nop
 		j       finish
-		nop		
+		sd      $a2, 0($t3)
 
-core_1:		
-		lw	$t3, 0($t2)
-		bnez    $t3, core_1
+core_other:		
+		ld      $a3, 0($t2)
+		sd      $a1, 0($t2)
+		ld      $a4, 0($t3)
+		daddu   $a7, $a7, 1
+		bne     $a4, $a2, core_other
 		nop
-		nop
-		nop
-		nop
-		nop	
-		nop	
-		nop	
-		nop
-		addi    $t3, $t3, 100
-		sw      $t3, 0($t2)	
 		j       finish
 		nop
 
 finish:
 		# Dump registers in the simulator
 		mtc0    $v0, $26 
-		nop
-		nop                
+
+spin:
+		daddu   $a5, $a5, 1
+		bne     $a0, $a5, spin
+		nop		
 
                 # Terminate the simulator 
                 mtc0    $v0, $23 
