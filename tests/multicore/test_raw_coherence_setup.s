@@ -45,55 +45,49 @@
 		.global start
 start:		
 		#
-		# Check core ID is set to zero
+		# Check total number of cores
 		#
-		mfc0	$t1, $15, 1
-		andi    $t2, $t1, 0xFFFF
-		srl     $t3, $t1, 16
-		addi    $t3, $t3, 1
-		slt     $a0, $t2, $t3
+		mfc0	$t0, $15, 1
+		srl     $t1, $t0, 16
+		daddu   $a1, $t1, 1
+
+		#
+		# Check core ID
+		#
+		andi    $a0, $t0, 0xFFFF
 
 		#
 		# Test memory location in cached space
 		#
-		dli     $t2, 0x9800000000001234
+		dli     $t2, 0x9800000000100000
 		lw      $t3, 0($t2)
-		daddu   $a1, $zero, $t3
+		daddu   $a2, $zero, $t3
 
 		#
 		# Write to cached mem location and test
 		#
-		sw      $t1, 0($t2) 
-		lw      $t3, 0($t2)
-		daddu   $a2, $zero, $t3
+		sw      $a0, 0($t2) 
+		lw      $a3, 0($t2)
 
+		#
 		# Dump registers in the simulator
+		#
 		mtc0    $v0, $26 
-		nop
-		nop                
 
+		#
+		# Wait for other cores to perfrom RegDump
+		#
+		dli     $t8, 200	# Spin for 200 cycles
+		dli     $t9, 0
+spin:
+		addu    $t9, $t9, 1
 		nop
-		nop                
-		nop
-		nop                
-		nop
-		nop                
-		nop
-		nop
-		nop                
-		nop
-		nop                
-		nop
-		nop	
-		nop
-		nop                
-		nop
-		nop                
-		nop
-		nop		
-		nop
+		bne     $t9, $t8, spin
+		nop		 
 
+		#
                 # Terminate the simulator 
+		#
                 mtc0    $v0, $23 
 
 end:
