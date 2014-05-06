@@ -63,6 +63,14 @@ start:
 		dli     $t9, 0
 		dli     $k0, 0
 		dli     $k1, 0
+		dli     $s0, 0
+		dli     $s1, 0
+		dli     $s2, 0
+		dli     $s3, 0
+		dli     $s4, 0
+		dli     $s5, 0
+		dli     $s6, 0
+		dli     $s7, 0
 
 		#
 		# Check core ID and total core number 
@@ -78,15 +86,26 @@ start:
 		#
 		dli     $t2, 0x9800000000100000
 		dli     $t3, 0x9800000000200000
+		dli     $s0, 0x9800000000300000
 		dli     $a0, 0xFFF
 		dli     $a1, 0xABC
 		dli     $a2, 0xB
+		dli     $a6, 0xFF
+
+		#
+		# Calculate shared value
+		#
+calc:
+		daddu   $t8, $t8, $t9
+		daddu   $t9, $t9, 1
+		bne     $t9, $t1, calc
+		nop
 
 		#
 		# Branch cores based on ID
 		#
 		bnez    $t0, core_other
-		nop 
+		sd      $zero, 0($s0) 
 
 core_0:
 		daddu   $a3, $a3, 1
@@ -109,11 +128,23 @@ finish:
 		# Dump registers in the simulator
 		mtc0    $v0, $26 
 
-spin:
-		daddu   $a5, $a5, 1
-		bne     $a0, $a5, spin
-		nop		
+		# Add core ID to shared register
+llsc:
+		lld     $s1, 0($s0)
+		daddu   $s1, $s1, $t0 
+		scd     $s1, 0($s0)
+		beqz    $s1, llsc
+		nop 
 
+spin:
+		ld      $s2, 0($s0)
+		bne     $t8, $s2, spin
+		nop
+/*
+		daddu   $a5, $a5, 1
+		bne     $a6, $a5, spin
+		nop		
+*/
                 # Terminate the simulator 
                 mtc0    $v0, $23 
 
