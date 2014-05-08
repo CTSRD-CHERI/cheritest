@@ -945,10 +945,10 @@ SIM        := ${CHERIROOT_ABS}/sim
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
-	SIM_TRACE_OPTS?= +trace +cTrace +showTranslations +instructionBasedCycleCounter +debug
+	SIM_TRACE_OPTS?= +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug
 else
 ifdef TRACE
-	SIM_TRACE_OPTS?=+trace +cTrace +showTranslations +instructionBasedCycleCounter
+	SIM_TRACE_OPTS?=+trace +cTrace +tlbTrace +instructionBasedCycleCounter
 else
 	SIM_TRACE_OPTS=
 endif
@@ -1105,17 +1105,6 @@ test: nosetest nosetest_cached
 .PHONY: FORCE
 FORCE:
 
-hardware-setup:
-	- killall -9 altera_socket_tunnel.py
-	- killall -9 system-console
-	- rm /tmp/cheri_debug_listen_socket
-	$(TOOLS_DIR_ABS)/debug/altera_socket_tunnel.py > /local/scratch/output.txt &
-
-hardware-cleanup:
-	- killall -9 altera_socket_tunnel.py
-	- killall -9 system-console
-	- rm /tmp/cheri_debug_listen_socket
-
 test_hardware: altera-nosetest altera-nosetest_cached
 
 $(CHERISOCKET):	
@@ -1245,6 +1234,7 @@ $(OBJDIR)/%.hex : $(OBJDIR)/%.mem
 	cp initial.hex $(CURDIR)/$@ && \
 	rm -r $$TMPDIR
 
+
 #
 # Provide an annotated disassembly for the ELF image to be used in diagnosis.
 #
@@ -1278,25 +1268,18 @@ $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 
 #
 # Target to do a run of the test suite on hardware.
-$(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
-	nios2-download -r
-	while ! test -e /tmp/cheri_debug_listen_socket; do sleep 0.1; done
-	TMPDIR=$$(mktemp -d) && \
-	cd $$TMPDIR && \
-	cp $(CURDIR)/$< mem.hex && \
-	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(CURDIR)/$@ && \
-	rm -r $$TMPDIR
+$(ALTERA_LOGDIR)/%.log : $(OBJDIR)/%.mem $(TOOLS_DIR_ABS)/debug/cherictl
+	$(TOOLS_DIR_ABS)/debug/cherictl test -f $(CURDIR)/$< > $(CURDIR)/$@ && \
 	sleep .1
 
 #
 # Target to run the hardware test suite on the simulator.
-$(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.hex $(TOOLS_DIR_ABS)/debug/cherictl
+$(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.mem $(TOOLS_DIR_ABS)/debug/cherictl
 	sleep 2
 	while ! test -e /tmp/cheri_debug_listen_socket; do sleep 0.1; done
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp $(CURDIR)/$< mem.hex && \
-	$(TOOLS_DIR_ABS)/debug/cherictl test -f mem.hex > $(CURDIR)/$@ && \
+	$(TOOLS_DIR_ABS)/debug/cherictl test -f $(CURDIR)/$< > $(CURDIR)/$@ && \
 	rm -r $$TMPDIR
 	killall -9 bluetcl
 	rm /tmp/cheri_debug_listen_socket
@@ -1382,11 +1365,11 @@ nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim MULTI1=1 CACHED=1 nosetests --with-xunit --xunit-file=nosetests_multi.xml \
                $(NOSEFLAGS) $(TESTDIRS) || true
 
-altera-nosetest: hardware-setup all $(ALTERA_TEST_LOGS) hardware-cleanup
+altera-nosetest: all $(ALTERA_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS_UNCACHED) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-altera-nosetest_cached: hardware-setup all $(ALTERA_TEST_CACHED_LOGS) hardware-cleanup
+altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
