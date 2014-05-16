@@ -1085,7 +1085,7 @@ PREPARE_TEST = \
 RUN_TEST = \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
-	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+	BERI_DEBUG_SOCKET_0=$(CHERISOCKET) $(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@
 
 CLEAN_TEST = rm -r $$TMPDIR
@@ -1251,7 +1251,7 @@ $(LOGDIR)/test_raw_trace_cached.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace_
 $(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.mem $(SIM) $(CHERICTL)
 	rm -f $$CHERI_TRACE_FILE
 	$(call PREPARE_TEST,$<) && \
-	((BERI_DEBUG_SOCKET=$$TMPDIR/sock \
+	((BERI_DEBUG_SOCKET_0=$$TMPDIR/sock \
 	CHERI_TRACE_FILE=$(CHERI_TRACE_FILE) \
 	$(RUN_TEST); \
 	$(CLEAN_TEST)) &) && \
