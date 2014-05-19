@@ -1082,11 +1082,17 @@ PREPARE_TEST = \
 	$(MEMCONV) bsimc2 && \
 	$(COPY_PISM_CONFS)
 
+# XXX rmn30 
+# As a hack to work around bsim license problems which cause it to sporadically fail we repeat the sim
+# command several times until it succeeds. The for loop should be removed once the license server problem
+# is fixed.
 RUN_TEST = \
+	for attempt in 0 1 2 4 5; do if \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
-	BERI_DEBUG_SOCKET_0=$(CHERISOCKET) $(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
-	    $(PWD)/$@
+	BERI_DEBUG_SOCKET_0=$(CHERISOCKET)  $(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+	    $(PWD)/$@; \
+	then break; else false; fi; done 
 
 CLEAN_TEST = rm -r $$TMPDIR
 
