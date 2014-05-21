@@ -38,13 +38,13 @@
 		.global multi_start
 multi_start:
 
-		dmfc0 $k0, $15, 1
+		dmfc0 $k0, $15, 6
 		andi $k0, $k0, 0xffff
 spin_core:
 		bnez $k0, spin_core
 		nop
 
-		dmfc0 $k0, $15, 2
+		dmfc0 $k0, $15, 7
 		andi $k0, $k0, 0xffff
 spin_thread:
 		bnez $k0, spin_thread

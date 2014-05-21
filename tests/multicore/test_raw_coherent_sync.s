@@ -75,7 +75,7 @@ start:
 		#
 		# Check core ID and total core number 
 		#
-		mfc0	$t0, $15, 1
+		mfc0	$t0, $15, 6
 		srl     $t1, $t0, 16
 		daddu   $t1, $t1, 1
 		andi    $t0, $t0, 0xFFFF

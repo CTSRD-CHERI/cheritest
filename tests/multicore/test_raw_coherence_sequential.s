@@ -52,7 +52,7 @@ start:
 		or      $k0, $k0, $k1 
 		mtc0    $k0, $12 
 		dla     $sp, __sp
-		mfc0    $t0, $15, 1
+		mfc0    $t0, $15, 6
 		andi    $t0, $t0, 0xFFFF
 		dli     $k0, 0x400  
 		mul     $k0, $k0, $t0    

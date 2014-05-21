@@ -47,7 +47,7 @@ start:
 		#
 		# Check total number of cores
 		#
-		mfc0	$t0, $15, 1
+		mfc0	$t0, $15, 6
 		srl     $t1, $t0, 16
 		daddu   $a1, $t1, 1
 
