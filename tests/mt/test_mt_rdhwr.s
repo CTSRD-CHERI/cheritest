@@ -55,7 +55,7 @@ test:		.ent test
 		# threads skip this part.
 		#
 
-		dmfc0	$t0, $15, 2		# Thread Id ...
+		dmfc0	$t0, $15, 7		# Thread Id ...
 		andi	$t1, $t0, 0xffff	# ... in bottom 16 bits
 		bnez	$t1, L1			# If we're not thread zero
 		nop	# branch delay slot
@@ -65,7 +65,7 @@ test:		.ent test
 
 L1:
 
-		dmfc0	$t0, $15, 2		# Thread Id (again)
+		dmfc0	$t0, $15, 7		# Thread Id (again)
 		dmtc0	$t0, $4, 2		# Store in user local register
 		nop				# Possible pipeline hazard
 		nop
@@ -88,7 +88,7 @@ L1:
 		rdhwr	$t0, $29
 		.set pop
 
-		dmfc0	$t1, $15, 2		# Thread Id
+		dmfc0	$t1, $15, 7		# Thread Id
 		beq	$t0, $t1, test_ok	# Should equal user local
 		nop	# branch delay slot
 
