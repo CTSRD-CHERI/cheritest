@@ -771,7 +771,7 @@ TEST_MULTICORE_FILES=\
 		test_raw_coherent_sync.s        \
                 test_raw_coherence_mp_loop.s    \
                 test_raw_coherence_sequential.s \
-		test_raw_pics.s			\
+		test_pics.s			\
                 test_raw_pic_default.s
 else
 TEST_MULTICORE_FILES=
