@@ -765,13 +765,13 @@ else
 TEST_CLANG_FILES=
 endif
 
-# Don't attempt multicore tests as the processor under test might be a single core.
 ifeq ($(MULTI),1)
 TEST_MULTICORE_FILES=\
 		test_raw_coherence_setup.s      \
 		test_raw_coherent_sync.s        \
                 test_raw_coherence_mp_loop.s    \
                 test_raw_coherence_sequential.s \
+		test_raw_pics.s			\
                 test_raw_pic_default.s
 else
 TEST_MULTICORE_FILES=
@@ -1143,6 +1143,7 @@ clean: cleantest
 	rm -f $(TEST_OBJS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
 	rm -f $(TEST_CACHED_ELFS) $(TEST_CACHED_MEMS) $(TEST_CACHED_DUMPS)
 	rm -f $(TEST_MULTI_ELFS) $(TEST_MULTI_MEMS) $(TEST_MULTI_DUMPS)
+	rm -f log/*.log obj/*.mem obj/*.o obj/*.elf obj/*.dump
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
