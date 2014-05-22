@@ -574,7 +574,7 @@ slow_memcpy_loop:                # byte-by-byte copy
 # Returns: (Up to) 16-bit thread ID
 #
         global_func get_thread_id
-        dmfc0    $v0, $15, 2         # load processor ID register, select 2
+        dmfc0    $v0, $15, 7         # load processor ID register, select 7
         jr       $ra                 # return
         and      $v0, $v0, 0xffff    # mask off max thread id
         .end get_thread_id
@@ -586,20 +586,20 @@ slow_memcpy_loop:                # byte-by-byte copy
 # Returns: (Up to) 16-bit max thread ID
 #
         global_func get_max_thread_id
-        dmfc0    $v0, $15, 2         # load processor ID register, select 2
+        dmfc0    $v0, $15, 7         # load processor ID register, select 6
         jr       $ra                 # return
         srl      $v0, $v0, 16        # top 16 bits contain max thread ID
         .end get_max_thread_id
 
 # As get_thread_id, but for core number
         global_func get_core_id
-        dmfc0    $v0, $15, 1         # load processor ID register, select 1
+        dmfc0    $v0, $15, 6         # load processor ID register, select 1
         jr       $ra                 # return
         and      $v0, $v0, 0xffff    # mask off max core id
         .end get_core_id
 # As get_max_thread_id, but for max core number
         global_func get_max_core_id
-        dmfc0    $v0, $15, 1         # load processor ID register, select 1
+        dmfc0    $v0, $15, 6         # load processor ID register, select 1
         jr       $ra                 # return
         srl      $v0, $v0, 16        # top 16 bits contain max core ID
         .end get_max_core_id
@@ -620,11 +620,11 @@ slow_memcpy_loop:                # byte-by-byte copy
         li    $v1, 1            # one core on gxemul
 	beqz  $t0, 1f           # return if on gxemul 
         li    $v0, 0            # return 0 on gxemul
-        dmfc0 $t0, $15, 1       # t0 = core ID / max core
+        dmfc0 $t0, $15, 6       # t0 = core ID / max core
         srl   $t1, $t0, 16      # t1 = max core ID
         add   $t1, 1            # t1 = num cores
         and   $v0, $t0, 0xffff  # v0 = current core ID
-        dmfc0 $t0, $15, 2       # t0 = thread ID / num threads
+        dmfc0 $t0, $15, 7       # t0 = thread ID / num threads
         srl   $v1, $t0, 16      # v1 = max thread ID
         add   $v1, 1            # v1 = num threads
         and   $t0, $t0, 0xffff  # t0 = thread ID
