@@ -568,7 +568,7 @@ slow_memcpy_loop:                # byte-by-byte copy
 .end cmemcpy
 
 #
-# Get the ID of the current thread. Reads CP0 register 15, select 2
+# Get the ID of the current thread. Reads CP0 register 15, select 7
 # (processor ID, so needs appropriate privilege).
 # Args: None
 # Returns: (Up to) 16-bit thread ID
@@ -581,25 +581,25 @@ slow_memcpy_loop:                # byte-by-byte copy
 
 #
 # Get the maximum ID of any thread on this CPU i.e. the number hw threads-1.
-# Reads CP0 register 15, select 2 (processor ID, so needs appropriate privilege).
+# Reads CP0 register 15, select 7 (processor ID, so needs appropriate privilege).
 # Args: None
 # Returns: (Up to) 16-bit max thread ID
 #
         global_func get_max_thread_id
-        dmfc0    $v0, $15, 7         # load processor ID register, select 6
+        dmfc0    $v0, $15, 7         # load processor ID register, select 7
         jr       $ra                 # return
         srl      $v0, $v0, 16        # top 16 bits contain max thread ID
         .end get_max_thread_id
 
 # As get_thread_id, but for core number
         global_func get_core_id
-        dmfc0    $v0, $15, 6         # load processor ID register, select 1
+        dmfc0    $v0, $15, 6         # load processor ID register, select 6
         jr       $ra                 # return
         and      $v0, $v0, 0xffff    # mask off max core id
         .end get_core_id
 # As get_max_thread_id, but for max core number
         global_func get_max_core_id
-        dmfc0    $v0, $15, 6         # load processor ID register, select 1
+        dmfc0    $v0, $15, 6         # load processor ID register, select 6
         jr       $ra                 # return
         srl      $v0, $v0, 16        # top 16 bits contain max core ID
         .end get_max_core_id
