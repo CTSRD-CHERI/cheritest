@@ -62,22 +62,22 @@ TESTDIRS=					\
 		$(TESTDIR)/tlb			\
 		$(TESTDIR)/mem			\
 		$(TESTDIR)/cache		\
-		$(TESTDIR)/cp0                  \
-		$(TESTDIR)/cp2                  \
-		$(TESTDIR)/fuzz_regressions     \
-		$(TESTDIR)/c                    \
+		$(TESTDIR)/cp0			\
+		$(TESTDIR)/cp2			\
+		$(TESTDIR)/fuzz_regressions	\
+		$(TESTDIR)/c			\
 		$(TESTDIR)/mt			
 
 ifeq ($(MULTI),1)
-TESTDIRS += $(TESTDIR)/multicore
+TESTDIRS+= $(TESTDIR)/multicore
 endif
 
 ifeq ($(MT),1)
-TESTDIRS += $(TESTDIR)/mt
+TESTDIRS+= $(TESTDIR)/mt
 endif
 
 ifneq ($(NOFUZZ),1)
-TESTDIRS += $(TESTDIR)/fuzz
+TESTDIRS+= $(TESTDIR)/fuzz
 endif
 
 ifeq ($(BRIEF_GXEMUL),1)
@@ -87,19 +87,19 @@ GXEMUL_LOG_FILTER=cat
 endif
 
 ifdef COP1
-		TESTDIRS += $(TESTDIR)/fpu
+TESTDIRS+= $(TESTDIR)/fpu
 endif
 
 ifdef COP1_ONLY
-		TESTDIRS = $(TESTDIR)/fpu
+TESTDIRS= $(TESTDIR)/fpu
 endif
 
 ifdef TEST_TRACE
-		TESTDIRS += $(TESTDIR)/trace
+TESTDIRS+= $(TESTDIR)/trace
 endif
 
 ifdef TEST_TRACE_ONLY
-		TESTDIRS = $(TESTDIR)/trace
+TESTDIRS= $(TESTDIR)/trace
 endif
 
 RAW_FRAMEWORK_FILES=				\
@@ -232,7 +232,7 @@ RAW_BRANCH_FILES=				\
 		test_raw_bnel_lt.s		\
 		test_raw_jr.s			\
 		test_raw_jal.s			\
-		test_raw_jalr.s                 \
+		test_raw_jalr.s			\
 		test_raw_tlb_j.s
 
 RAW_MEM_FILES=					\
@@ -270,98 +270,98 @@ RAW_CP0_FILES=					\
 RAW_CP2_FILES=					\
 		test_raw_capinstructions.s
 
-RAW_FPU_FILES =                \
-		test_raw_fpu_cntrl.s    \
-		test_raw_fpu_abs.s      \
-		test_raw_fpu_abs_qnan.s \
-		test_raw_fpu_add.s      \
-		test_raw_fpu_sub.s      \
-		test_raw_fpu_mul.s      \
-		test_raw_fpu_div.s      \
-		test_raw_fpu_neg.s      \
-		test_raw_fpu_neg_qnan.s \
-		test_raw_fpu_recip.s    \
-		test_raw_fpu_sqrt.s     \
-		test_raw_fpu_rsqrt.s    \
-		test_raw_fpu_cf.s       \
-		test_raw_fpu_cun.s      \
-		test_raw_fpu_ceq.s      \
-		test_raw_fpu_cueq.s     \
-		test_raw_fpu_colt.s     \
-		test_raw_fpu_cult.s     \
-		test_raw_fpu_cole.s     \
-		test_raw_fpu_cule.s     \
-		test_raw_fpu_branch.s   \
-		test_raw_fpu_mov_gpr.s  \
-		test_raw_fpu_mov_cc.s   \
-		test_raw_fpu_pair.s	\
-		test_raw_fpu_cvt_paired.s \
-		test_raw_fpu_add_d32.s \
-		test_raw_fpu_sub_d32.s \
-		test_raw_fpu_mul_d32.s \
-		test_raw_fpu_div_d32.s \
-		test_raw_fpu_sqrt_d32.s \
-		test_raw_fpu_cvt_d32.s \
-		test_raw_fpu_cole_single.s \
-		test_raw_fpu_colt_single.s \
-		test_raw_fpu_cule_single.s \
-		test_raw_fpu_cult_single.s \
-		test_raw_fpu_cueq_single.s \
-		test_raw_fpu_ceq_single.s \
-		test_raw_fpu_cun_single.s \
-		test_raw_fpu_colt_d64.s \
-		test_raw_fpu_cole_d64.s \
-		test_raw_fpu_ceq_d64.s \
-		test_raw_fpu_cun_d64.s \
-		test_raw_fpu_cueq_d64.s \
-		test_raw_fpu_cule_d64.s \
-		test_raw_fpu_cult_d64.s \
-		test_raw_fpu_round_single.s \
-		test_raw_fpu_ceil_single.s \
-		test_raw_fpu_floor_single.s \
-		test_raw_fpu_trunc_single.s \
-		test_raw_fpu_qnan_single.s \
-		test_raw_fpu_qnan_s2.s \
-		test_raw_fpu_underflow.s \
-		test_raw_fpu_div_small.s \
-		test_raw_fpu_denorm.s \
-		test_raw_fpu_trunc_d64.s \
-		test_raw_fpu_trunc_l_d64.s \
-		test_raw_fpu_trunc_l_s_d64.s \
-		test_raw_fpu_floor_d64.s \
-		test_raw_fpu_floor_l_d64.s \
-		test_raw_fpu_floor_l_s_d64.s \
-		test_raw_fpu_ceil_d64.s \
-		test_raw_fpu_ceil_l_d64.s \
-		test_raw_fpu_ceil_l_s_d64.s \
-		test_raw_fpu_round_d64.s \
-		test_raw_fpu_round_l_d64.s \
-		test_raw_fpu_round_l_s_d64.s \
-		test_raw_fpu_cvt_s_w.s \
-		test_raw_fpu_cvt_s_l_d64.s \
-		test_raw_fpu_cvt_w_d_d64.s \
-		test_raw_fpu_cvt_d_w_d64.s \
-		test_raw_fpu_cvt_d_l_d64.s \
-		test_raw_fpu_cvt_l_d_d64.s \
-		test_raw_fpu_cvt_l_s_d64.s \
-		test_fpu_exception_pipeline.s \
-		test_fpu_x_disabled.s \
-		test_fpu_x_ldc1_disabled.s \
-		test_fpu_x_mthc1.s \
-		test_raw_fpu_bc1t_pipeline.s \
-		test_raw_fpu_movt_s_pipeline.s \
-		test_raw_fpu_movf_s_pipeline.s \
-		test_raw_fpu_movt_pipeline.s \
-		test_raw_fpu_cvt.s	\
-		test_raw_fpu_cvtw.s	\
-		test_raw_fpu_movci.s	\
-		test_raw_fpu_sd_ld.s	\
-		test_raw_fpu_sw_lw.s	\
-		test_raw_fpu_xc1.s	\
-		test_raw_fpu_add_inf_single.s \
-		test_raw_fpu_sub_inf_single.s \
-		test_raw_fpu_mul_inf_single.s \
-		test_raw_fpu_div_inf_single.s \
+RAW_FPU_FILES =					\
+		test_raw_fpu_cntrl.s		\
+		test_raw_fpu_abs.s		\
+		test_raw_fpu_abs_qnan.s		\
+		test_raw_fpu_add.s		\
+		test_raw_fpu_sub.s		\
+		test_raw_fpu_mul.s		\
+		test_raw_fpu_div.s		\
+		test_raw_fpu_neg.s		\
+		test_raw_fpu_neg_qnan.s		\
+		test_raw_fpu_recip.s		\
+		test_raw_fpu_sqrt.s		\
+		test_raw_fpu_rsqrt.s		\
+		test_raw_fpu_cf.s		\
+		test_raw_fpu_cun.s		\
+		test_raw_fpu_ceq.s		\
+		test_raw_fpu_cueq.s		\
+		test_raw_fpu_colt.s		\
+		test_raw_fpu_cult.s		\
+		test_raw_fpu_cole.s		\
+		test_raw_fpu_cule.s		\
+		test_raw_fpu_branch.s		\
+		test_raw_fpu_mov_gpr.s		\
+		test_raw_fpu_mov_cc.s		\
+		test_raw_fpu_pair.s		\
+		test_raw_fpu_cvt_paired.s	\
+		test_raw_fpu_add_d32.s		\
+		test_raw_fpu_sub_d32.s		\
+		test_raw_fpu_mul_d32.s		\
+		test_raw_fpu_div_d32.s		\
+		test_raw_fpu_sqrt_d32.s		\
+		test_raw_fpu_cvt_d32.s		\
+		test_raw_fpu_cole_single.s	\
+		test_raw_fpu_colt_single.s	\
+		test_raw_fpu_cule_single.s	\
+		test_raw_fpu_cult_single.s	\
+		test_raw_fpu_cueq_single.s	\
+		test_raw_fpu_ceq_single.s	\
+		test_raw_fpu_cun_single.s	\
+		test_raw_fpu_colt_d64.s		\
+		test_raw_fpu_cole_d64.s		\
+		test_raw_fpu_ceq_d64.s		\
+		test_raw_fpu_cun_d64.s		\
+		test_raw_fpu_cueq_d64.s		\
+		test_raw_fpu_cule_d64.s		\
+		test_raw_fpu_cult_d64.s		\
+		test_raw_fpu_round_single.s	\
+		test_raw_fpu_ceil_single.s	\
+		test_raw_fpu_floor_single.s	\
+		test_raw_fpu_trunc_single.s	\
+		test_raw_fpu_qnan_single.s	\
+		test_raw_fpu_qnan_s2.s		\
+		test_raw_fpu_underflow.s	\
+		test_raw_fpu_div_small.s	\
+		test_raw_fpu_denorm.s		\
+		test_raw_fpu_trunc_d64.s	\
+		test_raw_fpu_trunc_l_d64.s	\
+		test_raw_fpu_trunc_l_s_d64.s	\
+		test_raw_fpu_floor_d64.s	\
+		test_raw_fpu_floor_l_d64.s	\
+		test_raw_fpu_floor_l_s_d64.s	\
+		test_raw_fpu_ceil_d64.s		\
+		test_raw_fpu_ceil_l_d64.s	\
+		test_raw_fpu_ceil_l_s_d64.s	\
+		test_raw_fpu_round_d64.s	\
+		test_raw_fpu_round_l_d64.s	\
+		test_raw_fpu_round_l_s_d64.s	\
+		test_raw_fpu_cvt_s_w.s		\
+		test_raw_fpu_cvt_s_l_d64.s	\
+		test_raw_fpu_cvt_w_d_d64.s	\
+		test_raw_fpu_cvt_d_w_d64.s	\
+		test_raw_fpu_cvt_d_l_d64.s	\
+		test_raw_fpu_cvt_l_d_d64.s	\
+		test_raw_fpu_cvt_l_s_d64.s	\
+		test_fpu_exception_pipeline.s	\
+		test_fpu_x_disabled.s		\
+		test_fpu_x_ldc1_disabled.s	\
+		test_fpu_x_mthc1.s		\
+		test_raw_fpu_bc1t_pipeline.s	\
+		test_raw_fpu_movt_s_pipeline.s	\
+		test_raw_fpu_movf_s_pipeline.s	\
+		test_raw_fpu_movt_pipeline.s	\
+		test_raw_fpu_cvt.s		\
+		test_raw_fpu_cvtw.s		\
+		test_raw_fpu_movci.s		\
+		test_raw_fpu_sd_ld.s		\
+		test_raw_fpu_sw_lw.s		\
+		test_raw_fpu_xc1.s		\
+		test_raw_fpu_add_inf_single.s	\
+		test_raw_fpu_sub_inf_single.s	\
+		test_raw_fpu_mul_inf_single.s	\
+		test_raw_fpu_div_inf_single.s	\
 		test_raw_fpu_infinity_single.s
 
 TEST_FRAMEWORK_FILES=				\
@@ -376,8 +376,8 @@ TEST_FRAMEWORK_FILES=				\
 		test_casmgp.c			\
 		test_cretval.c			\
 		test_crecurse.c			\
-		test_cglobals.c                 \
-		test_raw_jr_cachd.s             \
+		test_cglobals.c			\
+		test_raw_jr_cachd.s
 
 TEST_ALU_FILES=					\
 		test_hilo.s			\
@@ -413,7 +413,7 @@ TEST_MEM_FILES=					\
 		test_memory_flush		\
 		test_sd_burst.s			\
 		test_storeload.s		\
-		test_sync.s                     \
+		test_sync.s			\
 		test_mem_alias_data.s		\
 		test_raw_pism_truncation.s
 
@@ -430,9 +430,9 @@ TEST_LLSC_FILES=				\
 
 TEST_CACHE_FILES=				\
 		test_hardware_mapping_cached_read.s \
-		test_cache_instruction_data.s   \
+		test_cache_instruction_data.s	\
 		test_cache_instruction_instruction.s \
-		test_cache_instruction_L2.s     \
+		test_cache_instruction_L2.s	\
 		test_id_coherence.s
 
 TEST_CP0_FILES=					\
@@ -466,12 +466,12 @@ TEST_CP0_FILES=					\
 		test_tne_eq.s			\
 		test_tne_gt.s			\
 		test_tne_lt.s			\
-		test_cp0_compare.s              \
-		test_cp0_watch_instr.s          \
-		test_cp0_watch_load.s           \
-		test_cp0_watch_store.s          \
-		test_cp0_user.s                 \
-		test_cp0_eret_user.s            \
+		test_cp0_compare.s		\
+		test_cp0_watch_instr.s		\
+		test_cp0_watch_load.s		\
+		test_cp0_watch_store.s		\
+		test_cp0_user.s			\
+		test_cp0_eret_user.s		\
 		test_cp0_ri.s			\
 		test_cp0_cache_user.s		\
 		test_cp0_counter.s		\
@@ -575,9 +575,9 @@ TEST_CP2_FILES=					\
 		test_cp2_c0_sw.s		\
 		test_cp2_c0_sh.s		\
 		test_cp2_c0_sb.s		\
-		test_cp2_exception_epcc.s       \
-		test_cp2_exception_pipeline.s   \
-		test_cp2_tlb_exception_fill.s   \
+		test_cp2_exception_epcc.s	\
+		test_cp2_exception_pipeline.s	\
+		test_cp2_tlb_exception_fill.s	\
 		test_cp2_tlb_instruction_miss.s \
 		test_cp2_cmove_j.s		\
 		test_cp2_c0_notag.s		\
@@ -656,9 +656,9 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csettype_perm.s	\
 		test_cp2_x_csettype_bounds.s	\
 		test_cp2_x_swc1_perm.s		\
-		test_cp2_x_sdc1_perm.s          \
+		test_cp2_x_sdc1_perm.s		\
 		test_cp2_disabled_exception.s	\
-		test_cp2_x_ccheckperm.s         \
+		test_cp2_x_ccheckperm.s		\
 		test_cp2_x_cchecktype.s		\
 		test_cp2_x_ctoptr_length.s	\
 		test_cp2_x_clc_tlb.s		\
@@ -689,29 +689,29 @@ TEST_MEM_UNALIGN_FILES=				\
 		test_ld_unalign.s		\
 		test_sh_unalign.s		\
 		test_sw_unalign.s		\
-		test_sd_unalign.s               \
+		test_sd_unalign.s		\
 		test_beq_lb.s
 
 TEST_BEV1_FILES=				\
 		test_exception_bev1_trap.s
 
 
-TEST_TLB_FILES=                                 \
+TEST_TLB_FILES=					\
 		test_tlb_load_0.s		\
 		test_tlb_load_1.s		\
 		test_tlb_load_1_large_page.s	\
 		test_tlb_probe.s		\
 		test_tlb_exception_fill.s	\
 		test_tlb_instruction_miss.s	\
-		test_tlb_load_max.s             \
+		test_tlb_load_max.s		\
 		test_tlb_load_asid.s		\
 		test_tlb_read.s			\
 		test_tlb_store_0.s		\
 		test_tlb_store_protected.s	\
 		test_tlb_user_mode.s		\
 		test_tlb_invalid_load.s		\
-		test_tlb_invalid_store.s        \
-		test_tlb_addrerr_load.s         \
+		test_tlb_invalid_store.s	\
+		test_tlb_addrerr_load.s		\
 		test_tlb_addrerr_store.s
 
 TEST_TRAPI_FILES=				\
@@ -750,7 +750,7 @@ RAW_TRACE_FILES=test_raw_trace.s
 # Don't attempt to build clang tests unless CLANG is set to 1, because clang might not be available
 # This will cause clang tests to fail but that is better than make falling over.
 ifeq ($(CLANG),1)
-TEST_CLANG_FILES=\
+TEST_CLANG_FILES=				\
 		test_clang_cast.c		\
 		test_clang_toy.c		\
 		test_clang_memcpy.c		\
@@ -766,20 +766,20 @@ TEST_CLANG_FILES=
 endif
 
 ifeq ($(MULTI),1)
-TEST_MULTICORE_FILES=\
-		test_raw_coherence_setup.s      \
-		test_raw_coherent_sync.s        \
-                test_raw_coherence_mp_loop.s    \
-                test_raw_coherence_sequential.s \
+TEST_MULTICORE_FILES=				\
+		test_raw_coherence_setup.s	\
+		test_raw_coherent_sync.s	\
+		test_raw_coherence_mp_loop.s	\
+		test_raw_coherence_sequential.s	\
 		test_pics.s			\
-                test_raw_pic_default.s
+		test_raw_pic_default.s
 else
 TEST_MULTICORE_FILES=
 endif
 
 ifeq ($(MT),1)
-TEST_MT_FILES=\
-		test_ipc.s	\
+TEST_MT_FILES=					\
+		test_ipc.s			\
 		test_mt_rdhwr.s
 else
 TEST_MT_FILES=
@@ -816,27 +816,27 @@ TEST_FILES=					\
 		$(TEST_TLB_FILES)		\
 		$(TEST_ALU_OVERFLOW_FILES)	\
 		$(TEST_MEM_UNALIGN_FILES)	\
-		$(TEST_TRAPI_FILES)             \
-		$(FUZZ_TEST_FILES)              \
-		$(FUZZ_REGRESSION_TEST_FILES)   \
+		$(TEST_TRAPI_FILES)		\
+		$(FUZZ_TEST_FILES)		\
+		$(FUZZ_REGRESSION_TEST_FILES)	\
 		$(TEST_CLANG_FILES)		\
-		$(TEST_MULTICORE_FILES)         \
+		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)
 
 
 ifdef COP1
-    TEST_FILES += $(RAW_FPU_FILES) $(TEST_FPU_FILES)
+TEST_FILES+=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
 ifdef COP1_ONLY
-	TEST_FILES = $(RAW_FPU_FILES) $(TEST_FPU_FILES)
+TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
 ifdef TEST_TRACE
-	TEST_FILES += $(RAW_TRACE_FILES)
+TEST_FILES+=	$(RAW_TRACE_FILES)
 else
 ifdef TEST_TRACE_ONLY
-	TEST_FILES = $(RAW_TRACE_FILES)
+TEST_FILES=	$(RAW_TRACE_FILES)
 endif
 endif
 #
@@ -935,12 +935,12 @@ CHERILIBS_ABS:=$(realpath $(CHERILIBS))
 MEMCONF?=$(CHERIROOT_ABS)/memoryconfig
 PERIPHCONF?=$(CHERIROOT_ABS)/peripheralconfig
 TRACECONF?=$(CHERIROOT_ABS)/traceconfig
-TOOLS_DIR = ${CHERILIBS_ABS}/tools
+TOOLS_DIR= ${CHERILIBS_ABS}/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 CHERICTL=$(TOOLS_DIR_ABS)/debug/cherictl
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
 CHERISOCKET:= /tmp/$(USER)_beri_debug_socket
-SIM        := ${CHERIROOT_ABS}/sim
+SIM:= ${CHERIROOT_ABS}/sim
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
@@ -1149,8 +1149,8 @@ clean: cleantest
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
 .SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MEMS) \
-    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_INIT_MULTI_OBJECT) \
-    $(TEST_LIB_OBJECT)
+	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
+	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
 
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	$(MAKE) -C $(TOOLS_DIR_ABS)/debug/ cherictl
@@ -1305,13 +1305,13 @@ $(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.mem $(TOOLS_DIR_ABS)/debug/cherictl
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
-        $(GXEMUL_LOG_FILTER) >$@ || true
+	    $(GXEMUL_LOG_FILTER) >$@ || true
 
 
 $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
-        $(GXEMUL_LOG_FILTER) >$@ || true
+	    $(GXEMUL_LOG_FILTER) >$@ || true
 
 l3tosim: l3tosim.c
 	gcc -o l3tosim l3tosim.c
@@ -1344,7 +1344,7 @@ nose_fuzz: $(SIM) fuzz_run_tests
 
 nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
 	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit \
-            --xunit-file=nosetests_fuzz_cached.xml $(NOSEFLAGS) tests/fuzz || true
+	    --xunit-file=nosetests_fuzz_cached.xml $(NOSEFLAGS) tests/fuzz || true
 
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
@@ -1361,39 +1361,42 @@ nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 # file each time.
 
 nosetests_uncached.xml: $(CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit --xunit-file=nosetests_uncached.xml \
-		$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=0 nosetests --with-xunit \
+	    --xunit-file=nosetests_uncached.xml $(NOSEFLAGS_UNCACHED) \
+	    $(TESTDIRS) || true
 
 nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit --xunit-file=nosetests_cached.xml \
-               $(NOSEFLAGS) $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=1 nosetests --with-xunit \
+	    --xunit-file=nosetests_cached.xml $(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim MULTI1=1 CACHED=1 nosetests --with-xunit --xunit-file=nosetests_multi.xml \
-               $(NOSEFLAGS) $(TESTDIRS) || true
+	PYTHONPATH=tools/sim MULTI1=1 CACHED=1 nosetests --with-xunit \
+	    --xunit-file=nosetests_multi.xml $(NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest: all $(ALTERA_TEST_LOGS)
-	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS_UNCACHED) $(ALTERA_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests \
+	    $(NOSEFLAGS_UNCACHED) $(ALTERA_NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) nosetests \
+	    $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) $(TESTDIRS) || true
 
 hwsim-nosetest: $(CHERISOCKET) all $(HWSIM_TEST_LOGS)
-	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS_UNCACHED) $(HWSIM_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(HWSIM_LOGDIR) nosetests \
+	    $(NOSEFLAGS_UNCACHED) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
 
 hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) nosetests $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) nosetests \
+	    $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
 
 gxemul-nosetest: $(GXEMUL_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/gxemul CACHED=0 nosetests --with-xunit --xunit-file=nosetests_gxemul_uncached.xml $(GXEMUL_NOSEFLAGS) \
+	PYTHONPATH=tools/gxemul CACHED=0 nosetests --with-xunit \
+	    --xunit-file=nosetests_gxemul_uncached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-nosetest_cached: $(GXEMUL_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/gxemul CACHED=1 nosetests --with-xunit --xunit-file=nosetests_gxemul_cached.xml $(GXEMUL_NOSEFLAGS) \
+	PYTHONPATH=tools/gxemul CACHED=1 nosetests --with-xunit \
+	    --xunit-file=nosetests_gxemul_cached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
 gxemul-build:
@@ -1403,10 +1406,13 @@ gxemul-build:
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
 
 l3-nosetest: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
+	PYTHONPATH=tools/sim LOGDIR=$(L3_LOGDIR) nosetests --with-xunit \
+	    --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 l3-nosetest-cached: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(L3_LOGDIR) nosetests --with-xunit --xunit-file=nosetests_l3_cached.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
+	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(L3_LOGDIR) nosetests \
+	    --with-xunit --xunit-file=nosetests_l3_cached.xml $(L3_NOSEFLAGS) \
+	    $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
 	gcc -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
