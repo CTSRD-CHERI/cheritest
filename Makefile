@@ -1098,7 +1098,7 @@ WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 AS=mips64-as
-LD=sde-ld
+LD=mips-linux-gnu-ld
 OBJCOPY=mips64-objcopy
 OBJDUMP=mips64-objdump
 
@@ -1167,7 +1167,7 @@ $(OBJDIR)/test_clang%.o : test_clang%.c
 	clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
-	sde-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+	mips-linux-gnu-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) -o $@ $<
