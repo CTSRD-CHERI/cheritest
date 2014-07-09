@@ -907,7 +907,6 @@ and not mt \
 and not mtc0signex \
 and not rdhwr \
 and not swi \
-and not tlb \
 and not smalltlb \
 and not bigtlb \
 and not gxemultlb \
@@ -1316,7 +1315,7 @@ l3tosim: l3tosim.c
 
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim
 	test -d $(L3_LOGDIR) || mkdir $(L3_LOGDIR)
-	l3mips --cycles 10000 $< 2> $@.err | ./l3tosim > $@ || true
+	l3mips --cycles 10000 --uart-delay 0 $< 2> $@.err | ./l3tosim > $@ || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
