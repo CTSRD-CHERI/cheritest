@@ -143,7 +143,13 @@ test:		.ent test
 		# (6) Read writable word after invalidated write.  
 		#
 		ld $a6, 0($t0)
-		
+
+		#
+		# (7) Index Load Tag L2 Cache. Read the tags of a line in the L2
+		#		
+		cache 0x07, 0($t0)    # The address is irrelevant for this test
+		mfc0  $a7, $28        # Read the CP0 register to acquire the tags
+
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

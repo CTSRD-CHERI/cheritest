@@ -132,6 +132,14 @@ test:		.ent test
 		
 		ld	$a6, 0($t0)
 
+		# 
+		# (8) Index Load Tag Data Cache. Read the tags for a particular cache line. 
+		#
+		#ld    $t3, 0($t0)	
+		cache   0x05, 0($t0)	# dL1 Tag lookup
+		mfc0    $a7, $28          # Read CP0 register TagLo dL1
+
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
