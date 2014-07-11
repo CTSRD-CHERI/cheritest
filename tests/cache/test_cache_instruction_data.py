@@ -74,6 +74,6 @@ class test_cache_instruction_data(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a6, 1, "Cached read after data and L2 invalidate is incorrect")       
 
     @attr('cache')
-    @attr('counterdev')
+    @attr('loadcachetag')
     def test_index_load_tag_dcache(self):
         self.assertRegisterEqual(self.MIPS.a7, 0x000000004001fe00, "Index load tag dCache unexpected value")

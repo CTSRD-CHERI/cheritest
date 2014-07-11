@@ -79,6 +79,6 @@ class test_cache_instruction_L2(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a6, 5, "Writable location not invalidated")
 
     @attr('cache')
-    @attr('invalidateL2')
+    @attr('loadcachetag')
     def test_index_load_tag_l2cache(self):
         self.assertRegisterEqual(self.MIPS.a7, 0x0000000040004000, "Index load tag l2 unexpected value")

@@ -901,6 +901,7 @@ and not einstr \
 and not float \
 and not ignorebadex \
 and not invalidateL2 \
+and not loadcachetag \
 and not llscnotmatching \
 and not llscspan \
 and not mt \
@@ -959,6 +960,7 @@ NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not largepage
 NOSEPRED+=and not dumpicache
+NOSEPRED+=and not loadcachetag
 else
 NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb
