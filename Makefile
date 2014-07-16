@@ -439,6 +439,7 @@ TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
 		test_cp0_config1		\
 		test_cp0_config3		\
+		test_cp0_config6		\
 		test_eret.s			\
 		test_exception_bev0_trap.s	\
 		test_exception_bev0_trap_bd.s	\
