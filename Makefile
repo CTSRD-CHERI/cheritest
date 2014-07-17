@@ -897,8 +897,6 @@ not beri \
 and not beriinitial \
 and not capabilities \
 and not clang \
-and not comparereg \
-and not config3 \
 and not counterdev \
 and not dumpicache \
 and not einstr \
@@ -910,12 +908,11 @@ and not llscnotmatching \
 and not llscspan \
 and not mt \
 and not mtc0signex \
-and not rdhwr \
 and not swi \
+and not syncistep \
 and not smalltlb \
 and not bigtlb \
 and not gxemultlb \
-and not userlocal \
 and not watch \
 "
 #
