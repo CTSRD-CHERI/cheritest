@@ -387,6 +387,7 @@ TEST_ALU_FILES=					\
 		test_ddivu.s			\
 		test_div_zero.s			\
 		test_mul.s			\
+		test_mul_hilo.s			\
 		test_mult.s			\
 		test_multu.s			\
 		test_dmult.s			\
