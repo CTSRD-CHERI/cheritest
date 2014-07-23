@@ -66,7 +66,8 @@ TESTDIRS=					\
 		$(TESTDIR)/cp2			\
 		$(TESTDIR)/fuzz_regressions	\
 		$(TESTDIR)/c			\
-		$(TESTDIR)/mt			
+		$(TESTDIR)/mt			\
+		$(TESTDIR)/pic
 
 ifeq ($(MULTI),1)
 TESTDIRS+= $(TESTDIR)/multicore
@@ -751,6 +752,8 @@ TEST_TRAPI_FILES=				\
 
 RAW_TRACE_FILES=test_raw_trace.s
 
+RAW_PIC_FILES=test_raw_pic_regs.s
+
 # Don't attempt to build clang tests unless CLANG is set to 1, because clang might not be available
 # This will cause clang tests to fail but that is better than make falling over.
 ifeq ($(CLANG),1)
@@ -825,7 +828,8 @@ TEST_FILES=					\
 		$(FUZZ_REGRESSION_TEST_FILES)	\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
-		$(TEST_MT_FILES)
+		$(TEST_MT_FILES)  \
+		$(RAW_PIC_FILES)
 
 
 ifdef COP1
