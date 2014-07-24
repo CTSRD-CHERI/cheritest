@@ -62,6 +62,25 @@ read_reg_loop:
 read_reg_skip_fail:
     bne   $t0, $0, read_reg_loop
     addi  $t0, $t0, -1
+	
+		# Test setting PIC interrupt
+		# Enable soft interrupt 1
+		dli   $a0, 0x900000007f804000 + 8*64
+		ori   $t0, $0, 0x1
+		sll   $t0, $t0, 31
+		sd    $t0, 0($a0)
+		# Load read address
+    dli   $a0, 0x900000007f806008
+    ld    $t0, 0($a0)
+    # Load set address
+    dli   $a1, 0x900000007f806000 + 136
+    ori   $t0, $t0, 0x1
+    sd    $t0, 0($a1)
+    ld    $s2, 0($a0)
+    # Load clear address
+    dli   $a1, 0x900000007f806000 + 264
+    sd    $t0, 0($a1)
+    ld    $s3, 0($a0)
     
 		# Dump registers in the simulator
 		mtc0 $v0, $26

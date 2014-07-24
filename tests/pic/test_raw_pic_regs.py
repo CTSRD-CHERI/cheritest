@@ -33,3 +33,11 @@ class test_raw_pic_regs(BaseBERITestCase):
     @attr('pic')
     def test_pic_read_initial(self):
         self.assertRegisterEqual(self.MIPS.s1, 0x0, "Read registers initialized incorrectly")
+        
+    @attr('pic')
+    def test_pic_set(self):
+        self.assertRegisterEqual(self.MIPS.s2, 0x01, "Set interrupt")
+
+    @attr('pic')
+    def test_pic_clear(self):
+        self.assertRegisterEqual(self.MIPS.s3, 0x0, "Cleared interrupt")
