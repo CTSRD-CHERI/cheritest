@@ -918,6 +918,7 @@ and not smalltlb \
 and not bigtlb \
 and not gxemultlb \
 and not watch \
+and not pic \
 "
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
