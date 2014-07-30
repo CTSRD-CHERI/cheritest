@@ -920,6 +920,13 @@ and not gxemultlb \
 and not watch \
 and not pic \
 "
+
+#ifdef TRACE
+#define L3_TRACE --trace 2
+#else
+#define L3_TRACE --trace 0
+#endif
+
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
@@ -1318,12 +1325,15 @@ $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
 	    $(GXEMUL_LOG_FILTER) >$@ || true
 
+max_cycles: max_cycles.c
+	gcc -o max_cycles max_cycles.c
+
 l3tosim: l3tosim.c
 	gcc -o l3tosim l3tosim.c
 
-$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim
+$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 	test -d $(L3_LOGDIR) || mkdir $(L3_LOGDIR)
-	l3mips --cycles 10000 --uart-delay 0 --ignore HI --ignore LO $< 2> $@.err | ./l3tosim > $@ || true
+	l3mips --cycles `./max_cycles $@ 10000 100000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $< 2> $@.err | ./l3tosim > $@ || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
