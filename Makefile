@@ -894,6 +894,7 @@ and not rdhwr           \
 and not config3         \
 and not userlocal       \
 and not mt              \
+and not pic		\
 "
 
 L3_NOSEFLAGS=-A "\
