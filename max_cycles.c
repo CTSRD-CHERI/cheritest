@@ -55,7 +55,8 @@ char *cp;
   else
     cp++;
   
-  if (strcmp(cp, "test_tlb_exception_fill.log") == 0)
+  if ((strcmp(cp, "test_tlb_exception_fill.log") == 0) ||
+      (strcmp(cp, "test_tlb_exception_fill_cached.log") == 0))
     printf("%s\n", argv[3]);
   else
     printf("%s\n", argv[2]);
