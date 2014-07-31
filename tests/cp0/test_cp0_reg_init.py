@@ -62,9 +62,22 @@ class test_cp0_reg_init(BaseBERITestCase):
     ## kernel mode.
     @attr('beri')
     def test_status_cu(self):
-        self.assertRegisterEqual((self.MIPS.a4) >> 28 & 0x1, 0, "Unexpected CP0 coprocessor availability on reset")
+        self.assertRegisterEqual((self.MIPS.a4 >> 28) & 0x1, 0, "Unexpected CP0 coprocessor availability on reset")
+
+    @attr('nofloat')
+    def test_status_fr_nofloat(self):
+        '''Test that CP0.Status.FR doesn't claim that the CPU has 32 floating point registers when there is no FPU'''
+        self.assertRegisterEqual((self.MIPS.a4 >> 26) & 0x1, 0, "CP0.Status.FR was set but FPU not present")
+
+    @attr('float')
+    @attr('float64')
+    def test_status_fr_float64(self):
+        '''Test that CP0.Status.FR says there are 32 floating point registers'''
+        self.assertRegisterEqual((self.MIPS.a4 >> 26) & 0x1, 1, "CP0.Status.FR was not set")
 
     ## We should be using boot-time exceptions (BEV)
+        '''Test that CP0.Status.BEV is set after reset'''
+    def test_status_bev(self):
         self.assertRegisterEqual((self.MIPS.a4) >> 22 & 0x1, 1, "Unexpected CP0 boot-time exceptions value on reset")
 
     ## We should have interrupts enabled for all sources.
