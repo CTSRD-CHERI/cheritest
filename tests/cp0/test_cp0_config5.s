@@ -1,4 +1,4 @@
-#
+#-
 # Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
@@ -25,19 +25,27 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
 #
-# Test the CP0 config6 register
+# Test the inital value of CP0.config5
 #
 
-class test_cp0_config6(BaseBERITestCase):
+		.global test
+test:		.ent test
+		daddu 	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
 
-    @attr('tlb')
-    @attr('bigtlb')
-    def test_cp0_config6_1(self):
-        '''Test CP0.Config6'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x8f0000,
-            "CP0.Config6 did not have expected value")
+		dmfc0	$a0, $16, 5
 
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop			# branch-delay slot
+		.end	test
