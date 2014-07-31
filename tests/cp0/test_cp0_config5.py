@@ -36,8 +36,16 @@ class test_cp0_config5(BaseBERITestCase):
 
     @attr('tlb')
     @attr('bigtlb')
-    def test_cp0_config5_1(self):
+    def test_cp0_config5_large(self):
         '''Test CP0.Config5'''
         self.assertRegisterEqual(self.MIPS.a0 & 0x1, 1,
             "CP0.Config5 did not have expected value")
+
+    @attr('tlb')
+    @attr('smalltlb')
+    def test_cp0_config5_small(self):
+        '''Test CP0.Config5'''
+        self.assertRegisterEqual(self.MIPS.a0 & 0x1, 0,
+            "CP0.Config5 did not have expected value")
+
 
