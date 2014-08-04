@@ -718,7 +718,8 @@ TEST_TLB_FILES=					\
 		test_tlb_invalid_store.s	\
 		test_tlb_addrerr_load.s		\
 		test_tlb_addrerr_store.s	\
-		test_tlb_wired.s
+		test_tlb_wired.s                \
+		test_tlb_ext_enable.s
 
 TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
