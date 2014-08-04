@@ -126,6 +126,8 @@ loop:
 		tlbp
 		mfc0	$a5, $0		# TLB Index
 
+		mfc0	$a6, $1		# TLB Random
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
