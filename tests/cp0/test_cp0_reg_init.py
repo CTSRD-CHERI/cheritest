@@ -76,8 +76,9 @@ class test_cp0_reg_init(BaseBERITestCase):
         self.assertRegisterEqual((self.MIPS.a4 >> 26) & 0x1, 1, "CP0.Status.FR was not set")
 
     ## We should be using boot-time exceptions (BEV)
-        '''Test that CP0.Status.BEV is set after reset'''
+    @attr('beri')
     def test_status_bev(self):
+        '''Test that CP0.Status.BEV is set after reset'''
         self.assertRegisterEqual((self.MIPS.a4) >> 22 & 0x1, 1, "Unexpected CP0 boot-time exceptions value on reset")
 
     ## We should have interrupts enabled for all sources.
