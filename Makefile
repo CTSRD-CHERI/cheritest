@@ -899,6 +899,7 @@ and not config3         \
 and not userlocal       \
 and not mt              \
 and not pic		\
+and not mips_overflow 	\
 "
 
 L3_NOSEFLAGS=-A "\
