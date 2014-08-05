@@ -31,9 +31,11 @@ from nose.plugins.attrib import attr
 class test_tlb_wired(BaseBERITestCase):
 
     '''Test that we can set CP0.Wired to 1'''
+    @attr('tlb')
     def test_tlb_wired_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "Failed to set CP0.Wired to 1")
 
     '''Test that we can set CP0.Wired to 2'''
+    @attr('tlb')
     def test_tlb_wired_2(self):
         self.assertRegisterEqual(self.MIPS.a1, 2, "Failed to set CP0.Wired to 2")
