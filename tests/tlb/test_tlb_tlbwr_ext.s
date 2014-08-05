@@ -66,10 +66,11 @@ test:		.ent test
 		addi	$a0, $a0, 1
 
 		#
-		# Set the number of wired TLB entries to 0
+		# Set the number of wired TLB entries to 1
 		#
 
-		mtc0	$zero, $6	# TLB Wired
+		dli	$t0, 1
+		mtc0	$t0, $6	# TLB Wired
 
 		#
 		# Set the page size to 4K
@@ -121,7 +122,6 @@ loop:
 		# there are 128 extended TLB entries.
 		#
 
-		mtc0	$zero, $6	# TLB Wired
 		dli	$t2, 0x102000
 		nop
 		dmtc0	$t2, $10	# TLB EntryHi
@@ -168,6 +168,69 @@ loop:
 		dmtc0	$t2, $10
 		tlbp
 		mfc0	$t3, $0
+
+		#
+		# A loop repeatedly replacing page table entries
+		#
+
+		dli	$a1, 100
+
+thrash_loop:
+
+		#
+		# Clear the TLB entry
+		#
+
+		dmtc0	$a2, $10
+		dadd	$a2, $a2, $a3
+		dmtc0	$zero, $2	# TLB EntryLo0
+		dmtc0	$zero, $3	# TLB EntryHi
+		tlbwi
+		
+		#
+		# Write back page 129
+		#
+
+		dli	$t2, 0x102000
+		dmtc0	$t2, $10	# TLB EntryHi
+		tlbwr
+
+		#
+		# Find out where page 1 was evicted to
+		#
+
+		dmtc0	$a3, $10	# TLB EntryHi
+		tlbp
+		mfc0	$t0, $0		# TLB Index
+
+		#
+		# Clear the TLB entry
+		#
+
+		dmtc0	$a2, $10
+		dadd	$a2, $a2, $a3
+		dmtc0	$zero, $2	# TLB EntryLo0
+		dmtc0	$zero, $3	# TLB EntryHi
+		tlbwi
+
+		#
+		# Use TLBWR to put back the TLB entry for page 1
+		#
+
+		dmtc0	$a3, $10
+		tlbwr
+
+		#
+		# Find out where page 129 went
+		#
+
+		dmtc0	$t2, $10
+		tlbp
+		mfc0	$t0, $0
+
+		addi	$a1, $a1, -1
+		bnez	$a1, thrash_loop
+		nop			# branch delay slot
 
 test_failed:
 
