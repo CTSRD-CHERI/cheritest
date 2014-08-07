@@ -686,7 +686,8 @@ TEST_ALU_OVERFLOW_FILES=			\
 		test_sub_overflow.s		\
 		test_sub_overflow_minint.s	\
 		test_subu_overflow.s		\
-		test_madd_lo_overflow.s
+		test_madd_lo_overflow.s		\
+		test_subu_overflow.s
 
 TEST_MEM_UNALIGN_FILES=				\
 		test_lh_unalign.s		\
