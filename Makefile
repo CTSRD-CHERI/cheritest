@@ -765,6 +765,8 @@ RAW_PIC_FILES=test_raw_pic_regs.s
 ifeq ($(CLANG),1)
 TEST_CLANG_FILES=				\
 		test_clang_cast.c		\
+		test_clang_cursor.c		\
+		test_clang_cursor_trivial.c	\
 		test_clang_toy.c		\
 		test_clang_memcpy.c		\
 		test_clang_load_data.c		\

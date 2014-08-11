@@ -252,6 +252,7 @@ other_threads_go:
 
 	        .data
 		.align 3
+.globl exception_count
 exception_count:
 		.dword	0x0
 reset_barrier:

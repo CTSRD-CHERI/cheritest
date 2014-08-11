@@ -62,6 +62,9 @@ test:		.ent test
 
 		cmove $c1, $c0
 		cmove $c2, $c0
+		# It is undefined behaviour to use a capability to seal another without
+		# first setting its type.
+		csettype  $c1, $c1, $a2
 		csealcode $c1, $c1
 		# There are two different exceptions that could be raised
 		# by the next instruction: $c1 is already sealed (so can't

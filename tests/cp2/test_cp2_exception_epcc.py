@@ -128,9 +128,10 @@ class test_cp2_exception_epcc(BaseBERITestCase):
     def test_sandbox_epcc_perms(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0007, "sandbox EPCC perms incorrect")
 
+    # No otype is set for cr3, so it will contain a cursor value that is the same as its base (i.e. offset = 0)
     @attr('capabilities')
     def test_sandbox_epcc_ctype(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].ctype, 0x0, "sandbox EPCC ctype incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].ctype, self.MIPS.cp2[3].base, "sandbox EPCC ctype incorrect")
 
     @attr('capabilities')
     def test_sandbox_epcc_base(self):
