@@ -402,7 +402,8 @@ TEST_ALU_FILES=					\
 		test_slt.s			\
 		test_slti.s			\
 		test_sltiu.s			\
-		test_sltu.s
+		test_sltu.s			\
+		test_subu_carry.s
 
 TEST_BRANCH_FILES =				\
 		test_bltzall_large.s		\
