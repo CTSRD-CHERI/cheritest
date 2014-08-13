@@ -349,6 +349,7 @@ RAW_FPU_FILES =					\
 		test_fpu_x_disabled.s		\
 		test_fpu_x_ldc1_disabled.s	\
 		test_fpu_x_mthc1.s		\
+		test_fpu_x_reserved.s		\
 		test_raw_fpu_bc1t_pipeline.s	\
 		test_raw_fpu_movt_s_pipeline.s	\
 		test_raw_fpu_movf_s_pipeline.s	\
@@ -989,7 +990,7 @@ NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not syncistep
 endif
 ifdef COP1
-NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm
+NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri
 else
 NOSEPRED+=and not float
 endif
