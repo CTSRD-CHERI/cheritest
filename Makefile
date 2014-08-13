@@ -925,10 +925,9 @@ and not mtc0signex \
 and not swi \
 and not syncistep \
 and not smalltlb \
-and not bigtlb \
 and not gxemultlb \
 and not watch \
-and not pic \
+and not deterministic_random \
 "
 
 #ifdef TRACE

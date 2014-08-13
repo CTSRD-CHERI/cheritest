@@ -32,16 +32,19 @@ class test_tlb_tlbwr(BaseBERITestCase):
 
     @attr('tlb')
     @attr('bigtlb')
+    @attr('deterministic_random')
     def test_tlb_tlbwr_1(self):
         self.assertRegisterEqual(self.MIPS.a4, 15, "TLBWR did not write to the expected pseudo-random location")
 
     @attr('tlb')
     @attr('bigtlb')
+    @attr('deterministic_random')
     def test_tlb_tlbwr_2(self):
         self.assertRegisterEqual(self.MIPS.a5, 14, "TLBWR did not write to the expected pseudo-random location")
 
     @attr('tlb')
     @attr('bigtlb')
+    @attr('deterministic_random')
     def test_tlb_tlbwr_3(self):
         self.assertRegisterEqual(self.MIPS.a6, 13, "CP0.Random did not have the expected value")
 

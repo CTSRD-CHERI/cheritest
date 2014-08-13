@@ -50,12 +50,14 @@ class test_tlb_tlbwr_ext(BaseBERITestCase):
 
     @attr('tlb')
     @attr('bigtlb')
+    @attr('deterministic_random')
     def test_tlb_tlbwr_ext_4(self):
         '''Test that the TLB entry for page 1 was evicted to index 13'''
         self.assertRegisterEqual(self.MIPS.a6, 13, "TLB entry for page 1 was not evicted to index 13")
 
     @attr('tlb')
     @attr('bigtlb')
+    @attr('deterministic_random')
     def test_tlb_tlbwr_ext_5(self):
         '''Test that the TLB entry for page 129 was evicted to index 12'''
         self.assertRegisterEqual(self.MIPS.t3, 12, "TLB entry for page 129 was not evicted to index 12")
