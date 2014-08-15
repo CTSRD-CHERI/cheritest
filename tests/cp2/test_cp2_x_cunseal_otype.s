@@ -81,9 +81,8 @@ test:		.ent test
 		# Seal $c1
 		#
 
-		dla     $t1, sandbox1
-		cmove   $c2, $c0
-		csettype $c2, $c2, $t1
+		dli	$t1, 0x1111
+		csettype $c2, $c0, $t1
 
 		csealdata $c1, $c1, $c2
 
@@ -91,9 +90,8 @@ test:		.ent test
 		# Create a capability for a different type
 		#
 	
-		dla	$t1, sandbox2
-		cmove   $c3, $c0
-		csettype $c3, $c3, $t1
+		dli	$t1, 0x2222
+		csettype $c3, $c0, $t1
 
 		#
 		# Try to unseal with the wrong capability

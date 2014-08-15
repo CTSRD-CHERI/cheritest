@@ -60,7 +60,7 @@ test:		.ent test
 
                 # Make $c1 a template capability for a user-defined type
 		# whose otype is equal to the address of sandbox.
-		dla      $t0, sandbox
+		dli      $t0, 0xFEF1F0
 		csettype $c1, $c0, $t0
 
 		# Make c4 a sealed code capability for sandbox

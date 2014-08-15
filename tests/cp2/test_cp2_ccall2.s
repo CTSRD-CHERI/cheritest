@@ -105,8 +105,10 @@ L1:
                 # Make $c4 a template capability for a user-defined type
 		# whose otype is equal to the address of sandbox.
 
-		dla	$t0, sandbox
+		li	$t0, 0xFEF1F0
 		csettype $c4, $c0, $t0
+		dla	$t0, sandbox
+		cincbase $c4, $c4, $t0
 
 		#
                 # Make $c3 a data capability for the array at address data
@@ -293,6 +295,7 @@ do_ccall:
 		#
 
 		cgettype $t1, $c2
+		
 		bne	$t0, $t1, ccall_fails
 
 		#
@@ -313,14 +316,16 @@ do_ccall:
 		cunseal $c26, $c2, $c27
 
 		#
-		# Move $c1.otype - $c1.base into EPC, so that when we return 
+		# Move $c1.offset into EPC, so that when we return 
                 # PC will be set to the entry point of the invoked sandbox
 		#
 
-		cgettype $t0, $c1
-		cgetbase $t1, $c1
-		dsub $t0, $t0, $t1
-		dmtc0   $t0, $14
+		# However cgetoffset isn't implemented yet!
+		#cgetoffset $t0, $c1
+		#cgetbase $t1, $c1
+		#dsub $t0, $t0, $t1
+		#dmtc0   $t0, $14
+		dmtc0   $0, $14
 		nop
 		nop
 		nop

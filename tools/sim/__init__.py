@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2011 Steven J. Murdoch
 # Copyright (c) 2013 Alexandre Joannou
+# Copyright (c) 2014 Jonathan Woodruff
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -51,24 +52,25 @@ THREAD_RE=re.compile(r'======  Thread\s+([0-9]+)\s+======$')
 MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+) (0x................)$')
 MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC (0x................)$')
 CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC u:(.) perms:(0x.{8}) ' +
-                           r'type:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
+                            r'type:(0x.{6}) offset:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
 CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+) u:(.) perms:(0x.{8}) ' +
-                            r'type:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
+                            r'type:(0x.{6}) offset:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
 
 class MipsException(Exception):
     pass
 
 class Capability(object):
-    def __init__(self, u, perms, ctype, base, length):
+    def __init__(self, u, perms, ctype, offset, base, length):
         self.u = int(u)
-        self.perms = int(perms, 16)
         self.ctype = int(ctype, 16)
+        self.perms = int(perms, 16)
+        self.offset = int(offset, 16)
         self.base = int(base, 16)
         self.length = int(length, 16)
 
     def __repr__(self):
-        return 'u:%x perms:0x%08x type:0x%016x base:0x%016x length:0x%016x'%(
-            self.u, self.perms, self.ctype, self.base, self.length)
+        return 'u:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x'%(
+            self.u, self.perms, self.ctype, self.offset, self.base, self.length)
 
 class ThreadStatus(object):
     '''Data object representing status of a thread (including cp2 registers if present)'''
@@ -147,10 +149,10 @@ class MipsStatus(object):
             if (cap_reg_groups):
                 cap_reg_num = int(cap_reg_groups.group(1))
                 t = self.threads[thread]
-                t.cp2[cap_reg_num] = Capability(*cap_reg_groups.groups()[1:6])
+                t.cp2[cap_reg_num] = Capability(*cap_reg_groups.groups()[1:7])
             if (cap_pc_groups):
                 t = self.threads[thread]
-                t.pcc = Capability(*cap_pc_groups.groups()[0:5])
+                t.pcc = Capability(*cap_pc_groups.groups()[0:6])
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''

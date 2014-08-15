@@ -38,16 +38,15 @@ class test_cp2_csci(BaseBERITestCase):
         '''Test that csci didn't overwrite dword before requested addr'''
         self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef, "csci underflow")
 
-    # The 8 at the start is for the has-type field, which will go away at some point...
     @attr('capabilities')
     def test_cp2_csci_dword0(self):
         '''Test that csci stored perms, u fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x80000000000000ff, "csci stored incorrect u, perms fields")
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000001000000ff, "csci stored incorrect u, perms, and type fields")
 
     @attr('capabilities')
     def test_cp2_csci_dword1(self):
         '''Test that csci stored the otype field correctly'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000001, "csci stored incorrect otype")
+        self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000000, "csci stored incorrect offset")
 
     @attr('capabilities')
     def test_cp2_csci_dword2(self):

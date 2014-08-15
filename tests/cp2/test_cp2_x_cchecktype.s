@@ -64,13 +64,16 @@ test:		.ent test
                 # Make $c1 a template capability for a user-defined type
 		# whose otype is equal to the address of sandbox.
 		dla      $t0, sandbox
+		# csetoffset $c1, $c0, $t0
+		li       $t0, 0x1111
 		csettype $c1, $c0, $t0
 
                 # Make $c2 a data capability for the array at address data
 		dla      $t0, data
 		cincbase $c2, $c0, $t0
-                dli      $t0, 8
-                csetlen  $c2, $c2, $t0
+		li       $t0, 8
+		csetlen  $c2, $c2, $t0
+		
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
 		# Permit_Store.
 		# NB: Permit_Execute must not be included in the set of
@@ -84,7 +87,9 @@ test:		.ent test
 
 		# Make c4 a sealed code capability for sandbox2
 		dla	 $t0, sandbox2
-		csettype $c4, $c0, $t0
+		# csetoffset $c4, $c0, $t0
+		dli	 $t0, 0x2222
+		csettype $c4, $c4, $t0
 		csealcode $c4, $c4
 
 		# Check that c4 and c3 have the same otype

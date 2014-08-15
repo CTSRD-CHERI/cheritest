@@ -46,14 +46,13 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		dla      $t0, sandbox
+		li      $t0, 0xC0DE
 		csettype $c1, $c0, $t0
 		csealcode $c2, $c1
                 cunseal  $c3, $c2, $c1
 
  		cgetunsealed $a0, $c3
 		cgettype $a1, $c3
-		dla      $t0, sandbox
 		dsubu    $a1, $a1, $t0
 		
 

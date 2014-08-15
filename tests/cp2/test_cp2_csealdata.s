@@ -48,7 +48,7 @@ test:		.ent test
 
                 # Make $c1 a template capability for a user-defined type
 		# whose otype is equal to the address of sandbox.
-		dla      $t0, sandbox
+		li	$t0, 0x123456
 		csettype $c1, $c0, $t0
 
                 # Make $c2 a data capability for the array at address data
@@ -69,9 +69,9 @@ test:		.ent test
 
                 # $c3.u should be 0
 		cgetunsealed $a0, $c3
-                # $c3.type should be equal to sandbox
+                # $c3.type should be equal to 0x123456
 		cgettype $a1, $c3
-		dla      $t0, sandbox
+		li       $t0, 0x123456
 		dsubu    $a1, $a1, $t0
                 # $c3.base should be equal to data
                 cgetbase $a2, $c3

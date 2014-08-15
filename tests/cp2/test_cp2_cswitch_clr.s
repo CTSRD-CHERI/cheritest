@@ -146,7 +146,7 @@ test:		.ent test
 		#
 		dli	$t0, 0xffffffffffffffff
 		dli	$t1, 0
-		dli	$t2, 0x0101010101010101
+		dli	$t2, 0x010101
 
 		csettype	$c0, $c0, $t2
 		cincbase	$c0, $c0, $t0
