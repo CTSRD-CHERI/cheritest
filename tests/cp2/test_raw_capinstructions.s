@@ -36,6 +36,7 @@ start:
                 # get fields of a capability
 		cgetperm  $a1,  $c2
 		cgettype  $a1,  $c2
+		cgetoffset $a1, $c2
 		cgetbase  $a1,  $c2
 		cgetlen   $a1,  $c2
                 cgettag   $a1,  $c2
@@ -47,6 +48,7 @@ start:
 		dli       $a3,  0
 		candperm  $c1,  $c2, $a3
 		csettype  $c1,  $c2, $a3
+		csetoffset $c1, $c2, $a3
 		cincbase  $c1,  $c2, $a3
 		csetlen   $c1,  $c2, $a3
                 ccleartag $c1,  $c2
