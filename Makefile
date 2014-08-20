@@ -1087,6 +1087,8 @@ L3_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 L3_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
+L3_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
+	$(L3_LOGDIR)/,$(TESTS)))
 
 SIM_FUZZ_TEST_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_LOGS))
 SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED_LOGS))
@@ -1356,7 +1358,7 @@ l3tosim: l3tosim.c
 
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 	test -d $(L3_LOGDIR) || mkdir $(L3_LOGDIR)
-	l3mips --cycles `./max_cycles $@ 10000 100000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $< 2> $@.err | ./l3tosim > $@ || true
+	l3mips --cycles `./max_cycles $@ 20000 200000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $< 2> $@.err | ./l3tosim > $@ || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
@@ -1451,6 +1453,11 @@ l3-nosetest-cached: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(L3_LOGDIR) nosetests \
 	    --with-xunit --xunit-file=nosetests_l3_cached.xml $(L3_NOSEFLAGS) \
 	    $(TESTDIRS) || true
+
+l3-nosetest-multi: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim MULTI1=1 LOGDIR=$(L3_LOGDIR) nosetests \
+	    --with-xunit --xunit-file=nosetests_l3_multi.xml $(L3_NOSEFLAGS) \
+            $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
 	gcc -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
