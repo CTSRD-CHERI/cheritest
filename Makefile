@@ -908,7 +908,7 @@ and not pic		\
 and not mips_overflow 	\
 "
 
-L3_NOSEFLAGS=-A "\
+L3_NOSEPRED=\
 not beri \
 and not beriinitial \
 and not capabilities \
@@ -922,16 +922,23 @@ and not invalidateL2 \
 and not loadcachetag \
 and not llscnotmatching \
 and not llscspan \
-and not mt \
 and not mtc0signex \
 and not swi \
 and not syncistep \
 and not smalltlb \
 and not gxemultlb \
 and not watch \
-and not deterministic_random \
-"
+and not deterministic_random
 
+ifneq ($(MULTI),1)
+L3_NOSEPRED+=and not multicore
+endif
+
+ifneq ($(MT),1)
+L3_NOSEPRED+=and not mt
+endif
+
+L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 #ifdef TRACE
 #define L3_TRACE --trace 2
 #else
