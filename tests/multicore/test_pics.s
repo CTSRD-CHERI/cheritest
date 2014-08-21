@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Robert M. Norton
+# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # @BERI_LICENSE_HEADER_START@
@@ -33,72 +34,94 @@
 
 .global test
 test:   .ent    test
-	# setup stack - needs multicore support
-	jal     get_core_id
-	nop
-
-	dli     $k0, 0x400
-        mul     $k0, $k0, $v0
-	daddu 	$sp, $sp, $k0
 	daddu 	$sp, $sp, -32
 	sd	$ra, 24($sp)
 	sd	$fp, 16($sp)
 	daddu	$fp, $sp, 32
 
-        # address of the PIC, for later
-        dla     $s7, 0x900000007f804000
 
-        # enable interrupts
-        dmfc0   $t0, $12       # get status register
-        or      $t0, 0xc01    # unmask interrupt 0/1 and enable interrupts
-        and     $t0, ~0x6      # clear ERL, EXL
-        dmtc0   $t0, $12       # set status register
+	#
+        # Enable interrupts
+	#
+
+        mfc0    $t0, $12	# get status register
+        ori	$t0, $t0, 0xc01	# unmask interrupt 0/1 and enable interrupts
+        # and     $t0, ~0x6	# clear ERL, EXL (not needed)
+        mtc0    $t0, $12	# set status register
         
-	mtc0    $0, $26
+	mfc0	$v0, $15, 6	# CoreId
+	andi	$v0, $v0, 0xffff
         bnez    $v0, core1
         nop
 
+	#
+	# Only core 0 runs this part
+	#
+
 core0:
+	#
         # Activate core 1
+	#
+
         jal     other_threads_go
         nop
 
 	#
 	# Set up exception handlers.
 	#
+
 	jal	bev_clear
 	nop
 
+	#
         # Handler for core 0
+	#
+
         dla	$a0, bev0_handler
 	jal	bev0_handler_install
 	nop
 
+	#
         # Handler for core 1 -- note that we don't clear bev for core 1
         # so we have a handler for each core
+	#
+
 	dla	$a0, bev1_handler
 	jal	bev1_handler_install
 	nop
 
+	#
         # Configure the PIC
-        dli     $t0, 0x80000100
-        sd      $t0, 16($s7)     # enable int 2 and forward to core 1 irq 0
-        dli     $t0, 0x80000001
-        sd      $t0, 24($s7)     # enable int 3 and forward to core 0 irq 1
+	# Enable interrupt 3 and forward to thread 0 irq 1
+	#
 
+        dla     $s7, 0x900000007f804000	# Base address of PIC 0
+        dli     $t0, 0x80000001		# IRQ 1
+        sd      $t0, 24($s7)     	# Interrupt source 3 (3*8 = 24)
+
+
+	#
         # Synchronise with core 1
+	#
+
         dla    $a0, my_barrier
         jal    thread_barrier
+	nop
 
         # A small loop to ensure core 1 has had time to reach expected_epc
-        li      $t0, 20
+        li      $t0, 100
 1:      
         bgtz    $t0, 1b
         subu    $t0, 1
 
-        # trigger int 2 -> core 1
-        li      $t0, 4
-        sd      $t0, 8320($s7)
+	#
+        # Trigger interrupt 2 on core 1
+	#
+
+        dli     $t0, 0x4	# Interupt source 2 (4 = 1 << 2)
+	# PIC_IP_SET_BASE = PIC_CONFIG_BASE + 8*1024 + 128
+	# Add another 0x4000 to get to PIC1 from PIC0
+        sd      $t0, 0x6080($s7) 
 
 expected_epc0:
         b      .              # wait to be interrupted
@@ -121,6 +144,10 @@ the_end:
 .end    test
 	
 core1:
+        dla     $s7, 0x900000007f808000	# Base address of PIC 1
+        dli     $t0, 0x80000000
+        sd      $t0, 16($s7)     # enable int 2 and forward to thread 0 irq 0
+
         # Synchronise with core 0
         dla    $a0, my_barrier
         jal    thread_barrier
