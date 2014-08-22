@@ -88,6 +88,22 @@ L1:
 	        ld      $a2, 0($a1)             # read interrupt pending 
 		dla	$t1, pending		# save for later
 		sd	$a2, 0($t1)
+
+		#
+		# Pipeline hazard here
+		#
+
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+
 		mfc0    $a3, $13                # read cause reg    
 		srl	$a3, $a3, 8		# interrupt pending bits
 		andi	$a3, $a3, 0xff
