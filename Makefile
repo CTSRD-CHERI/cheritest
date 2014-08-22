@@ -366,6 +366,10 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_div_inf_single.s	\
 		test_raw_fpu_infinity_single.s
 
+RAW_TRACE_FILES=test_raw_trace.s
+
+RAW_PIC_FILES=test_raw_pic_regs.s
+
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
 		test_reg_zero.s			\
@@ -758,9 +762,7 @@ TEST_TRAPI_FILES=				\
 		test_tnei_lt_sign.s		\
 		test_tnei_lt.s
 
-RAW_TRACE_FILES=test_raw_trace.s
-
-RAW_PIC_FILES=test_raw_pic_regs.s
+TEST_PIC_FILES=test_pic_irq.s
 
 # Don't attempt to build clang tests unless CLANG is set to 1, because clang might not be available
 # This will cause clang tests to fail but that is better than make falling over.
@@ -822,6 +824,7 @@ TEST_FILES=					\
 		$(RAW_MEM_FILES)		\
 		$(RAW_LLSC_FILES)		\
 		$(RAW_CP0_FILES)		\
+		$(RAW_PIC_FILES)		\
 		$(TEST_FRAMEWORK_FILES)		\
 		$(TEST_ALU_FILES)		\
 		$(TEST_BRANCH_FILES)		\
@@ -839,8 +842,8 @@ TEST_FILES=					\
 		$(FUZZ_REGRESSION_TEST_FILES)	\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
-		$(TEST_MT_FILES)  \
-		$(RAW_PIC_FILES)
+		$(TEST_MT_FILES)	 	\
+		$(TEST_PIC_FILES)
 
 
 ifdef COP1
