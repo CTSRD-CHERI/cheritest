@@ -169,11 +169,15 @@ after_interrupt_t1:
 	#
 
 the_end:
-        dla    $s2, expected_epc0
-        dla    $s3, expected_epc1
+        dla	$s2, expected_epc0
+        dla	$s3, expected_epc1
         
-	mtc0    $0, $26
-	
+	#
+	# Set $a5 to 1 to indicate that the test ran to completion
+	#
+
+	dli	$a5, 1
+
 	ld	$fp, 16($sp)
 	ld	$ra, 24($sp)
 	jr      $ra

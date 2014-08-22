@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
 # Copyright (c) 2013 Alan A. Mujumdar
+# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -27,13 +28,12 @@
 #
 
 from beritest_tools import BaseBERITestCase
+from nose.plugins.attrib import attr
 
 class test_pics(BaseBERITestCase):
-    def test_pics_base(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0, "Null")
 
-    def test_pics_null_0(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "Null")
-
-    def test_pics_null_1(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0, "Null")
+    @attr('multicore')
+    @attr('pic')
+    def test_pics_1(self):
+        '''Check that the test of dual core PICs ran to completion'''
+        self.assertRegisterEqual(self.MIPS.a5, 1, "Test of dual core PICs did not complete")
