@@ -790,7 +790,6 @@ TEST_MULTICORE_FILES=				\
 		test_raw_coherent_sync.s	\
 		test_raw_coherence_mp_loop.s	\
 		test_raw_coherence_sequential.s	\
-		test_raw_pic_default.s		\
 		test_mc_pics.s			\
 		test_mc_pic_irq.s		\
 		test_mc_rdhwr.s
