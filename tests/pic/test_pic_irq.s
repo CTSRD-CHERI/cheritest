@@ -59,6 +59,28 @@ test:		.ent test
 	        li      $t0, 4                         
 	        sd      $t0, 128($a1)           # set source 2
 	        ld      $a2, 0($a1)             # read interrupt pending 
+
+		#
+		# Pipeline hazard: the interrupt might not
+		# show up in CP0.Cause immediately, as the
+		# CPU is pipelined and the write to the PIC
+		# has to make its way through the memory
+		# system.
+		#
+
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+
 		mfc0    $a3, $13                # read cause reg    
 		srl	$a3, $a3, 8		# interrupt pending bits
 		andi	$a3, $a3, 0xff
