@@ -110,8 +110,8 @@ core0:
 
         # A small loop to ensure core 1 has had time to reach expected_epc
         li      $t0, 100
-1:      
-        bgtz    $t0, 1b
+loop:      
+        bgtz    $t0, loop
         subu    $t0, 1
 
 	#
@@ -120,33 +120,31 @@ core0:
 
         dli     $t0, 0x4	# Interupt source 2 (4 = 1 << 2)
 	# PIC_IP_SET_BASE = PIC_CONFIG_BASE + 8*1024 + 128
-	# Add another 0x4000 to get to PIC1 from PIC0
+	# Add another 0x4000 to get to PIC1 from PIC0, total 0x6080
         sd      $t0, 0x6080($s7) 
+
+	#
+	# This infinite loop will be terminated by an interrupt which
+	# returns to the_end
+	#
 
 expected_epc0:
         b      .              # wait to be interrupted
         mfc0   $a2, $13       # read cause (for debugging)
-        
-the_end:
-        dla    $s2, expected_epc0
-        dla    $s3, expected_epc1
-        
-        dla    $a0, my_barrier
-        jal    thread_barrier
-        nop
 
-	mtc0    $0, $26
 	
-	ld	$fp, 16($sp)
-	ld	$ra, 24($sp)
-	jr      $ra
-	daddu	$sp, $sp, 32
-.end    test
-	
+	#
+	# Only core1 runs this bit
+	#
+
 core1:
-        dla     $s7, 0x900000007f808000	# Base address of PIC 1
+        dla     $s7, 0x900000007f804000	# Base address of PIC 0
         dli     $t0, 0x80000000
-        sd      $t0, 16($s7)     # enable int 2 and forward to thread 0 irq 0
+	# Add 0x4000 to get to PIC1, then 8*2 = 0x10 to get to source 2 config
+        sd      $t0, 0x4010($s7)   # enable int 2 and forward to thread 0 irq 0
+	sd	$zero, 0x4000($s7)
+	sd	$zero, 0x4008($s7)
+	sd	$zero, 0x4018($s7)
 
         # Synchronise with core 0
         dla    $a0, my_barrier
@@ -154,26 +152,59 @@ core1:
         nop
 
 expected_epc1:
-        b      .              # wait to be interrupted
-        mfc0   $a2, $13       # read cause (for debugging)
+        b	expected_epc1	# wait to be interrupted
+        mfc0   $a2, $13		# read cause (for debugging)
+
+	#
+	# After an interrupt, core1 returns to here
+	#
 
 after_interrupt_t1:
-        li     $t0, 8
-        sd     $t0, 8320($s7) # Trigger int 3 -> core 0
+	dla     $s7, 0x900000007f804000 # Base address of PIC 0
+        dli     $t0, 0x8
+        sd     $t0, 0x2080($s7) # Trigger int 3 -> core 0
         
-        j      the_end
-        nop
+	#
+	# Both cores run this part at the end
+	#
 
-#
-# Exception handlers
-#
+the_end:
+        dla    $s2, expected_epc0
+        dla    $s3, expected_epc1
+        
+	mtc0    $0, $26
+	
+	ld	$fp, 16($sp)
+	ld	$ra, 24($sp)
+	jr      $ra
+	daddu	$sp, $sp, 32
+.end    test
+
+	#
+	# Exception handlers
+	#
+
         .ent bev0_handler
 bev0_handler:	
 	dmfc0	$s0, $13	# Cause register
 	dmfc0	$s1, $14	# EPC
 	        
-        b       the_end
-        nop
+	#
+	# Clear the interrupt in PIC0
+	#
+
+	dli	$t0, 0x8
+	sd	$t0, 0x2100($s7)
+
+	dla	$t0, the_end
+	dmtc0	$t0, $14	# EPC
+	nop
+	nop
+	nop
+	nop
+	nop
+	eret
+	nop
 	.end bev0_handler
         
 	.ent bev1_handler
@@ -181,8 +212,25 @@ bev1_handler:
 	dmfc0	$s0, $13	# Cause register
 	dmfc0	$s1, $14	# EPC
 	        
-        b       after_interrupt_t1
-        nop
+	#
+	# Clear the interrupt in PIC1
+	#
+	# Add 0x4000 to get from PIC0 to PIC1, another 0x2000 to get from
+	# CONFIG_BASE to READ_BASE, then 0x100 to get from READ_BASE to
+	# CLEAR_BASE: total 0x6100
+	#
+
+	dli	$t0, 0x4
+	sd	$t0, 0x6100($s7)
+
+	dla	$t0, after_interrupt_t1
+	dmtc0	$t0, $14	# EPC
+	nop
+	nop
+	nop
+	nop
+	eret
+	nop
 	.end bev1_handler
 
 .data
