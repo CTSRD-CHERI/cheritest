@@ -40,5 +40,5 @@ class test_pic_irq(BaseBERITestCase):
 
     @attr('pic')
     def test_pic_irq_3(self):
-        self.assertRegisterEqual(self.MIPS.a4, 6, "PIC interrupt pending was not cleared")
+        self.assertRegisterEqual(self.MIPS.a4, 0, "PIC interrupt pending was not cleared")
 
