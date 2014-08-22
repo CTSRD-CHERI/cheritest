@@ -30,10 +30,10 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_pics(BaseBERITestCase):
+class test_mc_pics(BaseBERITestCase):
 
     @attr('multicore')
     @attr('pic')
-    def test_pics_1(self):
+    def test_mc_pics_1(self):
         '''Check that the test of dual core PICs ran to completion'''
         self.assertRegisterEqual(self.MIPS.a5, 1, "Test of dual core PICs did not complete")
