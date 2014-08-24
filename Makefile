@@ -50,6 +50,9 @@ TEST_CP2?=1
 CLANG?=1
 MULTI?=0
 MT?=0
+# Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
+NOFUZZ?=0
+NOFUZZR?=0
 
 #
 # List of directories in which to find test source and .py files.
@@ -64,7 +67,6 @@ TESTDIRS=					\
 		$(TESTDIR)/cache		\
 		$(TESTDIR)/cp0			\
 		$(TESTDIR)/cp2			\
-		$(TESTDIR)/fuzz_regressions	\
 		$(TESTDIR)/c			\
 		$(TESTDIR)/mt			\
 		$(TESTDIR)/pic
@@ -79,6 +81,10 @@ endif
 
 ifneq ($(NOFUZZ),1)
 TESTDIRS+= $(TESTDIR)/fuzz
+endif
+
+ifneq ($(NOFUZZR),1)
+TESTDIRS+=$(TESTDIR)/fuzz_regressions
 endif
 
 ifeq ($(BRIEF_GXEMUL),1)
@@ -975,8 +981,6 @@ CHERICTL=$(TOOLS_DIR_ABS)/debug/cherictl
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
 CHERISOCKET:= /tmp/$(USER)_beri_debug_socket
 SIM:= ${CHERIROOT_ABS}/sim
-# Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
-NOFUZZ?=0
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
 	SIM_TRACE_OPTS?= +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug
