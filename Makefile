@@ -817,8 +817,13 @@ FUZZ_TEST_DIR:=tests/fuzz
 ifneq ($(NOFUZZ),1)
 FUZZ_TEST_FILES:=$(notdir $(wildcard $(FUZZ_TEST_DIR)/*.s))
 endif
+ifneq ($(NOFUZZR),1)
 FUZZ_REGRESSION_TEST_DIR:=tests/fuzz_regressions/
 FUZZ_REGRESSION_TEST_FILES:=$(notdir $(wildcard $(FUZZ_REGRESSION_TEST_DIR)/*.s))
+else
+FUZZ_REGRESSION_TEST_DIR:=
+FUZZ_REGRESSION_TEST_FILES:=
+endif
 #
 # All unit tests.  Implicitly, these will all be run for CHERI, but subsets
 # may be used for other targets.
@@ -845,7 +850,6 @@ TEST_FILES=					\
 		$(TEST_MEM_UNALIGN_FILES)	\
 		$(TEST_TRAPI_FILES)		\
 		$(FUZZ_TEST_FILES)		\
-		$(FUZZ_REGRESSION_TEST_FILES)	\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)	 	\
@@ -858,6 +862,10 @@ endif
 
 ifdef COP1_ONLY
 TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
+endif
+
+ifneq ($(NOFUZZR),1)
+TEST_FILES+=$(FUZZ_REGRESSION_TEST_FILES)
 endif
 
 ifdef TEST_TRACE
