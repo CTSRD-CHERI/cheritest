@@ -63,7 +63,9 @@ class BaseBERITestCase(unittest.TestCase):
         self.cached = bool(int(os.environ.get("CACHED", "0")))
         self.multi = bool(int(os.environ.get("MULTI1", "0")))
         if self.LOG_FN is None:
-            if self.multi:
+            if self.multi and self.cached:
+                self.LOG_FN = self.__name__ + "_cachedmulti.log"
+            elif self.multi:
                 self.LOG_FN = self.__name__ + "_multi.log"
             elif self.cached:
                 self.LOG_FN = self.__name__ + "_cached.log"
@@ -164,7 +166,9 @@ class BaseICacheBERITestCase(BaseBERITestCase):
         self.cached = bool(int(os.environ.get("CACHED", "0")))
         self.multi = bool(int(os.environ.get("MULTI1", "0")))
         if self.LOG_FN is None:
-            if self.multi:
+            if self.multi and self.cached:
+                self.LOG_FN = self.__name__ + "_cachedmulti.log"
+            elif self.multi:
                 self.LOG_FN = self.__name__ + "_multi.log"
             elif self.cached:
                 self.LOG_FN = self.__name__ + "_cached.log"

@@ -57,8 +57,6 @@ int build;
   if (cp1)
     cp = cp1 + 1;
 
-  fprintf(stderr, "file = %s\n", cp);
-
   if (strstr(cp, "_cachedmulti.elf"))
     build = BUILD_CACHED_MULTI;
   else if (strstr(cp, "_multi.elf"))
@@ -67,8 +65,6 @@ int build;
     build = BUILD_CACHED;
   else 
     build = BUILD_UNCACHED;
-
-  fprintf(stderr, "build type = %d\n", build);
 
   if (strncmp(cp, "test_raw_", 9) == 0)
   {
@@ -95,20 +91,20 @@ int build;
     switch (build)
     {
       case BUILD_UNCACHED:
-        printf("-Ttest.ld \n");
+        printf("-Ttest.ld obj/lib.o\n");
         break;
       case BUILD_CACHED:
-        printf("-Ttest_cached.ld obj/init_cached.o\n");
+        printf("-Ttest_cached.ld obj/init_cached.o obj/lib.o\n");
         break;
       case BUILD_UNCACHED_MULTI:
         /* Non-raw tests don't need init_multi.o, because init.o takes
          * care of multicore initialization.
          */
-        printf("-Ttest_multi.ld\n");
+        printf("-Ttest_multi.ld obj/lib.o\n");
         break;
       case BUILD_CACHED_MULTI:
         /* Non-raw tests don't need init_multi.o */
-        printf("-Ttest_cachedmulti.ld obj/init_cached.o\n");
+        printf("-Ttest_cachedmulti.ld obj/init_cached.o obj/lib.o\n");
         break;
     }
   }

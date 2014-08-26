@@ -1071,6 +1071,7 @@ TEST_OBJS := $(addsuffix .o,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHEDMULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MULTI_MEMS := $(addsuffix _multi.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
@@ -1099,6 +1100,8 @@ CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(LOGDIR)/,$(TESTS)))
 CHERI_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
 	$(LOGDIR)/,$(TESTS)))
+CHERI_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
+	$(LOGDIR)/,$(TESTS)))
 ALTERA_TEST_LOGS := $(addsuffix .log,$(addprefix $(ALTERA_LOGDIR)/,$(TESTS)))
 ALTERA_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(ALTERA_LOGDIR)/,$(TESTS)))
@@ -1114,6 +1117,8 @@ L3_TEST_LOGS := $(addsuffix .log,$(addprefix \
 L3_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 L3_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
+	$(L3_LOGDIR)/,$(TESTS)))
+L3_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 
 SIM_FUZZ_TEST_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_LOGS))
@@ -1211,7 +1216,8 @@ clean: cleantest
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
-.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MEMS) \
+.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) \
+	$(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS) $(TEST_MEMS) \
 	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
 	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
 
@@ -1238,52 +1244,32 @@ $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) -o $@ $<
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 
-#
-# Targets for ELF images of tests running out of uncached memory.
-#
-
-$(OBJDIR)/test_raw_%.elf : $(OBJDIR)/test_raw_%.o $(RAW_LDSCRIPT)
-	$(LD) -EB -G0 -T$(RAW_LDSCRIPT) $< -o $@ -m elf64btsmip
-
-$(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o $(TEST_LDSCRIPT) \
-	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	$(LD) -EB -G0 -T$(TEST_LDSCRIPT) $(TEST_INIT_OBJECT) \
-	    $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
+select_init: select_init.c
+	gcc -o select_init select_init.c
 
 #
-# Targets for ELF images of tests running out of cached memory.
+# Targets for ELF images
 #
 
-$(OBJDIR)/test_raw_%_cached.elf : $(OBJDIR)/test_raw_%.o \
-	    $(TEST_INIT_CACHED_OBJECT) $(RAW_CACHED_LDSCRIPT)
-	$(LD) -EB -G0 -T$(RAW_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
-	    $< -o $@ -m elf64btsmip
+$(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o \
+	    $(TEST_LDSCRIPT) \
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
+	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
-	    $(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	$(LD) -EB -G0 -T$(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
-
-#
-# Targets for ELF images of tests running on multicore/multithreaded CPU.
-#
-
-$(OBJDIR)/test_raw_%_multi.elf : $(OBJDIR)/test_raw_%.o \
-	    $(TEST_INIT_MULTI_OBJECT) $(RAW_MULTI_LDSCRIPT)
-	$(LD) -EB -G0 -T$(RAW_MULTI_LDSCRIPT) $(TEST_INIT_MULTI_OBJECT) \
-	    $< -o $@ -m elf64btsmip
-
-#
-# Non-raw multi tests do not need to be linked against init_multi.o, because
-# init.o will take care of mutiple cores/threads. Used init_cached.o instead.
-#
+	    $(TEST_CACHED_LDSCRIPT) \
+	    $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT) select_init
+	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_multi.elf : $(OBJDIR)/test_%.o \
-	    $(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT)
-	$(LD) -EB -G0 -T$(TEST_CACHED_LDSCRIPT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $< -o $@ -m elf64btsmip
+	    $(TEST_MULTI_LDSCRIPT) \
+	    $(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT) select_init
+	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+
+$(OBJDIR)/test_%_cachedmulti.elf : $(OBJDIR)/test_%.o \
+	    $(TEST_CACHEDMULTI_LDSCRIPT) \
+	    $(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT) select_init
+	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
 
 #
 # Convert ELF images to raw memory images that can be loaded into simulators
@@ -1436,8 +1422,12 @@ nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	    --xunit-file=nosetests_cached.xml $(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim MULTI1=1 CACHED=1 nosetests --with-xunit \
+	PYTHONPATH=tools/sim MULTI1=1 nosetests --with-xunit \
 	    --xunit-file=nosetests_multi.xml $(NOSEFLAGS) $(TESTDIRS) || true
+
+nosetests_cachedmulti.xml: $(CHERI_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim MULTI1=1 CACHED=1 nosetests --with-xunit \
+	    --xunit-file=nosetests_cachedmulti.xml $(NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest: all $(ALTERA_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) nosetests \
@@ -1482,6 +1472,11 @@ l3-nosetest-cached: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 
 l3-nosetest-multi: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim MULTI1=1 LOGDIR=$(L3_LOGDIR) nosetests \
+	    --with-xunit --xunit-file=nosetests_l3_multi.xml $(L3_NOSEFLAGS) \
+            $(TESTDIRS) || true
+
+l3-nosetest-cachedmulti: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim CACHED=1 MULTI1=1 LOGDIR=$(L3_LOGDIR) nosetests \
 	    --with-xunit --xunit-file=nosetests_l3_multi.xml $(L3_NOSEFLAGS) \
             $(TESTDIRS) || true
 

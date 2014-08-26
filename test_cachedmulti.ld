@@ -27,7 +27,7 @@
  */
 
 __stack_size__ = 0x400; /* 1k stack */
-__mem_top__ = 0x9000000000008000;
+__mem_top__ = 0x9800000000008000;
 
 __sp = __mem_top__;
 __heap_top__ = __mem_top__ - __stack_size__;
@@ -35,14 +35,17 @@ __sp_bottom = __heap_top__;
 
 SECTIONS
 {
-	. = 0x9000000040000000;
+	. = 0x9800000040000000;
 
 	.text ALIGN(0x8): {
 		obj/init_multi.o(.text)
-		*(EXCLUDE_FILE (obj/init_multi.o) .text)
+		obj/init.o(.text) 
+		*(EXCLUDE_FILE (obj/init*.o) .text)
 	}
 	.bss ALIGN(0x8): { *(.bss) }
 	.data ALIGN(0x8): { *(.data)}
+	_gp = ALIGN(16) + 0x7ff0;
+	.got            : { *(.got.plt) *(.got) }
 
 	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
 	__bss_start = ADDR(.bss);
