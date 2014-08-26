@@ -88,10 +88,19 @@ loop:
 		#
 		# Read x and stash the result in 'result'
 		#
+		# NB: No 'sync' here: generic MIPS might reorder the reads
+		#
 
 		ld	$t0, 0($t2)
 		dla	$t1, result
 		sd	$t0, 0($t1)
+
+		#
+		# Make sure the write to result is flushed to memory
+		# before we called thread_barrier
+		#
+
+		sync	
 
 		b	end
 		nop
@@ -103,6 +112,12 @@ not_core_zero:
 		dla	$t1, y
 
 		sd	$a0, 0($t0)
+
+		#
+		# NB: No 'sync' instruction here
+		# Generic MIPS might reorder the writes
+		#
+
 		sd	$a0, 0($t1)
 
 end:
@@ -110,6 +125,9 @@ end:
 		dla	$a0, end_barrier
 		jal	thread_barrier
 		nop
+
+		# Probably need 'sync' here...
+		sync
 
 		dla	$a0, result
 		ld	$a0, 0($a0)
