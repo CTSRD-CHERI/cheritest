@@ -1264,12 +1264,14 @@ $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
 
 $(OBJDIR)/test_%_multi.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_MULTI_LDSCRIPT) \
+	    $(TEST_INIT_MULTI_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_LIB_OBJECT) select_init
 	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_cachedmulti.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_CACHEDMULTI_LDSCRIPT) \
+	    $(TEST_INIT_MULTI_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_LIB_OBJECT) select_init
 	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
