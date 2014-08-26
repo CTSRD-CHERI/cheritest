@@ -1477,7 +1477,7 @@ l3-nosetest-multi: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
 
 l3-nosetest-cachedmulti: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim CACHED=1 MULTI1=1 LOGDIR=$(L3_LOGDIR) nosetests \
-	    --with-xunit --xunit-file=nosetests_l3_multi.xml $(L3_NOSEFLAGS) \
+	    --with-xunit --xunit-file=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
