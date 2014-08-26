@@ -1,11 +1,10 @@
 #-
-# Copyright (c) 2011 Robert N. M. Watson
-# Copyright (c) 2013 Alan A. Mujumdar
+# Copyright (c) 2014 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
-# Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-11-C-0249
-# ("MRC2"), as part of the DARPA MRC research programme.
+# Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-10-C-0237
+# ("CTSRD"), as part of the DARPA CRASH research programme.
 #
 # @BERI_LICENSE_HEADER_START@
 #
@@ -27,9 +26,12 @@
 #
 
 from beritest_tools import BaseBERITestCase
+from nose.plugins.attrib import attr
 
-class test_raw_coherence_sequential(BaseBERITestCase):
-    def test_corr1_r2(self):
-        self.assertRegisterEqual(self.MIPS.a1, self.MIPS.a1, "CORR1 test fail, Register 2 had init value")
+class test_mc_coherence_sequential(BaseBERITestCase):
 
-
+    @attr('multicore')
+    @attr('sequential_consistency')
+    def test_mc_coherence_sequential_1(self):
+        '''Test that write to x happens before read of x'''
+        self.assertRegisterEqual(self.MIPS.a0, 1, "The value of x was not what would be expected under a sequentially consistent memory model")
