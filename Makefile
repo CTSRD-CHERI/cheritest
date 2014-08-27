@@ -379,6 +379,7 @@ RAW_PIC_FILES=test_raw_pic_regs.s
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
 		test_reg_zero.s			\
+		test_reg_forwarding.s		\
 		test_dli.s			\
 		test_move.s			\
 		test_movz_movn_pipeline.s	\
