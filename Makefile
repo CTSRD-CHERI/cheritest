@@ -799,7 +799,8 @@ TEST_MULTICORE_FILES=				\
 		test_mc_pics.s			\
 		test_mc_pic_irq.s		\
 		test_mc_rdhwr.s			\
-		test_mc_coherence_sequential.s
+		test_mc_coherence_sequential.s	\
+		test_mc_llsc.s
 else
 TEST_MULTICORE_FILES=
 endif
