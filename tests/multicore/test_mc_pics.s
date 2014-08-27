@@ -172,6 +172,10 @@ the_end:
         dla	$s2, expected_epc0
         dla	$s3, expected_epc1
         
+	dla	$a0, end_barrier
+	jal	thread_barrier
+	nop
+
 	#
 	# Set $a5 to 1 to indicate that the test ran to completion
 	#
@@ -237,6 +241,10 @@ bev1_handler:
 	nop
 	.end bev1_handler
 
-.data
+	.data
+
 my_barrier:
         mkBarrier
+
+end_barrier:
+	mkBarrier
