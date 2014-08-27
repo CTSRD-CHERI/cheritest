@@ -66,12 +66,35 @@ int build;
   else 
     build = BUILD_UNCACHED;
 
-  if (strncmp(cp, "test_raw_", 9) == 0)
+  if (strncmp(cp, "test_raw_mc_", 12) == 0)
+  {
+    /*
+     * raw multicore tests are assumed to know about multiple cores and
+     * handle them explicitly, so they don't get linked against the
+     * multicore initialization in init_multi.s
+     */
+    switch (build)
+    {
+      case BUILD_UNCACHED:
+        printf("-Traw.ld\n");
+        break;
+      case BUILD_CACHED:
+        printf("-Traw_cached.ld obj/init_cached.o\n");
+        break;
+      case BUILD_UNCACHED_MULTI:
+        /* raw_mc tests are aware of cores, so just link with raw.ld */
+        printf("-Traw.ld\n");
+        break;
+      case BUILD_CACHED_MULTI:
+        printf("-Traw_cached.ld obj/init_cached.o\n");
+    }
+  }
+  else if (strncmp(cp, "test_raw_", 9) == 0)
   {
     switch (build)
     {
       case BUILD_UNCACHED:
-        printf("-Traw.ld \n");
+        printf("-Traw.ld\n");
         break;
       case BUILD_CACHED:
         printf("-Traw_cached.ld obj/init_cached.o\n");
