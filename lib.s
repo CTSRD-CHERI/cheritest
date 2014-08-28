@@ -647,12 +647,18 @@ slow_memcpy_loop:                # byte-by-byte copy
 #  Returns: The value of the counter (i.e. the number of times the barrier has been called so far)
 #  Clobbers: t0,t1,t2,t3,v0,v1        
 #
+#  Multicore BERI1 and multithreaded BERI2 have sequentially consistent
+#  memory, so don't need "sync" memory barrier instruction. We include the
+#  sync in case the test library is run against formal models with a more
+#  relaxed memory model.
+
         .ent thread_barrier
         .global thread_barrier
 thread_barrier:
         prelude
         bal      get_corethread_id
         nop                          # delay
+	sync			     # memory barrier
         dadd     $t1, $a0, $v0       # address of flag for this thread
         lbu      $v0, 0($t1)         # load flag value
         add      $v0, 1              # increment
@@ -667,6 +673,7 @@ thread_loop:
         subu     $t0, 1              # decrement thread counter (delay slot)
         bgez     $t0, thread_loop    # next thread
         dadd     $t1, $a0, $t0       # address of next counter  (delay slot)
+	sync			     # memory barrier
         # Barrier complete
         epilogue
         jr       $ra                 # return
