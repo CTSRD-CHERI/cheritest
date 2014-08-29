@@ -69,20 +69,6 @@ start:
 		dsll $t1, $t1, 16
 		or $t0, $t0, $t1    # 1.0, 2.0
 		dmtc1 $t0, $f24
-		
-		# Random bits that happen to be a CULT instruction
-		# These have wedged the pipeline, causing the test
-		# not to complete.
-		.word 0x4693b8b5
-		nop
-		nop
-		nop
-		nop
-		.word 0x4693b8b5
-		nop
-		nop
-		nop
-		nop
 
 		# Individual tests
 		
