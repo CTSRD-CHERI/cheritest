@@ -49,8 +49,7 @@ int core = 0;
       buff[len] = '\0';
     }
     if ((strncmp(buff, "Reg ", 4) == 0) &&
-      (strstr(buff, "<-") == (char *) 0) &&
-      (core == 0))
+      (strstr(buff, "<-") == (char *) 0))
     {
       buff[6] = '\0';
       reg_num = atoi(buff + 4);
@@ -63,6 +62,7 @@ int core = 0;
     else if (strncmp(buff, "Core = ", 7) == 0)
     {
       core = strtol(buff + 7, NULL, 0);
+      printf("DEBUG MIPS COREID %d\n", core);
     }
   }
 
