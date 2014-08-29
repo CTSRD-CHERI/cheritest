@@ -51,13 +51,16 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dmfc0	$t0, $15, 7		# Thread Id ...
-		andi	$t1, $t0, 0xffff	# ... in bottom 16 bits
-		bnez	$t1, L1			# If we're not thread zero
-		nop	# branch delay slot
+		andi	$t0, $t0, 0xffff	# ... in bottom 16 bits
+		bnez	$t0, end		# If we're not thread zero
+		nop				# Branch delay slot
 		
 		dmfc0	$t0, $15, 6		# Core Id ...
-		andi	$t1, $t0, 0xffff	# ... in bottom 16 bits
-		bnez	$t1, L1			# If we're not core zero
+		andi	$t0, $t0, 0xffff	# ... in bottom 16 bits
+		dli	$t1, 1
+		beq	$t0, $t1, core1		# If we're core onr
+		nop				# Branch delay slot
+		bnez	$t0, end		# If we're not core zero
 		nop				# Branch delay slot
 
 		#
@@ -71,10 +74,10 @@ test:		.ent test
 		nop
 
 		#
-		# Other cores do this bit
+		# Only core1 does this bit
 		#
 
-L1:
+core1:
 	        dli     $a0, 0x900000007f808000 # PIC1_BASE 
 		sd	$zero, 0($a0)		# disable source 0
 		sd	$zero, 8($a0)		# disable source 1
