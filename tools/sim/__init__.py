@@ -49,8 +49,10 @@ for num, name in enumerate(MIPS_REG_NUM2NAME):
 
 ## Regular expressions for parsing the log file
 THREAD_RE=re.compile(r'======  Thread\s+([0-9]+)\s+======$')
+MIPS_CORE_RE=re.compile(r'^DEBUG MIPS COREID\s+([0-9]+)$')
 MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+) (0x................)$')
 MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC (0x................)$')
+CAPMIPS_CORE_RE=re.compile(r'^DEBUG CAP COREID\s+([0-9]+)$')
 CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC u:(.) perms:(0x.{8}) ' +
                             r'type:(0x.{6}) offset:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
 CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+) u:(.) perms:(0x.{8}) ' +
@@ -131,12 +133,21 @@ class MipsStatus(object):
         for line in self.fh:
             line = line.strip()
             thread_groups = THREAD_RE.search(line)
+            core_groups = MIPS_CORE_RE.search(line)
             reg_groups = MIPS_REG_RE.search(line)
             pc_groups = MIPS_PC_RE.search(line)
+            cap_core_groups = CAPMIPS_CORE_RE.search(line)
             cap_reg_groups = CAPMIPS_REG_RE.search(line)
             cap_pc_groups = CAPMIPS_PC_RE.search(line)
             if (thread_groups):
                 thread = int(thread_groups.group(1))
+            # We use 'thread' for both thread id and core id.
+            # This will need fixing if we ever have a CPU with both
+            # multiple threads and multiple cores.
+            if (core_groups):
+                thread = int(core_groups.group(1))
+            if (cap_core_groups):
+                thread = int(cap_core_groups.group(1))
             if (reg_groups):
                 reg_num = int(reg_groups.group(1))
                 reg_val = int(reg_groups.group(2), 16)
