@@ -51,7 +51,7 @@ test:		.ent test
 		csealcode $c2, $c1
                 cunseal  $c3, $c2, $c1
 
- 		cgetunsealed $a0, $c3
+ 		cgetsealed $a0, $c3
 		cgettype $a1, $c3
 		dsubu    $a1, $a1, $t0
 		

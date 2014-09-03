@@ -99,7 +99,7 @@ test:		.ent test
 
 		cunseal $c1, $c1, $c3	# This should raise an exception
 
-		cgetunsealed $a0, $c1	# Should be 0 if the unseal failed
+		cgetsealed $a0, $c1	# Should be 1 if the unseal failed
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

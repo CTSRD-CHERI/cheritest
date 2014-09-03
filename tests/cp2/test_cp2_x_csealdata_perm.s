@@ -80,7 +80,7 @@ test:		.ent test
 		candperm $c2, $c2, $t0
 		csealdata $c1, $c1, $c2 # This should raise an exception
 
-		cgetunsealed $a0, $c1
+		cgetsealed $a0, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

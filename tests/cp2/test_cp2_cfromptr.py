@@ -56,6 +56,6 @@ class test_cp2_cfromptr(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_cfromptr_unsealed(self):
-        '''Test that cfromptr of a non-NULL pointer sets the unsealed bit'''
-        self.assertRegisterEqual(self.MIPS.a5, 1, "cfromptr did not set the unsealed bit")
+        '''Test that cfromptr of a non-NULL pointer clears the sealed bit'''
+        self.assertRegisterEqual(self.MIPS.a5, 0, "cfromptr did not clear the sealed bit")
 

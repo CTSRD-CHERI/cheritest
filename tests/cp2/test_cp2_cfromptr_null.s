@@ -61,7 +61,7 @@ test:		.ent test
 		cgetlen  $a2, $c1
 		cgettype $a3, $c1
 		cgettag  $a4, $c1
-		cgetunsealed $a5, $c1
+		cgetsealed $a5, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -49,10 +49,18 @@ test:   .ent    test
         # and     $t0, ~0x6	# clear ERL, EXL (not needed)
         mtc0    $t0, $12	# set status register
         
-	mfc0	$v0, $15, 6	# CoreId
-	andi	$v0, $v0, 0xffff
-        bnez    $v0, core1
+	mfc0	$t0, $15, 7	# ThreadId
+	andi	$t0, $t0, 0xffff
+	bnez 	$t0, the_end
+	nop
+
+	mfc0	$t0, $15, 6	# CoreId
+	andi	$t0, $t0, 0xffff
+	dli	$t1, 1
+        beq     $t0, $t1, core1	# If we're core 1
         nop
+	bnez	$t0, the_end	# If we're not core 0
+	nop
 
 	#
 	# Only core 0 runs this part
@@ -165,7 +173,7 @@ after_interrupt_t1:
         sd     $t0, 0x2080($s7) # Trigger int 3 -> core 0
         
 	#
-	# Both cores run this part at the end
+	# All cores run this part at the end
 	#
 
 the_end:

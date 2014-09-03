@@ -31,7 +31,7 @@
 .set noat
 
 #
-# Test that cgetunsealed raises an exception if the capability register is
+# Test that cgetsealed raises an exception if the capability register is
 # one of the reserved registers and the corresponding bit in PCC.perms is
 # not set.
 #
@@ -42,7 +42,7 @@ sandbox:
 		# the required permission in PCC.
 		#
 		dli     $a0, 2
-		cgetunsealed $a0, $c27 # This should raise a C2E exception
+		cgetsealed $a0, $c27 # This should raise a C2E exception
 
 		cjr     $ra($c24)
 		# branch delay slot

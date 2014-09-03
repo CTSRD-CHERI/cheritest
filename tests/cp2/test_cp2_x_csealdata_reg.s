@@ -92,7 +92,7 @@ test:		.ent test
 		cjalr $t0($c2)
 		nop		# Branch delay slot
 
-		cgetunsealed $a0, $c1
+		cgetsealed $a0, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

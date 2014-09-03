@@ -40,8 +40,7 @@ sandbox:
 		# Try to use KR1C ($c27) as a capability, without having
 		# the required permission in PCC.
 		#
-		dli     $a0, 0
-		cgetpcc  $a0($c27) # This should raise a C2E exception
+		cgetpcc  $c27 # This should raise a C2E exception
 
 		cjr     $ra($c24)
 		# branch delay slot

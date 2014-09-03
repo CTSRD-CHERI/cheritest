@@ -94,7 +94,8 @@ test:		.ent test
 		# permission to access reserved registers).
 		#
 
-		cgetpcc $t1($c1)
+		cgetpcc $c1
+		# FIXME: new assembler syntax
 		dli	$t0, 0x1ff
 		candperm $c1, $c1, $t0
 		dla	$t0, L1
@@ -271,11 +272,11 @@ do_ccall:
 		# Check that $c1 and $c2 are sealed
 		#
 
-		cgetunsealed $t0, $c1
-		bne	$t0, $zero, ccall_fails
+		cgetsealed $t0, $c1
+		beqz	$t0, ccall_fails
 
-		cgetunsealed $t0, $c2
-		bne	$t0, $zero, ccall_fails
+		cgetsealed $t0, $c2
+		beqz	$t0, ccall_fails
 
 		#
 		# Set the otype of the Kernel Data Capability ($c27) to

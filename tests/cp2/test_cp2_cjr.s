@@ -56,7 +56,8 @@ test:		.ent test
 		nop
 
 L1:
-		cgetpcc  $t1($c2)
+		cgetpcc  $c2
+		# FIXME: new assembler syntax
 		cgetperm $a3, $c2
 		
 

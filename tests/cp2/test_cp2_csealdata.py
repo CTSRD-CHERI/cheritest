@@ -35,9 +35,9 @@ from nose.plugins.attrib import attr
 class test_cp2_csealdata(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_csealdata1(self):
-        '''Test that csealdata clears the unsealed bit'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "csealdata did not clear the u bit")
+        '''Test that csealdata sets the sealed bit'''
+        self.assertRegisterEqual(self.MIPS.a0, 1,
+            "csealdata did not set the sealed bit")
 
     @attr('capabilities')
     def test_cp2_sealdata2(self):

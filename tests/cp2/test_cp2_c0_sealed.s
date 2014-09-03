@@ -31,7 +31,7 @@
 .set noat
 
 #
-# Test can run instructions that don't load or store if c0.unsealed is not set.
+# Test can run instructions that don't load or store if c0.sealed is set.
 #
 
 sandbox:

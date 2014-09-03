@@ -40,8 +40,8 @@ start:
 		cgetbase  $a1,  $c2
 		cgetlen   $a1,  $c2
                 cgettag   $a1,  $c2
-                cgetunsealed $a1, $c2
-		cgetpcc   $a1($c2)
+                cgetsealed $a1, $c2
+		cgetpcc   $c2
 		cgetcause $a1
 
                 # set the fields of a capability

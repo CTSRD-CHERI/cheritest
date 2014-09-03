@@ -58,10 +58,10 @@ class test_cp2_cfromptr_null(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cfromptr_null_tag(self):
         '''Test that cfromptr of a NULL pointer clears the tag bit'''
-        self.assertRegisterEqual(self.MIPS.a4, 0, "cfromptr did set the tag bit")
+        self.assertRegisterEqual(self.MIPS.a4, 0, "cfromptr did not clear the tag bit")
 
     @attr('capabilities')
     def test_cp2_cfromptr_null_unsealed(self):
-        '''Test that cfromptr of a NULL pointer clears the unsealed bit'''
-        self.assertRegisterEqual(self.MIPS.a5, 0, "cfromptr did not clear the unsealed bit")
+        '''Test that cfromptr of a NULL pointer clears the sealed bit'''
+        self.assertRegisterEqual(self.MIPS.a5, 0, "cfromptr did not clear the sealed bit")
 

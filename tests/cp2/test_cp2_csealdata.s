@@ -67,8 +67,8 @@ test:		.ent test
 		# result in $c3.
                 csealdata $c3, $c2, $c1
 
-                # $c3.u should be 0
-		cgetunsealed $a0, $c3
+                # $c3.sealed should be 1
+		cgetsealed $a0, $c3
                 # $c3.type should be equal to 0x123456
 		cgettype $a1, $c3
 		li       $t0, 0x123456

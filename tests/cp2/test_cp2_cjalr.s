@@ -42,7 +42,8 @@ sandbox:
 		# sandbox should be running with a PCC that gives resticted
 		# permissions. Save it to $c2 so that we can check PCC.perms
 		# later on.
-		cgetpcc $a2($c2)
+		cgetpcc $c2
+		# FIXME: new assembler syntax
 
 		# Return from the sandboxed subroutine
 		cjr	$ra($c24)

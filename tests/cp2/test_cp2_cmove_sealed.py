@@ -35,8 +35,8 @@ from nose.plugins.attrib import attr
 class test_cp2_cmove_sealed(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cmove_sealed_1(self):
-        '''Test that cmove copied unsealed bit'''
-        self.assertRegisterEqual(self.MIPS.a0, 0, "cmove failed to copy unsealed bit")
+        '''Test that cmove copied sealed bit'''
+        self.assertRegisterEqual(self.MIPS.a0, 1, "cmove failed to copy sealed bit")
 
     @attr('capabilities')
     def test_cp2_cmove_sealed_2(self):

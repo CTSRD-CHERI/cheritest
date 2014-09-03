@@ -35,7 +35,8 @@
 #
 
 sandbox:
-		cgetpcc $t0($c2)
+		cgetpcc $c2
+		# FIXME: new assembler syntax
 		cjr $ra($c24)
 		# branch delat slot
 		nop
