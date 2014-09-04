@@ -29,36 +29,36 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test capability compare equal.
+# Test capability compare less than or equal to.
 #
 
-class test_cp2_ceq(BaseBERITestCase):
+class test_cp2_cle(BaseBERITestCase):
     @attr('capabilities')
-    def test_cp2_ceq_duplicated(self):
+    def test_cp2_cle_duplicated(self):
         '''Test duplicated capabilities are equal'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x01, "Duplicated capabilities did not compare equal")
+        self.assertRegisterEqual(self.MIPS.a0, 0x1, "Duplicated capabilities did not compare equal")
 
     @attr('capabilities')
-    def test_cp2_ceq_diff_offsets(self):
+    def test_cp2_cle_diff_offsets(self):
         '''Test capabilities with different offsets test not equal'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x0, "Capabilities with different offsets tested equal")
+        self.assertRegisterEqual(self.MIPS.a1, 0x1, "Capabilities with different offsets tested equal")
 
     @attr('capabilities')
-    def test_cp2_ceq_diff_bases(self):
+    def test_cp2_cle_diff_bases(self):
         '''Test capabilities with different bases test not equal'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x0, "Capabilities with different bases tested equal")
+        self.assertRegisterEqual(self.MIPS.a2, 0x1, "Capabilities with different bases tested equal")
         
     @attr('capabilities')
-    def test_cp2_ceq_both_null(self):
-        '''Test different NULL capabilities test not equal'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0, "Different NULL capabilities tested equal")
+    def test_cp2_cle_both_null(self):
+        '''Test different NULL capabilities test equal'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0, "Two NULL capabilities tested not equal")
 
     @attr('capabilities')
-    def test_cp2_ceq_same_base_plus_offset(self):
+    def test_cp2_cle_same_base_plus_offset(self):
         '''Test capabilities with complimentary bases and offsets test equal'''
         self.assertRegisterEqual(self.MIPS.a4, 0x1, "Capabilities with equivalent base + offset tested not equal")
         
     @attr('capabilities')
-    def test_cp2_ceq_one_null(self):
+    def test_cp2_cle_one_null(self):
         '''Test a NULL capability tests not equal to an equivelant non-NULL one'''
-        self.assertRegisterEqual(self.MIPS.a5, 0x0, "A NULL capability tested equal to a valid one")
+        self.assertRegisterEqual(self.MIPS.a5, 0x1, "A NULL capability tested equal to a valid one")

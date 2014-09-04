@@ -44,7 +44,7 @@ test:		.ent test
 		# Copy C0 into C1 and C2, compare them.
 		cmove $c1, $c0
 		cmove $c2, $c0
-		ceq	$a0, $c1, $c2
+		cne	$a0, $c1, $c2
 		# Result should be 1, ==
 
 		# Set different offsets for C1 & C2, and compare them
@@ -52,7 +52,7 @@ test:		.ent test
 		csetoffset	$c1, $c0, $t0
 		li	$t0, 0x2
 		csetoffset	$c2, $c0, $t0
-		ceq	$a1, $c1, $c2
+		cne	$a1, $c1, $c2
 		# Result should be 0, !=
 		
 		# Set different bases for C1 & C2, and compare them
@@ -60,13 +60,13 @@ test:		.ent test
 		cincbase	$c1, $c0, $t0
 		li	$t0, 0x2
 		cincbase	$c2, $c0, $t0
-		ceq	$a2, $c1, $c2
+		cne	$a2, $c1, $c2
 		# Result should be 0, !=
 		
 		# Set zero length for C3 and clear tag of C4 to make them NULL, and compare them
 		ccleartag	$c3, $c1
 		ccleartag	$c4, $c2
-		ceq	$a3, $c3, $c4
+		cne	$a3, $c3, $c4
 		# Result should be 0, !=, because of different bases + offsets.
 		
 		# Set complementary offsets for C1 & C2 so that effective addresses
@@ -75,12 +75,12 @@ test:		.ent test
 		csetoffset	$c1, $c1, $t0
 		li	$t0, 0x1
 		csetoffset	$c2, $c2, $t0
-		ceq	$a4, $c1, $c2
+		cne	$a4, $c1, $c2
 		# Result should be 1, ==
 		
 		# Set zero length for C3 to make it NULL, and compare
 		ccleartag	$c1, $c1
-		ceq	$a5, $c1, $c2
+		cne	$a5, $c1, $c2
 		# Result should be 0, !=, despite identical base + offset.
 		
 		# end test

@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2014 Jonathan Woodruff
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -29,7 +29,7 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test lbu (load byte unsigned) indirected via a constrainted c0.
+# Test capability compare less than.
 #
 
 class test_cp2_clt(BaseBERITestCase):
