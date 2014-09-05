@@ -172,6 +172,14 @@ start:
 		cchecktype $c1, $c2
 		
 		
+		# comparison operators
+		ceq	  $t1, $c0, $c1
+		cne	  $t1, $c0, $c1
+		clt	  $t1, $c0, $c1
+		cle	  $t1, $c0, $c1
+		cltu	  $t1, $c0, $c1
+		cleu	  $t1, $c0, $c1
+
                 # jumps
 		dla       $t1, l0
 		cjr       $t1($c0)
@@ -180,7 +188,8 @@ start:
 
 l0:
 		dla       $t1, l1
-		cjalr     $t1($c0)
+		csetoffset $c1, $c0, $t1
+		cjalr     $c24, $c0
 		# branch delay slot
 		nop
 
