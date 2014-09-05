@@ -608,12 +608,12 @@ TEST_CP2_FILES=					\
 		test_cp2_ccall2.s		\
 		test_cp2_cbtu.s			\
 		test_cp2_cbts.s			\
-		test_cp2_ceq.s		\
-		test_cp2_cne.s		\
-		test_cp2_clt.s		\
-		test_cp2_cle.s		\
-		test_cp2_cltu.s		\
-		test_cp2_cleu.s		\
+		test_cp2_ceq.s			\
+		test_cp2_cne.s			\
+		test_cp2_clt.s			\
+		test_cp2_cle.s			\
+		test_cp2_cltu.s			\
+		test_cp2_cleu.s			\
 		test_cp2_branchtag.s		\
 		test_cp2_floatstore.s		\
 		test_cp2_csb_neg.s		\
@@ -685,7 +685,6 @@ TEST_CP2_FILES=					\
 		test_cp2_disabled_exception.s	\
 		test_cp2_x_ccheckperm.s		\
 		test_cp2_x_cchecktype.s		\
-		test_cp2_x_ctoptr_length.s	\
 		test_cp2_x_clc_tlb.s		\
 		test_cp2_x_csc_tlb.s
 endif
