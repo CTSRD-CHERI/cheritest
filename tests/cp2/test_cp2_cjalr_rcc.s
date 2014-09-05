@@ -58,9 +58,9 @@ test:		.ent test
 		
 		# Jump to L1, with $pcc replaced with $c1
 		dla	$t0, L1
-		cjalr	$t0($c1)
-		# branch delay slot
-		nop
+		csetoffset $c1, $c1, $t0
+		cjalr	$c24, $c1
+		nop			# branch delay slot
 
 L1:
 		# Check that PCC was copied to RCC
@@ -71,6 +71,7 @@ L1:
 		
 		# Restore the old PCC
 		dla     $t0, L2
+		csetoffset $c24, $c24, $t0
 		cjr     $t0($c24)
 		# branch delay slot
 		nop
@@ -82,11 +83,3 @@ L2:
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
-
-		.data
-		.align	5                  # Must 256-bit align capabilities
-cap1:		.dword	0x0123456789abcdef # uperms/reserved
-		.dword	0x0123456789abcdef # otype/eaddr
-		.dword	0x0123456789abcdef # base
-		.dword	0x0123456789abcdef # length
-
