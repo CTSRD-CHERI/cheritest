@@ -41,11 +41,11 @@ class test_cp2_csci(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_csci_dword0(self):
         '''Test that csci stored perms, u fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x00000001000000ff, "csci stored incorrect u, perms, and type fields")
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000001000000fe, "csci stored incorrect u, perms, and type fields")
 
     @attr('capabilities')
     def test_cp2_csci_dword1(self):
-        '''Test that csci stored the otype field correctly'''
+        '''Test that csci stored the cursor (base+offset) field correctly'''
         self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000000, "csci stored incorrect offset")
 
     @attr('capabilities')
