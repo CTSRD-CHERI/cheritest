@@ -68,15 +68,15 @@ test:		.ent test
 		dla     $a0, 0
 
 		dla	$t0, sandbox
-		cjalr	$t0($c1)
-		# branch delay slot
-		nop
+		csetoffset $c1, $c1, $t0
+		cjalr	$c24, $c1
+		nop			# branch delay slot
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
 		jr	$ra
-		nop			# branch-delay slot
+		nop			# branch delay slot
 		.end	test
 
 		.data
