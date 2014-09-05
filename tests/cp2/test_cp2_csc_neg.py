@@ -40,12 +40,12 @@ class test_cp2_csc_neg(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_csci_neg_dword0(self):
-        '''Test that csc with negative immediate stored perms, u fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x00000001000000ff, "csci stored incorrect u, perms, and offset fields")
+        '''Test that csc with negative immediate stored perms, sealed and otype fields correctly'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000001000000fe, "csci stored incorrect sealed, perms, and otype fields")
 
     @attr('capabilities')
     def test_cp2_csc_neg_dword1(self):
-        '''Test that csc with negative immediate stored the otype field correctly'''
+        '''Test that csc with negative immediate stored the cursor (base+offset) field correctly'''
         self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000000, "csci stored incorrect cursor")
 
     @attr('capabilities')
