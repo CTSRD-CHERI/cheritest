@@ -39,12 +39,12 @@ class test_cp2_cscr(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef, "cscr underflow")
     @attr('capabilities')
     def test_cp2_cscr_dword0(self):
-        '''Test that cscr stored perms, u fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x00000001000000ff, "cscr stored incorrect u, perms, and offset fields")
+        '''Test that cscr stored perms, sealed fields correctly'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000001000000fe, "cscr stored incorrect sealed, perms, and offset fields")
 
     @attr('capabilities')
     def test_cp2_cscr_dword1(self):
-        '''Test that cscr stored the otype field correctly'''
+        '''Test that cscr stored the cursor (base+offset) field correctly'''
         self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000000, "cscr stored incorrect offset")
 
     @attr('capabilities')
