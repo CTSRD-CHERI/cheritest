@@ -74,7 +74,7 @@ test:		.ent test
 	dli	$a7, 0
 	
 	# Jump to new PCC
-	cjalr	$0($c1)
+	cjalr	$c24, $c1
 	nop
 
 	dla	$a1, return
