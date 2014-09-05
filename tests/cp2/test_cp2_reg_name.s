@@ -31,9 +31,9 @@
 .set noat
 
 #
-# Set each CP2 register to use an easily recognised otype, in order to
+# Set each CP2 register to use an easily recognised offset, in order to
 # confirm that the assembler, simulator, and test suite (roughly) agree.  This
-# test depends on at least csetotype and dli working.  $c2_pcc is left
+# test depends on at least csetoffset and dli working.  $c2_pcc is left
 # unmodified form boot, so should be 0.
 #
 # XXXRW: once we support mneumonics such as $c2_kcc, we should test those as
@@ -47,7 +47,11 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		dli		$t0, 1
+		#
+		# Set the offset of c0 to 0, because bad things will happen
+		# if it is non-zero
+		#
+		dli		$t0, 0
 		csetoffset	$c0, $c0, $t0
 		dli		$t0, 2
 		csetoffset	$c1, $c1, $t0
