@@ -68,11 +68,10 @@ test:		.ent test
 		move	$a1, $ra
 
 		dla	$a0, sandbox
-		# PC will be savced in $ra
-		# PCC will be saved in $c24
-		cjalr	$a0($c1)
-		# I'm not sure if this a branch delay slot
-		nop
+		csetoffset $c1, $c1, $a0
+		cjalr	$c24, $c1
+		nop			# Branch delay slot
+
 		nop
 
 		cgetperm $a3, $c2
