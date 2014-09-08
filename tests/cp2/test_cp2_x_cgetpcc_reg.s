@@ -85,6 +85,7 @@ test:		.ent test
 		cjalr   $c24, $c2
 		nop			# Branch delay slot
 
+		cgetoffset	$a0, $c27	# Should be 0
 		cgetlen $a1, $c27	# Should be 8
 
 		ld	$fp, 16($sp)
