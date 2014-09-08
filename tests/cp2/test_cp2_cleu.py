@@ -61,4 +61,4 @@ class test_cp2_cleu(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cleu_one_null(self):
         '''Test a NULL capability tests not equal to an equivelant non-NULL one'''
-        self.assertRegisterEqual(self.MIPS.a5, 0x1, "A NULL capability tested equal to a valid one")
+        self.assertRegisterEqual(self.MIPS.a5, 0x0, "A NULL capability tested equal to a valid one")
