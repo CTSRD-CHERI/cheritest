@@ -31,7 +31,7 @@
 .set noat
 
 #
-# Test csealdata
+# Test cseal on a data capability
 #
 
 # In this test, sandbox isn't actually called, but its address is used
@@ -65,7 +65,7 @@ test:		.ent test
 
 		# Seal data capability $c2 to the offset of $c1, and store
 		# result in $c3.
-                csealdata $c3, $c2, $c1
+                cseal	 $c3, $c2, $c1
 
                 # $c3.sealed should be 1
 		cgetsealed $a0, $c3
