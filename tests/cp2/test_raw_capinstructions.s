@@ -152,9 +152,8 @@ start:
                 cswhi     $a1,  0($c2)
 
 		# object capabilities
-		csealcode $c1,  $c2
-		csealdata $c1,  $c2, $c3
-		cunseal   $c1,  $c2, $c3
+		cseal	  $c1, $c2, $c3
+		cunseal   $c1, $c2, $c3
 
 		# load linked/store conditional
 		clld      $t1, $a3, 0($c2)
