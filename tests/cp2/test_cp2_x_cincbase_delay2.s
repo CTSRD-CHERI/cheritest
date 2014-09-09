@@ -70,9 +70,8 @@ test:		.ent test
 		# Make $c2 a capability for otype 1
 		#
 
-		cmove	$c2, $c0
 		dli	$t0, 1
-		csettype $c2, $c2, $t0
+		csetoffset $c2, $c0, $t0
 
 		#
 		# Seal $c1 with $c2 so that an attempt to incbase $c1 will fail
