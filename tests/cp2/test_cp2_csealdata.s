@@ -46,10 +46,10 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-                # Make $c1 a template capability for a user-defined type
-		# whose otype is equal to the address of sandbox.
+                # Make $c1 a template capability for the user-defined type
+		# 0x123456.
 		li	$t0, 0x123456
-		csettype $c1, $c0, $t0
+		csetoffset $c1, $c0, $t0
 
                 # Make $c2 a data capability for the array at address data
 		dla      $t0, data
@@ -63,7 +63,7 @@ test:		.ent test
 		dli      $t0, 0xd
 		candperm $c2, $c2, $t0
 
-		# Seal data capability $c2 to the otype of $c1, and store
+		# Seal data capability $c2 to the offset of $c1, and store
 		# result in $c3.
                 csealdata $c3, $c2, $c1
 
@@ -71,8 +71,6 @@ test:		.ent test
 		cgetsealed $a0, $c3
                 # $c3.type should be equal to 0x123456
 		cgettype $a1, $c3
-		li       $t0, 0x123456
-		dsubu    $a1, $a1, $t0
                 # $c3.base should be equal to data
                 cgetbase $a2, $c3
                 dla      $t0, data
