@@ -46,6 +46,12 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		#
+		# Set BEV state to BEV0
+		#
+		jal	bev_clear
+		nop
+
+		#
 		# Set up exception handler
 		#
 
