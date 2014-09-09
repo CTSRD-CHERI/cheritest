@@ -42,7 +42,7 @@ sandbox:
 		dli     $a0, 0
 		cldr    $a0, $zero($c27) # This should raise a C2E exception
 
-		cjr     $ra($c24)
+		cjr     $c24
 		# branch delay slot
 		nop
 

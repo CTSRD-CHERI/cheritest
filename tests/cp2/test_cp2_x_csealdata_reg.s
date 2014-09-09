@@ -40,7 +40,7 @@ sandbox1:
 
 sandbox2:
 		csealdata $c1, $c1, $c29 # This should raise an exception
-		cjr $ra($c24)	
+		cjr	$c24	
 		nop		# Branch delay slot
 
 		.global test

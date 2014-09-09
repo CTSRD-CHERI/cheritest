@@ -38,7 +38,7 @@ sandbox:
 		dli	$a0, 0
 		csetcause $a0		# This should raise an exception
 
-		cjr     $ra($c24)
+		cjr     $c24
 		# branch delay slot
 		nop
 

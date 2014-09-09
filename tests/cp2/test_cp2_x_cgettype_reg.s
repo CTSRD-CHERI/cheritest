@@ -44,7 +44,7 @@ sandbox:
 		dli     $a0, 2
 		cgettype $a0, $c27 # This should raise a C2E exception
 
-		cjr     $ra($c24)
+		cjr     $c24
 		# branch delay slot
 		nop
 

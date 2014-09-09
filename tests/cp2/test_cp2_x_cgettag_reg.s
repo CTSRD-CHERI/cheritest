@@ -42,11 +42,10 @@ sandbox:
 		# the required permission in PCC.
 		#
 		dli     $a0, 2
-		cgettag $a0, $c27 # This should raise a C2E exception
+		cgettag $a0, $c27	# This should raise a C2E exception
 
-		cjr     $ra($c24)
-		# branch delay slot
-		nop
+		cjr     $c24
+		nop			# branch delay slot
 
 		.global test
 test:		.ent test

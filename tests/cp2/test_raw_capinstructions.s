@@ -181,7 +181,7 @@ start:
 
                 # jumps
 		dla       $t1, l0
-		cjr       $t1($c0)
+		cjr       $c0
 		# branch delay slot
 		nop
 

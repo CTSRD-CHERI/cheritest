@@ -37,9 +37,8 @@
 sandbox:
 		cgetcause $a0		# This should raise an exception
 
-		cjr     $ra($c24)
-		# branch delay slot
-		nop
+		cjr     $c24
+		nop			# branch delay slot
 
 		.global test
 test:		.ent test

@@ -46,7 +46,7 @@ limit:
 		nop
 		dli	$a0, 2
 
-		cjr     $ra($c24)
+		cjr     $c24
 		# branch delay slot
 		nop
 

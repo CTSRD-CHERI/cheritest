@@ -43,7 +43,7 @@ sandbox:
 		dli     $t0, 1		# This makes the offset unaligned
 		cldr    $a0, $t0($c27)	# This should raise a C2E exception
 
-		cjr     $ra($c24)
+		cjr     $c24
 		# branch delay slot
 		nop
 

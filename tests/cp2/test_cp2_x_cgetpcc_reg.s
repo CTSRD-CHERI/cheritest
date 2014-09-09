@@ -40,11 +40,10 @@ sandbox:
 		# Try to use KR1C ($c27) as a capability, without having
 		# the required permission in PCC.
 		#
-		cgetpcc  $c27 # This should raise a C2E exception
+		cgetpcc  $c27	# This should raise a C2E exception
 
-		cjr     $ra($c24)
-		# branch delay slot
-		nop
+		cjr     $c24
+		nop		# branch delay slot
 
 		.global test
 test:		.ent test
