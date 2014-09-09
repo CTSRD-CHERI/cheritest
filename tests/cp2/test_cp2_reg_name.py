@@ -36,10 +36,11 @@ from nose.plugins.attrib import attr
 #
 
 class test_cp2_reg_name(BaseBERITestCase):
-    @attr('capabilities')
-    def test_cp2_reg_name_pcc(self):
-        self.assertRegisterEqual(self.MIPS.pcc.offset, 0, "CP2 PCC name mismatch")
-    
+
+    # Don't check pcc.offset: it should be equal to the program counter,
+    # but the test framework dumps them to the log at different times, so
+    # the log will capture different values of PC in PC versus PCC.
+
     @attr('capabilities')
     def test_cp2_reg_name_c0(self):
         self.assertRegisterEqual(self.MIPS.c0.offset, 0, "CP2 C0 name mismatch")
