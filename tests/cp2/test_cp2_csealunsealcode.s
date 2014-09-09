@@ -47,14 +47,16 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		li      $t0, 0xC0DE
-		csettype $c1, $c0, $t0
-		csealcode $c2, $c1
-                cunseal  $c3, $c2, $c1
+		csetoffset $c1, $c0, $t0
+
+		dla	$t0, sandbox
+		csetoffset $c2, $c0, $t0
+		
+		cseal	$c2, $c2, $c1
+                cunseal $c3, $c2, $c1
 
  		cgetsealed $a0, $c3
 		cgettype $a1, $c3
-		dsubu    $a1, $a1, $t0
-		
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
