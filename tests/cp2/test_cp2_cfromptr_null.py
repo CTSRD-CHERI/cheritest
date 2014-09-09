@@ -51,9 +51,9 @@ class test_cp2_cfromptr_null(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a2, 0, "cfromptr did not clear the length field")
 
     @attr('capabilities')
-    def test_cp2_cfromptr_null_type(self):
-        '''Test that cfromptr of a NULL pointer clears the type field'''
-        self.assertRegisterEqual(self.MIPS.a3, 0, "cfromptr did not clear the type field")
+    def test_cp2_cfromptr_null_offset(self):
+        '''Test that cfromptr of a NULL pointer clears the offset field'''
+        self.assertRegisterEqual(self.MIPS.a3, 0, "cfromptr did not clear the offset field")
 
     @attr('capabilities')
     def test_cp2_cfromptr_null_tag(self):
