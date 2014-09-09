@@ -114,7 +114,8 @@ test:		.ent test
 		#
 
 		dla     $t0, sandbox
-		cjr     $t0($c1)
+		csetoffset $c1, $c1, $t0
+		cjr     $c1
 		nop	# branch delay slot
 
 L1:

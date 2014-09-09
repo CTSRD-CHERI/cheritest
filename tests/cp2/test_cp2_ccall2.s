@@ -99,7 +99,8 @@ test:		.ent test
 		dli	$t0, 0x1ff
 		candperm $c1, $c1, $t0
 		dla	$t0, L1
-		cjr	$t0($c1)
+		csetoffset $c1, $c1, $t0
+		cjr	$c1
 		nop		# branch delay slot
 L1:
 		#

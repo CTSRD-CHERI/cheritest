@@ -45,7 +45,7 @@ sandbox:
 		cbts	$c27, L1 # This should raise a C2E exception
 		nop		# Branch delay slot
 L1:
-		cjr     $ra($c24)
+		cjr     $c24
 		nop		# branch delay slot
 
 		.global test

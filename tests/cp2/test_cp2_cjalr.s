@@ -46,8 +46,8 @@ sandbox:
 		# FIXME: new assembler syntax
 
 		# Return from the sandboxed subroutine
-		cjr	$ra($c24)
-		nop	# Probably a branch-delay slot
+		cjr	$c24
+		nop			# Branch-delay slot
 
 		.global test
 test:		.ent test

@@ -52,9 +52,8 @@ test:		.ent test
 
 		dla	$a0, L1
 		csetoffset $c1, $c1, $a0
-		cjr	$a0($c1)
-		# branch delay slot
-		nop
+		cjr	$c1
+		nop			# branch delay slot
 
 L1:
 		cgetpcc  $c2

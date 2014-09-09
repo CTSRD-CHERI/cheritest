@@ -38,9 +38,9 @@ sandbox:
 		dli     $a0, 1
 		j	20
 		nop
-		cjr     $ra($c24)
+		cjr     $c24
 		nop			# Branch delay slot
-		cjr     $ra($c24)
+		cjr     $c24
 		li	$a2, 1		# Branch delay slot
 
 		.global test

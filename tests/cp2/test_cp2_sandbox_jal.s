@@ -36,13 +36,11 @@
 
 sandbox:
 		dli     $a0, 1
-		move	$a5, $ra
 		jal	12
 		nop	# branch delay slot
 		nop
 		move	$a4, $ra
-		move 	$ra, $a5
-		cjr     $ra($c24)
+		cjr     $c24
 		nop	# branch delay slot
 
 		.global test

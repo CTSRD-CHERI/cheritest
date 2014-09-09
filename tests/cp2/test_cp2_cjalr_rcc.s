@@ -72,9 +72,8 @@ L1:
 		# Restore the old PCC
 		dla     $t0, L2
 		csetoffset $c24, $c24, $t0
-		cjr     $t0($c24)
-		# branch delay slot
-		nop
+		cjr     $c24
+		nop 		#  branch delay slot
 
 L2:
 		ld	$fp, 16($sp)

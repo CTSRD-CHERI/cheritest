@@ -46,9 +46,8 @@ sandbox:
 		dli $t0, 0
 		cldr $a0, $t0($c27)
 
-		cjr $ra($c24)
-		# branch delay slot
-		nop
+		cjr $c24
+		nop			# branch delay slot
 
 		.global test
 test:		.ent test

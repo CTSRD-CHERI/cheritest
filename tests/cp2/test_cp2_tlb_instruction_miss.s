@@ -86,7 +86,7 @@ test:		.ent test
 	#
 mapped_code:
 	# return straight away (after iTLB miss)
-	cjr	$ra($c24)
+	cjr	$c24
 	dli	$a5, 0xbeef
 
 return:

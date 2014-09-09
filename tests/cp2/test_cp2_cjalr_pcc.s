@@ -37,9 +37,8 @@
 sandbox:
 		cgetpcc $c2
 		# FIXME: new assembler syntax
-		cjr $ra($c24)
-		# branch delat slot
-		nop
+		cjr $c24
+		nop		# branch delay slot
 
 		.global test
 test:		.ent test
