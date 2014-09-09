@@ -36,7 +36,7 @@ class test_raw_coherence_setup(BaseBERITestCase):
 
     @attr('multicore')
     def test_coreid_max(self):
-        self.assertRegisterEqual(self.MIPS.a1, 2, "Read of number of cores did not give the expected result")
+        self.assertRegisterInRange(self.MIPS.a1, 2, 0x10000, "Read of number of cores did not give the expected result")
 
     def test_cache_coherent_write(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "Core produced incoherent data")
