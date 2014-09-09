@@ -58,7 +58,11 @@ char *cp;
   if ((strcmp(cp, "test_tlb_exception_fill.log") == 0) ||
       (strcmp(cp, "test_tlb_exception_fill_cached.log") == 0) ||
       (strcmp(cp, "test_tlb_exception_fill_multi.log") == 0) ||
-      (strcmp(cp, "test_tlb_exception_fill_cachedmulti.log") == 0))
+      (strcmp(cp, "test_tlb_exception_fill_cachedmulti.log") == 0) ||
+      (strcmp(cp, "test_mc_llsc.log") == 0) ||
+      (strcmp(cp, "test_mc_llsc_cached.log") == 0) ||
+      (strcmp(cp, "test_mc_llsc_multi.log") == 0) ||
+      (strcmp(cp, "test_mc_llsc_cachedmulti.log") == 0))
     printf("%s\n", argv[3]);
   else
     printf("%s\n", argv[2]);

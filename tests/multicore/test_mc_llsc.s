@@ -75,7 +75,7 @@ not_core_zero:
 		# All cores do this bit
 		#
 
-		dli	$t1, 32	# Number of times round the loop
+		dli	$t1, 16	# Number of times round the loop
 		dla	$a0, total
 		dmfc0	$a1, $15, 6
 		andi	$a1, $a1, 0xffff

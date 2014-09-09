@@ -34,4 +34,4 @@ class test_mc_llsc(BaseBERITestCase):
     # very useful, so tag it 'multicore' anyway.
     @attr('multicore')
     def test_mc_llsc_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, (self.MIPS.a1+1)*(self.MIPS.a1+2)*32/2, "Unexpected total")
+        self.assertRegisterEqual(self.MIPS.a0, (self.MIPS.a1+1)*(self.MIPS.a1+2)*16/2, "Unexpected total")
