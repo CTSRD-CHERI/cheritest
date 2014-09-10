@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2014 Jonathan Woodruff
+# Copyright (c) 2014 Robert M. Norton
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -25,69 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
-
-#
-# Test capability pointer compare not equal
-#
-
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
-		# Copy C0 into C1 and C2, compare them.
-		cmove $c1, $c0
-		cmove $c2, $c0
-		cne	$a0, $c1, $c2
-		# Result should be 0, ==
-
-		# Set different offsets for C1 & C2, and compare them
-		li	$t0, 0x1
-		csetoffset	$c1, $c0, $t0
-		li	$t0, 0x2
-		csetoffset	$c2, $c0, $t0
-		cne	$a1, $c1, $c2
-		# Result should be 1, !=
-		
-		# Set different bases for C1 & C2, and compare them
-		li	$t0, 0x1
-		cincbase	$c1, $c0, $t0
-		li	$t0, 0x2
-		cincbase	$c2, $c0, $t0
-		cne	$a2, $c1, $c2
-		# Result should be 1, !=
-		
-		# Set zero length for C3 and clear tag of C4 to make them NULL, and compare them
-		ccleartag	$c3, $c1
-		ccleartag	$c4, $c2
-		cne	$a3, $c3, $c4
-		# Result should be 1, !=, because of different bases + offsets.
-		
-		# Set complementary offsets for C1 & C2 so that effective addresses
-		# are equal
-		li	$t0, 0x2
-		csetoffset	$c1, $c1, $t0
-		li	$t0, 0x1
-		csetoffset	$c2, $c2, $t0
-		cne	$a4, $c1, $c2
-		# Result should be 0, ==
-		
-		# Clear tag on C3 to make it not a valid capability, and compare
-		ccleartag	$c1, $c1
-		cne	$a5, $c1, $c2
-		# Result should be 1, !=, despite identical base + offset.
-		
-		# end test
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
-
+.macro cmpop dest cA cB
+		cne \dest, \cA, \cB
+.endm
+	
+.include "tests/cp2/test_cp2_ptrcmp_template.s"

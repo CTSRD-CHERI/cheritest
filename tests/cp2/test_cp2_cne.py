@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2014 Jonathan Woodruff
+# Copyright (c) 2014 Jonathan Woodruff, Robert M. Norton
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -29,36 +29,41 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test capability compare not equal.
+# Test capability compare equal.
 #
+
+def construct_answer(tt1, tt2, ut1, ut2, uu1, uu2):
+    # bit 0 -- both untagged swapped
+    # bit 1 -- both untagged
+    # bit 2 -- one untagged swapped
+    # bit 3 -- one untagged 
+    # bit 4 -- both tagged swapped
+    # bit 5 -- both tagged
+    return uu1 + (uu2 << 1) + (ut1 << 2) + (ut2 << 3) + (tt1 << 4) + (tt2 << 5)
+
 
 class test_cp2_cne(BaseBERITestCase):
     @attr('capabilities')
-    def test_cp2_cne_duplicated(self):
-        '''Test duplicated capabilities are equal'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x0, "Duplicated capabilities did not compare equal")
+    def test_cp2_cne_equal(self):
+        '''Compare equal capabilities'''
+        self.assertRegisterEqual(self.MIPS.a1, construct_answer(0,0,1,1,0,0), "Equal capabilities compare incorrectly")
 
     @attr('capabilities')
-    def test_cp2_cne_diff_offsets(self):
-        '''Test capabilities with different offsets test not equal'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x1, "Capabilities with different offsets tested equal")
+    def test_cp2_cne_bases_diff(self):
+        '''Compare capabilities with different bases, offsets equal'''
+        self.assertRegisterEqual(self.MIPS.a2, construct_answer(1,1,1,1,0,0), "Capabilities with different bases compared incorrectly")
 
     @attr('capabilities')
-    def test_cp2_cne_diff_bases(self):
-        '''Test capabilities with different bases test not equal'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x1, "Capabilities with different bases tested equal")
+    def test_cp2_cne_offsets_diff(self):
+        '''Compare capabilities with different offsets, bases equal'''
+        self.assertRegisterEqual(self.MIPS.a3, construct_answer(1,1,1,1,1,1), "Capabilities with different offsets compared incorrectly")
         
     @attr('capabilities')
-    def test_cp2_cne_both_null(self):
-        '''Test different NULL capabilities test not equal'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1, "Different NULL capabilities tested equal")
+    def test_cp2_cne_base_and_offset_diff_sum_different(self):
+        '''Compare capabilities with different base and offset, base+offset not equal'''
+        self.assertRegisterEqual(self.MIPS.a4, construct_answer(1,1,1,1,1,1), "Capabilities with different base and offsets compared incorrectly")
 
     @attr('capabilities')
-    def test_cp2_cne_same_base_plus_offset(self):
-        '''Test capabilities with complimentary bases and offsets test equal'''
-        self.assertRegisterEqual(self.MIPS.a4, 0x0, "Capabilities with equivalent base + offset tested not equal")
-        
-    @attr('capabilities')
-    def test_cp2_cne_one_null(self):
-        '''Test a NULL capability tests not equal to an equivalant non-NULL one'''
-        self.assertRegisterEqual(self.MIPS.a5, 0x1, "A NULL capability tested equal to a valid one")
+    def test_cp2_cne_base_and_offset_diff_sum_equal(self):
+        '''Test capabilities with complimentary bases and offsets'''
+        self.assertRegisterEqual(self.MIPS.a5, construct_answer(0,0,1,1,1,1), "Capabilities with equivalent base + offset compared incorrectly")
