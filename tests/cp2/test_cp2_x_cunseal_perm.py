@@ -49,6 +49,6 @@ class test_cp2_x_cunseal_perm(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cunseal_perm_3(self):
         '''Test capability cause was set correcly when cunseal did not have Permit_Seal'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0417,
+        self.assertRegisterEqual(self.MIPS.a3, 0x0402,
             "Capability cause was not set correcly when cunseal did not have permission")
 
