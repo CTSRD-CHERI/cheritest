@@ -48,32 +48,32 @@ class test_cp2_cltu(BaseBERITestCase):
         '''Compare equal capabilities'''
         # A: base=0x42, offset=0x54
         # B: base=0x42, offset=0x54
-        self.assertRegisterEqual(self.MIPS.a1, construct_answer(0,0,0,0,0,0), "Equal capabilities compare incorrectly")
+        self.assertRegisterEqual(self.MIPS.a1, construct_answer(0,0,1,0,0,0), "Equal capabilities compare incorrectly")
 
     @attr('capabilities')
     def test_cp2_cltu_bases_diff(self):
         '''Compare capabilities with different bases, offsets equal'''
         # A: base=0x8000000000000000, offset=0x54
         # B: base=0x42, offset=0x54
-        self.assertRegisterEqual(self.MIPS.a2, construct_answer(0,1,0,0,0,0), "Capabilities with different bases compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a2, construct_answer(0,1,1,0,0,0), "Capabilities with different bases compared incorrectly")
 
     @attr('capabilities')
     def test_cp2_cltu_offsets_diff(self):
         '''Compare capabilities with different offsets, bases equal'''
         # A: base=0x42, offset=0x8000000000000000
         # B: base=0x42, offset=0x54
-        self.assertRegisterEqual(self.MIPS.a3, construct_answer(0,1,0,0,0,1), "Capabilities with different offsets compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a3, construct_answer(0,1,1,0,0,1), "Capabilities with different offsets compared incorrectly")
         
     @attr('capabilities')
     def test_cp2_cltu_base_and_offset_diff_sum_different(self):
         '''Compare capabilities with different base and offset, base+offset not equal'''
         # A: base=0x1, offset=0x8000000000000000
         # B: base=0x42, offset=0x54
-        self.assertRegisterEqual(self.MIPS.a4, construct_answer(0,1,0,0,0,1), "Capabilities with different base and offsets compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a4, construct_answer(0,1,1,0,0,1), "Capabilities with different base and offsets compared incorrectly")
 
     @attr('capabilities')
     def test_cp2_cltu_base_and_offset_diff_sum_equal(self):
         '''Test capabilities with complimentary bases and offsets'''
         # A: base=0x8000000000000053, offset=0x8000000000000001
         # B: base=0x42, offset=0x54
-        self.assertRegisterEqual(self.MIPS.a5, construct_answer(0,0,0,0,0,1), "Capabilities with equivalent base + offset compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a5, construct_answer(0,0,1,0,0,1), "Capabilities with equivalent base + offset compared incorrectly")
