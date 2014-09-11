@@ -51,7 +51,7 @@ test:		.ent test
 		# Clear RCC. so that we can tell when PCC has been saved there
 		dli      $t0, 4
 		cincbase $c24, $c24, $t0
-		csettype $c24, $c24, $t0
+		csetoffset $c24, $c24, $t0
 		csetlen  $c24, $c24, $t0
 		dli      $t0, 0
 		candperm $c24, $c24, $t0
@@ -65,7 +65,9 @@ test:		.ent test
 L1:
 		# Check that PCC was copied to RCC
 		cgetperm $a0, $c24
-		cgettype $a1, $c24
+		cgetoffset $a1, $c24
+		dla	 $t0, L1
+		dsubu	 $a1, $a1, $t0
 		cgetbase $a2, $c24
 		cgetlen  $a3, $c24
 		
