@@ -31,12 +31,8 @@
 .set noat
 
 #
-# Test that csealdata raises an exception if ct's tag bit is unset.
+# Test that cseal raises an exception if ct's tag bit is unset.
 #
-
-sandbox1:
-		creturn
-		nop
 
 sandbox2:
 		csealdata $c1, $c1, $c29 # This should raise an exception
@@ -75,18 +71,23 @@ test:		.ent test
 		candperm $c1, $c1, $t0
 
 		#
-		# $csp is KCC, a reserved register
+		# $c29 is KCC, a reserved register
 		#
-		dla $t0, sandbox1
-		cmove $c29, $c0
-		csettype $c29, $c29, $t0
+
+		dli	$t0, 0x1234
+		csetoffset $c29, $c0, $t0
 
 		#
 		# Take away the permission to access reserved registers,
 		# including KCC.
 		#
+
 		dli $t0, 0x1ff
 		candperm $c2, $c0, $t0
+
+		#
+		# Call sandbox2 with restricted permissions in $PCC
+		#
 
 		dla $t0, sandbox2
 		csetoffset $c2, $c2, $t0
