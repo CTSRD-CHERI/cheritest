@@ -47,7 +47,6 @@ start:
                 # set the fields of a capability
 		dli       $a3,  0
 		candperm  $c1, $c2, $a3
-		csettype  $c1, $c2, $a3
 		csetoffset $c1, $c2, $a3
 		cincbase  $c1, $c2, $a3
 		csetlen   $c1, $c2, $a3
