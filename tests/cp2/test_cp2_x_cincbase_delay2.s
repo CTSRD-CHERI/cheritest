@@ -77,7 +77,7 @@ test:		.ent test
 		# Seal $c1 with $c2 so that an attempt to incbase $c1 will fail
 		#
 
-		csealdata $c1, $c1, $c2
+		cseal	$c1, $c1, $c2
 
 		dli	$t1, 1
 		j	L1
