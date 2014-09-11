@@ -513,6 +513,7 @@ ifeq ($(TEST_CP2),1)
 TEST_CP2_FILES=					\
 		test_cp2_reg_init.s		\
 		test_cp2_reg_name.s		\
+		test_cp2_getsettype.s		\
 		test_cp2_getincbase.s		\
 		test_cp2_getsetleng.s		\
 		test_cp2_getsetoffset.s		\
@@ -676,6 +677,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cincbase_delay2.s	\
 		test_cp2_x_cbtu_reg.s		\
 		test_cp2_x_cbts_reg.s		\
+		test_cp2_x_csettype_perm.s	\
+		test_cp2_x_csettype_bounds.s	\
 		test_cp2_x_swc1_perm.s		\
 		test_cp2_x_sdc1_perm.s		\
 		test_cp2_disabled_exception.s	\
