@@ -35,7 +35,7 @@
 #
 
 sandbox2:
-		csealdata $c1, $c1, $c29 # This should raise an exception
+		cseal	$c1, $c1, $c29 # This should raise an exception
 		cjr	$c24	
 		nop		# Branch delay slot
 
