@@ -31,23 +31,24 @@ from nose.plugins.attrib import attr
 class test_tlb_tlbwr_ext(BaseBERITestCase):
 
     @attr('tlb')
-    @attr('bigtlb')
+    @attr('extendedtlb')
     def test_tlb_tlbwr_ext_1(self):
         '''Check the size of the extended TLB'''
         self.assertRegisterEqual(self.MIPS.a0, 0x90, "Extended TLB was not found or did not have the expected number of entries")
 
     @attr('tlb')
-    @attr('bigtlb')
+    @attr('extendedtlb')
     def test_tlb_tlbwr_ext_2(self):
         '''Test that the TLB entry for virtual page 1 was written at index 128'''
         self.assertRegisterEqual(self.MIPS.a4, 129, "TLB entry for page 1 was not written at index 129")
 
     @attr('tlb')
-    @attr('bigtlb')
+    @attr('extendedtlb')
     def test_tlb_tlbwr_ext_3(self):
         '''Test that the TLB entry for page 129 was written at page 129'''
         self.assertRegisterEqual(self.MIPS.a5, 129, "TLB entry for page 129 was not written at index 129")
 
+    # This test depends on the TLB having the same size and PRNG as BERI1
     @attr('tlb')
     @attr('bigtlb')
     @attr('deterministic_random')
@@ -55,6 +56,7 @@ class test_tlb_tlbwr_ext(BaseBERITestCase):
         '''Test that the TLB entry for page 1 was evicted to index 13'''
         self.assertRegisterEqual(self.MIPS.a6, 13, "TLB entry for page 1 was not evicted to index 13")
 
+    # This test depends on the TLB having the same size and PRNG as BERI1
     @attr('tlb')
     @attr('bigtlb')
     @attr('deterministic_random')

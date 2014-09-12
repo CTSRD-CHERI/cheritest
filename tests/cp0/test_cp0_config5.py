@@ -35,14 +35,14 @@ from nose.plugins.attrib import attr
 class test_cp0_config5(BaseBERITestCase):
 
     @attr('tlb')
-    @attr('bigtlb')
+    @attr('extendedtlb')
     def test_cp0_config5_large(self):
         '''Test CP0.Config5'''
         self.assertRegisterEqual(self.MIPS.a0 & 0x1, 1,
             "CP0.Config5 did not have expected value")
 
     @attr('tlb')
-    @attr('smalltlb')
+    @attr('noextendedtlb')
     def test_cp0_config5_small(self):
         '''Test CP0.Config5'''
         self.assertRegisterEqual(self.MIPS.a0 & 0x1, 0,

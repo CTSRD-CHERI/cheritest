@@ -31,7 +31,7 @@ from nose.plugins.attrib import attr
 class test_tlb_ext_enable(BaseBERITestCase):
 
     @attr('tlb')
-    @attr('bigtlb')
+    @attr('extendedtlb')
     def test_tlb_ext_enable_1(self):
         '''Test enabling the BERI extended TLB'''
         self.assertRegisterEqual(self.MIPS.a0, 4, "BERI extended TLB was not enabled")

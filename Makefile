@@ -924,6 +924,7 @@ and not floatexception  \
 and not floatechonan    \
 and not smalltlb        \
 and not bigtlb          \
+and not extendedtlb	\
 and not enablelargetlb  \
 and not invalidateL2    \
 and not rdhwr           \
@@ -1011,14 +1012,19 @@ NOSEPRED=not false
 ifeq ($(BERI_VER),2)
 NOSEPRED+=and not invalidateL2only
 NOSEPRED+=and not lladdr
+NOSEPRED+=and not extendedtlb
 NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not largepage
 NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
 else
+NOSEPRED+=and not noextendedtlb
 NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb
+ifeq ($(GENERIC_L1),1)
+NOSEPRED+=and not bigtlb
+endif
 NOSEPRED+=and not syncistep
 ifeq ($(MULTI),1)
 NOSEPRED+=and not loadcachetag
