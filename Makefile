@@ -956,7 +956,8 @@ and not syncistep \
 and not smalltlb \
 and not gxemultlb \
 and not watch \
-and not deterministic_random
+and not deterministic_random \
+and not noextendedtlb
 
 ifneq ($(MULTI),1)
 L3_NOSEPRED+=and not multicore
