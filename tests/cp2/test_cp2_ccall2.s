@@ -310,6 +310,12 @@ do_ccall:
 		cunseal $c26, $c2, $c27
 
 		#
+		# Restore the offset on KDC
+		#
+
+		csetoffset $c27, $c27, $zero
+
+		#
 		# Move $c1.offset into EPC, so that when we return 
                 # PC will be set to the entry point of the invoked sandbox
 		#
@@ -356,12 +362,11 @@ do_creturn:
                 clc     $c31, $k0, 32($c28)
 
                 #
-                # Pop the return address off the trusted system stack into
-                # EPC, so it will be returned to when this exception handler
-                # returns to user space.
+		# Set the return address (EPC) to the offset in the EPCC
+		# that was restored from the trusted system stack.
                 #
 
-                cld    $k0, $k0, 64($c28)
+                cgetoffset $k0, $c31
                 dmtc0   $k0, $14
 
                 nop
