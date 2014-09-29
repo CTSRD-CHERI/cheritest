@@ -56,16 +56,12 @@ test:		.ent test
 		dli	$a2, 0
 
 		#
-		# Make $c1 a data capability for the array 'data'
-		# This capability is ephemeral, but untagged so storing
-		# it should be allowed
+		# Make $c1 an ephemeral capability. It is ephemeral,
+		# but untagged so storing it should be allowed
+		#
 
-		dla     $t0, data
-		cincbase $c1, $c0, $t0
-		dli     $t0, 8
-                csetlen $c1, $c1, $t0
-		dli     $t0, 0x7e
-		candperm $c1, $c1, $t0
+		dli       $t0, 0x7e
+		candperm  $c1, $c1, $t0
 		ccleartag $c1, $c1
 
 		#
@@ -79,7 +75,7 @@ test:		.ent test
 		# that doesn't permit this.
 
 		dla     $t0, cap1
-		cscr     $c1, $t0($c2) # This should not raise an exception
+		cscr    $c1, $t0($c2) # This should not raise an exception
 
 		# Check that the store did happen.
 		cldr    $s0, $t0($c0)
@@ -87,7 +83,7 @@ test:		.ent test
 		cldr    $s1, $t0($c0)
 		daddiu  $t0, $t0, 8
 		cldr    $s2, $t0($c0)
-			daddiu  $t0, $t0, 8
+		daddiu  $t0, $t0, 8
 		cldr    $s3, $t0($c0)
 
 		ld	$fp, 16($sp)
@@ -117,7 +113,7 @@ data:		.dword	0x0123456789abcdef
 		.dword  0x0123456789abcdef
 
 		.align 5
-cap1:		.dword 0x0 
-		.dword 0x0 
-		.dword 0x0
-		.dword 0x0
+cap1:		.dword 0x0123456789abcdef
+		.dword 0x0123456789abcdef
+		.dword 0x0123456789abcdef
+		.dword 0x0123456789abcdef

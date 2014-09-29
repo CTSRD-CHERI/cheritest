@@ -38,9 +38,9 @@ class test_cp2_csc_ephemeral_invalid(BaseBERITestCase):
     def test_cp2_csc_ephemeral_invalid_1(self):
         '''Test csc stored an invalid ephemeral capability'''
         self.assertRegisterEqual(self.MIPS.s0, 0x00000000000000fc, "csc did not write an invalid, ephemeral capability (perms)")
-        self.assertRegisterEqual(self.MIPS.s1, 0x9800000040000d40, "csc did not write an invalid, ephemeral capability (cursor)")
-        self.assertRegisterEqual(self.MIPS.s2, 0x9800000040000d40, "csc did not write an invalid, ephemeral capability (base)")
-        self.assertRegisterEqual(self.MIPS.s3, 0x0000000000000008, "csc did not write an invalid, ephemeral capability (length)")
+        self.assertRegisterEqual(self.MIPS.s1, 0x0000000000000000, "csc did not write an invalid, ephemeral capability (cursor)")
+        self.assertRegisterEqual(self.MIPS.s2, 0x0000000000000000, "csc did not write an invalid, ephemeral capability (base)")
+        self.assertRegisterEqual(self.MIPS.s3, 0xffffffffffffffff, "csc did not write an invalid, ephemeral capability (length)")
 
     @attr('capabilities')
     def test_cp2_x_csc_ephermeral_2(self):
