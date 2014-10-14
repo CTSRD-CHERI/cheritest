@@ -55,7 +55,6 @@ test:		.ent test
 		# Uninterrupted access; check to make sure the right value
 		# comes back.
 		#
-		cmove   $c1, $c0 # FIXME
 		dla	$t1, dword
 		clldr	$a0, $t1($c0)
 		cscdr	$a0, $t1($c0)
@@ -74,7 +73,7 @@ test:		.ent test
 		# number, so we can do atomic arithmetic.
 		#
 		clldr	$a3, $t1($c0)
-		addiu	$a3, $a3, 1
+		daddiu	$a3, $a3, 1
 		cscdr	$a3, $t1($c0)
 		ld	$a4, 0($t1)
 
