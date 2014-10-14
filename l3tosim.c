@@ -64,6 +64,10 @@ int core = 0;
       core = strtol(buff + 7, NULL, 0);
       printf("DEBUG MIPS COREID %d\n", core);
     }
+    else if (strncmp(buff, "DEBUG CAP", 9) == 0)
+    {
+      printf("%s\n", buff);
+    }
   }
 
   return 0;
