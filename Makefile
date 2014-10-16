@@ -1,4 +1,4 @@
-#
+
 # Build system for CHERI regression tests.  Tests fall into three categories:
 #
 # "raw" -- which run without any prior software initialisation.  This is used
@@ -45,11 +45,11 @@
 # "make test" runs the tests through CHERI
 # "make gxemul-test" runs the tests through gxemul
 #
-
 TEST_CP2?=1
 CLANG?=1
 MULTI?=0
 MT?=0
+DMA?=0
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
 NOFUZZR?=0
@@ -69,7 +69,8 @@ TESTDIRS=					\
 		$(TESTDIR)/cp2			\
 		$(TESTDIR)/c			\
 		$(TESTDIR)/mt			\
-		$(TESTDIR)/pic
+		$(TESTDIR)/pic			\
+		$(TESTDIR)/dma
 
 ifeq ($(MULTI),1)
 TESTDIRS+= $(TESTDIR)/multicore
@@ -375,6 +376,12 @@ RAW_FPU_FILES =					\
 RAW_TRACE_FILES=test_raw_trace.s
 
 RAW_PIC_FILES=test_raw_pic_regs.s
+
+ifeq ($(DMA),1)
+RAW_DMA_FILES=test_raw_dma_simple.s
+else
+RAW_DMA_FILES=
+endif
 
 TEST_FRAMEWORK_FILES=				\
 		test_template.s			\
@@ -778,7 +785,25 @@ TEST_PIC_FILES=test_pic_irq.s
 
 # Don't attempt to build clang tests unless CLANG is set to 1, because clang might not be available
 # This will cause clang tests to fail but that is better than make falling over.
+# The DMA engine also depends on clang, and works in the same way
 ifeq ($(CLANG),1)
+
+ifeq ($(DMA), 1)
+TEST_DMA_FILES=					\
+		test_clang_dma_simple.c		\
+		test_clang_dma_byte.c		\
+		test_clang_dma_line.c		\
+		test_clang_dma_loop.c		\
+		test_clang_dma_add.c		\
+		test_clang_dma_sub.c		\
+		test_clang_dma_big_dram.c	\
+		test_clang_dma_long_program.c	\
+		test_clang_dma_successive_programs.c \
+		test_clang_dma_nested_loop.c
+else
+TEST_DMA_FILES=
+endif
+
 TEST_CLANG_FILES=				\
 		test_clang_cast.c		\
 		test_clang_cursor.c		\
@@ -859,6 +884,8 @@ TEST_FILES=					\
 		$(TEST_MEM_UNALIGN_FILES)	\
 		$(TEST_TRAPI_FILES)		\
 		$(FUZZ_TEST_FILES)		\
+		$(RAW_DMA_FILES)		\
+		$(TEST_DMA_FILES)		\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)	 	\
@@ -979,6 +1006,7 @@ L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
 TEST_CYCLE_LIMIT?=1500000
+#TEST_CYCLE_LIMIT?=15000000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
@@ -1041,7 +1069,10 @@ ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities and not clang
 endif
 ifneq ($(CLANG),1)
-NOSEPRED+=and not clang
+NOSEPRED+=and not clang and not dmaclang
+endif
+ifneq ($(DMA),1)
+NOSEPRED+=and not dma and not dmaclang
 endif
 ifneq ($(MULTI),1)
 NOSEPRED+=and not multicore
@@ -1248,10 +1279,26 @@ $(OBJDIR)/test_%.o : test_%.s
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -o $@ $<
 
-# Once the assembler works, we can try this version too:
-#clang  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
+DMADIR=$(CHERILIBS_ABS)/peripherals/DMA
+vpath DMA% $(DMADIR)
+
+DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
+
+$(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
+	clang -I$(DMADIR) -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
+
+# Once the assembler works, we can try this version too:
+#clang  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
+
+# For some reasons, these need to be explicit, not implicit
+$(OBJDIR)/DMAAsm.o: DMAAsm.c
+	clang -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+
+$(OBJDIR)/DMAControl.o: DMAControl.c
+	clang -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
 	mips-linux-gnu-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
@@ -1266,6 +1313,16 @@ select_init: select_init.c
 #
 # Targets for ELF images
 #
+
+#$(OBJDIR)/test_clang_dma_simple.elf : $(OBJDIR)/test_clang_dma_simple.o $(DMA_LIB_OBJS)\
+	    #$(TEST_LDSCRIPT) \
+	    #$(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
+	#$(LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
+
+$(OBJDIR)/test_clang_dma%.elf : $(OBJDIR)/test_clang_dma%.o $(DMA_LIB_OBJS)\
+	    $(TEST_LDSCRIPT) \
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
+	$(LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
 $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_LDSCRIPT) \
@@ -1342,6 +1399,9 @@ $(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.mem $(SIM) $(CHERICTL)
 # can use a temporary directory so that parallel builds work.
 $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	$(call PREPARE_TEST,$<) && $(call RUN_TEST,$*); $(CLEAN_TEST)
+
+# The test won't be run, but attempting to build with the standard rules fails
+$(LOGDIR)/test_clang_dma%_cached.log : ;
 
 #
 # Target to do a run of the test suite on hardware.
