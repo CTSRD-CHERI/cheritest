@@ -967,6 +967,7 @@ L3_NOSEPRED=\
 not beri \
 and not beriinitial \
 and not counterdev \
+and not dma \
 and not dumpicache \
 and not einstr \
 and not float \
