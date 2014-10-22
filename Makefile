@@ -966,8 +966,6 @@ and not mips_overflow 	\
 L3_NOSEPRED=\
 not beri \
 and not beriinitial \
-and not capabilities \
-and not clang \
 and not counterdev \
 and not dumpicache \
 and not einstr \
@@ -984,7 +982,16 @@ and not smalltlb \
 and not gxemultlb \
 and not watch \
 and not deterministic_random \
-and not noextendedtlb
+and not noextendedtlb \
+and not csettype
+
+ifneq ($(TEST_CP2),1)
+L3_NOSEPRED+=and not capabilities and not clang
+endif
+
+ifneq ($(CLANG),1)
+L3_NOSEPRED+=and not clang and not dmaclang
+endif
 
 ifneq ($(MULTI),1)
 L3_NOSEPRED+=and not multicore
