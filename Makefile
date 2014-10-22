@@ -969,6 +969,7 @@ not beri \
 and not beriinitial \
 and not counterdev \
 and not dma \
+and not dmaclang \
 and not dumpicache \
 and not einstr \
 and not float \
@@ -992,7 +993,7 @@ L3_NOSEPRED+=and not capabilities and not clang
 endif
 
 ifneq ($(CLANG),1)
-L3_NOSEPRED+=and not clang and not dmaclang
+L3_NOSEPRED+=and not clang
 endif
 
 ifneq ($(MULTI),1)
