@@ -59,6 +59,10 @@ char *cp;
       (strcmp(cp, "test_tlb_exception_fill_cached.log") == 0) ||
       (strcmp(cp, "test_tlb_exception_fill_multi.log") == 0) ||
       (strcmp(cp, "test_tlb_exception_fill_cachedmulti.log") == 0) ||
+      (strcmp(cp, "test_cp2_tlb_exception_fill.log") == 0) ||
+      (strcmp(cp, "test_cp2_tlb_exception_fill_cached.log") == 0) ||
+      (strcmp(cp, "test_cp2_tlb_exception_fill_multi.log") == 0) ||
+      (strcmp(cp, "test_cp2_tlb_exception_fill_cachedmulti.log") == 0) ||
       (strcmp(cp, "test_mc_llsc.log") == 0) ||
       (strcmp(cp, "test_mc_llsc_cached.log") == 0) ||
       (strcmp(cp, "test_mc_llsc_multi.log") == 0) ||
