@@ -962,6 +962,8 @@ and not userlocal       \
 and not mt              \
 and not pic		\
 and not mips_overflow 	\
+and not dma		\
+and not dmaclang	\
 "
 
 L3_NOSEPRED=\
@@ -1467,7 +1469,7 @@ endif
 
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 	test -d $(L3_LOGDIR) || mkdir $(L3_LOGDIR)
-	l3mips --cycles `./max_cycles $@ 20000 200000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | ./l3tosim > $@ || true
+	l3mips --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | ./l3tosim > $@ || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
