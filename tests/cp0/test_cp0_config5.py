@@ -36,6 +36,7 @@ class test_cp0_config5(BaseBERITestCase):
 
     @attr('tlb')
     @attr('extendedtlb')
+    @attr('config5')
     def test_cp0_config5_large(self):
         '''Test CP0.Config5'''
         self.assertRegisterEqual(self.MIPS.a0 & 0x1, 1,
@@ -43,6 +44,7 @@ class test_cp0_config5(BaseBERITestCase):
 
     @attr('tlb')
     @attr('noextendedtlb')
+    @attr('config5')
     def test_cp0_config5_small(self):
         '''Test CP0.Config5'''
         self.assertRegisterEqual(self.MIPS.a0 & 0x1, 0,

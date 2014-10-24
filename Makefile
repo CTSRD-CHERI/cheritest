@@ -959,6 +959,7 @@ and not enablelargetlb  \
 and not invalidateL2    \
 and not rdhwr           \
 and not config3         \
+and not config5		\
 and not userlocal       \
 and not mt              \
 and not pic		\
