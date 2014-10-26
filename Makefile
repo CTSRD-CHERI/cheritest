@@ -445,6 +445,7 @@ TEST_LLSC_FILES=				\
 		test_lld_unalign.s		\
 		test_sc_unalign.s		\
 		test_scd_unalign.s		\
+		test_scd_alias.s		\
 		test_llsc.s			\
 		test_llsc_span.s		\
 		test_lldscd.s			\
