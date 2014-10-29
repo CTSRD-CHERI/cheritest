@@ -3,13 +3,21 @@
 #include "DMAControl.h"
 #include "stdint.h"
 
-uint64_t source[4] = { 1, 2, 3, 4 };
-uint64_t dest[4] = { 0, 0, 0, 0 };
+uint64_t source_wrap[8];
+uint64_t dest_wrap[8];
 
 dma_instruction dma_program[2];
 
 int test(void)
 {
+	// 256 bit align manually
+	uint64_t * source = (uint64_t *)((uint64_t)(&source_wrap + 7) & ~0x1F);
+	uint64_t * dest = (uint64_t *)((uint64_t)(&dest_wrap + 7) & ~0x1F);
+
+	source[0] = 1;
+	source[1] = 2;
+	source[2] = 3;
+	source[3] = 4;
 
 	dma_program[0] = DMA_OP_TRANSFER(TS_BITS_256);
 	dma_program[1] = dma_op_stop();

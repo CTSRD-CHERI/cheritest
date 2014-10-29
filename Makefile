@@ -102,6 +102,10 @@ ifdef COP1_ONLY
 TESTDIRS= $(TESTDIR)/fpu
 endif
 
+ifdef DMA_ONLY
+TESTDIRS=$(TESTDIR)/dma
+endif
+
 ifdef TEST_TRACE
 TESTDIRS+= $(TESTDIR)/trace
 endif
@@ -802,7 +806,8 @@ TEST_DMA_FILES=					\
 		test_clang_dma_big_dram.c	\
 		test_clang_dma_long_program.c	\
 		test_clang_dma_successive_programs.c \
-		test_clang_dma_nested_loop.c
+		test_clang_dma_nested_loop.c	\
+		test_clang_dma_irq.c
 else
 TEST_DMA_FILES=
 endif
@@ -847,7 +852,6 @@ TEST_MT_FILES=					\
 else
 TEST_MT_FILES=
 endif
-
 FUZZ_SCRIPT:=fuzzing/fuzz.py
 FUZZ_SCRIPT_OPTS?=
 FUZZ_TEST_DIR:=tests/fuzz
@@ -901,6 +905,10 @@ endif
 
 ifdef COP1_ONLY
 TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
+endif
+
+ifdef DMA_ONLY
+TEST_FILES=	$(RAW_DMA_FILES) $(TEST_DMA_FILES)
 endif
 
 ifneq ($(NOFUZZR),1)
