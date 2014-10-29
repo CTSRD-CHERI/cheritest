@@ -839,6 +839,7 @@ TEST_MULTICORE_FILES=				\
 		test_mc_rdhwr.s			\
 		test_mc_coherence_sequential.s	\
 		test_mc_llsc.s			\
+		test_mc_llsc_alias.s		\
 		test_mc_core0_first.s		\
 		test_mc_core0_last.s
 else
@@ -1099,6 +1100,8 @@ NOSEPRED+=and not dma and not dmaclang
 endif
 ifneq ($(MULTI),1)
 NOSEPRED+=and not multicore
+else
+NOSEPRED+=and not llscnoalias
 endif
 ifneq ($(MT),1)
 NOSEPRED+=and not mt

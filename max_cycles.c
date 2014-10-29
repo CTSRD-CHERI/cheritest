@@ -66,7 +66,11 @@ char *cp;
       (strcmp(cp, "test_mc_llsc.log") == 0) ||
       (strcmp(cp, "test_mc_llsc_cached.log") == 0) ||
       (strcmp(cp, "test_mc_llsc_multi.log") == 0) ||
-      (strcmp(cp, "test_mc_llsc_cachedmulti.log") == 0))
+      (strcmp(cp, "test_mc_llsc_cachedmulti.log") == 0) ||
+      (strcmp(cp, "test_mc_llsc_alias.log") == 0) ||
+      (strcmp(cp, "test_mc_llsc_alias_cached.log") == 0) ||
+      (strcmp(cp, "test_mc_llsc_alias_multi.log") == 0) ||
+      (strcmp(cp, "test_mc_llsc_alias_cachedmulti.log") == 0))
     printf("%s\n", argv[3]);
   else
     printf("%s\n", argv[2]);
