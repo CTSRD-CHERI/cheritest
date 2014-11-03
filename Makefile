@@ -698,6 +698,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_sdc1_perm.s		\
 		test_cp2_disabled_exception.s	\
 		test_cp2_x_ccheckperm.s		\
+		test_cp2_x_ccheckperm_2.s	\
 		test_cp2_x_cchecktype.s		\
 		test_cp2_x_clc_tlb.s		\
 		test_cp2_x_csc_tlb.s
