@@ -640,6 +640,7 @@ TEST_CP2_FILES=					\
 		test_cp2_ctoptr.s		\
 		test_cp2_ctoptr_null.s		\
 		test_cp2_ctoptr_zero.s		\
+		test_cp2_ctoptr_bounds.s	\
 		test_cp2_cfromptr_null.s	\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
