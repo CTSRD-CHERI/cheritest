@@ -989,7 +989,6 @@ and not counterdev \
 and not dma \
 and not dmaclang \
 and not dumpicache \
-and not einstr \
 and not float \
 and not ignorebadex \
 and not invalidateL2 \
