@@ -846,7 +846,8 @@ TEST_MULTICORE_FILES=				\
 		test_mc_llsc.s			\
 		test_mc_llsc_alias.s		\
 		test_mc_core0_first.s		\
-		test_mc_core0_last.s
+		test_mc_core0_last.s		\
+		test_mc_tag_coherence.s
 else
 TEST_MULTICORE_FILES=
 endif
