@@ -87,7 +87,7 @@ test:		.ent test
 		lb	$a2, 0($t0)
 		
 		#
-		# (3) series of cache instructions to invalidate L2 cache lines.  
+		# (3) cache instruction to invalidate L2 cache line.  
 		#
 		cache 0x13, 0($t0)
 		
@@ -120,7 +120,7 @@ test:		.ent test
 		# (5) writeback and invalidate L2 cache lines.  
 		#
 		cache 0x01, 0($t0)
-		cache 0x03, 0($t0)
+		cache 0x17, 0($t0)
 		
 		#
 		# (5) Read written back value of writable word.  
