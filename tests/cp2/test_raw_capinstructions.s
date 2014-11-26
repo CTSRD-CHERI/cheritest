@@ -48,6 +48,7 @@ start:
 		dli       $a3,  0
 		candperm  $c1, $c2, $a3
 		csetoffset $c1, $c2, $a3
+		cincoffset $c1, $c2, $a3
 		cincbase  $c1, $c2, $a3
 		csetlen   $c1, $c2, $a3
                 ccleartag $c1, $c2
