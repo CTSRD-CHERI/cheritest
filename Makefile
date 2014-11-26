@@ -1019,7 +1019,7 @@ L3_NOSEPRED+=and not clang
 endif
 
 ifneq ($(MULTI),1)
-L3_NOSEPRED+=and not multicore
+L3_NOSEPRED+=and not multicore and not llscnoalias
 endif
 
 ifneq ($(MT),1)
