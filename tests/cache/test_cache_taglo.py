@@ -31,6 +31,7 @@ from nose.plugins.attrib import attr
 class test_cache_taglo(BaseBERITestCase):
 
     @attr('cache')
+    @attr('loadcachetag')
     def test_cache_taglo_1(self):
         '''Test that we can read CP0.TagLo'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "Read of CP0 TagLo did not complete")
