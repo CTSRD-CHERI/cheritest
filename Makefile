@@ -1000,6 +1000,7 @@ and not invalidateL2 \
 and not loadcachetag \
 and not llscnotmatching \
 and not llscspan \
+and not llscnoalias \
 and not mtc0signex \
 and not swi \
 and not syncistep \
@@ -1019,7 +1020,7 @@ L3_NOSEPRED+=and not clang
 endif
 
 ifneq ($(MULTI),1)
-L3_NOSEPRED+=and not multicore and not llscnoalias
+L3_NOSEPRED+=and not multicore
 endif
 
 ifneq ($(MT),1)
