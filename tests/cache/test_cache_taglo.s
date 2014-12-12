@@ -69,12 +69,15 @@ test:		.ent test
 		#
 		# Set $t0 to the number of Dcache sets per way
 		#
+		# XXX: FIXME - should be the number of L2 cache entries,
+		# not the primary DCache.
+		#
 
 		dli	$t0, 64
 		sllv	$t0, $t0, $a1
 loop:
 		mtc0	$t0, $0			# Index
-		cache	0x7, 0($zero)
+		cache	0x7, 0($zero)		# Index Load Tag, L2 data
 		mfc0	$t1, $28		# TagLo
 		addi	$t0, $t0, -1
 		bgez	$t0, loop
