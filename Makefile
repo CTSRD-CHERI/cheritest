@@ -846,6 +846,7 @@ TEST_MULTICORE_FILES=				\
 		test_mc_pics.s			\
 		test_mc_pic_irq.s		\
 		test_mc_rdhwr.s			\
+		test_mc_rdhwr_core.s		\
 		test_mc_coherence_sequential.s	\
 		test_mc_llsc.s			\
 		test_mc_llsc_alias.s		\
