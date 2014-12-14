@@ -532,6 +532,7 @@ TEST_CP2_FILES=					\
 		test_cp2_getsetleng.s		\
 		test_cp2_getsetoffset.s		\
 		test_cp2_csetoffset_int.s	\
+		test_cp2_csetoffset_notag.s	\
 		test_cp2_cincoffset.s		\
 		test_cp2_getandperm.s		\
 		test_cp2_getandperm_user.s	\
