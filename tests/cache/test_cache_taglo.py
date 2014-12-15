@@ -35,3 +35,11 @@ class test_cache_taglo(BaseBERITestCase):
     def test_cache_taglo_1(self):
         '''Test that we can read CP0.TagLo'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "Read of CP0 TagLo did not complete")
+
+    @attr('cache')
+    @attr('loadcachetag')
+    # In a BERi1-like cache/TLB configuration. DCache line size is 32 bytes
+    @attr('largetlb')
+    def test_cache_taglo_1(self):
+        '''Test that DCache line size has the expected value'''
+        self.assertRegisterEqual(self.MIPS.a3, 32, "DCache line size had an unexpected value")

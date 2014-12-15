@@ -48,13 +48,20 @@ test:		.ent test
 		dli	$a2, 0			# Set to 1 when test completes
 
 		#
-		# Set $a0 to the number of Dcache sets per way
-		# (64 * 2^$a1 gives the number of sets per way)
+		# Set $a0 to the number of Dcache sets * number of ways
 		#
 
 		mfc0	$a0, $16, 1		# Config1
-		srl	$a0, $a0, 13
+		srl	$a0, $a0, 13		# DCache sets
 		andi	$a0, $a0, 0x7
+
+		mfc0	$t0, $16, 1		# Config1
+		srl	$t0, $t0, 7		# DCache addociativity
+		andi	$t0, $t0, 0x3
+
+		addu	$t0, $a0, $t0
+		li	$a0, 64
+		sllv	$a0, $a0, $t0
 
 		#
 		# Set $a1 to the L2 cache sets per waT
@@ -65,16 +72,21 @@ test:		.ent test
 		andi	$a1, $a1, 0xf
 
 		#
-		# Set $t0 to the number of Dcache sets per way - 1
+		# Set $a3 to the DCache line size
 		#
 
-		dli	$t0, 64
-		sllv	$t0, $t0, $a0
-		daddi	$t0, $t0, -1
+		mfc0	$t0, $16, 1		# Config1
+		srl	$t0, $t0, 10
+		andi	$t0, $t0, 0x7
+		dli	$a3, 2
+		sllv	$a3, $a3, $t0
+
+		dli	$t1, 0x80000000		# kseg0
+		daddi	$t0, $a0, -1
 loop1:
-		mtc0	$t0, $0			# Index
-		cache	0x5, 0($zero)		# Index Load Tag, L1 data
-		mfc0	$t1, $28		# TagLo
+		cache	0x5, 0($t1)		# Index Load Tag, L1 data
+		mfc0	$v0, $28		# TagLo
+		daddu	$t1, $a3		# Increment pointer into cache
 		daddi	$t0, $t0, -1
 		bgez	$t0, loop1
 		nop				# Branvh delay
