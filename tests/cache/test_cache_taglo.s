@@ -48,7 +48,7 @@ test:		.ent test
 		dli	$a2, 0			# Set to 1 when test completes
 
 		#
-		# Set $a1 to the number of Dcache sets per way
+		# Set $a0 to the number of Dcache sets per way
 		# (64 * 2^$a1 gives the number of sets per way)
 		#
 
@@ -57,30 +57,42 @@ test:		.ent test
 		andi	$a0, $a0, 0x7
 
 		#
-		# Set $a2 to the Dcache line size
+		# Set $a1 to the L2 cache sets per waT
 		#
 
-		mfc0	$a1, $16, 1		# Config1
-		srl	$a1, $a1, 10
-		andi	$a1, $a1, 0x7
-		beqz	$a1, end
-		nop				# Branch delay
+		mfc0	$a1, $16, 2		# Config2
+		srl	$a1, $a1, 8
+		andi	$a1, $a1, 0xf
 
 		#
-		# Set $t0 to the number of Dcache sets per way
+		# Set $t0 to the number of Dcache sets per way - 1
 		#
-		# XXX: FIXME - should be the number of L2 cache entries,
-		# not the primary DCache.
+
+		dli	$t0, 64
+		sllv	$t0, $t0, $a0
+		daddi	$t0, $t0, -1
+loop1:
+		mtc0	$t0, $0			# Index
+		cache	0x5, 0($zero)		# Index Load Tag, L1 data
+		mfc0	$t1, $28		# TagLo
+		daddi	$t0, $t0, -1
+		bgez	$t0, loop1
+		nop				# Branvh delay
+
+		#
+		# Set $t0 to the number of L2 sets per way - 1
 		#
 
 		dli	$t0, 64
 		sllv	$t0, $t0, $a1
-loop:
+		daddi	$t0, $t0, -1
+loop2:
 		mtc0	$t0, $0			# Index
-		cache	0x7, 0($zero)		# Index Load Tag, L2 data
+		cache	0x7, 0($zero)		# Index Load Tag, L2 cache
 		mfc0	$t1, $28		# TagLo
-		addi	$t0, $t0, -1
-		bgez	$t0, loop
+		daddi	$t0, $t0, -1
+		bgez	$t0, loop2
+		nop				# Branvh delay
 
 
 end:
