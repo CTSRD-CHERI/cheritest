@@ -64,12 +64,19 @@ test:		.ent test
 		sllv	$a0, $a0, $t0
 
 		#
-		# Set $a1 to the L2 cache sets per waT
+		# Set $a1 to the L2 cache sets * number of ways
 		#
 
 		mfc0	$a1, $16, 2		# Config2
 		srl	$a1, $a1, 8
 		andi	$a1, $a1, 0xf
+
+		mfc0	$t0, $16, 2		# Config2
+		andi	$t0, $t0, 0xf		# L2 associativity
+
+		addu	$t0, $a1, $t0
+		li	$a1, 64
+		sllv	$a1, $a1, $t0
 
 		#
 		# Set $a3 to the DCache line size
@@ -80,6 +87,16 @@ test:		.ent test
 		andi	$t0, $t0, 0x7
 		dli	$a3, 2
 		sllv	$a3, $a3, $t0
+
+		#
+		# Set $a4 to the L2 cache line size
+		#
+
+		mfc0	$t0, $16, 2		# Config2
+		srl	$t0, $t0, 4		# SL
+		andi	$t0, $t0, 0xf
+		dli	$a4, 2
+		sllv	$a4, $a4, $t0
 
 		dli	$t1, 0x80000000		# kseg0
 		daddi	$t0, $a0, -1
@@ -95,12 +112,10 @@ loop1:
 		# Set $t0 to the number of L2 sets per way - 1
 		#
 
-		dli	$t0, 64
-		sllv	$t0, $t0, $a1
-		daddi	$t0, $t0, -1
+		dli     $t1, 0x80000000		# kseg0
+		daddi	$t0, $a1, -1
 loop2:
-		mtc0	$t0, $0			# Index
-		cache	0x7, 0($zero)		# Index Load Tag, L2 cache
+		cache	0x7, 0($t1)		# Index Load Tag, L2 cache
 		mfc0	$t1, $28		# TagLo
 		daddi	$t0, $t0, -1
 		bgez	$t0, loop2

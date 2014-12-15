@@ -40,6 +40,14 @@ class test_cache_taglo(BaseBERITestCase):
     @attr('loadcachetag')
     # In a BERi1-like cache/TLB configuration. DCache line size is 32 bytes
     @attr('largetlb')
-    def test_cache_taglo_1(self):
-        '''Test that DCache line size has the expected value'''
-        self.assertRegisterEqual(self.MIPS.a3, 32, "DCache line size had an unexpected value")
+    def test_cache_taglo_2(self):
+        '''Test that L1 data cache line size has the expected value'''
+        self.assertRegisterEqual(self.MIPS.a3, 32, "L1 data cache line size had an unexpected value")
+
+    @attr('cache')
+    @attr('loadcachetag')
+    # In a BERi1-like cache/TLB configuration. L2 cache line size is 32 bytes
+    @attr('largetlb')
+    def test_cache_taglo_3(self):
+        '''Test that L2 cache line size has the expected value'''
+        self.assertRegisterEqual(self.MIPS.a4, 32, "L2 cache line size had an unexpected value")
