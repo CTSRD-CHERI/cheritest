@@ -1099,6 +1099,9 @@ endif
 endif
 ifdef COP1
 NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri
+ifdef WONTFIX
+NOSEPRED+=and not floatpairedrounding
+endif
 else
 NOSEPRED+=and not float
 endif
