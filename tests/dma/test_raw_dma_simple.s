@@ -83,7 +83,7 @@ end:
 		nop
 
 		.data
-dma_addr:	.dword	0x900000007F800020
+dma_addr:	.dword	0x900000007F900000
 prog:		.word	0x26000000 # Transfer 64 bits
  		.word	0x60000000 # Stop
 source:		.dword	0x12345678
