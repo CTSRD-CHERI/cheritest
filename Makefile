@@ -50,6 +50,8 @@ CLANG?=1
 MULTI?=0
 MT?=0
 DMA?=0
+FUZZ_DMA?=0
+FUZZ_DMA_ONLY?=0
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
 NOFUZZR?=0
@@ -87,6 +89,10 @@ endif
 
 ifneq ($(NOFUZZR),1)
 TESTDIRS+=$(TESTDIR)/fuzz_regressions
+endif
+
+ifeq ($(FUZZ_DMA),1)
+TESTDIRS+=$(TESTDIR)/fuzz_dma
 endif
 
 ifeq ($(BRIEF_GXEMUL),1)
@@ -881,6 +887,12 @@ else
 FUZZ_REGRESSION_TEST_DIR:=
 FUZZ_REGRESSION_TEST_FILES:=
 endif
+
+ifeq ($(FUZZ_DMA), 1)
+FUZZ_DMA_FILES:=$(notdir $(wildcard tests/fuzz_dma/*.c))
+else
+FUZZ_DMA_FILES:=
+endif
 #
 # All unit tests.  Implicitly, these will all be run for CHERI, but subsets
 # may be used for other targets.
@@ -909,6 +921,7 @@ TEST_FILES=					\
 		$(FUZZ_TEST_FILES)		\
 		$(RAW_DMA_FILES)		\
 		$(TEST_DMA_FILES)		\
+		$(FUZZ_DMA_FILES)		\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)	 	\
@@ -925,6 +938,10 @@ endif
 
 ifdef DMA_ONLY
 TEST_FILES=	$(RAW_DMA_FILES) $(TEST_DMA_FILES)
+endif
+
+ifeq ($(FUZZ_DMA_ONLY), 1)
+TEST_FILES = $(FUZZ_DMA_FILES)
 endif
 
 ifneq ($(NOFUZZR),1)
@@ -1044,8 +1061,8 @@ L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
-TEST_CYCLE_LIMIT?=1500000
-#TEST_CYCLE_LIMIT?=15000000
+#TEST_CYCLE_LIMIT?=1500000
+TEST_CYCLE_LIMIT?=15000000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
