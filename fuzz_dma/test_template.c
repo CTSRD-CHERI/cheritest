@@ -2,8 +2,8 @@
 #include "DMAControl.h"
 #include "mips_assert.h"
 
-volatile uint8_t source[$sourcesize] __attribute__((aligned (256)));
-volatile uint8_t dest[$destsize] __attribute__((aligned (256)));
+volatile uint8_t *source = (uint8_t *)0x9000000010000000;
+volatile uint8_t *dest =   (uint8_t *)0x9000000020000000;
 
 dma_instruction dma_program[] = {
 	$program
