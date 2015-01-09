@@ -1,7 +1,13 @@
-#include "assert.h"
 #include "DMAAsm.h"
-#include "DMAControl.h"
 #include "stdint.h"
+
+#ifdef DMAMODEL
+#include "ModelAssert.h"
+#include "DMAModelSimple.h"
+#else
+#include "DMAControl.h"
+#include "mips_assert.h"
+#endif
 
 uint8_t source = 0xFF;
 uint64_t dest  = 0x1122334455667788;
@@ -26,6 +32,20 @@ int test(void)
 		asm("nop");
 	}
 
+#ifdef DMAMODEL
+	// There may be a way to properly simulate different endiannesses, but
+	// if there is I don't know it.
+	assert(dest == 0x11223344556677FF);
+#else
 	assert(dest == 0xFF22334455667788);
+#endif
 	return 0;
 }
+
+#ifdef DMAMODEL
+int main()
+{
+	test();
+	return 0;
+}
+#endif

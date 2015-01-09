@@ -1,7 +1,13 @@
-#include "assert.h"
 #include "DMAAsm.h"
-#include "DMAControl.h"
 #include "stdint.h"
+
+#ifdef DMAMODEL
+#include "DMAModelSimple.h"
+#include "ModelAssert.h"
+#else
+#include "DMAControl.h"
+#include "mips_assert.h"
+#endif
 
 // This is designed to test program occupying more than one line of the DMA
 // ICache.
@@ -42,3 +48,11 @@ int test(void)
 
 	return 0;
 }
+
+#ifdef DMAMODEL
+int main()
+{
+	test();
+	return 0;
+}
+#endif

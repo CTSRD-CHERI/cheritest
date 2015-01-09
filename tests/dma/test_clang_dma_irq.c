@@ -1,5 +1,5 @@
 
-#include "assert.h"
+#include "mips_assert.h"
 #include "DMAAsm.h"
 #include "DMAControl.h"
 #include "stdint.h"

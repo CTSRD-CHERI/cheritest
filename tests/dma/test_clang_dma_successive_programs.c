@@ -1,7 +1,13 @@
-#include "assert.h"
 #include "DMAAsm.h"
-#include "DMAControl.h"
 #include "stdint.h"
+
+#ifdef DMAMODEL
+#include "DMAModelSimple.h"
+#include "ModelAssert.h"
+#else
+#include "DMAControl.h"
+#include "mips_assert.h"
+#endif
 
 uint8_t source1[] = { 0xBE };
 uint8_t dest1[]   = { 0 };
@@ -54,3 +60,11 @@ int test(void)
 
 	return 0;
 }
+
+#ifdef DMAMODEL
+int main()
+{
+	test();
+	return 0;
+}
+#endif

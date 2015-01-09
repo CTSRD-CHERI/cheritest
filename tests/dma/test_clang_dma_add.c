@@ -1,7 +1,13 @@
-#include "assert.h"
 #include "DMAAsm.h"
-#include "DMAControl.h"
 #include "stdint.h"
+
+#ifdef DMAMODEL
+#include "DMAModelSimple.h"
+#include "ModelAssert.h"
+#else
+#include "DMAControl.h"
+#include "mips_assert.h"
+#endif
 
 uint32_t source[8] = { 0, 1, 2, 0, 0, 0, 3, 0xDEAD };
 uint32_t dest[9] =   { 1, 0, 0, 0, 0, 0, 0, 0, 0xBEEF };
@@ -38,3 +44,11 @@ int test(void)
 
 	return 0;
 }
+
+#ifdef DMAMODEL
+int main()
+{
+	test();
+	return 0;
+}
+#endif

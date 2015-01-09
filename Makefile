@@ -54,6 +54,7 @@ DMA?=0
 NOFUZZ?=0
 NOFUZZR?=0
 
+
 #
 # List of directories in which to find test source and .py files.
 #
@@ -1321,8 +1322,13 @@ $(OBJDIR)/test_%.o : test_%.s
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -o $@ $<
 
+
+# Put DMA model makefile into its own file. This one is already ludicrously
+# large.
 DMADIR=$(CHERILIBS_ABS)/peripherals/DMA
 vpath DMA% $(DMADIR)
+
+include dmamodel.mk
 
 DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 

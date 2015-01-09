@@ -1,7 +1,13 @@
-#include "assert.h"
 #include "DMAAsm.h"
-#include "DMAControl.h"
 #include "stdint.h"
+
+#ifdef DMAMODEL
+#include "DMAModelSimple.h"
+#include "ModelAssert.h"
+#else
+#include "DMAControl.h"
+#include "mips_assert.h"
+#endif
 
 // This is as much as we can run on the simulator. Oh well!
 const uint64_t size = 0x4000;
@@ -9,7 +15,6 @@ const uint64_t size = 0x4000;
 // Source starts offset, because otherwise it collides with the stack.
 uint64_t source     = 0x9000000000008000;
 uint64_t dest       = 0x9000000020000000;
-uint64_t dram_limit = 0x9000000040000000;
 
 // We copy from the bottom 512MiB of memory into the top 512 MiB.
 // The program is loop unrolled to minimise the missed cycles due to the loop
@@ -31,6 +36,10 @@ dma_instruction dma_program[] = {
 
 int test(void)
 {
+#ifdef DMAMODEL
+	source = (uint64_t)malloc(size);
+	dest = (uint64_t)malloc(size);
+#endif
 	uint16_t volatile *cursor, count = 0;
 	for (cursor = (uint16_t *)source; cursor < (source + size / 2); ++cursor) {
 		*cursor = count;
@@ -66,3 +75,11 @@ int test(void)
 	return 0;
 
 }
+
+#ifdef DMAMODEL
+int main()
+{
+	test();
+	return 0;
+}
+#endif
