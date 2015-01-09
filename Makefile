@@ -819,7 +819,8 @@ TEST_DMA_FILES=					\
 		test_clang_dma_long_program.c	\
 		test_clang_dma_successive_programs.c \
 		test_clang_dma_nested_loop.c	\
-		test_clang_dma_irq.c
+		test_clang_dma_irq.c		\
+		test_clang_dma_synth.c
 else
 TEST_DMA_FILES=
 endif
@@ -1073,7 +1074,7 @@ else
 ifdef TRACE
 	SIM_TRACE_OPTS?=+trace +cTrace +tlbTrace +instructionBasedCycleCounter
 else
-	SIM_TRACE_OPTS=
+	SIM_TRACE_OPTS?=
 endif
 endif
 NOSEPRED=not false
