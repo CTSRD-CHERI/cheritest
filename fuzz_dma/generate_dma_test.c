@@ -292,13 +292,14 @@ print_test_information(unsigned seed)
 		if (program[i] == DMA_OP_STOP) {
 			break;
 		}
-#ifdef DISASSEMBLE_DMA
 		else {
-			printf(", /* ");
+			printf(", ");
+#ifdef DISASSEMBLE_DMA
+			printf("/* ");
 			print_dma_instruction(program[i]);
 			printf(" */\n");
-		}
 #endif
+		}
 	}
 	printf("$");
 
@@ -320,15 +321,16 @@ print_test_information(unsigned seed)
 	}
 
 	access_number = 0;
+	printf("assert(1"); // 1 is loop body doesn't have a special case
 	for (current = transfer_list; current != NULL;
 			current = current->next) {
 		for (int i = 0; i < (1 << current->size); ++i) {
-			printf("assert(dest[%lld] == %d);",
+			printf(" && dest[%lld] == %d",
 					current->destination + i, access_number);
 			++access_number;
 		}
 		if (current->next == NULL) {
-			printf("$%lld",
+			printf(");$%lld",
 				current->destination + (1 << current->size));
 		}
 	}
@@ -338,6 +340,14 @@ int main(int argc, char* argv[])
 {
 	if (argc == 2) {
 		print_test_information(atoi(argv[1]));
+	}
+	else if (argc == 3) {
+		int lower = atoi(argv[1]);
+		int upper = atoi(argv[2]);
+		for (int i = lower; i <= upper; ++i) {
+			print_test_information(atoi(argv[1]));
+			printf("\n");
+		}
 	}
 	else {
 		printf("Invalid number of arguments: %d. Expected 1.\n",
