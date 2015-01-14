@@ -50,4 +50,4 @@ class test_cache_taglo(BaseBERITestCase):
     @attr('largetlb')
     def test_cache_taglo_3(self):
         '''Test that L2 cache line size has the expected value'''
-        self.assertRegisterEqual(self.MIPS.a4, 32, "L2 cache line size had an unexpected value")
+        self.assertRegisterEqual(self.MIPS.a4, 128, "L2 cache line size had an unexpected value")
