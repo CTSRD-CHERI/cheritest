@@ -33,7 +33,7 @@ class test_cp0_user(BaseBERITestCase):
 
     @attr('tlb')
     def test_exception_fired(self):
-        '''Test that cp unusable exception happened'''
+        '''Test that cp unusable exception happened.'''
         self.assertRegisterEqual(self.MIPS.a5, 1, "Exception didn't fire")
 
     @attr('tlb')
