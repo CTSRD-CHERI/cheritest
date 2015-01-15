@@ -44,5 +44,5 @@ class test_cp0_user(BaseBERITestCase):
     @attr('tlb')
     def test_exl_in_handler(self):
         '''Test EXL set in status register.'''
-        self.assertRegisterMaskEqual(self.MIPS.a6, 0x1 << 1, 1 << 1, "EXL not set in exception handler")
+        self.assertRegisterMaskEqual(self.MIPS.a6, 0x1 << 1, 1 << 1, "EXL not set in exception handler.")
 
