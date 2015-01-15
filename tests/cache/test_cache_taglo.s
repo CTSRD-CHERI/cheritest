@@ -119,7 +119,7 @@ loop2:
 		mfc0	$t1, $28		# TagLo
 		daddi	$t0, $t0, -1
 		bgez	$t0, loop2
-		nop				# Branvh delay
+		nop				# Branch delay
 
 
 end:
