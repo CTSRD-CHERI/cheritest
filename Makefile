@@ -1112,9 +1112,6 @@ ifeq ($(GENERIC_L1),1)
 NOSEPRED+=and not bigtlb
 endif
 NOSEPRED+=and not syncistep
-ifeq ($(MULTI),1)
-NOSEPRED+=and not loadcachetag
-endif
 endif
 ifdef COP1
 NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri
