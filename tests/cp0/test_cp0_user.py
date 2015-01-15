@@ -38,7 +38,7 @@ class test_cp0_user(BaseBERITestCase):
 
     @attr('tlb')
     def test_cause_code(self):
-        '''Test that exception code is set to "cp unusable" in cause register.'''
+        '''Test that exception code is set to cp unusable in cause register.'''
         self.assertRegisterMaskEqual(self.MIPS.a7, 0x1f << 2, 11 << 2, "Cause not set to cp unusable.")
 
     @attr('tlb')
