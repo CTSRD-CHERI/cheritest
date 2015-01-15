@@ -32,5 +32,5 @@ class test_cp0_wait(BaseBERITestCase):
 
     def test_cause_code(self):
         '''Test that exception code is set to timer in cause register.'''
-        self.assertRegisterMaskEqual(self.MIPS.a4, 0x1f << 2, 1, "Cause not set to timer.")
+        self.assertRegisterMaskEqual(self.MIPS.a4, 0x1f << 2, 0, "Cause not set to timer.")
 
