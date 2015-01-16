@@ -30,7 +30,10 @@ from nose.plugins.attrib import attr
 
 class test_cp0_wait(BaseBERITestCase):
 
-    def test_cause_code(self):
+    # This used to be called test_cause_code. The method has been renamed
+    # to test if something about the method's name was triggering a bug in
+    # Jenkins.
+    def test_aaa_cp0_wait_0(self):
         '''Test that exception code is set to timer in cause register.'''
         self.assertRegisterMaskEqual(self.MIPS.a4, 0x1f << 2, 0, "Cause not set to timer.")
 
