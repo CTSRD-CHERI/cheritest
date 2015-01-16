@@ -43,11 +43,11 @@ class test_cp0_compare(BaseBERITestCase):
         ''' Test that cycle counter interrupted CPU at the right moment.'''
 	self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a0 - 30, self.MIPS.a0 + 30, "Unexpected CP0 count cycle register value before compare register interrupt.")
 
-    def test_interrupt_fired(self):
+    def test_aaa_interrupt_fired(self):
         '''Test that compare register triggered interrupt.'''
         self.assertRegisterEqual(self.MIPS.a5, 1, "Exception didn't fire.")
 
-    def test_eret_happened(self):
+    def test_aaa_eret_happened(self):
         '''Test that eret occurred.'''
         self.assertRegisterEqual(self.MIPS.a3, 1, "Exception didn't return.")
 
@@ -59,11 +59,11 @@ class test_cp0_compare(BaseBERITestCase):
         '''Test that interrupt pending (IP) bit set in cause register.'''
         self.assertRegisterMaskEqual(self.MIPS.a7, 0xff << 8, 0x80 << 8, "IP7 flag not set.")
 
-    def test_cause_code(self):
+    def test_aaa_cause_code(self):
         '''Test that exception code is set to "interrupt".'''
         self.assertRegisterMaskEqual(self.MIPS.a7, 0x1f << 2, 0 << 2, "Code not set to Int.")
 
-    def test_exl_in_handler(self):
+    def test_aaa_exl_in_handler(self):
         '''Test that EXL is set in the interrupt handler.'''
         self.assertRegisterMaskEqual(self.MIPS.a6, 0x1 << 1, 1 << 1, "EXL not set in exception handler.")
 
@@ -71,7 +71,7 @@ class test_cp0_compare(BaseBERITestCase):
 	'''Test that writing to the CP0 compare register cleared IP7.'''
 	self.assertRegisterMaskEqual(self.MIPS.s0, 0xff << 8, 0 << 8, "IP7 flag not cleared.")
 
-    def test_not_exl_after_handler(self):
+    def test_aaa_not_exl_after_handler(self):
         '''Test that EXL is not set after ERET.'''
         self.assertRegisterMaskEqual(self.MIPS.a4, 0x1 << 1, 0 << 1, "EXL still set after ERET")
 
