@@ -140,5 +140,5 @@ class BaseBERITestCase(unittest.TestCase):
                 msg = ""
             else:
                 msg = msg + ": "
-            self.fail(msg + "0x%016x & 0x%016x != 0x%016x"%(first, mask, second))
+            self.fail(msg + "0x%016x and 0x%016x != 0x%016x"%(first, mask, second))
 
