@@ -40,7 +40,7 @@ class test_raw_fpu_div_inf_single(BaseBERITestCase):
 
     def test_raw_fpu_div_inf_single_2(self):
         '''Test div.s of +Infinity by +Infinity'''
-        self.assertRegisterEqual(self.MIPS.a1 & 0xff800000, 0x7f800000, "div.s of +infinity by +Infinity did not give NaN")
+        self.assertRegisterMaskEqual(self.MIPS.a1, 0xff800000, 0x7f800000, "div.s of +infinity by +Infinity did not give NaN")
 
     def test_raw_fpu_div_inf_single_3(self):
         '''Test div.s of +Infinity by +Infinity'''
@@ -52,7 +52,7 @@ class test_raw_fpu_div_inf_single(BaseBERITestCase):
 
     def test_raw_fpu_div_inf_single_5(self):
         '''Test div.s of 0,0 by 0.0'''
-        self.assertRegisterEqual(self.MIPS.a3 & 0xff800000, 0x7f800000, "div.s of 0.0 by 0.0 did not give NaN")
+        self.assertRegisterMaskEqual(self.MIPS.a3, 0xff800000, 0x7f800000, "div.s of 0.0 by 0.0 did not give NaN")
 
     def test_raw_fpu_div_inf_single_6(self):
         '''Test div.s of 0.0 by 0.0'''
