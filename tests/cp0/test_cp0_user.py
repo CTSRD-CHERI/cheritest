@@ -37,12 +37,12 @@ class test_cp0_user(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a5, 1, "Exception didn't fire")
 
     @attr('tlb')
-    def test_cause_code(self):
+    def test_aaa_cause_code(self):
         '''Test that exception code is set to cp unusable in cause register.'''
         self.assertRegisterMaskEqual(self.MIPS.a7, 0x1f << 2, 11 << 2, "Cause not set to cp unusable.")
 
     @attr('tlb')
-    def test_exl_in_handler(self):
+    def test_aaa_exl_in_handler(self):
         '''Test EXL set in status register.'''
         self.assertRegisterMaskEqual(self.MIPS.a6, 0x1 << 1, 1 << 1, "EXL not set in exception handler.")
 
