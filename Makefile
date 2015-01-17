@@ -983,6 +983,7 @@ and not clang           \
 and not beri            \
 and not dumpicache	\
 and not einstr		\
+and not jump_unaligned	\
 and not nofloat         \
 and not floatpaired     \
 and not floatindexed    \
