@@ -1002,6 +1002,7 @@ and not extendedtlb	\
 and not enablelargetlb  \
 and not invalidateL2    \
 and not rdhwr           \
+and not config2		\
 and not config3         \
 and not config5		\
 and not userlocal       \
