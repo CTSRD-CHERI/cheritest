@@ -474,6 +474,7 @@ TEST_CACHE_FILES=				\
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
 		test_cp0_config1		\
+		test_cp0_config2		\
 		test_cp0_config3		\
 		test_cp0_config5		\
 		test_cp0_config6		\
