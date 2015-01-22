@@ -50,6 +50,7 @@ CLANG?=1
 MULTI?=0
 MT?=0
 DMA?=0
+RMA?=0
 FUZZ_DMA?=0
 FUZZ_DMA_ONLY?=0
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
@@ -73,7 +74,7 @@ TESTDIRS=					\
 		$(TESTDIR)/c			\
 		$(TESTDIR)/mt			\
 		$(TESTDIR)/pic			\
-		$(TESTDIR)/dma
+		$(TESTDIR)/dma			
 
 ifeq ($(MULTI),1)
 TESTDIRS+= $(TESTDIR)/multicore
@@ -119,6 +120,10 @@ endif
 
 ifdef TEST_TRACE_ONLY
 TESTDIRS= $(TESTDIR)/trace
+endif
+
+ifdef RMA
+TESTDIRS+= $(TESTDIR)/rma
 endif
 
 RAW_FRAMEWORK_FILES=				\
@@ -393,6 +398,12 @@ ifeq ($(DMA),1)
 RAW_DMA_FILES=test_raw_dma_simple.s
 else
 RAW_DMA_FILES=
+endif
+
+ifeq ($(RMA),1)
+RAW_RMA_FILES=test_raw_rma_read.s
+else
+RAW_RMA_FILES=
 endif
 
 TEST_FRAMEWORK_FILES=				\
@@ -875,6 +886,13 @@ TEST_MT_FILES=					\
 else
 TEST_MT_FILES=
 endif
+
+ifeq ($(RMA), 1)
+TEST_RMA_FILES = test_raw_rma_read.s
+else
+TEST_RMA_FILES=
+endif
+
 FUZZ_SCRIPT:=fuzzing/fuzz.py
 FUZZ_SCRIPT_OPTS?=
 FUZZ_TEST_DIR:=tests/fuzz
@@ -926,7 +944,8 @@ TEST_FILES=					\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)	 	\
-		$(TEST_PIC_FILES)
+		$(TEST_PIC_FILES)		\
+		$(RAW_RMA_FILES)
 
 
 ifdef COP1
