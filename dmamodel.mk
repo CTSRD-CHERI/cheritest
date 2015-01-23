@@ -1,5 +1,5 @@
 CC=clang -march=x86-64
-CFLAGS=-g -DDMAMODEL
+CFLAGS=-Wall -Werror -g -DDMAMODEL
 
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
@@ -26,8 +26,9 @@ x86-obj/DMA%.o: $(DMADIR)/DMA%.c
 x86-obj/dmamodel_%: x86-obj/dmamodel_%.o $(DMAMODEL_LIB_OBJS)
 	$(CC) $(CFLAGS) $(CFFGLAGS) -I$(DMADIR) $^ -o $@
 
-x86-obj/generate_dma_test.o: fuzz_dma/generate_dma_test.c
+x86-obj/%.o: fuzz_dma/%.c
 	$(CC) -c $(CFLAGS) $(CFFLAGS) -I$(DMADIR) $^ -o $@
 
-x86-obj/generate_dma_test: x86-obj/generate_dma_test.o $(DMAMODEL_LIB_OBJS)
+GEN_DMA_OBJS=$(addprefix x86-obj/,generate_dma_test.o dma_test_generation.o)
+x86-obj/generate_dma_test: $(GEN_DMA_OBJS) $(DMAMODEL_LIB_OBJS)
 	$(CC) $(CFLAGS) $(CFFLAGS) -I$(DMADIR) $^ -o $@
