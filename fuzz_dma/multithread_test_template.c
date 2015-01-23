@@ -29,8 +29,8 @@
 #include "DMAControl.h"
 #include "mips_assert.h"
 
-static unsigned long next = $seed;
 #define THREAD_COUNT $thread_count
+static unsigned long next = $seed;
 
 volatile uint8_t *source_addrs[] = { $source_addrs };
 volatile uint8_t *dest_addrs[]   = { $dest_addrs };
@@ -49,7 +49,7 @@ int test(void)
 	int active_threads[];
 	int active_thread_count = THREAD_COUNT;
 
-	$setsources
+	$set_sources
 
 	for (i = 0; i < THREAD_COUNT; ++i) {
 		dma_thread_set_pc(i, dma_program[i]);

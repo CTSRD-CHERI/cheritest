@@ -33,8 +33,6 @@
 
 /*
  * Need to output:
- * seed,
- * a thread count,
  * an array of programs
  * source address setting,
  * assertions.
@@ -50,6 +48,8 @@ const dma_address DRAM_START = 0x9000000010000000;
 void
 print_test_information(unsigned int thread_count, unsigned int seed)
 {
+	mysrand(seed);
+
 	/* Generate programs, and evaluate results */
 	unsigned int i, j;
 
@@ -69,9 +69,6 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 	}
 
 	/* Output information */
-	printf("%d$%d${", seed, thread_count);
-	mysrand(seed);
-
 	for (i = 0; i < thread_count; ++i) {
 		printf("{");
 		for (j = 0; ; ++j) {
@@ -88,7 +85,7 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 			printf(", ");
 		}
 	}
-	printf("}$");
+	printf("$");
 
 	dma_address dram_position = DRAM_START;
 	dma_address *source_addrs = malloc(thread_count * sizeof(dma_address));
@@ -125,21 +122,20 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 		}
 	}
 
-	printf(")${");
+	printf(")$");
 	for (i = 0; i < thread_count; ++i) {
 		printf("0x%llx", source_addrs[i]);
 		if (i < (thread_count - 1)) {
 			printf(", ");
 		}
 	}
-	printf("}${");
+	printf("$");
 	for (i = 0; i < thread_count; ++i) {
 		printf("0x%llx", dest_addrs[i]);
 		if (i < (thread_count - 1)) {
 			printf(", ");
 		}
 	}
-	printf("}");
 	
 	/* Free resources */
 	for (i = 0; i < thread_count; ++i) {
@@ -155,6 +151,11 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 int
 main(int argc, char* argv[])
 {
+	if (argc != 5) {
+		printf(
+"Usage: <min thread count> <max thread count> <min seed> <max seed>\n");
+		return 1;
+	}
 	int thread_lower = atoi(argv[1]);
 	int thread_higher = atoi(argv[2]);
 	int seed_lower = atoi(argv[3]);
@@ -162,7 +163,6 @@ main(int argc, char* argv[])
 
 	for (int i = thread_lower; i <= thread_higher; ++i) {
 		for (int j = seed_lower; j <= seed_higher; ++j) {
-			printf("%d, %d\n", i, j);
 			print_test_information(i, j);
 			printf("\n");
 		}
