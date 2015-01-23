@@ -29,6 +29,13 @@ x86-obj/dmamodel_%: x86-obj/dmamodel_%.o $(DMAMODEL_LIB_OBJS)
 x86-obj/%.o: fuzz_dma/%.c
 	$(CC) -c $(CFLAGS) $(CFFLAGS) -I$(DMADIR) $^ -o $@
 
-GEN_DMA_OBJS=$(addprefix x86-obj/,generate_dma_test.o dma_test_generation.o)
-x86-obj/generate_dma_test: $(GEN_DMA_OBJS) $(DMAMODEL_LIB_OBJS)
+x86-objs/%: x86-obj/%.o
 	$(CC) $(CFLAGS) $(CFFLAGS) -I$(DMADIR) $^ -o $@
+
+run-%: x86-obj/%
+	$< $(ARGS)
+
+GEN_DMA_OBJS=x86-obj/dma_test_generation.o $(DMAMODEL_LIB_OBJS)
+x86-obj/generate_dma_test: $(GEN_DMA_OBJS)
+
+x86-obj/generate_multithread_dma_test: $(GEN_DMA_OBJS)

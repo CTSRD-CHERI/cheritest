@@ -29,13 +29,12 @@
 #include "DMAControl.h"
 #include "mips_assert.h"
 
+static unsigned long next = $seed;
 #define THREAD_COUNT $thread_count
 
 volatile uint8_t *source_addrs[] = { $source_addrs };
 volatile uint8_t *dest_addrs[]   = { $dest_addrs };
 dma_instruction dma_program[][]  = { $programs };
-
-static unsigned long next = $seed;
 
 #define RAND_LIMIT 32767
 

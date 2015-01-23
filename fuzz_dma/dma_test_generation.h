@@ -48,7 +48,8 @@ struct transfer_record {
 	struct transfer_record *next;
 };
 
-struct transfer_record *list_transfers(dma_instruction *program);
+struct transfer_record *list_transfers(dma_instruction *_program);
+void free_transfer_list(struct transfer_record *_current);
 
 dma_instruction *generate_random_dma_program(unsigned int _seed);
 

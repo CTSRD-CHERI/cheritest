@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 		int lower = atoi(argv[1]);
 		int upper = atoi(argv[2]);
 		for (int i = lower; i <= upper; ++i) {
-			print_test_information(atoi(argv[1]));
+			print_test_information(i);
 			printf("\n");
 		}
 	}

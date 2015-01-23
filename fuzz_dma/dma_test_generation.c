@@ -62,6 +62,7 @@ list_transfers(dma_instruction *program)
 {
 	struct transfer_record *false_head, *true_head, *tail;
         false_head = malloc(sizeof(struct transfer_record));
+	false_head->next = NULL;
 	tail = false_head;
 
 	struct dma_thread thread;
@@ -83,6 +84,17 @@ list_transfers(dma_instruction *program)
 	free(false_head);
 
 	return true_head;
+}
+
+void
+free_transfer_list(struct transfer_record *current)
+{
+	struct transfer_record *next;
+	while (current != NULL) {
+		next = current->next;
+		free(current);
+		current = next;
+	}
 }
 
 enum dma_program_node_type {
