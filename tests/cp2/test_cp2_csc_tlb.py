@@ -59,5 +59,5 @@ class test_cp2_csc_tlb(BaseBERITestCase):
     @attr('tlb')
     def test_cp2_csc_tlb_cause(self):
         '''Test that CP0 cause register is set correctly'''
-        self.assertRegisterEqual((self.MIPS.a7 >> 2) & 0x1f, 8, "CP0.Cause.ExcCode was not set correctly when capability store w inhibited in the TLB entry")
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x1f << 2, 8 << 2, "CP0.Cause.ExcCode was not set correctly when capability store w inhibited in the TLB entry")
 

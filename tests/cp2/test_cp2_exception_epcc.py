@@ -70,7 +70,7 @@ class test_cp2_exception_epcc(BaseBERITestCase):
     #
     @attr('capabilities')
     def test_trap_excode(self):
-        self.assertRegisterEqual((self.MIPS.s1 >> 2) & 0x1f, 13, "last exception not a trap")
+        self.assertRegisterMaskEqual(self.MIPS.s1, 0x1f << 2, 13 << 2, "last exception not a trap")
 
     #
     # Check that the exception handler is returning PCC-relative PCs rather
