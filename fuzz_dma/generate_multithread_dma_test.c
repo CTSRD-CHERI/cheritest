@@ -51,7 +51,6 @@ next_aligned(dma_address address, enum transfer_size width)
 	dma_address size_in_bytes = (1 << width);
 	dma_address mask = ~((1 << width) - 1);
 	return (address + size_in_bytes - 1) & mask;
-
 }
 
 void
@@ -121,7 +120,7 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 		}
 		// Only need to update at the end, because we include the
 		// source.
-		dram_position += (last_source + transfer_size);
+		dram_position += (last_source + (1 << transfer_size));
 	}
 	printf("$assert(1 ");
 
@@ -142,7 +141,7 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 				++access_number;
 			}
 		}
-		dram_position += (last_destination + transfer_size);
+		dram_position += (last_destination + (1 << transfer_size));
 	}
 
 
