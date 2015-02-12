@@ -35,15 +35,31 @@ from nose.plugins.attrib import attr
 
 class test_cp2_csc_ephemeral_invalid(BaseBERITestCase):
     @attr('capabilities')
-    def test_cp2_csc_ephemeral_invalid_1(self):
-        '''Test csc stored an invalid ephemeral capability'''
+    @attr('cap256')
+    def test_cp2_csc_ephemeral_invalid_dword0(self):
+        '''Test csc stored an invalid ephemeral capability (perms)'''
         self.assertRegisterEqual(self.MIPS.s0, 0x00000000000000fc, "csc did not write an invalid, ephemeral capability (perms)")
+
+    @attr('capabilities')
+    @attr('cap256')
+    def test_cp2_csc_ephemeral_invalid_dword1(self):
+        '''Test csc stored an invalid ephemeral capability (cursor)'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0000000000000000, "csc did not write an invalid, ephemeral capability (cursor)")
+
+    @attr('capabilities')
+    @attr('cap256')
+    def test_cp2_csc_ephemeral_invalid_dword2(self):
+        '''Test csc stored an invalid ephemeral capability (base)'''
         self.assertRegisterEqual(self.MIPS.s2, 0x0000000000000000, "csc did not write an invalid, ephemeral capability (base)")
+
+    @attr('capabilities')
+    @attr('cap256')
+    def test_cp2_csc_ephemeral_invalid_dword3(self):
+        '''Test csc stored an invalid ephemeral capability (length)'''
         self.assertRegisterEqual(self.MIPS.s3, 0xffffffffffffffff, "csc did not write an invalid, ephemeral capability (length)")
 
     @attr('capabilities')
-    def test_cp2_x_csc_ephermeral_2(self):
+    def test_cp2_x_csc_ephermeral_invalid_2(self):
         '''Test csc does not raise an exception when the capbility is ephemeral and invalid and we don't have Permit_Store_Ephemeral permission'''
         self.assertRegisterEqual(self.MIPS.a2, 0,
             "csc raised an exception when the capability was ephemeral, but invalid")
