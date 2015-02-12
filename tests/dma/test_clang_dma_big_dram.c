@@ -10,11 +10,11 @@
 #endif
 
 // This is as much as we can run on the simulator. Oh well!
-const uint64_t size = 0x4000;
+const uint64_t size = 0x2000;
 
-// Source starts offset, because otherwise it collides with the stack.
-uint64_t source     = 0x9000000000008000;
-uint64_t dest       = 0x9000000020000000;
+// Start offset, so we don't trash the test itself.
+uint64_t source     = 0x9000000020000000;
+uint64_t dest       = 0x9000000030000000;
 
 // We copy from the bottom 512MiB of memory into the top 512 MiB.
 // The program is loop unrolled to minimise the missed cycles due to the loop

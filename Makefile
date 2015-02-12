@@ -1380,7 +1380,7 @@ include dmamodel.mk
 DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 
 $(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
-	clang -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -Os -ffunction-sections -fno-builtin
+	clang -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections -fno-builtin
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	clang -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
@@ -1452,6 +1452,12 @@ $(OBJDIR)/test_%_cachedmulti.elf : $(OBJDIR)/test_%.o \
 # or hardware.
 #
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
+	$(OBJCOPY) -S -O binary $< $@
+
+# I instantiate this specifically so that it gets used to when test_clang_dma%
+# is used to build a test directly.
+
+$(OBJDIR)/startdramtest.mem: $(OBJDIR)/startdramtest.elf
 	$(OBJCOPY) -S -O binary $< $@
 
 #
