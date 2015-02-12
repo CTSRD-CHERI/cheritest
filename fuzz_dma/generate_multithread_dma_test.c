@@ -95,7 +95,7 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 	}
 	printf("$");
 
-	dma_address dram_position = DRAM_START, last_source, last_destination;
+	dma_address dram_position = DRAM_START;
 	dma_address *source_addrs = malloc(thread_count * sizeof(dma_address));
 	dma_address *dest_addrs = malloc(thread_count * sizeof(dma_address));
 
@@ -103,45 +103,44 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 	unsigned int transfer_size;
 
 	for (i = 0; i < thread_count; ++i) {
-		source_addrs[i] = dram_position;
 		current = transfer_list[i];
 		if (current != NULL) {
-			source_addrs[i] =
-				next_aligned(source_addrs[i], current->size);
+			dram_position =
+				next_aligned(dram_position, current->size);
+			source_addrs[i] = dram_position;
 		}
+
 		FOR_EACH(current, transfer_list[i]) {
 			transfer_size = (1 << current->size);
-			last_source = current->source;
+			dram_position = source_addrs[i] + current->source;
 			for (j = 0; j < transfer_size; ++j) {
-				printf("source_addrs[%d][%llu] = %d;",
-					i, current->source + j, access_number);
+				printf("*((volatile uint8_t *)0x%llx) = %d;",
+					dram_position, access_number);
+				++dram_position;
 				++access_number;
 			}
 		}
-		// Only need to update at the end, because we include the
-		// source.
-		dram_position += (last_source + (1 << transfer_size));
 	}
 	printf("$assert(1 ");
 
 	access_number = 0;
 	for (i = 0; i < thread_count; ++i) {
-		dest_addrs[i] = dram_position;
 		current = transfer_list[i];
 		if (current != NULL) {
-			dest_addrs[i] =
-				next_aligned(dest_addrs[i], current->size);
+			dram_position =
+				next_aligned(dram_position, current->size);
+			dest_addrs[i] = dram_position;
 		}
 		FOR_EACH(current, transfer_list[i]) {
 			transfer_size = (1 << current->size);
-			last_destination = current->destination;
+			dram_position = dest_addrs[i] + current->destination;
 			for (j = 0; j < transfer_size; ++j) {
-				printf("&& dest_addrs[%d][%llu] == %d ",
-					i, current->destination + j, access_number);
+				printf("&& *((volatile uint8_t *)0x%llx) == %d ",
+					dram_position, access_number);
+				++dram_position;
 				++access_number;
 			}
 		}
-		dram_position += (last_destination + (1 << transfer_size));
 	}
 
 
