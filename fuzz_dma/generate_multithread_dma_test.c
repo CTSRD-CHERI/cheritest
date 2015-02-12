@@ -87,7 +87,7 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 	}
 	printf("$");
 
-	dma_address dram_position = DRAM_START;
+	dma_address dram_position = DRAM_START, last_source, last_destination;
 	dma_address *source_addrs = malloc(thread_count * sizeof(dma_address));
 	dma_address *dest_addrs = malloc(thread_count * sizeof(dma_address));
 
@@ -98,13 +98,16 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 		source_addrs[i] = dram_position;
 		FOR_EACH(current, transfer_list[i]) {
 			transfer_size = (1 << current->size);
+			last_source = current->source;
 			for (j = 0; j < transfer_size; ++j) {
 				printf("source_addrs[%d][%llu] = %d;",
 					i, current->source + j, access_number);
 				++access_number;
 			}
-			dram_position += transfer_size;
 		}
+		// Only need to update at the end, because we include the
+		// source.
+		dram_position += (last_source + transfer_size);
 	}
 	printf("$assert(1 ");
 
@@ -113,13 +116,14 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 		dest_addrs[i] = dram_position;
 		FOR_EACH(current, transfer_list[i]) {
 			transfer_size = (1 << current->size);
+			last_destination = current->destination;
 			for (j = 0; j < transfer_size; ++j) {
 				printf("&& dest_addrs[%d][%llu] == %d ",
 					i, current->destination + j, access_number);
 				++access_number;
 			}
-			dram_position += transfer_size;
 		}
+		dram_position += (last_destination + transfer_size);
 	}
 
 	printf(");$");

@@ -48,7 +48,7 @@ def main():
     try:
         tests = subprocess.check_output([GENERATE_PROGRAM] + sys.argv[1:])
     except subprocess.CalledProcessError as ex:
-        print ex.output
+        print 'CALLED PROCESS ERROR', ex.output
         sys.exit(2)
 
     thread_count_min = int(sys.argv[1])
