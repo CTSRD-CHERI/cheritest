@@ -51,7 +51,7 @@ def main():
         for line in test_file:
             if line.strip().startswith('assert(1 &&'):
                 new_file.extend(humanise_asserts(line))
-            elif line.strip().startswith('*((volatile uint8_t *))'):
+            elif line.strip().startswith('*((volatile uint8_t *)'):
                 new_file.append(line.replace(';', ';\n\t'))
             elif line.strip().startswith('dma_instruction *dma_program[]'):
                 new_file.append(humanise_programs(line))
