@@ -81,10 +81,10 @@ def main():
                 source_addrs=source_addrs, dest_addrs=dest_addrs,
                 programs=programs, set_sources=set_sources, asserts=asserts))
 
-        thread_count += 1
-        if thread_count > thread_count_max:
-            seed += 1
-            thread_count = thread_count_min
+        seed += 1
+        if seed > seed_max:
+            thread_count += 1
+            seed = seed_min
 
     sys.exit(0)
 

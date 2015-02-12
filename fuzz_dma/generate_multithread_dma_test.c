@@ -45,6 +45,15 @@
 
 const dma_address DRAM_START = 0x9000000010000000;
 
+static inline dma_address
+next_aligned(dma_address address, enum transfer_size width)
+{
+	dma_address size_in_bytes = (1 << width);
+	dma_address mask = ~((1 << width) - 1);
+	return (address + size_in_bytes - 1) & mask;
+
+}
+
 void
 print_test_information(unsigned int thread_count, unsigned int seed)
 {
@@ -96,6 +105,11 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 
 	for (i = 0; i < thread_count; ++i) {
 		source_addrs[i] = dram_position;
+		current = transfer_list[i];
+		if (current != NULL) {
+			source_addrs[i] =
+				next_aligned(source_addrs[i], current->size);
+		}
 		FOR_EACH(current, transfer_list[i]) {
 			transfer_size = (1 << current->size);
 			last_source = current->source;
@@ -114,6 +128,11 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 	access_number = 0;
 	for (i = 0; i < thread_count; ++i) {
 		dest_addrs[i] = dram_position;
+		current = transfer_list[i];
+		if (current != NULL) {
+			dest_addrs[i] =
+				next_aligned(dest_addrs[i], current->size);
+		}
 		FOR_EACH(current, transfer_list[i]) {
 			transfer_size = (1 << current->size);
 			last_destination = current->destination;
@@ -125,6 +144,7 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 		}
 		dram_position += (last_destination + transfer_size);
 	}
+
 
 	printf(");$");
 	for (i = 0; i < thread_count; ++i) {
