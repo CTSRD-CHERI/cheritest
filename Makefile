@@ -1106,6 +1106,7 @@ CHERICTL=$(TOOLS_DIR_ABS)/debug/cherictl
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
 CHERISOCKET:= /tmp/$(USER)_beri_debug_socket
 SIM:= ${CHERIROOT_ABS}/sim
+DTB_FILE:=$(CHERIROOT_ABS)/sim.dtb
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
 	SIM_TRACE_OPTS?= +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug
@@ -1276,6 +1277,7 @@ RUN_TEST = \
 	for attempt in 0 1 2 4 5; do if \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
+	CHERI_DTB=$(DTB_FILE) \
 	BERI_DEBUG_SOCKET_0=$(CHERISOCKET)  $(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@; \
 	then break; else false; fi; done
