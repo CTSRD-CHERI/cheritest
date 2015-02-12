@@ -29,12 +29,13 @@
 #include "DMAControl.h"
 #include "mips_assert.h"
 
+#define DMA_THREAD_COUNT 4
 #define THREAD_COUNT $thread_count
 static unsigned long next = $seed;
 
 volatile uint8_t *source_addrs[] = { $source_addrs };
 volatile uint8_t *dest_addrs[]   = { $dest_addrs };
-dma_instruction dma_program[][]  = { $programs };
+dma_instruction *dma_program[]   = { $programs };
 
 #define RAND_LIMIT 32767
 
@@ -46,21 +47,21 @@ int myrand(void) {
 int test(void)
 {
 	int i;
-	int active_threads[];
+	int active_threads[THREAD_COUNT];
 	int active_thread_count = THREAD_COUNT;
 
 	$set_sources
 
 	for (i = 0; i < THREAD_COUNT; ++i) {
-		dma_thread_set_pc(i, dma_program[i]);
-		dma_thread_set_source_address(i, source_addrs[i]);
-		dma_thread_set_dest_address(i, dest_addrs[i]);
+		dma_set_pc(i, dma_program[i]);
+		dma_set_source_address(i, (uint64_t)source_addrs[i]);
+		dma_set_dest_address(i, (uint64_t)dest_addrs[i]);
 
 		active_threads[i] = i;
 	}
 
 	for (i = 0; i < THREAD_COUNT; ++i) {
-		dma_thread_start_transfer(thread_count);
+		dma_start_transfer(i);
 	}
 
 	while (active_thread_count != 0) {
@@ -75,9 +76,9 @@ int test(void)
 			thread_index[i] = myrand() % active_thread_count;
 			thread[i] = active_threads[thread_index[i]];
 		}
-		dma_thread_switch_to(thread[0]);
-		dma_thread_switch_to(thread[1]);
-		dma_thread_switch_to(thread[2]);
+		dma_switch_to(DMA_THREAD_COUNT, thread[0]);
+		dma_switch_to(DMA_THREAD_COUNT, thread[1]);
+		dma_switch_to(DMA_THREAD_COUNT, thread[2]);
 
 		int wait_periods = myrand() % 20;
 		for (i = 0; i < wait_periods; ++i) {

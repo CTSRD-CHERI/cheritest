@@ -70,7 +70,7 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 
 	/* Output information */
 	for (i = 0; i < thread_count; ++i) {
-		printf("{");
+		printf("(dma_instruction[]){");
 		for (j = 0; ; ++j) {
 			printf("0x%08x", program[i][j]);
 			if (program[i][j] == DMA_OP_STOP) {
@@ -122,16 +122,16 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 		}
 	}
 
-	printf(")$");
+	printf(");$");
 	for (i = 0; i < thread_count; ++i) {
-		printf("0x%llx", source_addrs[i]);
+		printf("(uint8_t *)0x%llx", source_addrs[i]);
 		if (i < (thread_count - 1)) {
 			printf(", ");
 		}
 	}
 	printf("$");
 	for (i = 0; i < thread_count; ++i) {
-		printf("0x%llx", dest_addrs[i]);
+		printf("(uint8_t *)0x%llx", dest_addrs[i]);
 		if (i < (thread_count - 1)) {
 			printf(", ");
 		}
