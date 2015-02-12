@@ -1272,14 +1272,20 @@ PREPARE_TEST = \
 # As a hack to work around bsim license problems which cause it to sporadically fail we repeat the sim
 # command several times until it succeeds. The for loop should be removed once the license server problem
 # is fixed.
-RUN_TEST = \
-	for attempt in 0 1 2 4 5; do if \
+
+RUN_TEST_COMMAND = \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	CHERI_DTB=$(DTB_FILE) \
 	BERI_DEBUG_SOCKET_0=$(CHERISOCKET)  $(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@; \
+
+REPEAT_5 = \
+	for attempt in 0 1 2 4 5; do if \
+	$(1) \
 	then break; else false; fi; done
+
+RUN_TEST = $(call REPEAT_5,$(RUN_TEST_COMMAND))
 
 # XXX jes212
 # Use the following version instead of the above (running a severely limited number of tests) if you wish
@@ -1408,10 +1414,13 @@ select_init: select_init.c
 	    #$(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
 	#$(LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
+$(OBJDIR)/startdramtest.elf: $(OBJDIR)/startdramtest.o $(TEST_LDSCRIPT)
+	$(LD) -EB -G0 raw.ld $< -o $@ -m elf64btsmip
+
 $(OBJDIR)/test_clang_dma%.elf : $(OBJDIR)/test_clang_dma%.o $(DMA_LIB_OBJS)\
 	    $(TEST_LDSCRIPT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
-	$(LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
+	$(LD) -EB -G0 -Ttest_dram.ld obj/lib.o $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
 $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_LDSCRIPT) \
@@ -1486,6 +1495,12 @@ $(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.mem $(SIM) $(CHERICTL)
 # Target to execute a Bluespec simulation of the test suite; memConv.py needs
 # fixing so that it accepts explicit sources and destinations but for now we
 # can use a temporary directory so that parallel builds work.
+$(LOGDIR)/test_clang_dma%.log: $(OBJDIR)/startdramtest.mem $(OBJDIR)/test_clang_dma%.mem $(SIM)
+	$(call PREPARE_TEST,$<) && \
+		cp $(PWD)/$(word 2, $^) . && \
+		$(call REPEAT_5, CHERI_KERNEL=$(notdir $(word 2, $^)) $(RUN_TEST_COMMAND)); \
+		$(CLEAN_TEST)
+
 $(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
 	$(call PREPARE_TEST,$<) && $(call RUN_TEST,$*); $(CLEAN_TEST)
 
