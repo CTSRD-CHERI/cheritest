@@ -837,8 +837,7 @@ TEST_DMA_FILES=					\
 		test_clang_dma_long_program.c	\
 		test_clang_dma_successive_programs.c \
 		test_clang_dma_nested_loop.c	\
-		test_clang_dma_irq.c		\
-		test_clang_dma_synth.c
+		test_clang_dma_irq.c
 else
 TEST_DMA_FILES=
 endif
@@ -1375,20 +1374,20 @@ include dmamodel.mk
 DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 
 $(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
-	clang -I$(DMADIR) -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -Os -ffunction-sections
+	clang -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -Os -ffunction-sections
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
-	clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
+	clang -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 # Once the assembler works, we can try this version too:
 #clang  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 
 # For some reasons, these need to be explicit, not implicit
 $(OBJDIR)/DMAAsm.o: DMAAsm.c
-	clang -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+	clang -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
 
 $(OBJDIR)/DMAControl.o: DMAControl.c
-	clang -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+	clang -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
 	mips-linux-gnu-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<

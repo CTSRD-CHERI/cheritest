@@ -46,13 +46,13 @@ int test(void)
 		++count;
 	}
 
-	dma_set_pc(dma_program);
-	dma_set_source_address(source);
-	dma_set_dest_address(dest);
+	dma_set_pc(0, dma_program);
+	dma_set_source_address(0, source);
+	dma_set_dest_address(0, dest);
 
-	dma_start_transfer();
+	dma_start_transfer(0);
 
-	while (!dma_ready()) {
+	while (!dma_thread_ready(0)) {
 		for (uint32_t stall = 0; stall < 1000; ++stall) {
 			DEBUG_NOP();
 			DEBUG_NOP();

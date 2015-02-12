@@ -28,16 +28,16 @@ int test(void)
 	dma_program[0] = DMA_OP_TRANSFER(TS_BITS_256);
 	dma_program[1] = dma_op_stop();
 
-	dma_set_pc(dma_program);
-	dma_set_source_address((uint64_t)source);
-	dma_set_dest_address((uint64_t)dest);
+	dma_set_pc(0, dma_program);
+	dma_set_source_address(0, (uint64_t)source);
+	dma_set_dest_address(0, (uint64_t)dest);
 
-	dma_start_transfer();
+	dma_start_transfer(0);
 
 	// Aggressive polling clogs the bus, but this catches a bug where the
 	// DMA would report that it had finished before all the write
 	// responses were returned.
-	while (!dma_ready()) {
+	while (!dma_thread_ready(0)) {
 	}
 
 	assert(dest[0] == 1);
