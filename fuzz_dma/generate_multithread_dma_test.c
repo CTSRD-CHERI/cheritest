@@ -99,8 +99,8 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 		FOR_EACH(current, transfer_list[i]) {
 			transfer_size = (1 << current->size);
 			for (j = 0; j < transfer_size; ++j) {
-				printf("source_addrs[%d][%d] = %d;",
-						i, j, access_number);
+				printf("source_addrs[%d][%llu] = %d;",
+					i, current->source + j, access_number);
 				++access_number;
 			}
 			dram_position += transfer_size;
@@ -114,8 +114,8 @@ print_test_information(unsigned int thread_count, unsigned int seed)
 		FOR_EACH(current, transfer_list[i]) {
 			transfer_size = (1 << current->size);
 			for (j = 0; j < transfer_size; ++j) {
-				printf("&& dest_addrs[%d][%d] == %d ",
-						i, j, access_number);
+				printf("&& dest_addrs[%d][%llu] == %d ",
+					i, current->destination + j, access_number);
 				++access_number;
 			}
 			dram_position += transfer_size;
