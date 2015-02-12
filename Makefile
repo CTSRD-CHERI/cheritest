@@ -1374,7 +1374,7 @@ include dmamodel.mk
 DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 
 $(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
-	clang -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -Os -ffunction-sections
+	clang -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -Os -ffunction-sections -fno-builtin
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	clang -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections

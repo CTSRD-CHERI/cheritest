@@ -49,6 +49,8 @@ int test(void)
 	int i;
 	int active_threads[THREAD_COUNT];
 	int active_thread_count = THREAD_COUNT;
+	// Threads to switch to
+	int thread_index[3], thread[3];
 
 	$set_sources
 
@@ -58,6 +60,11 @@ int test(void)
 		dma_set_dest_address(i, (uint64_t)dest_addrs[i]);
 
 		active_threads[i] = i;
+	}
+
+	for (i = 0; i < 3; ++i) {
+		thread_index[i] = myrand() % active_thread_count;
+		thread[i] = active_threads[thread_index[i]];
 	}
 
 	for (i = 0; i < THREAD_COUNT; ++i) {
@@ -70,12 +77,6 @@ int test(void)
 		// we also don't want to switch to inactive threads. My
 		// informal solution is to to do three switches in quick
 		// succession, wait, and then test for copmleteness.
-
-		int thread_index[3], thread[3];
-		for (i = 0; i < 3; ++i) {
-			thread_index[i] = myrand() % active_thread_count;
-			thread[i] = active_threads[thread_index[i]];
-		}
 		dma_switch_to(DMA_THREAD_COUNT, thread[0]);
 		dma_switch_to(DMA_THREAD_COUNT, thread[1]);
 		dma_switch_to(DMA_THREAD_COUNT, thread[2]);
@@ -96,6 +97,11 @@ int test(void)
 			active_threads[thread_index[2]] =
 				active_threads[active_thread_count - 1];
 			--active_thread_count;
+		}
+
+		for (i = 0; i < 3; ++i) {
+			thread_index[i] = myrand() % active_thread_count;
+			thread[i] = active_threads[thread_index[i]];
 		}
 	}
 
