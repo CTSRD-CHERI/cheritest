@@ -83,9 +83,12 @@ test:		.ent test
 		dli $a4, 0
 write_loop:
 		sd $a4, 0($a4)
-		daddi $a4, $a4, 64
+		sd $a4, 128($a4)
+		sd $a4, 256($a4)
+		sd $a4, 384($a4)
+		daddi $a4, $a4, 512
 		bnez $a3, write_loop
-		daddi $a3, $a3, -64
+		daddi $a3, $a3, -512
 		
 		dli $a3, 0x40000
 read_loop:
