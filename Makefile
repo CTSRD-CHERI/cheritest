@@ -1049,7 +1049,9 @@ and not mtc0signex \
 and not swi \
 and not syncistep \
 and not smalltlb \
+and not beri2tlb \
 and not gxemultlb \
+and not beri2cache \
 and not watch \
 and not deterministic_random \
 and not noextendedtlb \
@@ -1123,6 +1125,8 @@ NOSEPRED+=and not lladdr
 NOSEPRED+=and not extendedtlb
 NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb
+NOSEPRED+=and not beri1tlb
+NOSEPRED+=and not beri1cache
 NOSEPRED+=and not largepage
 NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
@@ -1130,6 +1134,8 @@ else
 NOSEPRED+=and not noextendedtlb
 NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb
+NOSEPRED+=and not beri2tlb
+NOSEPRED+=and not beri2cache
 ifeq ($(GENERIC_L1),1)
 NOSEPRED+=and not bigtlb
 endif
