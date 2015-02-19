@@ -1016,6 +1016,10 @@ and not floatexception  \
 and not floatechonan    \
 and not smalltlb        \
 and not bigtlb          \
+and not beri1tlb	\
+and not beri2tlb	\
+and not beri1cache	\
+and not beri2cache	\
 and not extendedtlb	\
 and not enablelargetlb  \
 and not invalidateL2    \
