@@ -241,7 +241,7 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('beri2cache')
     def test_config1_il_beri2(self):
         '''Test the initial value of CP0.Config1.IL'''
-        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 19, 4 << 19, "CP0.Config1.IL did not have the expected value")
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 19, 3 << 19, "CP0.Config1.IL did not have the expected value")
 
     @attr('beri1cache')
     def test_config1_is_beri1(self):
