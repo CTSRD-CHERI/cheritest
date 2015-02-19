@@ -223,6 +223,36 @@ class test_cp0_reg_init(BaseBERITestCase):
         '''Test the initial value of CP0.Config1.DS'''
         self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 13, 3 << 13, "CP0.Config1.DS did not have the expected value")
 
+    @attr('beri1cache')
+    def test_config1_ia_beri1(self):
+        '''Test the initial value of CP0.Config1.IA'''
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 16, 0 << 16, "CP0.Config1.IA did not have the expected value")
+
+    @attr('beri2cache')
+    def test_config1_ia_beri2(self):
+        '''Test the initial value of CP0.Config1.IA'''
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 16, 1 << 16, "CP0.Config1.IA did not have the expected value")
+
+    @attr('beri1cache')
+    def test_config1_il_beri1(self):
+        '''Test the initial value of CP0.Config1.IL'''
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 19, 4 << 19, "CP0.Config1.IL did not have the expected value")
+
+    @attr('beri2cache')
+    def test_config1_il_beri2(self):
+        '''Test the initial value of CP0.Config1.IL'''
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 19, 4 << 19, "CP0.Config1.IL did not have the expected value")
+
+    @attr('beri1cache')
+    def test_config1_is_beri1(self):
+        '''Test the initial value of CP0.Config1.IS'''
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 22, 3 << 22, "CP0.Config1.IS did not have the expected value")
+
+    @attr('beri2cache')
+    def test_config1_is_beri2(self):
+        '''Test the initial value of CP0.Config1.IS'''
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 22, 3 << 22, "CP0.Config1.IS did not have the expected value")
+
     @attr('beri2tlb')
     def test_config1_mmu_size_beri2(self):
         '''Test the initial value of CP0.Config1.MMU_Size'''
@@ -233,6 +263,7 @@ class test_cp0_reg_init(BaseBERITestCase):
         '''Test the initial value of CP0.Config1.MMU_Size'''
         self.assertRegisterMaskEqual(self.MIPS.a7, 0x3f << 25, (48 - 1)<< 25, "CP0.Config1.MMU_Size had an unexpected value")
 
+    
     @attr('config2')
     def test_config1_continuation(self):
         '''Test that CP0.Config1.M is set'''
