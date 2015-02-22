@@ -1609,9 +1609,18 @@ nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
 
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
+
 nosetest: nosetests_uncached.xml
 
 nosetest_cached: nosetests_cached.xml
+
+nosetests_multi: nosetests_multi.xml
+
+nosetests_cachedmulti: nosetests_cachedmulti.xml
+
+#
+# Merge resuls of cached and uncached tests
+#
 
 nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 	./xmlcat nosetests_uncached.xml nosetests_cached.xml > nosetests_combined.xml
@@ -1670,29 +1679,29 @@ gxemul-build:
 	unzip tools/gxemul/gxemul-testversion.zip -d tools/gxemul/
 	cd $(GXEMUL_BINDIR) && ./configure && $(MAKE)
 
-l3-nosetest: l3-nosetest.xml
+nosetests_l3: nosetests_l3.xml
 
-l3-nosetest-cached: l3-nosetest-cached.xml
+nosetests_l3_cached: nosetests_l3_cached.xml
 
-l3-nosetest-multi: l3-nosetest-multi.xml
+nosetests_l3__multi: nosetests_l3_multi.xml
 
-l3-nosetest-cachedmulti: l3-nosetest-cachedmulti.xml
+nosetests_l3_cachedmulti: nosetests_l3_cachedmulti.xml
 
-l3-nosetest.xml: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_l3.xml: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim LOGDIR=$(L3_LOGDIR) nosetests --with-xunit \
 	    --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) $(TESTDIRS) || true
 
-l3-nosetest-cached.xml: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
+nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(L3_LOGDIR) nosetests \
 	    --with-xunit --xunit-file=nosetests_l3_cached.xml $(L3_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-l3-nosetest-multi.xml: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
+nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim MULTI1=1 LOGDIR=$(L3_LOGDIR) nosetests \
 	    --with-xunit --xunit-file=nosetests_l3_multi.xml $(L3_NOSEFLAGS) \
             $(TESTDIRS) || true
 
-l3-nosetest-cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
+nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim CACHED=1 MULTI1=1 LOGDIR=$(L3_LOGDIR) nosetests \
 	    --with-xunit --xunit-file=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
             $(TESTDIRS) || true
