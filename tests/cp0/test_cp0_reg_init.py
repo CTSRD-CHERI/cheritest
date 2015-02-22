@@ -171,7 +171,12 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('watch')
     def test_config1_watch(self):
         '''Test that CP0.Config1.WR is set'''
-        self.assertRegisterMaskEqual(self.MIPS.a7, 0x1 << 3, 1 << 3, "CP0.Config1.CA was set")
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x1 << 3, 1 << 3, "CP0.Config1.WR was not set")
+
+    @attr('nowatch')
+    def test_config1_nowatch(self):
+        '''Test that CP0.Config1.WR is not set'''
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x1 << 3, 0 << 3, "CP0.Config1.WR was set")
 
     @attr('beri1tlb')
     def test_config1_mmu_size_beri1(self):

@@ -1175,6 +1175,8 @@ NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not 
 ifdef WONTFIX
 NOSEPRED+=and not jump_unaligned
 endif
+else
+NOSEPRED+=and not nowatch
 endif
 ifneq ($(NOSEPRED),)
 NOSEFLAGS?=-A "$(NOSEPRED) and not uncached"
