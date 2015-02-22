@@ -1657,18 +1657,22 @@ altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
 
 hwsim-nosetest: $(CHERISOCKET) all $(HWSIM_TEST_LOGS)
 	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(HWSIM_LOGDIR) nosetests \
-	    $(NOSEFLAGS_UNCACHED) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
+	$(NOSEFLAGS_UNCACHED) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
 
 hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) nosetests \
 	    $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
 
-gxemul-nosetest: $(GXEMUL_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_gxemul: nosetests_gxemul_uncached.xml
+
+nosetests_gxemul_uncached.xml: $(GXEMUL_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/gxemul CACHED=0 nosetests --with-xunit \
 	    --xunit-file=nosetests_gxemul_uncached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-gxemul-nosetest_cached: $(GXEMUL_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
+nosetests_gxemul_cached: nosetests_gxemul_cached.xml
+
+nosetests_gxemul_cached.xml: $(GXEMUL_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/gxemul CACHED=1 nosetests --with-xunit \
 	    --xunit-file=nosetests_gxemul_cached.xml $(GXEMUL_NOSEFLAGS) \
 	    $(TESTDIRS) || true
@@ -1683,7 +1687,7 @@ nosetests_l3: nosetests_l3.xml
 
 nosetests_l3_cached: nosetests_l3_cached.xml
 
-nosetests_l3__multi: nosetests_l3_multi.xml
+nosetests_l3_multi: nosetests_l3_multi.xml
 
 nosetests_l3_cachedmulti: nosetests_l3_cachedmulti.xml
 
