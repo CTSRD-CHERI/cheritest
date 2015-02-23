@@ -289,7 +289,8 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('float')
     @attr('watch')
     @attr('tlb')
-    @attr('bigtlb')
+    @attr('beri1tlb')
+    @attr('beri1cache')
     @attr('capabilities')
     def test_config1_reg_float(self):
         '''Test initial value of CP0.config1'''
@@ -299,7 +300,8 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('nofloat')
     @attr('watch')
     @attr('tlb')
-    @attr('smalltlb')
+    @attr('beri2tlb')
+    @attr('beri2cache')
     @attr('capabilities')
     def test_config1_reg_smalltlb(self):
         '''Test initial value of CP0.config1'''

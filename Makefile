@@ -1141,7 +1141,7 @@ NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not beri2tlb
 NOSEPRED+=and not beri2cache
 ifeq ($(GENERIC_L1),1)
-NOSEPRED+=and not bigtlb
+NOSEPRED+=and not beri1cache
 endif
 NOSEPRED+=and not syncistep
 endif
