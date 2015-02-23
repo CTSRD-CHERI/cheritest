@@ -1142,6 +1142,9 @@ NOSEPRED+=and not beri2tlb
 NOSEPRED+=and not beri2cache
 ifeq ($(GENERIC_L1),1)
 NOSEPRED+=and not beri1cache
+# The parser for the ICache dump hard-codes the size of the cache,
+# so isn't expected to work if the cache size changes.
+NOSEPRED+=and not dumpicache
 endif
 NOSEPRED+=and not syncistep
 endif
