@@ -730,7 +730,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csc_tlb.s		\
 		test_cp2_csc_tlb.s		\
 		test_cp2_x_csetoffset_sealed.s	\
-		test_cp2_x_cincoffset_sealed.s
+		test_cp2_x_cincoffset_sealed.s	\
+		test_cp2_x_ccall_type
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
@@ -1063,6 +1064,8 @@ and not csettype
 
 ifneq ($(TEST_CP2),1)
 L3_NOSEPRED+=and not capabilities and not clang
+else
+L3_NOSEPRED+=and not ccall_hw_1
 endif
 
 ifneq ($(CLANG),1)
@@ -1158,6 +1161,10 @@ NOSEPRED+=and not float
 endif
 ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities and not clang
+else
+ifeq ($(BERI_VER),2)
+NOSEPRED+=and not ccall_hw_1
+endif
 endif
 ifneq ($(CLANG),1)
 NOSEPRED+=and not clang and not dmaclang
