@@ -1161,10 +1161,6 @@ NOSEPRED+=and not float
 endif
 ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities and not clang
-else
-ifeq ($(BERI_VER),2)
-NOSEPRED+=and not ccall_hw_1
-endif
 endif
 ifneq ($(CLANG),1)
 NOSEPRED+=and not clang and not dmaclang
