@@ -50,6 +50,7 @@ CLANG?=1
 MULTI?=0
 MT?=0
 DMA?=0
+DMA_VIRT?=0
 RMA?=0
 FUZZ_DMA?=0
 FUZZ_DMA_ONLY?=0
@@ -108,10 +109,6 @@ endif
 
 ifdef COP1_ONLY
 TESTDIRS= $(TESTDIR)/fpu
-endif
-
-ifdef DMA_ONLY
-TESTDIRS=$(TESTDIR)/dma
 endif
 
 ifdef TEST_TRACE
@@ -843,6 +840,10 @@ else
 TEST_DMA_FILES=
 endif
 
+ifeq ($(DMA_VIRT), 1)
+TEST_DMA_FILES+=test_clang_dma_virt_translate.c
+endif
+
 TEST_CLANG_FILES=				\
 		test_clang_cast.c		\
 		test_clang_cursor.c		\
@@ -954,10 +955,6 @@ endif
 
 ifdef COP1_ONLY
 TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
-endif
-
-ifdef DMA_ONLY
-TEST_FILES=	$(RAW_DMA_FILES) $(TEST_DMA_FILES)
 endif
 
 ifeq ($(FUZZ_DMA_ONLY), 1)

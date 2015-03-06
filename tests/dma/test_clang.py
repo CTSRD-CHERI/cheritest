@@ -33,10 +33,14 @@ from nose.plugins.attrib import attr
 # Cached or uncached mode.
 CACHED = bool(int(os.environ.get("CACHED", "0")))
 MULTI = bool(int(os.environ.get("MULTI1", "0")))
+DMA_VIRT = bool(int(os.environ.get("DMA_VIRT", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-TEST_FILE_RE=re.compile('test_clang_\w+\.c')
+if DMA_VIRT:
+    TEST_FILE_RE=re.compile('test_clang_\w+\.c')
+else:
+    TEST_FILE_RE=re.compile('test_clang_(?!dma_virt)\w+\.c')
 TEST_DIR ='tests/dma'
 
 #Not derived from unittest.testcase because we wish test_clang to
