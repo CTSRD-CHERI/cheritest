@@ -1117,7 +1117,7 @@ ifdef DEBUG
 	SIM_TRACE_OPTS?= +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug
 else
 ifdef TRACE
-	SIM_TRACE_OPTS?=+trace +cTrace +tlbTrace +instructionBasedCycleCounter +dma
+	SIM_TRACE_OPTS?=+trace +cTrace +tlbTrace +instructionBasedCycleCounter +dma +periphBridge
 else
 	SIM_TRACE_OPTS?=
 endif

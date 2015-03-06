@@ -28,11 +28,11 @@ int test(void)
 
 	assert(get_dma_irq() == false);
 
-	dma_set_pc(0, dma_program);
+	dma_set_pc(DMA_PHYS, 0, dma_program);
 
-	dma_write_control(0, DMA_START_TRANSFER | DMA_ENABLE_IRQ);
+	dma_write_control(DMA_PHYS, 0, DMA_START_TRANSFER | DMA_ENABLE_IRQ);
 
-	while (!dma_thread_ready(0)) {
+	while (!dma_thread_ready(DMA_PHYS, 0)) {
 		DEBUG_NOP();
 		DEBUG_NOP();
 		DEBUG_NOP();
@@ -41,7 +41,7 @@ int test(void)
 
 	assert(get_dma_irq() == true);
 
-	dma_write_control(0, DMA_CLEAR_IRQ);
+	dma_write_control(DMA_PHYS, 0, DMA_CLEAR_IRQ);
 
 	DEBUG_NOP();
 	DEBUG_NOP();

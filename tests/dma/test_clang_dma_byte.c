@@ -19,13 +19,13 @@ int test(void)
 	dma_program[0] = dma_op_transfer(TS_BITS_8);
 	dma_program[1] = dma_op_stop();
 
-	dma_set_pc(0, dma_program);
-	dma_set_source_address(0, (uint64_t)&source);
-	dma_set_dest_address(0, (uint64_t)&dest);
+	dma_set_pc(DMA_PHYS, 0, dma_program);
+	dma_set_source_address(DMA_PHYS, 0, (uint64_t)&source);
+	dma_set_dest_address(DMA_PHYS, 0, (uint64_t)&dest);
 
-	dma_start_transfer(0);
+	dma_start_transfer(DMA_PHYS, 0);
 
-	while (!dma_thread_ready(0)) {
+	while (!dma_thread_ready(DMA_PHYS, 0)) {
 		asm("nop");
 		asm("nop");
 		asm("nop");

@@ -3,7 +3,7 @@
 #include "mips_assert.h"
 #include "stdint.h"
 
-static volatile void
+static volatile inline void
 add_tlb_mapping(uint64_t virtual_pn, uint64_t physical_pn_0,
 		uint64_t physical_pn_1)
 {
@@ -15,20 +15,16 @@ add_tlb_mapping(uint64_t virtual_pn, uint64_t physical_pn_0,
 
 	uint64_t page_mask = 0;
 	uint64_t entry_hi = virtual_pn << 13;
-	// & 7 sets Valid, Dirty (Writeble) and Global bit so that ASID
+	// | 7 sets Valid, Dirty (Writeble) and Global bit so that ASID
 	// comparison is skipped
-	uint64_t entry_lo0 = (physical_pn_0 << 6) & 7;
-	uint64_t entry_lo1 = (physical_pn_1 << 6) & 7;
+	uint64_t entry_lo0 = (physical_pn_0 << 6) | 7;
+	uint64_t entry_lo1 = (physical_pn_1 << 6) | 7;
 
-	asm (
-		"dmtc0 %0, $5;"
-		"dmtc0 %1, $2;"
-		"dmtc0 %2, $3;"
-		"dmtc0 %3, $10;"
-		"tlbwr"
-		: /* No outputs */
-		: "r"(page_mask), "r"(entry_lo0), "r"(entry_lo1), "r"(entry_hi)
-	    );
+	asm ("dmtc0 %0, $5"  : : "r"(page_mask));
+	asm ("dmtc0 %0, $2"  : : "r"(entry_lo0));
+	asm ("dmtc0 %0, $3"  : : "r"(entry_lo1));
+	asm ("dmtc0 %0, $10" : : "r"(entry_hi));
+	asm ("tlbwr");
 }
 
 dma_instruction dma_program_physical[] = {
@@ -36,36 +32,36 @@ dma_instruction dma_program_physical[] = {
 	DMA_OP_STOP
 };
 
-// Let's arbitrarily map virtual pages 40 and 41 to physical pages 11
-// and 73. Let's put the program into physical page 11, and the data
-// in 73.
+// Let's arbitrarily map virtual pages 40 and 41 to physical pages 0x10011 and
+// 0x10073. They are high so we know they're in DRAM.Let's put the program into
+// physical page 0x10011, and the data in 0x10073.
 
-#define PHYSICAL_START		((void *)0x9000000000000000)
-#define PHYS_P0_START		((void *)(PHYSICAL_START + (11 << 13)))
-#define PHYS_P1_START		((void *)(PHYSICAL_START + (73 << 13)))
-#define VIRT_P0_START		((void *)(40 << 13))
-#define VIRT_P1_START		((void *)(41 << 13))
+#define PHYSICAL_START	((volatile void *)0x9000000000000000)
+#define PHYS_P0_START	((volatile void *)(PHYSICAL_START + (0x10011 << 12)))
+#define PHYS_P1_START	((volatile void *)(PHYSICAL_START + (0x10073 << 12)))
+#define VIRT_P0_START	((volatile void *)(40 << 12))
+#define VIRT_P1_START	((volatile void *)(41 << 12))
 
 int test(void) {
-	add_tlb_mapping(20, 11, 73);
+	add_tlb_mapping(20, 0x10011, 0x10073);
 
-	*(uint64_t *)PHYS_P0_START = *(uint64_t *)(dma_program_physical);
-	*(uint64_t *)PHYS_P1_START = 0xFEEDBEDE;
+	*(volatile uint64_t *)PHYS_P0_START = *(uint64_t *)(dma_program_physical);
+	*(volatile uint64_t *)PHYS_P1_START = 0xFEEDBEDE;
 
-	dma_set_pc(0, VIRT_P0_START);
-	dma_set_source_address(0, (uint64_t)VIRT_P1_START);
-	dma_set_dest_address(0, (uint64_t)(VIRT_P1_START + 8));
+	dma_set_pc(DMA_VIRT, 0, VIRT_P0_START);
+	dma_set_source_address(DMA_VIRT, 0, (uint64_t)VIRT_P1_START);
+	dma_set_dest_address(DMA_VIRT, 0, (uint64_t)(VIRT_P1_START + 8));
 
-	dma_start_transfer(0);
+	dma_start_transfer(DMA_VIRT, 0);
 
-	while (!dma_thread_ready(0)) {
+	while (!dma_thread_ready(DMA_VIRT, 0)) {
 		DEBUG_NOP();
 		DEBUG_NOP();
 		DEBUG_NOP();
 		DEBUG_NOP();
 	}
 
-	assert(*(uint64_t *)(PHYS_P1_START + 8) == 0xFEEDBEDE);
+	assert(*(volatile uint64_t *)(PHYS_P1_START + 8) == 0xFEEDBEDE);
 
 	return 0;
 }
