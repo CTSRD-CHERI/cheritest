@@ -50,7 +50,7 @@ class test_tlb_tlbwr_ext(BaseBERITestCase):
 
     # This test depends on the TLB having the same size and PRNG as BERI1
     @attr('tlb')
-    @attr('bigtlb')
+    @attr('beri1tlb')
     @attr('deterministic_random')
     def test_tlb_tlbwr_ext_4(self):
         '''Test that the TLB entry for page 1 was evicted to index 13'''
@@ -58,7 +58,7 @@ class test_tlb_tlbwr_ext(BaseBERITestCase):
 
     # This test depends on the TLB having the same size and PRNG as BERI1
     @attr('tlb')
-    @attr('bigtlb')
+    @attr('beri1tlb')
     @attr('deterministic_random')
     def test_tlb_tlbwr_ext_5(self):
         '''Test that the TLB entry for page 129 was evicted to index 12'''

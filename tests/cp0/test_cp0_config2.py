@@ -41,37 +41,37 @@ class test_cp0_config2(BaseBERITestCase):
             "CP0 does not have config register 2")
 
     @attr('config2')
-    @attr('bigtlb')
+    @attr('beri1cache')
     def test_cp0_config2_sa_beri1(self):
         '''Test the value of CP0.Config2.SA'''
         self.assertRegisterMaskEqual(self.MIPS.a2, 0xf, 3, "Config2 has unexpected value for L2 cache associativity")
 
     @attr('config2')
-    @attr('smalltlb')
+    @attr('beri2cache')
     def test_cp0_config2_sa_beri2(self):
         '''Test the value of CP0.Config2.SA'''
         self.assertRegisterMaskEqual(self.MIPS.a2, 0xf, 3, "Config2 has unexpected value for L2 cache associativity")
 
     @attr('config2')
-    @attr('bigtlb')
+    @attr('beri1cache')
     def test_cp0_config2_sl_beri1(self):
         '''Test the value of CP0.Config2.SL'''
         self.assertRegisterMaskEqual(self.MIPS.a2, 0xf0, 0x60, "Config2 has unexpected value for L2 cache line size")
 
     @attr('config2')
-    @attr('smalltlb')
+    @attr('beri2cache')
     def test_cp0_config2_sl_beri2(self):
         '''Test the value of CP0.Config2.SL'''
         self.assertRegisterMaskEqual(self.MIPS.a2, 0xf0, 0x40, "Config2 has unexpected value for L2 cache line size")
 
     @attr('config2')
-    @attr('bigtlb')
+    @attr('beri1cache')
     def test_cp0_config2_ss_beri1(self):
         '''Test the value of CP0.Config2.SS'''
         self.assertRegisterMaskEqual(self.MIPS.a2, 0xf00, 0x100, "Config2 has unexpected value for number of L2 index positions")
 
     @attr('config2')
-    @attr('smalltlb')
+    @attr('beri2cache')
     def test_cp0_config2_ss_beri2(self):
         '''Test the value of CP0.Config2.SS'''
         self.assertRegisterMaskEqual(self.MIPS.a2, 0xf00, 0x600, "Config2 has unexpected value for number of L2 index positions")
