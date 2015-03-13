@@ -67,14 +67,8 @@ test:		.ent test
 		candperm $c1, $c1, $t0
 
 		#
-		# Write $c1 to memory, overwrite its otype field in memory,
-		# and load it back in again. The write to the otype field
-		# should clear the tag bit.
-		dla	$t0, cap1
-		cscr	$c1, $t0($c0)
-		dli	$t1, 0
-		sd	$t1, 8($t0)
-		clcr	$c1, $t0($c0)
+		# Clear the tag bit of $c1.
+		ccleartag $c1, $c1
 
 		dli	$t1, 2
 		csetlen $c1, $c1, $t1 # This should raise a C2E exception
