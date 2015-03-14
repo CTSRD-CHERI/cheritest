@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2012,2014 Robert M. Norton
+# Copyright (c) 2012, 2014 Robert M. Norton
 # Cipyright (c) 2014 Michael Roe
 # All rights reserved.
 #
