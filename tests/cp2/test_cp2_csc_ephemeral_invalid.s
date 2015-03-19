@@ -1,5 +1,6 @@
 #-
-# Copyright (c) 2012-2014 Michael Roe, Robert M. Norton
+# Copyright (c) 2012-2014 Michael Roe
+# Copyright (c) 2012-2014 Robert M. Norton
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of

@@ -1,5 +1,6 @@
 #-
-# Copyright (c) 2014 Jonathan Woodruff, Robert M. Norton
+# Copyright (c) 2014 Jonathan Woodruff
+# Copyright (c) 2014 Robert M. Norton
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of

@@ -1,3 +1,50 @@
+#
+# Copyright (c) 2013-2014 Alan A. Mujumdar
+# Copyright (c) 2014 SRI International
+# Copyright (c) 2012 Benjamin Thorner
+# Copyright (c) 2013-2015 Colin Rothwell
+# Copyright (c) 2012, 2014 David T. Chisnall
+# Copyright (c) 2011-2014 Jonathan Woodruff
+# Copyright (c) 2012-2015 Michael Roe
+# Copyright (c) 2015 Paul J. Fox
+# Copyright (c) 2012 Philip Paeps
+# Copyright (c) 2011-2014 Robert M. Norton
+# Copyright (c) 2011-2012 Robert N. M. Watson
+# Copyright (c) 2011 William M. Morland
+# Copyright (c) 2014 Joseph Stoy
+# Copyright (c) 2011-2012 Steven J. Murdoch
+#
+# All rights reserved.
+#
+# This software was developed by SRI International and the University of
+# Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-10-C-0237
+# ("CTSRD"), as part of the DARPA CRASH research programme.
+# This software was developed by SRI International and the University of
+# Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-11-C-0249
+# ("MRC2"), as part of the DARPA MRC research programme.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+#
+
 
 # Build system for CHERI regression tests.  Tests fall into three categories:
 #
@@ -1387,6 +1434,7 @@ $(OBJDIR)/test_%.o : test_%.s
 
 # Put DMA model makefile into its own file. This one is already ludicrously
 # large.
+ifeq ($(DMA),1)
 DMADIR=$(CHERILIBS_ABS)/peripherals/DMA
 vpath DMA% $(DMADIR)
 
@@ -1397,18 +1445,20 @@ DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 $(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 	clang -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections -fno-builtin
 
-$(OBJDIR)/test_clang%.o : test_clang%.c
-	clang -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
-
-# Once the assembler works, we can try this version too:
-#clang  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
-
 # For some reasons, these need to be explicit, not implicit
 $(OBJDIR)/DMAAsm.o: DMAAsm.c
 	clang -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
 
 $(OBJDIR)/DMAControl.o: DMAControl.c
 	clang -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+endif
+
+
+# Once the assembler works, we can try this version too:
+#clang  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
+
+$(OBJDIR)/test_clang%.o : test_clang%.c
+	clang -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
 	mips-linux-gnu-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
