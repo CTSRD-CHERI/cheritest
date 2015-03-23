@@ -215,9 +215,9 @@ print_virtualised_test_information(uint thread_count, uint seed)
 	size_t addr_arr_size = thread_count * sizeof(dma_address);
 	// Allocate contiguously so we can easily check for duplicates
 	dma_address *source_phys_pns = malloc(2 * addr_arr_size);
-	dma_address *dest_phys_pns = source_phys_pns + addr_arr_size;
+	dma_address *dest_phys_pns = source_phys_pns + thread_count;
 	dma_address *source_virt_pns = malloc(2 * addr_arr_size);
-	dma_address *dest_virt_pns = source_virt_pns + addr_arr_size;
+	dma_address *dest_virt_pns = source_virt_pns + thread_count;
 
 	dma_address next_addr;
 
@@ -233,7 +233,7 @@ print_virtualised_test_information(uint thread_count, uint seed)
 			next_addr = addr_in_range(MIN_PHYS_PAGE, MAX_PHYS_PAGE);
 			next_addr &= ~1;
 		} while (in_addr_array(next_addr, source_phys_pns,
-					i + addr_arr_size));
+					i + thread_count));
 		dest_phys_pns[i] = next_addr;
 
 		do {
@@ -244,7 +244,7 @@ print_virtualised_test_information(uint thread_count, uint seed)
 		do {
 			next_addr = addr_in_range(0, VIRT_PAGE_COUNT) & ~1;
 		} while (in_addr_array(next_addr, source_virt_pns,
-					i + addr_arr_size));
+					i + thread_count));
 		dest_virt_pns[i] = next_addr;
 	}
 
@@ -313,9 +313,8 @@ print_virtualised_test_information(uint thread_count, uint seed)
 	free(programs);
 	free(transfer_lists);
 	free(source_phys_pns);
-	free(dest_virt_pns);
+	free(source_virt_pns);
 	free(source_virt_addrs);
-	free(dest_virt_pns);
 }
 
 void
