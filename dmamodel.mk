@@ -1,6 +1,6 @@
 CC=clang
 CPP=clang++
-CFLAGS=-march=x86-64 -Wall -Werror -g -DDMAMODEL
+CFLAGS=-march=x86-64 -Wall -Werror -g -DDMAMODEL -Ifuzz_dma
 CPPFLAGS=-std=c++11
 
 CHERILIBS?=../../cherilibs/trunk

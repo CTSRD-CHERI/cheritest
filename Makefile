@@ -1445,7 +1445,7 @@ include dmamodel.mk
 DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 
 $(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
-	clang -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections -fno-builtin
+	clang -Ifuzz_dma -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections -fno-builtin
 
 # For some reasons, these need to be explicit, not implicit
 $(OBJDIR)/DMAAsm.o: DMAAsm.c
