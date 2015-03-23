@@ -29,11 +29,16 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include <vector>
 
+extern "C" {
 #include "dma_test_generation.h"
 #include "DMAModel.h"
+}
 
 typedef unsigned int uint;
+
+#define MAX(X, Y) ((X) > (Y) ? (X) : (Y));
 
 /*
  * For generating non virtualised tests, need to output:
@@ -75,12 +80,15 @@ typedef unsigned int uint;
  *
  * And virtual pages up to PN
  * 0x0003 FFFF FFFF FFFF
+ *
+ * We then halve this, because we are actually mapping simulated "8K" pages:
+ * we double again before adding the mapping.
  */
 
-#define MIN_PHYS_PAGE   0x10000
-#define MAX_PHYS_PAGE   0x3FFFF
+#define MIN_PHYS_PAGE   0x08000
+#define MAX_PHYS_PAGE   0x1FFFF
 
-#define VIRT_PAGE_COUNT 0x3FFFFFFFFFFFF
+#define VIRT_PAGE_COUNT 0x1FFFFFFFFFFFF
 
  /*
  * The tests will:
@@ -159,11 +167,12 @@ virt_pn_to_addr(dma_address virt_pn)
 	return (virt_pn << 12);
 }
 
+template <class Type>
 inline static bool
-in_addr_array(dma_address to_test, dma_address *array, size_t array_size)
+in_vector(Type to_test, const std::vector<Type> &vector)
 {
-	for (size_t i = 0; i < array_size; ++i) {
-		if (array[i] == to_test) {
+	for (size_t i = 0; i < vector.size(); ++i) {
+		if (vector[i] == to_test) {
 			return true;
 		}
 	}
@@ -197,13 +206,12 @@ print_virtualised_test_information(uint thread_count, uint seed)
 
 	uint i, j;
 
-	size_t prog_arr_size = thread_count * sizeof(dma_instruction *);
-	dma_instruction **programs = malloc(prog_arr_size);
+	dma_instruction **programs = new dma_instruction *[thread_count];
 
 	generate_programs(thread_count, programs);
 
-	size_t tl_arr_size = thread_count * sizeof(struct transfer_record *);
-	struct transfer_record **transfer_lists = malloc(tl_arr_size);
+	struct transfer_record **transfer_lists =
+		new struct transfer_record *[thread_count];
 	struct transfer_record *current;
 
 	generate_transfer_lists(thread_count, transfer_lists, programs);
@@ -212,52 +220,78 @@ print_virtualised_test_information(uint thread_count, uint seed)
 	print_programs(thread_count, programs);
 	printf("$");
 
-	size_t addr_arr_size = thread_count * sizeof(dma_address);
-	// Allocate contiguously so we can easily check for duplicates
-	dma_address *source_phys_pns = malloc(2 * addr_arr_size);
-	dma_address *dest_phys_pns = source_phys_pns + thread_count;
-	dma_address *source_virt_pns = malloc(2 * addr_arr_size);
-	dma_address *dest_virt_pns = source_virt_pns + thread_count;
+	/*
+	 * We need to create source and destination mappings for each thread,
+	 * output the TLB commands to implement the mappings, and create the
+	 * initial value settings and assertions.
+	 */
 
-	dma_address next_addr;
+	dma_address *source_phys_pns = new dma_address[thread_count];
+	dma_address *dest_phys_pns = new dma_address[thread_count];
+	dma_address *source_virt_pns = new dma_address[thread_count];
+	dma_address *dest_virt_pns = new dma_address[thread_count];
+
+	std::vector<dma_address> used_phys_pns;
+	std::vector<dma_address> used_virt_pns;
+
+	dma_address next_addr, usage_bytes, usage_pages;
 
 	for (i = 0; i < thread_count; ++i) {
-		// & ~1 to force even, due to MIPS TLB.
+		// Calculate memory usage of program
+		current = transfer_lists[i];
+		if (current == NULL) {
+			usage_pages = 0;
+		}
+		else {
+			while (current->next != NULL) {
+				current = current->next;
+			}
+			usage_bytes = MAX(current->source, current->destination);
+			usage_bytes += 1 << current->size;
+			// 0x2000 corresponds to an 8K double-page
+			usage_pages = usage_bytes / 0x2000;
+		}
+
 		do {
 			next_addr = addr_in_range(MIN_PHYS_PAGE, MAX_PHYS_PAGE);
-			next_addr &= ~1;
-		} while (in_addr_array(next_addr, source_phys_pns, i));
+		} while (in_vector(next_addr, used_phys_pns));
+		for (j = 0; j <= usage_pages; ++j) {
+			used_phys_pns.push_back(next_addr + j);
+		}
 		source_phys_pns[i] = next_addr;
 
 		do {
 			next_addr = addr_in_range(MIN_PHYS_PAGE, MAX_PHYS_PAGE);
-			next_addr &= ~1;
-		} while (in_addr_array(next_addr, source_phys_pns,
-					i + thread_count));
+		} while (in_vector(next_addr, used_phys_pns));
+		for (j = 0; j <= usage_pages; ++j) {
+			used_phys_pns.push_back(next_addr + j);
+		}
 		dest_phys_pns[i] = next_addr;
 
 		do {
-			next_addr = addr_in_range(0, VIRT_PAGE_COUNT) & ~1;
-		} while (in_addr_array(next_addr, source_virt_pns, i));
+			next_addr = addr_in_range(0, VIRT_PAGE_COUNT);
+		} while (in_vector(next_addr, used_virt_pns));
+		for (j = 0; j <= usage_pages; ++j) {
+			used_virt_pns.push_back(next_addr + j);
+		}
 		source_virt_pns[i] = next_addr;
 
 		do {
 			next_addr = addr_in_range(0, VIRT_PAGE_COUNT) & ~1;
-		} while (in_addr_array(next_addr, source_virt_pns,
-					i + thread_count));
+		} while (in_vector(next_addr, used_virt_pns));
+		for (j = 0; j <= usage_pages; ++j) {
+			used_virt_pns.push_back(next_addr + j);
+		}
 		dest_virt_pns[i] = next_addr;
 	}
 
 	// We output the mapping before the sources, using the same region of
 	// the test. This is naughty, but it works.
 
-	for (i = 0; i < thread_count; ++i) {
+	for (i = 0; i < used_phys_pns.size(); ++i) {
 		printf("add_tlb_mapping(0x%llx, 0x%llx, 0x%llx);",
-			source_virt_pns[i],
-			source_phys_pns[i], source_phys_pns[i] + 1);
-		printf("add_tlb_mapping(0x%llx, 0x%llx, 0x%llx);",
-			dest_virt_pns[i],
-			dest_phys_pns[i], dest_phys_pns[i] + 1);
+			used_virt_pns[i],
+			2 * used_phys_pns[i], 2 * used_phys_pns[i] + 1);
 	}
 
 	dma_address thread_source, transfer_source;
@@ -265,7 +299,7 @@ print_virtualised_test_information(uint thread_count, uint seed)
 	uint transfer_size;
 
 	for (i = 0; i < thread_count; ++i) {
-		thread_source = phys_pn_to_addr(source_phys_pns[i]);
+		thread_source = phys_pn_to_addr(2 * source_phys_pns[i]);
 		FOR_EACH(current, transfer_lists[i]) {
 			transfer_size = (1 << current->size);
 			transfer_source = thread_source + current->source;
@@ -281,7 +315,7 @@ print_virtualised_test_information(uint thread_count, uint seed)
 	dma_address thread_dest, transfer_dest;
 	access_number = 0;
 	for (i = 0; i < thread_count; ++i) {
-		thread_dest = phys_pn_to_addr(dest_phys_pns[i]);
+		thread_dest = phys_pn_to_addr(2 * dest_phys_pns[i]);
 		FOR_EACH(current, transfer_lists[i]) {
 			transfer_size = (1 << current->size);
 			transfer_dest = thread_dest + current->destination;
@@ -293,12 +327,12 @@ print_virtualised_test_information(uint thread_count, uint seed)
 		}
 	}
 
-	dma_address *source_virt_addrs = malloc(addr_arr_size);
-	dma_address *dest_virt_addrs = malloc(addr_arr_size);
+	dma_address *source_virt_addrs = new dma_address[thread_count];
+	dma_address *dest_virt_addrs = new dma_address[thread_count];
 
 	for (i = 0; i < thread_count; ++i) {
-		source_virt_addrs[i] = virt_pn_to_addr(source_virt_pns[i]);
-		dest_virt_addrs[i] = virt_pn_to_addr(dest_virt_pns[i]);
+		source_virt_addrs[i] = virt_pn_to_addr(2 * source_virt_pns[i]);
+		dest_virt_addrs[i] = virt_pn_to_addr(2 * dest_virt_pns[i]);
 	}
 
 	printf(");$");
@@ -307,14 +341,17 @@ print_virtualised_test_information(uint thread_count, uint seed)
 	print_pointer_array(thread_count, dest_virt_addrs);
 
 	for (i = 0; i < thread_count; ++i) {
-		free(programs[i]);
+		delete programs[i];
 		free_transfer_list(transfer_lists[i]);
 	}
-	free(programs);
-	free(transfer_lists);
-	free(source_phys_pns);
-	free(source_virt_pns);
-	free(source_virt_addrs);
+	delete programs;
+	delete transfer_lists;
+	delete source_phys_pns;
+	delete source_virt_pns;
+	delete source_virt_addrs;
+	delete dest_phys_pns;
+	delete dest_virt_pns;
+	delete dest_virt_addrs;
 }
 
 void
@@ -325,13 +362,12 @@ print_test_information(uint thread_count, uint seed)
 	/* Generate programs, and evaluate results */
 	uint i, j;
 
-	size_t prog_arr_size = thread_count * sizeof(dma_instruction *);
-	dma_instruction **programs = malloc(prog_arr_size);
+	dma_instruction **programs = new dma_instruction *[thread_count];
 
 	generate_programs(thread_count, programs);
 
-	size_t tl_arr_size = thread_count * sizeof(struct transfer_record *);
-	struct transfer_record **transfer_lists = malloc(tl_arr_size);
+	struct transfer_record **transfer_lists =
+		new struct transfer_record *[thread_count];
 	struct transfer_record *current;
 
 	generate_transfer_lists(thread_count, transfer_lists, programs);
@@ -341,8 +377,8 @@ print_test_information(uint thread_count, uint seed)
 	printf("$");
 
 	dma_address dram_position = DRAM_START;
-	dma_address *source_addrs = malloc(thread_count * sizeof(dma_address));
-	dma_address *dest_addrs = malloc(thread_count * sizeof(dma_address));
+	dma_address *source_addrs = new dma_address[thread_count];
+	dma_address *dest_addrs = new dma_address[thread_count];
 
 	uint8_t access_number = 0;
 	uint transfer_size;
@@ -408,11 +444,11 @@ print_test_information(uint thread_count, uint seed)
 int
 _main(int argc, char* argv[])
 {
-	dma_address test_data[3] = {3, 0, 2};
+	std::vector<dma_address> test_data = {3, 0, 2};
 
-	printf("%d\n", in_addr_array(2, test_data, 3));
-	printf("%d\n", in_addr_array(1, test_data, 3));
-	printf("%d\n", in_addr_array(3, test_data, 0));
+	printf("%d\n", in_vector(2ll, test_data));
+	printf("%d\n", in_vector(1ll, test_data));
+	printf("%d\n", in_vector(3ll, test_data));
 
 	return 0;
 }

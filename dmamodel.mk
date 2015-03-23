@@ -1,5 +1,7 @@
-CC=clang -march=x86-64
-CFLAGS=-Wall -Werror -g -DDMAMODEL
+CC=clang
+CPP=clang++
+CFLAGS=-march=x86-64 -Wall -Werror -g -DDMAMODEL
+CPPFLAGS=-std=c++11
 
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
@@ -26,11 +28,14 @@ x86-obj/DMA%.o: $(DMADIR)/DMA%.c
 x86-obj/dmamodel_%: x86-obj/dmamodel_%.o $(DMAMODEL_LIB_OBJS)
 	$(CC) $(CFLAGS) $(CFFGLAGS) -I$(DMADIR) $^ -o $@
 
+x86-obj/%.o: fuzz_dma/%.cpp
+	$(CPP) -c $(CFLAGS) $(CPPFLAGS) $(CFFLAGS) -I$(DMADIR) $^ -o $@
+
 x86-obj/%.o: fuzz_dma/%.c
 	$(CC) -c $(CFLAGS) $(CFFLAGS) -I$(DMADIR) $^ -o $@
 
-x86-objs/%: x86-obj/%.o
-	$(CC) $(CFLAGS) $(CFFLAGS) -I$(DMADIR) $^ -o $@
+x86-obj/%: x86-obj/%.o
+	$(CPP) -lstdc++ $(CFLAGS) $(CFFLAGS) -I$(DMADIR) $^ -o $@
 
 run-%: x86-obj/%
 	$< $(ARGS)
