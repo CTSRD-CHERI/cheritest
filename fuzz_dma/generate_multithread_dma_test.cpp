@@ -25,10 +25,12 @@
  * @BERI_LICENSE_HEADER_END@
  */
 
+#include <cassert>
 #include "stdbool.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include <random>
 #include <vector>
 
 extern "C" {
@@ -85,10 +87,10 @@ typedef unsigned int uint;
  * we double again before adding the mapping.
  */
 
-#define MIN_PHYS_PAGE   0x08000
-#define MAX_PHYS_PAGE   0x1FFFF
+#define MIN_PHYS_PAGE   0x08000ULL
+#define MAX_PHYS_PAGE   0x1FFFFULL
 
-#define VIRT_PAGE_COUNT 0x1FFFFFFFFFFFF
+#define VIRT_PAGE_COUNT 0x1FFFFFFFFFFFFULL
 
  /*
  * The tests will:
@@ -179,15 +181,6 @@ in_vector(Type to_test, const std::vector<Type> &vector)
 	return false;
 }
 
-inline static dma_address
-addr_in_range(dma_address min, dma_address max)
-{
-	// I think this might be biased against the last page. I think there
-	// may also be pages that we never hit.
-	dma_address count = max - min;
-	return min + ((count * (dma_address)myrand()) / RAND_LIMIT);
-}
-
 inline static void
 print_pointer_array(uint size, dma_address *array)
 {
@@ -198,6 +191,8 @@ print_pointer_array(uint size, dma_address *array)
 		}
 	}
 }
+
+typedef std::uniform_int_distribution<dma_address> uniform_dma_address;
 
 void
 print_virtualised_test_information(uint thread_count, uint seed)
@@ -236,6 +231,10 @@ print_virtualised_test_information(uint thread_count, uint seed)
 
 	dma_address next_addr, usage_bytes, usage_pages;
 
+	std::default_random_engine random_engine(seed);
+	uniform_dma_address random_phys_pn(MIN_PHYS_PAGE, MAX_PHYS_PAGE);
+	uniform_dma_address random_virt_pn(0, VIRT_PAGE_COUNT);
+
 	for (i = 0; i < thread_count; ++i) {
 		// Calculate memory usage of program
 		current = transfer_lists[i];
@@ -253,7 +252,7 @@ print_virtualised_test_information(uint thread_count, uint seed)
 		}
 
 		do {
-			next_addr = addr_in_range(MIN_PHYS_PAGE, MAX_PHYS_PAGE);
+			next_addr = random_phys_pn(random_engine);
 		} while (in_vector(next_addr, used_phys_pns));
 		for (j = 0; j <= usage_pages; ++j) {
 			used_phys_pns.push_back(next_addr + j);
@@ -261,7 +260,7 @@ print_virtualised_test_information(uint thread_count, uint seed)
 		source_phys_pns[i] = next_addr;
 
 		do {
-			next_addr = addr_in_range(MIN_PHYS_PAGE, MAX_PHYS_PAGE);
+			next_addr = random_phys_pn(random_engine);
 		} while (in_vector(next_addr, used_phys_pns));
 		for (j = 0; j <= usage_pages; ++j) {
 			used_phys_pns.push_back(next_addr + j);
@@ -269,7 +268,8 @@ print_virtualised_test_information(uint thread_count, uint seed)
 		dest_phys_pns[i] = next_addr;
 
 		do {
-			next_addr = addr_in_range(0, VIRT_PAGE_COUNT);
+			next_addr = random_virt_pn(random_engine);
+			assert(next_addr <= VIRT_PAGE_COUNT);
 		} while (in_vector(next_addr, used_virt_pns));
 		for (j = 0; j <= usage_pages; ++j) {
 			used_virt_pns.push_back(next_addr + j);
@@ -277,7 +277,8 @@ print_virtualised_test_information(uint thread_count, uint seed)
 		source_virt_pns[i] = next_addr;
 
 		do {
-			next_addr = addr_in_range(0, VIRT_PAGE_COUNT) & ~1;
+			next_addr = random_virt_pn(random_engine);
+			assert(next_addr <= VIRT_PAGE_COUNT);
 		} while (in_vector(next_addr, used_virt_pns));
 		for (j = 0; j <= usage_pages; ++j) {
 			used_virt_pns.push_back(next_addr + j);
@@ -290,7 +291,7 @@ print_virtualised_test_information(uint thread_count, uint seed)
 
 	for (i = 0; i < used_phys_pns.size(); ++i) {
 		printf("add_tlb_mapping(0x%llx, 0x%llx, 0x%llx);",
-			used_virt_pns[i],
+			2 * used_virt_pns[i],
 			2 * used_phys_pns[i], 2 * used_phys_pns[i] + 1);
 	}
 
