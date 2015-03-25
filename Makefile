@@ -1153,7 +1153,6 @@ CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
 MEMCONF?=$(CHERIROOT_ABS)/memoryconfig
-TRACECONF?=$(CHERIROOT_ABS)/traceconfig
 TOOLS_DIR= ${CHERILIBS_ABS}/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 CHERICTL=$(TOOLS_DIR_ABS)/debug/cherictl
@@ -1321,8 +1320,7 @@ GXEMUL_FUZZ_TEST_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_LO
 GXEMUL_FUZZ_TEST_CACHED_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_CACHED_LOGS))
 
 REWRITE_PISM_CONF = sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' < $(1) > $(2)
-COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(MEMCONF),$$TMPDIR/memoryconfig) && \
-		  $(call REWRITE_PISM_CONF,$(TRACECONF),$$TMPDIR/traceconfig)
+COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(MEMCONF),$$TMPDIR/memoryconfig)
 
 PREPARE_TEST = \
 	TMPDIR=$$(mktemp -d) && \
