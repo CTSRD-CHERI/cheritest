@@ -104,7 +104,7 @@ FUZZ_DMA_ONLY?=0
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
 NOFUZZ?=0
 NOFUZZR?=0
-
+CAP_SIZE?=256
 
 #
 # List of directories in which to find test source and .py files.
@@ -1124,6 +1124,10 @@ endif
 
 ifneq ($(MT),1)
 L3_NOSEPRED+=and not mt
+endif
+
+ifneq ($(CAP_SIZE),256)
+L3_NOSEPRED+=and not cap256
 endif
 
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
