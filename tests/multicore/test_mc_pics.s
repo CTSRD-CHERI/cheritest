@@ -59,7 +59,7 @@ test:   .ent    test
 	dli	$t1, 1
         beq     $t0, $t1, core1	# If we're core 1
         nop
-	bnez	$t0, the_end	# If we're not core 0
+	bnez	$t0, core_other	# If we're not core 0, either
 	nop
 
 	#
@@ -172,6 +172,19 @@ after_interrupt_t1:
         dli     $t0, 0x8
         sd     $t0, 0x2080($s7) # Trigger int 3 -> core 0
         
+	b	the_end
+	nop	# Branch delay slot
+
+	#
+	# Cores 2 and higher (if they exist) run this bit
+	#
+
+core_other:
+
+	dla	$a0, my_barrier
+	jal	thread_barrier
+	nop
+
 	#
 	# All cores run this part at the end
 	#
