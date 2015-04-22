@@ -1636,7 +1636,7 @@ L3_MULTI=
 endif
 
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
-	test -d $(L3_LOGDIR) || mkdir $(L3_LOGDIR)
+	mkdir -p $(L3_LOGDIR)
 	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | ./l3tosim > $@ || true
 
 # Simulate a failure on all unit tests
