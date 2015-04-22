@@ -105,6 +105,7 @@ FUZZ_DMA_ONLY?=0
 NOFUZZ?=0
 NOFUZZR?=0
 CAP_SIZE?=256
+L3_SIM?=l3mips
 
 #
 # List of directories in which to find test source and .py files.
@@ -1636,7 +1637,7 @@ endif
 
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 	test -d $(L3_LOGDIR) || mkdir $(L3_LOGDIR)
-	l3mips --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | ./l3tosim > $@ || true
+	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | ./l3tosim > $@ || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
