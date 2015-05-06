@@ -1067,6 +1067,7 @@ and not bigtlb          \
 and not beri1tlb	\
 and not beri2tlb	\
 and not beri1cache	\
+and not beri1oldcache	\
 and not beri2cache	\
 and not extendedtlb	\
 and not enablelargetlb  \
@@ -1104,6 +1105,7 @@ and not smalltlb \
 and not beri2tlb \
 and not gxemultlb \
 and not beri2cache \
+and not beri1oldcache \
 and not watch \
 and not deterministic_random \
 and not noextendedtlb \
@@ -1185,6 +1187,7 @@ NOSEPRED+=and not bigtlb
 NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not beri1tlb
 NOSEPRED+=and not beri1cache
+NOSEPRED+=and not beri1oldcache
 NOSEPRED+=and not largepage
 NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
@@ -1193,6 +1196,7 @@ NOSEPRED+=and not noextendedtlb
 NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not beri2tlb
+NOSEPRED+=and not beri1oldcache
 NOSEPRED+=and not beri2cache
 ifeq ($(GENERIC_L1),1)
 NOSEPRED+=and not beri1cache
