@@ -1176,6 +1176,7 @@ else
 endif
 endif
 NOSEPRED=not false
+NOSEPRED+=and not csettype
 ifeq ($(BERI_VER),2)
 NOSEPRED+=and not invalidateL2only
 NOSEPRED+=and not lladdr
