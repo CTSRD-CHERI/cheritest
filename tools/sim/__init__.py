@@ -53,8 +53,8 @@ MIPS_CORE_RE=re.compile(r'^DEBUG MIPS COREID\s+([0-9]+)$')
 MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+) (0x................)$')
 MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC (0x................)$')
 CAPMIPS_CORE_RE=re.compile(r'^DEBUG CAP COREID\s+([0-9]+)$')
-CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC u:(.) perms:(0x.{8}) ' +
-                            r'type:(0x.{6}) offset:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
+CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC u:(.) perms:(0x.{6,8}) ' +
+                            r'type:(0x.{4,6}) offset:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
 CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+) u:(.) perms:(0x.{6,8}) ' +
                             r'type:(0x.{4,6}) offset:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
 
