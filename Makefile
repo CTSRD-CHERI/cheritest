@@ -1179,6 +1179,7 @@ endif
 endif
 NOSEPRED=not false
 NOSEPRED+=and not csettype
+NOSEPRED+=and not dumpicache
 ifeq ($(BERI_VER),2)
 NOSEPRED+=and not invalidateL2only
 NOSEPRED+=and not lladdr
@@ -1189,7 +1190,6 @@ NOSEPRED+=and not beri1tlb
 NOSEPRED+=and not beri1cache
 NOSEPRED+=and not beri1oldcache
 NOSEPRED+=and not largepage
-NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
 else
 NOSEPRED+=and not noextendedtlb

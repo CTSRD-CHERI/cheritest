@@ -306,15 +306,27 @@ class test_cp0_reg_init(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,1,6,0,1,6,0,1,0,0,1,0,0,0), "Unexpected CP0 config1 register value on reset")
 
     ## CHERI1 configuration with FPU, capabilities and a large TLB
+    # (old cache size)
     @attr('float')
     @attr('watch')
     @attr('tlb')
     @attr('beri1tlb')
-    @attr('beri1cache')
+    @attr('beri1oldcache')
     @attr('capabilities')
     def test_config1_reg_float(self):
         '''Test initial value of CP0.config1'''
         self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,3,4,0,3,4,0,1,0,0,1,0,0,1), "Unexpected CP0 config1 register value on reset")
+
+    ## CHERI1 configuration with FPU, capabilities and a large TLB
+    @attr('float')
+    @attr('watch')
+    @attr('tlb')
+    @attr('beri1oldtlb')
+    @attr('beri1cache')
+    @attr('capabilities')
+    def test_config1_reg_float(self):
+        '''Test initial value of CP0.config1'''
+        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,1,6,0,1,6,0,1,0,0,1,0,0,1), "Unexpected CP0 config1 register value on reset")
 
     ## CHERI2 configuration with no FPU, watch register, capabilities, and a small TLB
     @attr('nofloat')
