@@ -46,13 +46,32 @@ from nose.plugins.attrib import attr
 #
 
 class test_cp2_reg_init(BaseBERITestCase):
+
     @attr('capabilities')
-    def test_cp2_reg_init_pcc(self):
-        '''Test that CP2 register PCC is correctly initialised'''
+    def test_cp2_reg_init_pcc_base(self):
+        '''Test that CP2 register PCC.base is correctly initialised'''
         self.assertRegisterEqual(self.MIPS.pcc.base, 0x0, "CP2 PCC base incorrectly initialised")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_pcc_len(self):
         self.assertRegisterEqual(self.MIPS.pcc.length, 0xffffffffffffffff, "CP2 PCC length incorrectly initialised")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_pcc_otype(self):
         self.assertRegisterEqual(self.MIPS.pcc.ctype, 0x0, "CP2 PCC ctype incorrectly initialised")
+
+    @attr('capabilities')
+    @attr('cap256')
+    def test_cp2_reg_init_pcc_perms_256(self):
         self.assertRegisterEqual(self.MIPS.pcc.perms, 0x7fffffff, "CP2 PCC perms incorrectly initialised")
+
+    @attr('capabilities')
+    @attr('cap128')
+    def test_cp2_reg_init_pcc_perms_128(self):
+        self.assertRegisterEqual(self.MIPS.pcc.perms, 0x7fffff, "CP2 PCC perms incorrectly initialised")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_pcc_unsealed(self):
         self.assertRegisterEqual(self.MIPS.pcc.u, 0, "CP2 PCC sealed incorrectly initialised")
 
     @attr('capabilities')
