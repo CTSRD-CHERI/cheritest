@@ -33,10 +33,18 @@ from nose.plugins.attrib import attr
 #
 
 class test_cp2_getandperm(BaseBERITestCase):
+
     @attr('capabilities')
-    def test_cp2_getperm1(self):
+    @attr('cap256')
+    def test_cp2_getperm1_256(self):
         '''Test that cgetperm returns correct initial value'''
         self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "cgetperm returns incorrect initial value")
+
+    @attr('capabilities')
+    @attr('cap128')
+    def test_cp2_getperm1_128(self):
+        '''Test that cgetperm returns correct initial value'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x7fffff, "cgetperm returns incorrect initial value")
 
     @attr('capabilities')
     def test_cp2_getperm2(self):
