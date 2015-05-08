@@ -51,6 +51,7 @@ start:
 		cincoffset $c1, $c2, $a3
 		cincbase  $c1, $c2, $a3
 		csetlen   $c1, $c2, $a3
+		csetbounds $c1, $c2, $a3
                 ccleartag $c1, $c2
 		csetcause $a3
 
