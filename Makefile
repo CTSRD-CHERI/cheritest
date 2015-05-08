@@ -1133,6 +1133,10 @@ ifneq ($(CAP_SIZE),256)
 L3_NOSEPRED+=and not cap256
 endif
 
+ifneq ($(CAP_SIZE),128)
+L3_NOSEPRED+=and not cap128
+endif
+
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 #ifdef TRACE
 #define L3_TRACE --trace 2
@@ -1216,6 +1220,13 @@ NOSEPRED+=and not float
 endif
 ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities and not clang
+else
+ifneq ($(CAP_SIZE),256)
+NOSEPRED+=and not cap256
+endif
+ifneq ($(CAP_SIZE),128)
+NOSEPRED+=and not cap128
+endif
 endif
 ifneq ($(CLANG),1)
 NOSEPRED+=and not clang and not dmaclang

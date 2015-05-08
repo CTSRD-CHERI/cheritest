@@ -35,9 +35,16 @@ from nose.plugins.attrib import attr
 class test_cp2_cfromptr(BaseBERITestCase):
 
     @attr('capabilities')
+    @attr('cap256')
     def test_cp2_cfromptr_perm(self):
         '''Test that cfromptr of a NULL pointer clears the permissions field'''
         self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "cfromptr did not clear the permissions field")
+
+    @attr('capabilities')
+    @attr('cap128')
+    def test_cp2_cfromptr_perm(self):
+        '''Test that cfromptr of a NULL pointer clears the permissions field'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x7fffff, "cfromptr did not clear the permissions field")
 
     @attr('capabilities')
     def test_cp2_cfromptr_length(self):
