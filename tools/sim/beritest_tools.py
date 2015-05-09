@@ -179,6 +179,26 @@ class BaseBERITestCase(unittest.TestCase):
                 msg = msg + ": "
             self.fail(msg + "0x%016x and 0x%016x == 0x%016x"%(first, mask, second))
 
+    def assertRegisterAllPermissions(self, reg_val, msg=None):
+        cap_size = int(os.environ.get("CAP_SIZE", "256"))
+        passed = True
+        expected = 0
+        if cap_size == 256:
+            expected = 0x7fffffff
+        if cap_size == 128:
+            expected = 0x7fffff
+        if self.ALWAYS_FAIL:
+            passed = False
+        if expected != 0 and reg_val != expected:
+            passed = False
+        if not passed:
+            if msg is None:
+                msg = ""
+            else:
+                msg = msg + ": "
+            self.fail(msg + "0x%016x != 0x%016x"%(reg_val, expected))
+          
+    
 class BaseICacheBERITestCase(BaseBERITestCase):
     '''Abstract base class for test cases for the BERI Instruction Cache.'''
 

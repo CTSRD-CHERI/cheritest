@@ -36,7 +36,7 @@ class test_cp2_getandperm_user(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_getperm1(self):
         '''Test that cgetperm returns correct initial value'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "cgetperm returns incorrect initial value")
+        self.assertRegisterAllPermissions(self.MIPS.a0, "cgetperm returns incorrect initial value")
 
     @attr('capabilities')
     def test_cp2_getperm2(self):
