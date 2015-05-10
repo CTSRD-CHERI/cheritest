@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2014-2015 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -31,7 +32,7 @@
 .set noat
 
 #
-# Test csndperm with one of the user-defined permission bit set.
+# Test candperm with one of the user-defined permission bit set.
 #
 
 		.global test
@@ -41,15 +42,22 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		lui	$t0, 0x4000
-		or	$t0, 0x01
 		dli	$a0, 1
 		dli	$a1, 2
+		dli	$a3, 3
 
-		cgetperm	$a0, $c2
-		candperm	$c2, $c2, $t0
-		cgetperm	$a1, $c2
+		cgetperm	$a0, $c0
 
+		lui	$t0, 0x4000
+		or	$t0, 0x01
+		candperm $c1, $c0, $t0
+		cgetperm $a1, $c1
+
+		lui	$t0, 0x40
+		or	$t0, 0x01
+		candperm $c2, $c0, $t0
+		cgetperm $a2, $c2
+		
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
