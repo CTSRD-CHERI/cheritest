@@ -89,7 +89,9 @@ def run():
 
 def genDWord():
   x = random.choice(
-    [ random.randrange(0, 65536)
+    [ 0
+    , 1
+    , random.randrange(0, 65536)
     , random.randrange(0xffffffffffff0000, 0xffffffffffffffff)
     , random.randrange(0, 0xffffffffffffffff)
     ])
@@ -214,6 +216,30 @@ postlude = [
 def chance(p):
   return random.random() < p
 
+def queryCap():
+  seq = []
+
+  # Query resulting capability
+  seq.extend(
+    [ "  cgetperm   $s0, $c0"
+    , "  cgetbase   $s1, $c0"
+    , "  cgetlen    $s2, $c0"
+    , "  cgetoffset $s3, $c0"
+    , "  cgettag    $s4, $c0"
+    , "  cgetsealed $s5, $c0"
+    , "  cgettype   $s6, $c0"
+    ])
+
+  branch = random.choice(["cbts", "cbtu"])
+  seq.extend(
+    [ "  " + branch + " $c0, skip"
+    , "  nop"
+    , "  li $s7, 0xffff"
+    , "skip:"
+    ])
+
+  return seq
+
 # Generate a random capability (through a random sequence of
 # capability-modification instructions), then read the fields of the
 # resulting capability into general-purpose registers.
@@ -229,23 +255,8 @@ def testSetGet():
   print
 
   # Query resulting capability
-  testseq.extend(
-    [ "  cgetperm   $s0, $c0"
-    , "  cgetbase   $s1, $c0"
-    , "  cgetlen    $s2, $c0"
-    , "  cgetoffset $s3, $c0"
-    , "  cgettag    $s4, $c0"
-    , "  cgetsealed $s5, $c0"
-    , "  cgettype   $s6, $c0"
-    ])
-
-  branch = random.choice(["cbts", "cbtu"])
-  testseq.extend(
-    [ "  " + branch + " $c0, skip"
-    , "  nop"
-    , "  li $s7, 0xffff"
-    , "skip:"
-    ])
+  seq = queryCap()
+  testseq.extend(seq)
 
   return testseq
 
@@ -254,10 +265,10 @@ def testSetGet():
 
 def testCmp():
   testseq = []
-  for i in range(0,random.randrange(1,3)):
+  for i in range(0,random.randrange(1,4)):
     testseq.extend(genCSet("$c0"))
   testseq.append("")
-  for i in range(0,random.randrange(1,3)):
+  for i in range(0,random.randrange(1,4)):
     testseq.extend(genCSet("$c1"))
   testseq.append("")
 
@@ -279,15 +290,63 @@ def testCmp():
 
   return testseq
 
+# Generate three random capabilities. Seal the first capability using
+# the second, then unseal the first using either the second or the
+# third (randomly).
+
+def testSealUnseal():
+  testseq = []
+  for i in range(0,random.randrange(1,4)):
+    testseq.extend(genCSet("$c0"))
+  testseq.append("")
+  for i in range(0,random.randrange(1,4)):
+    testseq.extend(genCSet("$c1"))
+  testseq.append("")
+  for i in range(0,random.randrange(1,4)):
+    testseq.extend(genCSet("$c2"))
+  testseq.append("")
+
+  sealed = False
+  if chance(0.75):
+    # Seal c0 using c1
+    testseq.append("  cseal $c0, $c0, $c1")
+    sealed = True
+
+  if not sealed or chance(0.5):
+    # Unseal c0 using c1 or c2
+    if chance(0.5):
+      testseq.append("  cunseal $c0, $c0, $c1")
+    else:
+      testseq.append("  cunseal $c0, $c0, $c2")
+
+  # Apply random capability modifications to c0
+  if chance(0.5):
+    for i in range(0,random.randrange(1,4)):
+      testseq.extend(genCSet("$c0"))
+
+  # Print test sequence
+  for line in testseq:
+    print line
+  print
+
+  # Query resulting capability
+  seq = queryCap()
+  testseq.extend(seq)
+
+  return testseq
+
 def gen():
   # Choose a test sequence
   testseq = []
-  if chance(0.5):
+  if chance(0.33):
     print "{Set-Get}"
     testseq = testSetGet()
-  else:
+  elif chance(0.33):
     print "{PtrCmp}"
     testseq = testCmp()
+  else:
+    print "{Seal-Unseal}"
+    testseq = testSealUnseal()
 
   # Write to file "captest.s"
   f = open("captest.s", "w");
