@@ -31,7 +31,7 @@
 .set noat
 
 #
-# Test that CIncOffset raises an exception if the capability is seaked.
+# Test that CIncOffset raises an exception if the capability is sealed.
 #
 
 		.global test
