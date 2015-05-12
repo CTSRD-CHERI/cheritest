@@ -59,8 +59,8 @@ test:		.ent test
 		dli	$a2, 0	# a2 will be set to 1 if an exception happens
 
                 # Make $c1 a template capability for a user-defined type
-		# whose identifoer is 0xFEF1F0 (chosen arbitrarily).
-		dli      $t0, 0xFEF1F0
+		# whose identifier is 0x1234 (chosen arbitrarily).
+		dli      $t0, 0x1234
 		csetoffset $c1, $c0, $t0
 
 		# Make c4 a sealed code capability for sandbox
