@@ -42,7 +42,7 @@ class test_cp2_csealdata(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_sealdata2(self):
         '''Test that cseal sets the otype field'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x123456,
+        self.assertRegisterEqual(self.MIPS.a1, 0x1234,
             "cseal did not set the otype field correctly")
 
     @attr('capabilities')

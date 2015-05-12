@@ -34,11 +34,6 @@
 # Test cseal on a data capability
 #
 
-# In this test, sandbox isn't actually called, but its address is used
-# as an otype.
-sandbox:
-		creturn
-
 		.global test
 test:		.ent test
 		daddu 	$sp, $sp, -32
@@ -47,8 +42,8 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
                 # Make $c1 a template capability for the user-defined type
-		# 0x123456.
-		li	$t0, 0x123456
+		# 0x1234.
+		dli	$t0, 0x1234
 		csetoffset $c1, $c0, $t0
 
                 # Make $c2 a data capability for the array at address data
@@ -69,7 +64,7 @@ test:		.ent test
 
                 # $c3.sealed should be 1
 		cgetsealed $a0, $c3
-                # $c3.type should be equal to 0x123456
+                # $c3.type should be equal to 0x1234
 		cgettype $a1, $c3
                 # $c3.base should be equal to data
                 cgetbase $a2, $c3
