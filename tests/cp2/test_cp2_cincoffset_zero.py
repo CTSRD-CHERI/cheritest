@@ -35,6 +35,7 @@ class test_cp2_cincoffset_zero(BaseBERITestCase):
         '''Test that CIncOffset with an offset of zero can copy a sealed capability'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Test did not run to completion")
 
+    @attr('capabilities')
     def test_cp2_cincoffset_zero_2(self):
         '''Test that CIncOffset with an offset of zero copied the permissions field of a sealed capability'''
         self.assertRegisterEqual(self.MIPS.a1, 7, "cincoffset with an offset of zero did not copy the permissions field of a sealed capability")
