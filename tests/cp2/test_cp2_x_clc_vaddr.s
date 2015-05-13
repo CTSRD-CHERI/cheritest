@@ -125,7 +125,6 @@ data:		.dword	0x0123456789abcdef
 
 		.align 5
 padding:	.dword 0x0 # Padding to make cap1 unaligned
-		.dword 0x0
 
 cap1:		.dword 0x0123456789abcdef # This is not 32-byte aligned, so a
 		.dword 0x0123456789abcdef # capability load from here will 
