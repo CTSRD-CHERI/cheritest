@@ -128,7 +128,7 @@ def genCAndPerm(c):
          ]
 
 def genCFromPtr(c):
-  return [ "  dli $t0, " + random.choice(["0", genDWord()])
+  return [ "  dli $t0, " + genDWord()
          , "  cfromptr " + c + ", " + c + ", $t0"
          ]
 
@@ -147,6 +147,7 @@ def genCSet(c):
     + 3 * [genCAndPerm(c)]
     + 3 * [genCSetLen(c)]
     + 3 * [genCSetOffset(c)]
+    + 3 * [genCSetBounds(c)]
     + 2 * [genCFromPtr(c)]
     + 1 * [genCClearTag(c)]
     + 1 * [genCCheckPerm(c)]
@@ -320,7 +321,7 @@ def testSealUnseal():
       testseq.append("  cunseal $c0, $c0, $c2")
 
   # Apply random capability modifications to c0
-  if chance(0.5):
+  if chance(0.75):
     for i in range(0,random.randrange(1,4)):
       testseq.extend(genCSet("$c0"))
 
