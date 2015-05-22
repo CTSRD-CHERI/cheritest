@@ -448,6 +448,7 @@ def save(testseq, saveHex = False):
   # Save hex file too if requested
   if saveHex:
     shutil.copyfile("mem64.hex", filename + ".hex");
+    shutil.copyfile("obj/captest.bin", filename + ".bin");
 
 # Generate a test
 def gen():
