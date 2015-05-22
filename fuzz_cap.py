@@ -408,17 +408,21 @@ def emit(testseq, filename="captest.s"):
   f.close()
 
 # Save a test
-def save(testseq):
+def save(testseq, saveHex = False):
   # Ensure that "fuzz_cap" directory exists
   if not os.path.exists("fuzz_cap"):
     os.mkdir("fuzz_cap")
 
   # Create unique name
-  filename = "fuzz_cap/t" + str(uuid.uuid1()) + ".s"
+  filename = "fuzz_cap/t" + str(uuid.uuid1())
 
   # Write to disc
-  print ("Saved to " + filename)
-  emit(testseq, filename)
+  print ("Saved to " + filename + ".s")
+  emit(testseq, filename + ".s")
+
+  # Save hex file too if requested
+  if saveHex:
+    shutil.copyfile("mem64.hex", filename + ".hex");
 
 # Generate a test
 def gen():
@@ -467,7 +471,9 @@ def doOneTest():
   if failure != "":
     print " failed"
     shorter = shrink(test)
-    save(shorter)
+    emit(shorter)
+    compile()
+    save(shorter, True)
     return False
   else:
     return True
@@ -484,7 +490,19 @@ try:
   parser.add_option(
     "-r", "--run", dest="filename",
     help="replay test from FILE", metavar="FILE")
+  parser.add_option(
+    "-s", "--seed", dest="seed",
+    help="use a specified random seed", metavar="SEED")
   (options, args) = parser.parse_args()
+
+  if options.seed == None:
+    random.seed()
+    seed = random.randint(0, 100000)
+  else:
+    seed = int(options.seed)
+
+  print ("Setting random seed to %i" % seed)
+  random.seed(seed)
 
   if options.filename == None:
     for i in range (1,numTests):
