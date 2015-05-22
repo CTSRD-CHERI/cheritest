@@ -136,7 +136,7 @@ def run():
   for k in regFileL3.keys():
     if regFileL3[k] != regFileBSV[k]:
       r = regName.get(k, k)
-      failure = ( "\n"
+      failure = ( failure + "\n"
                 + "Register " + r + " differs:\n"
                 + "  model says: " + regFileL3[k] + "\n"
                 + "  implementation says: " + regFileBSV[k] + "\n"
@@ -243,6 +243,7 @@ prelude = [
   , "  jal memcpy"
   , "  nop"
   , "  dli     $a0, 0 # set to 1 on exception"
+  , "  dli     $t0, 0"
   , ""
   , "# Auto-genetated test case:"
   ]
@@ -401,7 +402,7 @@ def testSealUnseal():
 # Write a test to a file
 def emit(testseq, filename="captest.s"):
   # Write to file "captest.s"
-  f = open(filename, "w");
+  f = open(filename, "w")
   for line in prelude + testseq + postlude:
     f.write(line + "\n")
   f.close()
@@ -451,7 +452,7 @@ def shrink(test):
     compile()
     failure = run()
     if failure != "":
-      ommitted.append(omit);
+      ommitted.append(omit)
       result = new
   print ""
   return result
@@ -465,8 +466,8 @@ def doOneTest():
   failure = run()
   if failure != "":
     print " failed"
-    test = shrink(test)
-    save(test)
+    shorter = shrink(test)
+    save(shorter)
     return False
   else:
     return True
@@ -492,7 +493,7 @@ try:
       doOneTest()
   else:
     print ("Replaying " + options.filename)
-    shutil.copyfile(options.filename, "captest.s");
+    shutil.copyfile(options.filename, "captest.s")
     compile()
     failure = run()
     if failure == "":
