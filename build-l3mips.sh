@@ -17,6 +17,8 @@ cd polyml.5.5.2/
 ./configure
 make
 export PATH=`pwd`:$PATH
+export LIBRARY_PATH=`pwd`/libpolyml/.libs/:$LIBRARY_PATH
+export LIBRARY_PATH=`pwd`/libpolymain/.libs/:$LIBRARY_PATH
 cd ..
 wget http://www.cl.cam.ac.uk/~acjf3/l3/l3.tar.bz2
 mkdir L3
