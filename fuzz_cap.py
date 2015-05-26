@@ -228,12 +228,12 @@ def genCClearTag(c):
 
 def genCSet(c):
   return random.choice(
-      5 * [genCIncBase(c)]
-    + 5 * [genCIncOffset(c)]
+#      5 * [genCIncBase(c)]
+      5 * [genCIncOffset(c)]
+    + 5 * [genCSetBounds(c)]
     + 3 * [genCAndPerm(c)]
-    + 3 * [genCSetLen(c)]
+#    + 3 * [genCSetLen(c)]
     + 3 * [genCSetOffset(c)]
-    + 3 * [genCSetBounds(c)]
     + 2 * [genCFromPtr(c)]
     + 1 * [genCClearTag(c)]
     + 1 * [genCCheckPerm(c)]
