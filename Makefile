@@ -1190,6 +1190,7 @@ NOSEPRED+=and not invalidateL2only
 NOSEPRED+=and not lladdr
 NOSEPRED+=and not extendedtlb
 NOSEPRED+=and not bigtlb
+NOSEPRED+=and not csettype
 NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not beri1tlb
 NOSEPRED+=and not beri1cache
