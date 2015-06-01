@@ -218,6 +218,12 @@ def genCFromPtr(c):
          , "  cfromptr " + c + ", " + c + ", $t0"
          ]
 
+def genCLC(c):
+  return [ "  clc " + c + ", $0, 0($c10)"]
+  
+def genCSC(c):
+  return [ "  csc " + c + ", $0, 0($c10)"]
+
 def genCCheckPerm(c):
   return [ "  dli $t0, " + genDWord()
          , "  ccheckperm " + c + ", $t0"
@@ -235,6 +241,8 @@ def genCSet(c):
 #    + 3 * [genCSetLen(c)]
     + 3 * [genCSetOffset(c)]
     + 2 * [genCFromPtr(c)]
+    + 2 * [genCLC(c)]
+    + 2 * [genCSC(c)]
     + 1 * [genCClearTag(c)]
     + 1 * [genCCheckPerm(c)]
     )
@@ -267,7 +275,10 @@ prelude = [
   , "  dsll    $a2, 2  # convert to byte count"
   , "  jal memcpy"
   , "  nop"
-  , "  dli     $a0, 0 # set to 1 on exception"
+  , "  dli     $a0, 0    # set to 1 on exception"
+  , "  dla     $t0, cap1 # address to load/store capability"
+  , "  cfromptr     $c10, $c0, $t0 # address to load/store capability"
+  , "  csc     $c10, $0, 0($c10) # store a valid capability there"
   , "  dli     $t0, 0"
   , ""
   , "# Auto-genetated test case:"
@@ -301,6 +312,12 @@ postlude = [
   , "  jr  $k0"
   , "  nop"
   , "  .end bev0_common_handler_stub"
+  , "  .data"
+	, "	.align	5		# Must 256-bit align capabilities"
+  , "cap1:		.dword	0x0123456789abcdef	# uperms/reserved"
+	, "	.dword	0x0123456789abcdef	# otype/eaddr"
+	, "	.dword	0x0123456789abcdef	# base"
+	, "	.dword	0x0123456789abcdef	# length"
   ]
 
 # Returns True with probability 'p', and False otherwise
