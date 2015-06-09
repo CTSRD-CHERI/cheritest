@@ -56,7 +56,7 @@ test:		.ent test
 		#
 		# Install new $c0
 		#
-		cmove	$c0, $c1
+		csetdefault $c1
 
 		dli	$t0, 0
 		lhu	$a0, 0($t0)		# 64-bit aligned
@@ -66,7 +66,7 @@ test:		.ent test
 		#
 		# Restore privileged c0 for test termination.
 		#
-		cmove	$c0, $c30
+		csetdefault $c30
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

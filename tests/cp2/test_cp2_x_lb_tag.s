@@ -77,7 +77,7 @@ test:		.ent test
 		# Save c0
 		#
 
-		cmove   $c2, $c0
+		cgetdefault   $c2
 
 		#
 		# Clear $c0's tag, so it isn't a valid capability
@@ -94,7 +94,7 @@ test:		.ent test
 		# Restore c0
 		#
 
-		cmove   $c0, $c2
+		csetdefault $c2
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

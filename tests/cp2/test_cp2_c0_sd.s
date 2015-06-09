@@ -56,7 +56,7 @@ test:		.ent test
 		#
 		# Install new $c0
 		#
-		cmove	$c0, $c1
+		csetdefault $c1
 
 		dli	$t0, 0
 		dli	$t1, 0x0011223344556677
@@ -65,7 +65,7 @@ test:		.ent test
 		#
 		# Restore privileged c0 for test termination.
 		#
-		cmove	$c0, $c30
+		csetdefault $c30
 
 		#
 		# Load using restored privilege for checking.
