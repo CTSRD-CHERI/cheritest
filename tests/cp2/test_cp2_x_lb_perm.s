@@ -77,14 +77,15 @@ test:		.ent test
 		# Save c0
 		#
 
-		cmove   $c2, $c0
+		cgetdefault   $c1
 
 		#
 		# Make $c0 a write-only capability
 		#
 
 		dli     $t0, 0xb # Permit_Load not granted
-		candperm $c0, $c0, $t0
+		candperm $c2, $c1, $t0
+		csetdefault $c2
 
 		dla	$t1, data
 		dli     $a0, 0
@@ -94,7 +95,7 @@ test:		.ent test
 		# Restore c0
 		#
 
-		cmove   $c0, $c2
+		csetdefault $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

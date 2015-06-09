@@ -46,14 +46,15 @@ test:		.ent test
 		# Save $c0 so we can restore it later
 		#	
 
-		cmove   $c1, $c0
+		cgetdefault   $c1
 
 		#
 		# Remove Permit_Store permission from $c0
 		#
 
 		dli     $t0, 0x1f7
-		candperm $c0, $c0, $t0
+		candperm $c2, $c1, $t0
+		csetdefault $c2
 
 
 		#
@@ -68,7 +69,7 @@ test:		.ent test
 		# Restore the original $c0
 		#
 
-		cmove $c0, $c1
+		csetdefault $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
