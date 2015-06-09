@@ -50,6 +50,8 @@ void get(__capability int* x)
 int test(void)
 {
 	// Explicitly set the size of the capability
+	// XXX: This should be __builtin_cheri_set_cap_bounds, but clang
+	// doesn't support it yet.
 	__capability int *b = __builtin_cheri_set_cap_length((__capability void*)buffer, 42*sizeof(int));
 	// Check that the base is correctly set to the start of the array
 	assert((long long)buffer == __builtin_cheri_get_cap_base(b));

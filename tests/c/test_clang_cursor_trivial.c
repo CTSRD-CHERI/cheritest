@@ -35,6 +35,8 @@ int test(void)
 	long long count = exception_count;
 	b[41] = 12;
 	// Explicitly set the length of the capability, in case the compiler fails
+	// XXX: This should be __builtin_cheri_set_cap_bounds, but clang
+	// doesn't support it yet.
 	__capability volatile int *v = __builtin_cheri_set_cap_length(b, sizeof(buffer));
 	// Set the cursor past the end and check that dereferencing fires an exception
 	v = __builtin_cheri_cap_offset_increment((__capability void*)v, 42*sizeof(int));
