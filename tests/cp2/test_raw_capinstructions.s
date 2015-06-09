@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Steven J. Murdoch
+# Copyright (c) 2012-2015 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,7 +34,10 @@
 		.global start
 		.ent start
 start:
-                # get fields of a capability
+		#
+                # Get fields of a capability
+		#
+
 		cgetperm  $a1, $c2
 		cgettype  $a1, $c2
 		cgetoffset $a1, $c2
@@ -41,10 +45,11 @@ start:
 		cgetlen   $a1, $c2
                 cgettag   $a1, $c2
                 cgetsealed $a1, $c2
-		cgetpcc   $c2
-		cgetcause $a1
 
-                # set the fields of a capability
+		#
+                # Set the fields of a capability
+		#
+
 		dli       $a3,  0
 		candperm  $c1, $c2, $a3
 		csetoffset $c1, $c2, $a3
@@ -53,9 +58,24 @@ start:
 		csetlen   $c1, $c2, $a3
 		csetbounds $c1, $c2, $a3
                 ccleartag $c1, $c2
-		csetcause $a3
-
 		cmove     $c1,  $c2
+
+		#
+		# Get/set special registers
+		#
+
+		cgetpcc   $c2
+		cgetcause $a1
+		csetcause $a1
+		cgetdefault $c1
+		csetdefault $c1
+
+		#
+		# Load/store operations
+		#
+
+		dla	$t0, cap1
+		csetoffset $c2, $c0, $t0
 
 		# store/load capability, register and immediate offset
 		csc	  $c1, $a3, 0($c2)
