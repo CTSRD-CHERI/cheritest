@@ -601,6 +601,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cincoffset.s		\
 		test_cp2_cincoffset_notag.s	\
 		test_cp2_cincoffset_zero.s	\
+		test_cp2_cincoffset_imprecise.s \
 		test_cp2_getandperm.s		\
 		test_cp2_getandperm_user.s	\
 		test_cp2_getcleartag.s		\
