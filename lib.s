@@ -352,8 +352,8 @@ __assert_fail:
 .global smemcpy
 .ent smemcpy 
 smemcpy:
-	CIncBase $c3, $c0, $a0      # Get the destination capability
-	CIncBase $c4, $c0, $a1      # Get the source capability
+	cfromptr $c3, $c0, $a0      # Get the destination capability
+	cfromptr $c4, $c0, $a1      # Get the source capability
 	b        memcpy_c           # Jump to the capability version
 	daddi    $a0, $a2, 0        # Move the length to arg0 (delay slot)
 .end smemcpy
