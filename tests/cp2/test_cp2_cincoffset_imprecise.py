@@ -42,8 +42,7 @@ class test_cp2_cincoffset_imprecise(BaseBERITestCase):
     @attr('capabilities')
     @attr('cap128')
     def test_cp2_cincoffset_imprecise_tag_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "CIncOffset did not set the tag on the result when it was imprecise")
-
+        self.assertRegisterEqual(self.MIPS.a1, 0, "CIncOffset did not clear the tag on the result when it was imprecise")
 
     @attr('capabilities')
     @attr('cap256')
