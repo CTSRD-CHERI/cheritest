@@ -783,7 +783,8 @@ TEST_CP2_FILES=					\
 		test_cp2_csc_tlb.s		\
 		test_cp2_x_csetoffset_sealed.s	\
 		test_cp2_x_cincoffset_sealed.s	\
-		test_cp2_x_ccall_type
+		test_cp2_x_ccall_type		\
+		test_cp2_x_jr_imprecise
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
