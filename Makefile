@@ -1143,11 +1143,6 @@ L3_NOSEPRED+=and not cap128
 endif
 
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
-#ifdef TRACE
-#define L3_TRACE --trace 2
-#else
-#define L3_TRACE --trace 0
-#endif
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -1659,7 +1654,11 @@ endif
 
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 	mkdir -p $(L3_LOGDIR)
-	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | ./l3tosim > $@ || true
+ifdef TRACE
+	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | tee $@.trace | ./l3tosim > $@ || true
+else
+	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO $(L3_MULTI) $< 2> $@.err | ./l3tosim > $@ || true
+endif
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
