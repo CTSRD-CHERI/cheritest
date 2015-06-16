@@ -783,10 +783,10 @@ TEST_CP2_FILES=					\
 		test_cp2_csc_tlb.s		\
 		test_cp2_x_csetoffset_sealed.s	\
 		test_cp2_x_cincoffset_sealed.s	\
-		test_cp2_x_ccall_type		\
-		test_cp2_x_jr_imprecise		\
-		test_cp2_x_csetbounds_base	\
-		test_cp2_x_csetbounds_length
+		test_cp2_x_ccall_type.s		\
+		test_cp2_x_jr_imprecise.s	\
+		test_cp2_x_csetbounds_length.s	\
+		test_cp2_x_csetbounds_base.s
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
@@ -1453,8 +1453,8 @@ $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_A
 # uncached and cached runs of the suite, so we just build them once.
 #
 $(OBJDIR)/test_%.o : test_%.s
-	clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
-	#$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -o $@ $<
+	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -o $@ $<
 
 
 # Put DMA model makefile into its own file. This one is already ludicrously
