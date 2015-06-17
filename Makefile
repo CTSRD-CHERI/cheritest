@@ -843,6 +843,7 @@ TEST_TLB_FILES=					\
 		test_tlb_user_mode.s		\
 		test_tlb_invalid_load.s		\
 		test_tlb_invalid_store.s	\
+		test_tlb_invalid_store_h.s	\
 		test_tlb_addrerr_load.s		\
 		test_tlb_addrerr_store.s	\
 		test_tlb_wired.s                \
