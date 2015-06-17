@@ -508,6 +508,7 @@ TEST_MEM_FILES=					\
 		test_raw_pism_truncation.s	\
 		test_lwr.s			\
 		test_lwl.s			\
+		test_swr.s			\
 		test_swl.s
 
 TEST_LLSC_FILES=				\
