@@ -506,7 +506,8 @@ TEST_MEM_FILES=					\
 		test_sync.s			\
 		test_mem_alias_data.s		\
 		test_raw_pism_truncation.s	\
-		test_lwr.s
+		test_lwr.s			\
+		test_lwl.s
 
 TEST_LLSC_FILES=				\
 		test_ll_unalign.s		\
