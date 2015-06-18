@@ -63,3 +63,10 @@ class test_tlb_tlbwr_ext(BaseBERITestCase):
     def test_tlb_tlbwr_ext_5(self):
         '''Test that the TLB entry for page 129 was evicted to index 12'''
         self.assertRegisterEqual(self.MIPS.t3, 12, "TLB entry for page 129 was not evicted to index 12")
+
+    @attr('tlb')
+    @attr('extendedtlb')
+    def test_tlb_tlbwr_ext_6(self):
+        '''Test that the TLB entry for page 1 was evicted to an associative TLB entry'''
+        self.assertRegisterInRange(self.MIPS.a6, 0, 0x7fffffff, "Evicted TLB entry for page 1 was not found")
+
