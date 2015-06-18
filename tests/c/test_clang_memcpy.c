@@ -162,18 +162,21 @@ int test(void)
 	// aligned base, unaligned offset + base
 	invalidate(&t2);
 	cpy = memcpy_c(
-		__builtin_cheri_cap_offset_set(CAP(&t2), 3),
-		__builtin_cheri_cap_offset_set(CAP(&t1), 3),
+		__builtin_cheri_cap_offset_increment(CAP(&t2), 3),
+		__builtin_cheri_cap_offset_increment(CAP(&t1), 3),
 		sizeof(t1)-6
 		);
 	assert((void*)cpy == &t2.pad0[3]);
 	check(&t2, 3, 29);
 
 	// unaligned base, aligned offset + base
+	// FIXME: This currently gives an aligned base.  We should make the CAP
+	// macro take a base and length so that it can do CIncBase / CSetLen on
+	// CHERI256, CFromPtr / CSetBounds on CHERI128
 	invalidate(&t2);
 	cpy = memcpy_c(
-		__builtin_cheri_cap_offset_set(CAP(t2.pad0-1), 1),
-		__builtin_cheri_cap_offset_set(CAP(t1.pad0-1), 1),
+		__builtin_cheri_cap_offset_increment(CAP(t2.pad0-1), 1),
+		__builtin_cheri_cap_offset_increment(CAP(t1.pad0-1), 1),
 		sizeof(t1)
 		);
 	assert((void*)cpy == &t2.pad0);
