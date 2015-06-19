@@ -109,15 +109,17 @@ def compile():
   LD      = "mips-linux-gnu-ld"
   OBJCOPY = "mips64-objcopy"
   OBJDUMP = "mips64-objdump"
-  LDFLAGS = ["-EB", "-G0", "-T", "test.ld", "-m", "elf64btsmip"]
+  LDFLAGS = ["-EB", "-G0", "-T", "test_cached.ld", "-m", "elf64btsmip"]
   CFLAGS  = ["-EB", "-march=mips64", "-mabi=64", "-G0",
              "-ggdb", "-defsym", "TEST_CP2=1" ]
   MEMCONV = "../../cherilibs/trunk/tools/memConv.py"
   subprocess.call([AS] + CFLAGS  + ["-o", "obj/lib.o", "lib.s"])
   subprocess.call([AS] + CFLAGS  + ["-o", "obj/init.o", "init.s"])
+  subprocess.call([AS] + CFLAGS  + ["-o", "obj/init_cached.o", "init_cached.s"])
   subprocess.call([AS] + CFLAGS  + ["-o", "obj/captest.o", "captest.s"])
-  subprocess.call([LD] + LDFLAGS + ["-o", "obj/captest.elf", "obj/init.o",
-                                    "obj/captest.o", "obj/lib.o"])
+  subprocess.call([LD] + LDFLAGS + ["-o", "obj/captest.elf", "obj/init.o", 
+  																	"obj/init_cached.o", "obj/captest.o", 
+  																	"obj/lib.o"])
   subprocess.call([OBJCOPY] + ["-S", "-O", "binary",
                                "obj/captest.elf", "obj/captest.bin"])
   subprocess.call(["python", MEMCONV, "-b", "obj/captest.bin"])
@@ -219,10 +221,10 @@ def genCFromPtr(c):
          ]
 
 def genCLC(c):
-  return [ "  clc " + c + ", $0, 0($c10)"]
+  return [ "  clc $c0, $0, 0($c10)"]
   
 def genCSC(c):
-  return [ "  csc " + c + ", $0, 0($c10)"]
+  return [ "  csc $c0, $0, 0($c10)"]
 
 def genCCheckPerm(c):
   return [ "  dli $t0, " + genDWord()
@@ -237,12 +239,12 @@ def genCSet(c):
 #      5 * [genCIncBase(c)]
       5 * [genCIncOffset(c)]
     + 5 * [genCSetBounds(c)]
+    + 4 * [genCLC(c)]
+    + 4 * [genCSC(c)]
     + 3 * [genCAndPerm(c)]
 #    + 3 * [genCSetLen(c)]
     + 3 * [genCSetOffset(c)]
     + 2 * [genCFromPtr(c)]
-    + 2 * [genCLC(c)]
-    + 2 * [genCSC(c)]
     + 1 * [genCClearTag(c)]
     + 1 * [genCCheckPerm(c)]
     )
@@ -277,8 +279,8 @@ prelude = [
   , "  nop"
   , "  dli     $a0, 0    # set to 1 on exception"
   , "  dla     $t0, cap1 # address to load/store capability"
-  , "  cfromptr     $c10, $c0, $t0 # address to load/store capability"
-  , "  csc     $c10, $0, 0($c10) # store a valid capability there"
+  , "  cfromptr     $c10, $c0, $t0 # $t0 # address to load/store capability"
+  , "#  csc     $c10, $0, 0($c10) # store a valid capability there"
   , "  dli     $t0, 0"
   , ""
   , "# Auto-genetated test case:"
@@ -301,6 +303,7 @@ postlude = [
   , "  li        $a0, 1"
   , "  cgetcause $a1"
   , "  dmfc0     $a2, $14    # EPC"
+  , "  cgetbase  $a3, $c31   # EPCC"
   , "  mtc0      $zero, $26  # Dump registers"
   , "  mtc0      $zero, $23  # Terminate simulator"
   , "  nop"
@@ -312,13 +315,18 @@ postlude = [
   , "  jr  $k0"
   , "  nop"
   , "  .end bev0_common_handler_stub"
-  , "  .data"
-	, "	.align	5		# Must 256-bit align capabilities"
-  , "cap1:		.dword	0x0123456789abcdef	# uperms/reserved"
-	, "	.dword	0x0123456789abcdef	# otype/eaddr"
-	, "	.dword	0x0123456789abcdef	# base"
-	, "	.dword	0x0123456789abcdef	# length"
   ]
+  
+# Random data section
+def datasection(): return [
+      " .data"
+		, "	.align	5		# Must 256-bit align capabilities"
+    , "cap1:		.dword	" + genDWord() + "	# uperms/reserved"
+	  , "	.dword	" + genDWord() + "	# otype/eaddr"
+	  , "	.dword	" + genDWord() + "	# base"
+	  , "	.dword	" + genDWord() + "	# length"
+  ]
+    
 
 # Returns True with probability 'p', and False otherwise
 def chance(p):
@@ -336,6 +344,8 @@ def queryCap():
     , "  cgettag    $s4, $c0"
     , "  cgetsealed $s5, $c0"
     , "  cgettype   $s6, $c0"
+    , "  cld        $t8, $0, 0($c10)"
+    , "  cld        $t9, $0, 8($c10)"
     ])
 
   branch = random.choice(["cbts", "cbtu"])
@@ -442,15 +452,15 @@ def testSealUnseal():
   return testseq
 
 # Write a test to a file
-def emit(testseq, filename="captest.s"):
+def emit(testseq, dataseq, filename="captest.s"):
   # Write to file "captest.s"
   f = open(filename, "w")
-  for line in prelude + testseq + postlude:
+  for line in prelude + testseq + postlude + dataseq:
     f.write(line + "\n")
   f.close()
 
 # Save a test
-def save(testseq, saveHex = False):
+def save(testseq, dataseq, saveHex = False):
   # Ensure that "fuzz_cap" directory exists
   if not os.path.exists("fuzz_cap"):
     os.mkdir("fuzz_cap")
@@ -460,7 +470,7 @@ def save(testseq, saveHex = False):
 
   # Write to disc
   print ("Saved to " + filename + ".s")
-  emit(testseq, filename + ".s")
+  emit(testseq, dataseq, filename + ".s")
 
   # Save hex file too if requested
   if saveHex:
@@ -471,7 +481,7 @@ def save(testseq, saveHex = False):
 def gen():
   # Choose a test sequence
   testseq = []
-  if chance(0.33):
+  if chance(.33):
     if verbose: print "{Set-Get}"
     testseq = testSetGet()
   elif chance(0.33):
@@ -484,7 +494,7 @@ def gen():
   return testseq
 
 # Shrink a failing test
-def shrink(test):
+def shrink(test, dataseq):
   n        = len(test)
   ommitted = []
   result   = []
@@ -495,7 +505,7 @@ def shrink(test):
     for (i, instr) in zip(range(n), test):
       if omit != i and i not in ommitted:
         new.append(instr)
-    emit(new)
+    emit(new, dataseq)
     compile()
     failure = run()
     if failure != "":
@@ -508,15 +518,16 @@ def shrink(test):
 # And then shrink the test if it fails.
 def doOneTest():
   test = gen()
-  emit(test)
+  dataseq = datasection()
+  emit(test, dataseq)
   compile()
   failure = run()
   if failure != "":
     print " failed"
-    shorter = shrink(test)
-    emit(shorter)
+    shorter = shrink(test, dataseq)
+    emit(shorter, dataseq)
     compile()
-    save(shorter, True)
+    save(shorter, dataseq, True)
     return False
   else:
     return True
