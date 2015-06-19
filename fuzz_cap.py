@@ -2,6 +2,7 @@
 
 #
 # Copyright (c) 2015 Matthew Naylor
+# Copyright (c) 2015 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -60,6 +61,13 @@ if 'L3CHERI' in os.environ.keys():
 else:
   print "Please set the L3CHERI environment variable"
   print "It should point to an L3-compiled binary"
+  exit()
+
+if 'BSVCHERI' in os.environ.keys():
+  BSVCHERI = os.environ['BSVCHERI']
+else:
+  print "Please set the BSVCHERI environment variable"
+  print "It should point to a bluespec simulator"
   exit()
 
 # =====================
@@ -145,10 +153,9 @@ def run():
         regFileL3[fields[1]] = "0x" + fields[2].lower()
 
   # Obtain output from BSV
-  os.chdir('../../cheri/trunk')
-  outputBSV = subprocess.check_output(["./sim", "+regDump"],
+  outputBSV = subprocess.check_output([BSVCHERI, "+regDump"],
                                       stderr=subprocess.STDOUT)
-  os.chdir('../../cheritest/trunk')
+
   regFileBSV = {}
   for line in outputBSV.split("\n"):
     fields = line.split()
