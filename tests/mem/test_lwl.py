@@ -41,3 +41,6 @@ class test_lwl(BaseBERITestCase):
 
     def test_lwl_3(self):
         self.assertRegisterEqual(self.MIPS.a3, 0x04ffffff, "LWL at offset 2 gave unexpected result")
+
+    def test_lwl_4(self):
+        self.assertRegisterEqual(self.MIPS.a5, 0, "LWL at offset increased by 4 gave different result")
