@@ -1669,7 +1669,13 @@ $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 ifdef TRACE
 	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | tee $@.trace | ./l3tosim > $@ || true
 else
+ifdef PROFILE
+	rm -f mlmon.out
+endif
 	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO $(L3_MULTI) $< 2> $@.err | ./l3tosim > $@ || true
+ifdef PROFILE
+	mlprof -raw true -show-line true `which $(L3_SIM)` mlmon.out > $(L3_LOGDIR)/$*.cover
+endif
 endif
 
 # Simulate a failure on all unit tests
