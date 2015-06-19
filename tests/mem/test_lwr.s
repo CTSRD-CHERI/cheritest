@@ -41,6 +41,8 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
+		dli	$a5, 0
+
 		dla	$t0, data
 		dli	$t1, -1
 		daddiu	$a0, $t1, 0
@@ -52,6 +54,40 @@ test:		.ent test
 		daddiu	$a3, $t1, 0
 		lwr	$a3, 3($t0)
 
+		#
+		# LWR at offsets 4 .. 7 should give the same result as for
+		# offsets 0 .. 3, but it exercizes different code paths in
+		# the L3 formal model because the memory is modelled as
+		# 64-bit dwords. It might exercize different code paths in
+		# a hardware implementation, too.
+		#
+
+                daddiu  $a4, $t1, 0
+		lwr     $a4, 4($t0)
+		bne     $a4, $a0, fail
+		nop     # branch delay slot
+
+                daddiu  $a4, $t1, 0
+		lwr     $a4, 5($t0)
+		bne     $a4, $a1, fail
+		nop     # branch delay slot
+
+                daddiu  $a4, $t1, 0
+		lwr     $a4, 6($t0)
+		bne     $a4, $a2, fail
+		nop     # branch delay slot
+
+                daddiu  $a4, $t1, 0
+		lwr     $a4, 7($t0)
+		bne     $a4, $a3, fail
+		nop     # branch delay slot
+
+		b	pass
+		nop
+
+fail:		
+		dli	$a5, 1
+pass:
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
@@ -62,3 +98,4 @@ test:		.ent test
 		.data
 		.align 3
 data:		.word 0x01020304
+		.word 0x01020304
