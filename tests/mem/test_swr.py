@@ -41,3 +41,6 @@ class test_swr(BaseBERITestCase):
 
     def test_swr_3(self):
         self.assertRegisterEqual(self.MIPS.a3, 0x01020304, "SWR at offset 2 gave unexpected result")
+
+    def test_swr_5(self):
+        self.assertRegisterEqual(self.MIPS.a5, 0, "SWR at offset increased by 4 gave different result")
