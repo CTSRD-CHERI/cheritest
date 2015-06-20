@@ -31,7 +31,7 @@
 .set noat
 
 #
-# Test that clbur raises an exception if CP2 is disabled
+# Test that clb raises an exception if CP2 is disabled.
 #
 
 		.global test
@@ -83,11 +83,21 @@ test:		.ent test
 		dli	$a4, 0
 		clb   	$a4, $zero, 0($c1) # This should raise an exception
 		
+		#
+		# Enable CP2
+		#
+
+		mfc0	$t0, $12	# Status register
+		dli	$t1, 1
+		sll	$t1, 30		# Coprocessor 2 usable bit
+		or	$t1, $t1, $t0
+		mtc0	$t1, $12
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
 		jr	$ra
-		nop			# branch-delay slot
+		nop			# branch delay slot
 		.end	test
 
 		.ent bev0_handler
