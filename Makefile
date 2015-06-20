@@ -793,7 +793,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_jr_imprecise.s	\
 		test_cp2_x_csetbounds_length.s	\
 		test_cp2_x_csetbounds_base.s	\
-		test_cp2_x_csetbounds_overflow.s
+		test_cp2_x_csetbounds_overflow.s \
+		test_cp2_x_clb_disabled.s
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
