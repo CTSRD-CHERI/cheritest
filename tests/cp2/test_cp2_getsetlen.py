@@ -29,16 +29,16 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Check basic behaviour of cgetleng and csetlen.
+# Check basic behaviour of cgetlen and csetlen.
 #
 
-class test_cp2_getsetleng(BaseBERITestCase):
+class test_cp2_getsetlen(BaseBERITestCase):
     @attr('capabilities')
-    def test_cp2_getleng1(self):
-        '''Test that cgetleng returns correct initial value'''
-        self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "cgetleng returns incorrect initial value")
+    def test_cp2_getlen_1(self):
+        '''Test that cgetlen returns correct initial value'''
+        self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "cgetlen returns incorrect initial value")
 
     @attr('capabilities')
-    def test_cp2_getleng2(self):
-        '''Test that cgetleng returns correct value after csetlen'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x100, "cgetleng returns incorrect value after csetleng")
+    def test_cp2_getlen_2(self):
+        '''Test that cgetlen returns correct value after csetlen'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x100, "cgetlen returns incorrect value after csetlen")

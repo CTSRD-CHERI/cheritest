@@ -599,7 +599,7 @@ TEST_CP2_FILES=					\
 		test_cp2_reg_name.s		\
 		test_cp2_getsettype.s		\
 		test_cp2_getincbase.s		\
-		test_cp2_getsetleng.s		\
+		test_cp2_getsetlen.s		\
 		test_cp2_getsetoffset.s		\
 		test_cp2_csetoffset_int.s	\
 		test_cp2_csetoffset_notag.s	\
