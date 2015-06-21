@@ -34,6 +34,7 @@ class test_cp2_x_multiop_tag(BaseBERITestCase):
     def test_cp2_x_multiop_tag_1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "An unexpected exception was raised during the test of capability operations on a register with tag bit clear")
 
+    @attr('capabilities')
     def test_cp2_x_multiop_tag_2(self):
         self.assertRegisterEqual(self.MIPS.a2, 9, "An unexpected number of exceptions was raised during the test of capability operations on a register with tag bit clear")
 
