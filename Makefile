@@ -797,7 +797,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_clb_disabled.s	\
 		test_cp2_x_multiop_disabled.s	\
 		test_cp2_x_multiop_tag.s	\
-		test_cp2_x_multiop_sealed.s
+		test_cp2_x_multiop_sealed.s	\
+		test_cp2_x_cptrcmp_unimp.s
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
