@@ -932,7 +932,8 @@ TEST_CLANG_FILES=				\
 		test_clang_opaque.c		\
 		test_clang_load_float.c		\
 		test_clang_load_double.c	\
-		test_clang_pack.c
+		test_clang_pack.c		\
+		test_clang_sub.c
 else
 TEST_CLANG_FILES=
 endif
