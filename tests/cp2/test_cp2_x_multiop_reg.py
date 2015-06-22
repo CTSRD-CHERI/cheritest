@@ -36,5 +36,5 @@ class test_cp2_x_multiop_reg(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_multiop_reg_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 29, "An unexpected number of exceptions was raised during the test of capability operations on a reserved register without the required permission in PCC")
+        self.assertRegisterEqual(self.MIPS.a2, 41, "An unexpected number of exceptions was raised during the test of capability operations on a reserved register without the required permission in PCC")
 

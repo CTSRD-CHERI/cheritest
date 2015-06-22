@@ -75,6 +75,24 @@ sandbox:
 		# cunseal requires a sealed capability, so don't test
 		# it here
 
+		#
+		# Comparison operations
+		#
+
+		ceq	$t0, $c1, $c29
+		ceq	$t0, $c29, $c1
+		cne	$t0, $c1, $c29
+		cne	$t0, $c29, $c1
+		clt	$t0, $c1, $c29
+		clt	$t0, $c29, $c1
+		cle	$t0, $c1, $c29
+		cle	$t0, $c29, $c1
+		cltu	$t0, $c1, $c29
+		cltu	$t0, $c29, $c1
+		cleu	$t0, $c1, $c29
+		cleu	$t0, $c29, $c1
+		
+
 		cjr	$c24
 		nop		# Branch delay slot
 
