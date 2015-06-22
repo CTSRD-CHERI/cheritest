@@ -219,5 +219,6 @@ expected_cause:
 data:		.dword	0x0123456789abcdef
 		.dword  0x0123456789abcdef
 		.dword  0x0123456789abcdef
+		.dword  0x0123456789abcdef
 
 
