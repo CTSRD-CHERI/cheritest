@@ -133,6 +133,16 @@ test:		.ent test
 		cleu $t0, $c1, $c1
 
 		#
+		# Branches
+		#
+
+		cbts $c1, L1
+		nop
+L1:
+		cbtu	$c1, L2
+		nop
+L2:
+		#
 		# Enable CP2
 		#
 
