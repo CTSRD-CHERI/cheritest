@@ -59,7 +59,8 @@ sandbox:
 		cgettype $t0, $c29
 		cincbase $c2, $c29, $zero
 		cincbase $c29, $c1, $zero
-		# cincoffset is complicated
+		cincoffset $c2, $c29, $zero
+		cincoffset $c29, $c1, $zero
 		cseal $c2, $c1, $c29
 		cseal $c2, $c29, $c1
 		cseal $c29, $c1, $c1
@@ -67,7 +68,8 @@ sandbox:
 		csetbounds $c29, $c1, $zero
 		csetlen $c2, $c29, $zero
 		csetlen $c29, $c1, $zero
-		# csetoffset is complicated
+		csetoffset $c2, $c29, $zero
+		csetoffset $c29, $c1, $zero
 		ctoptr $t0, $c2, $c29
 		ctoptr $t0, $c29, $c1
 		# cunseal requires a sealed capability, so don't test
