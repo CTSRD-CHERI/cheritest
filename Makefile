@@ -1183,6 +1183,7 @@ CHERIROOT?=../../cheri$(BERI_VER)/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=../../cherilibs/trunk
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
+PISM_MODULES_PATH=$(CHERILIBS_ABS)/peripherals
 MEMCONF?=$(CHERIROOT_ABS)/memoryconfig
 TOOLS_DIR= ${CHERILIBS_ABS}/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
@@ -1361,8 +1362,9 @@ SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED
 GXEMUL_FUZZ_TEST_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_LOGS))
 GXEMUL_FUZZ_TEST_CACHED_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_CACHED_LOGS))
 
-REWRITE_PISM_CONF = sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' < $(1) > $(2)
-COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(MEMCONF),$$TMPDIR/memoryconfig)
+#REWRITE_PISM_CONF = sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' < $(1) > $(2)
+#COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(MEMCONF),$$TMPDIR/memoryconfig)
+COPY_PISM_CONFS = cp $(MEMCONF) $$TMPDIR/memoryconfig
 
 PREPARE_TEST = \
 	TMPDIR=$$(mktemp -d) && \
@@ -1379,6 +1381,7 @@ PREPARE_TEST = \
 
 RUN_TEST_COMMAND = \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+    PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	CHERI_DTB=$(DTB_FILE) \
 	BERI_DEBUG_SOCKET_0=$(CHERISOCKET)  $(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
@@ -1398,6 +1401,7 @@ RUN_TEST = $(call REPEAT_5,$(RUN_TEST_COMMAND))
 #RUN_TEST = \
 	for attempt in 0 1 2 4 5; do if \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+    PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM) -V $(HOME)/$(1).vcd -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@; \
@@ -1429,6 +1433,7 @@ $(CHERISOCKET):
 	$(MEMCONV) bsim && \
 	$(COPY_PISM_CONFS) && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+    PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	$(SIM) &
 
