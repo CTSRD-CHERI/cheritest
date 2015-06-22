@@ -92,6 +92,26 @@ sandbox:
 		cleu	$t0, $c1, $c29
 		cleu	$t0, $c29, $c1
 		
+		#
+		# Loads and stores
+		#
+
+		dla	$t1, data
+		clcr	$c2, $t1($c29)
+		clcr	$c29, $t1($c1)
+		cscr	$c2, $t1($c29)
+		cscr	$c29, $t1($c1)
+		clbr	$t0, $t1($c29)
+		csbr	$t0, $t1($c29)
+		clhr	$t0, $t1($c29)
+		cshr	$t0, $t1($c29)
+		clwr	$t0, $t1($c29)
+		cswr	$t0, $t1($c29)
+		cldr	$t0, $t1($c29)
+		csdr	$t0, $t1($c29)
+		clldr	$t0, $t1($c29)
+		cscdr	$t0, $t1($c29)
+
 
 		cjr	$c24
 		nop		# Branch delay slot
