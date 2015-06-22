@@ -755,6 +755,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cgetcause_perm.s	\
 		test_cp2_x_csetcause_perm.s	\
 		test_cp2_x_cincbase_tag.s	\
+		test_cp2_x_cincbase_length.s	\
 		test_cp2_x_csetlen_tag.s	\
 		test_cp2_x_candperm_tag.s	\
 		test_cp2_x_cjalr_tag.s		\
