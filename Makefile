@@ -742,6 +742,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_clc_bounds.s		\
 		test_cp2_x_cunseal_otype.s	\
 		test_cp2_x_cunseal_perm.s	\
+		test_cp2_x_cseal_length.s	\
 		test_cp2_x_csealdata_tag.s	\
 		test_cp2_x_csealdata_reg.s	\
 		test_cp2_x_csealdata_perm.s	\
