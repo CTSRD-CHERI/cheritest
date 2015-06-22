@@ -119,6 +119,25 @@ test:		.ent test
 		# the tag bit is not set
 		#
 
+		#
+		# Loads and stores
+		#
+
+
+		dla	$t1, data
+		clcr	$c2, $t1($c1)
+		cscr	$c1, $t1($c1)
+		clbr	$t0, $t1($c1)
+		csbr	$t0, $t1($c1)
+		clhr	$t0, $t1($c1)
+		cshr	$t0, $t1($c1)
+		clwr	$t0, $t1($c1)
+		cswr	$t0, $t1($c1)
+		cldr	$t0, $t1($c1)
+		csdr	$t0, $t1($c1)
+		clldr	$t0, $t1($c1)
+		cscdr	$t0, $t1($c1)
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
@@ -172,6 +191,7 @@ expected_cause:
 		.data
 		.align	5
 data:		.dword	0x0123456789abcdef
+		.dword  0x0123456789abcdef
 		.dword  0x0123456789abcdef
 		.dword  0x0123456789abcdef
 
