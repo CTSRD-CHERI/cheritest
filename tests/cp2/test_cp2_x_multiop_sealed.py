@@ -32,7 +32,7 @@ class test_cp2_x_multiop_sealed(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_multiop_sealed_1(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "An unexpected exception was raised during the test of capability operations on a register with the sealed bit clear")
+        self.assertRegisterEqual(self.MIPS.a1, 0, "An unexpected exception was raised during the test of capability operations on a register with the sealed bit set")
 
     @attr('capabilities')
     def test_cp2_x_multiop_sealed_2(self):
