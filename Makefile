@@ -740,6 +740,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_clc_vaddr.s		\
 		test_cp2_x_clc_priority.s	\
 		test_cp2_x_clc_bounds.s		\
+		test_cp2_x_clc_underflow.s	\
 		test_cp2_x_cunseal_otype.s	\
 		test_cp2_x_cunseal_perm.s	\
 		test_cp2_x_cseal_length.s	\
