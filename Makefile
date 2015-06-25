@@ -762,6 +762,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csetlen_length.s	\
 		test_cp2_x_candperm_tag.s	\
 		test_cp2_x_cjalr_tag.s		\
+		test_cp2_x_cjalr_sealed.s	\
 		test_cp2_cunseal_ephemeral.s	\
 		test_cp2_x_cunseal_unsealed.s	\
 		test_cp2_x_cunseal_sealed.s	\
