@@ -143,7 +143,7 @@ expected_exception:
 
 
 		.data
-		.align	5
+		.align	7	# NB: Cache line algined
 data:
 
 		.rept	160
