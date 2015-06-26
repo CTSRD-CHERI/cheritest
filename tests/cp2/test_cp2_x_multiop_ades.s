@@ -90,7 +90,9 @@ test:		.ent test
 		#
 		# Try some CP2 instructions
 		#
-		# Loads and stores
+
+		#
+		# Stores
 		#
 
 		dli	$t1, 127	# unaligned, probably spans cache line
@@ -145,5 +147,5 @@ expected_exception:
 data:
 
 		.rept	160
-		.byte	9
+		.byte	0
 		.endr
