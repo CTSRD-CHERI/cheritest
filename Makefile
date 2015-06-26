@@ -808,6 +808,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_multiop_reg.s	\
 		test_cp2_x_multiop_adel.s	\
 		test_cp2_x_multiop_ades.s	\
+		test_cp2_x_multiop_permit_store.s \
 		test_cp2_x_cptrcmp_unimp.s
 endif
 
