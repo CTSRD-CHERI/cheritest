@@ -31,7 +31,7 @@
 .set noat
 
 #
-# Test that the load and store via capability operations raise an exception
+# Test that the load via capability operations raise an exception
 # if the address is not correctly aligned.
 #
 
@@ -90,7 +90,9 @@ test:		.ent test
 		#
 		# Try some CP2 instructions
 		#
-		# Loads and stores
+
+		#
+		# Loads
 		#
 
 		dli	$t1, 127	# unaligned, probably spans cache line
@@ -145,5 +147,5 @@ expected_exception:
 data:
 
 		.rept	160
-		.byte	9
+		.byte	0
 		.endr
