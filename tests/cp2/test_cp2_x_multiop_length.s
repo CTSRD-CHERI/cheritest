@@ -132,6 +132,19 @@ test:		.ent test
 		clldr	$t0, $a0($c1)
 		cscdr	$t0, $a0($c1)
 
+		clci	$c2, -32($c1)
+		csci	$c1, -32($c1)
+		clbi	$t0, -1($c1)
+		csbi	$t0, -1($c1)
+		clhi	$t0, -2($c1)
+		cshi	$t0, -2($c1)
+		clwi	$t0, -4($c1)
+		cswi	$t0, -4($c1)
+		cldi	$t0, -8($c1)
+		csdi	$t0, -8($c1)
+		clldi	$t0, -8($c1)
+		cscdi	$t0, -8($c1)
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
