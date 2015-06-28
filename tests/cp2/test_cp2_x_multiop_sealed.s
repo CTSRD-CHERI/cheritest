@@ -78,8 +78,9 @@ test:		.ent test
 		#
 
 		# Permissions Global, Permit_Load, Permit_Store,
-		# but not Permit_Execute.
-		dli	$t0, 0xd 
+		# Permit_Load_Capability, Permit_Store_Capability, but not
+		# Permit_Execute.
+		dli	$t0, 0x3d 
 
 		candperm $c1, $c1, $t0
 		dli	$t0, 1
