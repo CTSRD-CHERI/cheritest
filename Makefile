@@ -479,6 +479,7 @@ TEST_ALU_FILES=					\
 		test_mul_hilo.s			\
 		test_mult.s			\
 		test_multu.s			\
+		test_multu_ex.s			\
 		test_dmult.s			\
 		test_dmultu.s			\
 		test_madd.s			\
