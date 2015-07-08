@@ -487,6 +487,7 @@ TEST_ALU_FILES=					\
 		test_msubu.s			\
 		test_mul_div_loop.s		\
 		test_mult_exception.s		\
+		test_mult_ex.c			\
 		test_slt.s			\
 		test_slti.s			\
 		test_sltiu.s			\
