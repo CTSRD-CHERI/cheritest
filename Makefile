@@ -475,6 +475,7 @@ TEST_ALU_FILES=					\
 		test_ddivu.s			\
 		test_div_zero.s			\
 		test_divu_zero.s		\
+		test_div_ex.s			\
 		test_mul.s			\
 		test_mul_hilo.s			\
 		test_mult.s			\
