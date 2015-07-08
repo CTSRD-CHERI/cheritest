@@ -30,19 +30,19 @@ from nose.plugins.attrib import attr
 
 class test_div_ex(BaseBERITestCase):
 
-    @attr('ignore_bad_ex')
+    @attr('ignorebadex')
     def test_div_ex_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 2, "DIV of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
-    @attr('ignore_bad_ex')
+    @attr('ignorebadex')
     def test_div_ex_2(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "DIV of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
-    @attr('ignore_bad_ex')
+    @attr('ignorebadex')
     def test_div_ex_3(self):
         self.assertRegisterEqual(self.MIPS.a2, 2, "DIV of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
-    @attr('ignore_bad_ex')
+    @attr('ignorebadex')
     def test_div_ex_4(self):
         self.assertRegisterEqual(self.MIPS.a3, 0, "DIV of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 

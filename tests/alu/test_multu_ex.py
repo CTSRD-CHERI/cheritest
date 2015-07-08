@@ -30,19 +30,19 @@ from nose.plugins.attrib import attr
 
 class test_multu_ex(BaseBERITestCase):
 
-    @attr('ignore_bad_ex')
+    @attr('ignorebadex')
     def test_multu_ex_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 6, "MULTU of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
-    @attr('ignore_bad_ex')
+    @attr('ignorebadex')
     def test_multu_ex_2(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "MULTU of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
-    @attr('ignore_bad_ex')
+    @attr('ignorebadex')
     def test_multu_ex_3(self):
         self.assertRegisterEqual(self.MIPS.a2, 6, "MULTU of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
-    @attr('ignore_bad_ex')
+    @attr('ignorebadex')
     def test_multu_ex_4(self):
         self.assertRegisterEqual(self.MIPS.a3, 0, "MULTU of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
