@@ -216,7 +216,23 @@ class BaseBERITestCase(unittest.TestCase):
             else:
                 msg = msg + ": "
             self.fail(msg + "0x%016x != 0x%016x"%(reg_val, expected))
-    
+
+    def assertNullCap(self, cap, msg = None):
+        self.assertRegisterEqual(cap.u     , 0, msg)
+        self.assertRegisterEqual(cap.ctype , 0, msg)
+        self.assertRegisterEqual(cap.perms , 0, msg)
+        self.assertRegisterEqual(cap.offset, 0, msg)
+        self.assertRegisterEqual(cap.base  , 0, msg)
+        self.assertRegisterEqual(cap.length, 0, msg)
+
+    def assertDefaultCap(self, cap, msg = None):
+        self.assertRegisterEqual(cap.u     , 0, msg)
+        self.assertRegisterEqual(cap.ctype , 0, msg)
+        self.assertRegisterEqual(cap.perms , 0x7fffffff, msg)
+        self.assertRegisterEqual(cap.offset, 0, msg)
+        self.assertRegisterEqual(cap.base  , 0, msg)
+        self.assertRegisterEqual(cap.length, 0xffffffffffffffff, msg)
+
 class BaseICacheBERITestCase(BaseBERITestCase):
     '''Abstract base class for test cases for the BERI Instruction Cache.'''
 
