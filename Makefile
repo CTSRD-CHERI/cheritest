@@ -1185,7 +1185,7 @@ L3_NOSEPRED+=and not mt
 endif
 
 ifneq ($(CAP_SIZE),256)
-L3_NOSEPRED+=and not cap256
+L3_NOSEPRED+=and not cap256 and not beri1cache
 endif
 
 ifneq ($(CAP_SIZE),128)
@@ -1198,8 +1198,8 @@ L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
-TEST_CYCLE_LIMIT?=1500000
-#TEST_CYCLE_LIMIT?=15000000
+#TEST_CYCLE_LIMIT?=1500000
+TEST_CYCLE_LIMIT?=15000000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
@@ -1710,7 +1710,7 @@ endif
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 	mkdir -p $(L3_LOGDIR)
 ifdef TRACE
-	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | tee $@.trace | ./l3tosim > $@ || true
+	$(L3_SIM) --cycles `./max_cycles $@ 20000000 30000000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | tee $@.trace | ./l3tosim > $@ || true
 else
 ifdef PROFILE
 	rm -f mlmon.out
