@@ -1245,7 +1245,6 @@ NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not beri1tlb
 NOSEPRED+=and not beri1cache
 NOSEPRED+=and not beri1oldcache
-NOSEPRED+=and not largepage
 NOSEPRED+=and not loadcachetag
 else
 NOSEPRED+=and not noextendedtlb
