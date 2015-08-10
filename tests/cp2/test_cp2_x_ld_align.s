@@ -34,6 +34,9 @@
 # Test that ld raises an exception if C0.base + offset is incorrectly aligned,
 # even if the offset itself is aligned.
 #
+# XXX: This test doesn't work at the moment, because it needs to install
+# an exception handler that can cope with $c0 being set to an unexpected
+# value.
 
 		.global test
 test:		.ent test
