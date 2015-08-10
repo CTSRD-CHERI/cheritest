@@ -826,6 +826,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_multiop_permit_store.s \
 		test_cp2_x_multiop_length.s \
 		test_cp2_x_cptrcmp_unimp.s \
+		test_cp2_x_ld_align.s \
 		test_cp2_clearregs_gplo.s \
 		test_cp2_clearregs_gphi.s \
 		test_cp2_clearregs_caplo.s \
@@ -1247,6 +1248,7 @@ NOSEPRED+=and not beri1cache
 NOSEPRED+=and not beri1oldcache
 NOSEPRED+=and not loadcachetag
 else
+NOSEPRED+=and not alignex
 NOSEPRED+=and not noextendedtlb
 NOSEPRED+=and not smalltlb
 NOSEPRED+=and not gxemultlb
