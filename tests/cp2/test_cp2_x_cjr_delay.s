@@ -57,11 +57,18 @@ test:		.ent test
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
 
-		dla	$t0, data
-
+		#
+		# Set $c2 to a capability with no permissions. An exception
+		# will be raised when we try to use it.
+		#
 
 		cgetdefault $c2
 		candperm $c2, $c1, $zero
+
+		#
+		# Do a CJR to address L1, with an exception in the
+		# branch delay slot.
+		#
 
 		cgetpcc $c1
 		dla	$t0, L1
@@ -86,7 +93,7 @@ bev0_handler:
 		li	$a2, 1
 		mfc0	$a3, $13	# Cause register
 		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		dla	$k0, L1
 		dmtc0	$k0, $14
 		nop
 		nop
