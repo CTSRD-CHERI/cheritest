@@ -1509,7 +1509,7 @@ $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_A
 #
 $(OBJDIR)/test_%.o : test_%.s
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 
 # Put DMA model makefile into its own file. This one is already ludicrously
