@@ -25,6 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
@@ -62,12 +63,7 @@ test:		.ent test
 		syscall	0
 		# The following instruction should NOT be executed because the
 		# handler will return to syscall + 8
-		cincbase	$c2, $c2, $t0  # not executed
-
-		# Test csetlen
-		dli	$t1, 0x100
-		syscall 0
-		csetlen	$c3, $c3, $t1  # not executed
+		csetbounds	$c2, $c2, $t0  # not executed
 
 		# Test candperm
 		dli	$t2, 0x100
