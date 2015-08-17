@@ -108,12 +108,10 @@ test:		.ent test
 		# cgettype doesn't check the sealed bit
 		# cincbase doesn't check the sealed bit if rt=0
 		dli $t0, 1
-		cincbase $c2, $c1, $t0
 		# cincoffset is complicated
 		cseal $c2, $c1, $c3
 		cseal $c2, $c3, $c1
 		csetbounds $c2, $c1, $zero
-		csetlen $c2, $c1, $zero
 		# csetoffset is complicated
 		# ctoptr does not check the sealed bit
 		# cunseal requires a sealed capability, so don't test
