@@ -33,17 +33,19 @@ from nose.plugins.attrib import attr
 #
 
 class test_cp2_x_csetbounds_delay2(BaseBERITestCase):
+
+    # XXX : FIXME : This is wrong.
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay2_1(self):
-        '''Test csetbounds did set bounds of of a sealed capability'''
+        '''Test CSetBounds did not set the length of of a sealed capability'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
-            "csetbounds bounded a sealed capability")
+            "CSetBounds set the length of a sealed capability")
 
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay2_2(self):
-        '''Test csetboundsraised a C2E exception when capability was sealed'''
+        '''Test CSetBounds raised a C2E exception when capability was sealed'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
-            "csetbounds did not raise an exception when capability was sealed")
+            "CSetBounds did not raise an exception when capability was sealed")
 
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay2_3(self):

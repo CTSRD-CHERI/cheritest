@@ -60,7 +60,7 @@ test:		.ent test
 		#
 
 		dla     $t0, data
-		cincoffset $c1, $c0, $t0
+		csetoffset $c1, $c0, $t0
 		dli     $t0, 8
                 csetbounds $c1, $c1, $t0
 		dli     $t0, 0x5
@@ -74,7 +74,8 @@ test:		.ent test
 		csetoffset $c2, $c0, $t0
 
 		#
-		# Seal $c1 with $c2 so that an attempt to incbase $c1 will fail
+		# Seal $c1 with $c2 so that an attempt to CSetBounds $c1 will
+		# fail.
 		#
 
 		cseal	$c1, $c1, $c2
@@ -86,7 +87,7 @@ test:		.ent test
 		nop
 		nop
 L1:
-		cgetbase $a0, $c1
+		cgetbase $a0, $c1	# XXX: FIXME : This is wrong.
 		dla	$t0, data
 		dsubu   $a0, $a0, $t0
 
