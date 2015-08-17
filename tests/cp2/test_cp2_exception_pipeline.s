@@ -58,7 +58,7 @@ test:		.ent test
 		jal	bev0_handler_install
                 nop
 	
-		# Test cincbase
+		# Test csetbounds
 		dli	$t0, 0x100
 		syscall	0
 		# The following instruction should NOT be executed because the
