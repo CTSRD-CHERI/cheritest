@@ -790,7 +790,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_lb_perm.s		\
 		test_cp2_x_lb_tag.s		\
 		test_cp2_x_lb_sealed.s		\
-		test_cp2_x_cincbase_delay.s	\
+		test_cp2_x_csetbounds_delay.s	\
 		test_cp2_x_cincbase_delay2.s	\
 		test_cp2_x_cbtu_reg.s		\
 		test_cp2_x_cbtu_length.s	\
@@ -1202,7 +1202,7 @@ L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
 #TEST_CYCLE_LIMIT?=1500000
-TEST_CYCLE_LIMIT?=1500000
+TEST_CYCLE_LIMIT?=15000000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
@@ -1507,7 +1507,7 @@ $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_A
 # Targets for unlinked .o files.  The same .o files can be used for both
 # uncached and cached runs of the suite, so we just build them once.
 #
-$(OBJDIR)/test_%.o : test_%.s macros.s
+$(OBJDIR)/test_%.o : test_%.s
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
