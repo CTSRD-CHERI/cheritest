@@ -62,9 +62,18 @@ max_thread_count = 32
         .endr
 .endm
 
-.macro cincbaseMac dest, source, offset
-        cgetlen    $at, \dest
+.macro cincbase dest, source, offset
+        cgetoffset $t9, \source
+        cgetlen    $at, \source
         dsubu      $at, $at, \offset
         csetoffset \dest, \source, \offset
-        csetbounds \dest, \source, $at
+        csetbounds \dest, \dest, $at
+        csetoffset \dest, \dest, $t9
+.endm
+
+.macro csetlen dest, source, offset
+        cgetoffset $at, \source
+        csetoffset \dest, \source, $0
+        csetbounds \dest, \dest, \offset
+        csetoffset \dest, \dest, $at
 .endm
