@@ -80,9 +80,9 @@ test:		.ent test
 		#
 
 		dla	$t0, data
-		cincbase $c2, $c0, $t0
+		cincoffset $c2, $c0, $t0
 		dli	$t0, 8
-		csetlen	$c2, $c2, $t0
+		csetbounds	$c2, $c2, $t0
 		dli	$t0, 3
 		candperm $c2, $c2, $t0
 		cseal	$c2, $c2, $c1
@@ -93,7 +93,10 @@ test:		.ent test
 		#
 
 		dli	$t0, 0x10
-		csetlen	$c3, $c1, $t0
+		csetoffset $c3, $c1, $0
+		csetbounds	$c3, $c3, $t0
+		dli	$t0, 0x1234
+		csetoffset $c3, $c3, $t0
 
 		#
 		# Clear $c4 so we can tell if the following cunseal succeeds
