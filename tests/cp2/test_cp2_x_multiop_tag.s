@@ -100,12 +100,10 @@ test:		.ent test
 		# cgettype doesn't check the tag bit
 		# cincbase doesn't check the tag bit if rt=0
 		dli $t0, 1
-		cincbase $c2, $c1, $t0
 		# cincoffset is complicated
 		cseal $c2, $c1, $c3
 		cseal $c2, $c3, $c1
 		csetbounds $c2, $c1, $zero
-		csetlen $c2, $c1, $zero
 		# csetoffset is complicated
 		# ctoptr only checks the tag on the third argument; it returns
 		# zero (i.e. the NULL pointer) if its second argument has the

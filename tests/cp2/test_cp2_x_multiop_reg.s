@@ -57,8 +57,6 @@ sandbox:
 		cgetsealed $t0, $c29
 		cgettag $t0, $c29
 		cgettype $t0, $c29
-		cincbase $c2, $c29, $zero
-		cincbase $c29, $c1, $zero
 		cincoffset $c2, $c29, $zero
 		cincoffset $c29, $c1, $zero
 		cseal $c2, $c1, $c29
@@ -66,8 +64,6 @@ sandbox:
 		cseal $c29, $c1, $c1
 		csetbounds $c2, $c29, $zero
 		csetbounds $c29, $c1, $zero
-		csetlen $c2, $c29, $zero
-		csetlen $c29, $c1, $zero
 		csetoffset $c2, $c29, $zero
 		csetoffset $c29, $c1, $zero
 		ctoptr $t0, $c2, $c29

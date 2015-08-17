@@ -110,12 +110,10 @@ test:		.ent test
 		cgetsealed $t0, $c1
 		cgettag $t0, $c1
 		cgettype $t0, $c1
-		cincbase $c2, $c1, $zero
 		cincoffset $c2, $c1, $zero
 		cseal $c2, $c1, $c1
 		csetbounds $c2, $c1, $zero
 		csetcause $zero
-		csetlen $c2, $c1, $zero
 		csetoffset $c2, $c1, $zero
 		ctoptr $t0, $c1, $c1
 		# cunseal requires a sealed capability, so don't test
