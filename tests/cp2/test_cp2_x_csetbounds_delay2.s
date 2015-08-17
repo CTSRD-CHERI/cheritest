@@ -31,7 +31,7 @@
 .set noat
 
 #
-# Test that cause register is set correctly if cincbase raises an exception
+# Test that cause register is set correctly if csetbounds raises an exception
 # in a branch delay slot.
 #
 
@@ -60,9 +60,9 @@ test:		.ent test
 		#
 
 		dla     $t0, data
-		cincbase $c1, $c0, $t0
+		cincoffset $c1, $c0, $t0
 		dli     $t0, 8
-                csetlen $c1, $c1, $t0
+                csetbounds $c1, $c1, $t0
 		dli     $t0, 0x5
 		candperm $c1, $c1, $t0
 
@@ -82,7 +82,7 @@ test:		.ent test
 		dli	$t1, 1
 		j	L1
 		# The exception happens in the branch delay slot
-		cincbase $c1, $c1, $t1 # This should raise a C2E exception
+		csetbounds $c1, $c1, $t1 # This should raise a C2E exception
 		nop
 		nop
 L1:

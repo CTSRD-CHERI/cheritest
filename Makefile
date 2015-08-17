@@ -791,7 +791,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_lb_tag.s		\
 		test_cp2_x_lb_sealed.s		\
 		test_cp2_x_csetbounds_delay.s	\
-		test_cp2_x_cincbase_delay2.s	\
+		test_cp2_x_csetbounds_delay2.s	\
 		test_cp2_x_cbtu_reg.s		\
 		test_cp2_x_cbtu_length.s	\
 		test_cp2_x_cbts_reg.s		\
