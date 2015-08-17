@@ -31,6 +31,7 @@
 # bit is set in the TLB entry for the page but the tag bit on data is unset.
 #
 
+.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt

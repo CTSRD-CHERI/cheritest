@@ -28,6 +28,7 @@
 # SUCH DAMAGE.
 #
 
+.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt

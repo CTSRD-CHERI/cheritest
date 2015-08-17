@@ -51,6 +51,7 @@
 # arithmetic is used.
 #
 
+.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
@@ -98,12 +99,12 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		# Construct two equal capabilities with non-zero base and offset.
-		dli        $at, 0x42
-		cincbase   $c1, $c0, $at
-		cincbase   $c2, $c0, $at
-		dli        $at, 0x54
-		csetoffset $c1, $c1, $at
-		csetoffset $c2, $c2, $at
+		dli        $t0, 0x42
+		cincbase   $c1, $c0, $t0
+		cincbase   $c2, $c0, $t0
+		dli        $t0, 0x54
+		csetoffset $c1, $c1, $t0
+		csetoffset $c2, $c2, $t0
 
 		# EQUAL CAPABILITIES
 

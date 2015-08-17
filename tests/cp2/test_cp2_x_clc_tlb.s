@@ -33,6 +33,7 @@
 # copying data using clc/csc in no-cap regions.
 #
 
+.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt

@@ -31,6 +31,7 @@
 # 'disable capability store' bit is set in the TLB entry for the page.
 #
 
+.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
