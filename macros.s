@@ -1,5 +1,6 @@
 #-
-# Copyright (c) 2013 Robert M. Norton
+# Copyright (c) 2013-2015 Robert M. Norton
+# Copyright (c) 2015 Jonathan Woodruff
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -63,17 +64,17 @@ max_thread_count = 32
 .endm
 
 .macro cincbase dest, source, offset
-        cgetoffset $t9, \source
+        #cgetoffset $t9, \source
         cgetlen    $at, \source
         dsubu      $at, $at, \offset
         csetoffset \dest, \source, \offset
         csetbounds \dest, \dest, $at
-        csetoffset \dest, \dest, $t9
+        #csetoffset \dest, \dest, $t9
 .endm
 
 .macro csetlen dest, source, offset
-        cgetoffset $at, \source
-        csetoffset \dest, \source, $0
+        #cgetoffset $at, \source
+        #csetoffset \dest, \source, $0
         csetbounds \dest, \dest, \offset
-        csetoffset \dest, \dest, $at
+        #csetoffset \dest, \dest, $at
 .endm
