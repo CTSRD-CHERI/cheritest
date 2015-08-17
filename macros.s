@@ -61,3 +61,10 @@ max_thread_count = 32
         .byte 0
         .endr
 .endm
+
+.macro cincbaseMac dest, source, offset
+        cgetlen    $at, \dest
+        dsubu      $at, $at, \offset
+        csetoffset \dest, \source, \offset
+        csetbounds \dest, \source, $at
+.endm
