@@ -29,24 +29,24 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test what happens when cincbase raises a C2E exception in a branch delay slot
+# Test what happens when csetbounds raises a C2E exception in a branch delay slot
 #
 
-class test_cp2_x_cincbase_delay(BaseBERITestCase):
+class test_cp2_x_csetbounds_delay(BaseBERITestCase):
     @attr('capabilities')
-    def test_cp2_x_cincbase_delay_1(self):
-        '''Test cincbase did not increment an untagged capability'''
+    def test_cp2_x_csetbounds_delay_1(self):
+        '''Test csetbounds did not increment an untagged capability'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
-            "cincbase incremented a capability with tag bit unset")
+            "csetbounds incremented a capability with tag bit unset")
 
     @attr('capabilities')
-    def test_cp2_x_cincbase_delay_2(self):
-        '''Test cincbaseraised a C2E exception when capability tag was unset'''
+    def test_cp2_x_csetbounds_delay_2(self):
+        '''Test csetbounds raised a C2E exception when capability tag was unset'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
-            "cincbase did not raise an exception when capability tag was unset")
+            "csetbounds did not raise an exception when capability tag was unset")
 
     @attr('capabilities')
-    def test_cp2_x_cincbase_delay_3(self):
+    def test_cp2_x_csetbounds_delay_3(self):
         '''Test CP0 cause is set correctly when C2E in a branch delay slot'''
         self.assertRegisterEqual(self.MIPS.a3, 0x80000048,
             "CP0 cause was not set correcly when C2E in a branch delay slot")

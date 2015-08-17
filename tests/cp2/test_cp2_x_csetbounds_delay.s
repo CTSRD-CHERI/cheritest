@@ -25,6 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
@@ -59,12 +60,12 @@ test:		.ent test
 		# Make $c1 a data capability for the array 'data'
 		#
 
-		dla     $t0, data
-		cincbase $c1, $c0, $t0
-		dli     $t0, 8
-                csetlen $c1, $c1, $t0
-		dli     $t0, 0x7
-		candperm $c1, $c1, $t0
+		dla     	$t0, data
+		cincoffset	$c1, $c0, $t0
+		dli     	$t0, 8
+                csetbounds 	$c1, $c1, $t0
+		dli     	$t0, 0x7
+		candperm 	$c1, $c1, $t0
 
 		#
 		# Write $c1 to memory, then copy its first word as data.
@@ -80,7 +81,7 @@ test:		.ent test
 		dli	$t1, 1
 		j	L1
 		# The exception happens in the branch delay slot
-		cincbase $c1, $c1, $t1 # This should raise a C2E exception
+		csetbounds $c1, $c1, $t1 # This should raise a C2E exception
 		nop
 		nop
 L1:
