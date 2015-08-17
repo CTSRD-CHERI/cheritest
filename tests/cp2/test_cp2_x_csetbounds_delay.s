@@ -32,7 +32,7 @@
 .set noat
 
 #
-# Test that cause register is set correctly if cincbase raises an exception
+# Test that cause register is set correctly if csetbounds raises an exception
 # in a branch delay slot.
 #
 
@@ -85,7 +85,7 @@ test:		.ent test
 		nop
 		nop
 L1:
-		cgetbase $a0, $c1
+		cgetbase $a0, $c1	# XXX: FIXME : This is wrong.
 		dla	$t0, data
 		dsubu   $a0, $a0, $t0
 

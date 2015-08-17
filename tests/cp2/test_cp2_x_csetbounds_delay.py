@@ -29,21 +29,24 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test what happens when csetbounds raises a C2E exception in a branch delay slot
+# Test what happens when csetbounds raises a C2E exception in a branch delay
+# slot.
 #
 
 class test_cp2_x_csetbounds_delay(BaseBERITestCase):
+
+    # XXX : FIXME : This is wrong.
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay_1(self):
-        '''Test csetbounds did not increment an untagged capability'''
+        '''Test CSetBounds did not change the length of an untagged capability'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
-            "csetbounds incremented a capability with tag bit unset")
+            "CSetBounds changed the length of a capability with tag bit unset")
 
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay_2(self):
-        '''Test csetbounds raised a C2E exception when capability tag was unset'''
+        '''Test CSetBounds raised a C2E exception when capability tag was unset'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
-            "csetbounds did not raise an exception when capability tag was unset")
+            "CSetBounds did not raise an exception when capability tag was unset")
 
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay_3(self):
