@@ -80,7 +80,7 @@ test:		.ent test
 		#
 
 		dla	$t0, data
-		cincoffset $c2, $c0, $t0
+		csetoffset $c2, $c0, $t0
 		dli	$t0, 8
 		csetbounds	$c2, $c2, $t0
 		dli	$t0, 3
@@ -92,8 +92,8 @@ test:		.ent test
 		# (not including 0x1234)
 		#
 
-		dli	$t0, 0x10
 		csetoffset $c3, $c1, $0
+		dli	$t0, 0x10
 		csetbounds	$c3, $c3, $t0
 		dli	$t0, 0x1234
 		csetoffset $c3, $c3, $t0
