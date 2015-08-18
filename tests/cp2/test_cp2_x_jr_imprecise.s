@@ -25,7 +25,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
@@ -68,12 +67,10 @@ test:		.ent test
 		dli	$a2, 0
 
 		dla     $t0, sandbox 
-		cgetdefault $c1
-		cincbase $c1, $c1, $t0
-		csetoffset $c1, $c1, $zero
+		cincoffset $c1, $c1, $t0
 		dla     $t1, limit
 		dsubu	$t2, $t1, $t0
-		csetlen $c1, $c1, $t2
+		csetbounds $c1, $c1, $t2
 
 		#
 		# Make $a0 so far outside the sandbox that it will cause
