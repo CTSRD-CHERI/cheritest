@@ -228,7 +228,7 @@ class BaseBERITestCase(unittest.TestCase):
     def assertDefaultCap(self, cap, msg = None):
         self.assertRegisterEqual(cap.u     , 0, msg)
         self.assertRegisterEqual(cap.ctype , 0, msg)
-        self.assertRegisterEqual(cap.perms , 0x7fffffff, msg)
+        self.assertRegisterAllPermissions(cap.perms , msg)
         self.assertRegisterEqual(cap.offset, 0, msg)
         self.assertRegisterEqual(cap.base  , 0, msg)
         self.assertRegisterEqual(cap.length, 0xffffffffffffffff, msg)
