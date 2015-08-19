@@ -25,7 +25,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
