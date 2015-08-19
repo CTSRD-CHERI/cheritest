@@ -25,15 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
 .set noat
 
 #
-# Perform a few basic tests involving capability register base: query the
-# starting base of $c2, increase the base, and query it again.
+# Perform a few basic tests involving capability register offset: query the
+# starting offset of $c2, increase the offset, and query it again.
 #
 
 		.global test
@@ -47,9 +46,9 @@ test:		.ent test
 		dli	$a0, 1
 		dli	$a1, 2
 
-		cgetbase	$a0, $c2
-		cincbase	$c2, $c2, $t0
-		cgetbase	$a1, $c2
+		cgetoffset	$a0, $c2
+		cincoffset	$c2, $c2, $t0
+		cgetoffset	$a1, $c2
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

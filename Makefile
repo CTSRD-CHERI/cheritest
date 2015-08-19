@@ -602,7 +602,7 @@ TEST_CP2_FILES=					\
 		test_cp2_reg_init.s		\
 		test_cp2_reg_name.s		\
 		test_cp2_getsettype.s		\
-		test_cp2_getincbase.s		\
+		test_cp2_getincoffset.s		\
 		test_cp2_getsetlen.s		\
 		test_cp2_getsetoffset.s		\
 		test_cp2_csetoffset_int.s	\
@@ -1202,7 +1202,7 @@ L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
 #TEST_CYCLE_LIMIT?=1500000
-TEST_CYCLE_LIMIT?=1500000
+TEST_CYCLE_LIMIT?=150000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new

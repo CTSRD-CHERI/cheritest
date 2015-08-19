@@ -29,16 +29,16 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Check basic behaviour of cgetbase and cincbase.
+# Check basic behaviour of cgetoffset and cincoffset.
 #
 
-class test_cp2_getincbase(BaseBERITestCase):
+class test_cp2_getincoffset(BaseBERITestCase):
     @attr('capabilities')
-    def test_cp2_getbase1(self):
-        '''Test that cgetbase returns correct initial value'''
-        self.assertRegisterEqual(self.MIPS.a0, 0, "cgetbase returns incorrect initial value")
+    def test_cp2_getoffset1(self):
+        '''Test that cgetoffset returns correct initial value'''
+        self.assertRegisterEqual(self.MIPS.a0, 0, "cgetoffset returns incorrect initial value")
 
     @attr('capabilities')
-    def test_cp2_getbase2(self):
-        '''Test that cgetbase returns correct value after cincbase'''
-        self.assertRegisterEqual(self.MIPS.a1, 100, "cgetbase returns incorrect value after cincbase")
+    def test_cp2_getoffset2(self):
+        '''Test that cgetoffset returns correct value after cincoffset'''
+        self.assertRegisterEqual(self.MIPS.a1, 100, "cgetoffset returns incorrect value after cincoffset")
