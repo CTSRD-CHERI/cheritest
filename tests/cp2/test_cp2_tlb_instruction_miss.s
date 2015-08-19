@@ -27,7 +27,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
@@ -63,11 +62,13 @@ test:		.ent test
 	jal	set_bev0_xtlb_handler
 	nop
 
-	# Construct virtual address 
+	# Construct virtual address with a length of one page
 	dla	$a4, mapped_code
 	dli	$a2, 0xFFFFFFFF
 	and	$a4, $a2, $a4
-	cincbase $c1, $c1, $a4
+	cincoffset $c1, $c0, $a4
+	dli	$a2, 0x1000
+	csetbounds $c1, $c1, $a2
 
 	# Clear registers we'll use when testing results later.
 	dli	$a5, 0
