@@ -25,7 +25,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
@@ -62,8 +61,9 @@ test:		.ent test
 		#
 
 		dla     $t0, sandbox
-		cincbase	$c1, $c0, $t0
-		csetoffset $c1, $c1, $zero	# Shouldn't be needed
+		cincoffset	$c1, $c0, $t0
+		dli			$t0, 28 # Size of sandbox
+		csetbounds	$c1, $c1, $t0 
 		cjalr   $c24, $c1
 		nop			# Branch delay slot
 
