@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2013-2014 Alan A. Mujumdar
+# Copyright (c) 2015 Alexandre Joannou
 # Copyright (c) 2014 SRI International
 # Copyright (c) 2012 Benjamin Thorner
 # Copyright (c) 2013-2015 Colin Rothwell
@@ -96,6 +97,7 @@ TEST_CP2?=1
 CLANG?=1
 MULTI?=0
 MT?=0
+STATCOUNTERS?=0
 DMA?=0
 DMA_VIRT?=0
 RMA?=0
@@ -131,6 +133,10 @@ endif
 
 ifeq ($(MT),1)
 TESTDIRS+= $(TESTDIR)/mt
+endif
+
+ifeq ($(STATCOUNTERS),1)
+TESTDIRS+= $(TESTDIR)/statcounters
 endif
 
 ifneq ($(NOFUZZ),1)
@@ -996,6 +1002,13 @@ else
 TEST_MT_FILES=
 endif
 
+ifeq ($(STATCOUNTERS),1)
+RAW_STATCOUNTERS_FILES= 			\
+		test_raw_statcounters_reset.s
+else
+RAW_STATCOUNTERS_FILES=
+endif
+
 ifeq ($(RMA), 1)
 TEST_RMA_FILES = test_raw_rma_read.s
 else
@@ -1052,7 +1065,8 @@ TEST_FILES=					\
 		$(FUZZ_DMA_FILES)		\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
-		$(TEST_MT_FILES)	 	\
+		$(TEST_MT_FILES)		\
+		$(RAW_STATCOUNTERS_FILES)	\
 		$(TEST_PIC_FILES)		\
 		$(RAW_RMA_FILES)
 
@@ -1140,6 +1154,7 @@ and not pic		\
 and not mips_overflow 	\
 and not dma		\
 and not dmaclang	\
+and not statcounters	\
 "
 
 L3_NOSEPRED=\
@@ -1167,7 +1182,8 @@ and not beri1oldcache \
 and not watch \
 and not deterministic_random \
 and not noextendedtlb \
-and not csettype
+and not csettype \
+and not statcounters
 
 ifneq ($(TEST_CP2),1)
 L3_NOSEPRED+=and not capabilities and not clang
@@ -1297,6 +1313,9 @@ endif
 ifneq ($(MT),1)
 NOSEPRED+=and not mt
 endif
+ifneq ($(STATCOUNTERS),1)
+NOSEPRED+=and not statcounters
+endif
 ifdef CHERI_MICRO
 NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
 ifdef WONTFIX
@@ -1362,6 +1381,7 @@ TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/mem/,$(basename $(RAW_MEM_FILES) $(TEST_MEM_FILES) $(TEST_MEM_UNALIGN_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/tlb/,$(basename $(TEST_TLB_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/mt/,$(basename $(TEST_MT_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/statcounters/,$(basename $(RAW_STATCOUNTERS_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/multicore/,$(basename $(TEST_MULTICORE_FILES))))
 
 CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
