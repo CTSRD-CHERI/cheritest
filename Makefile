@@ -340,6 +340,7 @@ RAW_LLSC_FILES=					\
 		test_raw_scd.s
 
 RAW_CP0_FILES=					\
+		test_raw_eret_error.s		\
 		test_raw_mfc0_dmfc0.s		\
 		test_raw_mtc0_sign_extend.s
 
