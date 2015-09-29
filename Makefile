@@ -1004,8 +1004,9 @@ TEST_MT_FILES=
 endif
 
 ifeq ($(STATCOUNTERS),1)
-RAW_STATCOUNTERS_FILES= 			\
-		test_raw_statcounters_reset.s
+RAW_STATCOUNTERS_FILES= 			  \
+		test_raw_statcounters_reset.s \
+		test_raw_statcounters_dcache.s
 else
 RAW_STATCOUNTERS_FILES=
 endif
@@ -1244,7 +1245,7 @@ SIM:= ${CHERIROOT_ABS}/sim
 DTB_FILE:=$(CHERIROOT_ABS)/sim.dtb
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
-	SIM_TRACE_OPTS?= +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug
+	SIM_TRACE_OPTS?= +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug +StatCounters
 else
 ifdef TRACE
 	SIM_TRACE_OPTS?=+trace +cTrace +tlbTrace +instructionBasedCycleCounter +dma
