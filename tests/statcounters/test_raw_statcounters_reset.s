@@ -25,26 +25,25 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.macro getstatcounter dest, counter_group, counter_offset
-    .word (0x1F << 26) | (0x0 << 21) | (\dest << 16) | (\counter_group << 11) | (\counter_offset << 6) | (0x3B)
+#
+# Test the reset values of the stat counters
+#
+
+.include "statcounters_macros.s"
+
+THRESHOLD = 100
+
+.macro checkstatcounter counter_group, counter_offset
+    getstatcounter 6, \counter_group, \counter_offset # a2 gets the counter's value
+    sltiu   $a5, $a2, THRESHOLD # a5 <= 1 if a2 less than threshold, 0 otherwise
+    or      $v0, $v0, $a5       # or a5 in the lsb of v0
+    sll     $v0, $v0, 1         # shift v0 left by one
 .endm
-.macro resetstatcounters
-    .word (0x1F << 26) | (0x0 << 21) | (0x0 << 16) | (0xA << 11) | (0x0 << 6) | (0x3B)
-.endm   
 
 .set mips64
 .set noreorder
 .set nobopt
 .set noat
-
-#
-# Test the reset values of the stat counters
-#
-
-COUNTERS_PER_GROUP = 9
-COUNTERS_GROUPS = 3
-COUNTERS_GROUP_START_OFFSET = 7
-THRESHOLD = 100
 
 .global start
 start:
@@ -53,23 +52,32 @@ start:
 
     move    $v0, $zero # init result bit vector to all 0s
 
-    dli     $a0, (COUNTERS_GROUP_START_OFFSET + COUNTERS_GROUPS - 1) # init counter group selector
-    foreach_group:
+    checkstatcounter ICACHE, WRITE_HIT
+	checkstatcounter ICACHE, WRITE_MISS  
+	checkstatcounter ICACHE, READ_HIT    
+	checkstatcounter ICACHE, READ_MISS   
+	checkstatcounter ICACHE, PFTCH_HIT   
+	checkstatcounter ICACHE, PFTCH_MISS  
+	checkstatcounter ICACHE, EVICT       
+	checkstatcounter ICACHE, PFTCH_EVICT 
 
-        dli $a1, (COUNTERS_PER_GROUP - 1) # init counter offset
-        foreach_counter:
+    checkstatcounter DCACHE, WRITE_HIT
+	checkstatcounter DCACHE, WRITE_MISS  
+	checkstatcounter DCACHE, READ_HIT    
+	checkstatcounter DCACHE, READ_MISS   
+	checkstatcounter DCACHE, PFTCH_HIT   
+	checkstatcounter DCACHE, PFTCH_MISS  
+	checkstatcounter DCACHE, EVICT       
+	checkstatcounter DCACHE, PFTCH_EVICT 
 
-            getstatcounter 6, 4, 5      # a2 takes the value of counter a1 in group a0 
-            sltiu   $a5, $a2, THRESHOLD # a5 <= 1 if a2 less than threshold, 0 otherwise
-            or      $v0, $v0, $a5       # or a5 in the lsb of v0
-            sll     $v0, $v0, 1         # shift v0 left by one
-
-            bne     $a1, $zero, foreach_counter 
-            daddiu  $a1, $a1, -1
-
-        daddiu  $a4, $a0, -COUNTERS_GROUP_START_OFFSET
-        bne     $a4, $zero, foreach_group
-        daddiu  $a0, $a0, -1
+    checkstatcounter L2CACHE, WRITE_HIT
+	checkstatcounter L2CACHE, WRITE_MISS  
+	checkstatcounter L2CACHE, READ_HIT    
+	checkstatcounter L2CACHE, READ_MISS   
+	checkstatcounter L2CACHE, PFTCH_HIT   
+	checkstatcounter L2CACHE, PFTCH_MISS  
+	checkstatcounter L2CACHE, EVICT       
+	checkstatcounter L2CACHE, PFTCH_EVICT 
 
     # Dump registers in the simulator
     mtc0 $v0, $26

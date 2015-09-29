@@ -25,41 +25,27 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "statcounters_macros.s"
-
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
-
 #
-# Test the counters for the dcache
+# Test the reset values of the stat counters
 #
 
-.global start
-start:
+ICACHE  = 7
+DCACHE  = 8
+L2CACHE = 9
 
-    resetstatcounters  # reset stat counters
+WRITE_HIT   = 0
+WRITE_MISS  = 1
+READ_HIT    = 2
+READ_MISS   = 3
+PFTCH_HIT   = 4
+PFTCH_MISS  = 5
+EVICT       = 6
+PFTCH_EVICT = 7
 
-    dli             $a4,  100
-    delay:
-    bne             $a4, $zero, delay
-    daddi           $a4, -1
+.macro getstatcounter dest, counter_group, counter_offset
+    .word (0x1F << 26) | (0x0 << 21) | (\dest << 16) | (\counter_group << 11) | (\counter_offset << 6) | (0x3B)
+.endm
 
-    ld              $v0,  dword
-
-    getstatcounter  6, DCACHE, READ_MISS         # a2 takes the value of counter READ_MISS in group DCACHE
-
-    # Dump registers in the simulator
-    mtc0 $v0, $26
-    nop
-    nop
-
-    # Terminate the simulator
-    mtc0 $v0, $23
-    end:
-    b end
-    nop
-
-.data
-dword:		.dword	0xf00df00dbeefbeef
+.macro resetstatcounters
+    .word (0x1F << 26) | (0x0 << 21) | (0x0 << 16) | (0xA << 11) | (0x0 << 6) | (0x3B)
+.endm   

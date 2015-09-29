@@ -1529,10 +1529,13 @@ $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_A
 # Targets for unlinked .o files.  The same .o files can be used for both
 # uncached and cached runs of the suite, so we just build them once.
 #
+
+$(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s
+	$(AS) -I $(TESTDIR)/statcounters -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
+
 $(OBJDIR)/test_%.o : test_%.s macros.s
 	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
-
 
 # Put DMA model makefile into its own file. This one is already ludicrously
 # large.
