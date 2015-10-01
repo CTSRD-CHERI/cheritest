@@ -75,6 +75,6 @@ max_thread_count = 32
 .macro csetlen dest, source, offset
         #cgetoffset $at, \source
         #csetoffset \dest, \source, $0
-        csetbounds \dest, \dest, \offset
+        csetbounds \dest, \source, \offset
         #csetoffset \dest, \dest, $at
 .endm
