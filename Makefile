@@ -958,6 +958,7 @@ TEST_DMA_FILES+=test_clang_dma_virt_translate.c
 endif
 
 TEST_CLANG_FILES=				\
+		test_clang_atomic.c		\
 		test_clang_cast.c		\
 		test_clang_cursor.c		\
 		test_clang_cursor_trivial.c	\
@@ -1220,7 +1221,7 @@ L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 # instructions to ensure that loops terminate.  This is an arbitrary number.
 #
 #TEST_CYCLE_LIMIT?=1500000
-TEST_CYCLE_LIMIT?=150000
+TEST_CYCLE_LIMIT?=1500000
 
 ##############################################################################
 # No need to modify anything below this point if you are just adding new
