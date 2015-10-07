@@ -129,32 +129,35 @@ all_threads:
 		# Not cleared: $sp, $fp, $ra
 		mthi	$at
 		mtlo	$at
-
+		
 		# Invoke test function test() provided by individual tests.
 		dla   $25, test
+		
+		mfc0 $k0, $16, 1	# config1 register
+		andi $k0, $k0, 0x40	# CP2 available bit
+		beqz $k0, skip_cp2_setup 
+		nop
+		
+		cfromptr	$c12, $c0, $25
 		jalr $25
-		nop			# branch-delay slot
+		cfromptr	$c17, $c0, $31 			# return address
+				
+		# Dump capability registers in the simulator
+		#
+		
+		j continue_finish
+		mtc2 $k0, $0, 6
 
+skip_cp2_setup:
+		jalr $25
+		nop
 		#
 		# Check to see if coprocessor 2 (capability unit) is present,
 		# and dump out its registers if it is.
 		#
 
-		mfc0 $k0, $16, 1	# config1 register
-		andi $k0, $k0, 0x40	# CP2 available bit
-		beqz $k0, skip_cp2_dump 
-		nop
-	
-		#
-		# Dump capability registers in the simulator
-		#
-
-		mtc2 $k0, $0, 6
-		nop
-		nop
-
-skip_cp2_dump:
 		
+continue_finish:		
 		#
 		# On multithreaded/multicore, only core/thread 0 halts 
 		# the simulation.

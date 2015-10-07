@@ -36,7 +36,7 @@ MULTI = bool(int(os.environ.get("MULTI1", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-TEST_FILE_RE=re.compile('test_clang_\w+\.c')
+TEST_FILE_RE=re.compile('test_[\w_]*clang_\w+\.c')
 TEST_DIR ='tests/c'
 
 #Not derived from unittest.testcase because we wish test_clang to

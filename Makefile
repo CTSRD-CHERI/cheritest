@@ -958,7 +958,7 @@ TEST_DMA_FILES+=test_clang_dma_virt_translate.c
 endif
 
 TEST_CLANG_FILES=				\
-		test_clang_atomic.c		\
+		test_cheriabi_clang_atomic.c		\
 		test_clang_cast.c		\
 		test_clang_cursor.c		\
 		test_clang_cursor_trivial.c	\
@@ -1565,6 +1565,9 @@ endif
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	clang -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
+	
+$(OBJDIR)/test_cheriabi_clang%.o : test_cheriabi_clang%.c
+	clang -c -fno-pic -target cheri-unknown-freebsd -mabi=sandbox -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
 	mips-linux-gnu-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
