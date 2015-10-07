@@ -33,15 +33,10 @@
 #include "assert.h"
 //#include "cheri_c_test.h"
 
-_Atomic(char) c;
-_Atomic(short) h;
-_Atomic(int) w;
+_Atomic(char) c = 42;
+_Atomic(short) h = 42;
+_Atomic(int) w = 42;
 _Atomic(long long) d = 42;
-
-_Atomic(char) *cp = &c;
-_Atomic(short) *hp = &h;
-_Atomic(int) *wp = &w;
-_Atomic(long long) *dp = &d;
 
 int test(void)
 {
@@ -53,6 +48,33 @@ int test(void)
 	assert(d == 43);
 	(*(long long*)(&d))++;
 	assert(d == 44);
+	
+	assert(*(int*)&w == 42);
+	*(int*)&w = 42;
+	assert(*(int*)&w == 42);
+	assert(w == 42);
+	w++;
+	assert(w == 43);
+	(*(int*)(&w))++;
+	assert(w == 44);
+	
+	assert(*(short*)&h == 42);
+	*(short*)&h = 42;
+	assert(*(short*)&h == 42);
+	assert(h == 42);
+	h++;
+	assert(h == 43);
+	(*(short*)(&h))++;
+	assert(h == 44);
+	
+	assert(*(char*)&c == 42);
+	*(char*)&c = 42;
+	assert(*(char*)&c == 42);
+	assert(c == 42);
+	c++;
+	assert(c == 43);
+	(*(char*)(&c))++;
+	assert(c == 44);
 	
   return 0;
 }
