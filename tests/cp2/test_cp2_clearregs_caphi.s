@@ -46,6 +46,34 @@ test:           .ent test
                 sd      $fp, 16($sp)
                 daddu   $fp, $sp, 32
 
+								# Ensure all capability registers are set to the default.
+                cmove		$c1, $c0
+                cmove		$c2, $c0
+                cmove		$c3, $c0
+                cmove		$c4, $c0
+                cmove		$c5, $c0
+                cmove		$c6, $c0
+                cmove		$c7, $c0
+                cmove		$c8, $c0
+                cmove		$c9, $c0
+                cmove		$c10, $c0
+                cmove		$c11, $c0
+                cmove		$c12, $c0
+                cmove		$c13, $c0
+                cmove		$c14, $c0
+                cmove		$c15, $c0
+                cmove		$c16, $c0
+                cmove		$c17, $c0
+                cmove		$c18, $c0
+                cmove		$c19, $c0
+                cmove		$c20, $c0
+                cmove		$c21, $c0
+                cmove		$c22, $c0
+                cmove		$c23, $c0
+                cmove		$c24, $c0
+                cmove		$c25, $c0
+                cmove		$c26, $c0
+
                 # clear caphi16 even regs
                 cclearregs 3, 0x5555
 
