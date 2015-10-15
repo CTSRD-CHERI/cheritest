@@ -36,5 +36,5 @@ class test_cp2_x_multiop_adel(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_multiop_adel_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 5, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
+        self.assertRegisterEqual(self.MIPS.a2, 7, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
 

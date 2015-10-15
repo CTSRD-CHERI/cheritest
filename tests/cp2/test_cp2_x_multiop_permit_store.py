@@ -36,5 +36,5 @@ class test_cp2_x_multiop_permit_store(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_multiop_permit_store_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 5, "Unexpected number of exceptions raised during test of multiple operations raising Permit_Store exception")
+        self.assertRegisterEqual(self.MIPS.a2, 8, "Unexpected number of exceptions raised during test of multiple operations raising Permit_Store exception")
 

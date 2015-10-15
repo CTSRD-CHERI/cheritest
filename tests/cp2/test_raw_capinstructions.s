@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2011 Steven J. Murdoch
 # Copyright (c) 2012-2015 Michael Roe
+# Copyright (c) 2015 SRI International
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -177,13 +178,30 @@ start:
 		cseal	  $c1, $c2, $c3
 		cunseal   $c1, $c2, $c3
 
-		# load linked/store conditional
-		clld      $t1, $a3, 0($c2)
-		cscd      $t1, $a3, 0($c2)
-		clldr     $t1, $a3($c2)
-		cscdr     $t1, $a3($c2)
-		clldi     $t1, 0($c2)
-		cscdi     $t1, 0($c2)
+		# load linked/store conditional, sign extend
+		csetoffset $c4, $c2, $a3
+		cllb	$t1, $c4
+		cscb	$t1, $t1, $c4
+		cllh	$t1, $c4
+		csch	$t1, $t1, $c4
+		cllw	$t1, $c4
+		cscw	$t1, $t1, $c4
+		clld	$t1, $c4
+		cscd	$t1, $t1, $c4
+
+		# load linked/store conditional, zero extend
+		cllbu	$t1, $c4
+		cscb	$t1, $t1, $c4
+		cllhu	$t1, $c4
+		csch	$t1, $t1, $c4
+		cllwu	$t1, $c4
+		cscw	$t1, $t1, $c4
+		clldu	$t1, $c4
+		cscd	$t1, $t1, $c4
+
+		# load linked/store conditional, capability
+		cllc	$c1, $c4
+		cscc	$c1, $t1, $c4
 
 		# check capability fields
 		cmove $c1, $c0

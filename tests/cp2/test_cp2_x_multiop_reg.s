@@ -1,10 +1,15 @@
 #-
 # Copyright (c) 2015 Michael Roe
+# Copyright (c) 2015 SRI International
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
 # Laboratory as part of the Rigorous Engineering of Mainstream Systems (REMS)
 # project, funded by EPSRC grant EP/K008528/1.
+#
+# This software was developed by SRI International and the University of
+# Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-10-C-0237
+# ("CTSRD"), as part of the DARPA CRASH research programme.
 #
 # @BERI_LICENSE_HEADER_START@
 #
@@ -105,8 +110,15 @@ sandbox:
 		cswr	$t0, $t1($c29)
 		cldr	$t0, $t1($c29)
 		csdr	$t0, $t1($c29)
-		clldr	$t0, $t1($c29)
-		cscdr	$t0, $t1($c29)
+		csetoffset $c29, $c29, $t1
+		cllb	$t0, $c29
+		cscb	$t0, $t2, $c29
+		cllh	$t0, $c29
+		csch	$t0, $t2, $c29
+		cllw	$t0, $c29
+		cscw	$t0, $t2, $c29
+		clld	$t0, $c29
+		cscd	$t0, $t2, $c29
 
 
 		cjr	$c24
