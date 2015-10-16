@@ -709,6 +709,10 @@ TEST_CP2_FILES=					\
 		test_cp2_cllh.s			\
 		test_cp2_cllb.s			\
 		test_cp2_clld_span.s		\
+		test_cp2_cllw_span.s		\
+		test_cp2_cllw_span.s		\
+		test_cp2_cllh_span.s		\
+		test_cp2_cllb_span.s		\
 		test_cp2_ccall.s		\
 		test_cp2_creturn_trap.s		\
 		test_cp2_ccall2.s		\
