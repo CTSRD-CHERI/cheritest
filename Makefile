@@ -705,6 +705,9 @@ TEST_CP2_FILES=					\
 		test_cp2_c0_perm.s		\
 		test_cp2_c0_sealed.s		\
 		test_cp2_clld.s			\
+		test_cp2_cllw.s			\
+		test_cp2_cllh.s			\
+		test_cp2_cllb.s			\
 		test_cp2_clld_span.s		\
 		test_cp2_ccall.s		\
 		test_cp2_creturn_trap.s		\
