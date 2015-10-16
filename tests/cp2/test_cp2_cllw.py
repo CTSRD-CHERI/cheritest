@@ -73,7 +73,7 @@ class test_cp2_cllw(BaseBERITestCase):
     @attr('capabilities')
     def test_s0(self):
         '''Test signed-extended load linked word from double word'''
-        self.assertRegisterEqual(self.MIPS.s0, 0xfedcba98, "Sign-extended load linked word from double word failed")
+        self.assertRegisterEqual(self.MIPS.s0, 0xfffffffffedcba98, "Sign-extended load linked word from double word failed")
 
     @attr('llsc')
     @attr('cached')
