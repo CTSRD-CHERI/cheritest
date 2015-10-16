@@ -76,6 +76,7 @@ test:		.ent test
 		csci	$c0, 0($c1)
 		cscc	$c2, $a3, $c1
 		clci	$c3, 0($c1)
+		cgettag	$a2, $c3
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

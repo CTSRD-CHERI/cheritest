@@ -46,7 +46,7 @@ class test_cp2_cllc_span(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cllc_7(self):
 	'''That an cllc+cscc spanning a store to the line does not store'''
-	self.assertRegisterNotEqual(self.MIPS.c3.tag, 0, "Interrupted cllc+csci+cscc stored value")
+	self.assertRegisterNotEqual(self.MIPS.a2, 0, "Interrupted cllc+csci+cscc stored value")
 
     @attr('llsc')
     @attr('llscspan')

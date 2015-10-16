@@ -43,7 +43,7 @@ class test_cp2_cllc(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cllc_2(self):
 	'''That an uninterrupted cllc+cscc stored untagged'''
-	self.assertRegisterEqual(self.MIPS.c3.tag, 0, "Uninterrupted cllc+cscc stored tag")
+	self.assertRegisterEqual(self.MIPS.a5, 0, "Uninterrupted cllc+cscc stored tag")
 
     @attr('llsc')
     @attr('cached')
@@ -64,7 +64,7 @@ class test_cp2_cllc(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cllc_5(self):
 	'''That an uninterrupted cllc+csetoffset+cscc wrote a tag'''
-	self.assertRegisterEqual(self.MIPS.c4.tag, 1,  "Uninterrupted cllc+csetoffset+cscc failed to store a tag")
+	self.assertRegisterEqual(self.MIPS.a6, 1,  "Uninterrupted cllc+csetoffset+cscc failed to store a tag")
 
     @attr('llsc')
     @attr('cached')

@@ -64,6 +64,7 @@ test:		.ent test
 		cllc	$c2, $c1
 		cscc	$c2, $a1, $c1
 		clci	$c3, 0($c1)
+		cgettag	$a5, $c3
 
 		#
 		# Check to make sure we are allowed to write a new value
@@ -73,6 +74,7 @@ test:		.ent test
 		csetoffset	$c2, $c0, $a0
 		cscc	$c2, $a2, $c1
 		clci	$c4, 0($c1)
+		cgettag	$a6, $c4
 
 		#
 		# Trap between clld and cscd; check to make sure that the
