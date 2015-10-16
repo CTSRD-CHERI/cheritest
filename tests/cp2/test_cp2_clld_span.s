@@ -74,9 +74,8 @@ test:		.ent test
 		li	$t0, 1
 		clld	$a1, $c1
 		sd	$a1, 0($t1)
-		cscd	$t0, $a5, $c1
+		cscd	$t0, $a3, $c1
 		ld	$a2, 0($t1)
-		daddiu	$a3, $t0, 0
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
