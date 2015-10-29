@@ -62,7 +62,7 @@ test:		.ent test
 		dla	$a0, cap1
 		csetoffset	$c1, $c0, $a0
 		cllc	$c2, $c1
-		cscc	$c2, $a1, $c1
+		cscc	$a1, $c2, $c1
 		clci	$c3, 0($c1)
 		cgettag	$a5, $c3
 
@@ -72,7 +72,7 @@ test:		.ent test
 
 		cllc	$c2, $c1
 		csetoffset	$c2, $c0, $a0
-		cscc	$c2, $a2, $c1
+		cscc	$a2, $c2, $c1
 		clci	$c4, 0($c1)
 		cgettag	$a6, $c4
 
@@ -83,7 +83,7 @@ test:		.ent test
 
 		cllc	$c2, $c1
 		tnei	$zero, 1
-		cscc	$c2, $a4, $c1
+		cscc	$a4, $c2, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
