@@ -63,7 +63,7 @@ test:		.ent test
 
 		cllc	$c2, $c1
 		clci	$c2, 0($c1)
-		cscc	$c2, $a4, $c1
+		cscc	$a4, $c2, $c1
 
 		#
 		# Store to capability between cllc and cscc; check to make
@@ -74,7 +74,7 @@ test:		.ent test
 		li	$t0, 1
 		cllc	$c2, $c1
 		csci	$c0, 0($c1)
-		cscc	$c2, $a3, $c1
+		cscc	$a3, $c2, $c1
 		clci	$c3, 0($c1)
 		cgettag	$a2, $c3
 
