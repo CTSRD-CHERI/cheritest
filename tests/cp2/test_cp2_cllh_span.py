@@ -38,7 +38,7 @@ class test_cp2_cllh_span(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cllh_3(self):
 	'''That an uninterrupted cllh+cld+csch succeeds'''
-	self.assertRegisterEqual(self.MIPS.a4, 1, "Uninterrupted cllh+cld+csch failed")
+	self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted cllh+cld+csch failed")
 
     @attr('llsc')
     @attr('llscspan')
@@ -54,4 +54,4 @@ class test_cp2_cllh_span(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cllh_6(self):
 	'''That an cllh+csh+csch spanning fails'''
-	self.assertRegisterEqual(self.MIPS.a3, 0, "Interrupted cllh+csh+csch succeeded")
+	self.assertRegisterEqual(self.MIPS.t0, 0, "Interrupted cllh+csh+csch succeeded")
