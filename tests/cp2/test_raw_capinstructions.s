@@ -196,12 +196,11 @@ start:
 		csch	$t1, $t1, $c4
 		cllwu	$t1, $c4
 		cscw	$t1, $t1, $c4
-		clldu	$t1, $c4
 		cscd	$t1, $t1, $c4
 
 		# load linked/store conditional, capability
 		cllc	$c1, $c4
-		cscc	$c1, $t1, $c4
+		cscc	$t1, $c1, $c4
 
 		# check capability fields
 		cmove $c1, $c0
