@@ -217,6 +217,7 @@ start:
 		cle	  $t1, $c0, $c1
 		cltu	  $t1, $c0, $c1
 		cleu	  $t1, $c0, $c1
+		cexeq	  $t1, $c0, $c1
 
                 # jumps
 		dla       $t1, l0
