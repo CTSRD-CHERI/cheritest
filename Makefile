@@ -673,6 +673,7 @@ TEST_CP2_FILES=					\
 		test_cp2_clwu_unpriv.s		\
 		test_cp2_zeroex.s		\
 		test_cp2_signex.s		\
+		test_cp2_ll_signex.s		\
 		test_cp2_csealcode.s		\
 		test_cp2_csealunsealcode.s	\
 		test_cp2_csealdata.s		\
