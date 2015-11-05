@@ -90,7 +90,7 @@ test:		.ent test
 		cgetdefault $c1
 		dla	$t0, data
 		csetoffset $c1, $c1, $t0
-		dla	$t0, 160
+		dli	$t0, 160
 		csetbounds $c1, $c1, $t0
 
 		#
@@ -102,14 +102,17 @@ test:		.ent test
 		#
 
 		dli	$t1, 127	# unaligned, probably spans cache line
+		csetoffset $c3, $c1, $t1
 
 		clcr	$c2, $t1($c1)
+		# cllc doesn't take a register offset, so use $c3 not $t1($c1)
+		cllc	$c2, $c3
 		# clbr will work at any alignment
 		clhr	$t0, $t1($c1)
 		clwr	$t0, $t1($c1)
 		cldr	$t0, $t1($c1)
 		csetoffset $c3, $c1, $t1
-		# cllh will work at any alignment
+		# cllb will work at any alignment
 		cllh	$t0, $c3
 		cllw	$t0, $c3
 		clld	$t0, $c3
