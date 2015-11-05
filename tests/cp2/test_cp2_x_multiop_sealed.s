@@ -86,7 +86,6 @@ test:		.ent test
 		# Permit_Load_Capability, Permit_Store_Capability, but not
 		# Permit_Execute.
 		dli	$t0, 0x3d 
-
 		candperm $c1, $c1, $t0
 		dli	$t0, 1
 		csetoffset $c2, $c3, $t0
@@ -137,7 +136,23 @@ test:		.ent test
 		cswr	$t0, $t1($c1)
 		cldr	$t0, $t1($c1)
 		csdr	$t0, $t1($c1)
-		# Skip setting an appropriate offset for now
+
+		#
+		# Make $c1 a sealed capability with offset pointing at 'data'
+		#
+
+		cgetdefault $c1
+		dla	$t1, data
+		csetoffset $c1, $c1, $t1
+		dli	$t0, 0x3d 
+		candperm $c1, $c1, $t0
+		cgetdefault $c2
+		dli	$t0, 1
+		csetoffset $c2, $c2, $t0
+		cseal $c1, $c1, $c2
+		
+		cllc	$c2, $c1
+		cscc	$t0, $c1, $c1
 		cllb	$t0, $c1
 		cscb	$t0, $t2, $c1
 		cllh	$t0, $c1
