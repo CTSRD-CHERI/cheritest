@@ -110,7 +110,10 @@ sandbox:
 		cswr	$t0, $t1($c29)
 		cldr	$t0, $t1($c29)
 		csdr	$t0, $t1($c29)
+
 		csetoffset $c29, $c29, $t1
+		cllc	$c2, $c29
+		cscc	$t0, $c1, $c29
 		cllb	$t0, $c29
 		cscb	$t0, $t2, $c29
 		cllh	$t0, $c29
