@@ -161,6 +161,8 @@ L2:
 		cldr	$t0, $t1($c1)
 		csdr	$t0, $t1($c1)
 		csetoffset $c1, $c1, $t1
+		cllc	$c2, $c1
+		cscc	$t0, $c1, $c1
 		cllb	$t0, $c1
 		cscb	$t0, $t3, $c1
 		cllh	$t0, $c1
