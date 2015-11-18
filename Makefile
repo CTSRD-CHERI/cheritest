@@ -855,6 +855,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_ld_align.s \
 		test_cp2_x_ld_len.s \
 		test_cp2_x_cjr_delay.s \
+		test_cp2_x_cllc_perm.s \
 		test_cp2_clearregs_gplo.s \
 		test_cp2_clearregs_gphi.s \
 		test_cp2_clearregs_caplo.s \
