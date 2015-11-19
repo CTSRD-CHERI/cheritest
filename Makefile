@@ -560,6 +560,7 @@ TEST_CP0_FILES=					\
 		test_eret.s			\
 		test_exception_bev0_trap.s	\
 		test_exception_bev0_trap_bd.s	\
+		test_exception_exl.s		\
 		test_break.s			\
 		test_syscall.s			\
 		test_syscall2.s			\
