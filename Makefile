@@ -1278,6 +1278,7 @@ NOSEPRED=not false
 NOSEPRED+=and not csettype
 NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
+NOSEPRED+=and not errorepc
 ifeq ($(BERI_VER),2)
 NOSEPRED+=and not invalidateL2only
 NOSEPRED+=and not lladdr

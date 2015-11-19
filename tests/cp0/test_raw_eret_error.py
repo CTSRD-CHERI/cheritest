@@ -30,6 +30,7 @@ from nose.plugins.attrib import attr
 
 class test_raw_eret_error(BaseBERITestCase):
 
+    @attr('errorepc')
     def test_raw_eret_error_1(self):
         '''Test that ERET returns to ErrorEPC when CP0.Status.ERL is set'''
         self.assertRegisterEqual(self.MIPS.a0, 0, "ERET did not return to ErrorEPC when CP0.ERL was set")
