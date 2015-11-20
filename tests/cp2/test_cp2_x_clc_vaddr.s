@@ -64,7 +64,7 @@ test:		.ent test
 		dla     $t1, data
 		cincbase $c1, $c0, $t1
 		dli     $t0, 96
-                csetlen $c1, $c1, $t0
+		csetlen $c1, $c1, $t0
 		dli     $t0, 0x7f
 		candperm $c1, $c1, $t0
 
@@ -79,12 +79,12 @@ test:		.ent test
 		# Clear $c1 so we can tell if the load happened
 		#
 
-                cmove     $c2, $c1
+		cmove     $c2, $c1
 		cfromptr  $c1, $c1, $0
 
-                # Calculate offset of 'cap1' from 'data'
-                dla     $a6, cap1
-                dsub    $t0, $a6, $t1
+		# Calculate offset of 'cap1' from 'data'
+		dla     $a6, cap1
+		dsub    $t0, $a6, $t1
 
 		#
 		# Reload from an unaligned address
