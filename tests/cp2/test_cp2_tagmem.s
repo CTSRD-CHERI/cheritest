@@ -51,36 +51,36 @@ test:		.ent test
 
 		dla	$t0, cap1
 		cmove   $c1, $c0
-                cscr     $c1, $t0($c0)
-                clcr     $c2, $t0($c0)
-                cgettag $a0, $c2
-                ccleartag $c1, $c0
-                cscr     $c1, $t0($c0)
-                clcr     $c2, $t0($c0)
-                cgettag $a1, $c2
-                
-                # Exercise a potential victim buffer in the tag cache.
-                dla	$t1, cap1-0x4000000	# A conflicting address
-                dla	$t2, cap1+0x1000	# A different address
-                cmove	$c1, $c0
-                # Store a valid cap to an address that conflicts with one in the cache.
-                cscr	$c1, $t1($c0)
-                # Load data from the old address, swapping with the victim buffer.
-                clcr	$c2, $t0($c0)
-                # Load another address, evicting the victim buffer
+		cscr     $c1, $t0($c0)
+		clcr     $c2, $t0($c0)
+		cgettag $a0, $c2
+		ccleartag $c1, $c0
+		cscr     $c1, $t0($c0)
+		clcr     $c2, $t0($c0)
+		cgettag $a1, $c2
+		
+		# Exercise a potential victim buffer in the tag cache.
+		dla	$t1, cap1-0x4000000	# A conflicting address
+		dla	$t2, cap1+0x1000	# A different address
+		cmove	$c1, $c0
+		# Store a valid cap to an address that conflicts with one in the cache.
+		cscr	$c1, $t1($c0)
+		# Load data from the old address, swapping with the victim buffer.
+		clcr	$c2, $t0($c0)
+		# Load another address, evicting the victim buffer
 		clcr	$c3, $t2($c0)
 		# Load the evicted address to see if it has the tag set
 		clcr	$c1, $t1($c0)
 		cgettag	$a2, $c1
 		
 		# Store data on either side of capability to ensure the tag is preserved. 
-                cmove	$c1, $c0
-                # Store a valid cap
-                cscr	$c1, $t1($c0)
-                # Store general-purpose data just before the capability
-                sd	$t0, -8($t0)
-                # Store general-purpose data just after the capability
-                sd	$t0, cap_width($t0)
+		cmove	$c1, $c0
+		# Store a valid cap
+		cscr	$c1, $t1($c0)
+		# Store general-purpose data just before the capability
+		sd	$t0, -8($t0)
+		# Store general-purpose data just after the capability
+		sd	$t0, cap_width($t0)
 		# Load the evicted address to see if it has the tag set
 		clcr	$c1, $t1($c0)
 		cgettag	$a3, $c1
@@ -93,7 +93,7 @@ test:		.ent test
 		.end	test
 
 		.data
-		.align	5                  # Must 256-bit align capabilities
+		.align	5		  # Must 256-bit align capabilities
 buffer:		.dword	0x0123456789abcdef # uperms/reserved
 		.dword	0x0123456789abcdef # otype/eaddr
 		.dword	0x0123456789abcdef # base
