@@ -50,13 +50,13 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dla	$t0, cap1
-		cmove   $c1, $c0
-		cscr     $c1, $t0($c0)
-		clcr     $c2, $t0($c0)
+		cmove	$c1, $c0
+		cscr	$c1, $t0($c0)
+		clcr	$c2, $t0($c0)
 		cgettag $a0, $c2
 		ccleartag $c1, $c0
-		cscr     $c1, $t0($c0)
-		clcr     $c2, $t0($c0)
+		cscr	$c1, $t0($c0)
+		clcr	$c2, $t0($c0)
 		cgettag $a1, $c2
 		
 		# Exercise a potential victim buffer in the tag cache.
@@ -93,7 +93,7 @@ test:		.ent test
 		.end	test
 
 		.data
-		.align	5		  # Must 256-bit align capabilities
+		.align	5		# Must 256-bit align capabilities
 buffer:		.dword	0x0123456789abcdef # uperms/reserved
 		.dword	0x0123456789abcdef # otype/eaddr
 		.dword	0x0123456789abcdef # base
