@@ -98,6 +98,10 @@ buffer:		.dword	0x0123456789abcdef # uperms/reserved
 		.dword	0x0123456789abcdef # otype/eaddr
 		.dword	0x0123456789abcdef # base
 		.dword	0x0123456789abcdef # length
+.if CAP_SIZE==128			   # More interesting alignment for 128 case.
+		.dword	0x0123456789abcdef
+		.dword	0x0123456789abcdef
+.endif
 cap1:		.dword	0x0123456789abcdef # uperms/reserved
 		.dword	0x0123456789abcdef # otype/eaddr
 		.dword	0x0123456789abcdef # base
