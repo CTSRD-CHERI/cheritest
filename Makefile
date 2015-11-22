@@ -441,7 +441,8 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_mul_inf_single.s	\
 		test_raw_fpu_div_inf_single.s	\
 		test_raw_fpu_infinity_single.s	\
-		test_raw_fpu_trunc_nan_single.s
+		test_raw_fpu_trunc_nan_single.s \
+		test_raw_fpu_trunc_nan_d64.s
 
 RAW_TRACE_FILES=test_raw_trace.s
 
