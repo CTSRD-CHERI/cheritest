@@ -59,11 +59,17 @@ start:
                 trunc.l.d $f2, $f2
                 dmfc1 $a1, $f2
 
-		li $t0, 0xc3e0		# 2^64
+		li $t0, 0x43f0		# 2^64
 		dsll $t0, $t0, 48
 		dmtc1 $t0, $f2
                 trunc.l.d $f2, $f2
                 dmfc1 $a2, $f2
+
+		li $t0, 0xfff0		# IEEE -infinity
+		dsll $t0, $t0, 48
+		dmtc1 $t0, $f2
+		trunc.l.d $f2, $f2
+		dmfc1 $a3, $f2
 
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

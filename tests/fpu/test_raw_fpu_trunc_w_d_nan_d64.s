@@ -25,23 +25,61 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-class test_raw_fpu_trunc_nan_d64(BaseBERITestCase):
+#
+# Test double-precision truncate with nan, infinite, and too large operands.
+#
+		.text
+		.global start
+		.ent start
+start:     
+		mfc0 $t0, $12
+		li $t1, 1 << 29		# Enable CP1
+		or $t0, $t0, $t1    
+		li $t1, 1 << 26         # Put FPU into 64 bit mode
+		or $t0, $t0, $t1
+		mtc0 $t0, $12 
+		nop
+		nop
+		nop
 
-    def test_raw_fpu_trunc_nan_d64_1(self):
-        '''Test TRUNC.L.D of QNan'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x7fffffffffffffff, "TRUNC.L.D of QNaN did not return MAXINT")
+		li $t0, 0x7ff8		# NaN
+		dsll $t0, $t0, 48
+		dmtc1 $t0, $f2
+		trunc.w.d $f2, $f2
+		dmfc1 $a0, $f2
 
-    def test_raw_fpu_trunc_nan_d64_2(self):
-        '''Test TRUNC.L.D of +Inf'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x7fffffffffffffff, "TRUNC.L.D of +Infinity did not return MAXINT")
+		li $t0, 0x7ff0		# IEEE 754 +infinity
+		dsll $t0, $t0, 48
+		dmtc1 $t0, $f2
+                trunc.w.d $f2, $f2
+                dmfc1 $a1, $f2
 
-    def test_raw_fpu_trunc_nan_d64_3(self):
-        '''Test TRUNC.L.D of 2^64'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x7fffffffffffffff, "TRUNC.L.D of 2^64 did not return MAXINT")
+		li $t0, 0x43f0 		# 2^64
+		dsll $t0, $t0, 48
+		dmtc1 $t0, $f2
+                trunc.w.d $f2, $f2
+                dmfc1 $a2, $f2
 
-    def test_raw_fpu_trunc_nan_d64_4(self):
-        '''Test TRUNC.L.D of -Inf'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x7fffffffffffffff, "TRUNC.L.D of -Infinity did not return MAXINT")
+		li $t0, 0xfff0		# IEEE -infinity
+		dsll $t0, $t0, 48
+		dmtc1 $t0, $f2
+		trunc.w.d $f2, $f2
+		dmfc1 $a3, $f2
+
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
+
+		# Terminate the simulator
+		mtc0 $at, $23
+end:
+		b end
+		nop
+
+.end start
