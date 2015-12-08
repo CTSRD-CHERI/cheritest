@@ -30,18 +30,22 @@ from nose.plugins.attrib import attr
 
 class test_raw_fpu_trunc_w_d_nan_d64(BaseBERITestCase):
 
+    @attr('float64')
     def test_raw_fpu_trunc_w_d_nan_d64_1(self):
         '''Test TRUNC.W.D of QNan'''
         self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "TRUNC.W.D of QNaN did not return MAXINT")
 
+    @attr('float64')
     def test_raw_fpu_trunc_w_d_nan_d64_2(self):
         '''Test TRUNC.W.D of +Inf'''
         self.assertRegisterEqual(self.MIPS.a1, 0x7fffffff, "TRUNC.W.D of +Infinity did not return MAXINT")
 
+    @attr('float64')
     def test_raw_fpu_trunc_w_d_nan_d64_3(self):
         '''Test TRUNC.W.D of 2^64'''
         self.assertRegisterEqual(self.MIPS.a2, 0x7fffffff, "TRUNC.W.D of 2^64 did not return MAXINT")
 
+    @attr('float64')
     def test_raw_fpu_trunc_w_d_nan_d64_4(self):
         '''Test TRUNC.W.D of -Inf'''
         self.assertRegisterEqual(self.MIPS.a3, 0x7fffffff, "TRUNC.W.D of -Infinity did not return MAXINT")
