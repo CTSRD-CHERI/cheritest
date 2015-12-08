@@ -1191,7 +1191,6 @@ and not counterdev \
 and not dma \
 and not dmaclang \
 and not dumpicache \
-and not float \
 and not ignorebadex \
 and not invalidateL2 \
 and not loadcachetag \
@@ -1211,6 +1210,20 @@ and not deterministic_random \
 and not noextendedtlb \
 and not csettype \
 and not statcounters
+
+ifdef COP1
+L3_NOSEPRED+=\
+and not float32 \
+and not floatpaired \
+and not floatindexed \
+and not floatfexr \
+and not floatfenr \
+and not floatrecip \
+and not floatrsqrt \
+and not floatexception
+else
+L3_NOSEPRED+=and not float
+endif
 
 ifneq ($(TEST_CP2),1)
 L3_NOSEPRED+=and not capabilities and not clang
