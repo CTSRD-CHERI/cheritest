@@ -32,7 +32,7 @@ class test_cp2_csetoffset_imprecise(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_csetoffset_imprecise_offset(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x10000, "CSetOffset did not set the offset to the expected value")
+        self.assertRegisterEqual(self.MIPS.a0, 0x1000000, "CSetOffset did not set the offset to the expected value")
 
     @attr('capabilities')
     @attr('cap256')
