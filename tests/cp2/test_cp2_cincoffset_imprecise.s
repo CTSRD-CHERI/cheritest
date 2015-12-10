@@ -49,7 +49,7 @@ test:		.ent test
 		dli	$t0, 1
 		csetbounds $c1, $c1, $t0
 		dli	$t0, 1
-		dsll	$t0, $t0, 16
+		dsll	$t0, $t0, 24
 		cincoffset $c1, $c1, $t0	# possible loss of precision
 
 		cgetoffset $a0, $c1
