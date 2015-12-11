@@ -1782,7 +1782,7 @@ endif
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 	mkdir -p $(L3_LOGDIR)
 ifdef TRACE
-	$(L3_SIM) --cycles `./max_cycles $@ 20000000 30000000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | tee $@.trace | ./l3tosim > $@ || true
+	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err | tee $@.trace | ./l3tosim > $@ || true
 else
 ifdef PROFILE
 	rm -f mlmon.out
