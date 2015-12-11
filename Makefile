@@ -1219,6 +1219,7 @@ and not floatindexed \
 and not floatfccr \
 and not floatfexr \
 and not floatfenr \
+and not floatflags \
 and not floatrecip \
 and not floatrsqrt \
 and not floatexception \
