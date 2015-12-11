@@ -39,6 +39,7 @@ class test_raw_fpu_div(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.s0, 0x407159d4d1bc2504, "Double precision division failed")
 
     @attr('float64')
+    @attr('floatechonan')
     def test_div_double_qnan(self):
         '''Test double precision division of QNaN'''
         self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "div.d failed to echo QNaN");

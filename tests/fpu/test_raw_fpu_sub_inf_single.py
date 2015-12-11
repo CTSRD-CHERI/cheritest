@@ -40,7 +40,7 @@ class test_raw_fpu_sub_inf_single(BaseBERITestCase):
 
     def test_raw_fpu_infinity_single_sub_2(self):
         '''Test sub.s +Infinity from +infinity'''
-	self.assertRegisterMaskEqual(self.MIPS.a1, 0xff800000, 0x7f800000, "sub.s of +Infinity from +infinity did not give NaN")
+	self.assertRegisterMaskEqual(self.MIPS.a1, 0x7f800000, 0x7f800000, "sub.s of +Infinity from +infinity did not give NaN")
 
     def test_raw_fpu_infinity_single_sub_3(self):
         '''Test sub.s +Infinity from +infinity'''
