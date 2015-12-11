@@ -1153,7 +1153,7 @@ and not nofloat         \
 and not floatpaired     \
 and not floatindexed    \
 and not floatcmove      \
-and not floatfcsr       \
+and not floatfccr       \
 and not floatfenr       \
 and not floatfexr       \
 and not floatrecip      \
@@ -1216,11 +1216,13 @@ L3_NOSEPRED+=\
 and not float32 \
 and not floatpaired \
 and not floatindexed \
+and not floatfccr \
 and not floatfexr \
 and not floatfenr \
 and not floatrecip \
 and not floatrsqrt \
-and not floatexception
+and not floatexception \
+and not floatechonan 
 else
 L3_NOSEPRED+=and not float
 endif

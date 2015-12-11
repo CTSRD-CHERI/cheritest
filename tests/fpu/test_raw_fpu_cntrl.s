@@ -58,7 +58,7 @@ start:
 		
 		# CTC / CFC
 		li $t0, 0xFFF3F
-		ctc1 $t0, $f25 # FCSR
+		ctc1 $t0, $f25 # FCCR
 		cfc1 $s2, $f25
 		
 		li $t0, 0xFFF1

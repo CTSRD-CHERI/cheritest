@@ -37,9 +37,9 @@ class test_raw_fpu_cntrl(BaseBERITestCase):
         '''Test to ensure we can move 64 bits between COP1 and GPR registers'''
         self.assertRegisterEqual(self.MIPS.s1, (18 << 32) + 7, "DMOVC failed")
         
-    @attr('floatfcsr')
+    @attr('floatfccr')
     def test_cmovc_fcsr(self):
-        '''Test to ensure FCSR is correctly read and written'''
+        '''Test to ensure FCCR is correctly read and written'''
         self.assertRegisterEqual(self.MIPS.s2, 0x3F, "ctc1/cfc1 failed for $f25")
         self.assertRegisterEqual(self.MIPS.a0, 0x0, "cfc1 failed to interpret $f31 for $f25")
 
