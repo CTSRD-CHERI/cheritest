@@ -99,7 +99,7 @@ L1:
 		.ent bev0_handler
 bev0_handler:
 		li	$a2, 1
-		dmfc0   $a3, $13 	# Cause register
+		mfc0    $a3, $13 	# Cause register
 		#
 		# The exception should be in a branch delay slot, so can't
 		# just increment EPC. Instead, load EPC with L1, the address

@@ -106,7 +106,7 @@ return:
 		.ent exception_handler
 exception_handler:
 		daddiu	$a0, $a0, 1	# Increment trap counter        
-		dmfc0	$a1, $13	# Get cause register
+		mfc0	$a1, $13	# Get cause register
 		dmfc0	$a2, $14        # get EPC
 
 		# Set EPC to continue after exception return

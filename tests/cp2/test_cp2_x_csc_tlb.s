@@ -153,7 +153,7 @@ testcode:
 exception_handler:
 
                 dmfc0   $a6, $12                # Read status
-                dmfc0   $a7, $13                # Read cause
+                mfc0    $a7, $13                # Read cause
 
 		#
 		# Check to see if the capability store succeeded

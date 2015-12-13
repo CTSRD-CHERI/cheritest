@@ -104,7 +104,7 @@ data:		.dword	0x0011223344556677
 exception_handler:
 		# Capture cause register so we can make sure that an
 		# exception was thrown for the right reason!
-		dmfc0	$s1, $13	# Get cause register
+		mfc0	$s1, $13	# Get cause register
 		daddiu	$s2, $s2, 1	# Increment trap counter
 		dmfc0	$k1, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET

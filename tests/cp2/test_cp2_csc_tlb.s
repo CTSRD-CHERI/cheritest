@@ -164,7 +164,7 @@ testcode:
 		nop
 
 exception_handler:
-                dmfc0   $a7, $13                # Read cause.
+                mfc0    $a7, $13                # Read cause.
 
 		dla	$t0, the_end
 		jr	$t0

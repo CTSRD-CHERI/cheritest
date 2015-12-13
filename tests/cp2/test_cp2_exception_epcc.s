@@ -172,7 +172,7 @@ restored_ra:
 exception_handler:
 		# Capture cause register so we can make sure that an
 		# exception was thrown for the right reason!
-		dmfc0	$s1, $13	# Get cause register
+		mfc0	$s1, $13	# Get cause register
 
 		daddiu	$a0, $a0, 1	# Increment trap counter
 

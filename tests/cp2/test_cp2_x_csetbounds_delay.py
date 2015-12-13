@@ -51,6 +51,6 @@ class test_cp2_x_csetbounds_delay(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay_3(self):
         '''Test CP0 cause is set correctly when C2E in a branch delay slot'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x80000048,
+        self.assertRegisterEqual(self.MIPS.a3, 0xffffffff80000048,
             "CP0 cause was not set correcly when C2E in a branch delay slot")
 

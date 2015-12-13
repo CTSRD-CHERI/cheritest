@@ -177,7 +177,7 @@ exception_handler:
 		# increment a0 to count number of exceptions
 		add     $a0, 1
 		li      $a5, 6
-		dmfc0   $a7, $13                # Read cause
+		mfc0    $a7, $13                # Read cause
 		dla	$t0, the_end
 		jr	$t0
 		nop
