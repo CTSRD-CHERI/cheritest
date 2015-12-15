@@ -5,7 +5,7 @@
 #
 # This software was developed by Ben Thorner as part of his summer internship
 # and Colin Rothwell as part of his final year undergraduate project.
-# 
+#
 # @BERI_LICENSE_HEADER_START@
 #
 # Licensed to BERI Open Systems C.I.C. (BERI) under one or more contributor
@@ -25,63 +25,23 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+from beritest_tools import BaseBERITestCase
+from nose.plugins.attrib import attr
 
-#
-# Tests to exercise the multiplication ALU instruction.
-#
+class test_raw_fpu_mul_ps(BaseBERITestCase):
 
-		.text
-		.global start
-		.ent start
-start:     
-		# First enable CP1 
-		dli $t1, 1 << 29
-		or $at, $at, $t1    # Enable CP1    
-		mtc0 $at, $12 
-		nop
-		nop
-		nop
-		nop
-		nop
+    @attr('floatpaired')
+    def test_mul_paired(self):
+        '''Test we can multiply paired singles'''
+        self.assertRegisterInRange(self.MIPS.s2, 0x4140000043674C07, 0x4140000043674C08, "Failed paired single multiply.")
 
-		# Individual tests
-		
-		# START TEST
-		# MUL.D
-		lui $t3, 0x4000
-		dsll $t3, $t3, 32   # 2.0
-		dmtc1 $t3, $f29
-		mul.D $f27, $f29, $f29
-		dmfc1 $s0, $f27
- 
-		# MUL.S
-		lui $t2, 0x4080     # 4.0
-		mtc1 $t2, $f20
-		mul.S $f20, $f20, $f20
+    @attr('floatpaired')
+    @attr('floatpairedrounding')
+    def test_mul_paired_rounding(self):
+        '''Test we can multiply paired singles, and check rounding'''
+        self.assertRegisterEqual(self.MIPS.s2, 0x4140000043674C08, "Failed paired single multiply (checking rounding).")
 
-		# MUL.S (Denorm)
-		lui $t0, 0x0100
-		mtc1 $t0, $f31      # Enable flush to zero on denorm.
-		lui $t1, 0x1
-		dmtc1 $t1, $f22
-		mul.S $f22, $f22, $f22
-		dmfc1 $s4, $f22        
-		dmfc1 $s1, $f20
-
-		# END TEST
-		
-		# Dump registers on the simulator (gxemul dumps regs on exit)
-		mtc0 $at, $26
-		nop
-		nop
-
-		# Terminate the simulator
-		mtc0 $at, $23
-end:
-		b end
-		nop
-		.end start
+    @attr('floatpaired')
+    def test_mul_paired_qnan(self):
+        '''Test paired single multiplication when one of the pair is QNaN'''
+        self.assertRegisterEqual(self.MIPS.s3, 0x7F81000040800000, "mul.ps failed to echo QNaN")

@@ -29,31 +29,17 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 class test_raw_fpu_mul(BaseBERITestCase):
+
     def test_mul_single(self):
         '''Test we can multiply in single precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x41800000, "Failed to multiply 4.0 and 4.0 in single precision")
+
+    def test_mul_single_denorm(self):
+        '''Test that mul.s flushes a denormalized result to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "mul.s failed to flush denormalised result")
 
     @attr('float64')
     def test_mul_double(self):
         '''Test we can multiply in double precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x4010000000000000, "Failed to multiply 2.0 and 2.0 in double precision")
 
-    @attr('floatpaired')
-    def test_mul_paired(self):
-        '''Test we can multiply paired singles'''
-        self.assertRegisterInRange(self.MIPS.s2, 0x4140000043674C07, 0x4140000043674C08, "Failed paired single multiply.")
-
-    @attr('floatpaired')
-    @attr('floatpairedrounding')
-    def test_mul_paired_rounding(self):
-        '''Test we can multiply paired singles, and check rounding'''
-        self.assertRegisterEqual(self.MIPS.s2, 0x4140000043674C08, "Failed paired single multiply (checking rounding).")
-
-    @attr('floatpaired')
-    def test_mul_paired_qnan(self):
-        '''Test paired single multiplication when one of the pair is QNaN'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7F81000040800000, "mul.ps failed to echo QNaN")
-
-    def test_mul_single_denorm(self):
-        '''Test that mul.s flushes a denormalized result to zero'''
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "mul.s failed to flush denormalised result")
