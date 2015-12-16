@@ -72,6 +72,27 @@ start:
 		dmfc1 $s4, $f22        
 		dmfc1 $s1, $f20
 
+		# MUL.D (regression test)
+		add $t0, $zero, $zero
+		ori $t0, $t0, 0xbfd1
+		dsll $t0, $t0, 16
+		ori $t0, $t0, 0xb257
+		dsll $t0, $t0, 16
+		ori $t0, $t0, 0x47d1
+		dsll $t0, $t0, 16
+		ori $t0, $t0, 0x4462
+		dmtc1 $t0, $f0
+		add $t0, $zero, $zero
+		ori $t0, $t0, 0x3fd1
+		dsll $t0, $t0, 16
+		ori $t0, $t0, 0x89e6
+		dsll $t0, $t0, 16
+		ori $t0, $t0, 0x3d5e
+		dsll $t0, $t0, 16
+		ori $t0, $t0, 0x384c
+		dmtc1 $t0, $f1
+		mul.d $f0, $f0, $f1
+		dmfc1 $a0, $f0
 		# END TEST
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
