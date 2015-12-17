@@ -54,10 +54,22 @@ test:		.ent test
 		nop
 
 		#
-		# Set up exception handler
+		# Set up exception handlers
+		#
+
+		#
+		# Handler for XTLB refill - shouldn't be called, but might be
+		# if there is a bug in exception processing
 		#
 
 		dli	$a0, 0xffffffff80000080
+		dla	$a1, bev0_common_handler_stub
+		dli	$a2, 12	# instruction count
+		dsll	$a2, 2	# convert to byte count
+		jal	memcpy
+		nop		# branch delay slot	
+
+		dli	$a0, 0xffffffff80000180
 		dla	$a1, bev0_common_handler_stub
 		dli	$a2, 12	# instruction count
 		dsll	$a2, 2	# convert to byte count
@@ -78,10 +90,10 @@ test:		.ent test
 		#
 
 		dla	$t0, data
-		daddiu	$t0, 1
+		daddiu	$t0, $t0, 127
 		csetoffset $c2, $c1, $t0
-		dli	$t0, 32
-		csetbounds $c2, $c2, $t0
+		dli	$t1, 32
+		csetbounds $c2, $c2, $t1
 		
 
 		#
@@ -91,8 +103,8 @@ test:		.ent test
 		csetdefault $c2
 
 		dli	$t1, 0
-		dli     $a0, 0
-		ld      $a0, 0($t1) # This should raise a C2E exception
+		dli     $a0, 1
+		ld      $a0, 0($zero) # This should raise a C2E exception
 
 		#
 		# Restore c0
@@ -110,7 +122,7 @@ test:		.ent test
 		.ent bev0_handler
 bev0_handler:
 		dli	$a2, 1
-		mfc0	$a3, $13	# CP0.Status
+		mfc0	$a3, $13	# CP0.Cause
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
@@ -129,8 +141,9 @@ bev0_common_handler_stub:
 		.end bev0_common_handler_stub
 
 		.data
-		.align	3
-data:		.dword	0x0123456789abcdef
-		.dword  0x0123456789abcdef
-
+		.align	5
+data:
+		.rept 160
+		.byte 0
+		.endr
 

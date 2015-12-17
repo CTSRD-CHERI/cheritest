@@ -33,7 +33,7 @@ class test_cp2_x_ld_align(BaseBERITestCase):
     @attr('capabilities')
     @attr('alignex')
     def test_cp2_x_ld_align_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0, "LD succeeded even though C0.base was not aligned")
+        self.assertRegisterEqual(self.MIPS.a0, 1, "LD succeeded even though C0.base was not aligned")
 
     @attr('capabilities')
     @attr('alignex')
@@ -43,4 +43,4 @@ class test_cp2_x_ld_align(BaseBERITestCase):
     @attr('capabilities')
     @attr('alignex')
     def test_cp2_x_ld_align_3(self):
-        self.assertRegisterEqual(self.MIPS.a3, 2 << 2, "CP0.Status was not set correctly when C0.base was not aligned")
+        self.assertRegisterEqual(self.MIPS.a3, 4 << 2, "CP0.Status was not set correctly when C0.base was not aligned")
