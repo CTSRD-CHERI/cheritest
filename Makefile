@@ -890,6 +890,7 @@ TEST_MEM_UNALIGN_FILES=				\
 		test_lh_unalign.s		\
 		test_lw_unalign.s		\
 		test_ld_unalign.s		\
+		test_ld_unalign_ok.s		\
 		test_sh_unalign.s		\
 		test_sw_unalign.s		\
 		test_sd_unalign.s		\
@@ -1186,7 +1187,8 @@ and not statcounters	\
 "
 
 L3_NOSEPRED=\
-not beri \
+not allow_unaligned \
+and not beri \
 and not beriinitial \
 and not counterdev \
 and not dma \
