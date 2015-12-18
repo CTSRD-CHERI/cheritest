@@ -1214,6 +1214,7 @@ and not statcounters
 
 ifdef COP1
 L3_NOSEPRED+=\
+and not nofloat \
 and not float32 \
 and not floatpaired \
 and not floatindexed \
