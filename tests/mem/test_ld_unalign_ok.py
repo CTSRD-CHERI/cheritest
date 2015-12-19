@@ -31,6 +31,6 @@ from nose.plugins.attrib import attr
 class test_ld_unalign_ok(BaseBERITestCase):
 
     @attr('allow_unaligned')
-    def test_template(self):
+    def test_ld_unalign_ok_1(self):
         '''Test LD of an unaligned address'''
         self.assertRegisterEqual(self.MIPS.a0, 0x0102030405060708, "LD of an unaligned address loaded an unexpected value")
