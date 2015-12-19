@@ -353,6 +353,7 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_abs_ps.s		\
 		test_raw_fpu_abs_qnan.s		\
 		test_raw_fpu_add.s		\
+		test_raw_fpu_add_ps.s		\
 		test_raw_fpu_sub.s		\
 		test_raw_fpu_mul.s		\
 		test_raw_fpu_mul_ps.s		\
