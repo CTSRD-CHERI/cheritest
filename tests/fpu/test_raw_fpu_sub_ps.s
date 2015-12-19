@@ -25,20 +25,73 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-class test_raw_fpu_sub(BaseBERITestCase):
+#
+# Tests to exercise the subtraction ALU instruction.
+#
 
-    def test_sub_single(self):
-        '''Test we can subtract in single precision'''
-        self.assertRegisterMaskEqual(self.MIPS.s1, 0xffffffff, 0xC0000000, "Failed to subtract 4.0 from 2.0 in single precision")
+		.text
+		.global start
+		.ent start
+start:     
+		# First enable CP1 
+		dli $t1, 1 << 29
+		or $at, $at, $t1    # Enable CP1    
+		mtc0 $at, $12 
+		nop
+		nop
+		nop
+		nop
+		nop
 
-    @attr('float64')
-    def test_sub_double(self):
-        '''Test we can subtract in double precision'''
-        self.assertRegisterEqual(self.MIPS.s0, 0x3FF0000000000000, "Failed to subtract 1.0 from 2.0 in double precision")
+		# Individual tests
+		# START TEST
+		
+		# SUB.PS
+		# Loading (75, -32)
+		add $s2, $0, $0
+		ori $s2, $s2, 0x4296
+		dsll $s2, $s2, 32
+		ori $s2, $s2, 0xC200
+		dsll $s2, $s2, 16
+		dmtc1 $s2, $f0
+		# Loading (50, -64)
+		add $s2, $0, $0
+		ori $s2, $s2, 0x4248
+		dsll $s2, $s2, 32
+		ori $s2, $s2, 0xC280
+		dsll $s2, $s2, 16
+		dmtc1 $s2, $f1
+		# Performing operation
+		sub.ps $f0, $f0, $f1
+		dmfc1 $s2, $f0
 
-    def test_sub_single_denorm(self):
-        '''Test that subtract flushes a denormalized result to zero'''
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "SUB.S failed to flush denormalised result")
+		# SUB.PS (QNaN)
+		lui $t2, 0x7F81
+		dsll $t2, $t2, 32   # QNaN
+		ori $t1, $0, 0x4000
+		dsll $t1, $t1, 16   # 2.0
+		or $t2, $t2, $t1
+		dmtc1 $t2, $f13
+		sub.PS $f13, $f13, $f13
+		dmfc1 $s3, $f13
+		
+		# END TEST
+       
+		# Dump registers on the simulator (gxemul dumps regs on exit)
+		mtc0 $at, $26
+		nop
+		nop
+
+		# Terminate the simulator
+		mtc0 $at, $23
+end:
+		b end
+		nop
+		.end start
+		
+		
