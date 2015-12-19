@@ -38,6 +38,7 @@ class test_raw_fpu_abs(BaseBERITestCase):
         '''Test we can take absolute value of a double'''
         self.assertRegisterEqual(self.MIPS.s0, 0x07FF000000000000, "Failed to take absolute of double")
 
+    @attr('floatlegacyabs')
     def test_abs_single_denorm(self):
         '''Test that ABS.S flushes denormalized results to zero'''
         self.assertRegisterEqual(self.MIPS.s4, 0x0, "ABS.S failed to flush denormalised result")
