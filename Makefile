@@ -360,6 +360,7 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_mul_ps.s		\
 		test_raw_fpu_div.s		\
 		test_raw_fpu_neg.s		\
+		test_raw_fpu_neg_ps.s		\
 		test_raw_fpu_neg_qnan.s		\
 		test_raw_fpu_recip.s		\
 		test_raw_fpu_sqrt.s		\
