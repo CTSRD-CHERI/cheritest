@@ -1231,7 +1231,8 @@ and not floatflags \
 and not floatrecip \
 and not floatrsqrt \
 and not floatexception \
-and not floatechonan 
+and not floatechonan \
+and not floatlegacyabs
 else
 L3_NOSEPRED+=and not float
 endif

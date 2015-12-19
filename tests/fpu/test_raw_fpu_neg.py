@@ -39,6 +39,7 @@ class test_raw_fpu_neg(BaseBERITestCase):
         '''Test we can negate in double precision'''
         self.assertRegisterEqual(self.MIPS.s1, 0x0220555500000000, "Failed to negate a double")
 
+    @attr('floatlegacyabs')
     def test_neg_single_denorm(self):
         '''Test that NEG.S flushes a denormalized result to zero'''
         # We ignore the sign
