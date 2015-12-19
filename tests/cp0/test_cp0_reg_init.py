@@ -196,7 +196,7 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('capabilities')
     def test_config1_capabilities(self):
         '''Test the initial value of CP0.Config1.C2'''
-        self.assertRegisterMaskEqual(self.MIPS.a7, 0x1 << 6, 0x1 << 6, "CP0.Config1.CA was not set")
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x1 << 6, 0x1 << 6, "CP0.Config1.C2 was not set")
 
     @attr('beri1cache')
     def test_config1_da_beri1(self):
