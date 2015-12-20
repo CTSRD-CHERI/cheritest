@@ -79,9 +79,6 @@ start:
 		
 		cfc1 $a0, $f25 # FCSR
 
-		# Test FIR
-		cfc1 $t9, $f0 # FIR
-		
 		# MOV.S
 		lui $t1, 0x4100
 		mtc1 $t1, $f4

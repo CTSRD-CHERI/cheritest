@@ -59,12 +59,6 @@ class test_raw_fpu_cntrl(BaseBERITestCase):
         '''Test to ensure $f31 is correctly read and written'''
         self.assertRegisterEqual(self.MIPS.s5, 0x0003FFFF, "ctc1/cfc1 failed for $f31")
         
-    @attr('floatpaired')
-    def test_fir(self):
-        '''Test that we get the correct value out of the FIR'''
-        self.assertRegisterEqual(self.MIPS.t9, 0x470000, "Incorrect value from FIR")
-        # I've left Impl, ProcessorID and Revision to be 0.
-        
     def test_cmov_single(self):
         '''Test to ensure we can move values between FPRs'''
         self.assertRegisterEqual(self.MIPS.t8, 0x41000000, "CMOV failed for single precision")
