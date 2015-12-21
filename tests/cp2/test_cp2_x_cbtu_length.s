@@ -32,13 +32,13 @@
 .set noat
 
 #
-# Test that cbts raises an exception if you try to jump outside of the
-# bounds of the capability.
+# Test that an exception is raised if you use cbtu to jump outside the bounds
+# of PCC. The exception address is the address of the branch target, not
+# the addres of the branch instruction.
 #
 
 sandbox:
 		dli	$a0, 1
-victim:
 		cbtu	$c2, L1
 		nop			# Branch delay slot
 		cjr     $c24
@@ -49,7 +49,7 @@ victim:
 		nop
 		nop
 L1:
-		dli	$a0, 2
+		dli	$a0, 2		# Exception should be raised here
 		cjr	$c24
 		nop
 
@@ -97,7 +97,7 @@ test:		.ent test
 		# an exception into $a1
 		#
 
-		dla	$a1, victim
+		dla	$a1, L1
 		dla	$t0, sandbox
 		dsubu	$a1, $a1, $t0
 
@@ -107,7 +107,7 @@ test:		.ent test
 
 		cfromptr $c2, $c1, $zero
 
-		cjalr   $c24, $c1 	# This should raise an exception
+		cjalr   $c24, $c1 
 		nop			# Branch delay slot
 
 finally:

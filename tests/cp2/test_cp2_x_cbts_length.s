@@ -32,13 +32,13 @@
 .set noat
 
 #
-# Test that cbts raises an exception if you try to jump outside of the
-# bounds of the capability.
+# Test that an exception is raised if we use CBTS to jump outside the bounds
+# of PCC. The exception address is the address of the branch target, not
+# the address of the branch instruction.
 #
 
 sandbox:
 		dli	$a0, 1
-victim:
 		cbts	$c1, L1
 		nop			# Branch delay slot
 		cjr     $c24
@@ -97,11 +97,11 @@ test:		.ent test
 		# an exception into $a1
 		#
 
-		dla	$a1, victim
+		dla	$a1, L1
 		dla	$t0, sandbox
 		dsubu	$a1, $a1, $t0
 
-		cjalr   $c24, $c1 	# This should raise an exception
+		cjalr   $c24, $c1
 		nop			# Branch delay slot
 
 finally:
