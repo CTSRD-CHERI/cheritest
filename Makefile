@@ -1319,6 +1319,7 @@ NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not beri1tlb
 NOSEPRED+=and not beri1cache
 NOSEPRED+=and not beri1oldcache
+NOSEPRED+=and not allow_unaligned
 else
 NOSEPRED+=and not alignex
 NOSEPRED+=and not noextendedtlb
