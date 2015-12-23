@@ -46,6 +46,7 @@ start:
 		nop
 		nop
 
+		dli $a0, 0
 		cfc1 $a0, $0			# FIR
 
 		# Dump registers on the simulator (gxemul dumps regs on exit)
