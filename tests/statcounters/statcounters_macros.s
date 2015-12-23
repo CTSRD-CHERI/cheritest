@@ -29,32 +29,32 @@
 # Test the reset values of the stat counters
 #
 
-ICACHE  = 8
-DCACHE  = 9
-L2CACHE = 10
-MIPSMEM = 11
+ICACHE  =   8
+DCACHE  =   9
+L2CACHE =   10
+MIPSMEM =   11
 
 # CacheCore counters
-WRITE_HIT   = 0
-WRITE_MISS  = 1
-READ_HIT    = 2
-READ_MISS   = 3
-PFTCH_HIT   = 4
-PFTCH_MISS  = 5
-EVICT       = 6
-PFTCH_EVICT = 7
+WRITE_HIT   =   0
+WRITE_MISS  =   1
+READ_HIT    =   2
+READ_MISS   =   3
+PFTCH_HIT   =   4
+PFTCH_MISS  =   5
+EVICT       =   6
+PFTCH_EVICT =   7
 
 # MIPSMem counters
-BYTE_READ   0
-BYTE_WRITE  1
-HWORD_READ  2
-HWORD_WRITE 3
-WORD_READ   4
-WORD_WRITE  5
-DWORD_READ  6
-DWORD_WRITE 7
-CAP_READ    8
-CAP_WRITE   9
+BYTE_READ   =   0
+BYTE_WRITE  =   1
+HWORD_READ  =   2
+HWORD_WRITE =   3
+WORD_READ   =   4
+WORD_WRITE  =   5
+DWORD_READ  =   6
+DWORD_WRITE =   7
+CAP_READ    =   8
+CAP_WRITE   =   9
 
 .macro getstatcounter dest, counter_group, counter_offset
     .word (0x1F << 26) | (0x0 << 21) | (\dest << 16) | (\counter_group << 11) | (\counter_offset << 6) | (0x3B)

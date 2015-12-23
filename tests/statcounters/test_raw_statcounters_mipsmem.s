@@ -33,25 +33,96 @@
 .set noat
 
 #
-# Test the counters for the dcache
+# Test the counters for the mipsmem
 #
+
+DELAY_TIME  = 1000
+
+BYTE_TIMES  = 18
+HWORD_TIMES = 22
+WORD_TIMES  = 8
+DWORD_TIMES = 12
+CAP_TIMES   = 24
 
 .global start
 start:
+    # get status reg
+    mfc0    $at, $12
+    # enable cheri coprocessor
+    dli     $t1, 1 << 30
+    or      $at, $at, $t1
+    mtc0    $at, $12
 
     resetstatcounters  # reset stat counters
+    # wait a bit for counters reset
+    dli     $a4, DELAY_TIME
+    1:
+    bne     $a4, $zero, 1b
+    daddi   $a4, -1
 
-    dli             $a4,  100
-    delay:
-    bne             $a4, $zero, delay
-    daddi           $a4, -1
-
+    # load and store a byte ...
+    dla     $t0, byte1
+    # ... BYTE_TIMES times
+    dli     $a4, BYTE_TIMES-2
+    1:
+    lb      $t1, 0($t0)
+    sb      $t1, 0($t0)
+    bne     $a4, $zero, 1b
+    daddi   $a4, -1
+    # load and store a hword ...
+    dla     $t0, hword1
+    # ... HWORD_TIMES times
+    dli     $a4, HWORD_TIMES-2
+    1:
+    lh      $t1, 0($t0)
+    sh      $t1, 0($t0)
+    bne     $a4, $zero, 1b
+    daddi   $a4, -1
+    # load and store a word ...
+    dla     $t0, word1
+    # ... WORD_TIMES times
+    dli     $a4, WORD_TIMES-2
+    1:
+    lw      $t1, 0($t0)
+    sw      $t1, 0($t0)
+    bne     $a4, $zero, 1b
+    daddi   $a4, -1
+    # load and store a dword ...
+    dla     $t0, dword1
+    # ... DWORD_TIMES times
+    dli     $a4, DWORD_TIMES-2
+    1:
+    ld      $t1, 0($t0)
+    sd      $t1, 0($t0)
+    bne     $a4, $zero, 1b
+    daddi   $a4, -1
+    # load and store a cap ...
     dla     $t0, cap1
-    cscr	$c2, $t0($c0)
-    clcr	$c3, $t0($c0)
+    # ... CAP_TIMES times
+    dli     $a4, CAP_TIMES-2
+    1:
+    clcr	$c1, $t0($c0)
+    cscr	$c1, $t0($c0)
+    bne     $a4, $zero, 1b
+    daddi   $a4, -1
 
-    getstatcounter  6, MIPSMEM, CAP_READ
-    getstatcounter  6, MIPSMEM, CAP_WRITE
+    # wait a bit for counters update
+    dli     $a4, DELAY_TIME
+    1:
+    bne     $a4, $zero, 1b
+    daddi   $a4, -1
+
+    # read counters
+    getstatcounter  4,  MIPSMEM, BYTE_READ      # in a0
+    getstatcounter  5,  MIPSMEM, BYTE_WRITE     # in a1
+    getstatcounter  6,  MIPSMEM, HWORD_READ     # in a2
+    getstatcounter  7,  MIPSMEM, HWORD_WRITE    # in a3
+    getstatcounter  8,  MIPSMEM, WORD_READ      # in a4
+    getstatcounter  9,  MIPSMEM, WORD_WRITE     # in a5
+    getstatcounter  10, MIPSMEM, DWORD_READ     # in a6
+    getstatcounter  11, MIPSMEM, DWORD_WRITE    # in a7
+    getstatcounter  12, MIPSMEM, CAP_READ       # in t0
+    getstatcounter  13, MIPSMEM, CAP_WRITE      # in t1
 
     # Dump registers in the simulator
     mtc0 $v0, $26
@@ -65,9 +136,16 @@ start:
     nop
 
 .data
+.align  0
+byte1:  .byte   0xAA
+.align  1
+hword1: .hword  0xBBBB
+.align  2
+word1:  .word   0xCCCCCCCC
+.align  3
+dword1: .dword  0xDDDDDDDDDDDDDDDD
 .align	5		# Must 256-bit align capabilities
 cap1:	.dword	0x0123456789abcdef	# uperms/reserved
 		.dword	0x0123456789abcdef	# otype/eaddr
 		.dword	0x0123456789abcdef	# base
 		.dword	0x0123456789abcdef	# length
-dword1: .dword	0xf00df00dbeefbeef

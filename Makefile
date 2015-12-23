@@ -1036,9 +1036,10 @@ TEST_MT_FILES=
 endif
 
 ifeq ($(STATCOUNTERS),1)
-RAW_STATCOUNTERS_FILES= 			  \
-		test_raw_statcounters_reset.s \
-		test_raw_statcounters_dcache.s
+RAW_STATCOUNTERS_FILES=                \
+		test_raw_statcounters_reset.s   \
+		test_raw_statcounters_dcache.s  \
+		test_raw_statcounters_mipsmem.s
 else
 RAW_STATCOUNTERS_FILES=
 endif
