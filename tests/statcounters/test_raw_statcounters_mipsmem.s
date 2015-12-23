@@ -25,41 +25,49 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+.include "statcounters_macros.s"
+
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
+
 #
-# Test the reset values of the stat counters
+# Test the counters for the dcache
 #
 
-ICACHE  = 8
-DCACHE  = 9
-L2CACHE = 10
-MIPSMEM = 11
+.global start
+start:
 
-# CacheCore counters
-WRITE_HIT   = 0
-WRITE_MISS  = 1
-READ_HIT    = 2
-READ_MISS   = 3
-PFTCH_HIT   = 4
-PFTCH_MISS  = 5
-EVICT       = 6
-PFTCH_EVICT = 7
+    resetstatcounters  # reset stat counters
 
-# MIPSMem counters
-BYTE_READ   0
-BYTE_WRITE  1
-HWORD_READ  2
-HWORD_WRITE 3
-WORD_READ   4
-WORD_WRITE  5
-DWORD_READ  6
-DWORD_WRITE 7
-CAP_READ    8
-CAP_WRITE   9
+    dli             $a4,  100
+    delay:
+    bne             $a4, $zero, delay
+    daddi           $a4, -1
 
-.macro getstatcounter dest, counter_group, counter_offset
-    .word (0x1F << 26) | (0x0 << 21) | (\dest << 16) | (\counter_group << 11) | (\counter_offset << 6) | (0x3B)
-.endm
+    dla     $t0, cap1
+    cscr	$c2, $t0($c0)
+    clcr	$c3, $t0($c0)
 
-.macro resetstatcounters
-    .word (0x1F << 26) | (0x0 << 21) | (0x0 << 16) | (0x7 << 11) | (0x0 << 6) | (0x3B)
-.endm
+    getstatcounter  6, MIPSMEM, CAP_READ
+    getstatcounter  6, MIPSMEM, CAP_WRITE
+
+    # Dump registers in the simulator
+    mtc0 $v0, $26
+    nop
+    nop
+
+    # Terminate the simulator
+    mtc0 $v0, $23
+    end:
+    b end
+    nop
+
+.data
+.align	5		# Must 256-bit align capabilities
+cap1:	.dword	0x0123456789abcdef	# uperms/reserved
+		.dword	0x0123456789abcdef	# otype/eaddr
+		.dword	0x0123456789abcdef	# base
+		.dword	0x0123456789abcdef	# length
+dword1: .dword	0xf00df00dbeefbeef

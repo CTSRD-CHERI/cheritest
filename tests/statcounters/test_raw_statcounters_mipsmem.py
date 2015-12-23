@@ -25,41 +25,17 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-#
-# Test the reset values of the stat counters
-#
+from beritest_tools import BaseBERITestCase
+from nose.plugins.attrib import attr
 
-ICACHE  = 8
-DCACHE  = 9
-L2CACHE = 10
-MIPSMEM = 11
+class test_raw_statcounters_reset(BaseBERITestCase):
 
-# CacheCore counters
-WRITE_HIT   = 0
-WRITE_MISS  = 1
-READ_HIT    = 2
-READ_MISS   = 3
-PFTCH_HIT   = 4
-PFTCH_MISS  = 5
-EVICT       = 6
-PFTCH_EVICT = 7
+    @attr('statcounters')
+    def test_raw_statcounters_store_cap(self):
+        '''Test that querying the stat counter for cap writes returns 1 after reseting and storing one cap'''
+        self.assertRegisterEqual(self.MIPS.a2, 1, "mips mem cap write counter corrupted")
 
-# MIPSMem counters
-BYTE_READ   0
-BYTE_WRITE  1
-HWORD_READ  2
-HWORD_WRITE 3
-WORD_READ   4
-WORD_WRITE  5
-DWORD_READ  6
-DWORD_WRITE 7
-CAP_READ    8
-CAP_WRITE   9
-
-.macro getstatcounter dest, counter_group, counter_offset
-    .word (0x1F << 26) | (0x0 << 21) | (\dest << 16) | (\counter_group << 11) | (\counter_offset << 6) | (0x3B)
-.endm
-
-.macro resetstatcounters
-    .word (0x1F << 26) | (0x0 << 21) | (0x0 << 16) | (0x7 << 11) | (0x0 << 6) | (0x3B)
-.endm
+    @attr('statcounters')
+    def test_raw_statcounters_read_cap(self):
+        '''Test that querying the stat counter for cap reads returns 1 after reseting and storing one cap'''
+        self.assertRegisterEqual(self.MIPS.a3, 1, "mips mem cap reads counter corrupted")
