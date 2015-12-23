@@ -1144,7 +1144,8 @@ endif
 # cheri - gxemul is simply not CHERI
 #
 GXEMUL_NOSEFLAGS=-A "   \
-not llsc                \
+not allow_unaligned 	\
+and not llsc		\
 and not cache           \
 and not bev1            \
 and not trapi           \
