@@ -47,4 +47,5 @@ class test_raw_fpu_colt(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.s5, 0x0, "Failed to compare equal 2.0, 1.0 and 2.0, 1.0 in paired single precision")
 
     def test_colt_abs(self):
+        '''Test we can compare -0.8 < 1'''
         self.assertRegisterEqual(self.MIPS.s6, 0x1, "-0.8 not marked as < 1")

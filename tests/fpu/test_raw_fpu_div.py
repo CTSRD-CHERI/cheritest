@@ -42,8 +42,8 @@ class test_raw_fpu_div(BaseBERITestCase):
     @attr('floatechonan')
     def test_div_double_qnan(self):
         '''Test double precision division of QNaN'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "div.d failed to echo QNaN");
+        self.assertRegisterEqual(self.MIPS.s3, 0x7FF1000000000000, "DIV.S failed to echo QNaN");
 
     def test_div_single_denorm(self):
-        '''Test that single precision division flushes a denormalized result to zero'''
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "div.s failed to flush denormalised result");
+        '''Test that DIV.S flushes a denormalized result to zero'''
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "DIV.S failed to flush denormalised result");
