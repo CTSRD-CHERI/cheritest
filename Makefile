@@ -374,6 +374,7 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_cole.s		\
 		test_raw_fpu_cule.s		\
 		test_raw_fpu_branch.s		\
+		test_raw_fpu_blikely.s		\
 		test_raw_fpu_mov_gpr.s		\
 		test_raw_fpu_mov_cc.s		\
 		test_raw_fpu_pair.s		\
