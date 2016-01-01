@@ -30,6 +30,7 @@ from nose.plugins.attrib import attr
 
 class test_raw_fpu_cf(BaseBERITestCase):
     def test_cf_single(self):
+        '''Test we can compare false in single precision'''
         self.assertRegisterEqual(self.MIPS.s0, 0x0, "Failed to compare false 2.0, 2.0 in single precision")
 
     @attr('float64')
