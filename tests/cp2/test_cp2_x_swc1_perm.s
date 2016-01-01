@@ -52,6 +52,19 @@ test:		.ent test
 		beq	$t0, $zero, no_fpu
 		nop	# Branch delay slot
 
+                #
+                # Enable the floating point unit
+                #
+
+                mfc0 $t0, $12           # Status Register
+                li $t1, 1 << 29         # CP1 Usable
+                or $t0, $t0, $t1
+                mtc0 $t0, $12
+                nop                     # Potential pipeline hazard
+                nop
+                nop
+                nop
+
 		#
 		# Clear the BEV flag
 		#
