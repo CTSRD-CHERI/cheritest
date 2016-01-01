@@ -71,11 +71,12 @@ test:		.ent test
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
 
+		cgetdefault $c1
 		dla     $t0, sandbox 
-		cincbase $c1, $c0, $t0
+		csetoffset $c1, $c1, $t0
 		dla     $t1, limit
-		dsub		$t2, $t1, $t0
-		csetlen $c1, $c1, $t2
+		dsub	$t2, $t1, $t0
+		csetbounds $c1, $c1, $t2
 		cjalr   $c24, $c1
 		nop			# Branch delay slot
 finally:
