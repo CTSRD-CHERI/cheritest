@@ -86,8 +86,8 @@ all_threads:
 	        # Also enable timer interrupts
 	        or      $at, $at, (1 << 15)
 	        or      $at, $at, 1
-                dli	$t1, 1 << 30
-                or      $at, $at, $t1 	# Enable CP2
+                dli	$t1, 3 << 29
+                or      $at, $at, $t1 	# Enable CP1 and CP2
 	        # Clear pending timer interrupts before we enable them
 	        mtc0    $zero, $11
 	        mtc0    $at, $12
