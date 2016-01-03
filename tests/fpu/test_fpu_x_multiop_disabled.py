@@ -28,8 +28,8 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_fpu_x_disabled_multi(BaseBERITestCase):
+class test_fpu_x_multiop_disabled(BaseBERITestCase):
 
-    def test_template(self):
+    def test_fpu_x_multiop_disabled_1(self):
         '''Test that coprocessor unusable is raised if the FPU is disabled'''
         self.assertRegisterEqual(self.MIPS.a2, 64, "Coprocessor unusable exception was raised an unexpected number of times")
