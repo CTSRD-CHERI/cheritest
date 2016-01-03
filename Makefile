@@ -399,6 +399,7 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_cueq_d64.s		\
 		test_raw_fpu_cule_d64.s		\
 		test_raw_fpu_cult_d64.s		\
+		test_raw_fpu_cvt_single.s	\
 		test_raw_fpu_round_single.s	\
 		test_raw_fpu_ceil_single.s	\
 		test_raw_fpu_floor_single.s	\
