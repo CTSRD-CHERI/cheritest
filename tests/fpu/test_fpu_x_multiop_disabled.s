@@ -143,6 +143,25 @@ test:
 		cfc1	$t0, $f31
 		ctc1	$zero, $f31
 
+		dla	$t1, data
+		lwc1	$f0, 0($t1)
+		swc1	$f0, 0($t1)
+		ldc1	$f0, 0($t1)
+		swc1	$f0, 0($t1)
+
+		bc1t	L1
+		nop
+L1:
+		bc1f	L2
+		nop
+L2:
+		bc1tl	L3
+		nop
+L3:
+		bc1fl	L4
+		nop
+L4:
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
@@ -172,3 +191,7 @@ bev0_handler:
 		eret
 .end bev0_handler
 
+
+		.data
+		.align 3
+data:		.dword 0
