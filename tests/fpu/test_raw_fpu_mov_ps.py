@@ -32,5 +32,5 @@ class test_raw_fpu_mov_ps(BaseBERITestCase):
 
     @attr('floatpaired')
     def test_raw_fpu_mov_ps_1(self):
-        '''Test MOV.PS''
+        '''Test MOV.PS'''
         self.assertRegisterEqual(self.MIPS.a0, 0x4100000040000000, "MOV.PS failed")
