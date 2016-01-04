@@ -452,6 +452,9 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_trunc_nan_single.s \
 		test_raw_fpu_trunc_nan_d64.s	\
 		test_raw_fpu_trunc_w_d_nan_d64.s \
+		test_raw_fpu_round_nan_single.s \
+		test_raw_fpu_ceil_nan_single.s \
+		test_raw_fpu_floor_nan_single.s \
 		test_raw_fpu_fir.s
 
 RAW_TRACE_FILES=test_raw_trace.s

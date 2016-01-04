@@ -31,7 +31,7 @@
 .set noat
 
 #
-# Test single-precision truncate with nan, infinite, and too large operands.
+# Test single-precision ceiling with nan, infinite, and too large operands.
 #
 		.text
 		.global start
@@ -47,17 +47,17 @@ start:
 
 		lui $t0, 0x7F81		# NaN
 		mtc1 $t0, $f2
-		trunc.w.s $f2, $f2
+		ceil.w.s $f2, $f2
 		mfc1 $a0, $f2
 
 		lui $t0, 0x7f80 	# IEEE 754 +infinity
 		mtc1 $t0, $f2
-                trunc.w.s $f2, $f2
+                ceil.w.s $f2, $f2
                 mfc1 $a1, $f2
 
 		lui $t0, 0x4f80		# 2^32
 		mtc1 $t0, $f2
-                trunc.w.s $f2, $f2
+                ceil.w.s $f2, $f2
                 mfc1 $a2, $f2
 
 		# Dump registers on the simulator (gxemul dumps regs on exit)

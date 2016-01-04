@@ -25,50 +25,20 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+from beritest_tools import BaseBERITestCase
+from nose.plugins.attrib import attr
 
-#
-# Test single-precision truncate with nan, infinite, and too large operands.
-#
-		.text
-		.global start
-		.ent start
-start:     
-		mfc0 $t0, $12
-		li $t1, 1 << 29		# Enable CP1
-		or $t0, $t0, $t1    
-		mtc0 $t0, $12 
-		nop
-		nop
-		nop
+class test_raw_fpu_floor_nan_single(BaseBERITestCase):
 
-		lui $t0, 0x7F81		# NaN
-		mtc1 $t0, $f2
-		trunc.w.s $f2, $f2
-		mfc1 $a0, $f2
+    '''Test FLOOR.W.S of QNan'''
+    def test_raw_fpu_floor_nan_single_1(self):
+        self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "FLOOR.W.S of QNaN did not return MAXINT")
 
-		lui $t0, 0x7f80 	# IEEE 754 +infinity
-		mtc1 $t0, $f2
-                trunc.w.s $f2, $f2
-                mfc1 $a1, $f2
+    '''Test FLOOR.W.S of +Inf'''
+    def test_raw_fpu_floor_nan_single_2(self):
+        self.assertRegisterEqual(self.MIPS.a1, 0x7fffffff, "FLOOR.W.S of +Infinity did not return MAXINT")
 
-		lui $t0, 0x4f80		# 2^32
-		mtc1 $t0, $f2
-                trunc.w.s $f2, $f2
-                mfc1 $a2, $f2
+    '''Test FLOOR.W.S of 2^32'''
+    def test_raw_fpu_floor_nan_single_3(self):
+        self.assertRegisterEqual(self.MIPS.a2, 0x7fffffff, "FLOOR.W.S of 2^32 did not return MAXINT")
 
-		# Dump registers on the simulator (gxemul dumps regs on exit)
-		mtc0 $at, $26
-		nop
-		nop
-
-		# Terminate the simulator
-		mtc0 $at, $23
-end:
-		b end
-		nop
-
-.end start
