@@ -28,6 +28,7 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
+@attr('floatpaired')
 class test_raw_fpu_colt(BaseBERITestCase):
     def test_colt_single(self):
         '''Test we can compare less than in single precision'''

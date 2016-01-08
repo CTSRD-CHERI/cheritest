@@ -28,6 +28,7 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
+@attr('floatpaired')
 class test_raw_fpu_cun(BaseBERITestCase):
     def test_cun_single(self):
         '''Test we can compare unordered in single precision'''
