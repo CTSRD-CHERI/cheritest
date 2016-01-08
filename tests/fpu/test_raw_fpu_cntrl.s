@@ -56,29 +56,6 @@ start:
 		dmtc1 $t0, $f5
 		dmfc1 $s1, $f5
 		
-		# CTC / CFC
-		li $t0, 0xFFF3F
-		ctc1 $t0, $f25 # FCCR
-		cfc1 $s2, $f25
-		
-		li $t0, 0xFFF1
-		ctc1 $t0, $f26 # FEXR
-		cfc1 $s3, $f26
-		
-		li $t0, 0xFFF86
-		ctc1 $t0, $f28 # FENR
-		cfc1 $s4, $f28
-		
-		li $t0, 0x0003FFFF
-		ctc1 $t0, $f31 # FCSR
-		cfc1 $s5, $f31
-		
-		cfc1 $s6, $f28 # FENR
-		
-		cfc1 $s7, $f26 # FEXR
-		
-		cfc1 $a0, $f25 # FCSR
-
 		# MOV.S
 		lui $t1, 0x4100
 		mtc1 $t1, $f4
@@ -92,12 +69,6 @@ start:
 		mov.D $f3, $f7
 		dmfc1 $t3, $f3
 		
-		# MOV.PS
-		or $t0, $t1, $t2
-		dmtc1 $t0, $f5
-		mov.PS $f3, $f5
-		dmfc1 $t2, $f3 
-
 		# Test we can use control numbered registers as normal registers too.
 		# This seems exotic, but I found this bug.
 		li $t0, 0xDEADBEEF
