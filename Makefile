@@ -1239,7 +1239,6 @@ L3_NOSEPRED+=\
 and not nofloat \
 and not float32 \
 and not floatpaired \
-and not floatfccr \
 and not floatfexr \
 and not floatfenr \
 and not floatflags \
