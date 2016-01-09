@@ -460,7 +460,8 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_fccr.s \
 		test_raw_fpu_fexr.s \
 		test_raw_fpu_fenr.s \
-		test_raw_fpu_mov_ps.s
+		test_raw_fpu_mov_ps.s \
+		test_raw_fpu_movc_ps
 
 RAW_TRACE_FILES=test_raw_trace.s
 
