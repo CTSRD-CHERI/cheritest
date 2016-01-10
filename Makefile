@@ -107,6 +107,7 @@ FUZZ_DMA_ONLY?=0
 NOFUZZ?=0
 NOFUZZR?=0
 CAP_SIZE?=256
+PERM_SIZE?=31
 L3_SIM?=l3mips
 
 #
@@ -1868,22 +1869,22 @@ nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 # file each time.
 
 nosetests_uncached.xml: $(CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CAP_SIZE=$(CAP_SIZE) CACHED=0 \
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=0 \
 	nosetests --with-xunit --xunit-file=nosetests_uncached.xml \
 	$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CAP_SIZE=$(CAP_SIZE) CACHED=1 \
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 \
 	nosetests --with-xunit --xunit-file=nosetests_cached.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CAP_SIZE=$(CAP_SIZE) MULTI1=1 \
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) MULTI1=1 \
 	nosetests --with-xunit --xunit-file=nosetests_multi.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_cachedmulti.xml: $(CHERI_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CAP_SIZE=$(CAP_SIZE) MULTI1=1 CACHED=1 \
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) MULTI1=1 CACHED=1 \
 	nosetests --with-xunit --xunit-file=nosetests_cachedmulti.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
@@ -1932,22 +1933,22 @@ nosetests_l3_multi: nosetests_l3_multi.xml
 nosetests_l3_cachedmulti: nosetests_l3_cachedmulti.xml
 
 nosetests_l3.xml: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CAP_SIZE=$(CAP_SIZE) LOGDIR=$(L3_LOGDIR) \
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) LOGDIR=$(L3_LOGDIR) \
 	nosetests --with-xunit --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) \
 	$(TESTDIRS) || true
 
 nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CAP_SIZE=$(CAP_SIZE) CACHED=1 LOGDIR=$(L3_LOGDIR) \
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 LOGDIR=$(L3_LOGDIR) \
 	nosetests --with-xunit --xunit-file=nosetests_l3_cached.xml \
 	$(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CAP_SIZE=$(CAP_SIZE) MULTI1=1 LOGDIR=$(L3_LOGDIR) \
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) MULTI1=1 LOGDIR=$(L3_LOGDIR) \
 	nosetests --with-xunit --xunit-file=nosetests_l3_multi.xml \
 	$(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim CAP_SIZE=$(CAP_SIZE) CACHED=1 MULTI1=1 \
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 MULTI1=1 \
 	LOGDIR=$(L3_LOGDIR) nosetests --with-xunit \
 	--xunit-file=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
             $(TESTDIRS) || true

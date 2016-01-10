@@ -199,12 +199,12 @@ class BaseBERITestCase(unittest.TestCase):
             self.fail(msg + "0x%016x and 0x%016x == 0x%016x"%(first, mask, second))
 
     def assertRegisterAllPermissions(self, reg_val, msg=None):
-        cap_size = int(os.environ.get("CAP_SIZE", "256"))
+        perm_size = int(os.environ.get("PERM_SIZE", "31"))
         passed = True
         expected = 0
-        if cap_size == 256:
+        if perm_size == 31:
             expected = 0x7fffffff
-        if cap_size == 128:
+        if perm_size == 23:
             expected = 0x7fffff
         if self.ALWAYS_FAIL:
             passed = False

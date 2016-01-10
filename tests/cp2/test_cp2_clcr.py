@@ -35,16 +35,9 @@ from nose.plugins.attrib import attr
 class test_cp2_clcr(BaseBERITestCase):
 
     @attr('capabilities')
-    @attr('cap256')
-    def test_cp2_clcr_getperm_256(self):
+    def test_cp2_clcr_getperm(self):
         '''Test that clcr loaded perms fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "clcr read back incorrect perms")
-
-    @attr('capabilities')
-    @attr('cap128')
-    def test_cp2_clcr_getperm_128(self):
-        '''Test that clcr loaded perms fields correctly'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x7fffff, "clcr read back incorrect perms")
+        self.assertRegisterAllPermissions(self.MIPS.a0, "clcr read back incorrect perms")
 
     @attr('capabilities')
     def test_cp2_clcr_getoffset(self):
