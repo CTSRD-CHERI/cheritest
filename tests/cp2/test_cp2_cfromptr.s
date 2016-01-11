@@ -64,10 +64,11 @@ test:		.ent test
 		# (fields different from $c1)
 		#
 
+		cgetdefault $c2
 		dla	$t0, data2
-		cincbase $c2, $c0, $t0
+		csetoffset $c2, $c2, $t0
 		dli	$t0, 16
-		csetlen $c2, $c2, $t0
+		csetbounds $c2, $c2, $t0
 		dli	$t0, 3
 		csetoffset $c2, $c2, $t0
 
