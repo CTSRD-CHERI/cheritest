@@ -49,10 +49,11 @@ test:		.ent test
 		# Make $c1 a capability for 'data1', length 8, offset 2
 		# 
 
+		cgetdefault $c1
 		dla	$t0, data1
-		cincbase $c1, $c0, $t0
+		csetoffset $c1, $c1, $t0
 		dli	$t0, 8
-		csetlen $c1, $c1, $t0
+		csetbounds $c1, $c1, $t0
 		dli	$t0, 2
 		csetoffset $c1, $c1, $t0	
 		dli	$t0, 0x3
