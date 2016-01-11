@@ -52,10 +52,11 @@ test:		.ent test
 		# Load values into c2
 		#
 
+		cgetdefault $c2
 		dla	$t0, data
-		cincbase $c2, $c0, $t0
+		csetoffset $c2, $c0, $t0
 		dli	$t0, 8
-		csetlen	$c2, $c2, $t0
+		csetbounds $c2, $c2, $t0
 		dli	$t0, 0xff
 		candperm $c2, $c2, $t0
 		dli	$t0, 5
