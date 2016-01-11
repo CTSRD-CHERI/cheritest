@@ -36,11 +36,12 @@
 #
 
 sandbox:
-		dla $t0, data
 		# KR1C is $c27
-		cincbase $c27, $c0, $t0
+		cgetdefault $c27
+		dla $t0, data
+		csetoffset $c27, $c27, $t0
 		dli $t0, 8
-		csetlen $c27, $c27, $t0
+		csetbounds $c27, $c27, $t0
 		dli $t0, 0x7f
 		candperm $c27, $c27, $t0
 

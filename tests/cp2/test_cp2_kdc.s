@@ -36,11 +36,12 @@
 #
 
 sandbox:
-		dla $t0, data
 		# KDC is $c30
-		cincbase $c30, $c0, $t0
+		cgetdefault $c30
+		dla $t0, data
+		csetoffset $c30, $c30, $t0
 		dli $t0, 8
-		csetlen $c30, $c30, $t0
+		csetbounds $c30, $c30, $t0
 		dli $t0, 0x7f
 		candperm $c30, $c30, $t0
 

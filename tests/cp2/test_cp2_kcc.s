@@ -36,11 +36,12 @@
 #
 
 sandbox:
-		dla $t0, data
 		# KCC is $c29
-		cincbase $c29, $c0, $t0
+		cgetdefault $c29
+		dla $t0, data
+		csetoffset $c29, $c29, $t0
 		dli $t0, 8
-		csetlen $c29, $c29, $t0
+		csetbounds $c29, $c29, $t0
 		dli $t0, 0x7f
 		candperm $c29, $c29, $t0
 
