@@ -66,7 +66,7 @@ class test_cp2_reg_init(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_reg_init_pcc_unsealed(self):
-        self.assertRegisterEqual(self.MIPS.pcc.u, 0, "CP2 PCC sealed incorrectly initialised")
+        self.assertRegisterEqual(self.MIPS.pcc.s, 0, "CP2 PCC sealed incorrectly initialised")
 
     @attr('capabilities')
     def test_cp2_reg_init_rest_base(self):
@@ -96,4 +96,4 @@ class test_cp2_reg_init(BaseBERITestCase):
     def test_cp2_reg_init_rest_unsealed(self):
         '''Test that CP2 general-purpose register unsealeds are correctly initialised'''
         for i in range(1, 26):
-            self.assertRegisterEqual(self.MIPS.cp2[i].u, 0, "CP2 capability register sealed incorrectly initialised")
+            self.assertRegisterEqual(self.MIPS.cp2[i].s, 0, "CP2 capability register sealed incorrectly initialised")

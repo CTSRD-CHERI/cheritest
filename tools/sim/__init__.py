@@ -48,22 +48,23 @@ for num, name in enumerate(MIPS_REG_NUM2NAME):
     MIPS_REG_NAME2NUM[name] = num
 
 ## Regular expressions for parsing the log file
+hdigit="[0-9A-Fa-f]"
 THREAD_RE=re.compile(r'======  Thread\s+([0-9]+)\s+======$')
 MIPS_CORE_RE=re.compile(r'^DEBUG MIPS COREID\s+([0-9]+)$')
-MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+) (0x................)$')
-MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC (0x................)$')
+MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+)\s+(0x................)$')
+MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC\s+(0x................)$')
 CAPMIPS_CORE_RE=re.compile(r'^DEBUG CAP COREID\s+([0-9]+)$')
-CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC u:(.) perms:(0x.{6,8}) ' +
-                            r'type:(0x.{4,6}) offset:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
-CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+) u:(.) perms:(0x.{6,8}) ' +
-                            r'type:(0x.{4,6}) offset:(0x.{16}) base:(0x.{16}) length:(0x.{16})$')
+CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
+                            r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
+CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
+                            r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
 
 class MipsException(Exception):
     pass
 
 class Capability(object):
-    def __init__(self, u, perms, ctype, offset, base, length):
-        self.u = int(u)
+    def __init__(self, s, perms, ctype, offset, base, length):
+        self.s = int(s)
         self.ctype = int(ctype, 16)
         self.perms = int(perms, 16)
         self.offset = int(offset, 16)
@@ -71,8 +72,8 @@ class Capability(object):
         self.length = int(length, 16)
 
     def __repr__(self):
-        return 'u:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x'%(
-            self.u, self.perms, self.ctype, self.offset, self.base, self.length)
+        return 's:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x'%(
+            self.s, self.perms, self.ctype, self.offset, self.base, self.length)
 
 class ThreadStatus(object):
     '''Data object representing status of a thread (including cp2 registers if present)'''
