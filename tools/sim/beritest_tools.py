@@ -206,6 +206,8 @@ class BaseBERITestCase(unittest.TestCase):
             expected = 0x7fffffff
         if perm_size == 23:
             expected = 0x7fffff
+        if perm_size == 15:
+            expected = 0x7fff
         if self.ALWAYS_FAIL:
             passed = False
         if expected != 0 and reg_val != expected:
