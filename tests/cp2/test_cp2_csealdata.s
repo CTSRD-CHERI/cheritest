@@ -48,10 +48,11 @@ test:		.ent test
 		csetoffset $c1, $c0, $t0
 
                 # Make $c2 a data capability for the array at address data
+		cgetdefault $c2
 		dla      $t0, data
-		cincbase $c2, $c0, $t0
+		csetoffset $c2, $c2, $t0
                 dli      $t0, 8
-                csetlen  $c2, $c2, $t0
+                csetbounds $c2, $c2, $t0
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
 		# Permit_Store.
 		# NB: Permit_Execute must not be included in the set of
