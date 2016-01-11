@@ -1276,6 +1276,10 @@ ifneq ($(CAP_SIZE),128)
 L3_NOSEPRED+=and not cap128
 endif
 
+ifneq ($(CAP_SIZE),64)
+L3_NOSEPRED+=and not cap64
+endif
+
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 
 #
@@ -1364,6 +1368,9 @@ NOSEPRED+=and not cap256
 endif
 ifneq ($(CAP_SIZE),128)
 NOSEPRED+=and not cap128
+endif
+ifneq ($(CAP_SIZE),64)
+NOSEPRED+=and not cap64
 endif
 endif
 ifneq ($(CLANG),1)
