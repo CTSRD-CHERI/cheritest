@@ -44,7 +44,6 @@ sandbox:
 		# permissions. Save it to $c2 so that we can check PCC.perms
 		# later on.
 		cgetpcc $c2
-		# FIXME: new assembler syntax
 
 		# Return from the sandboxed subroutine
 		.align 5
@@ -66,15 +65,14 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 		addiu	$a6, $0, 4
 
+loop:
 		# Restrict the PCC capability that sandbox will run with.
 		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
 		# Permit_Load_Capability, Permit_Store_Capability, 
 		# Permit_Store_Ephemeral_Capability.
-loop:
+
 		dli $t1, 0x7f
 		candperm $c1, $c0, $t1
-		dla $t1, loop
-		csetlen $c1, $c1, $t1
 
 		# Save $ra so we can return from this subroutine
 		move	$a1, $ra
