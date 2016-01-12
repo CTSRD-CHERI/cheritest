@@ -156,6 +156,8 @@ test:		.ent test
 		cscw	$t1, $t0, $c1
 		clld	$t0, $c1
 		cscd	$t1, $t0, $c1
+		cllc	$c2, $c1
+		cscc	$t1, $c1, $c1
 
 		dli	$t0, -32
 		csetoffset $c1, $c1, $t0
@@ -167,6 +169,8 @@ test:		.ent test
 		cscw	$t1, $t0, $c1
 		clld	$t0, $c1
 		cscd	$t1, $t0, $c1
+		cllc	$c2, $c1
+		cscc	$t1, $c1, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -36,5 +36,5 @@ class test_cp2_x_multiop_length(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_multiop_length_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 36, "An unexpected number of exceptions was raised during the test of capability loads and stores beyond the length.")
+        self.assertRegisterEqual(self.MIPS.a2, 40, "An unexpected number of exceptions was raised during the test of capability loads and stores beyond the length.")
 
