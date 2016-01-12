@@ -60,8 +60,9 @@ test:		.ent test
 		# Make $c1 a data capability for the array 'data'
 		#
 
+		cgetdefault	$c1
 		dla     	$t0, data
-		cincoffset	$c1, $c0, $t0
+		csetoffset	$c1, $c1, $t0
 		dli     	$t0, 8
                 csetbounds 	$c1, $c1, $t0
 		dli     	$t0, 0x7
@@ -85,9 +86,7 @@ test:		.ent test
 		nop
 		nop
 L1:
-		cgetbase $a0, $c1	# XXX: FIXME : This is wrong.
-		dla	$t0, data
-		dsubu   $a0, $a0, $t0
+		cgetlen $a0, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

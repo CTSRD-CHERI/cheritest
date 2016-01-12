@@ -35,11 +35,10 @@ from nose.plugins.attrib import attr
 
 class test_cp2_x_csetbounds_delay(BaseBERITestCase):
 
-    # XXX : FIXME : This is wrong.
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay_1(self):
         '''Test CSetBounds did not change the length of an untagged capability'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
+        self.assertRegisterEqual(self.MIPS.a0, 8,
             "CSetBounds changed the length of a capability with tag bit unset")
 
     @attr('capabilities')
