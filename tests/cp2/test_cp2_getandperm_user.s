@@ -59,6 +59,11 @@ test:		.ent test
 		candperm $c2, $c0, $t0
 		cgetperm $a2, $c2
 		
+		lui	$t0, 0x4
+		or	$t0, 0x01
+		candperm $c2, $c0, $t0
+		cgetperm $a3, $c2
+
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
