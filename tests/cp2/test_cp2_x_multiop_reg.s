@@ -37,7 +37,7 @@
 
 #
 # Test that (some) CP2 instructions raise an exception if one of the operands
-# is a reserved registwr and PCC does not grant permission to access it.
+# is a reserved register and PCC does not grant permission to access it.
 #
 
 sandbox:
@@ -111,9 +111,13 @@ sandbox:
 		cldr	$t0, $t1($c29)
 		csdr	$t0, $t1($c29)
 
+		csetoffset $c1, $c1, $t1
 		csetoffset $c29, $c29, $t1
+
 		cllc	$c2, $c29
 		cscc	$t0, $c1, $c29
+		cllc	$c28, $c1
+		cscc	$t0, $c29, $c1
 		cllb	$t0, $c29
 		cscb	$t0, $t2, $c29
 		cllh	$t0, $c29
