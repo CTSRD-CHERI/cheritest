@@ -28,13 +28,13 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp2_x_multiop_reg(BaseBERITestCase):
+class test_cp2_x_multiop_reg2(BaseBERITestCase):
 
     @attr('capabilities')
-    def test_cp2_x_multiop_reg_1(self):
+    def test_cp2_x_multiop_reg2_1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "An unexpected exception was raised during the test of capability operations on a reserved register without the required permission in PCC")
 
     @attr('capabilities')
-    def test_cp2_x_multiop_reg_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 49, "An unexpected number of exceptions was raised during the test of capability operations on a reserved register without the required permission in PCC")
+    def test_cp2_x_multiop_reg2_2(self):
+        self.assertRegisterEqual(self.MIPS.a2, 12, "An unexpected number of exceptions was raised during the test of capability operations on a reserved register without the required permission in PCC")
 

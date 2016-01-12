@@ -872,6 +872,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_multiop_tag.s	\
 		test_cp2_x_multiop_sealed.s	\
 		test_cp2_x_multiop_reg.s	\
+		test_cp2_x_multiop_reg2.s	\
 		test_cp2_x_multiop_adel.s	\
 		test_cp2_x_multiop_ades.s	\
 		test_cp2_x_multiop_permit_load.s \

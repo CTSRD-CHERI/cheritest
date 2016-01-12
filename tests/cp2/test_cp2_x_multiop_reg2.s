@@ -37,79 +37,23 @@
 
 #
 # Test that (some) CP2 instructions raise an exception if one of the operands
-# is a reserved registwr and PCC does not grant permission to access it.
+# is a reserved register and PCC does not grant permission to access it.
 #
 
 sandbox:
-		#
-		# Try some CP2 instructions
-		#
+		cllc	$c2, $c29
+		cscc	$t0, $c1, $c29
+		cllc	$c29, $c1
+		cscc	$t0, $c29, $c1
+		cllb	$t0, $c29
+		cscb	$t0, $t2, $c29
+		cllh	$t0, $c29
+		csch	$t0, $t2, $c29
+		cllw	$t0, $c29
+		cscw	$t0, $t2, $c29
+		clld	$t0, $c29
+		cscd	$t0, $t2, $c29
 
-		candperm $c2, $c29, $zero
-		candperm $c29, $c1, $zero
-		ccheckperm $c29, $zero
-		# cchecktype expects a sealed capability, so don't test
-		# it here
-		ccleartag $c2, $c29
-		ccleartag $c29, $c1
-		dli $t0, 1
-		cfromptr $c2, $c29, $t0
-		cfromptr $c29, $c1, $t0
-		cgetbase $t0, $c29
-		cgetlen	$t0, $c29
-		cgetoffset $t0, $c29
-		cgetperm $t0, $c29
-		cgetsealed $t0, $c29
-		cgettag $t0, $c29
-		cgettype $t0, $c29
-		cincoffset $c2, $c29, $zero
-		cincoffset $c29, $c1, $zero
-		cseal $c2, $c1, $c29
-		cseal $c2, $c29, $c1
-		cseal $c29, $c1, $c1
-		csetbounds $c2, $c29, $zero
-		csetbounds $c29, $c1, $zero
-		csetoffset $c2, $c29, $zero
-		csetoffset $c29, $c1, $zero
-		ctoptr $t0, $c2, $c29
-		ctoptr $t0, $c29, $c1
-		# cunseal requires a sealed capability, so don't test
-		# it here
-
-		#
-		# Comparison operations
-		#
-
-		ceq	$t0, $c1, $c29
-		ceq	$t0, $c29, $c1
-		cne	$t0, $c1, $c29
-		cne	$t0, $c29, $c1
-		clt	$t0, $c1, $c29
-		clt	$t0, $c29, $c1
-		cle	$t0, $c1, $c29
-		cle	$t0, $c29, $c1
-		cltu	$t0, $c1, $c29
-		cltu	$t0, $c29, $c1
-		cleu	$t0, $c1, $c29
-		cleu	$t0, $c29, $c1
-		
-		#
-		# Loads and stores
-		#
-
-		dla	$t1, data
-		clcr	$c2, $t1($c29)
-		clcr	$c29, $t1($c1)
-		cscr	$c2, $t1($c29)
-		cscr	$c29, $t1($c1)
-		clbr	$t0, $t1($c29)
-		csbr	$t0, $t1($c29)
-		clhr	$t0, $t1($c29)
-		cshr	$t0, $t1($c29)
-		clwr	$t0, $t1($c29)
-		cswr	$t0, $t1($c29)
-		cldr	$t0, $t1($c29)
-		csdr	$t0, $t1($c29)
 
 		cjr	$c24
 		nop		# Branch delay slot
@@ -148,7 +92,17 @@ test:		.ent test
 
 		dli	$a2, 0
 
+		#
+		# Set the offsets of $c1 and $c29 to point at the array 'data'.
+		# $c29.offset must be set here, because the sandbox does not
+		# have permission to set it.
+		#
+
+		dla	$t1, data
 		cgetdefault $c1
+		csetoffset $c1, $c1, $t1
+		cgetdefault $c29
+		csetoffset $c29, $c29, $t1
 
 		#
 		# Run sandbox with restricted permissions
