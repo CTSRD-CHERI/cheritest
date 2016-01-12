@@ -110,6 +110,12 @@ CAP_SIZE?=256
 PERM_SIZE?=31
 L3_SIM?=l3mips
 
+ifeq ($(CAP_SIZE),256)
+CAP_PRECISE?=1
+else
+CAP_PRECISE?=0
+endif
+
 #
 # List of directories in which to find test source and .py files.
 #
@@ -1280,6 +1286,12 @@ ifneq ($(CAP_SIZE),64)
 L3_NOSEPRED+=and not cap64
 endif
 
+ifeq ($(CAP_PRECISE),1)
+L3_NOSEPRED+=and not cap_imprecise
+else
+L3_NOSEPRED+=and not cap_precise
+endif
+
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 
 #
@@ -1371,6 +1383,11 @@ NOSEPRED+=and not cap128
 endif
 ifneq ($(CAP_SIZE),64)
 NOSEPRED+=and not cap64
+endif
+ifeq ($(CAP_PRECISE),1)
+NOSEPRED+=and not cap_imprecise
+else
+NOSEPRED+=and not cap_precise
 endif
 endif
 ifneq ($(CLANG),1)

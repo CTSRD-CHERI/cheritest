@@ -39,11 +39,11 @@ class test_cp2_x_jr_imprecise(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a2, 1, "An exception was not raised after jr out of range of PCC")
 
     @attr('capabilities')
-    @attr('cap256')
+    @attr('cap_precise')
     def test_cp2_x_jr_imprecise_tag_precise(self):
         self.assertRegisterEqual(self.MIPS.a4, 1, "EPCC.tag was not set to true after jr out of range of PCC")
 
     @attr('capabilities')
-    @attr('cap128')
+    @attr('cap_imprecise')
     def test_cp2_x_jr_imprecise_tag_imprecise(self):
         self.assertRegisterEqual(self.MIPS.a4, 0, "EPCC.tag was not cleared after jr out of range of PCC causes PCC to lose precision")
