@@ -32,8 +32,8 @@
 .set noat
 
 #
-# Test that cscr raises an exception if it does not that Permit_Store_Ephemeral
-# permission.
+# Test that CSCR raises an exception if it does not have
+# Permit_Store_Capability permission.
 #
 
 		.global test
