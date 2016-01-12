@@ -112,6 +112,7 @@ test:		.ent test
 		csch	$t0, $t2, $c3
 		cscw	$t0, $t2, $c3
 		cscd	$t0, $t2, $c3
+		cscc	$t0, $c1, $c3
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
