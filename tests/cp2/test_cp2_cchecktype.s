@@ -61,19 +61,22 @@ test:		.ent test
 
                 # Make $c1 a template capability for a user-defined type
 		# whose identifier is 0x1234 (chosen arbitrarily).
+		cgetdefault $c1
 		dli      $t0, 0x1234
-		csetoffset $c1, $c0, $t0
+		csetoffset $c1, $c1, $t0
 
 		# Make c4 a sealed code capability for sandbox
+		cgetdefault $c4
 		dla	 $t0, sandbox
-		csetoffset $c4, $c0, $t0
+		csetoffset $c4, $c4, $t0
 		cseal	 $c4, $c4, $c1
 
                 # Make $c2 a data capability for the array at address data
+		cgetdefault $c2
 		dla      $t0, data
-		cincbase $c2, $c0, $t0
+		csetoffset $c2, $c2, $t0
                 dli      $t0, 8
-                csetlen  $c2, $c2, $t0
+                csetbounds  $c2, $c2, $t0
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
 		# Permit_Store.
 		# NB: Permit_Execute must not be included in the set of
