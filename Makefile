@@ -792,6 +792,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csc_align.s		\
 		test_cp2_x_csc_vaddr.s		\
 		test_cp2_x_csc_ephemeral.s	\
+		test_cp2_x_cscc_local.s		\
 		test_cp2_csc_ephemeral_invalid.s\
 		test_cp2_x_csc_perm.s		\
 		test_cp2_x_csc_underflow.s	\
