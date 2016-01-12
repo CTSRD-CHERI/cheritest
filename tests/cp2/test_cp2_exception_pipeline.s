@@ -77,9 +77,9 @@ test:		.ent test
 
 		# Create a test capability for loading and storing
 		dla		$t0, data
-		cincbase	$c6, $c0, $t0
+		csetoffset	$c6, $c0, $t0
 		dli     	$t0, 32
-		csetlen		$c6, $c6, $t0
+		csetbounds	$c6, $c6, $t0
 		dli		$t0, 0x1ff
 		candperm	$c6, $c6, $t0
 		dli		$t0, 0
