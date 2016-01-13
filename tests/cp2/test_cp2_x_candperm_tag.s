@@ -32,7 +32,7 @@
 .set noat
 
 #
-# Test that cincbase raises an exception if tag bit is not set on the capability
+# Test that CAndPerm raises an exception if tag bit is not set on the capability
 # register (i.e. it doesn't contain a capability).
 #
 
@@ -82,7 +82,24 @@ test:		.ent test
 		dli	$t1, 0
 		candperm $c1, $c1, $t1 # This should raise a C2E exception
 
-		cgetperm $a0, $c1
+		dla	$t1, cap2
+		cscr	$c1, $t1($c0)
+
+		ld	$s0, 0($t0)
+		ld	$t2, 0($t1)
+		xor	$s0, $s0, $t2
+
+		ld      $s1, 8($t0)
+                ld      $t2, 8($t1)
+                xor     $s1, $s1, $t2
+
+		ld      $s2, 16($t0)
+                ld      $t2, 16($t1)
+                xor     $s2, $s2, $t2
+
+		ld      $s3, 24($t0)
+                ld      $t2, 24($t1)
+                xor     $s3, $s3, $t2
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
@@ -112,6 +129,12 @@ cap1:		.dword	0x0123456789abcdef	# uperms/reserved
 		.dword	0x0123456789abcdef	# otype/eaddr
 		.dword	0x0123456789abcdef	# base
 		.dword	0x0123456789abcdef	# length
+
+		.align 5
+cap2:		.dword  0x0123456789abcdef      # uperms/reserved
+                .dword  0x0123456789abcdef      # otype/eaddr
+                .dword  0x0123456789abcdef      # base
+                .dword  0x0123456789abcdef      # length
 
 		.align	3
 data:		.dword	0x0123456789abcdef
