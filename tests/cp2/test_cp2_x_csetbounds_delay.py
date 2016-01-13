@@ -37,19 +37,37 @@ class test_cp2_x_csetbounds_delay(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_csetbounds_delay_1(self):
-        '''Test CSetBounds did not change the length of an untagged capability'''
-        self.assertRegisterEqual(self.MIPS.a0, 8,
-            "CSetBounds changed the length of a capability with tag bit unset")
-
-    @attr('capabilities')
-    def test_cp2_x_csetbounds_delay_2(self):
         '''Test CSetBounds raised a C2E exception when capability tag was unset'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "CSetBounds did not raise an exception when capability tag was unset")
 
     @attr('capabilities')
-    def test_cp2_x_csetbounds_delay_3(self):
+    def test_cp2_x_csetbounds_delay_2(self):
         '''Test CP0 cause is set correctly when C2E in a branch delay slot'''
         self.assertRegisterEqual(self.MIPS.a3, 0xffffffff80000048,
             "CP0 cause was not set correcly when C2E in a branch delay slot")
+
+    @attr('capabilities')
+    def test_cp2_x_csetbounds_delay_3(self):
+        '''Test CSetBounds did not change dword 0 of an untagged capability'''
+        self.assertRegisterEqual(self.MIPS.s0, 0,
+            "CSetBounds changed dword 0 of an untagged capability")
+
+    @attr('capabilities')
+    def test_cp2_x_csetbounds_delay_4(self):
+        '''Test CSetBounds did not change dword 1 of an untagged capability'''
+        self.assertRegisterEqual(self.MIPS.s1, 0,
+            "CSetBounds changed dword 1 of an untagged capability")
+
+    @attr('capabilities')
+    def test_cp2_x_csetbounds_delay_5(self):
+        '''Test CSetBounds did not change dword 2 of an untagged capability'''
+        self.assertRegisterEqual(self.MIPS.s2, 0,
+            "CSetBounds changed dword 2 of an untagged capability")
+
+    @attr('capabilities')
+    def test_cp2_x_csetbounds_delay_6(self):
+        '''Test CSetBounds did not change dword 3 of an untagged capability'''
+        self.assertRegisterEqual(self.MIPS.s3, 0,
+            "CSetBounds changed dword 3 of an untagged capability")
 
