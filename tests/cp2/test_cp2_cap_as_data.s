@@ -31,9 +31,9 @@
 .set noat
 
 #
-# Short block comment describing the test: what instruction/behaviour are we
-# investigating; what properties are we testing, what properties are deferred
-# to other tests?  What might we want to test as well in the future?
+# Copy a capability as data, and then read its fields using CGetLen etc.
+# This will clear the tag bit, but operating system code (e.g. paging) might
+# rely on the other fields being copied correctly.
 #
 
 		.global test
@@ -78,8 +78,8 @@ test:		.ent test
 		cgetbase $t2, $c1
 		xor	$a2, $a2, $t2
 
-		cgetbase $a3, $c2
-		cgetbase $t2, $c1
+		cgetlen $a3, $c2
+		cgetlen $t2, $c1
 		xor	$a3, $a3, $t2
 
 		cgetoffset $a4, $c2
