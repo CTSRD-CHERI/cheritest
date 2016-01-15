@@ -31,6 +31,7 @@ from nose.plugins.attrib import attr
 class test_cp2_cseal_imprecise(BaseBERITestCase):
 
     @attr('capabilities')
+    @attr('cap_precise')
     def test_cp2_cseal_imprecise_1_precise(self):
         '''Test that CSeal/CUnseal preserves a large offset'''
         self.assertRegisterEqual(self.MIPS.a0, 0x9800040000000000, "CSeal/CUnseal did not preserve a large offset")
