@@ -469,7 +469,8 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_fenr.s \
 		test_raw_fpu_mov_ps.s \
 		test_raw_fpu_movc_ps.s \
-		test_raw_fpu_movcc_ps.s
+		test_raw_fpu_movcc_ps.s \
+		test_raw_fpu_madd_single.s
 
 RAW_TRACE_FILES=test_raw_trace.s
 
@@ -1368,7 +1369,7 @@ endif
 NOSEPRED+=and not syncistep
 endif
 ifdef COP1
-NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri
+NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd
 ifdef WONTFIX
 NOSEPRED+=and not floatpairedrounding
 endif
