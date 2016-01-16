@@ -1192,6 +1192,7 @@ and not floatrsqrt      \
 and not float64         \
 and not floatexception  \
 and not floatechonan    \
+and not floatmadd	\
 and not smalltlb        \
 and not bigtlb          \
 and not beri1tlb	\
