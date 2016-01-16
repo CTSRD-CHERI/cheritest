@@ -470,7 +470,8 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_mov_ps.s \
 		test_raw_fpu_movc_ps.s \
 		test_raw_fpu_movcc_ps.s \
-		test_raw_fpu_madd_single.s
+		test_raw_fpu_madd_single.s \
+		test_raw_fpu_madd_d64.s
 
 RAW_TRACE_FILES=test_raw_trace.s
 
