@@ -1294,6 +1294,14 @@ ifneq ($(CAP_SIZE),64)
 L3_NOSEPRED+=and not cap64
 endif
 
+ifeq ($(PERM_SIZE),23)
+L3_NOSEPRED+=and not cap_perm_31
+endif
+
+ifeq ($(PERM_SIZE),19)
+L3_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
+endif
+
 ifeq ($(CAP_PRECISE),1)
 L3_NOSEPRED+=and not cap_imprecise
 else
@@ -1391,6 +1399,12 @@ NOSEPRED+=and not cap128
 endif
 ifneq ($(CAP_SIZE),64)
 NOSEPRED+=and not cap64
+endif
+ifeq ($(PERM_SIZE),23)
+NOSEPRED+=and not cap_perm_31
+endif
+ifeq ($(PERM_SIZE),19)
+NOSEPRED+=and not cap_perm_31 and not cap_perm_23
 endif
 ifeq ($(CAP_PRECISE),1)
 NOSEPRED+=and not cap_imprecise
