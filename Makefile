@@ -1305,6 +1305,10 @@ ifeq ($(PERM_SIZE),19)
 L3_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
 endif
 
+ifeq ($(PERM_SIZE),15)
+L3_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
+endif
+
 ifeq ($(CAP_PRECISE),1)
 L3_NOSEPRED+=and not cap_imprecise
 else
@@ -1407,6 +1411,9 @@ ifeq ($(PERM_SIZE),23)
 NOSEPRED+=and not cap_perm_31
 endif
 ifeq ($(PERM_SIZE),19)
+NOSEPRED+=and not cap_perm_31 and not cap_perm_23
+endif
+ifeq ($(PERM_SIZE),15)
 NOSEPRED+=and not cap_perm_31 and not cap_perm_23
 endif
 ifeq ($(CAP_PRECISE),1)
