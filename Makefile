@@ -1284,6 +1284,9 @@ endif
 
 ifneq ($(CAP_SIZE),256)
 L3_NOSEPRED+=and not cap256 and not beri1cache
+ifneq ($(CAP_PRECISE),1)
+L3_NOSEPRED+=and not cap_copy_as_data
+endif
 endif
 
 ifneq ($(CAP_SIZE),128)

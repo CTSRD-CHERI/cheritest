@@ -36,20 +36,26 @@ class test_cp2_cap_as_data(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a0, 0, "Copying a capability as data did not clear the tag bit")
 
     @attr('capabilities')
+    @attr('cap_copy_as_data')
     def test_cp2_cap_as_data_perms(self):
         '''Test that copying a capability as data copies permissions'''
         self.assertRegisterEqual(self.MIPS.a1, 0, "Copying a capability as data did not copy the permissions")
 
     @attr('capabilities')
+    @attr('cap_copy_as_data')
     def test_cp2_cap_as_data_base(self):
         '''Test that copying a capability as data copies base'''
         self.assertRegisterEqual(self.MIPS.a2, 0, "Copying a capability as data did not copy the base")
 
     @attr('capabilities')
+    @attr('cap_copy_as_data')
     def test_cp2_cap_as_data_len(self):
         '''Test that copying a capability as data copies length'''
         self.assertRegisterEqual(self.MIPS.a3, 0, "Copying a capability as data did not copy the length")
 
+    # The L3 model of precise capabilities with less than 256 bits preserves
+    # the offset, even though it does not have enough space to preserve all
+    # the fields. So don't tag 'cap_copy_as_data'.
     @attr('capabilities')
     def test_cp2_cap_as_data_offset(self):
         '''Test that copying a capability as data copies offset'''
