@@ -86,7 +86,7 @@ test:		.ent test
 finally:
 
 		dla	$t0, sandbox
-		dsubu	$a1, $a1, $t0
+		dsubu	$a0, $a1, $t0
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
