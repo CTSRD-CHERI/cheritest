@@ -66,6 +66,7 @@ test:		.ent test
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
 
+		cgetdefault $c1
 		dla     $t0, sandbox 
 		cincoffset $c1, $c1, $t0
 		dla     $t1, limit
@@ -83,6 +84,9 @@ test:		.ent test
 		cjalr   $c24, $c1
 		nop			# Branch delay slot
 finally:
+
+		dla	$t0, sandbox
+		dsubu	$a1, $a1, $t0
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
