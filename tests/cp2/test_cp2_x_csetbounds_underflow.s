@@ -85,7 +85,7 @@ test:		.ent test
 		# should fail.
 		#
 
-		dli	$t0, 0
+		dli	$t0, 9
 		csetbounds $c1, $c1, $t0 # This should raise an exception
 		
 		#
