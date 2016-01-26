@@ -1315,6 +1315,10 @@ else
 L3_NOSEPRED+=and not cap_precise
 endif
 
+ifdef CHERI_MICRO
+L3_NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
+endif
+
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 
 #
