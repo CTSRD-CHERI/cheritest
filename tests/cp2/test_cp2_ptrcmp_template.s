@@ -97,17 +97,23 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
+		#
 		# Construct two equal capabilities with non-zero base and offset.
-		dli        $t0, 0x42
-		cincoffset $c1, $c0, $t0
-		cgetlen    $t1, $c1
-		dsubu      $t1, $t1, $t0
-		csetbounds $c1, $c1, $t1
-		dli        $t0, 0x54
+		#
+
+		cgetdefault $c1
+		dla	$t0, data
 		cincoffset $c1, $c1, $t0
+		dli	$t0, 16
+		csetbounds $c1, $c1, $t0
+		dli	$t0, 1
+		cincoffset $c1, $c1, $t0
+
 		cmove      $c2, $c1
 
-		# EQUAL CAPABILITIES
+		#
+		# Equal capabilities
+		#
 
 		cmove      $c3, $c1
 		cmove      $c4, $c2
@@ -117,62 +123,64 @@ test:		.ent test
 		# Stash the answer
 		move       $a1, $a0
 
-                # BASES DIFFERENT, OFFSETS EQUAL
+		#
+                # Bases different, offsets equal
+		#
 
-		# Give c3 a very large/negative base and same offset
-		dli        $a0, 0x8000000000000000
-		cincoffset $c3, $c1, $a0
-		dli        $t0, 0x1000 # A length of one page is enough
-		csetbounds $c3, $c3, $t0
-		dli        $a0, 0x54
-		cincoffset $c3, $c3, $a0
-		cmove      $c4, $c2
+		dli	$t0, 15
+		csetbounds $c2, $c1, $t0
+		dli	$t0, 1
+		cincoffset $c2, $c2, $t1
+
+		cmove	$c3, $c1
+		cmove	$c4, $c2
 
 		docomparisons
 
 		# Stash the answer
 		move       $a2, $a0
 
-        	# BASES EQUAL, OFFSETS DIFFERENT
+		#
+        	# Bases equal, offsets different
+		#
 
-		# Give c3 a very large/negative offset
-		dli        $a0, 0x8000000000000000
-		csetoffset $c3, $c1, $a0
-		cmove      $c4, $c2
+		dli	$t0, 1
+		cincoffset $c2, $c1, $t0
+
+		cmove	$c3, $c1
+		cmove	$c4, $c2
 
 		docomparisons
 
 		# Stash the answer
 		move       $a3, $a0
 
-		# BASES and OFFSETS DIFFERENT, EFFECTIVE ADDRESSES DIFFERENT
+		#
+		# Bases AND offsets different, effective addresses different
+		#
 
-		# Give c3 a different base from c4
-		dli        $a0, 0x1
-		cincoffset $c3, $c1, $a0
-		dli        $t0, 0x8000000000000000 # A length with enough magnitude for a big offset.
-		csetbounds $c3, $c3, $t0
-		# Give c3 a very large/negative offset
-		dli        $a0, 0x8000000000000000
-		cincoffset $c3, $c3, $a0
-		cmove      $c4, $c2
+		dli	$t0, 15
+		csetbounds $c2, $c1, $t0
+		dli	$t0, 2
+		cincoffset $c2, $c2, $t0
+
+		cmove	$c3, $c1
+		cmove	$c4, $c2
 
 		docomparisons
 
 		# Stash the answer
 		move       $a4, $a0
 
-		# BASES AND OFFSETS DIFFERENT, EFFECTIVE ADDRESSES EQUAL
+		#
+		# Bases and offsets different, effective addresses equal
+		#
 
-		# Give c3 a base which adds to offset to give same base+offset as c4 (with wrap around).
-		dli        $a0, 0x8000000000000053 - 0x54
-		cincoffset $c3, $c1, $a0
-		dli        $t0, 0x4000000000000000 # A length for a big offset.
-		csetbounds $c3, $c3, $t0
-		# Give c3 a very large or very negative offset
-		dli        $a0, 0x8000000000000001
-		cincoffset $c3, $c3, $a0
-		cmove      $c4, $c2
+		dli	$t0, 15
+		csetbounds $c2, $c1, $t0
+		
+		cmove 	$c3, $c1
+		cmove	$c4, $c1
 
 		docomparisons
 
@@ -185,3 +193,7 @@ test:		.ent test
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
+
+		.data
+data:		.dword 0
+		.dword 0
