@@ -130,7 +130,7 @@ test:		.ent test
 		dli	$t0, 15
 		csetbounds $c2, $c1, $t0
 		dli	$t0, 1
-		cincoffset $c2, $c2, $t1
+		cincoffset $c2, $c2, $t0
 
 		cmove	$c3, $c1
 		cmove	$c4, $c2

@@ -52,17 +52,17 @@ class test_cp2_cltu(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cltu_bases_diff(self):
         '''Compare LTU capabilities with different bases, offsets equal'''
-        self.assertRegisterEqual(self.MIPS.a2, construct_answer(0,1,1,0,0,1), "Capabilities with different bases compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a2, construct_answer(1,0,1,0,1,0), "Capabilities with different bases compared incorrectly")
 
     @attr('capabilities')
     def test_cp2_cltu_offsets_diff(self):
         '''Compare LTU capabilities with different offsets, bases equal'''
-        self.assertRegisterEqual(self.MIPS.a3, construct_answer(0,1,1,0,0,1), "Capabilities with different offsets compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a3, construct_answer(1,0,1,0,1,0), "Capabilities with different offsets compared incorrectly")
         
     @attr('capabilities')
     def test_cp2_cltu_base_and_offset_diff_sum_different(self):
         '''Compare LTU capabilities with different base and offset, base+offset not equal'''
-        self.assertRegisterEqual(self.MIPS.a4, construct_answer(0,1,1,0,0,1), "Capabilities with different base and offsets compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a4, construct_answer(1,0,1,0,1,0), "Capabilities with different base and offsets compared incorrectly")
 
     @attr('capabilities')
     def test_cp2_cltu_base_and_offset_diff_sum_equal(self):
