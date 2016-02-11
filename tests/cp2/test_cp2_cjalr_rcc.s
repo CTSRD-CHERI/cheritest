@@ -51,9 +51,9 @@ test:		.ent test
 
 		# Clear RCC. so that we can tell when PCC has been saved there
 		dli      $t0, 4
-		cincbase $c24, $c24, $t0
+		cincoffset $c24, $c24, $t0
+		csetbounds  $c24, $c24, $t0
 		csetoffset $c24, $c24, $t0
-		csetlen  $c24, $c24, $t0
 		dli      $t0, 0
 		candperm $c24, $c24, $t0
 		

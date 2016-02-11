@@ -87,7 +87,7 @@ test:		.ent test
 
 		# Seal data capability $c2 to the offset of $c1, and store
 		# result in $c3.
-                cseal	 $c3, $c2, $c1
+    cseal	 $c3, $c2, $c1
 
 		# Make $c4 a code capability for sandbox
 		dla	 $t0, sandbox
