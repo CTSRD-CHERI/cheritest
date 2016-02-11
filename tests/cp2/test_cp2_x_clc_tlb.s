@@ -140,8 +140,8 @@ testcode:
 		#
 
 		dli	$t0, 64
-		cincbase $c1, $c0, $t0
-		csetlen	$c1, $c1, $t0
+		cincoffset $c1, $c0, $t0
+		csetbounds	$c1, $c1, $t0
 		cscr	$c1, $a2($c0)
 
 		dli	$a5, 4
