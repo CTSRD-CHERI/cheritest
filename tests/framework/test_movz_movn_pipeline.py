@@ -40,6 +40,6 @@ class test_movz_movn_pipeline(BaseBERITestCase):
     def test_movn_pipeline_false(self):
         '''Test that result of MOVN test is correct.'''
         self.assertRegisterEqual(self.MIPS.s3, 0x0000000000000001, "MOVN did not move when it should have.")
-    def test_movn_pipeline_false(self):
+    def test_movn_pipeline_freebsd(self):
         '''Test that result of MOVN test is correct.'''
         self.assertRegisterEqual(self.MIPS.s5, 0xfffffffffffffffc, "MOVZ did not forward correctly in case found in freeBSD.")
