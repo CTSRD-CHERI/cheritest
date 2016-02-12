@@ -57,7 +57,7 @@ test:		.ent test
 		dli      $t0, BASE_ADDRESS
 		csetoffset $c2, $c2, $t0
 		# Choose a size that allows compression.
-                dli      $t0, 1024
+                dli      $t0, LENGTH
                 csetbounds $c2, $c2, $t0
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
 		# Permit_Store.
