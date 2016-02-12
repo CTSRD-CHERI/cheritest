@@ -109,6 +109,8 @@ NOFUZZR?=0
 CAP_SIZE?=256
 PERM_SIZE?=31
 L3_SIM?=l3mips
+SAIL_DIR?=~/bitbucket/l2
+SAIL_SIM=$(SAIL_DIR)/src/run_mips.native
 
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
@@ -1320,7 +1322,43 @@ ifdef CHERI_MICRO
 L3_NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
 endif
 
+SAIL_NOSEPRED=\
+not allow_unaligned \
+and not beri \
+and not beriinitial \
+and not counterdev \
+and not dma \
+and not dmaclang \
+and not dumpicache \
+and not ignorebadex \
+and not invalidateL2 \
+and not loadcachetag \
+and not llscnotmatching \
+and not llscspan \
+and not llscnoalias \
+and not mtc0signex \
+and not swi \
+and not syncistep \
+and not smalltlb \
+and not beri2tlb \
+and not gxemultlb \
+and not beri2cache \
+and not beri1oldcache \
+and not watch \
+and not deterministic_random \
+and not noextendedtlb \
+and not csettype \
+and not statcounters \
+and not float \
+and not tlb \
+and not capabilities \
+and not clang  \
+and not pic \
+and not mt \
+and not comparereg
+
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
+SAIL_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -1467,6 +1505,7 @@ GXEMUL_BINDIR?=/usr/groups/ctsrd/gxemul/CTSRD-CHERI-gxemul-testversion
 GXEMUL_TRACE_OPTS?=-i
 GXEMUL_OPTS=-V -E oldtestmips -M 3072 $(GXEMUL_TRACE_OPTS) -p "end"
 L3_LOGDIR=l3_log
+SAIL_LOGDIR=sail_log
 
 RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
@@ -1537,6 +1576,8 @@ L3_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 L3_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
+SAIL_TEST_LOGS := $(addsuffix .log,$(addprefix \
+	$(SAIL_LOGDIR)/,$(TESTS)))
 
 SIM_FUZZ_TEST_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_LOGS))
 SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED_LOGS))
@@ -1631,6 +1672,7 @@ cleantest:
 	rm -f $(GXEMUL_TEST_LOGS) $(GXEMUL_TEST_CACHED_LOGS)
 	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
 	rm -f $(L3_TEST_LOGS) $(L3_TEST_CACHED_LOGS)
+	rm -f $(SAIL_TEST_LOGS)
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
@@ -1878,6 +1920,10 @@ ifdef PROFILE
 endif
 endif
 
+$(SAIL_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_SIM) max_cycles
+	mkdir -p $(SAIL_LOGDIR)
+	-$(SAIL_SIM) --quiet --max_instruction `./max_cycles $@ 20000 300000` --file $< > $@ 2>&1
+
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
 	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=tools nosetests $(NOSEFLAGS) $(TESTDIRS)
@@ -2010,6 +2056,14 @@ nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 MULTI1=1 \
 	LOGDIR=$(L3_LOGDIR) nosetests --with-xunit \
 	--xunit-file=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
+            $(TESTDIRS) || true
+
+nosetests_sail: nosetests_sail.xml
+
+nosetests_sail.xml: $(SAIL_TEST_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	LOGDIR=$(SAIL_LOGDIR) nosetests --with-xunit \
+	--xunit-file=$@ $(SAIL_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
