@@ -35,6 +35,9 @@
 # Test cseal on a data capability
 #
 
+.set BASE_ADDRESS, 0x9800001234567800
+.set LENGTH, 1024
+
 		.global test
 test:		.ent test
 		daddu 	$sp, $sp, -32
@@ -49,9 +52,12 @@ test:		.ent test
 
                 # Make $c2 a data capability for the array at address data
 		cgetdefault $c2
-		dla      $t0, data
+		# Choose address that can be compressed if sealing is compressing
+		# the bounds.
+		dli      $t0, BASE_ADDRESS
 		csetoffset $c2, $c2, $t0
-                dli      $t0, 8
+		# Choose a size that allows compression.
+                dli      $t0, 1024
                 csetbounds $c2, $c2, $t0
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
 		# Permit_Store.
@@ -68,12 +74,12 @@ test:		.ent test
 		cgetsealed $a0, $c3
                 # $c3.type should be equal to 0x1234
 		cgettype $a1, $c3
-                # $c3.base should be equal to data
+                # $c3.base should be equal to the original base
                 cgetbase $a2, $c3
-                dla      $t0, data
-                dsubu    $a2, $t0
+                dli      $s2, BASE_ADDRESS
 	        # $c3.len should be equal to $c2.len, i.e. 8	
                 cgetlen  $a3, $c3
+                dli      $s3, LENGTH
                 # $c3.perm should be equal to $c2.perms
 		cgetperm $a4, $c3
 
@@ -83,7 +89,3 @@ test:		.ent test
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
-
-		.data
-		.align 3
-data:		.dword	0xfedcba9876543210
