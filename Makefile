@@ -763,6 +763,7 @@ TEST_CP2_FILES=					\
 		test_cp2_ccall.s		\
 		test_cp2_creturn_trap.s		\
 		test_cp2_ccall2.s		\
+		test_cp2_ccall_fast.s		\
 		test_cp2_cbtu.s			\
 		test_cp2_cbts.s			\
 		test_cp2_ceq.s			\
