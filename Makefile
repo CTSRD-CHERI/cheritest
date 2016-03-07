@@ -789,6 +789,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cfromptr_null.s	\
 		test_cp2_csetbounds.s		\
 		test_cp2_csetbounds_large.s	\
+		test_cp2_csetbounds_cases.s		\
 		test_cp2_ceqex.s		\
 		test_cp2_cseal_imprecise.s	\
 		test_cp2_cfromptr_imprecise.s	\
@@ -1394,7 +1395,7 @@ ifdef DEBUG
 	SIM_TRACE_OPTS?= +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug +StatCounters
 else
 ifdef TRACE
-	SIM_TRACE_OPTS?=+trace +cTrace +tlbTrace +instructionBasedCycleCounter +dma
+	SIM_TRACE_OPTS?=+trace +cTrace +tlbTrace +instructionBasedCycleCounter
 else
 	SIM_TRACE_OPTS?=
 endif
