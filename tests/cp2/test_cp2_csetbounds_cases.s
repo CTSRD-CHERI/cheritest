@@ -71,6 +71,29 @@ test:		.ent test
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
+		
+		#
+		# Case two, found by Robert Watson.
+		#
+		# Stage 1 setting up the initial capability.
+		dli	$t0, 0x7fffffe8c0
+		csetoffset $c1, $c0, $t0
+		dli	$t1, 0x0
+		csetbounds $c1, $c1, $t1
+		# Get and assert that the base and length are what we set.
+		cgetbase $v0, $c1
+		bne $v0, $t0, error
+		cgetlen $v1, $c1
+		bne $v1, $t1, error
+		nop
+		# Stage 2 attempt the failing csetbounds.
+		dli	$t3, 0x0
+		daddu $t0, $t0, $t3 # Add this offset to the previous base to get new base.
+		csetoffset $c1, $c1, $t3
+		# Get and assert that the base and length are what we set.
+		cgetbase $v0, $c1
+		bne $v0, $t0, error
+		nop
 
 		
 		ld	$fp, 16($sp)
