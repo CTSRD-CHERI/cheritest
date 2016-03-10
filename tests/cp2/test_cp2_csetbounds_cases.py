@@ -31,5 +31,5 @@ from nose.plugins.attrib import attr
 class test_cp2_csetbounds_cases(BaseBERITestCase):
 
     @attr('capabilities')
-    def test_cp2_csetbounds_len_exact(self):
+    def test_cp2_csetbounds_base_or_length_unexpected(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "One case of CSetBounds did not get an expected value")

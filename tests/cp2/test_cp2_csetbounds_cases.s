@@ -71,6 +71,8 @@ test:		.ent test
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
+		cbtu $c1, error
+		nop
 		
 		#
 		# Case two, found by Robert Watson.
@@ -94,6 +96,8 @@ test:		.ent test
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
 		nop
+		cbtu $c1, error
+		nop
 		
 		#
 		# Case three, found by Jonathan Woodruff.
@@ -111,16 +115,16 @@ test:		.ent test
 		nop
 		# Stage 2 attempt the failing csetbounds.
 		dli	$t3, 0x7fe940
-		daddu $t0, $t0, $t3 # Add this offset to the previous base to get new base.
 		cincoffset $c1, $c1, $t3
 		dli	$t3, 0xfffffffffffff0e8
-		daddu $t0, $t0, $t3
 		cincoffset $c1, $c1, $t3
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
+		nop
+		cbtu $c1, error
 		nop
 
 		
