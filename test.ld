@@ -33,9 +33,9 @@ __sp = __mem_top__;
 __heap_top__ = __mem_top__ - __stack_size__;
 __sp_bottom = __heap_top__;
 
-MEMORY 
+MEMORY
 {
-       dmem : ORIGIN = 0x40000000, LENGTH = 1024M
+       dmem : ORIGIN = 0x9000000040000000, LENGTH = 1024M
 }
 
 SECTIONS
