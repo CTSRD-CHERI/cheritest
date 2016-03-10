@@ -1675,6 +1675,7 @@ cleantest:
 	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
 	rm -f $(L3_TEST_LOGS) $(L3_TEST_CACHED_LOGS)
 	rm -f $(SAIL_TEST_LOGS)
+	rm -f $(L3_LOGDIR)/*.err
 
 clean: cleantest
 	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
