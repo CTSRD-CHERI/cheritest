@@ -48,7 +48,7 @@ SECTIONS
                 . = ALIGN(0x8);
 	} AT>dmem
 	.bss  ALIGN(0x8): { *(.bss)  . = ALIGN(0x8); } AT>dmem
-	.data ALIGN(0x8): { *(.data)  *(.global_sizes) . = ALIGN(0x8); } AT>dmem
+	.data ALIGN(0x8): { *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*) . = ALIGN(0x8); } AT>dmem
 	.got            : {
                  _gp = ALIGN(16) + 0x7ff0;
                  *(.got.plt) *(.got) 
