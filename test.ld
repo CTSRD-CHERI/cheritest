@@ -58,6 +58,6 @@ SECTIONS
 	__bss_start = ADDR(.bss);
 	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
 
-        /DISCARD/ : { *(.MIPS.options) *(.MIPS.abiflags) *(.pdr) }
+        /DISCARD/ : { *(.MIPS.options) *(.MIPS.abiflags) *(.pdr) *(.global_sizes)}
 }
 
