@@ -48,7 +48,7 @@ SECTIONS
                 . = ALIGN(0x8);
 	} AT>dmem
 	.bss  ALIGN(0x8): { *(.bss)  . = ALIGN(0x8); } AT>dmem
-	.data ALIGN(0x8): { *(.data) . = ALIGN(0x8); } AT>dmem
+	.data ALIGN(0x8): { *(.data)  *(.global_sizes) . = ALIGN(0x8); } AT>dmem
 	.got            : {
                  _gp = ALIGN(16) + 0x7ff0;
                  *(.got.plt) *(.got) 
@@ -58,6 +58,6 @@ SECTIONS
 	__bss_start = ADDR(.bss);
 	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
 
-        /DISCARD/ : { *(.MIPS.options) *(.MIPS.abiflags) *(.pdr) *(.global_sizes)}
+        /DISCARD/ : { *(.MIPS.options) *(.MIPS.abiflags) *(.pdr)}
 }
 
