@@ -44,7 +44,7 @@ SECTIONS
 
 	.text ALIGN(0x8): {
 		obj/init.o(.text) 
-		*(EXCLUDE_FILE (obj/init.o) .text)
+		*(EXCLUDE_FILE (obj/init.o) .text .text.*)
                 . = ALIGN(0x8);
 	} AT>dmem
 	.bss  ALIGN(0x8): { *(.bss)  . = ALIGN(0x8); } AT>dmem
@@ -58,6 +58,6 @@ SECTIONS
 	__bss_start = ADDR(.bss);
 	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
 
-        /DISCARD/ : { *(.MIPS.options) }
+        /DISCARD/ : { *(.MIPS.options) *(.MIPS.abiflags) *(.pdr) }
 }
 
