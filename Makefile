@@ -1324,6 +1324,8 @@ ifdef CHERI_MICRO
 L3_NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
 endif
 
+L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
+
 SAIL_NOSEPRED=\
 not allow_unaligned \
 and not beri \
@@ -1359,8 +1361,11 @@ and not pic \
 and not mt \
 and not comparereg
 
-L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 SAIL_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
+
+QEMU_NOSEPRED=
+
+QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -1508,6 +1513,7 @@ GXEMUL_TRACE_OPTS?=-i
 GXEMUL_OPTS=-V -E oldtestmips -M 3072 $(GXEMUL_TRACE_OPTS) -p "end"
 L3_LOGDIR=l3_log
 SAIL_LOGDIR=sail_log
+QEMU_LOGDIR=qemu_log
 
 RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
@@ -1580,6 +1586,8 @@ L3_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 SAIL_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_LOGDIR)/,$(TESTS)))
+QEMU_TEST_LOGS := $(addsuffix .log,$(addprefix \
+	$(QEMU_LOGDIR)/,$(TESTS)))
 
 SIM_FUZZ_TEST_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_LOGS))
 SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED_LOGS))
@@ -1675,6 +1683,7 @@ cleantest:
 	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
 	rm -f $(L3_TEST_LOGS) $(L3_TEST_CACHED_LOGS)
 	rm -f $(SAIL_TEST_LOGS)
+	rm -f $(QEMU_TEST_LOGS)
 	rm -f $(L3_LOGDIR)/*.err
 
 clean: cleantest
@@ -1927,6 +1936,11 @@ $(SAIL_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_SIM) max_cycles
 	mkdir -p $(SAIL_LOGDIR)
 	-$(SAIL_SIM) --quiet --max_instruction `./max_cycles $@ 20000 300000` --file $< > $@ 2>&1
 
+$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf
+	mkdir -p $(QEMU_LOGDIR)
+	qemu-system-cheri -D $@ -d in_asm,int -M mipssim -cpu R4000 \
+	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M
+
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
 	DEBUG_ALWAYS_FAIL=1 PYTHONPATH=tools nosetests $(NOSEFLAGS) $(TESTDIRS)
@@ -2068,6 +2082,14 @@ nosetests_sail.xml: $(SAIL_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_LOGDIR) nosetests --with-xunit \
 	--xunit-file=$@ $(SAIL_NOSEFLAGS) \
             $(TESTDIRS) || true
+
+nosetests_qemu: nosetests_qemu.xml
+
+nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	LOGDIR=$(QEMU_LOGDIR) nosetests --with-xunit \
+	--xunit-file=$@ $(QEMU_NOSEFLAGS) \
+	$(TESTDIRS) || true
 
 xmlcat: xmlcat.c
 	gcc -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
