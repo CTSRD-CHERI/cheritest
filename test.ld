@@ -35,25 +35,25 @@ __sp_bottom = __heap_top__;
 
 MEMORY
 {
-       dmem : ORIGIN = 0x9000000040000000, LENGTH = 1024M
+       dmem : ORIGIN = 0x40000000, LENGTH = 1024M
 }
 
 SECTIONS
 {
 	. = 0x9000000040000000;
 
-	.text ALIGN(0x8): {
+	.text . : {
+                . = ALIGN(8);
 		obj/init.o(.text) 
 		*(EXCLUDE_FILE (obj/init.o) .text .text.*)
-                . = ALIGN(0x8);
-	} AT>dmem
-	.bss  ALIGN(0x8): { *(.bss)  . = ALIGN(0x8); } AT>dmem
-	.data ALIGN(0x8): { *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*) . = ALIGN(0x8); } AT>dmem
-	.got            : {
+ 	} AT>dmem
+	.data . : { . = ALIGN(8); *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*); } AT>dmem
+	.got  . : {
+                    . = ALIGN(16);
                  _gp = ALIGN(16) + 0x7ff0;
                  *(.got.plt) *(.got) 
                  } AT>dmem
-
+	.bss  . : { . = ALIGN(8); *(.bss); } AT>dmem =0
 	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
 	__bss_start = ADDR(.bss);
 	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
