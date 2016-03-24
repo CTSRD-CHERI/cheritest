@@ -113,7 +113,7 @@ test:		.ent test
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
-		# Stage 2 attempt the failing csetbounds.
+		# Stage 2 attempt the failing inc offsets.
 		dli	$t3, 0x7fe940
 		cincoffset $c1, $c1, $t3
 		dli	$t3, 0xfffffffffffff0e8
@@ -125,6 +125,26 @@ test:		.ent test
 		bne $v1, $t1, error
 		nop
 		cbtu $c1, error
+		nop
+		
+		#
+		# Case three, found by Jonathan Woodruff.
+		#
+		# Stage 1 setting up the initial capability.
+		dli	$t0, 0x160600000
+		csetoffset $c1, $c0, $t0
+		dli	$t1, 0x300000
+		csetbounds $c1, $c1, $t1
+		cseal $c1, $c1, $c0
+		dla $t2, data
+		csc $c1, $t2, 0($c0)
+		clc $c1, $t2, 0($c0)
+		cunseal $c1, $c1, $c0
+		# Get and assert that the base and length are what we set.
+		cgetbase $v0, $c1
+		bne $v0, $t0, error
+		cgetlen $v1, $c1
+		bne $v1, $t1, error
 		nop
 
 		
