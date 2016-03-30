@@ -1364,7 +1364,12 @@ and not comparereg
 
 SAIL_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 
-QEMU_NOSEPRED=
+QEMU_NOSEPRED=\
+not allow_unaligned \
+and not ignorebadex \
+and not einstr \
+and not pic \
+and not rdhwr
 
 QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
 
