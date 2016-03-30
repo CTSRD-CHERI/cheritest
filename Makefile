@@ -1939,7 +1939,7 @@ $(SAIL_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_SIM) max_cycles
 
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf
 	mkdir -p $(QEMU_LOGDIR)
-	qemu-system-cheri -D $@ -d in_asm,int -M mipssim -cpu R4000 \
+	qemu-system-cheri -D $@ -d instr -M mipssim -cpu R4000 \
 	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M
 
 # Simulate a failure on all unit tests
