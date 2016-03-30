@@ -1939,8 +1939,8 @@ $(SAIL_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_SIM) max_cycles
 
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf
 	mkdir -p $(QEMU_LOGDIR)
-	qemu-system-cheri -D $@ -d instr -M mipssim -cpu R4000 \
-	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M
+	qemu-system-cheri -D $@ -d int -M mipssim -cpu R4000 \
+	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bp 0x`mips64-objdump -d $(OBJDIR)/$*.elf | awk -f end.awk` || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
