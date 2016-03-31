@@ -1366,15 +1366,25 @@ SAIL_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 
 QEMU_NOSEPRED=\
 not allow_unaligned \
+and not beri \
+and not beri1cache \
+and not beri1tlb \
+and not beri2cache \
+and not beri2tlb \
+and not gxemultlb \
+and not config2 \
+and not config3 \
 and not counterdev \
 and not csettype \
 and not deterministic_random \
 and not dma \
 and not dmaclang \
+and not dumpicache \
 and not einstr \
 and not extendedtlb \
 and not ignorebadex \
 and not loadcachetag \
+and not nofloat \
 and not pic \
 and not rdhwr \
 and not watch
@@ -1952,7 +1962,7 @@ $(SAIL_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_SIM) max_cycles
 
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf
 	mkdir -p $(QEMU_LOGDIR)
-	qemu-system-cheri -D $@ -d int -M mipssim -cpu R4000 \
+	qemu-system-cheri -D $@ -d instr -M mipssim -cpu R4000 \
 	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bp 0x`mips64-objdump -d $(OBJDIR)/$*.elf | awk -f end.awk` || true
 
 # Simulate a failure on all unit tests
