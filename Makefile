@@ -1366,10 +1366,18 @@ SAIL_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 
 QEMU_NOSEPRED=\
 not allow_unaligned \
-and not ignorebadex \
+and not counterdev \
+and not csettype \
+and not deterministic_random \
+and not dma \
+and not dmaclang \
 and not einstr \
+and not extendedtlb \
+and not ignorebadex \
+and not loadcachetag \
 and not pic \
-and not rdhwr
+and not rdhwr \
+and not watch
 
 QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
 
