@@ -31,18 +31,22 @@ from nose.plugins.attrib import attr
 class test_madd_ex(BaseBERITestCase):
 
     @attr('ignorebadex')
+    @attr('madd')
     def test_madd_ex_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 6, "MADD of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
     @attr('ignorebadex')
+    @attr('madd')
     def test_madd_ex_2(self):
         self.assertRegisterEqual(self.MIPS.a1, 0, "MADD of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
     @attr('ignorebadex')
+    @attr('madd')
     def test_madd_ex_3(self):
         self.assertRegisterEqual(self.MIPS.a2, 6, "MADD of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
     @attr('ignorebadex')
+    @attr('madd')
     def test_madd_ex_4(self):
         self.assertRegisterEqual(self.MIPS.a3, 0, "MADD of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 

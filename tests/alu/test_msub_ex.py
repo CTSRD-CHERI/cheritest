@@ -31,18 +31,22 @@ from nose.plugins.attrib import attr
 class test_msub_ex(BaseBERITestCase):
 
     @attr('ignorebadex')
+    @attr('madd')
     def test_msub_ex_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 0xfffffffffffffffa, "MSUB of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
     @attr('ignorebadex')
+    @attr('madd')
     def test_msub_ex_2(self):
         self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "MSUB of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
     @attr('ignorebadex')
+    @attr('madd')
     def test_msub_ex_3(self):
         self.assertRegisterEqual(self.MIPS.a2, 0xfffffffffffffffa, "MSUB of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
     @attr('ignorebadex')
+    @attr('madd')
     def test_msub_ex_4(self):
         self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "MSUB of a value that was not a valid sign extention of a 32-bit value gave an unexpected result.")
 
