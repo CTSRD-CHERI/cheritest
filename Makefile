@@ -1383,11 +1383,18 @@ and not dumpicache \
 and not einstr \
 and not extendedtlb \
 and not ignorebadex \
+and not lladdr \
+and not llscspan \
 and not loadcachetag \
+and not mt \
 and not nofloat \
 and not pic \
 and not rdhwr \
 and not watch
+
+ifneq ($(CLANG),1)
+QEMU_NOSEPRED+=and not clang
+endif
 
 QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
 
