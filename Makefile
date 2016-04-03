@@ -1386,6 +1386,8 @@ and not ignorebadex \
 and not lladdr \
 and not llscspan \
 and not loadcachetag \
+and not madd \
+and not movz \
 and not mt \
 and not nofloat \
 and not pic \
@@ -1394,6 +1396,24 @@ and not watch
 
 ifneq ($(CLANG),1)
 QEMU_NOSEPRED+=and not clang
+endif
+
+ifneq ($(CAP_SIZE), 256)
+QEMU_NOSEPRED+=and not cap256
+endif
+
+ifneq ($(CAP_SIZE), 128)
+QEMU_NOSEPRED+=and not cap128
+endif
+
+ifneq ($(CAP_SIZE), 64)
+QEMU_NOSEPRED+=and not cap64
+endif
+
+ifeq ($(CAP_PRECISE),1)
+QEMU_NOSEPRED+=and not cap_imprecise
+else
+QEMU_NOSEPRED+=and not cap_precise
 endif
 
 QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
