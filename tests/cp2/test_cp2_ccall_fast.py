@@ -34,31 +34,37 @@ from nose.plugins.attrib import attr
 #
 
 class test_cp2_ccall_fast(BaseBERITestCase):
+
     @attr('capabilities')
+    @attr('ccall_hw_2')
     def test_cp2_ccall_fast_1(self):
         '''Test that ccall_fast called the sandbox and returned'''
         self.assertRegisterEqual(self.MIPS.a1, 0x900d,
             "ccall did not call the sandbox and come back")
 
     @attr('capabilities')
+    @attr('ccall_hw_2')
     def test_cp2_ccall_fast_2(self):
         '''Test that the sandbox inverted the memory array'''
         self.assertRegisterEqual(self.MIPS.a2, 0x08,
             "the sandbox did not invert the memory array")
 
     @attr('capabilities')
+    @attr('ccall_hw_2')
     def test_cp2_ccall_fast_3(self):
         '''Test that the sandbox zeroed the second memory array'''
         self.assertRegisterEqual(self.MIPS.a3, 0x00,
             "the sandbox did not zero the second memory array")
 
     @attr('capabilities')
+    @attr('ccall_hw_2')
     def test_cp2_ccall_fast_4(self):
         '''Test that returning from the sandbox cleared $a4'''
         self.assertRegisterEqual(self.MIPS.a4, 0x00,
             "returning from the sandbox did not clear $a4")
 
     @attr('capabilities')
+    @attr('ccall_hw_2')
     def test_cp2_ccall_fast_5(self):
         '''Test that the sandbox zeroed the second memory array from $a4'''
         self.assertRegisterEqual(self.MIPS.a5, 0x00,
