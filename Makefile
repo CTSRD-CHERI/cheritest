@@ -1273,7 +1273,7 @@ endif
 ifneq ($(TEST_CP2),1)
 L3_NOSEPRED+=and not capabilities and not clang
 else
-L3_NOSEPRED+=and not ccall_hw_1 and not ccall_hw_2
+L3_NOSEPRED+=and not ccall_hw_1 and not ccall_hw_2 and not cgetpccsetoffset
 endif
 
 ifneq ($(CLANG),1)
@@ -1373,6 +1373,7 @@ and not beri2cache \
 and not beri2tlb \
 and not gxemultlb \
 and not ccall_hw_2 \
+and not cgetpccsetoffset \
 and not config2 \
 and not config3 \
 and not counterdev \
