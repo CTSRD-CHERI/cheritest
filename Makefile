@@ -1384,6 +1384,15 @@ and not dmaclang \
 and not dumpicache \
 and not einstr \
 and not extendedtlb \
+and not floatcmove \
+and not floatfccr \
+and not floatfenr \
+and not floatfexr \
+and not floatindexed \
+and not floatmadd \
+and not floatpaired \
+and not floatrecip \
+and not floatrsqrt \
 and not ignorebadex \
 and not largepage \
 and not lladdr \
