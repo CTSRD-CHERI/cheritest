@@ -44,12 +44,59 @@ start:
         
                 # Clear BEV bit
                 mfc0	$t0, $12
+		ori	$t0, $t0, 0xe0	# Set KX, DX, UX
 		dli	$t1, 1 << 22	# BEV bit
 		nor	$t1, $t1
 		and	$t0, $t0, $t1
 		mtc0	$t0, $12
 
+		#
+		# Set the number of wired TLB entries to 0
+		#
+
+		mtc0	$zero, $6	# TLB Wired
+
+		#
+		# Set the page size to 4K
+		#
+
+		mtc0	$zero, $5	# TLB Page Mask
+
+		#
+		# Clear the TLB
+		#
+
+		dmtc0	$zero, $2	# TLB EntryLo0
+		dmtc0	$zero, $3	# TLB EntryLo1
+
+		#
+		# Find out how many TLB entries there are
+		#
+
+		mfc0	$a0, $16, 1	# Config1
+		srl	$a0, $a0, 25
+		andi	$a0, $a0, 0x3f
+		addi	$a0, $a0, 1
+
+		dli	$a1, 0
+		dli	$a2, 5		# ASID to use
+		dli	$a3, 1 << 13 	# VPN2 field in EntryHi
+		daddu	$a2, $a2, $a3
+tlb_loop:
+		dmtc0	$a2, $10	# TLB EntryHi
+		mtc0	$a1, $0		# TLB Index
+
+		tlbwi
+
+		addi	$a1, $a1, 1
+		dadd	$a2, $a2, $a3
+		bne	$a1, $a0, tlb_loop
+		nop			# Branch delay slot
+
+		#
                 # Copy some code to the exception vector
+		#
+
                 dla     $t0, tlb_miss_vector
                 ld      $t1, 0($t0)
                 # the test is very timing/alignment sensitive such that uncommenting
