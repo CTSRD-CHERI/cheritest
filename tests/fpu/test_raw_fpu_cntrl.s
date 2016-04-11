@@ -38,8 +38,11 @@
 		.ent start
 start:     
 		# First enable CP1 
-		dli $t1, 1 << 29
-		or $at, $at, $t1   # Enable CP1    
+		mfc0 $at, $12
+		dli $t1, 1 << 29	# Enable CP1
+		or $at, $at, $t1
+		dli $t1, 1 << 26        # Put FPU into 64 bit mode
+		or $at, $at, $t1
 		mtc0    $at, $12 
 		    
 		# Individual tests
@@ -59,14 +62,14 @@ start:
 		# MOV.S
 		lui $t1, 0x4100
 		mtc1 $t1, $f4
-		mov.S $f3, $f4
+		mov.s $f3, $f4
 		mfc1 $t8, $f3
 		
 		# MOV.D
 		lui $t2, 0x4000
 		dsll $t2, $t2, 32
 		dmtc1 $t2, $f7
-		mov.D $f3, $f7
+		mov.d $f3, $f7
 		dmfc1 $t3, $f3
 		
 		# Test we can use control numbered registers as normal registers too.
