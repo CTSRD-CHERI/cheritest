@@ -1390,6 +1390,8 @@ and not floatfenr \
 and not floatfexr \
 and not floatindexed \
 and not floatmadd \
+and not float_mov_signex \
+and not float_mtc_signex \
 and not floatpaired \
 and not floatrecip \
 and not floatrsqrt \
