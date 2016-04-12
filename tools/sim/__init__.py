@@ -79,8 +79,8 @@ class Capability(object):
 def capabilityFromStrings(s, perms, ctype, offset, base, length):
     return Capability(
         int(s), 
-        int(ctype, 16),
         int(perms, 16),
+        int(ctype, 16),
         int(offset, 16),
         int(base, 16),
         int(length, 16),
