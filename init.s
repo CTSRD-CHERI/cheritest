@@ -79,6 +79,17 @@ start:
 		jal	bev1_handler_install
 		nop
 
+zero_bss:
+		dla     $t0, __bss_start
+		dla     $t1, __bss_end
+1:
+		beq     $t0, $t1, 2f # exit loop if finished
+		nop
+		sb      $0, 0($t0)
+		b       1b
+		dadd    $t0, $t0, 1
+2:
+
 all_threads:
 	        # Switch to 64-bit mode (no effect on cheri, but required for gxemul)
 	        mfc0    $at, $12
