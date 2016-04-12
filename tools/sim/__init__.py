@@ -58,22 +58,47 @@ CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC\s+[su]:([01]) perms:(0x'+hdigit+'+) 
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
 CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
-
+SAIL_CAP_PCC_RE = re.compile('DEBUG CAP PCC\s+0b([01u]{257})')
+SAIL_CAP_REG_RE = re.compile('DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{257})')
 class MipsException(Exception):
     pass
 
 class Capability(object):
     def __init__(self, s, perms, ctype, offset, base, length):
-        self.s = int(s)
-        self.ctype = int(ctype, 16)
-        self.perms = int(perms, 16)
-        self.offset = int(offset, 16)
-        self.base = int(base, 16)
-        self.length = int(length, 16)
+        self.s      = s
+        self.ctype  = ctype
+        self.perms  = perms
+        self.offset = offset
+        self.base   = base
+        self.length = length
 
     def __repr__(self):
         return 's:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x'%(
             self.s, self.perms, self.ctype, self.offset, self.base, self.length)
+
+def capabilityFromStrings(s, perms, ctype, offset, base, length):
+    return Capability(
+        int(s), 
+        int(ctype, 16),
+        int(perms, 16),
+        int(offset, 16),
+        int(base, 16),
+        int(length, 16),
+    )
+
+def capabilityFromBinaryString(s):
+    # sail prints capaabilities as a 257 bit binary string...
+    if 'u' in s:
+        return None
+    else:
+        return Capability(
+            int(s[256-192], 2),           # sealed
+            int(s[256-223 : 257-193], 2), # perms
+            int(s[256-247 : 257-224], 2), # otype
+            int(s[256-191 : 257-128], 2), # offset
+            int(s[256-127 : 257- 64], 2), # base
+            int(s[256-63  : 257-  0], 2), # length
+    )
 
 class ThreadStatus(object):
     '''Data object representing status of a thread (including cp2 registers if present)'''
@@ -92,13 +117,19 @@ class ThreadStatus(object):
             reg_num = MIPS_REG_NAME2NUM.get(key, None)
             if reg_num is None:
                 raise MipsException("Not a valid register name", key)
-            return self.reg_vals[reg_num]
+            val = self.reg_vals[reg_num]
+            if val is None:
+                raise MipsException("Attempted to read register not present or undef in log file: ", key)
+            return val
 
     def __getitem__(self, key):
         '''Return a register value by number'''
         if not type(key) is int or key < 0 or key > len(MIPS_REG_NUM2NAME):
             raise MipsException("Not a valid register number", key)
-        return self.reg_vals[key]
+        val = self.reg_vals[key]
+        if val is None:
+            raise MipsException("Attempted to read register not present or undef in log file: ", key)
+        return val
 
     def __repr__(self):
         v = []
@@ -124,9 +155,6 @@ class MipsStatus(object):
             raise MipsException("No reg dump found in %s"%self.fh)
         if self.pc is None:
             raise MipsException("Failed to parse PC from %s"%self.fh)
-        for i in range(len(MIPS_REG_NUM2NAME)):
-            if self.reg_vals[i] is None:
-                raise MipsException("Failed to parse register %d from %s"%(i,self.fh))
 
     def parse_log(self):
         '''Parse a log file and populate self.reg_vals and self.pc'''
@@ -140,6 +168,8 @@ class MipsStatus(object):
             cap_core_groups = CAPMIPS_CORE_RE.search(line)
             cap_reg_groups = CAPMIPS_REG_RE.search(line)
             cap_pc_groups = CAPMIPS_PC_RE.search(line)
+            sail_cap_pcc_groups=SAIL_CAP_PCC_RE.search(line)
+            sail_cap_reg_groups=SAIL_CAP_REG_RE.search(line)
             if (thread_groups):
                 thread = int(thread_groups.group(1))
             # We use 'thread' for both thread id and core id.
@@ -151,7 +181,12 @@ class MipsStatus(object):
                 thread = int(cap_core_groups.group(1))
             if (reg_groups):
                 reg_num = int(reg_groups.group(1))
-                reg_val = int(reg_groups.group(2), 16)
+                reg_val_hex = reg_groups.group(2)
+                if 'u' in reg_val_hex:
+                    # sail can produce undefined values
+                    reg_val = None
+                else:
+                    reg_val = int(reg_val_hex, 16)
                 t = self.threads[thread]
                 t.reg_vals[reg_num] = reg_val
             if (pc_groups):
@@ -161,10 +196,19 @@ class MipsStatus(object):
             if (cap_reg_groups):
                 cap_reg_num = int(cap_reg_groups.group(1))
                 t = self.threads[thread]
-                t.cp2[cap_reg_num] = Capability(*cap_reg_groups.groups()[1:7])
+                t.cp2[cap_reg_num] = capabilityFromStrings(*cap_reg_groups.groups()[1:7])
             if (cap_pc_groups):
                 t = self.threads[thread]
-                t.pcc = Capability(*cap_pc_groups.groups()[0:6])
+                t.pcc = capabilityFromStrings(*cap_pc_groups.groups()[0:6])
+            if (sail_cap_pcc_groups):
+                pcc_string = sail_cap_pcc_groups.group(1)
+                t = self.threads[thread]
+                t.pcc = capabilityFromBinaryString(pcc_string)
+            if (sail_cap_reg_groups):
+                cap_reg_num = int(sail_cap_reg_groups.group(1))
+                cap_string = sail_cap_reg_groups.group(2)
+                t = self.threads[thread]
+                t.cp2[cap_reg_num] = capabilityFromBinaryString(cap_string)
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''
