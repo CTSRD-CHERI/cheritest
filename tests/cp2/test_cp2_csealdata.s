@@ -50,15 +50,15 @@ test:		.ent test
 		dli	$t0, 0x1234
 		csetoffset $c1, $c0, $t0
 
-                # Make $c2 a data capability for the array at address data
+		# Make $c2 a data capability for the array at address data
 		cgetdefault $c2
 		# Choose address that can be compressed if sealing is compressing
 		# the bounds.
 		dli      $t0, BASE_ADDRESS
 		csetoffset $c2, $c2, $t0
 		# Choose a size that allows compression.
-                dli      $t0, LENGTH
-                csetbounds $c2, $c2, $t0
+		dli      $t0, LENGTH
+		csetbounds $c2, $c2, $t0
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
 		# Permit_Store.
 		# NB: Permit_Execute must not be included in the set of
@@ -68,19 +68,19 @@ test:		.ent test
 
 		# Seal data capability $c2 to the offset of $c1, and store
 		# result in $c3.
-                cseal	 $c3, $c2, $c1
+		cseal	 $c3, $c2, $c1
 
-                # $c3.sealed should be 1
+		# $c3.sealed should be 1
 		cgetsealed $a0, $c3
-                # $c3.type should be equal to 0x1234
+		# $c3.type should be equal to 0x1234
 		cgettype $a1, $c3
-                # $c3.base should be equal to the original base
-                cgetbase $a2, $c3
-                dli      $s2, BASE_ADDRESS
-	        # $c3.len should be equal to $c2.len, i.e. 8	
-                cgetlen  $a3, $c3
-                dli      $s3, LENGTH
-                # $c3.perm should be equal to $c2.perms
+		# $c3.base should be equal to the original base
+		cgetbase $a2, $c3
+		dli      $s2, BASE_ADDRESS
+		# $c3.len should be equal to $c2.len, i.e. 8	
+		cgetlen  $a3, $c3
+		dli      $s3, LENGTH
+		# $c3.perm should be equal to $c2.perms
 		cgetperm $a4, $c3
 
 		ld	$fp, 16($sp)
