@@ -32,28 +32,34 @@ class test_raw_fpu_fir(BaseBERITestCase):
 
     # On BERI, Revision, ProcessorID and Impl are set to zero
 
+    @attr('floatfirextended')
     def test_fir_s(self):
         '''Test FIR.S'''
         self.assertRegisterMaskEqual(self.MIPS.a0, 1 << 16, 1 << 16, "S (single precision) bit was not set in FIR")
 
+    @attr('floatfirextended')
     def test_fir_d(self):
         '''Test FIR.D'''
         self.assertRegisterMaskEqual(self.MIPS.a0, 1 << 17, 1 << 17, "D (double precision) bit was not set in FIR")
 
     @attr('floatpaired')
+    @attr('floatfirextended')
     def test_fir_ps(self):
         '''Test FIR.PS'''
         self.assertRegisterMaskEqual(self.MIPS.a0, 1 << 18, 1 << 18, "PS (paired single precision) bit was not set in FIR")
 
+    @attr('floatfirextended')
     def test_fir_w(self):
         '''Test FIR.W'''
         self.assertRegisterMaskEqual(self.MIPS.a0, 1 << 20, 1 << 20, "W (word fixed point) bit was not set in FIR")
 
+    @attr('floatfirextended')
     def test_fir_l(self):
         '''Test FIR.L'''
         self.assertRegisterMaskEqual(self.MIPS.a0, 1 << 21, 1 << 21, "L (double word fixed point) bit was not set in FIR")
 
     @attr('float64')
+    @attr('floatfirextended')
     def test_fir_fp64(self):
         '''Test FIR.FP64'''
         self.assertRegisterMaskEqual(self.MIPS.a0, 1 << 22, 1 << 22, "FP64 (64 bit FP registers) bit was not set in FIR") 
