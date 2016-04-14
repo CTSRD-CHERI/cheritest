@@ -1391,6 +1391,7 @@ and not floatfccr \
 and not floatfenr \
 and not floatfexr \
 and not floatindexed \
+and not floatlegacyabs \
 and not floatmadd \
 and not float_mov_signex \
 and not float_mtc_signex \
