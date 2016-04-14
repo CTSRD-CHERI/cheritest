@@ -68,8 +68,8 @@ test:		.ent test
 		#
 		# Store at cap1 in memory.
 		#
-		dli     $t0, 8
-		csc	$c2, $t0, -8($c1)
+		dli     $t0, 32
+		csc	$c2, $t0, -32($c1)
 
 		#
 		# Load back in as general-purpose registers to check values

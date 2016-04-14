@@ -61,7 +61,7 @@ test:		.ent test
 		candperm $c2, $c2, $t0
 
 		#
-		# Make $c1 a data capability starting at 8 bytes before cap1
+		# Make $c1 a data capability starting at 16 bytes before cap1
 		#
 		dla $t0, underflow
 		cincbase $c1, $c0, $t0
@@ -69,7 +69,7 @@ test:		.ent test
 		#
 		# Store at cap1 in memory.
 		#
-		csci	$c2, 8($c1)
+		csci	$c2, 16($c1)
 
 		#
 		# Load back in as general-purpose registers to check values
@@ -99,8 +99,8 @@ test:		.ent test
 		.align	5		# Must 256-bit align capabilities
 		.dword	0x0
 		.dword	0x0
-		.dword	0x0
 underflow:	.dword	0x0123456789abcdef
+		.dword	0x0123456789abcdef
 cap1:		.dword	0x0123456789abcdef	# uperms/reserved
 		.dword	0x0123456789abcdef	# otype/eaddr
 		.dword	0x0123456789abcdef	# base
