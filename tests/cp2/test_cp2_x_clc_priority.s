@@ -78,7 +78,8 @@ test:		.ent test
 		# needed for security; it isn't security-relevant in this case,
 		# but we keep the same priority order for simplicity.
 
-		clci	$c2, 33($c1)
+		dli $t0, 33
+		clcr	$c2, $t0($c1)
 		cgetlen $a0, $c2
 
 		ld	$fp, 16($sp)

@@ -61,8 +61,8 @@ test:		.ent test
 
 		dla     $t0, data
 		cincbase $c1, $c0, $t0
-		dli     $t0, 8
-                csetlen $c1, $c1, $t0
+		dli     $t0, 0x1000
+		csetlen $c1, $c1, $t0
 		# Grant the permissions Permit_Load and Non_Ephemeral.
 		# The permissions granted here must not include Permit_Execute,
 		# as that would make the CSealData fail.
@@ -108,7 +108,7 @@ bev0_handler:
 		.end bev0_handler
 
 		.data
-		.align	3
+		.align	12
 data:		.dword	0x0123456789abcdef
 		.dword  0x0123456789abcdef
 

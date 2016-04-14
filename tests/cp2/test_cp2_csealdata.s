@@ -35,8 +35,8 @@
 # Test cseal on a data capability
 #
 
-.set BASE_ADDRESS, 0x9800001234567800
-.set LENGTH, 1024
+.set BASE_ADDRESS, 0x9800001234567000
+.set LENGTH, 0x1000
 
 		.global test
 test:		.ent test
@@ -45,7 +45,7 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-                # Make $c1 a template capability for the user-defined type
+		# Make $c1 a template capability for the user-defined type
 		# 0x1234.
 		dli	$t0, 0x1234
 		csetoffset $c1, $c0, $t0

@@ -81,7 +81,7 @@ test:		.ent test
 
 		dla	$t0, data
 		csetoffset $c2, $c0, $t0
-		dli	$t0, 8
+		dli	$t0, 0x1000
 		csetbounds	$c2, $c2, $t0
 		dli	$t0, 3
 		candperm $c2, $c2, $t0
@@ -136,5 +136,5 @@ bev0_handler:
 
 
 		.data
-		.align 5
+		.align 12
 data:		.dword 0

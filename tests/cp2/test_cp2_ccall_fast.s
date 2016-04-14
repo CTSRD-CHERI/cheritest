@@ -75,7 +75,7 @@ L1:
 
                 dla         $t0, data
                 cincoffset  $c3, $c0, $t0
-                dli         $t0, 16
+                dli         $t0, 0x1000
                 csetbounds  $c3, $c3, $t0
                 # Permissions Non_Ephemeral, Permit_Load, Permit_Store,
                 # Permit_Store.
@@ -186,10 +186,12 @@ invoke:         .ent invoke
                 dli         $t0, 0x4321
                 csetoffset  $c4, $c0, $t0
 
+                # prepare code capability
                 cgetpcc     $c23
                 csetoffset  $c23, $c23, $ra
                 cseal       $c23, $c23, $c4
 
+                # prepare the data capability, this time just use default which is aligned.
                 cgetdefault $c24
                 dli         $t0, -3      # clear perm execute
                 candperm    $c24, $c24, $t0
@@ -339,6 +341,6 @@ uninvoke:       .ent uninvoke
                 .end uninvoke
 
                 .data
-                .align  3
+                .align  12
 data:           .dword  0x0102030405060708
                 .dword  0xffffffffffffffff

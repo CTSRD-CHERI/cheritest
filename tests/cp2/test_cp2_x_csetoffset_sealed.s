@@ -61,8 +61,8 @@ test:		.ent test
 		cgetdefault $c1
 		dla     $t0, data
 		csetoffset $c1, $c1, $t0
-		dli     $t0, 8
-                csetbounds $c1, $c1, $t0
+		dli     $t0, 0x1000
+		csetbounds $c1, $c1, $t0
 		dli     $t0, 0x7
 		candperm $c1, $c1, $t0
 
@@ -104,7 +104,7 @@ cap1:		.dword	0x0123456789abcdef	# uperms/reserved
 		.dword	0x0123456789abcdef	# base
 		.dword	0x0123456789abcdef	# length
 
-		.align	3
+		.align	12
 data:		.dword	0x0123456789abcdef
 		.dword  0x0123456789abcdef
 

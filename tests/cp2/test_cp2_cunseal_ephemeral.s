@@ -56,7 +56,7 @@ test:		.ent test
 		cgetdefault $c2
 		dla      $t0, data
 		csetoffset $c2, $c2, $t0
-		dli	 $t0, 8
+		dli	 $t0, 0x1000
 		csetbounds $c2, $c2, $t0
 		dli	 $t0, 0x0d # Permit_Store, Permit_Load and Global
 		candperm $c2, $c2, $t0
@@ -85,7 +85,7 @@ test:		.ent test
 		.end	test
 
                 .data
-                .align  3
+                .align  12
 data:           .dword  0x0123456789abcdef
                 .dword  0x0123456789abcdef
 

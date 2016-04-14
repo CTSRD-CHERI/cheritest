@@ -115,10 +115,10 @@ L1:
 		# Make $c3 a data capability for the array at address data
 		#
 
-		dla      $t0, data
-		cincbase $c3, $c0, $t0
-		dli      $t0, 8
-		csetlen  $c3, $c3, $t0
+		dla        $t0, data
+		cincoffset $c3, $c0, $t0
+		dli        $t0, 0x1000
+		csetbounds $c3, $c3, $t0
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
 		# Permit_Store.
 		# NB: Permit_Execute must not be included in the set of
@@ -421,5 +421,5 @@ trusted_system_stack:
 		.dword 0
 		.dword 0
 
-		.align 3
+		.align 12
 data:		.dword	0xfedcba9876543210

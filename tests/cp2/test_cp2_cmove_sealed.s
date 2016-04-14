@@ -47,10 +47,10 @@ test:		.ent test
 
 		# Put a non-zero value in c1.base, so we can tell when
 		# c2 has been changed.
-		dli		$t0, 0x100
+		dli		$t0, 0x1000
 		cincoffset	$c1, $c0, $t0
 
-		dli		$t0, 8
+		dli		$t0, 0x1000
 		csetbounds		$c1, $c1, $t0
 
 		# Need to remove execute permission before we seal it
