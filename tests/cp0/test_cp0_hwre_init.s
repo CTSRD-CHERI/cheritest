@@ -1,10 +1,10 @@
 #-
-# Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2016 Michael Roe
 # All rights reserved.
 #
-# This software was developed by SRI International and the University of
-# Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-10-C-0237
-# ("CTSRD"), as part of the DARPA CRASH research programme.
+# This software was developed by the University of Cambridge Computer
+# Laboratory as part of the Rigorous Engineering of Mainstream Systems (REMS)
+# project, funded by EPSRC grant EP/K008528/1.
 #
 # @BERI_LICENSE_HEADER_START@
 #
@@ -31,9 +31,10 @@
 .set noat
 
 #
-# This test checks the initialisation-time defaults for selected CP0
-# registers by copying them into general-purpose registers that predicates can
-# check directly.
+# Test the initial state of HWREna.
+# This is a separate test because MIPS III/R4000 did not include HWREna,
+# and attempts to read it may cause an exception on some MIPS III-compatible
+# implementations.
 #
 
 		.global test
@@ -43,33 +44,7 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
-		# Context Register
-		dmfc0	$a0, $4
-
-		# Wired Register
-		dmfc0	$a1, $6
-
-		# Count Register
-		dmfc0	$a2, $9
-
-		# Compare Register
-		dmfc0	$a3, $11
-
-		# Status Register
-		dmfc0	$a4, $12
-
-		# Processor Revision Identifier (PRId)
-		dmfc0	$a5, $15
-
-		# Config Register
-		dmfc0	$a6, $16, 0
-
-		# Config1 Register
-		dmfc0	$a7, $16, 1
-
-		# XContext Register
-		dmfc0	$s0, $20
-
+		dmfc0	$a0, $7		# HWREna
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -349,8 +349,3 @@ class test_cp0_reg_init(BaseBERITestCase):
     ## XXX:
     def test_xcontext_reg(self):
         self.assertRegisterEqual(self.MIPS.s0, 0, "Unexpected CP0 xcontext register value on reset")
-
-    # Hardware enable register to go with rdhwr instruction
-    @attr('rdhwr') # required?
-    def test_hwrena_reg(self):
-        self.assertRegisterEqual(self.MIPS.s1, 0, "Unexpected CP0 HWRena register value on reset")
