@@ -62,12 +62,12 @@ test:		.ent test
 
 		cseal		$c1, $c1, $c3
 
-		# Move should copy c1 (base=0x100) into c2.
+		# Move should copy c1 (base=0x1000) into c2.
 		cmove		$c2, $c1
 
 		cgetsealed 	$a0, $c2 	# Should be 1
-		cgetbase 	$a1, $c2     	# Should be 0x100
-		cgetlen		$a2, $c2	# Should be 8
+		cgetbase 	$a1, $c2     	# Should be 0x1000
+		cgetlen		$a2, $c2	# Should be 0x1000
 		cgettype	$a3, $c2	# Should be 0x1234
 
 		ld	$fp, 16($sp)
