@@ -71,6 +71,7 @@ class test_cp0_reg_init(BaseBERITestCase):
 
     @attr('float')
     @attr('float64')
+    @attr('float64initial')
     def test_status_fr_float64(self):
         '''Test that CP0.Status.FR says there are 32 floating point registers'''
         self.assertRegisterMaskEqual(self.MIPS.a4, 0x1 << 26, 1 << 26, "CP0.Status.FR was not set")

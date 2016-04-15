@@ -1386,6 +1386,7 @@ and not dmaclang \
 and not dumpicache \
 and not einstr \
 and not extendedtlb \
+and not float64initial \
 and not floatcmove \
 and not floatfccr \
 and not floatfenr \
