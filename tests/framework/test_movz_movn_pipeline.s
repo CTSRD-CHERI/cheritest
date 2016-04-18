@@ -77,7 +77,7 @@ movn_true:
 		movn	$v1, $a0,$v1
 		sw	$v1, 0($sp)
 		lw	$s3, 0($sp)
-end:
+
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
