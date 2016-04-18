@@ -1387,31 +1387,38 @@ and not dumpicache \
 and not einstr \
 and not extendedtlb \
 and not float64initial \
-and not floatcmove \
 and not floatfccr \
 and not floatfenr \
 and not floatfexr \
-and not floatindexed \
 and not floatfirextended \
+and not floatindexed \
 and not floatlegacyabs \
-and not floatmadd \
 and not float_mov_signex \
 and not float_mtc_signex \
 and not floatpaired \
-and not floatrecip \
-and not floatrsqrt \
+and not floatrecipflushesdenorm \
 and not ignorebadex \
 and not largepage \
 and not lladdr \
 and not llscspan \
 and not loadcachetag \
-and not madd \
-and not movz \
 and not mt \
 and not nofloat \
 and not pic \
-and not rdhwr \
 and not watch
+
+ifdef TEST_QEMU_R4000
+QEMU_NOSEPRED+=\
+and not floatcmove \
+and not floatmadd \
+and not floatrecip \
+and not floatrsqrt \
+and not madd \
+and not movz \
+and not rdhwr
+else
+QEMU_NOSEPRED+=and not nomthc1 and not nowatch
+endif
 
 ifneq ($(CLANG),1)
 QEMU_NOSEPRED+=and not clang
