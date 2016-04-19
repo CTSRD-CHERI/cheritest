@@ -1,6 +1,5 @@
 #-
 # Copyright (c) 2014 Michael Roe
-# Copyright (c) 2016 Robert Norton
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -44,10 +43,8 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dli	$a0, -1
-# use a non-zero offset to make sure we don't get zero by accident
-		li      $t0, 42
-		csetoffset $c1, $c0, $t0
-		ccleartag $c1, $c1
+		dla	$t0, cap
+		clcr	$c1, $t0($c0)
 		ctoptr	$a0, $c1, $c0
 
 		ld	$fp, 16($sp)
@@ -56,3 +53,10 @@ test:		.ent test
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
+
+		.data
+		.align 5
+cap:		.dword 0x123456789abcdef0
+		.dword 0x123456789abcdef0
+		.dword 0x4
+		.dword 0x123456789abcdef0
