@@ -1391,7 +1391,6 @@ and not floatfccr \
 and not floatfenr \
 and not floatfexr \
 and not floatfirextended \
-and not floatindexed \
 and not floatlegacyabs \
 and not float_mov_signex \
 and not float_mtc_signex \
@@ -1410,6 +1409,7 @@ and not watch
 ifdef TEST_QEMU_R4000
 QEMU_NOSEPRED+=\
 and not floatcmove \
+and not floatindexed \
 and not floatmadd \
 and not floatrecip \
 and not floatrsqrt \
@@ -2023,7 +2023,7 @@ $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles
 
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf
 	mkdir -p $(QEMU_LOGDIR)
-	qemu-system-cheri -D $@ -d instr -M mipssim -cpu R4000 \
+	qemu-system-cheri -D $@ -d instr -M mipssim -cpu 5Kf \
 	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bp 0x`mips64-objdump -d $(OBJDIR)/$*.elf | awk -f end.awk` || true
 
 # Simulate a failure on all unit tests
