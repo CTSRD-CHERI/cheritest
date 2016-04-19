@@ -60,6 +60,7 @@ CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+[su]:([01]) perms:(0x'
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
 SAIL_CAP_PCC_RE = re.compile('DEBUG CAP PCC\s+0b([01u]{257})')
 SAIL_CAP_REG_RE = re.compile('DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{257})')
+SAIL_CAP_REG_NULL_RE = re.compile('DEBUG CAP REG\s+([0-9]+)\s+0b0\.\.\.0')
 class MipsException(Exception):
     pass
 
@@ -112,7 +113,10 @@ class ThreadStatus(object):
         '''Return a register value by name'''
         if key.startswith("c"):
             regnum = int(key[1:])
-            return self.cp2[regnum]
+            val = self.cp2[regnum]
+            if val is None:
+                raise MipsException("Attempted to read register not present or undef in log file: ", key)
+            return val
         else:
             reg_num = MIPS_REG_NAME2NUM.get(key, None)
             if reg_num is None:
@@ -170,6 +174,7 @@ class MipsStatus(object):
             cap_pc_groups = CAPMIPS_PC_RE.search(line)
             sail_cap_pcc_groups=SAIL_CAP_PCC_RE.search(line)
             sail_cap_reg_groups=SAIL_CAP_REG_RE.search(line)
+            sail_cap_reg_null_groups=SAIL_CAP_REG_NULL_RE.search(line)
             if (thread_groups):
                 thread = int(thread_groups.group(1))
             # We use 'thread' for both thread id and core id.
@@ -209,6 +214,11 @@ class MipsStatus(object):
                 cap_string = sail_cap_reg_groups.group(2)
                 t = self.threads[thread]
                 t.cp2[cap_reg_num] = capabilityFromBinaryString(cap_string)
+            if (sail_cap_reg_null_groups):
+                # special case for null cap due to fact that sail abreviates printed cap with '...'. Arg.
+                cap_reg_num = int(sail_cap_reg_null_groups.group(1))
+                t = self.threads[thread]
+                t.cp2[cap_reg_num] = Capability(0,0,0,0,0,0)
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''
