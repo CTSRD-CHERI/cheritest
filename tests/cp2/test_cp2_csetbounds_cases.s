@@ -160,6 +160,9 @@ error:
 		li $a0, 1			# branch-delay slot
 
 		.data
-		.align 3
+		.align 5
 data:
+		.dword 0
+		.dword 0
+		.dword 0
 		.dword 0
