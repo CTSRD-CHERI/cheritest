@@ -70,13 +70,19 @@ start:
 
                 # Thread 0 Code
         
-		# Install default exception handlers
+		#
+		# Install BEV0 exception handlers
+		#
+
 		dla	$a0, exception_count_handler
 		jal 	bev0_handler_install
 		nop
 
-		dla	$a0, exception_count_handler
-		jal	bev1_handler_install
+		#
+		# Enable the BEV0 handlers
+		#
+
+		jal	bev_clear
 		nop
 
 zero_bss:
