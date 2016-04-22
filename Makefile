@@ -1362,6 +1362,11 @@ and not clang  \
 and not pic \
 and not mt \
 and not comparereg
+ifeq ($(CAP_PRECISE),1)
+SAIL_NOSEPRED+=and not cap_imprecise
+else
+SAIL_NOSEPRED+=and not cap_precise
+endif
 
 SAIL_MIPS_NOSEFLAGS=-A "$(SAIL_NOSEPRED) and not capabilities"
 SAIL_CHERI_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
