@@ -1379,6 +1379,7 @@ and not beri1tlb \
 and not beri2cache \
 and not beri2tlb \
 and not bev1ram \
+and not countrate \
 and not gxemultlb \
 and not ccall_hw_2 \
 and not cgetpccsetoffset \

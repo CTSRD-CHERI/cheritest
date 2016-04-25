@@ -42,6 +42,7 @@ class test_cp0_reg_init(BaseBERITestCase):
     ## Hard to know what the count register should be, but we might reasonably
     ## guess that it's in the below range.  This might require tuning, but
     ## will hopefully detect problems such as "very large number".
+    @attr('countrate')
     def test_count_reg(self):
         '''Test count register on reset'''
         self.assertRegisterInRange(self.MIPS.a2, 100, 80000, "Unexpected CP0 count cycle register value on reset")
