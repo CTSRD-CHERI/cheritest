@@ -33,6 +33,11 @@
 #
 # Test the FEXR control register
 #
+# FIXME: This test is probably wrong. If the FPU supports floating point
+# exceptions, setting a cause bit in FCSR/FEXR might trigger the exception.
+# This test will appear to work on BERI because BERI's FPU does not support
+# exceptions.
+#
 
 		.text
 		.global start
