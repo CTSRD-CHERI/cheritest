@@ -1394,8 +1394,6 @@ and not dumpicache \
 and not einstr \
 and not extendedtlb \
 and not float64initial \
-and not floatfccr \
-and not floatfenr \
 and not floatfexr \
 and not floatfirextended \
 and not floatlegacyabs \
@@ -1416,6 +1414,8 @@ and not watch
 ifdef TEST_QEMU_R4000
 QEMU_NOSEPRED+=\
 and not floatcmove \
+and not floatfccr \
+and not floatfenr \
 and not floatindexed \
 and not floatmadd \
 and not floatrecip \
