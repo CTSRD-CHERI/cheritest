@@ -50,7 +50,7 @@ test:		.ent test
 		# Get the pcc, setting the offset to a value.
 		dli $v0, 0x1234
 		#cgetpccsetoffset  $c1, $v0
-		.word	0x48020807
+		.word	0x480111FF
 
 		cgetperm   $a0, $c1
 		cgettype   $a1, $c1
