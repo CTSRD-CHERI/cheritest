@@ -27,7 +27,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
@@ -56,8 +55,6 @@ start:
 		candperm  $c1, $c2, $a3
 		csetoffset $c1, $c2, $a3
 		cincoffset $c1, $c2, $a3
-		cincbase  $c1, $c2, $a3
-		csetlen   $c1, $c2, $a3
 		csetbounds $c1, $c2, $a3
                 ccleartag $c1, $c2
 		cmove     $c1,  $c2
@@ -67,6 +64,7 @@ start:
 		#
 
 		cgetpcc   $c2
+		cgetpccsetoffset $c2, $a3
 		cgetcause $a1
 		csetcause $a1
 		cgetdefault $c1
@@ -84,8 +82,8 @@ start:
 		clc       $c1, $a3, 0($c2)
 
 		# negative immmediate offset
-		csc       $c1, $a3, -1($c2)
-		clc       $c1, $a3, -1($c2)
+		csc       $c1, $a3, -32($c2)
+		clc       $c1, $a3, -32($c2)
 
                 # store/load capability, register offset
                 dla       $a3, cap1
@@ -104,9 +102,9 @@ start:
 
 		# negative immediate offset
 		clb       $a1, $a3, -1($c2)
-		clh       $a1, $a3, -1($c2)
-		clw       $a1, $a3, -1($c2)
-		cld       $a1, $a3, -1($c2)
+		clh       $a1, $a3, -2($c2)
+		clw       $a1, $a3, -4($c2)
+		cld       $a1, $a3, -8($c2)
 
                 # load via capability, sign extend, register offset
                 clbr      $a1, $a3($c2)
@@ -143,9 +141,9 @@ start:
 
 		# negative immediate offset
 		csb       $a1, $a3, -1($c2)
-		csh       $a1, $a3, -1($c2)
-		csw       $a1, $a3, -1($c2)
-		csd       $a1, $a3, -1($c2)
+		csh       $a1, $a3, -2($c2)
+		csw       $a1, $a3, -4($c2)
+		csd       $a1, $a3, -8($c2)
 
                 # store via capability, register offset
                 csbr      $a1, $a3($c2)
