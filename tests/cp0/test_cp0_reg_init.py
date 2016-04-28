@@ -77,11 +77,10 @@ class test_cp0_reg_init(BaseBERITestCase):
         '''Test that CP0.Status.FR says there are 32 floating point registers'''
         self.assertRegisterMaskEqual(self.MIPS.a4, 0x1 << 26, 1 << 26, "CP0.Status.FR was not set")
 
-    ## We should be using boot-time exceptions (BEV)
-    @attr('beri')
+    ## We should not be using boot-time exceptions (BEV)
     def test_status_bev(self):
-        '''Test that CP0.Status.BEV is set after reset'''
-        self.assertRegisterMaskEqual(self.MIPS.a4, 0x1 << 22, 1 << 22, "Unexpected CP0 boot-time exceptions value on reset")
+        '''Test that CP0.Status.BEV is not set'''
+        self.assertRegisterMaskEqual(self.MIPS.a4, 0x1 << 22, 0 << 22, "Unexpected CP0 boot-time exceptions value")
 
 
     ## We should have interrupts enabled for all sources.
