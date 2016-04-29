@@ -41,16 +41,17 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		# Make $c1 differemt from $pcc
+		cgetdefault $c1
 		dli	$t0, 4
-		cincbase $c1, $c1, $t0
-		dli      $t0, 0
-		csetlen  $c1, $c1, $t0
+		csetoffset $c1, $c1, $t0
+		dli      $t0, 8
+		csetbounds $c1, $c1, $t0
+		dli	$t0, 4	# Permit_Load
 		candperm $c1, $c1, $t0
 		
 		# Get the pcc, setting the offset to a value.
 		dli $v0, 0x1234
-		#cgetpccsetoffset  $c1, $v0
-		.word	0x480111FF
+		cgetpccsetoffset  $c1, $v0
 
 		cgetperm   $a0, $c1
 		cgettype   $a1, $c1
