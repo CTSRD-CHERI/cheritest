@@ -61,10 +61,11 @@ test:		.ent test
 		# Make $c1 a data capability for the array 'data'
 		#
 
+		cgetdefault $c1
 		dla     $t1, data
-		cincbase $c1, $c0, $t1
+		csetoffset $c1, $c1, $t1
 		dli     $t0, 96
-		csetlen $c1, $c1, $t0
+		csetbounds $c1, $c1, $t0
 		dli     $t0, 0x7f
 		candperm $c1, $c1, $t0
 
