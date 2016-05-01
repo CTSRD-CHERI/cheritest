@@ -80,10 +80,11 @@ test:		.ent test
 		# Make $c2 a sealed data capability for 'data'
 		#
 
+		cgetdefault $c2
 		dla	$t0, data
-		cincbase $c2, $c0, $t0
+		csetoffset $c2, $c2, $t0
 		dli	$t0, 0x1000
-		csetlen	$c2, $c2, $t0
+		csetbounds $c2, $c2, $t0
 		dli	$t0, 3
 		candperm $c2, $c2, $t0
 		cseal	$c2, $c2, $c1
