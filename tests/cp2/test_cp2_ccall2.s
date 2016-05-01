@@ -74,10 +74,11 @@ test:		.ent test
 		# Create a capability for the trusted system stack
 		#
 
+		cgetdefault $c1
 		dla     $t0, trusted_system_stack
-		cincbase $c1, $c0, $t0
+		csetoffset $c1, $c1, $t0
 		dli     $t0, 96
-		csetlen $c1, $c1, $t0
+		csetbounds $c1, $c1, $t0
 		dla     $t0, tsscap
 		cscr    $c1, $t0($c0)
 
