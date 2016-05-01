@@ -57,19 +57,19 @@ test:		.ent test
 
 		#
 		# Set up $c1 to point at data.
-		#
-		dla	$t0, data
-		cincbase	$c1, $c1, $t0
-
-		#
 		# We want $c1.length to be 8.
 		#
+
+		cgetdefault $c1
+		dla	$t0, data
+		csetoffset $c1, $c1, $t0
 		dli	$t1, 8
-		csetlen	$c1, $c1, $t1
+		csetbounds $c1, $c1, $t1
 
 		#
 		# Install new $c0
 		#
+
 		csetdefault $c1
 
 		dli	$t0, 0
@@ -81,6 +81,7 @@ test:		.ent test
 		#
 		# Restore privileged c0 for test termination.
 		#
+
 		csetdefault $c30
 
 		ld	$fp, 16($sp)
