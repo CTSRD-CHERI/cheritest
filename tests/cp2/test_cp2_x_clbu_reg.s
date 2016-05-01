@@ -70,16 +70,23 @@ test:		.ent test
 		dli	$a2, 0
 
 		#
-		# Make $c27 a data capability for the array 'data'
+		# Make $c1 a data capability for the array 'data'
 		#
 
+		cgetdefault $c1
 		dla     $t0, data
-		cincbase $c27, $c0, $t0
+		cincbase $c1, $c1, $t0
 		dli     $t0, 8
-                csetlen $c27, $c27, $t0
+                csetlen $c1, $c1, $t0
 		dli     $t0, 0x7
-		candperm $c27, $c27, $t0
+		candperm $c1, $c1, $t0
 		
+		#
+		# Move $c1 into KR1C
+		#
+
+		cmove $c27, $c1
+
 		# Run sandbox with restricted permissions
 		dli     $t0, 0x1ff
 		candperm $c2, $c0, $t0
