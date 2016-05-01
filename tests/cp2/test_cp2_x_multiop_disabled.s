@@ -111,6 +111,7 @@ test:		.ent test
 		cgetlen	$t0, $c1
 		cgetoffset $t0, $c1
 		cgetpcc $c2
+		cgetpccsetoffset $c2, $zero
 		cgetperm $t0, $c1
 		cgetsealed $t0, $c1
 		cgettag $t0, $c1
