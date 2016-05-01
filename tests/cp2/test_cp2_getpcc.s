@@ -40,10 +40,12 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		# Make $c1 differemt from $pcc
+		cgetdefault $c1
 		dli	$t0, 4
 		cincbase $c1, $c1, $t0
-		dli      $t0, 0
-		csetlen  $c1, $c1, $t0
+		dli     $t0, 8
+		csetbounds  $c1, $c1, $t0
+		dli	$t0, 4
 		candperm $c1, $c1, $t0
 		
 		cgetpcc  $c1
