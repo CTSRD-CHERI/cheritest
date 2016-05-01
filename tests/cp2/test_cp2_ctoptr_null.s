@@ -43,8 +43,12 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 
+		cgetdefault $c1
 		dli	$t0, 4
-		cincbase $c1, $c0, $t0
+		csetoffset $c1, $c1, $t0
+		dli	$t0, 4
+		csetbounds $c1, $c1, $t0
+
 		cfromptr $c2, $c0, $zero
 		dli	$a0, 1
 		ctoptr	$a0, $c2, $c1
