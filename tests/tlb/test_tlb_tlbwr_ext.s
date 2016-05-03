@@ -162,7 +162,7 @@ loop:
 		tlbwr
 
 		#
-		# Find out where page 129 was evicted to
+		# Find out where page 257 was evicted to
 		#
 
 		dmtc0	$t2, $10
@@ -188,10 +188,10 @@ thrash_loop:
 		tlbwi
 		
 		#
-		# Write back page 129
+		# Write back page 257
 		#
 
-		dli	$t2, 0x102000
+		dli	$t2, 0x202000
 		dmtc0	$t2, $10	# TLB EntryHi
 		tlbwr
 
@@ -221,7 +221,7 @@ thrash_loop:
 		tlbwr
 
 		#
-		# Find out where page 129 went
+		# Find out where page 257 went
 		#
 
 		dmtc0	$t2, $10
