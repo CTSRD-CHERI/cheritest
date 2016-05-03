@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2014 Michael Roe
+# Copyright (c) 2014, 2016 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -31,10 +31,9 @@
 .set noat
 
 #
-# Test abs.s of a "Quiet Not a Number" (QNaN)
+# Test abs.s of a "Quiet Not a Number" (QNaN), with the FPU in IEEE 754-2008
+# mode.
 #
-# In the MIPS spec, abs is what the IEEE floating point standard calls
-# 'arithmetic'.
 #
 		.text
 		.global start
@@ -52,8 +51,7 @@ start:
 
 		cfc1	$t0, $31		# FCSR
 		dli	$t1, 1 << 19		# ABS2008
-		nor	$t1, $t1, $t1
-		and	$t0, $t0, $t1
+		or	$t0, $t0, $t1
 		ctc1	$t0, $31
 
 		nop

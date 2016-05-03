@@ -36,7 +36,7 @@ class test_raw_fpu_abs_qnan(BaseBERITestCase):
 
 #
 # This test for a 'not a number' value really should test that the fraction
-# part is non-zero, as this denotes +/- infinity rather than NaN/
+# part is non-zero, as this denotes +/- infinity rather than NaN.
 #
     def test_raw_fpu_abs_qnan_1(self):
         '''Test single precision abs of QNaN'''
@@ -44,5 +44,10 @@ class test_raw_fpu_abs_qnan(BaseBERITestCase):
 
     @attr('floatlegacyabs')
     def test_raw_fpu_abs_qnan_2(self):
-        '''Test that abs has legacy MIPS behaviour, not IEEE 754-2008'''
+        '''Test that FCSR.ABS2008 is not set'''
         self.assertRegisterEqual(self.MIPS.a1, 0, "FCSR.ABS2008 was set")
+
+    @attr('floatlegacyabs')
+    def test_raw_fpu_abs_qnan_3(self):
+        '''Test that ABS.S has IEEE 754-1985 behaviour'''
+        self.assertRegisterEqual(self.MIPS.a0, 0xff800000, "ABS.S did not copy QNaN (IEEE 754-1985 behaviour")

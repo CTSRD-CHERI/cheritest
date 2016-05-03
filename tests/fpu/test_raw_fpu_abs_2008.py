@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2014 Michael Roe
+# Copyright (c) 2014, 2016 Michael Roe
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -25,62 +25,29 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+#
+# Test abs.s of "Quiet Not a Number" (QNaN)
+#
+
+from beritest_tools import BaseBERITestCase
+from nose.plugins.attrib import attr
+
+class test_raw_fpu_abs_2008(BaseBERITestCase):
 
 #
-# Test abs.s of a "Quiet Not a Number" (QNaN)
+# This test for a 'not a number' value really should test that the fraction
+# part is non-zero, as this denotes +/- infinity rather than NaN.
 #
-# In the MIPS spec, abs is what the IEEE floating point standard calls
-# 'arithmetic'.
-#
-		.text
-		.global start
-		.ent start
-start:     
-		mfc0 $t0, $12
-		li $t1, 1 << 29			# Enable CP1
-		or $t0, $t0, $t1    
-		mtc0 $t0, $12 
+    def test_raw_fpu_abs_2008_1(self):
+        '''Test single precision abs of QNaN'''
+	self.assertRegisterMaskEqual(self.MIPS.a0, 0x7f800000, 0x7f800000, "ABS.S did not return QNaN")
 
-		nop
-		nop
-		nop
-		nop
+    @attr('floatabs2008')
+    def test_raw_fpu_abs_2008_2(self):
+        '''Test that FCSR.ABS2008 is set'''
+        self.assertRegisterEqual(self.MIPS.a1, 1, "FCSR.ABS2008 was not set")
 
-		cfc1	$t0, $31		# FCSR
-		dli	$t1, 1 << 19		# ABS2008
-		nor	$t1, $t1, $t1
-		and	$t0, $t0, $t1
-		ctc1	$t0, $31
-
-		nop
-		nop
-		nop
-		nop
-
-		lui $t0, 0xff90		# QNaN, with the sign bit set
-		mtc1 $t0, $f1
-
-		abs.s $f1, $f1
-		mfc1 $a0, $f1
-
-		cfc1 $a1, $31           # FCSR
-		dsrl $a1, $a1, 19       # ABS2008 bit. 1 if abs behaves as in 
-		andi $a1, 0x01          # IEEE 754-2008, 0 for legacy MIPS.
-
-		# Dump registers on the simulator (gxemul dumps regs on exit)
-
-		mtc0 $at, $26
-		nop
-		nop
-
-		# Terminate the simulator
-		mtc0 $at, $23
-end:
-		b end
-		nop
-
-.end start
+    @attr('floatabs2008')
+    def test_raw_fpu_abs_2008_3(self):
+        '''Test that ABS.S has IEEE 754-2008 behaviour'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x7f900000, "ABS.S did not copy QNaN (IEEE 754-2008 behaviour")
