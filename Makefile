@@ -830,6 +830,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cgetperm_reg.s	\
 		test_cp2_x_cgettype_reg.s	\
 		test_cp2_x_cgetpcc_reg.s	\
+		test_cp2_x_cgetpccsetoffset_reg.s	\
 		test_cp2_x_cgetcause_perm.s	\
 		test_cp2_x_csetcause_perm.s	\
 		test_cp2_x_candperm_tag.s	\
@@ -1488,6 +1489,7 @@ else
 endif
 endif
 NOSEPRED=not false
+NOSEPRED+=and not allow_unaligned
 NOSEPRED+=and not csettype
 NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
@@ -1502,7 +1504,6 @@ NOSEPRED+=and not gxemultlb
 NOSEPRED+=and not beri1tlb
 NOSEPRED+=and not beri1cache
 NOSEPRED+=and not beri1oldcache
-NOSEPRED+=and not allow_unaligned
 else
 NOSEPRED+=and not alignex
 NOSEPRED+=and not noextendedtlb
