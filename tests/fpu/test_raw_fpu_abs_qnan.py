@@ -51,3 +51,8 @@ class test_raw_fpu_abs_qnan(BaseBERITestCase):
     def test_raw_fpu_abs_qnan_3(self):
         '''Test that ABS.S has IEEE 754-1985 behaviour'''
         self.assertRegisterEqual(self.MIPS.a0, 0xff800000, "ABS.S did not copy QNaN (IEEE 754-1985 behaviour")
+
+    @attr('floatlegacyabs')
+    def test_raw_fpu_abs_qnan_4(self):
+        '''Test that ABS.D has IEEE 754-1985 behaviour'''
+        self.assertRegisterEqual(self.MIPS.a2, 0xfff1000000000000, "ABS.D did not copy QNaN (IEEE 754-1985 behaviour")
