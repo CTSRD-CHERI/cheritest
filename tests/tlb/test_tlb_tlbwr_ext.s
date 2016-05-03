@@ -122,7 +122,7 @@ loop:
 		# there are 256 extended TLB entries.
 		#
 
-		dli	$t2, 0x802000
+		dli	$t2, 0x202000
 		nop
 		dmtc0	$t2, $10	# TLB EntryHi
 		tlbwr
