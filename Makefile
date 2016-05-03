@@ -1522,7 +1522,7 @@ endif
 NOSEPRED+=and not syncistep
 endif
 ifdef COP1
-NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd and not float_mtc_signex and not float_mov_signex
+NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd and not float_mtc_signex and not float_mov_signex and not floatabs2008
 ifdef WONTFIX
 NOSEPRED+=and not floatpairedrounding
 endif
