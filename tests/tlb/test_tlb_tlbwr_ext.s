@@ -117,12 +117,12 @@ loop:
 		mfc0	$a4, $0		# TLB Index
 
 		#
-		# Use TLBWR to write page 129. The test assumes that this
+		# Use TLBWR to write page 257. The test assumes that this
 		# will hash to the same TLB entry, which will be true if
-		# there are 128 extended TLB entries.
+		# there are 256 extended TLB entries.
 		#
 
-		dli	$t2, 0x102000
+		dli	$t2, 0x802000
 		nop
 		dmtc0	$t2, $10	# TLB EntryHi
 		tlbwr
