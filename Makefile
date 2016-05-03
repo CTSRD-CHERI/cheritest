@@ -1192,6 +1192,7 @@ and not dumpicache	\
 and not einstr		\
 and not jump_unaligned	\
 and not nofloat         \
+and not floatabs2008	\
 and not floatpaired     \
 and not floatindexed    \
 and not floatcmove      \
