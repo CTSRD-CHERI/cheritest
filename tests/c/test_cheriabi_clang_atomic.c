@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2015 David Chisnall
+ * Copyright (c) 2015 David T. Chisnall
  * Copyright (c) 2015 Jonathan Woodruff
  * All rights reserved.
  *
