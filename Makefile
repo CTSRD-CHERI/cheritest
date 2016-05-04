@@ -1362,7 +1362,9 @@ and not tlb \
 and not clang  \
 and not pic \
 and not mt \
-and not comparereg
+and not comparereg \
+and not einstr
+
 ifeq ($(CAP_PRECISE),1)
 SAIL_NOSEPRED+=and not cap_imprecise
 else
