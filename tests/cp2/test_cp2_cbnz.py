@@ -33,20 +33,24 @@ from nose.plugins.attrib import attr
 #
 
 class test_cp2_cbnz(BaseBERITestCase):
+
+    @attr('newisa')
     @attr('capabilities')
     def test_cp2_cbnz_1(self):
         '''Test that cbnz branches if the cap is not zero'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
             "cbnz did not branch when the cap was not zero")
 
+    @attr('newisa')
     @attr('capabilities')
     def test_cp2_cbnz_2(self):
         '''Test that cbnz does not branch if the cap is not zero'''
         self.assertRegisterEqual(self.MIPS.a1, 1,
             "cbnz branched when cap was not zero")
 
+    @attr('newisa')
     @attr('capabilities')
-    def test_cp2_cbtu_3(self):
+    def test_cp2_cbnz_3(self):
         '''Test that cbnz executes the instruction in the branch delay slot'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "cbnz did not execute instruction in branch delay slot")

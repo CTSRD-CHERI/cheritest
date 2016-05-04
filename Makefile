@@ -1230,7 +1230,8 @@ and not statcounters	\
 "
 
 L3_NOSEPRED=\
-not allow_unaligned \
+not newisa \
+and not allow_unaligned \
 and not beri \
 and not beriinitial \
 and not counterdev \
@@ -1332,7 +1333,8 @@ endif
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 
 SAIL_NOSEPRED=\
-not allow_unaligned \
+not newisa \
+and not allow_unaligned \
 and not beri \
 and not beriinitial \
 and not counterdev \
@@ -1376,7 +1378,8 @@ SAIL_MIPS_NOSEFLAGS=-A "$(SAIL_NOSEPRED) and not capabilities"
 SAIL_CHERI_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 
 QEMU_NOSEPRED=\
-not allow_unaligned \
+not newisa \
+and not allow_unaligned \
 and not beri \
 and not beri1cache \
 and not beri1tlb \
