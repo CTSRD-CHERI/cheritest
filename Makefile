@@ -769,6 +769,7 @@ TEST_CP2_FILES=					\
 		test_cp2_ccall_fast.s		\
 		test_cp2_cbtu.s			\
 		test_cp2_cbts.s			\
+		test_cp2_cbnz.s			\
 		test_cp2_ceq.s			\
 		test_cp2_cne.s			\
 		test_cp2_clt.s			\
@@ -1484,10 +1485,10 @@ SIM:= ${CHERIROOT_ABS}/sim
 DTB_FILE:=$(CHERIROOT_ABS)/sim.dtb
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
-	SIM_TRACE_OPTS?= +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug +StatCounters
+	SIM_TRACE_OPTS?= +regfile +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug +StatCounters
 else
 ifdef TRACE
-	SIM_TRACE_OPTS?=+trace +cTrace +tlbTrace +instructionBasedCycleCounter
+	SIM_TRACE_OPTS?=+regfile +trace +cTrace +tlbTrace +instructionBasedCycleCounter +tlb
 else
 	SIM_TRACE_OPTS?=
 endif
