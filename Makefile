@@ -1366,7 +1366,7 @@ and not comparereg \
 and not einstr
 
 ifeq ($(CAP_PRECISE),1)
-SAIL_NOSEPRED+=and not cap_imprecise
+SAIL_NOSEPRED+=and not cap_imprecise and not ccall_hw_2
 else
 SAIL_NOSEPRED+=and not cap_precise
 endif
