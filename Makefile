@@ -1385,6 +1385,7 @@ and not beri1cache \
 and not beri1tlb \
 and not beri2cache \
 and not beri2tlb \
+and not bericcres \
 and not berisyncistep \
 and not bev1ram \
 and not countrate \
