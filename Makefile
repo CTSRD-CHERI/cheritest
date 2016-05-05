@@ -1234,6 +1234,7 @@ not newisa \
 and not allow_unaligned \
 and not beri \
 and not beriinitial \
+and not berisyncistep \
 and not counterdev \
 and not dma \
 and not dmaclang \
@@ -1246,7 +1247,6 @@ and not llscspan \
 and not llscnoalias \
 and not mtc0signex \
 and not swi \
-and not syncistep \
 and not smalltlb \
 and not beri2tlb \
 and not gxemultlb \
@@ -1337,6 +1337,7 @@ not newisa \
 and not allow_unaligned \
 and not beri \
 and not beriinitial \
+and not berisyncistep \
 and not counterdev \
 and not dma \
 and not dmaclang \
@@ -1349,7 +1350,6 @@ and not llscspan \
 and not llscnoalias \
 and not mtc0signex \
 and not swi \
-and not syncistep \
 and not smalltlb \
 and not beri2tlb \
 and not gxemultlb \
@@ -1385,6 +1385,7 @@ and not beri1cache \
 and not beri1tlb \
 and not beri2cache \
 and not beri2tlb \
+and not berisyncistep \
 and not bev1ram \
 and not countrate \
 and not gxemultlb \
@@ -1530,7 +1531,7 @@ NOSEPRED+=and not beri1cache
 # so isn't expected to work if the cache size changes.
 NOSEPRED+=and not dumpicache
 endif
-NOSEPRED+=and not syncistep
+NOSEPRED+=and not berisyncistep
 endif
 ifdef COP1
 NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd and not float_mtc_signex and not float_mov_signex and not floatabs2008
