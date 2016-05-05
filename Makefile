@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2013-2014 Alan A. Mujumdar
-# Copyright (c) 2015 Alexandre Joannou
+# Copyright (c) 2015-2016 Alexandre Joannou
 # Copyright (c) 2014 SRI International
 # Copyright (c) 2012 Benjamin Thorner
 # Copyright (c) 2013-2015 Colin Rothwell
@@ -117,6 +117,12 @@ ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
 else
 CAP_PRECISE?=0
+endif
+
+ifeq ($(CAP_SIZE),128)
+CLANG_CC?=clang
+else
+CLANG_CC?=clang -mllvm -cheri128
 endif
 
 #
@@ -1817,7 +1823,7 @@ $(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s
 	$(AS) -I $(TESTDIR)/statcounters -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 $(OBJDIR)/test_%.o : test_%.s macros.s
-	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
+	#$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 # Put DMA model makefile into its own file. This one is already ludicrously
@@ -1831,32 +1837,32 @@ include dmamodel.mk
 DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 
 $(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
-	clang -Ifuzz_dma -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections -fno-builtin
+	$(CLANG_CC) -Ifuzz_dma -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections -fno-builtin
 
 # For some reasons, these need to be explicit, not implicit
 $(OBJDIR)/DMAAsm.o: DMAAsm.c
-	clang -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+	$(CLANG_CC) -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
 
 $(OBJDIR)/DMAControl.o: DMAControl.c
-	clang -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+	$(CLANG_CC) -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
 endif
 
 
 # Once the assembler works, we can try this version too:
-#clang  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
+#$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
-	clang -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
+	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
 	
 $(OBJDIR)/test_cheriabi_clang%.o : test_cheriabi_clang%.c
-	clang -c -fno-pic -target cheri-unknown-freebsd -mabi=sandbox -integrated-as -o $@ $<  -O3 -ffunction-sections
+	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -mabi=sandbox -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
 	mips-linux-gnu-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) -o $@ $<
-	#clang  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
+	#$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 
 select_init: select_init.c
 	gcc -o select_init select_init.c
