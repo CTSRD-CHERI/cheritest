@@ -120,9 +120,9 @@ CAP_PRECISE?=0
 endif
 
 ifeq ($(CAP_SIZE),128)
-CLANG_CC?=clang
-else
 CLANG_CC?=clang -mllvm -cheri128
+else
+CLANG_CC?=clang
 endif
 
 #
