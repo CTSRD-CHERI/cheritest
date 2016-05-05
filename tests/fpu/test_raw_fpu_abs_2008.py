@@ -51,3 +51,8 @@ class test_raw_fpu_abs_2008(BaseBERITestCase):
     def test_raw_fpu_abs_2008_3(self):
         '''Test that ABS.S has IEEE 754-2008 behaviour'''
         self.assertRegisterEqual(self.MIPS.a0, 0x7f900000, "ABS.S did not copy QNaN (IEEE 754-2008 behaviour")
+
+    @attr('floatabs2008')
+    def test_raw_fpu_abs_2008_4(self):
+        '''Test that ABS.D has IEEE 754-2008 behaviour'''
+        self.assertRegisterEqual(self.MIPS.a2, 0x7ff1000000000000, "ABS.D did nor copy QNaN (IEEE 754-2008 behaviour")

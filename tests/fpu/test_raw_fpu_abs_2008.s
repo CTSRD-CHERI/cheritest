@@ -40,8 +40,10 @@
 		.ent start
 start:     
 		mfc0 $t0, $12
-		li $t1, 1 << 29			# Enable CP1
+		li $t1, 1 << 29		# Enable CP1
 		or $t0, $t0, $t1    
+		dli $t1, 1 << 26        # Put FPU into 64 bit mode
+		or $t0, $t0, $t1
 		mtc0 $t0, $12 
 
 		nop
@@ -64,6 +66,13 @@ start:
 
 		abs.s $f1, $f1
 		mfc1 $a0, $f1
+
+		lui $t0, 0xfff1         # QNaN, with the sign bit set
+		dsll $t0, $t0, 32
+		dmtc1 $t0, $f2
+
+		abs.d $f2, $f2
+		dmfc1 $a2, $f2
 
 		cfc1 $a1, $31           # FCSR
 		dsrl $a1, $a1, 19       # ABS2008 bit. 1 if abs behaves as in 
