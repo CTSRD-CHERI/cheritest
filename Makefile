@@ -1434,6 +1434,10 @@ else
 QEMU_NOSEPRED+=and not nomthc1 and not nowatch
 endif
 
+ifneq ($(TEST_CP2),1)
+QEMU_NOSEPRED+=and not capabilities and not clang
+endif
+
 ifneq ($(CLANG),1)
 QEMU_NOSEPRED+=and not clang
 endif
