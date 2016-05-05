@@ -1411,6 +1411,7 @@ and not float_mtc_signex \
 and not floatpaired \
 and not floatrecipflushesdenorm \
 and not ignorebadex \
+and not invalidateL2 \
 and not largepage \
 and not lladdr \
 and not llscspan \
