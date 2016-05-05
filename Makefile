@@ -1418,6 +1418,7 @@ and not loadcachetag \
 and not mt \
 and not nofloat \
 and not pic \
+and not swisync \
 and not watch
 
 ifdef TEST_QEMU_R4000
