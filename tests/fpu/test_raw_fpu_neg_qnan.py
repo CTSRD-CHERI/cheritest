@@ -45,7 +45,7 @@ class test_raw_fpu_neg_qnan(BaseBERITestCase):
     @attr('floatlegacyabs')
     def test_raw_fpu_neg_qnan_2(self):
         '''Test that NEG.S of QNaN has IEEE 754-1985 behaviour'''
-	self.assertRegisterMaskEqual(self.MIPS.a0, 0xff800000, 0xff800000, "NEG.S did not return QNaN")
+	self.assertRegisterMaskEqual(self.MIPS.a0, 0xff800000, 0x7f800000, "NEG.S did not return QNaN")
 
     @attr('floatlegacyabs')
     @attr('floatechonan')
