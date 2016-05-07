@@ -51,7 +51,7 @@ class test_raw_fpu_neg_qnan(BaseBERITestCase):
     @attr('floatechonan')
     def test_raw_fpu_neg_qnan_3(self):
         '''Test NEG.S echos a QNaN'''
-        self.assertRegisteEqual(self.MIPS.a0, 0x7f900000, "NEG.S did not echo QNaN")
+        self.assertRegisterEqual(self.MIPS.a0, 0x7f900000, "NEG.S did not echo QNaN")
 
     def test_raw_fpu_neg_qnan_4(self):
         '''Test NEG.D of QNaN'''
