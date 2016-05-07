@@ -147,7 +147,7 @@ test:
 		lwc1	$f0, 0($t1)
 		swc1	$f0, 0($t1)
 		ldc1	$f0, 0($t1)
-		swc1	$f0, 0($t1)
+		sdc1	$f0, 0($t1)
 
 		bc1t	L1
 		nop
