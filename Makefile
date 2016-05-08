@@ -881,6 +881,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cchecktype.s		\
 		test_cp2_x_clc_tlb.s		\
 		test_cp2_x_csc_tlb.s		\
+		test_cp2_x_cllc_tlb.s		\
 		test_cp2_csc_tlb.s		\
 		test_cp2_x_csetoffset_sealed.s	\
 		test_cp2_x_cincoffset_sealed.s	\
