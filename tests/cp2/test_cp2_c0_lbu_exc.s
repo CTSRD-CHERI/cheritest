@@ -46,13 +46,12 @@ test:		.ent test
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#
-		jal	bev_clear
-		nop
+
 		dla	$a0, exception_handler
 		jal	bev0_handler_install
 		nop
-		dla	$a0, exception_handler
-		jal	bev1_handler_install
+
+		jal	bev_clear
 		nop
 
 		#
