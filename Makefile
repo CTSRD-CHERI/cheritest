@@ -862,6 +862,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cjr_reg.s		\
 		test_cp2_x_cjr_tag.s		\
 		test_cp2_x_cjr_sealed.s		\
+		test_cp2_x_cjr_perm.s		\
 		test_cp2_x_cjalr_ephemeral.s	\
 		test_cp2_x_sb_perm.s		\
 		test_cp2_x_lb_perm.s		\
