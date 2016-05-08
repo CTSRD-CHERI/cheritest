@@ -875,6 +875,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cbts_length.s	\
 		test_cp2_x_swc1_perm.s		\
 		test_cp2_x_sdc1_perm.s		\
+		test_cp2_x_lwc1_perm.s		\
 		test_cp2_disabled_exception.s	\
 		test_cp2_x_ccheckperm.s		\
 		test_cp2_x_ccheckperm_2.s	\
