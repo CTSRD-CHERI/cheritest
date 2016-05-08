@@ -33,7 +33,7 @@
 
 #
 # Test that a floating point store raises an exception if C0 does not grant
-# Permit_Load.
+# Permit_Store.
 #
 
 		.global test
