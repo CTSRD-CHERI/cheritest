@@ -102,7 +102,7 @@ test:		.ent test
 
 		mtc1	$zero, $f1
 		dla	$t1, data
-		lwc1    $f1, 0($t1) # This should raise a C2E exception
+		lwxc1   $f1, $zero($t1) # This should raise a C2E exception
 		mfc1	$a0, $f1
 
 		#
