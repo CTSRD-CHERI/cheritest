@@ -878,6 +878,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_lwc1_perm.s		\
 		test_cp2_x_ldc1_perm.s		\
 		test_cp2_x_lwxc1_perm.s		\
+		test_cp2_x_ldxc1_perm.s		\
 		test_cp2_disabled_exception.s	\
 		test_cp2_x_ccheckperm.s		\
 		test_cp2_x_ccheckperm_2.s	\
