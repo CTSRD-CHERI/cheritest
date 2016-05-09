@@ -974,7 +974,8 @@ TEST_TLB_FILES=					\
 		test_tlb_ext_enable.s		\
 		test_tlb_tlbwr.s		\
 		test_tlb_tlbwr_ext.s		\
-		test_tlb_tlbr_ext.s
+		test_tlb_tlbr_ext.s		\
+		test_tlb_x_mask.s
 
 TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
@@ -1269,7 +1270,8 @@ and not watch \
 and not deterministic_random \
 and not noextendedtlb \
 and not csettype \
-and not statcounters
+and not statcounters \
+and not tlbcheck
 
 ifdef COP1
 L3_NOSEPRED+=\
@@ -1432,6 +1434,7 @@ and not mt \
 and not nofloat \
 and not pic \
 and not swisync \
+and not tlbcheck \
 and not watch
 
 ifdef TEST_QEMU_R4000
@@ -1522,6 +1525,7 @@ NOSEPRED+=and not csettype
 NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
 NOSEPRED+=and not errorepc
+NOSEPRED+=and not tlbcheck
 ifeq ($(BERI_VER),2)
 NOSEPRED+=and not invalidateL2only
 NOSEPRED+=and not lladdr
