@@ -975,7 +975,8 @@ TEST_TLB_FILES=					\
 		test_tlb_tlbwr.s		\
 		test_tlb_tlbwr_ext.s		\
 		test_tlb_tlbr_ext.s		\
-		test_tlb_x_mask.s
+		test_tlb_x_mask.s		\
+		test_tlb_initial.s
 
 TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
@@ -1271,7 +1272,8 @@ and not deterministic_random \
 and not noextendedtlb \
 and not csettype \
 and not statcounters \
-and not tlbcheck
+and not tlbcheck \
+and not tlb_read_uninitialized
 
 ifdef COP1
 L3_NOSEPRED+=\
