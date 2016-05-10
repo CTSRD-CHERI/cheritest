@@ -71,6 +71,15 @@ start:
 		csetdefault $c1
 
 		#
+		# Clear registers
+		#
+
+		clearlo 0x1
+		clearhi 0x1
+		cclearlo 0x1
+		cclearhi 0x1
+
+		#
 		# Load/store operations
 		#
 
