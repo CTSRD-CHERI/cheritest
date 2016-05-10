@@ -35,10 +35,6 @@
 # Test cclear regs instruction
 #
 
-.macro cclearregs regset regmask
-                .word (0x12 << 26) | (0xf << 21) | (\regset << 16) | (\regmask)
-.endm   
-
                 .global test
 test:           .ent test
                 daddu   $sp, $sp, -32
@@ -75,7 +71,7 @@ test:           .ent test
                 cmove		$c26, $c0
 
                 # clear gphi16
-                cclearregs 1, 0x5555
+		clearhi		0x5555
 
                 # Write a non-zero value to some of the cleared registers to ensure it
                 # sticks.

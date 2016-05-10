@@ -175,6 +175,13 @@ L2:
 		
 
 		#
+		# Register clear instructions`
+		#
+
+		cclearlo 0x4
+		cclearhi 0x1
+
+		#
 		# Enable CP2
 		#
 
