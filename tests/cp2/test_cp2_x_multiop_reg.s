@@ -111,6 +111,12 @@ sandbox:
 		cldr	$t0, $t1($c29)
 		csdr	$t0, $t1($c29)
 
+		#
+		# Clear $c29 with cclearhi
+		#
+
+		cclearhi 0x2000
+
 		cjr	$c24
 		nop		# Branch delay slot
 
