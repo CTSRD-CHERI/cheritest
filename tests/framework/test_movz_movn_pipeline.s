@@ -34,7 +34,16 @@
 
 		.global test
 test:		.ent test
-movz_strange: # This case was found in freeBSD and failed
+
+		#
+		# This case was found in freeBSD and failed
+		#
+movz_strange: 
+
+		sd	$zero, 128($sp)
+		# Writeback invalidate so we'll (probably) take a cache miss later
+		cache	0x15, 128($sp)
+
 		li	$s8, 5
 		li	$a1, 5
 		li	$a0, 4
