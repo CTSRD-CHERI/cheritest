@@ -107,6 +107,10 @@ all_threads:
 		# Enable CP1 and CP2
                 dli	$t1, 3 << 29
                 or      $at, $at, $t1 
+		# Clear ERL
+		dli	$t1, 0x4
+		nor	$t1, $t1, $t1
+		and	$at, $at, $t1
 	        # Clear pending timer interrupts before we enable them
 	        mtc0    $zero, $11
 	        mtc0    $at, $12
