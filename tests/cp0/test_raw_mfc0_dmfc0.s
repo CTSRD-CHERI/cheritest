@@ -33,8 +33,8 @@
 		.global start
 start:
 		# Test here
-		li	$a3, 0xdead				# Clear register
-    li	$a4, 0xdead				# Clear register
+		li	$a3, 0xdead		# Clear register
+		li	$a4, 0xdead		# Clear register
     
 		dla	$a0, epc_target
 		dmtc0	$a0, $14
