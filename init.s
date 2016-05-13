@@ -97,14 +97,16 @@ zero_bss:
 2:
 
 all_threads:
-	        # Switch to 64-bit mode (no effect on cheri, but required for gxemul)
 	        mfc0    $at, $12
+	        # Enable 64-bit mode (KX, SX)
+		# (no effect on cheri, but required for gxemul)
 	        or      $at, $at, 0xe0
-	        # Also enable timer interrupts
+	        # Enable timer interrupts (IM7, IE)
 	        or      $at, $at, (1 << 15)
 	        or      $at, $at, 1
+		# Enable CP1 and CP2
                 dli	$t1, 3 << 29
-                or      $at, $at, $t1 	# Enable CP1 and CP2
+                or      $at, $at, $t1 
 	        # Clear pending timer interrupts before we enable them
 	        mtc0    $zero, $11
 	        mtc0    $at, $12
