@@ -30,58 +30,47 @@
 
 # The extension for unaligned loads/stores is not supported
 
+make obj/test_ld_unalign_ok.mem
 cp /dev/null qemu_log/test_ld_unalign_ok.log
 
 # Software interrupts are asynchronous
 
+make obj/test_memory_flush.mem
 cp /dev/null qemu_log/test_memory_flush.log
 
 # CP0
 
 # Count register advances at an unexpected rate
 
+make obj/test_cp0_compare.mem
 cp /dev/null qemu_log/test_cp0_compare.log
+make obj/test_cp0_wait.mem
 cp /dev/null qemu_log/test_cp0_wait.log
 
 # BEV1 handler is in ROM
 
+make obj/test_code_rom_relocation.mem
 cp /dev/null qemu_log/test_code_rom_relocation.log
+make obj/test_exception_bev0_trap.mem
 cp /dev/null qemu_log/test_exception_bev0_trap.log
+make obj/test_exception_bev1_trap.mem
 cp /dev/null qemu_log/test_exception_bev1_trap.log
 
 # CP1 (Floating point)
 
 # Problem with FEXR not yet understood
 
+make obj/test_raw_fpu_fexr.mem
 cp /dev/null qemu_log/test_raw_fpu_fexr.log 
-
-# Paired single not supported
-
-cp /dev/null qemu_log/test_raw_fpu_abs_ps.log
-cp /dev/null qemu_log/test_raw_fpu_add_ps.log
-cp /dev/null qemu_log/test_raw_fpu_ceq_ps.log
-cp /dev/null qemu_log/test_raw_fpu_cf_ps.log
-cp /dev/null qemu_log/test_raw_fpu_cole_ps.log
-cp /dev/null qemu_log/test_raw_fpu_colt_ps.log
-cp /dev/null qemu_log/test_raw_fpu_cueq_ps.log
-cp /dev/null qemu_log/test_raw_fpu_cule_ps.log
-cp /dev/null qemu_log/test_raw_fpu_cult_ps.log
-cp /dev/null qemu_log/test_raw_fpu_cun_ps.log
-cp /dev/null qemu_log/test_raw_fpu_cvt_paired.log
-cp /dev/null qemu_log/test_raw_fpu_movcc_ps.log
-cp /dev/null qemu_log/test_raw_fpu_movc_ps.log
-cp /dev/null qemu_log/test_raw_fpu_mov_ps.log
-cp /dev/null qemu_log/test_raw_fpu_mul_ps.log
-cp /dev/null qemu_log/test_raw_fpu_neg_ps.log
-cp /dev/null qemu_log/test_raw_fpu_pair.log
-cp /dev/null qemu_log/test_raw_fpu_sub_ps.log
 
 # CP2 (Capabilities)
 
-# CGetType/CSetType (obsolete instructions) not supported
-
-cp /dev/null qemu_log/test_cp2_getsettype.log
-
 # Fast CCall not supported
 
+make obj/test_cp2_ccall_fast.mem
 cp /dev/null qemu_log/test_cp2_ccall_fast.log
+
+# Clang tests
+
+touch obj/test_clang_load_double.log
+cp /dev/null qemu_log/test_clang_load_double.log
