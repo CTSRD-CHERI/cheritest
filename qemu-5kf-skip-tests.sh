@@ -58,9 +58,9 @@ cp /dev/null qemu_log/test_exception_bev1_trap.log
 
 # CP1 (Floating point)
 
-# Problem with FEXR not yet understood
+# FEXR test needs fixing
 
-make obj/test_raw_fpu_fexr.mem
+COP1=1 make obj/test_raw_fpu_fexr.mem
 cp /dev/null qemu_log/test_raw_fpu_fexr.log 
 
 # CP2 (Capabilities)
