@@ -659,7 +659,8 @@ TEST_CP0_FILES=					\
 		test_cp0_ccres.s		\
 		test_cp0_wait.s			\
 		test_cp0_mtc0_user.s		\
-		test_cp0_hwre_init.s
+		test_cp0_hwre_init.s		\
+		test_cp0_multiop_user.s
 
 TEST_FPU_FILES=					\
 		test_fpu_exception_pipeline.s	\
