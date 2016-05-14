@@ -30,7 +30,9 @@
 .set nobopt
 .set noat
 
-# Tests to exercise the comparison (less than) ALU instructions.
+#
+# Tests to exercise the comparison (unordered) ALU instructions.
+#
 
 		.text
 		.global start
@@ -47,7 +49,7 @@ start:
 		nop
 		nop
 		nop    
-    
+
 		# Clear FCSR
 
 		mtc1 $0, $f31
@@ -63,43 +65,47 @@ start:
 		dmtc1 $t0, $f13
 		ori $t1, $0, 0x3F80
 		dsll $t1, $t1, 16
-		or $t0, $t0, $t1    # 2.0, 1.0
+		or $t0, $t0, $t1
 		dmtc1 $t0, $f23
 		lui $t0, 0x3FF0
 		dsll $t0, $t0, 32
 		dmtc1 $t0, $f14
 		ori $t1, $0, 0x4000
 		dsll $t1, $t1, 16
-		or $t0, $t0, $t1    # 1.0, 2.0
+		or $t0, $t0, $t1
 		dmtc1 $t0, $f24
 
 		# Individual tests
 		
-		# C.OLT.S (True)
-		c.olt.s $f4, $f3
+		# C.UN.S (True)
+		lui $t0, 0x7F81     # QNaN
+		mtc1 $t0, $f5
+		c.un.S $f3, $f5
 		cfc1 $s0, $f25
 		
-		# C.OLT.D (True)
-		c.olt.d $f14, $f13
+		# C.UN.D (True)
+		lui $t0, 0x7FF1
+		dsll $t0, $t0, 32   # QNaN
+		dmtc1 $t0, $f15
+		c.un.D $f15, $f15
 		cfc1 $s1, $f25
 		
-		# C.OLT.S (False)
-		c.olt.s $f3, $f3
+		# C.UN.PS (True)
+		c.un.PS $f5, $f5
+		cfc1 $s2, $f25
+		
+		# C.UN.S (False)
+		c.un.s $f3, $f3
 		cfc1 $s3, $f25
 		
-		# C.OLT.D
-		c.olt.d $f13, $f13
+		# C.UN.D (False)
+		c.un.D $f13, $f14
 		cfc1 $s4, $f25
 		
-		# -0.8 < 1.0
-		li $t0, 0xBF4CCCCC # 0.8
-		li $t1, 0x3F800000 # 1.0
-		mtc1 $t0, $f0
-		mtc1 $t1, $f1
+		# C.UN.PS (False)
+		c.un.PS $f24, $f23
+		cfc1 $s5, $f25
 
-		c.olt.s $f0, $f1
-		cfc1 $s6, $f25
-		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26
 		nop

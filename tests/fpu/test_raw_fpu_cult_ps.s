@@ -30,7 +30,9 @@
 .set nobopt
 .set noat
 
-# Tests to exercise the comparison (less than) ALU instructions.
+#
+# Tests to exercise the comparison (unordered or less than) ALU instructions.
+#
 
 		.text
 		.global start
@@ -46,7 +48,7 @@ start:
 		nop
 		nop
 		nop
-		nop    
+		nop
     
 		# Clear FCSR
 
@@ -75,30 +77,23 @@ start:
 
 		# Individual tests
 		
-		# C.OLT.S (True)
-		c.olt.s $f4, $f3
-		cfc1 $s0, $f25
+		# C.ULT.PS (True)
+		c.ult.ps $f23, $f24
+		cfc1 $s2, $f25
 		
-		# C.OLT.D (True)
-		c.olt.d $f14, $f13
-		cfc1 $s1, $f25
+		# C.ULT.PS (False)
+		c.ult.ps $f23, $f23
+		cfc1 $s5, $f25
 		
-		# C.OLT.S (False)
-		c.olt.s $f3, $f3
-		cfc1 $s3, $f25
+		# C.ULT.PS (True)
+		lui $t0, 0x7F81     # QNaN
+		mtc1 $t0, $f5
+		c.ult.ps $f5, $f5
+		cfc1 $a0, $f25
 		
-		# C.OLT.D
-		c.olt.d $f13, $f13
-		cfc1 $s4, $f25
-		
-		# -0.8 < 1.0
-		li $t0, 0xBF4CCCCC # 0.8
-		li $t1, 0x3F800000 # 1.0
-		mtc1 $t0, $f0
-		mtc1 $t1, $f1
-
-		c.olt.s $f0, $f1
-		cfc1 $s6, $f25
+		# C.ULT.PS
+		c.ult.ps $f24, $f23
+		cfc1 $a3, $f25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

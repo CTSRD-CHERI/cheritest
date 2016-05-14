@@ -5,7 +5,7 @@
 #
 # This software was developed by Ben Thorner as part of his summer internship
 # and Colin Rothwell as part of his final year undergraduate project.
-#
+# 
 # @BERI_LICENSE_HEADER_START@
 #
 # Licensed to BERI Open Systems C.I.C. (BERI) under one or more contributor
@@ -28,15 +28,11 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_fpu_ceq(BaseBERITestCase):
+class test_raw_fpu_cole_ps(BaseBERITestCase):
 
-    def test_ceq_single(self):
-        '''Test we can compare equal in single precision'''
-        self.assertRegisterEqual(self.MIPS.s0, 0x1, "Failed to compare equal 2.0, 2.0 in single precision")
-        self.assertRegisterEqual(self.MIPS.s3, 0x0, "Failed to compare equal 2.0, 1.0 in single precision")
-
-    @attr('float64')
-    def test_ceq_double(self):
-        '''Test we can compare equal in double precision'''
-        self.assertRegisterEqual(self.MIPS.s1, 0x1, "Failed to compare equal 2.0, 2.0 in in double precision")
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to compare equal 2.0, 1.0 in double precision")
+    @attr('floatpaired')
+    def test_cole_ps_1(self):
+        '''Test we can compare less than or equal paired singles'''
+        self.assertRegisterEqual(self.MIPS.s2, 0x3, "Failed to compare less than or equal 2.0, 1.0 and 2.0, 1.0 in paired single precision");
+        self.assertRegisterEqual(self.MIPS.s5, 0x2, "Failed to compare less than or equal 1.0, 2.0 and 2.0, 1.0 in paired single precision")
+        self.assertRegisterEqual(self.MIPS.a0, 0x1, "Failed to compare less than or equal 2.0, 1.0 and 1.0, 2.0 in paired single precision")

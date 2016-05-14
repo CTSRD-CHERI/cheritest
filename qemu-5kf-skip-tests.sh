@@ -59,14 +59,14 @@ cp /dev/null qemu_log/test_raw_fpu_fexr.log
 
 cp /dev/null qemu_log/test_raw_fpu_abs_ps.log
 cp /dev/null qemu_log/test_raw_fpu_add_ps.log
-cp /dev/null qemu_log/test_raw_fpu_ceq.log
-cp /dev/null qemu_log/test_raw_fpu_cf.log
-cp /dev/null qemu_log/test_raw_fpu_cole.log
-cp /dev/null qemu_log/test_raw_fpu_colt.log
-cp /dev/null qemu_log/test_raw_fpu_cueq.log
-cp /dev/null qemu_log/test_raw_fpu_cule.log
-cp /dev/null qemu_log/test_raw_fpu_cult.log
-cp /dev/null qemu_log/test_raw_fpu_cun.log
+cp /dev/null qemu_log/test_raw_fpu_ceq_ps.log
+cp /dev/null qemu_log/test_raw_fpu_cf_ps.log
+cp /dev/null qemu_log/test_raw_fpu_cole_ps.log
+cp /dev/null qemu_log/test_raw_fpu_colt_ps.log
+cp /dev/null qemu_log/test_raw_fpu_cueq_ps.log
+cp /dev/null qemu_log/test_raw_fpu_cule_ps.log
+cp /dev/null qemu_log/test_raw_fpu_cult_ps.log
+cp /dev/null qemu_log/test_raw_fpu_cun_ps.log
 cp /dev/null qemu_log/test_raw_fpu_cvt_paired.log
 cp /dev/null qemu_log/test_raw_fpu_movcc_ps.log
 cp /dev/null qemu_log/test_raw_fpu_movc_ps.log

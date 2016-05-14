@@ -30,7 +30,9 @@
 .set nobopt
 .set noat
 
-# Tests to exercise the comparison (less than) ALU instructions.
+#
+# Tests to exercise the comparison (less than or equal) ALU instructions.
+#
 
 		.text
 		.global start
@@ -40,14 +42,13 @@ start:
 		dli $t1, 1 << 29	# Enable CP1
 		or $at, $at, $t1
 		dli $t1, 1 << 26	# Put FPU into 64 bit mode
-		or $at, $at, $t1
-		mtc0 $at, $12 
+		mtc0 $at, $12
 		nop
 		nop
 		nop
 		nop
-		nop    
-    
+		nop
+		    
 		# Clear FCSR
 
 		mtc1 $0, $f31
@@ -75,30 +76,43 @@ start:
 
 		# Individual tests
 		
-		# C.OLT.S (True)
-		c.olt.s $f4, $f3
+		# C.OLE.S (True)
+		c.ole.S $f3, $f3
 		cfc1 $s0, $f25
 		
-		# C.OLT.D (True)
-		c.olt.d $f14, $f13
+		# C.OLE.D (True)
+		c.ole.D $f13, $f13
 		cfc1 $s1, $f25
 		
-		# C.OLT.S (False)
-		c.olt.s $f3, $f3
+		# C.OLE.PS (True)
+		c.ole.PS $f23, $f23
+		cfc1 $s2, $f25
+		ctc1 $0, $f31
+		
+		# C.OLE.S (False)
+		c.ole.S $f3, $f4
 		cfc1 $s3, $f25
 		
-		# C.OLT.D
-		c.olt.d $f13, $f13
+		# C.OLE.D (False)
+		c.ole.D $f13, $f14
 		cfc1 $s4, $f25
 		
-		# -0.8 < 1.0
-		li $t0, 0xBF4CCCCC # 0.8
-		li $t1, 0x3F800000 # 1.0
-		mtc1 $t0, $f0
-		mtc1 $t1, $f1
-
-		c.olt.s $f0, $f1
+		# C.OLE.PS
+		c.ole.PS $f24, $f23
+		cfc1 $s5, $f25
+		ctc1 $0, $f31
+		
+		# C.OLE.S (True)
+		c.ole.S $f4, $f3
 		cfc1 $s6, $f25
+		
+		# C.OLE.D (True)
+		c.ole.D $f14, $f13
+		cfc1 $s7, $f25
+		
+		# C.OLE.PS
+		c.ole.PS $f23, $f24
+		cfc1 $a0, $f25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

@@ -485,7 +485,15 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_madd_single.s \
 		test_raw_fpu_madd_d64.s	\
 		test_raw_fpu_mtc1_ex.s \
-		test_raw_fpu_mov_ex.s
+		test_raw_fpu_mov_ex.s \
+		test_raw_fpu_ceq_ps.s \
+		test_raw_fpu_cf_ps.s \
+		test_raw_fpu_cole_ps.s \
+		test_raw_fpu_colt_ps.s \
+		test_raw_fpu_cueq_ps.s \
+		test_raw_fpu_cule_ps.s \
+		test_raw_fpu_cult_ps.s \
+		test_raw_fpu_cun_ps.s
 
 RAW_TRACE_FILES=test_raw_trace.s
 
