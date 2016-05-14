@@ -366,18 +366,13 @@ RAW_CP2_FILES=					\
 RAW_FPU_FILES =					\
 		test_raw_fpu_cntrl.s		\
 		test_raw_fpu_abs.s		\
-		test_raw_fpu_abs_ps.s		\
 		test_raw_fpu_abs_qnan.s		\
 		test_raw_fpu_abs_2008.s		\
 		test_raw_fpu_add.s		\
-		test_raw_fpu_add_ps.s		\
 		test_raw_fpu_sub.s		\
-		test_raw_fpu_sub_ps.s		\
 		test_raw_fpu_mul.s		\
-		test_raw_fpu_mul_ps.s		\
 		test_raw_fpu_div.s		\
 		test_raw_fpu_neg.s		\
-		test_raw_fpu_neg_ps.s		\
 		test_raw_fpu_neg_qnan.s		\
 		test_raw_fpu_neg_2008.s		\
 		test_raw_fpu_recip.s		\
@@ -395,8 +390,6 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_blikely.s		\
 		test_raw_fpu_mov_gpr.s		\
 		test_raw_fpu_mov_cc.s		\
-		test_raw_fpu_pair.s		\
-		test_raw_fpu_cvt_paired.s	\
 		test_raw_fpu_add_d32.s		\
 		test_raw_fpu_sub_d32.s		\
 		test_raw_fpu_mul_d32.s		\
@@ -479,13 +472,22 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_fccr.s \
 		test_raw_fpu_fexr.s \
 		test_raw_fpu_fenr.s \
-		test_raw_fpu_mov_ps.s \
-		test_raw_fpu_movc_ps.s \
-		test_raw_fpu_movcc_ps.s \
 		test_raw_fpu_madd_single.s \
 		test_raw_fpu_madd_d64.s	\
 		test_raw_fpu_mtc1_ex.s \
-		test_raw_fpu_mov_ex.s \
+		test_raw_fpu_mov_ex.s
+
+RAW_PS_FILES=\
+		test_raw_fpu_abs_ps.s		\
+		test_raw_fpu_add_ps.s		\
+		test_raw_fpu_sub_ps.s		\
+		test_raw_fpu_neg_ps.s		\
+		test_raw_fpu_mul_ps.s		\
+		test_raw_fpu_pair.s		\
+		test_raw_fpu_cvt_paired.s	\
+		test_raw_fpu_mov_ps.s \
+		test_raw_fpu_movc_ps.s \
+		test_raw_fpu_movcc_ps.s \
 		test_raw_fpu_ceq_ps.s \
 		test_raw_fpu_cf_ps.s \
 		test_raw_fpu_cole_ps.s \
@@ -1172,6 +1174,10 @@ endif
 
 ifdef COP1_ONLY
 TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
+endif
+
+ifdef TEST_PS
+TEST_FILES+= $(RAW_PS_FILES)
 endif
 
 ifeq ($(FUZZ_DMA_ONLY), 1)
