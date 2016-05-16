@@ -1052,7 +1052,6 @@ TEST_DMA_FILES+=test_clang_dma_virt_translate.c
 endif
 
 TEST_CLANG_FILES=				\
-		test_cheriabi_clang_atomic.c		\
 		test_clang_cast.c		\
 		test_clang_cursor.c		\
 		test_clang_cursor_trivial.c	\
