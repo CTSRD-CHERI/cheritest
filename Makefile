@@ -970,6 +970,7 @@ TEST_TLB_FILES=					\
 		test_tlb_load_0.s		\
 		test_tlb_load_1.s		\
 		test_tlb_load_1_large_page.s	\
+		test_tlb_large_page.s		\
 		test_tlb_probe.s		\
 		test_tlb_exception_fill.s	\
 		test_tlb_instruction_miss.s	\
@@ -1444,7 +1445,7 @@ and not floatpaired \
 and not floatrecipflushesdenorm \
 and not ignorebadex \
 and not invalidateL2 \
-and not largepage \
+and not largepage2 \
 and not lladdr \
 and not llscspan \
 and not loadcachetag \
