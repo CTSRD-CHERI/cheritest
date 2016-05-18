@@ -1387,15 +1387,15 @@ and not swi \
 and not smalltlb \
 and not beri2tlb \
 and not gxemultlb \
+and not beri1cache \
 and not beri2cache \
 and not beri1oldcache \
 and not watch \
 and not deterministic_random \
-and not noextendedtlb \
+and not extendedtlb \
 and not csettype \
 and not statcounters \
 and not float \
-and not tlb \
 and not clang  \
 and not pic \
 and not mt \
