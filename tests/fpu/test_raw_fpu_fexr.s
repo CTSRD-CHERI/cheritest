@@ -50,14 +50,14 @@ start:
 		    
 		# Individual tests
 		    
-		li $t0, 0x3f07c
+		li $t0, 0x7c
 		ctc1 $t0, $f26 # FEXR
 		cfc1 $a0, $f26
 		
 		ctc1 $zero, $f26 # FEXR
 		cfc1 $a1, $f26 # FEXR
 
-		li $t0, 0x3fffc
+		li $t0, 0x7c
 		ctc1 $t0, $f31	# FCSR
 		cfc1 $a2, $f26	# FEXR
 		

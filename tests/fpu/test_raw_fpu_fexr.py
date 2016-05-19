@@ -32,8 +32,8 @@ class test_raw_fpu_fexr(BaseBERITestCase):
 
     @attr('floatfexr')
     def test_raw_fpu_fexr_1(self):
-        '''Test we can set FEXR to all ones'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x3f07c, "FEXR was not set to all ones")
+        '''Test we can set FEXR.Flags to all ones'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x7c, "FEXR.Flags was not set to all ones")
 
     @attr('floatfexr')
     def test_raw_fpu_fexr_2(self):
@@ -42,8 +42,8 @@ class test_raw_fpu_fexr(BaseBERITestCase):
 
     @attr('floatfexr')
     def test_raw_fpu_fexr_3(self):
-        '''Test we can set FEXR to all ones by writing FCSR'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x3f07c, "FEXR was not set to all ones")
+        '''Test we can set FEXR.Flags to all ones by writing FCSR'''
+        self.assertRegisterEqual(self.MIPS.a2, 0x7c, "FEXR.Flags was not set to all ones")
 
     @attr('floatfexr')
     def test_raw_fpu_fexr_4(self):

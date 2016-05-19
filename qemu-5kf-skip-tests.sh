@@ -56,13 +56,6 @@ cp /dev/null qemu_log/test_exception_bev0_trap.log
 make obj/test_exception_bev1_trap.mem
 cp /dev/null qemu_log/test_exception_bev1_trap.log
 
-# CP1 (Floating point)
-
-# FEXR test needs fixing
-
-COP1=1 make obj/test_raw_fpu_fexr.mem
-cp /dev/null qemu_log/test_raw_fpu_fexr.log 
-
 # CP2 (Capabilities)
 
 # Fast CCall not supported
