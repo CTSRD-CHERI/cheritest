@@ -57,8 +57,10 @@ test:		.ent test
                 #
 
                 mfc0 $t0, $12           # Status Register
-                li $t1, 1 << 29         # CP1 Usable
+                dli $t1, 1 << 29        # CP1 Usable
                 or $t0, $t0, $t1
+		dli $t1, 1 << 26	# Put FPU into 64 bit mode
+		or $t0, $t0, $t1
                 mtc0 $t0, $12
                 nop                     # Potential pipeline hazard
                 nop
