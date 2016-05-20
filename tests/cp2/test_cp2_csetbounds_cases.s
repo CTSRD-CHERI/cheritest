@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2015 Michael Roe
+# Copyright (c) 2016 Jonathan Woodruff
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -48,7 +49,9 @@ test:		.ent test
 		#
 		# Case one, found by Robert Watson.
 		#
+
 		# Stage 1 setting up the initial capability.
+
 		dli	$t0, 0x1600f4000
 		csetoffset $c1, $c0, $t0
 		dli	$t1, 0x20000
@@ -77,6 +80,7 @@ test:		.ent test
 		#
 		# Case two, found by Robert Watson.
 		#
+
 		# Stage 1 setting up the initial capability.
 		dli	$t0, 0x7fffffe8c0
 		csetoffset $c1, $c0, $t0
@@ -102,6 +106,7 @@ test:		.ent test
 		#
 		# Case three, found by Jonathan Woodruff.
 		#
+
 		# Stage 1 setting up the initial capability.
 		dli	$t0, 0x16022e000
 		csetoffset $c1, $c0, $t0
@@ -128,8 +133,9 @@ test:		.ent test
 		nop
 		
 		#
-		# Case three, found by Jonathan Woodruff.
+		# Case four, found by Jonathan Woodruff.
 		#
+
 		# Stage 1 setting up the initial capability.
 		dli	$t0, 0x160600000
 		csetoffset $c1, $c0, $t0
