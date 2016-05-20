@@ -79,7 +79,7 @@ test:		.ent test
 		cgetdefault $c2
 		dla      $t0, data
 		csetoffset $c2, $c2, $t0
-		li       $t0, 8
+		li       $t0, 4096		# Alignment for sealing
 		csetbounds $c2, $c2, $t0
 		
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
@@ -128,5 +128,5 @@ bev0_handler:
 		.end bev0_handler
 
 		.data
-		.align 3
+		.align 12
 data:		.dword	0xfedcba9876543210
