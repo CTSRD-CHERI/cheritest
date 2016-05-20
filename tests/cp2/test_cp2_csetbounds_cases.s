@@ -59,6 +59,7 @@ test:		.ent test
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
+		nop
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
@@ -71,6 +72,7 @@ test:		.ent test
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
+		nop
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
@@ -89,6 +91,7 @@ test:		.ent test
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
+		nop
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
@@ -115,6 +118,7 @@ test:		.ent test
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
+		nop
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
@@ -126,6 +130,7 @@ test:		.ent test
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
+		nop
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
@@ -149,11 +154,18 @@ test:		.ent test
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
+		nop
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
 
-		
+		b	finally
+		nop
+
+error:
+		li $a0, 1
+
+finally:
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
@@ -161,10 +173,6 @@ test:		.ent test
 		nop			# branch-delay slot
 		.end	test
 		
-error:
-		jr $ra
-		li $a0, 1			# branch-delay slot
-
 		.data
 		.align 5
 data:
