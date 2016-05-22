@@ -991,7 +991,8 @@ TEST_TLB_FILES=					\
 		test_tlb_tlbwr_ext.s		\
 		test_tlb_tlbr_ext.s		\
 		test_tlb_x_mask.s		\
-		test_tlb_initial.s
+		test_tlb_initial.s		\
+		test_tlb_multiop_miss.s
 
 TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
