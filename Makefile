@@ -903,6 +903,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csetoffset_sealed.s	\
 		test_cp2_x_cincoffset_sealed.s	\
 		test_cp2_x_ccall_type.s		\
+		test_cp2_x_ccall_tag.s		\
 		test_cp2_x_jr_imprecise.s	\
 		test_cp2_x_csetbounds_length.s	\
 		test_cp2_x_csetbounds_base.s	\
