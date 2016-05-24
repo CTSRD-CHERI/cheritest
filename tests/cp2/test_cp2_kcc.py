@@ -35,7 +35,6 @@ from nose.plugins.attrib import attr
 class test_cp2_kcc(BaseBERITestCase):
 
     @attr('capabilities')
-    @attr('cap_perm_23')
     def test_cp2_kcc_1(self):
         '''Test load doubleword via KCC'''
         self.assertRegisterEqual(self.MIPS.a0, 0x0123456789abcdef, "Load doubleword via KCC returned incorrect value")
