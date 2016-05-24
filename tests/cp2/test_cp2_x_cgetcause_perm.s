@@ -65,8 +65,8 @@ test:		.ent test
 		dli	$a0, 0xff
 
 		# Run sandbox with restricted permissions
-		# All permission except Access_EPCC
-		dli     $t0, 0x7bff
+		# All permissions except Access_System_Registers
+		dli     $t0, 0xff
 		candperm $c2, $c0, $t0
 		dla     $t0, sandbox
 		csetoffset $c2, $c2, $t0

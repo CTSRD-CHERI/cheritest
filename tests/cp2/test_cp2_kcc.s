@@ -61,9 +61,9 @@ test:		.ent test
 		# Restrict the PCC capability that sandbox will run with.
 		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
 		# Permit_Load_Capability, Permit_Store_Capability, 
-		# Permit_Store_Ephemeral_Capability, Access_KCC.
+		# Permit_Store_Ephemeral_Capability, Access_System_Registers.
 
-		dli $t0, 0x107f
+		dli $t0, 0x7c7f
 		candperm $c1, $c0, $t0
 
 		dla     $a0, 0

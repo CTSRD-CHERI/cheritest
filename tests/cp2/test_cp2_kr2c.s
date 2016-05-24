@@ -63,7 +63,7 @@ test:		.ent test
 		# Permit_Load_Capability, Permit_Store_Capability, 
 		# Permit_Store_Ephemeral_Capability, Access_KR2C.
 
-		dli $t0, 0x407f
+		dli $t0, 0x7c7f
 		candperm $c1, $c0, $t0
 
 		dla     $a0, 0
