@@ -34,7 +34,7 @@ class test_cp2_x_csetbounds_base(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_csetbounds_base_2(self):
-        self.assertRegisterEqual(self.MIPS.a1, 8, "Length was not set correclty after failing csetbounds")
+        self.assertRegisterEqual(self.MIPS.a1, 8, "Length was not set correctly after failing csetbounds")
 
     @attr('capabilities')
     def test_cp2_x_csetbounds_base_3(self):
