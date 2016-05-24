@@ -1388,6 +1388,7 @@ and not swi \
 and not smalltlb \
 and not beri2tlb \
 and not gxemultlb \
+and not beri1tlb   \
 and not beri1cache \
 and not beri2cache \
 and not beri1oldcache \
