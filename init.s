@@ -116,7 +116,7 @@ all_threads:
 	        mtc0    $at, $12
 
 		mfc0	$t0, $16, 1	# Config1
-		ori	$t1, $t0, 0x1	# FP
+		andi	$t1, $t0, 0x1	# FP
 		beqz	$t1, no_float
 		nop
 		# Put FPU into 64 bit mode
