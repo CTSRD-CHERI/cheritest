@@ -115,12 +115,12 @@ all_threads:
 	        mtc0    $zero, $11
 	        mtc0    $at, $12
 
-		mfc0	$t0, $12
-		dli	$t1, 1 << 30
-		or	$t1, $t1, $t0
+		mfc0	$t0, $16, 1	# Config1
+		ori	$t1, $t0, 0x1	# FP
 		beqz	$t1, no_float
 		nop
 		# Put FPU into 64 bit mode
+		mfc0	$t0, $12
 		dli	$t1, 1 << 26
 		or	$t0, $t0, $t1
 		mtc0	$t0, $12
