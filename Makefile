@@ -1250,6 +1250,7 @@ and not beri1oldcache	\
 and not beri2cache	\
 and not extendedtlb	\
 and not enablelargetlb  \
+and not tlbcheck	\
 and not invalidateL2    \
 and not rdhwr           \
 and not config2		\
