@@ -62,8 +62,3 @@ cp /dev/null qemu_log/test_exception_bev1_trap.log
 
 make obj/test_cp2_ccall_fast.mem
 cp /dev/null qemu_log/test_cp2_ccall_fast.log
-
-# Clang tests
-
-touch obj/test_clang_load_double.log
-cp /dev/null qemu_log/test_clang_load_double.log
