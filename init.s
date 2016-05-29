@@ -107,9 +107,6 @@ all_threads:
 		# Enable CP1 and CP2
                 dli	$t1, 3 << 29
                 or      $at, $at, $t1 
-		# Put FPU into 64 bit mode
-		dli	$t1, 1 << 26
-		or	$at, $at, $t1
 		# Clear ERL
 		dli	$t1, 0x4
 		nor	$t1, $t1, $t1
@@ -118,6 +115,17 @@ all_threads:
 	        mtc0    $zero, $11
 	        mtc0    $at, $12
 
+		mfc0	$t0, $12
+		dli	$t1, 1 << 30
+		or	$t1, $t1, $t0
+		beqz	$t1, no_float
+		nop
+		# Put FPU into 64 bit mode
+		dli	$t1, 1 << 26
+		or	$t0, $t0, $t1
+		mtc0	$t0, $12
+		
+no_float:
 		#
 		# Explicitly initialise most registers in order to make the effects
 		# of a test on the register file more clear.  Otherwise,
