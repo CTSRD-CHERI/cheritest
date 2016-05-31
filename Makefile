@@ -1486,6 +1486,9 @@ endif
 
 ifneq ($(CAP_SIZE), 256)
 QEMU_NOSEPRED+=and not cap256
+ifeq ($(CAP_PRECISE),1)
+QEMU_NOSEPRED+=and not cap_copy_as_data
+endif
 endif
 
 ifneq ($(CAP_SIZE), 128)
