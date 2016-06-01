@@ -50,6 +50,6 @@ class test_cp2_x_cjalr_reg(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cjalr_reg_3(self):
         '''Test CJALR set capability cause when did not have permission for register'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1d1b,
+        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
             "CJALR did not set capability cause correctly when did not have permission for register")
 

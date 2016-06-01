@@ -56,6 +56,6 @@ class test_cp2_x_cgetpccsetoffset_reg(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cgetpccsetoffset_reg_4(self):
         '''Test capability cause was set correctly when register was reserved'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1d1b,
+        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
             "Capability cause was not set correctly when register was reserved")
 

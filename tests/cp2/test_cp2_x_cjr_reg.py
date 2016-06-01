@@ -50,6 +50,6 @@ class test_cp2_x_cjr_reg(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_x_cjr_reg_3(self):
         '''Test CJR set capability cause when did not have permission for register'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1d1b,
+        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
             "CJR did not set capability cause correctly when did not have permission for register")
 

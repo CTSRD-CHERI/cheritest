@@ -143,7 +143,7 @@ bev0_handler:
 
 expected_exception:
 		cgetcause $k0
-		xori	$k0, $k0, 0x1c1d
+		xori	$k0, $k0, 0x181d
 		beqz	$k0, expected_cause
 		nop
 
