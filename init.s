@@ -246,6 +246,9 @@ dump_core0:
 		#
 
 		mtc0 $at, $23
+		.ent end
+		.global end
+		
 end:
 		b end
 		nop

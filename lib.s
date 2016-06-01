@@ -333,6 +333,8 @@ __assert_fail:
 		.endif
 		# Kill the simulator
 		mtc0 $at, $23
+		b end
+		nop
 .end __assert_fail
 
 
