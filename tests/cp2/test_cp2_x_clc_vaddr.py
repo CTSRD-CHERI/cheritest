@@ -35,17 +35,24 @@ from nose.plugins.attrib import attr
 #
 
 class test_cp2_x_clc_vaddr(BaseBERITestCase):
+
     @attr('capabilities')
     def test_cp2_x_clc_align_1(self):
-        '''Test clc did not load from an unaligned address'''
+        '''Test CLC did not load from an unaligned address'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
-            "clc loaded from an unaligned address")
+            "CLC loaded from an unaligned address")
+
+    @attr('capabilities')
+    def test_cp2_x_clc_align_4(self):
+        '''Test CLC did not load from an unaligned address'''
+        self.assertRegisterEqual(self.MIPS.a1, 0,
+            "CLC loaded from an unaligned address")
 
     @attr('capabilities')
     def test_cp2_x_clc_align_2(self):
-        '''Test clc raises an exception when the address is unaligned'''
+        '''Test CLC raises an exception when the address is unaligned'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
-            "clc did not raise an exception when the address was unaligned")
+            "CLC did not raise an exception when the address was unaligned")
 
     @attr('capabilities')
     def test_cp2_x_clc_align_3(self):

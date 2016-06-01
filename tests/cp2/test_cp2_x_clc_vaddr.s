@@ -96,7 +96,8 @@ test:		.ent test
 		# Check that the load didn't happen.
 		#
 
-		cgetlen $a0, $c1
+		cgettag $a0, $c1
+		cgetoffset $a1, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
