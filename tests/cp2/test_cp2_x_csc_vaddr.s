@@ -113,7 +113,7 @@ data:		.dword	0x0123456789abcdef
 		.align 5
 padding:	.dword 0x0 # Padding to make cap1 unaligned
 
-cap1:		.dword 0x0 # This is not 32-byte aligned, so a capability
-		.dword 0x0 # store here will raise an exception
-		.dword 0x0
-		.dword 0x0
+cap1:		.dword 0x1234 # This is not 32-byte aligned, so a capability
+		.dword 0x1234 # store here will raise an exception
+		.dword 0x1234
+		.dword 0x1234

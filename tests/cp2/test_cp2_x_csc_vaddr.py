@@ -34,23 +34,24 @@ from nose.plugins.attrib import attr
 #
 
 class test_cp2_x_csc_vaddr(BaseBERITestCase):
+
     @attr('capabilities')
     def test_cp2_x_csc_align_1(self):
-        '''Test csc did not write to an unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "csc wrote to an unaligned address")
+        '''Test CSC did not write to an unaligned address'''
+        self.assertRegisterEqual(self.MIPS.a0, 0x1234,
+            "CSC wrote to an unaligned address")
 
     @attr('capabilities')
     def test_cp2_x_csc_align_2(self):
         '''Test csc did not write to an unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a1, 0,
-            "csc wrote to an unaligned address")
+        self.assertRegisterEqual(self.MIPS.a1, 0x1234,
+            "CSC wrote to an unaligned address")
 
     @attr('capabilities')
     def test_cp2_x_csc_align_3(self):
-        '''Test csc raises an exception when the address is unaligned'''
+        '''Test CSC raises an exception when the address is unaligned'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
-            "csc did not raise an exception when the address was unaligned")
+            "CSC did not raise an exception when the address was unaligned")
 
     @attr('capabilities')
     def test_cp2_x_csc_align_4(self):
