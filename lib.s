@@ -383,8 +383,8 @@ memcpy_c:
 	CGetBase $v1, $c4            # v1 = linear address of src
 	CGetOffset $at, $c4
 	dadd     $v1, $v1, $at
-	andi     $12, $v0, 0x1f      # t4 = dst % 32
-	andi     $13, $v1, 0x1f      # t5 = src % 32
+	andi     $12, $v0, CAP_SIZE/8 - 1      # t4 = dst % 32
+	andi     $13, $v1, CAP_SIZE/8 - 1      # t5 = src % 32
 	daddi    $a1, $zero, 0       # Store 0 in $a1 - we'll use that for the
 	                             # offset later.
 
@@ -396,18 +396,18 @@ memcpy_c:
 	                             # We could do something involving shifts, but
 	                             # this is probably a sufficiently uncommon
 	                             # case not to be worth optimising.
-	andi     $t8, $a0, 0x1f      # t8 = len % 32
+	andi     $t8, $a0, CAP_SIZE/8 - 1      # t8 = len % 32
 
 fast_path:                       # At this point, src and dst are known to have
                                  # the same alignment.  They may not be 32-byte
                                  # aligned, however.  
 	# FIXME: This logic can be simplified by using the power of algebra
 	dsub    $v1, $zero, $12
-	daddi   $v1, $v1, 32
-	andi    $v1, $v1, 0x1f      # v1 = number of bytes we need to copy to
+	daddi   $v1, $v1, CAP_SIZE/8
+	andi    $v1, $v1, CAP_SIZE/8 - 1      # v1 = number of bytes we need to copy to
 	                            # become aligned
 	dsub    $a2, $a0, $v1
-	daddi   $a2, $a2, -32        # (delay slot)
+	daddi   $a2, $a2, -CAP_SIZE/8        # (delay slot)
 	bltz    $a2, slow_memcpy_loop# If we are copying more bytes than the number
 	                             # required for alignment, plus at least one
 	                             # capability more, continue in the fast path
@@ -425,15 +425,15 @@ unaligned_start:
 
 	dsub     $a2, $a0, $a1        # $12 = amount left to copy
 aligned_copy:
-	addi    $at, $zero, 0xFFE0
+	addi    $at, $zero, -CAP_SIZE/8
 	and     $a2, $a2, $at        # a2 = number of 32-byte aligned bytes to copy
 	dadd    $a2, $a2, $a1        # ...plus the number already copied.
 
 copy_caps:
 	clc     $c5, $a1, 0($c4)
-	daddi   $a1, $a1, 32
+	daddi   $a1, $a1, CAP_SIZE/8
 	bne     $a1, $a2, copy_caps
-	csc     $c5, $a1, -32($c3)
+	csc     $c5, $a1, -CAP_SIZE/8($c3)
 
 	dsub    $v1, $a0, $a2        # Subtract the number of bytes copied from the
 	                             # number to copy.  This should give the number
