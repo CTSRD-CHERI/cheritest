@@ -1897,7 +1897,7 @@ $(OBJDIR)/test_%.o : test_%.c
 	mips-linux-gnu-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) --defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
 	#$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 
 select_init: select_init.c
