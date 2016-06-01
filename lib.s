@@ -433,7 +433,11 @@ copy_caps:
 	clc     $c5, $a1, 0($c4)
 	daddi   $a1, $a1, CAP_SIZE/8
 	bne     $a1, $a2, copy_caps
+.if (CAP_SIZE != 64)
 	csc     $c5, $a1, -CAP_SIZE/8($c3)
+	# XXX FIXME: Offsets are 128-bit aligned even when CAP_SIZE=64, so this
+	# won't work with 64-bit capabilities.
+.endif
 
 	dsub    $v1, $a0, $a2        # Subtract the number of bytes copied from the
 	                             # number to copy.  This should give the number
