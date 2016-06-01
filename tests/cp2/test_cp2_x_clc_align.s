@@ -66,6 +66,8 @@ test:		.ent test
                 csetbounds $c1, $c1, $t0
 		dli     $t0, 0x7f
 		candperm $c1, $c1, $t0
+		dli	$t0, 1
+		csetoffset $c1, $c1, $t0
 
 		#
 		# Store $c1 to padding (aligned)
@@ -91,7 +93,8 @@ test:		.ent test
 		# Check that the load didn't happen.
 		#
 
-		cgetlen $a0, $c1
+		cgettag $a0, $c1
+		cgetoffset $a1, $c1
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

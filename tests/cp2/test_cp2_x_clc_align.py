@@ -30,7 +30,7 @@ from nose.plugins.attrib import attr
 
 #
 # Test that CLC raises an exception if the address from which the capability
-# is to be loaded is not aligned on a 32-byte boundary.
+# is to be loaded is not aligned on a capability-size boundary.
 #
 
 class test_cp2_x_clc_align(BaseBERITestCase):
@@ -47,6 +47,20 @@ class test_cp2_x_clc_align(BaseBERITestCase):
     def test_cp2_x_clc_align_1_128(self):
         '''Test CLC did not load from an unaligned address'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
+            "CLC loaded from an unaligned address")
+
+    @attr('capabilities')
+    @attr('cap256')
+    def test_cp2_x_clc_align_4_256(self):
+        '''Test CLC did not load from an unaligned address'''
+        self.assertRegisterEqual(self.MIPS.a1, 0,
+            "CLC loaded from an unaligned address")
+
+    @attr('capabilities')
+    @attr('cap128')
+    def test_cp2_x_clc_align_4_128(self):
+        '''Test CLC did not load from an unaligned address'''
+        self.assertRegisterEqual(self.MIPS.a1, 0,
             "CLC loaded from an unaligned address")
 
     @attr('capabilities')
