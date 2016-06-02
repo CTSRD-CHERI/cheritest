@@ -817,6 +817,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cseal_imprecise.s	\
 		test_cp2_cfromptr_imprecise.s	\
 		test_cp2_csub.s			\
+		test_cp2_data_as_cap.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
