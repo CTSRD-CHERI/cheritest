@@ -28,6 +28,8 @@
 
 # Skip the tests that are not expected to terminate with QEMU
 
+mkdir -p qemu_log
+
 # The extension for unaligned loads/stores is not supported
 
 make obj/test_ld_unalign_ok.mem
