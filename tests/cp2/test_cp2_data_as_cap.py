@@ -32,24 +32,24 @@ class test_cp2_data_as_cap(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_data_as_cap_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "CLC/CSC did not cipy first dword of non-capability data")
+        self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffffff, "CLC/CSC did not copy first dword of non-capability data")
 
     @attr('capabilities')
     @attr('cap128')
     def test_cp2_data_as_cap_2_128(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "CLC/CSC did not cipy second dword of non-capability data")
+        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "CLC/CSC did not copy second dword of non-capability data")
 
     @attr('capabilities')
     @attr('cap256')
     def test_cp2_data_as_cap_2_256(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "CLC/CSC did not cipy second dword of non-capability data")
+        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "CLC/CSC did not copy second dword of non-capability data")
 
     @attr('capabilities')
     @attr('cap256')
     def test_cp2_data_as_cap_3(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0xffffffffffffffff, "CLC/CSC did not cipy third dword of non-capability data")
+        self.assertRegisterEqual(self.MIPS.a2, 0xffffffffffffffff, "CLC/CSC did not copy third dword of non-capability data")
 
     @attr('capabilities')
     @attr('cap256')
     def test_cp2_data_as_cap_4(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "CLC/CSC did not cipy fourth dword of non-capability data")
+        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "CLC/CSC did not copy fourth dword of non-capability data")
