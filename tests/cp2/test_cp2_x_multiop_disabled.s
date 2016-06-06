@@ -76,6 +76,23 @@ test:		.ent test
 		cgetdefault $c1
 
 		#
+		# Before we disable CP2, make $c3 a suitable target for
+		# CJALR.
+		#
+
+		cgetdefault $c3
+		dla $t0, L3
+		csetoffset $c3, $c3, $t0
+
+		#
+		# .. and $c4 a suitable target for CJR.
+		#
+
+		cgetdefault $c4
+		dla $t0, L4
+		csetoffset $c4, $c4, $t0
+
+		#
 		# Disable CP2
 		#
 
@@ -147,6 +164,13 @@ L1:
 		cbtu	$c1, L2
 		nop
 L2:
+		cjalr	$c24, $c3
+		nop
+L3:
+		cjr	$c4
+		nop
+L4:
+
 		#
 		# Loads and stores
 		#
