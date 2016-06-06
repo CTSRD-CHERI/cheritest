@@ -814,7 +814,6 @@ TEST_CP2_FILES=					\
 		test_cp2_csetbounds_large.s	\
 		test_cp2_csetbounds_cases.s		\
 		test_cp2_ceqex.s		\
-		test_cp2_cseal_imprecise.s	\
 		test_cp2_cfromptr_imprecise.s	\
 		test_cp2_csub.s			\
 		test_cp2_data_as_cap.s		\
@@ -928,6 +927,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cllc_perm.s \
 		test_cp2_x_clearreg_unimp.s \
 		test_cp2_x_c0_multiop_perm.s \
+		test_cp2_x_cseal_imprecise.s \
 		test_cp2_clearregs_gplo.s \
 		test_cp2_clearregs_gphi.s \
 		test_cp2_clearregs_caplo.s \

@@ -1,6 +1,10 @@
 #-
-# Copyright (c) 2015 Michael Roe
+# Copyright (c) 2013-2016 Michael Roe
 # All rights reserved.
+#
+# This software was developed by SRI International and the University of
+# Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-10-C-0237
+# ("CTSRD"), as part of the DARPA CRASH research programme.
 #
 # This software was developed by the University of Cambridge Computer
 # Laboratory as part of the Rigorous Engineering of Mainstream Systems (REMS)
@@ -25,13 +29,15 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+.include "macros.s"
 .set mips64
 .set noreorder
 .set nobopt
 .set noat
 
 #
-# Test a case where CSeal loses precision with 128 bit candidate 1.
+# Test that cseal in a case where 128-bit capabilities cannot represent the
+# bounds exactly.
 #
 
 		.global test
@@ -41,24 +47,44 @@ test:		.ent test
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
 
+		#
+		# Set up exception handler
+		#
+
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
+		nop
+
+		#
+		# $a2 will be set to 1 if the exception handler is called
+		#
+
+		dli	$a2, 0
+
+		#
+		# $a3 will be set to the capability cause if there is an
+		# exception.
+		#
+
+		dli	$a3, 0
+
+
 		cgetdefault $c1
-		dli	$t0, 1
+		dli $t0, 1
 		csetoffset $c1, $c1, $t0
+		csetbounds $c1, $c1, $t0
 
-		li	$t0, 0x98
-		dsll	$t0, $t0, 56
-		li	$t1, 0x1
-		dsll 	$t1, $t1, 42
-		or	$t0, $t0, $t1
-
+		dli	$t0, 0x11
 		cgetdefault $c2
 		csetoffset $c2, $c2, $t0
 
-		cseal $c2, $c2, $c1
+		cgetdefault $c3
 
-		cunseal $c3, $c2, $c1
+		cseal $c3, $c1, $c2	# Should raise an exception
 
-		cgetoffset $a0, $c3
+		cgetbase $a0, $c3
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
@@ -66,3 +92,22 @@ test:		.ent test
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
+
+		.ent bev0_handler
+bev0_handler:
+		li	$a2, 1
+		cgetcause $a3
+		dmfc0	$a5, $14	# EPC
+		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+		nop
+		nop
+		nop
+		nop
+		eret
+		.end bev0_handler
+
+
+		.data
+		.align 12
+data:		.dword 0

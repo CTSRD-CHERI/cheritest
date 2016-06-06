@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2015 Michael Roe
+# Copyright (c) 2016 Michael Roe
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -28,10 +28,20 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp2_cseal_imprecise(BaseBERITestCase):
+class test_cp2_x_cseal_imprecise(BaseBERITestCase):
 
     @attr('capabilities')
-    @attr('cap_precise')
-    def test_cp2_cseal_imprecise_1_precise(self):
-        '''Test that CSeal/CUnseal preserves a large offset'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x9800040000000000, "CSeal/CUnseal did not preserve a large offset")
+    @attr('cap_imprecise')
+    def test_cp2_x_cseal_imprecise_1(self):
+        self.assertRegisterEqual(self.MIPS.a0, 0x0, "CSeal wrote to destination register when it should have raised an exception.")
+
+    @attr('capabilities')
+    @attr('cap_imprecise')
+    def test_cp2_x_cseal_imprecise_2(self):
+        self.assertRegisterEqual(self.MIPS.a2, 1, "CSeal did not raise an exception when bounds could not be represented exactly.")
+
+    @attr('capabilities')
+    @attr('cap_imprecise')
+    def test_cp2_x_cseal_imprecise_3(self):
+        self.assertRegisterEqual(self.MIPS.a3, 0x0a01, "CSeal did not set capability cause correctly when bounds could not be represented exactly.")
+
