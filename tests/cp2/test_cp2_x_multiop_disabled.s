@@ -121,6 +121,7 @@ test:		.ent test
 		csetbounds $c2, $c1, $zero
 		csetcause $zero
 		csetoffset $c2, $c1, $zero
+		csub $t0, $c1, $c1
 		ctoptr $t0, $c1, $c1
 		# cunseal requires a sealed capability, so don't test
 		# it here
@@ -175,7 +176,7 @@ L2:
 		
 
 		#
-		# Register clear instructions`
+		# Register clear instructions
 		#
 
 		cclearlo 0x4

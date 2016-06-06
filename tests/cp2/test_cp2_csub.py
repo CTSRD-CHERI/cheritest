@@ -31,7 +31,6 @@ from nose.plugins.attrib import attr
 class test_cp2_csub(BaseBERITestCase):
 
     @attr('capabilities')
-    @attr('newisa')
     def test_cp2_csub_1(self):
         '''Test CSub of two capabilities'''
         self.assertRegisterEqual(self.MIPS.a0, 4, "CSub did not compute the expected result")

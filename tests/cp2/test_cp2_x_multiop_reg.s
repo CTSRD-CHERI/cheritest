@@ -71,6 +71,8 @@ sandbox:
 		csetbounds $c29, $c1, $zero
 		csetoffset $c2, $c29, $zero
 		csetoffset $c29, $c1, $zero
+		csub $t0, $c2, $c29
+		csub $t0, $c29, $c2
 		ctoptr $t0, $c2, $c29
 		ctoptr $t0, $c29, $c1
 		# cunseal requires a sealed capability, so don't test
