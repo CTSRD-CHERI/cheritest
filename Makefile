@@ -109,7 +109,7 @@ NOFUZZR?=0
 CAP_SIZE?=256
 PERM_SIZE?=31
 L3_SIM?=l3mips
-SAIL_DIR?=~/bitbucket/l2
+SAIL_DIR?=~/bitbucket/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/src/run_mips.native
 SAIL_CHERI_SIM=$(SAIL_DIR)/src/run_cheri.native
 
