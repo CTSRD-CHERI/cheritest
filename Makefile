@@ -111,7 +111,7 @@ PERM_SIZE?=31
 L3_SIM?=l3mips
 SAIL_DIR?=~/bitbucket/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/src/run_mips.native
-SAIL_CHERI_SIM=$(SAIL_DIR)/src/run_cheri.native
+SAIL_CHERI_SIM=/home/mr101/bin/run_cheri.native
 
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
@@ -817,6 +817,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cfromptr_imprecise.s	\
 		test_cp2_csub.s			\
 		test_cp2_data_as_cap.s		\
+		test_cp2_cscr_offset.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
