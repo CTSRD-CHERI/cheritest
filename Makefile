@@ -112,6 +112,8 @@ L3_SIM?=l3mips
 SAIL_DIR?=~/bitbucket/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/src/run_mips.native
 SAIL_CHERI_SIM=$(SAIL_DIR)/src/run_cheri.native
+CC?=gcc
+XCC?=mips-linux-gnu-gcc
 
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
@@ -123,6 +125,12 @@ ifeq ($(CAP_SIZE),128)
 CLANG_CC?=clang -mllvm -cheri128
 else
 CLANG_CC?=clang
+endif
+
+ifeq ($(CAP_SIZE),128)
+QEMU?=qemu-system-cheri128
+else
+QEMU?=qemu-system-cheri
 endif
 
 #
@@ -1509,6 +1517,16 @@ else
 QEMU_NOSEPRED+=and not cap_precise
 endif
 
+ifeq ($(PERM_SIZE),23)
+QEMU_NOSEPRED+=and not cap_perm_31
+endif
+ifeq ($(PERM_SIZE),19)
+QEMU_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
+endif
+ifeq ($(PERM_SIZE),15)
+QEMU_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
+endif
+
 QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
 
 #
@@ -1898,14 +1916,14 @@ $(OBJDIR)/test_cheriabi_clang%.o : test_cheriabi_clang%.c
 	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -mabi=sandbox -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
-	mips-linux-gnu-gcc -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+	$(XCC) -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
 
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) --defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
 	#$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 
 select_init: select_init.c
-	gcc -o select_init select_init.c
+	$(CC) -o select_init select_init.c
 
 #
 # Targets for ELF images
@@ -2056,10 +2074,10 @@ $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	    $(GXEMUL_LOG_FILTER) >$@ || true
 
 max_cycles: max_cycles.c
-	gcc -o max_cycles max_cycles.c
+	$(CC) -o max_cycles max_cycles.c
 
 l3tosim: l3tosim.c
-	gcc -o l3tosim l3tosim.c
+	$(CC) -o l3tosim l3tosim.c
 
 ifeq ($(MULTI),1)
 L3_MULTI=--nbcore 2
@@ -2091,7 +2109,7 @@ $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles
 
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf
 	mkdir -p $(QEMU_LOGDIR)
-	qemu-system-cheri -D $@ -d instr -M mipssim -cpu 5Kf \
+	$(QEMU) -D $@ -d instr -M mipssim -cpu 5Kf \
 	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bp 0x`mips64-objdump -d $(OBJDIR)/$*.elf | awk -f end.awk` || true
 
 # Simulate a failure on all unit tests
@@ -2252,7 +2270,7 @@ nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
 	$(TESTDIRS) || true
 
 xmlcat: xmlcat.c
-	gcc -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
+	$(CC) -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
 
 cleanerror:
 	find log -size 0 | xargs -r --verbose rm
