@@ -45,6 +45,17 @@
 		.global start
 		.ent start
 start:
+
+		#
+		# Set CP0.Config.K0, the kseg0 coherency algorithm
+		# We have to do this before we refer to kseg0
+		#
+
+	        mfc0    $t0, $16
+       		ori     $t0, $t0, 7
+      	 	xori    $t0, $t0, 5
+        	mtc0    $t0, $16
+
                 jal     get_corethread_id   # v0 = core ID * num threads + thread ID
                 nop                         # (delay slot)
 

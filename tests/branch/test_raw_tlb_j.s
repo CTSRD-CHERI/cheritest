@@ -39,10 +39,19 @@
 
 		.global start
 start:
-                nop 
-                nop
+		#
+		# Set cache coherency algorithm for kseg0
+		#
+
+        	mfc0    $t0, $16
+        	ori     $t0, $t0, 7
+        	xori    $t0, $t0, 5
+        	mtc0    $t0, $16
         
+		#
                 # Clear BEV bit
+		#
+
                 mfc0	$t0, $12
 		ori	$t0, $t0, 0xe0	# Set KX, DX, UX
 		dli	$t1, 1 << 22	# BEV bit
