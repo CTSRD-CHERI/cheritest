@@ -641,6 +641,7 @@ TEST_CP0_FILES=					\
 		test_tlt_eq.s			\
 		test_tlt_gt.s			\
 		test_tlt_lt.s			\
+		test_tlt_overflow.s		\
 		test_tltu_eq.s			\
 		test_tltu_gt_sign.s		\
 		test_tltu_gt.s			\
