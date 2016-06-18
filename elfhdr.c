@@ -46,7 +46,6 @@ char *fp;
   fp[1] = (x >> 48) & 0xff;
   fp[0] = (x >> 56) & 0xff;
 
-  fprintf(stderr, "flipped = %llx\n", flipped);
   return flipped;
 }
 
@@ -59,26 +58,39 @@ Elf64_Shdr sh1;
 Elf64_Shdr sh2;
 struct stat stats;
 int i;
-unsigned char entry[8] = {0x90, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00};
-unsigned char offset[8] = {0, 0, 0, 0, 0, 0, 0, 64};
-char *fname = "holtest/test03.mem";
+char *fname_in;
+char *fname_out;
 FILE *f_in;
 FILE *f_out;
 static char strtab[] = {0, '.', 's', 'h', 's', 't', 'r', 't', 'a', 'b', 0,
     '.', 'd', 'a', 't', 'a', 0};
 
-  if (stat(fname, &stats) != 0)
+  if (argc < 3)
   {
-    fprintf(stderr, "Couldn't fstat %s\n", fname);
+    fprintf(stderr, "Usage: elfhdr <input file> <output file>\n");
     return -1;
   }
 
-  f_in = fopen(fname, "r");
+  fname_in = argv[1];
+  fname_out = argv[2];
 
-  f_out = fopen("test03.elf", "w");
+  if (stat(fname_in, &stats) != 0)
+  {
+    fprintf(stderr, "Couldn't fstat %s\n", fname_in);
+    return -1;
+  }
+
+  f_in = fopen(fname_in, "r");
+  if (f_in == NULL)
+  {
+    fprintf(stderr, "Couldn't open %s\n", fname_in);
+    return -1;
+  }
+
+  f_out = fopen(fname_out, "w");
   if (f_out == NULL)
   {
-    fprintf(stderr, "Couldn't open output file\n");
+    fprintf(stderr, "Couldn't open %s\n", fname_out);
     return -1;
   }
 
@@ -135,7 +147,6 @@ static char strtab[] = {0, '.', 's', 'h', 's', 't', 'r', 't', 'a', 'b', 0,
   sh2.sh_size = flip64(sizeof(strtab));
   sh2.sh_entsize = flip64(0);
 
-  fprintf(stderr, "ELF header size = %d\n", sizeof(h));
   fwrite((void *) &h, sizeof(h), 1, f_out);
   fwrite((void *) &ph, sizeof(ph), 1, f_out);
   fwrite((void *) &sh0, sizeof(sh0), 1, f_out);
