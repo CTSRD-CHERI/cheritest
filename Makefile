@@ -669,7 +669,8 @@ TEST_CP0_FILES=					\
 		test_cp0_wait.s			\
 		test_cp0_mtc0_user.s		\
 		test_cp0_hwre_init.s		\
-		test_cp0_multiop_user.s
+		test_cp0_multiop_user.s		\
+		test_cp0_multiop_supervisor.s
 
 TEST_FPU_FILES=					\
 		test_fpu_exception_pipeline.s	\
@@ -1005,7 +1006,8 @@ TEST_TLB_FILES=					\
 		test_tlb_tlbr_ext.s		\
 		test_tlb_x_mask.s		\
 		test_tlb_initial.s		\
-		test_tlb_multiop_miss.s
+		test_tlb_multiop_miss.s		\
+		test_tlb_xkseg.s
 
 TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
