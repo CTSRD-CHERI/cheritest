@@ -1007,7 +1007,8 @@ TEST_TLB_FILES=					\
 		test_tlb_x_mask.s		\
 		test_tlb_initial.s		\
 		test_tlb_multiop_miss.s		\
-		test_tlb_xkseg.s
+		test_tlb_xkseg.s		\
+		test_tlb_xksseg.s
 
 TEST_TRAPI_FILES=				\
 		test_teqi_eq.s			\
