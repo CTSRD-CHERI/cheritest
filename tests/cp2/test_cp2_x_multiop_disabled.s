@@ -164,7 +164,7 @@ L1:
 		cbtu	$c1, L2
 		nop
 L2:
-		cjalr	$c24, $c3
+		cjalr	$c3, $c24
 		nop
 L3:
 		cjr	$c4

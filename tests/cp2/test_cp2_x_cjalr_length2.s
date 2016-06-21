@@ -102,7 +102,7 @@ test:		.ent test
 
 		dla	$a1, victim
 victim:
-		cjalr   $c24, $c1 	# This should raise an exception
+		cjalr   $c1, $c24 	# This should raise an exception
 		nop			# Branch delay slot
 
 finally:

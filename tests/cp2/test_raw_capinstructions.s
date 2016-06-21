@@ -235,7 +235,7 @@ start:
 l0:
 		dla       $t1, l1
 		csetoffset $c1, $c0, $t1
-		cjalr     $c24, $c0
+		cjalr     $c0, $c24
 		# branch delay slot
 		nop
 

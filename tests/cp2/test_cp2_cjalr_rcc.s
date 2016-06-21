@@ -60,7 +60,7 @@ test:		.ent test
 		# Jump to L1, with $pcc replaced with $c1
 		dla	$t0, L1
 		csetoffset $c1, $c1, $t0
-		cjalr	$c24, $c1
+		cjalr	$c1, $c24
 		nop			# branch delay slot
 
 L1:

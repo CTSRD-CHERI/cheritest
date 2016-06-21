@@ -77,7 +77,7 @@ test:		.ent test
 		dla     $t1, limit
 		dsub	$t2, $t1, $t0
 		csetbounds $c1, $c1, $t2
-		cjalr   $c24, $c1
+		cjalr   $c1, $c24
 		nop			# Branch delay slot
 finally:
 

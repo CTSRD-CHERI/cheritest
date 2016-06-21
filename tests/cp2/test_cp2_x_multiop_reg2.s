@@ -113,7 +113,7 @@ test:		.ent test
 		candperm $c4, $c4, $t0
 		dla     $t0, sandbox
 		csetoffset $c4, $c4, $t0
-		cjalr   $c24, $c4
+		cjalr   $c4, $c24
 		nop			# Branch delay slot
 
 		ld	$fp, 16($sp)

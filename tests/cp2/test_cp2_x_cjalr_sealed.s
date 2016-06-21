@@ -81,7 +81,7 @@ test:		.ent test
 
 		cseal $c1, $c1, $c2
 		
-		cjalr   $c24, $c1 	# This should raise an exception
+		cjalr   $c1, $c24 	# This should raise an exception
 		nop			# Branch delay slot
 
 		ld	$fp, 16($sp)

@@ -42,7 +42,7 @@ sandbox2:
 		nop			# Branch delay slot
 
 sandbox1:
-		cjalr	$c27, $c2	# Should raise an exception
+		cjalr	$c2, $c27	# Should raise an exception
 		nop			# Branch delay slot
 		cjr	$c24		# Return from subroutine
 		nop			# Branch delay slot
@@ -95,7 +95,7 @@ test:		.ent test
 		dla	$t0, sandbox1
 		csetoffset $c1, $c1, $t0
 		
-		cjalr   $c24, $c1 	# Call into sandbox1
+		cjalr   $c1, $c24 	# Call into sandbox1
 		nop			# Branch delay slot
 
 		ld	$fp, 16($sp)

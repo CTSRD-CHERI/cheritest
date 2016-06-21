@@ -80,7 +80,7 @@ loop:
 		dla	$a0, sandbox
 		csetoffset $c1, $c1, $a0
 		# PCC will be saved in $c24
-		cjalr	$c24, $c1
+		cjalr	$c1, $c24
 		nop			# Branch delay slot
 
 		nop

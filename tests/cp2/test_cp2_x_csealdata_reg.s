@@ -93,7 +93,7 @@ test:		.ent test
 
 		dla $t0, sandbox2
 		csetoffset $c2, $c2, $t0
-		cjalr $c24, $c2
+		cjalr	$c2, $c24
 		nop			# Branch delay slot
 
 		cgetsealed $a0, $c1

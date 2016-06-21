@@ -43,7 +43,7 @@ sandbox2:
 
 sandbox1:
 		cmove	$c3, $c24	# Save return capability
-		cjalr	$c24, $c27	# Should raise an exception
+		cjalr	$c27, $c24	# Should raise an exception
 		nop			# Branch delay slot
 		cmove	$c24, $c3	# Restore return capability
 		cjr	$c24		# Return from subroutine
@@ -97,7 +97,7 @@ test:		.ent test
 		dla	$t0, sandbox1
 		csetoffset $c1, $c1, $t0
 		
-		cjalr   $c24, $c1 	# Call into sandbox1
+		cjalr   $c1, $c24 	# Call into sandbox1
 		nop			# Branch delay slot
 
 		ld	$fp, 16($sp)

@@ -107,7 +107,7 @@ test:		.ent test
 
 		cfromptr $c2, $c1, $zero
 
-		cjalr   $c24, $c1 
+		cjalr   $c1, $c24
 		nop			# Branch delay slot
 
 finally:

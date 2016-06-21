@@ -101,7 +101,7 @@ test:		.ent test
 		dla	$t0, sandbox
 		dsubu	$a1, $a1, $t0
 
-		cjalr   $c24, $c1
+		cjalr   $c1, $c24
 		nop			# Branch delay slot
 
 finally:
