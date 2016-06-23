@@ -74,8 +74,7 @@ test:		.ent test
 
 		dli	$a0, 0
 
-		dli	$t0, 1
-		ld	$t0, 0($t0)	# Should raise an exception
+		teq $0, $0 # Should raise an exception
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
