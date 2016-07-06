@@ -1,6 +1,6 @@
 #-
 # Copyright (c) 2011 Steven J. Murdoch
-# Copyright (c) 2013 Alexandre Joannou
+# Copyright (c) 2013-2016 Alexandre Joannou
 # Copyright (c) 2014 Jonathan Woodruff
 # All rights reserved.
 #
@@ -54,9 +54,9 @@ MIPS_CORE_RE=re.compile(r'^DEBUG MIPS COREID\s+([0-9]+)$')
 MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+)\s+(0x................)$')
 MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC\s+(0x................)$')
 CAPMIPS_CORE_RE=re.compile(r'^DEBUG CAP COREID\s+([0-9]+)$')
-CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
+CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
-CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
+CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
 SAIL_CAP_PCC_RE = re.compile('DEBUG CAP PCC\s+0b([01u]{257})')
 SAIL_CAP_REG_RE = re.compile('DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{257})')
@@ -65,7 +65,8 @@ class MipsException(Exception):
     pass
 
 class Capability(object):
-    def __init__(self, s, perms, ctype, offset, base, length):
+    def __init__(self, t, s, perms, ctype, offset, base, length):
+        self.t      = t
         self.s      = s
         self.ctype  = ctype
         self.perms  = perms
@@ -74,12 +75,13 @@ class Capability(object):
         self.length = length
 
     def __repr__(self):
-        return 's:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x'%(
-            self.s, self.perms, self.ctype, self.offset, self.base, self.length)
+        return 't:%x s:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x'%(
+            self.t, self.s, self.perms, self.ctype, self.offset, self.base, self.length)
 
-def capabilityFromStrings(s, perms, ctype, offset, base, length):
+def capabilityFromStrings(t, s, perms, ctype, offset, base, length):
     return Capability(
-        int(s), 
+        int(t),
+        int(s),
         int(perms, 16),
         int(ctype, 16),
         int(offset, 16),
@@ -93,6 +95,7 @@ def capabilityFromBinaryString(s):
         return None
     else:
         return Capability(
+            int(s[0], 2),                 # tag
             int(s[256-192], 2),           # sealed
             int(s[256-223 : 257-193], 2), # perms
             int(s[256-247 : 257-224], 2), # otype
@@ -201,10 +204,10 @@ class MipsStatus(object):
             if (cap_reg_groups):
                 cap_reg_num = int(cap_reg_groups.group(1))
                 t = self.threads[thread]
-                t.cp2[cap_reg_num] = capabilityFromStrings(*cap_reg_groups.groups()[1:7])
+                t.cp2[cap_reg_num] = capabilityFromStrings(*cap_reg_groups.groups()[1:8])
             if (cap_pc_groups):
                 t = self.threads[thread]
-                t.pcc = capabilityFromStrings(*cap_pc_groups.groups()[0:6])
+                t.pcc = capabilityFromStrings(*cap_pc_groups.groups()[0:7])
             if (sail_cap_pcc_groups):
                 pcc_string = sail_cap_pcc_groups.group(1)
                 t = self.threads[thread]
