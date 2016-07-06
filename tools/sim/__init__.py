@@ -221,7 +221,7 @@ class MipsStatus(object):
                 # special case for null cap due to fact that sail abreviates printed cap with '...'. Arg.
                 cap_reg_num = int(sail_cap_reg_null_groups.group(1))
                 t = self.threads[thread]
-                t.cp2[cap_reg_num] = Capability(0,0,0,0,0,0)
+                t.cp2[cap_reg_num] = Capability(0,0,0,0,0,0,0)
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''
