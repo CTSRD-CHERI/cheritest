@@ -243,7 +243,7 @@ bev0_handler_install:
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
 		jr	$ra
-		nop			# branch-delay slot
+		sync			# branch-delay slot
 		.end bev0_handler_install
 
 # As above but for bev1
@@ -266,7 +266,7 @@ bev1_handler_install:
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
 		jr	$ra
-		nop			# branch-delay slot
+		sync			# branch-delay slot
 		.end bev1_handler_install
 
 #
