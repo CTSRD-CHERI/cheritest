@@ -115,6 +115,7 @@ tlb_loop:
                 dla     $t0, 0xffffffff80000080
                 sd      $t1, 0($t0)
                 #sd      $t2, 8($t0)
+                sync			# Ensure write propagates
 
                 # Clear some flag registers
                 li      $a0, 0
