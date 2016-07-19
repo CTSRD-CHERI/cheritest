@@ -78,6 +78,7 @@ start:
 		sw $s2, 8($s1)
 		lw $s2,12($s0)
 		sw $s2,12($s1)
+		sync
 		nop										# some nops to give the data time to propagate
 		nop                   # before the instruction fetch.
 		nop
