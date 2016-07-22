@@ -58,7 +58,9 @@ test:		.ent test
 		dli	$a2, 12	# instruction count
 		dsll	$a2, 2	# convert to byte count
 		jal	memcpy
-		nop		# branch delay slot	
+		nop		# branch delay slot
+		
+		sync
 
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
