@@ -85,7 +85,7 @@ memcpy_done:
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
 		jr	$ra
-		nop			# branch-delay slot
+		sync			# branch-delay slot
 		.end memcpy
 
 ################################################################################
@@ -456,7 +456,7 @@ unaligned_end:
 
 memcpy_c_return:
 	jr       $ra                 # Return value remains in c1
-	nop
+	sync
 
 slow_memcpy_loop:                # byte-by-byte copy
 	clb      $a2, $a1, 0($c4)
@@ -464,7 +464,7 @@ slow_memcpy_loop:                # byte-by-byte copy
 	bne      $a0, $a1, slow_memcpy_loop
 	csb      $a2, $a1, -1($c3)
 	jr       $ra                 # Return value remains in c1
-	nop
+	sync
 .end memcpy_c
 
 #
