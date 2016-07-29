@@ -1389,7 +1389,6 @@ L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 
 SAIL_NOSEPRED=\
 not newisa \
-and not allow_unaligned \
 and not beri \
 and not beriinitial \
 and not berisyncistep \
