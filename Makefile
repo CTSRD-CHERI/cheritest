@@ -1917,7 +1917,7 @@ endif
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
-	
+
 $(OBJDIR)/test_cheriabi_clang%.o : test_cheriabi_clang%.c
 	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -mabi=sandbox -integrated-as -o $@ $<  -O3 -ffunction-sections
 
@@ -1926,7 +1926,7 @@ $(OBJDIR)/test_%.o : test_%.c
 
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) --defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
-	#$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
+#$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 
 select_init: select_init.c
 	$(CC) -o select_init select_init.c
