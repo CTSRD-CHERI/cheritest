@@ -1462,6 +1462,7 @@ and not floatfirextended \
 and not floatlegacyabs \
 and not float_mov_signex \
 and not float_mtc_signex \
+and not floatnan2008 \
 and not floatpaired \
 and not floatrecipflushesdenorm \
 and not ignorebadex \

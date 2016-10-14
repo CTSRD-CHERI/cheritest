@@ -198,7 +198,7 @@ class BaseBERITestCase(unittest.TestCase):
                 msg = msg + ": "
             self.fail(msg + "0x%016x and 0x%016x == 0x%016x"%(first, mask, second))
 
-    def assertRegisterSingleNaN(self, reg_val, msg=None):
+    def assertRegisterIsSingleNaN(self, reg_val, msg=None):
         if ((reg_val & 0x7f800000 != 0x7f800000) or (reg_val & 0x7fffff == 0)):
             if msg is None:
                 msg = ""
@@ -206,7 +206,7 @@ class BaseBERITestCase(unittest.TestCase):
                 msg = msg + ": "
             self.fail(msg + "0x%016x is not a NaN value"%(reg_val))
 
-    def assertRegisterSingleQNaN(self, reg_val, msg=None):
+    def assertRegisterIsSingleQNaN(self, reg_val, msg=None):
         # This tests for the IEEE 754:2008 QNaN, not the legacy MIPS
         # IEEE 754:1985 QNaN
         if (reg_val & 0x7fc00000 != 0x7fc00000):

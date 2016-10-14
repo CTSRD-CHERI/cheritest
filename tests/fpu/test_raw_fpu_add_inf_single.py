@@ -40,9 +40,10 @@ class test_raw_fpu_add_inf_single(BaseBERITestCase):
 
     def test_raw_fpu_add_inf_single_2(self):
         '''Test add.s of +Infinity and -Infinity'''
-        self.assertRegisterSingleNaN(self.MIPS.a1, "add.s of +infinity and -infinity did not give NaN")
+        self.assertRegisterIsSingleNaN(self.MIPS.a1, "add.s of +infinity and -infinity did not give NaN")
 
+    @attr('floatnan2008')
     def test_raw_fpu_add_inf_single_2(self):
         '''Test add.s of +Infinity and -Infinity'''
-        self.assertRegisterSingleQNaN(self.MIPS.a1, "add.s of +infinity and -infinity did not give QNaN")
+        self.assertRegisterIsSingleQNaN(self.MIPS.a1, "add.s of +infinity and -infinity did not give QNaN")
 
