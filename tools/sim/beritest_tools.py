@@ -216,6 +216,22 @@ class BaseBERITestCase(unittest.TestCase):
                 msg = msg + ": "
             self.fail(msg + "0x%016x is not a QNaN value"%(reg_val))
 
+    def assertRegisterIsDoubleNaN(self, reg_val, msg=None):
+        if ((reg_val & 0x7ff0000000000000 != 0x7ff0000000000000) or (reg_val & 0xfffffffffffff == 0)):
+            if msg is None:
+                msg = ""
+            else:
+                msg = msg + ": "
+            self.fail(msg + "0x%016x is not a NaN value"%(reg_val))
+
+    def assertRegisterIsDoubleQNaN(self, reg_val, msg=None):
+        if (reg_val & 0x7ff8000000000000 != 0x7ff8000000000000):
+            if msg is None:
+                msg = ""
+            else:
+                msg = msg + ": "
+            self.fail(msg + "0x%016x is not a QNaN value"%(reg_val))
+
     def assertRegisterAllPermissions(self, reg_val, msg=None):
         perm_size = int(os.environ.get("PERM_SIZE", "31"))
         passed = True

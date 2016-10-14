@@ -483,7 +483,8 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_madd_single.s \
 		test_raw_fpu_madd_d64.s	\
 		test_raw_fpu_mtc1_ex.s \
-		test_raw_fpu_mov_ex.s
+		test_raw_fpu_mov_ex.s \
+		test_raw_fpu_add_inf_d64.s
 
 RAW_PS_FILES=\
 		test_raw_fpu_abs_ps.s		\
