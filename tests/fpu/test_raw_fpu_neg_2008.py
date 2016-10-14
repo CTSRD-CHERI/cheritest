@@ -34,13 +34,9 @@ from nose.plugins.attrib import attr
 
 class test_raw_fpu_neg_2008(BaseBERITestCase):
 
-#
-# This test for a 'not a number' value really should test that the fraction
-# part is non-zero, as this denotes +/- infinity rather than NaN.
-#
     def test_raw_fpu_neg_2008_1(self):
         '''Test NEG.S of QNaN'''
-	self.assertRegisterMaskEqual(self.MIPS.a0, 0x7f800000, 0x7f800000, "NEG.S did not return QNaN")
+	self.assertRegisterIsSingleNaN(self.MIPS.a0, "NEG.S did not return NaN")
 
     @attr('floatabs2008')
     def test_raw_fpu_neg_2008_2(self):
