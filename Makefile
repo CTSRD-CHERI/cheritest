@@ -484,7 +484,8 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_madd_d64.s	\
 		test_raw_fpu_mtc1_ex.s \
 		test_raw_fpu_mov_ex.s \
-		test_raw_fpu_add_inf_d64.s
+		test_raw_fpu_add_inf_d64.s \
+		test_raw_fpu_rounding_mode.s
 
 RAW_PS_FILES=\
 		test_raw_fpu_abs_ps.s		\
@@ -1324,7 +1325,8 @@ and not floatflags \
 and not floatrecip \
 and not floatrsqrt \
 and not floatexception \
-and not floatechonan
+and not floatechonan \
+and not float_round_upwards
 else
 L3_NOSEPRED+=and not float
 endif
@@ -1608,7 +1610,7 @@ endif
 NOSEPRED+=and not berisyncistep
 endif
 ifdef COP1
-NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd and not float_mtc_signex and not float_mov_signex and not floatabs2008
+NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd and not float_mtc_signex and not float_mov_signex and not floatabs2008 and not float_round_upwards
 ifdef WONTFIX
 NOSEPRED+=and not floatpairedrounding
 endif
