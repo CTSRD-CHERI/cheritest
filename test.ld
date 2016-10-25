@@ -46,7 +46,7 @@ SECTIONS
                 . = ALIGN(8);
 		obj/init.o(.text) 
 		*(EXCLUDE_FILE (obj/init.o) .text .text.*)
- 	} AT>dmem
+	} AT>dmem
 	.data . : { . = ALIGN(8); *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*); } AT>dmem
 	.got  . : {
                     . = ALIGN(16);
