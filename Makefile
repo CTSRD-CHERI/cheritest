@@ -832,6 +832,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cscr_offset.s		\
 		test_cp2_ldl_unalign.s		\
 		test_cp2_kcc_base.s		\
+		test_cp2_clcr_null.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
