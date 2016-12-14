@@ -836,6 +836,7 @@ TEST_CP2_FILES=					\
 		test_cp2_kcc_base.s		\
 		test_cp2_clcr_null.s		\
 		test_cp2_cunseal_global.s	\
+		test_cp2_clcr_otype.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
