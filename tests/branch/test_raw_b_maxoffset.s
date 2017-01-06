@@ -87,6 +87,13 @@ start:
 		nop
 		nop
 		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
 		jr $s1                 # jump to the branch
 		nop
 branch:
