@@ -199,6 +199,7 @@ finally:
 		nop			# branch-delay slot
 		.end	test
 		
+		.align 3
 return_to_c17:
 		cjr $c17
 		nop
