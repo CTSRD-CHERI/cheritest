@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2015 Alexandre Joannou
+# Copyright (c) 2015-2016 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -32,6 +32,12 @@
 .set nobopt
 .set noat
 
+.macro reset_delay x
+    resetstatcounters  # reset stat counters
+    bne             \x, $zero, 0
+    daddi           \x, -1
+.endm
+
 #
 # Test the counters for the dcache
 #
@@ -39,16 +45,18 @@
 .global start
 start:
 
-    resetstatcounters  # reset stat counters
-
-    dli             $a4,  100
-    delay:
-    bne             $a4, $zero, delay
-    daddi           $a4, -1
-
-    ld              $v0,  dword
-
-    getstatcounter  6, DCACHE, READ_MISS         # a2 takes the value of counter READ_MISS in group DCACHE
+    # reset statcounters delay in v1
+    dli             $v1,  100
+    # dword address in v0
+    la              $v0,  dword
+    # test 1 : read miss
+    reset_delay     $v1
+    ld              $t0, 0($v0)
+    getstatcounter  6, DCACHE, READ_MISS    # a2 takes the value of counter READ_MISS in group DCACHE
+    # test 2 : eviction
+    reset_delay     $v1
+	cache           0x1, 0($v0)
+    getstatcounter  7, DCACHE, EVICT        # a3 takes the value of counter EVICT in group DCACHE
 
     # Dump registers in the simulator
     mtc0 $v0, $26
