@@ -136,7 +136,7 @@ test:		.ent test
 		nop
 		cbtu $c1, error
 		nop
-		
+
 		#
 		# Case four, found by Jonathan Woodruff.
 		#
@@ -158,6 +158,32 @@ test:		.ent test
 		cgetlen $v1, $c1
 		bne $v1, $t1, error
 		nop
+		
+		#
+		# Case four, found by Mike Roe and Jon Woodruff.
+		#
+		# $c12: v:1 s:0 p:00000007 b:00000001600f9000 l:0000000000038000 o:88c0 t:0
+
+		# Stage 1 setting up the initial capability.
+		dli	$t0, 0x98000000600f9000
+		csetoffset $c1, $c0, $t0
+		dli	$t1, 0x38000
+		csetbounds $c1, $c1, $t1
+		dli $t2, 0x88c0
+		csetoffset $c1, $c1, $t2
+		# Set up return instruction
+		dla $t2, return_to_c17
+		ld $t3, 0($t2)
+		csd $t3, $0, 0($c1)
+		cjalr	$c1,$c17
+		nop
+		# Get and assert that the base and length are what we set.
+		cgetbase $v0, $c1
+		bne $v0, $t0, error
+		nop
+		cgetlen $v1, $c1
+		bne $v1, $t1, error
+		nop
 
 		b	finally
 		nop
@@ -172,6 +198,11 @@ finally:
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
+		
+return_to_c17:
+		cjr $c17
+		nop
+		
 		
 		.data
 		.align 5
