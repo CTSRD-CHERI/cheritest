@@ -60,6 +60,8 @@ CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+t:([01])\s+[su]:([01])
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
 SAIL_CAP_PCC_RE = re.compile('DEBUG CAP PCC\s+0b([01u]{257})')
 SAIL_CAP_REG_RE = re.compile('DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{257})')
+SAIL_CAP128_PCC_RE = re.compile('DEBUG CAP PCC\s+0b([01u]{129})')
+SAIL_CAP128_REG_RE = re.compile('DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{129})')
 SAIL_CAP_REG_NULL_RE = re.compile('DEBUG CAP REG\s+([0-9]+)\s+0b0\.\.\.0')
 class MipsException(Exception):
     pass
@@ -90,7 +92,7 @@ def capabilityFromStrings(t, s, perms, ctype, offset, base, length):
     )
 
 def capabilityFromBinaryString(s):
-    # sail prints capaabilities as a 257 bit binary string...
+    # sail prints capabilities as a 257 bit binary string...
     if 'u' in s:
         return None
     else:
@@ -103,6 +105,59 @@ def capabilityFromBinaryString(s):
             int(s[256-127 : 257- 64], 2), # base
             int(s[256-63  : 257-  0], 2), # length
     )
+
+def c128_atop_correction(a_mid, R, TB):
+    alt = a_mid < R
+    tblt = TB < R
+    if alt == tblt:
+        return 0
+    else:
+        return -1 if alt else 1
+
+def capabilityFromBinaryString128(s):
+    # sail 128 prints capabilities as a 129 bit binary string...
+    if 'u' in s:
+        return None
+    else:
+        tag   = int(s[0], 2)
+        perms = s[128-127 : 129-113]
+        perms_munged = perms[0:4] + (4*perms[4:5]) + perms[4:] # replicate access_system_regs
+        perms = int(perms_munged, 2)
+        e     = int(s[128-110 : 129-105], 2)
+        sealed= int(s[128-104], 2)
+        B     = int(s[128-103 : 129- 84], 2)
+        T     = int(s[128-83  : 129- 64], 2)
+        ptr   = int(s[128-63  : 129-  0], 2)
+        # decode the raw compressed capability
+        if sealed:
+            otype_hi = B & 0xfff
+            otype_lo = T & 0xfff
+            otype = (otype_hi << 12) | otype_lo
+            T = T & 0xff000
+            B = B & 0xff000
+        else:
+            otype = 0
+        R=(B - 2**12) & 0xfffff
+        a_mid = (ptr >> e) & 0xfffff
+        a_top = ptr >> (20+e)
+        correction_t = c128_atop_correction(a_mid, R, T)
+        correction_b = c128_atop_correction(a_mid, R, B)
+        base = (B << e) | ((a_top + correction_b) << (20+e))
+        top  = (T << e) | ((a_top + correction_t) << (20+e))
+        #print "T=0x%05x B=0x%05x e=%2d otype=0x%06x\n" % (T, B, e, otype)
+        #print "a_mid=0x%05x c_t=%d c_b=%d\n" % (a_mid, correction_t, correction_b)
+        #print "base=0x%016x top=0x%016x" % (base, top)
+        
+        return Capability(
+            tag,                 # tag
+            sealed,           # sealed
+            perms, # perms
+            otype, # otype
+            ptr-base, # offset
+            base, # base
+            top-base, # length
+    )
+
 
 class ThreadStatus(object):
     '''Data object representing status of a thread (including cp2 registers if present)'''
@@ -178,6 +233,8 @@ class MipsStatus(object):
             sail_cap_pcc_groups=SAIL_CAP_PCC_RE.search(line)
             sail_cap_reg_groups=SAIL_CAP_REG_RE.search(line)
             sail_cap_reg_null_groups=SAIL_CAP_REG_NULL_RE.search(line)
+            sail_cap128_pcc_groups=SAIL_CAP128_PCC_RE.search(line)
+            sail_cap128_reg_groups=SAIL_CAP128_REG_RE.search(line)
             if (thread_groups):
                 thread = int(thread_groups.group(1))
             # We use 'thread' for both thread id and core id.
@@ -222,6 +279,15 @@ class MipsStatus(object):
                 cap_reg_num = int(sail_cap_reg_null_groups.group(1))
                 t = self.threads[thread]
                 t.cp2[cap_reg_num] = Capability(0,0,0,0,0,0,0)
+            if (sail_cap128_pcc_groups):
+                pcc_string = sail_cap128_pcc_groups.group(1)
+                t = self.threads[thread]
+                t.pcc = capabilityFromBinaryString128(pcc_string)
+            if (sail_cap128_reg_groups):
+                cap_reg_num = int(sail_cap128_reg_groups.group(1))
+                cap_string = sail_cap128_reg_groups.group(2)
+                t = self.threads[thread]
+                t.cp2[cap_reg_num] = capabilityFromBinaryString128(cap_string)
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''
