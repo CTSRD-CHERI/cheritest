@@ -25,45 +25,12 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "statcounters_macros.s"
+from beritest_tools import BaseBERITestCase
+from nose.plugins.attrib import attr
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+class test_raw_statcounters_l2cachemaster(BaseBERITestCase):
 
-#
-# Test the counters for the dcache
-#
-
-.global start
-start:
-
-    # reset statcounters delay in v1
-    dli             $v1,  100
-    # dword address in v0
-    dla             $v0,  dword
-    # test 1 : read miss
-    reset_delay     $v1
-    ld              $t0, 0($v0)
-    delay           $v1
-    getstatcounter  6, DCACHE, READ_MISS    # a2 takes the value of counter READ_MISS in group DCACHE
-    # test 2 : eviction
-    reset_delay     $v1
-	cache           0x1, 0($v0)
-    delay           $v1
-    getstatcounter  7, DCACHE, EVICT        # a3 takes the value of counter EVICT in group DCACHE
-
-    # Dump registers in the simulator
-    mtc0 $v0, $26
-    nop
-    nop
-
-    # Terminate the simulator
-    mtc0 $v0, $23
-    end:
-    b end
-    nop
-
-.data
-dword:		.dword	0xf00df00dbeefbeef
+    @attr('statcounters')
+    def test_raw_statcounters_l2cachemaster_1(self):
+        '''Test that resetting the stat counters, loading a dword and querying the l2cachemaster read request counter returns 1'''
+        self.assertRegisterEqual(self.MIPS.a2, 268, "l2cachemaster read req counter corrupted")

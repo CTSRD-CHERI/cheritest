@@ -33,37 +33,44 @@
 .set noat
 
 #
-# Test the counters for the dcache
+# Test the counters for the l2 master interface
 #
+
+DELAY_TIME = 1000
+
+READ_REQ_TIMES = 268
 
 .global start
 start:
 
     # reset statcounters delay in v1
-    dli             $v1,  100
+    dli             $v1, DELAY_TIME
     # dword address in v0
-    dla             $v0,  dword
-    # test 1 : read miss
-    reset_delay     $v1
+    dli             $v0,  0x9000000040000000
+    # test 1 : read request
+    dli             $a5, 2      # looping just to make sure no instruction miss will be counted
+    1:
+    delay           $v1
+    resetstatcounters
+    delay           $v1
+    dli             $a6, READ_REQ_TIMES - 1
+    2:
+    flush_nops
     ld              $t0, 0($v0)
+    bne             $a6, $zero, 2b
+    daddi           $a6, -1
     delay           $v1
-    getstatcounter  6, DCACHE, READ_MISS    # a2 takes the value of counter READ_MISS in group DCACHE
-    # test 2 : eviction
-    reset_delay     $v1
-	cache           0x1, 0($v0)
-    delay           $v1
-    getstatcounter  7, DCACHE, EVICT        # a3 takes the value of counter EVICT in group DCACHE
+    getstatcounter  6, L2CACHEMASTER, READ_REQ  # a2 takes the value of counter READ_REQ in group L2CACHEMASTER
+    bne             $a5, $zero, 1b
+    daddi           $a5, -1
 
     # Dump registers in the simulator
-    mtc0 $v0, $26
+    mtc0            $v0, $26
     nop
     nop
 
     # Terminate the simulator
-    mtc0 $v0, $23
+    mtc0            $v0, $23
     end:
     b end
     nop
-
-.data
-dword:		.dword	0xf00df00dbeefbeef
