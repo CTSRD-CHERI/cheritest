@@ -1434,6 +1434,23 @@ and not pic \
 and not mt \
 and not einstr
 
+ifneq ($(CAP_SIZE),256)
+SAIL_NOSEPRED+=and not cap256
+ifeq ($(CAP_PRECISE),1)
+SAIL_NOSEPRED+=and not cap_copy_as_data
+else
+SAIL_NOSEPRED+=and not cap_null_length
+endif
+endif
+
+ifneq ($(CAP_SIZE),128)
+SAIL_NOSEPRED+=and not cap128
+endif
+
+ifneq ($(CAP_SIZE),64)
+SAIL_NOSEPRED+=and not cap64
+endif
+
 ifeq ($(CAP_PRECISE),1)
 SAIL_NOSEPRED+=and not cap_imprecise and not ccall_hw_2
 else
