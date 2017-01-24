@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2013-2014 Alan A. Mujumdar
-# Copyright (c) 2015-2016 Alexandre Joannou
+# Copyright (c) 2015-2017 Alexandre Joannou
 # Copyright (c) 2014 SRI International
 # Copyright (c) 2012 Benjamin Thorner
 # Copyright (c) 2013-2015 Colin Rothwell
@@ -1129,6 +1129,7 @@ ifeq ($(STATCOUNTERS),1)
 RAW_STATCOUNTERS_FILES=                \
 		test_raw_statcounters_reset.s   \
 		test_raw_statcounters_dcache.s  \
+		test_raw_statcounters_l2cachemaster.s  \
 		test_raw_statcounters_mipsmem.s
 else
 RAW_STATCOUNTERS_FILES=
@@ -1578,7 +1579,7 @@ ifdef DEBUG
 	SIM_TRACE_OPTS?= +regfile +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug +StatCounters
 else
 ifdef TRACE
-	SIM_TRACE_OPTS?=+regfile +trace +cTrace +tlbTrace +instructionBasedCycleCounter +tlb
+	SIM_TRACE_OPTS?=+trace +cTrace +instructionBasedCycleCounter +StatCounters
 else
 	SIM_TRACE_OPTS?=
 endif

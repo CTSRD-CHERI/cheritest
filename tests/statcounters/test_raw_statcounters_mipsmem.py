@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2015 Alexandre Joannou
+# Copyright (c) 2015-2017 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -28,7 +28,7 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_statcounters_reset(BaseBERITestCase):
+class test_raw_statcounters_mipsmem(BaseBERITestCase):
 
     @attr('statcounters')
     def test_raw_statcounters_byte_read(self):

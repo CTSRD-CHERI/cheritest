@@ -63,7 +63,7 @@ start:
     # load and store a byte ...
     dla     $t0, byte1
     # ... BYTE_TIMES times
-    dli     $a4, BYTE_TIMES-2
+    dli     $a4, BYTE_TIMES-1
     1:
     lb      $t1, 0($t0)
     sb      $t1, 0($t0)
@@ -72,7 +72,7 @@ start:
     # load and store a hword ...
     dla     $t0, hword1
     # ... HWORD_TIMES times
-    dli     $a4, HWORD_TIMES-2
+    dli     $a4, HWORD_TIMES-1
     1:
     lh      $t1, 0($t0)
     sh      $t1, 0($t0)
@@ -81,7 +81,7 @@ start:
     # load and store a word ...
     dla     $t0, word1
     # ... WORD_TIMES times
-    dli     $a4, WORD_TIMES-2
+    dli     $a4, WORD_TIMES-1
     1:
     lw      $t1, 0($t0)
     sw      $t1, 0($t0)
@@ -90,7 +90,7 @@ start:
     # load and store a dword ...
     dla     $t0, dword1
     # ... DWORD_TIMES times
-    dli     $a4, DWORD_TIMES-2
+    dli     $a4, DWORD_TIMES-1
     1:
     ld      $t1, 0($t0)
     sd      $t1, 0($t0)
@@ -99,7 +99,7 @@ start:
     # load and store a cap ...
     dla     $t0, cap1
     # ... CAP_TIMES times
-    dli     $a4, CAP_TIMES-2
+    dli     $a4, CAP_TIMES-1
     1:
     clcr	$c1, $t0($c0)
     cscr	$c1, $t0($c0)

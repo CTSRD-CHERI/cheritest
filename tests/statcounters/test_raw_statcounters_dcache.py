@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2015 Alexandre Joannou
+# Copyright (c) 2015-2017 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -28,9 +28,9 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_statcounters_reset(BaseBERITestCase):
+class test_raw_statcounters_dcache(BaseBERITestCase):
 
     @attr('statcounters')
-    def test_raw_statcounters_reset_1(self):
+    def test_raw_statcounters_dcache_1(self):
         '''Test that resetting the stat counters, loading a dword and querying the dcache miss counter returns 1'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "dcache read miss counter corrupted")
