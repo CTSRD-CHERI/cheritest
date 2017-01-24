@@ -38,10 +38,10 @@
 
 DELAY_TIME  = 1000
 
-BYTE_TIMES  = 18
-HWORD_TIMES = 22
-WORD_TIMES  = 8
-DWORD_TIMES = 12
+BYTE_TIMES  = 154
+HWORD_TIMES = 36
+WORD_TIMES  = 222
+DWORD_TIMES = 144
 CAP_TIMES   = 24
 
 .global start
@@ -65,46 +65,60 @@ start:
     # ... BYTE_TIMES times
     dli     $a4, BYTE_TIMES-1
     1:
+    flush_nops
     lb      $t1, 0($t0)
     sb      $t1, 0($t0)
     bne     $a4, $zero, 1b
     daddi   $a4, -1
+    flush_nops
+
     # load and store a hword ...
     dla     $t0, hword1
     # ... HWORD_TIMES times
     dli     $a4, HWORD_TIMES-1
     1:
+    flush_nops
     lh      $t1, 0($t0)
     sh      $t1, 0($t0)
     bne     $a4, $zero, 1b
     daddi   $a4, -1
+    flush_nops
+
     # load and store a word ...
     dla     $t0, word1
     # ... WORD_TIMES times
     dli     $a4, WORD_TIMES-1
     1:
+    flush_nops
     lw      $t1, 0($t0)
     sw      $t1, 0($t0)
     bne     $a4, $zero, 1b
     daddi   $a4, -1
+    flush_nops
+
     # load and store a dword ...
     dla     $t0, dword1
     # ... DWORD_TIMES times
     dli     $a4, DWORD_TIMES-1
     1:
+    flush_nops
     ld      $t1, 0($t0)
     sd      $t1, 0($t0)
     bne     $a4, $zero, 1b
     daddi   $a4, -1
+    flush_nops
+
     # load and store a cap ...
     dla     $t0, cap1
     # ... CAP_TIMES times
     dli     $a4, CAP_TIMES-1
     1:
+    flush_nops
     clcr	$c1, $t0($c0)
     cscr	$c1, $t0($c0)
     bne     $a4, $zero, 1b
     daddi   $a4, -1
+    flush_nops
 
     # wait a bit for counters update
     dli     $a4, DELAY_TIME

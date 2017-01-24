@@ -85,3 +85,16 @@ WRITE_RSP      = 5
     bne             \x, $zero, 0
     daddi           \x, -1
 .endm
+
+.macro flush_nops
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+.endm
