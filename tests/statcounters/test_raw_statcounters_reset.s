@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2015 Alexandre Joannou
+# Copyright (c) 2015-2017 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -36,8 +36,8 @@ THRESHOLD = 100
 .macro checkstatcounter counter_group, counter_offset
     getstatcounter 6, \counter_group, \counter_offset # a2 gets the counter's value
     sltiu   $a5, $a2, THRESHOLD # a5 <= 1 if a2 less than threshold, 0 otherwise
-    or      $v0, $v0, $a5       # or a5 in the lsb of v0
     sll     $v0, $v0, 1         # shift v0 left by one
+    or      $v0, $v0, $a5       # or a5 in the lsb of v0
 .endm
 
 .set mips64
@@ -53,31 +53,65 @@ start:
     move    $v0, $zero # init result bit vector to all 0s
 
     checkstatcounter ICACHE, WRITE_HIT
-	checkstatcounter ICACHE, WRITE_MISS  
-	checkstatcounter ICACHE, READ_HIT    
-	checkstatcounter ICACHE, READ_MISS   
-	checkstatcounter ICACHE, PFTCH_HIT   
-	checkstatcounter ICACHE, PFTCH_MISS  
-	checkstatcounter ICACHE, EVICT       
-	checkstatcounter ICACHE, PFTCH_EVICT 
+    checkstatcounter ICACHE, WRITE_MISS
+    checkstatcounter ICACHE, READ_HIT
+    checkstatcounter ICACHE, READ_MISS
+    checkstatcounter ICACHE, PFTCH_HIT
+    checkstatcounter ICACHE, PFTCH_MISS
+    checkstatcounter ICACHE, EVICT
+    checkstatcounter ICACHE, PFTCH_EVICT
 
     checkstatcounter DCACHE, WRITE_HIT
-	checkstatcounter DCACHE, WRITE_MISS  
-	checkstatcounter DCACHE, READ_HIT    
-	checkstatcounter DCACHE, READ_MISS   
-	checkstatcounter DCACHE, PFTCH_HIT   
-	checkstatcounter DCACHE, PFTCH_MISS  
-	checkstatcounter DCACHE, EVICT       
-	checkstatcounter DCACHE, PFTCH_EVICT 
+    checkstatcounter DCACHE, WRITE_MISS
+    checkstatcounter DCACHE, READ_HIT
+    checkstatcounter DCACHE, READ_MISS
+    checkstatcounter DCACHE, PFTCH_HIT
+    checkstatcounter DCACHE, PFTCH_MISS
+    checkstatcounter DCACHE, EVICT
+    checkstatcounter DCACHE, PFTCH_EVICT
 
     checkstatcounter L2CACHE, WRITE_HIT
-	checkstatcounter L2CACHE, WRITE_MISS  
-	checkstatcounter L2CACHE, READ_HIT    
-	checkstatcounter L2CACHE, READ_MISS   
-	checkstatcounter L2CACHE, PFTCH_HIT   
-	checkstatcounter L2CACHE, PFTCH_MISS  
-	checkstatcounter L2CACHE, EVICT       
-	checkstatcounter L2CACHE, PFTCH_EVICT 
+    checkstatcounter L2CACHE, WRITE_MISS
+    checkstatcounter L2CACHE, READ_HIT
+    checkstatcounter L2CACHE, READ_MISS
+    checkstatcounter L2CACHE, PFTCH_HIT
+    checkstatcounter L2CACHE, PFTCH_MISS
+    checkstatcounter L2CACHE, EVICT
+    checkstatcounter L2CACHE, PFTCH_EVICT
+
+    checkstatcounter MIPSMEM, BYTE_READ
+    checkstatcounter MIPSMEM, BYTE_WRITE
+    checkstatcounter MIPSMEM, HWORD_READ
+    checkstatcounter MIPSMEM, HWORD_WRITE
+    checkstatcounter MIPSMEM, WORD_READ
+    checkstatcounter MIPSMEM, WORD_WRITE
+    checkstatcounter MIPSMEM, DWORD_READ
+    checkstatcounter MIPSMEM, DWORD_WRITE
+    checkstatcounter MIPSMEM, CAP_READ
+    checkstatcounter MIPSMEM, CAP_WRITE
+
+    checkstatcounter TAGCACHE, WRITE_HIT
+    checkstatcounter TAGCACHE, WRITE_MISS
+    checkstatcounter TAGCACHE, READ_HIT
+    checkstatcounter TAGCACHE, READ_MISS
+    checkstatcounter TAGCACHE, PFTCH_HIT
+    checkstatcounter TAGCACHE, PFTCH_MISS
+    checkstatcounter TAGCACHE, EVICT
+    checkstatcounter TAGCACHE, PFTCH_EVICT
+
+    checkstatcounter L2CACHEMASTER, READ_REQ
+    checkstatcounter L2CACHEMASTER, WRITE_REQ
+    checkstatcounter L2CACHEMASTER, WRITE_REQ_FLIT
+    checkstatcounter L2CACHEMASTER, READ_RSP
+    checkstatcounter L2CACHEMASTER, READ_RSP_FLIT
+    checkstatcounter L2CACHEMASTER, WRITE_RSP
+
+    checkstatcounter TAGCACHEMASTER, READ_REQ
+    checkstatcounter TAGCACHEMASTER, WRITE_REQ
+    checkstatcounter TAGCACHEMASTER, WRITE_REQ_FLIT
+    checkstatcounter TAGCACHEMASTER, READ_RSP
+    checkstatcounter TAGCACHEMASTER, READ_RSP_FLIT
+    checkstatcounter TAGCACHEMASTER, WRITE_RSP
 
     # Dump registers in the simulator
     mtc0 $v0, $26

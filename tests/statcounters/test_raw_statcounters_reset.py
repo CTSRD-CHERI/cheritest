@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2015 Alexandre Joannou
+# Copyright (c) 2015-2017 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,4 +33,4 @@ class test_raw_statcounters_reset(BaseBERITestCase):
     @attr('statcounters')
     def test_raw_statcounters_reset_1(self):
         '''Test that reseting the stat counters actually resets their values'''
-        self.assertRegisterMaskEqual(self.MIPS.v0, 0x7ffffff, 0x7ffffff, "stat counters not reset correctly")
+        self.assertRegisterMaskEqual(self.MIPS.v0, 0x3fffffffffffff, 0x3fffffffffffff, "stat counters not reset correctly")
