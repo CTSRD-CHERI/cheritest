@@ -147,7 +147,7 @@ def capabilityFromBinaryString128(s):
         #print "T=0x%05x B=0x%05x e=%2d otype=0x%06x\n" % (T, B, e, otype)
         #print "a_mid=0x%05x c_t=%d c_b=%d\n" % (a_mid, correction_t, correction_b)
         #print "base=0x%016x top=0x%016x" % (base, top)
-        
+        length = top - base
         return Capability(
             tag,                 # tag
             sealed,           # sealed
@@ -155,7 +155,7 @@ def capabilityFromBinaryString128(s):
             otype, # otype
             ptr-base, # offset
             base, # base
-            top-base, # length
+            min(0xffffffffffffffff, length) , # length
     )
 
 
