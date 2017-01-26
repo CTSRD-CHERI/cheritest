@@ -1432,7 +1432,8 @@ and not float \
 and not clang  \
 and not pic \
 and not mt \
-and not einstr
+and not einstr \
+and not ccall_hw_2
 
 ifneq ($(CAP_SIZE),256)
 SAIL_NOSEPRED+=and not cap256
@@ -1452,7 +1453,7 @@ SAIL_NOSEPRED+=and not cap64
 endif
 
 ifeq ($(CAP_PRECISE),1)
-SAIL_NOSEPRED+=and not cap_imprecise and not ccall_hw_2
+SAIL_NOSEPRED+=and not cap_imprecise
 else
 SAIL_NOSEPRED+=and not cap_precise
 endif
