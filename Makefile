@@ -955,7 +955,8 @@ TEST_CP2_FILES=					\
 		test_cp2_clearregs_gphi.s \
 		test_cp2_clearregs_caplo.s \
 		test_cp2_clearregs_caphi.s \
-		test_cp2_cap_as_data.s
+		test_cp2_cap_as_data.s \
+		test_cp2_fast_rep_check.s
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
