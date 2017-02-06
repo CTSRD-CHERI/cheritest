@@ -48,14 +48,14 @@ class test_cp2_fast_rep_check(BaseBERITestCase):
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_fast_rep_check_tag0(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x1, "Tag unexpectedly cleared by cincoffset with positive increment near representable boundary using precise capabilities")
+        self.assertRegisterEqual(self.MIPS.a0, 0x1, "Tag unexpectedly cleared by cincoffset with positive increment near representable boundary using imprecise capabilities")
 
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_fast_rep_check_tag2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0x1, "Tag unexpectedly cleared by cincoffset with zero increment near representable boundary using precise capabilities")
+        self.assertRegisterEqual(self.MIPS.a2, 0x1, "Tag unexpectedly cleared by cincoffset with zero increment near representable boundary using imprecise capabilities")
 
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_fast_rep_check_tag2(self):
-                self.assertRegisterEqual(self.MIPS.a4, 0x0, "Tag unexpectedly NOT cleared by cincoffset with negative increment near representable boundary using precise capabilities")
+                self.assertRegisterEqual(self.MIPS.a4, 0x0, "Tag unexpectedly NOT cleared by cincoffset with negative increment near representable boundary using imprecise capabilities")
