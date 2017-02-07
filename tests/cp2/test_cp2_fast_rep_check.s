@@ -47,24 +47,52 @@ test:		.ent test
                 csetoffset $c1, $c0, $t0
                 dli     $t0, 0x0000000000e01000
                 csetbounds $c1, $c1, $t0
+
 # Put the offset near, but still inside, the lower limit of representable bounds. This is expected to work.
                 dli     $t0, -0xffff
-                cincoffset $c1, $c1, $t0
-# Now, attempt to decrement the offset. Although the result is still in representable bounds CHERI's fast representable bounds check is conservatively approximate and will fail in this case.
-                dli        $t0, 1
                 cincoffset $c2, $c1, $t0
-                dli        $t0, 0
-                cincoffset $c3, $c1, $t0
-                dli        $t0, -1
-                cincoffset $c4, $c1, $t0
-                
-                cgettag    $a0, $c2
-                cgetoffset $a1, $c2
-                cgettag    $a2, $c3
-                cgetoffset $a3, $c3
-                cgettag    $a4, $c4
-                cgetoffset $a5, $c4
 
+# Now, attempt to move the offset by one in either direction and by
+# zero. Although the result is still in representable bounds
+# CHERI's fast representable bounds check is conservatively
+# approximate and will fail in the decrement case.
+                dli        $t0, 1
+                cincoffset $c3, $c2, $t0
+                dli        $t0, 0
+                cincoffset $c4, $c2, $t0
+                dli        $t0, -1
+                cincoffset $c5, $c2, $t0
+
+                cgettag    $a0, $c3
+                cgetoffset $a1, $c3
+                cgettag    $a2, $c4
+                cgetoffset $a3, $c4
+                cgettag    $a4, $c5
+                cgetoffset $a5, $c5
+
+# Put the offset near, but still inside, the upper limit of representable bounds. This is expected to work.
+                dli     $t0, 0xfefffe
+                cincoffset $c6, $c1, $t0
+
+# Now, attempt to move the offset by one in either direction and by
+# zero. Although the result is still in representable bounds
+# CHERI's fast representable bounds check is conservatively
+# approximate and will fail in the increment and zero cases.
+                dli        $t0, 1
+                cincoffset $c7, $c6, $t0
+                dli        $t0, 0
+                cincoffset $c8, $c6, $t0
+                dli        $t0, -1
+                cincoffset $c9, $c6, $t0
+
+                cgettag    $a6, $c7
+                cgetoffset $a7, $c7
+                cgettag    $s0, $c8
+                cgetoffset $s1, $c8
+                cgettag    $s2, $c9
+                cgetoffset $s3, $c9
+
+        
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
@@ -72,9 +100,3 @@ test:		.ent test
 		nop			# branch-delay slot
 		.end	test
 
-		.data
-		.align 5
-cap:		.dword 0
-		.dword 0
-		.dword 0
-		.dword 0
