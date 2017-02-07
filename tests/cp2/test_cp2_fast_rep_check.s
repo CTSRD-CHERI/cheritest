@@ -71,8 +71,12 @@ test:		.ent test
                 cgetoffset $a5, $c5
 
 # Put the offset near, but still inside, the upper limit of representable bounds. This is expected to work.
-                dli     $t0, 0xfefffe
+                dli     $t0, 0xfeffef
                 cincoffset $c6, $c1, $t0
+# Nudge the address into the last representable block without failing the fast representable check.
+# This must be done with an increment with no significant bits in the "mantissa" range.
+                dli        $t0, 0x01
+                cincoffset $c6, $c6, $t0
 
 # Now, attempt to move the offset by one in either direction and by
 # zero. Although the result is still in representable bounds
