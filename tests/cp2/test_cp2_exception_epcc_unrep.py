@@ -140,7 +140,7 @@ class test_cp2_exception_epcc_unrep(BaseBERITestCase):
         
     @attr('capabilities')
     def test_sandbox_epcc_offset(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].offset, self.MIPS.a7 + 0x10000000, "sandbox EPCC offset incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].base + self.MIPS.cp2[3].offset, self.MIPS.a7 + 0x10000000, "sandbox EPCC offset incorrect")
 
     @attr('capabilities')
     @attr('cap_precise')
