@@ -29,6 +29,7 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
+@attr("capabilities")
 class test_cp2_exception_exl(BaseBERITestCase):
 
     def test_cp2_exception_exl_epc(self):
