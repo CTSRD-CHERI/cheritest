@@ -957,7 +957,8 @@ TEST_CP2_FILES=					\
 		test_cp2_clearregs_caphi.s \
 		test_cp2_cap_as_data.s \
 		test_cp2_fast_rep_check.s \
-		test_cp2_exception_epcc_unrep.s
+		test_cp2_exception_epcc_unrep.s \
+		test_cp2_exception_exl.s
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
