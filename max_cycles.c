@@ -75,6 +75,10 @@ char *cp;
       (strcmp(cp, "test_mc_tag_coherence_cached.log") == 0) ||
       (strcmp(cp, "test_mc_tag_coherence_multi.log") == 0) ||
       (strcmp(cp, "test_mc_tag_coherence_cachedmulti.log") == 0) ||
+      (strcmp(cp, "test_mc_addr.log") == 0) ||
+      (strcmp(cp, "test_mc_addr_cached.log") == 0) ||
+      (strcmp(cp, "test_mc_addr_multi.log") == 0) ||
+      (strcmp(cp, "test_mc_addr_cachedmulti.log") == 0) ||
       (strcmp(cp, "test_clang_memcpy.log") == 0) ||
       (strcmp(cp, "test_clang_memcpy_cached.log") == 0) ||
       (strcmp(cp, "test_clang_memcpy_multi.log") == 0) ||
