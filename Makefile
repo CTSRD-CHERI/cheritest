@@ -958,6 +958,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cap_as_data.s \
 		test_cp2_fast_rep_check.s \
 		test_cp2_exception_epcc_unrep.s \
+		test_cp2_exception_epcc_rep.s \
 		test_cp2_exception_exl.s
 endif
 
