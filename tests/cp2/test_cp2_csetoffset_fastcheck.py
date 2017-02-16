@@ -36,3 +36,21 @@ class test_cp2_csetoffset_fastcheck(BaseBERITestCase):
 
     def test_cp2_check_offset(self):
         self.assertRegisterEqual(self.MIPS.a1, 0xFEFFF0, "Incorrect offset when set into representable hazard zone")
+
+    def test_cp2_check_tag_lower1(self):
+        self.assertRegisterEqual(self.MIPS.a2, 0x1, "Tag unexpectedly cleared by csetoffset into representable hazard zone")
+
+    def test_cp2_check_offset_lower1(self):
+        self.assertRegisterEqual(self.MIPS.a3, -0xFFFF & 0xffffffffffffffff, "Incorrect offset when set into representable hazard zone")
+
+    def test_cp2_check_tag_lower2(self):
+        self.assertRegisterEqual(self.MIPS.a4, 0x1, "Tag unexpectedly cleared by csetoffset into representable hazard zone")
+
+    def test_cp2_check_offset_lower2(self):
+        self.assertRegisterEqual(self.MIPS.a5, -0xFFFE & 0xffffffffffffffff, "Incorrect offset when set into representable hazard zone")
+
+    def test_cp2_check_tag_lower3(self):
+        self.assertRegisterEqual(self.MIPS.a6, 0x1, "Tag unexpectedly cleared by csetoffset into representable hazard zone")
+
+    def test_cp2_check_offset_lower3(self):
+        self.assertRegisterEqual(self.MIPS.a7, -0xFFFF & 0xffffffffffffffff, "Incorrect offset when set into representable hazard zone")

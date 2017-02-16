@@ -36,29 +36,51 @@
 # check is approximate, and hence architecturally visible.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+.global test
+test:           .ent test
+        daddu   $sp, $sp, -32
+        sd      $ra, 24($sp)
+        sd      $fp, 16($sp)
+        daddu   $fp, $sp, 32
 # Construct the example capability given in the paper
-                dli     $t0, 0x0010000000200000
-                csetoffset $c1, $c0, $t0
-                dli     $t0, 0x0000000000e01000
-                csetbounds $c1, $c1, $t0
+        dli     $t0, 0x0010000000200000
+        csetoffset $c1, $c0, $t0
+        dli     $t0, 0x0000000000e01000
+        csetbounds $c1, $c1, $t0
 
-# Attempt to set the offset into the "imprecision hazard" zone -- within representable bounds but might fail with fast representable bounds check
-                dli        $t0, 0xFEFFF0
-                csetoffset $c2, $c1, $t0
+# Attempt to set the offset into the UPPER "imprecision hazard" zone
+# -- within representable bounds but might fail with fast
+# representable bounds check
+        dli        $t0, 0xFEFFF0
+        csetoffset $c2, $c1, $t0
+        cgettag    $a0, $c2
+        cgetoffset $a1, $c2
 
-                cgettag    $a0, $c2
-                cgetoffset $a1, $c2
+# Attempt to set the offset into the LOWER "imprecision hazard" zone
+# This works even with fast representable bounds check
+        dli        $t0, -0xFFFF
+        csetoffset $c3, $c1, $t0
+        cgettag    $a2, $c3
+        cgetoffset $a3, $c3
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+# Similar to above except that we do it in two stages -- the first
+# one should work but the second will fail the fast representable
+# bounds check. This could be a bit suprising...
+        dli        $t0, -0xFFFE
+        csetoffset $c4, $c1, $t0
+        cgettag    $a4, $c4
+        cgetoffset $a5, $c4
+
+        dli        $t0, -0xFFFF
+        csetoffset $c5, $c4, $t0
+        cgettag    $a6, $c5
+        cgetoffset $a7, $c5
+
+        
+        ld      $fp, 16($sp)
+        ld      $ra, 24($sp)
+        daddu   $sp, $sp, 32
+        jr      $ra
+        nop                     # branch-delay slot
+.end    test
 
