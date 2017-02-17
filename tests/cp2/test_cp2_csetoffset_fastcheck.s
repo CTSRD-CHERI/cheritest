@@ -55,26 +55,30 @@ test:           .ent test
         csetoffset $c2, $c1, $t0
         cgettag    $a0, $c2
         cgetoffset $a1, $c2
+        cgetbase   $a2, $c2
 
 # Attempt to set the offset into the LOWER "imprecision hazard" zone
 # This works even with fast representable bounds check
         dli        $t0, -0xFFFF
         csetoffset $c3, $c1, $t0
-        cgettag    $a2, $c3
-        cgetoffset $a3, $c3
+        cgettag    $a3, $c3
+        cgetoffset $a4, $c3
+        cgetbase   $a5, $c3
 
 # Similar to above except that we do it in two stages -- the first
 # one should work but the second will fail the fast representable
 # bounds check. This could be a bit suprising...
         dli        $t0, -0xFFFE
         csetoffset $c4, $c1, $t0
-        cgettag    $a4, $c4
-        cgetoffset $a5, $c4
+        cgettag    $a6, $c4
+        cgetoffset $a7, $c4
+        cgetbase   $s0, $c4
 
         dli        $t0, -0xFFFF
         csetoffset $c5, $c4, $t0
-        cgettag    $a6, $c5
-        cgetoffset $a7, $c5
+        cgettag    $s1, $c5
+        cgetoffset $s2, $c5
+        cgetbase   $s3, $c5
 
         
         ld      $fp, 16($sp)
