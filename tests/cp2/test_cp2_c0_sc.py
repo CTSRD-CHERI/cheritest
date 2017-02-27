@@ -31,5 +31,6 @@ from nose.plugins.attrib import attr
 class test_cp2_c0_sc(BaseBERITestCase):
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_c0_sc_1(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "An exception was raised by SC with an unaligned DDC")

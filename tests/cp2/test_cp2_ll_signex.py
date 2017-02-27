@@ -36,18 +36,21 @@ from nose.plugins.attrib import attr
 class test_cp2_ll_signex(BaseBERITestCase):
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_ll_signex_1(self):
         '''Test that cllb sign-extends the result'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfffffffffffffffe,
             "cllb of negative value returned incorrect result")
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_ll_signex_2(self):
         '''Test that cllh sign-extends the result'''
         self.assertRegisterEqual(self.MIPS.a1, 0xfffffffffffffedc,
             "cllh of negative value returned incorrect result")
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_ll_signex_3(self):
         '''Test that cllw sign-extends the result'''
         self.assertRegisterEqual(self.MIPS.a2, 0xfffffffffedcba98,

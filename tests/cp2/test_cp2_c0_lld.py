@@ -35,6 +35,7 @@ from nose.plugins.attrib import attr
 class test_cp2_c0_lld(BaseBERITestCase):
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_lld_64aligned(self):
         '''Test a 64-bit aligned double word load linked via a constrained c0'''
         self.assertRegisterEqual(self.MIPS.a0, 0x0011223344556677, "64-bit aligned lld returned incorrect value")

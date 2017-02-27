@@ -35,11 +35,13 @@ from nose.plugins.attrib import attr
 class test_cp2_c0_ll(BaseBERITestCase):
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_ll_64aligned(self):
         '''Test a 64-bit aligned word load linked via a constrained c0'''
         self.assertRegisterEqual(self.MIPS.a0, 0x00112233, "64-bit aligned ll returned incorrect value")
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_ll_32aligned(self):
         '''Test a 32-bit aligned word load via a constrained c0'''
         self.assertRegisterEqual(self.MIPS.a1, 0x44556677, "32-bit aligned ll returned incorrect value")

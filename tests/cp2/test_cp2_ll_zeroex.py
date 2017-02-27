@@ -41,18 +41,21 @@ from nose.plugins.attrib import attr
 class test_cp2_ll_zeroex(BaseBERITestCase):
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_ll_zeroex_1(self):
         '''Test that cllbu zero-extends the result'''
         self.assertRegisterEqual(self.MIPS.a0, 0xfe,
             "cllbu of negative value returned incorrect result")
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_ll_zeroex_2(self):
         '''Test that cllhu zero-extends the result'''
         self.assertRegisterEqual(self.MIPS.a1, 0xfedc,
             "cllhu of negative value returned incorrect result")
 
     @attr('capabilities')
+    @attr('cached')
     def test_cp2_ll_zeroex_3(self):
         '''Test that cllwu zero-extends the result'''
         self.assertRegisterEqual(self.MIPS.a2, 0xfedcba98,
