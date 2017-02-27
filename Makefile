@@ -1404,6 +1404,7 @@ L3_NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and n
 endif
 
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
+L3_NOSEFLAGS_UNCACHED=-A "$(L3_NOSEPRED) and not cached"
 
 SAIL_NOSEPRED=\
 not newisa \
@@ -2290,8 +2291,8 @@ nosetests_l3_cachedmulti: nosetests_l3_cachedmulti.xml
 
 nosetests_l3.xml: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) LOGDIR=$(L3_LOGDIR) \
-	nosetests --with-xunit --xunit-file=nosetests_l3.xml $(L3_NOSEFLAGS) \
-	$(TESTDIRS) || true
+	nosetests --with-xunit --xunit-file=nosetests_l3.xml \
+	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 LOGDIR=$(L3_LOGDIR) \
@@ -2301,7 +2302,7 @@ nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
 nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) MULTI1=1 LOGDIR=$(L3_LOGDIR) \
 	nosetests --with-xunit --xunit-file=nosetests_l3_multi.xml \
-	$(L3_NOSEFLAGS) $(TESTDIRS) || true
+	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 MULTI1=1 \
