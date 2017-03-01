@@ -1617,10 +1617,14 @@ DTB_FILE:=$(CHERIROOT_ABS)/sim.dtb
 ifdef DEBUG
 	SIM_TRACE_OPTS?= +regfile +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug +StatCounters
 else
+ifdef CTRACE
+	SIM_TRACE_OPTS?=+trace +cTrace +instructionBasedCycleCounter
+else
 ifdef TRACE
-	SIM_TRACE_OPTS?=+trace +cTrace +instructionBasedCycleCounter +StatCounters
+	SIM_TRACE_OPTS?=+trace +instructionBasedCycleCounter
 else
 	SIM_TRACE_OPTS?=
+endif
 endif
 endif
 NOSEPRED=not false
