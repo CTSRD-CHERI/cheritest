@@ -202,7 +202,7 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('beri1cache')
     def test_config1_da_beri1(self):
         '''Test the initial value of CP0.Config1.DA'''
-        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 7, 0 , "CP0.Config1.DA did not have the expected value")
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 7, 3 << 7 , "CP0.Config1.DA did not have the expected value")
 
     @attr('beri2cache')
     def test_config1_da_beri2(self):
@@ -232,7 +232,7 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('beri1cache')
     def test_config1_ds_beri1(self):
         '''Test the initial value of CP0.Config1.DS'''
-        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 13, 1 << 13, "CP0.Config1.DS did not have the expected value")
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 13, 0 << 13, "CP0.Config1.DS did not have the expected value")
 
     @attr('beri2cache')
     def test_config1_ds_beri2(self):
@@ -242,7 +242,7 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('beri1cache')
     def test_config1_ia_beri1(self):
         '''Test the initial value of CP0.Config1.IA'''
-        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 16, 0 << 16, "CP0.Config1.IA did not have the expected value")
+        self.assertRegisterMaskEqual(self.MIPS.a7, 0x7 << 16, 1 << 16, "CP0.Config1.IA did not have the expected value")
 
     @attr('beri2cache')
     def test_config1_ia_beri2(self):
