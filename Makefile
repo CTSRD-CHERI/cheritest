@@ -951,6 +951,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_clearreg_unimp.s \
 		test_cp2_x_c0_multiop_perm.s \
 		test_cp2_x_cseal_imprecise.s \
+		test_cp2_x_cclearreg_reg.s \
 		test_cp2_clearregs_gplo.s \
 		test_cp2_clearregs_gphi.s \
 		test_cp2_clearregs_caplo.s \
