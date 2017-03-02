@@ -31,6 +31,6 @@ from nose.plugins.attrib import attr
 class test_cp2_x_cclearreg_reg(BaseBERITestCase):
 
     @attr('capabilities')
-    def test_template_c0(self):
+    def test_cp2_x_cclearreg_reg_1(self):
         '''Test that CClearRegs does not clear any registers if it raises an exception'''
         self.assertRegisterEqual(self.MIPS.a0, 0x1234, "CClearReg cleared a register even though it raised an exception")
