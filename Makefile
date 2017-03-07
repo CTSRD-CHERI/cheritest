@@ -840,6 +840,7 @@ TEST_CP2_FILES=					\
 		test_cp2_clcr_otype.s		\
 		test_cp2_c0_sc.s		\
 		test_cp2_cseal_large.s		\
+		test_cp2_cjalr_delay.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
