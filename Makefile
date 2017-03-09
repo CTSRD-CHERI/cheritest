@@ -1877,7 +1877,7 @@ WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 AS=mips64-as
-LD=mips-linux-gnu-ld
+LD=mips64-ld
 OBJCOPY=mips64-objcopy
 OBJDUMP=mips64-objdump
 
