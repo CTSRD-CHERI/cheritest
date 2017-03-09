@@ -153,6 +153,10 @@ TESTDIRS=					\
 		$(TESTDIR)/pic			\
 		$(TESTDIR)/dma			
 
+ifeq ($(CLANG),1)
+TESTDIRS+= $(TESTDIR)/cframework
+endif
+
 ifeq ($(MULTI),1)
 TESTDIRS+= $(TESTDIR)/multicore
 endif
