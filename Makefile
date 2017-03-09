@@ -127,8 +127,6 @@ else
 CLANG_CC?=clang
 endif
 
-XCC?=$(CLANG_CC)
-
 ifeq ($(CAP_SIZE),128)
 QEMU?=qemu-system-cheri128
 else
@@ -1996,7 +1994,7 @@ $(OBJDIR)/test_cheriabi_clang%.o : test_cheriabi_clang%.c
 	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -mabi=sandbox -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
-	$(XCC) -c -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ $<
+	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
 
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) --defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
