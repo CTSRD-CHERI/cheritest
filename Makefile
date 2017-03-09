@@ -114,7 +114,6 @@ SAIL_MIPS_SIM=$(SAIL_DIR)/src/run_mips.native
 SAIL_CHERI_SIM=$(SAIL_DIR)/src/run_cheri.native
 SAIL_CHERI128_SIM=$(SAIL_DIR)/src/run_cheri128.native
 CC?=gcc
-XCC?=mips-linux-gnu-gcc
 
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
@@ -127,6 +126,8 @@ CLANG_CC?=clang -mllvm -cheri128
 else
 CLANG_CC?=clang
 endif
+
+XCC?=$(CLANG_CC)
 
 ifeq ($(CAP_SIZE),128)
 QEMU?=qemu-system-cheri128
@@ -533,12 +534,18 @@ TEST_FRAMEWORK_FILES=				\
 		test_movz_movn_pipeline.s	\
 		test_code_rom_relocation.s	\
 		test_code_ram_relocation.s	\
+		test_raw_jr_cachd.s
+
+ifeq ($(CLANG),1)
+C_FRAMEWORK_FILES=				\
 		test_ctemplate.c		\
 		test_casmgp.c			\
 		test_cretval.c			\
 		test_crecurse.c			\
-		test_cglobals.c			\
-		test_raw_jr_cachd.s
+		test_cglobals.c	
+else
+C_FRAMEWORK_FILES=
+endif
 
 TEST_ALU_FILES=					\
 		test_hilo.s			\
@@ -1199,6 +1206,7 @@ TEST_FILES=					\
 		$(RAW_DMA_FILES)		\
 		$(TEST_DMA_FILES)		\
 		$(FUZZ_DMA_FILES)		\
+		$(C_FRAMEWORK_FILES)		\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)		\
@@ -1775,6 +1783,7 @@ TEST_MULTI_DUMPS := $(addsuffix _multi.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 
 TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/framework/,$(basename $(RAW_FRAMEWORK_FILES) $(TEST_FRAMEWORK_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/cframework/,$(basename $(C_FRAMEWORK_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/alu/,$(basename $(RAW_ALU_FILES) $(TEST_ALU_FILES) $(TEST_ALU_OVERFLOW_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/branch/,$(basename $(RAW_BRANCH_FILES) $(TEST_BRANCH_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/cp0/,$(basename $(RAW_CP0_FILES) $(TEST_CP0_FILES) $(TEST_TRAPI_FILES) $(TEST_BEV1_FILES)))) \
