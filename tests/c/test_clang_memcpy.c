@@ -31,13 +31,13 @@ typedef __SIZE_TYPE__ size_t;
 // Currently, memcpy is called smemcpy.
 #define memcpy smemcpy
 
-__capability void *memcpy_c(__capability void *dst,
-                            __capability const void *src,
+void * __capability memcpy_c(void * __capability dst,
+                            const void * __capability src,
                             size_t len);
 void *memcpy(void *dst,
              const void *src,
              size_t len);
-#define CAP(x) ((__capability void*)(x))
+#define CAP(x) ((void * __capability)(x))
 
 // Test structure which will be memcpy'd.  Contains data and a capability in
 // the middle.  The capability must be aligned, but memcpy should work for any
@@ -46,7 +46,7 @@ void *memcpy(void *dst,
 struct Test 
 {
 	char pad0[32];
-	__capability void *y;
+	void * __capability y;
 	char pad1[32];
 };
 
@@ -60,7 +60,7 @@ void check(struct Test *t1, int start, int end)
 		assert(t1->pad0[i] == i);
 	}
 	assert((void*)t1->y == t1);
-	assert(__builtin_cheri_get_cap_tag(t1->y));
+	assert(__builtin_cheri_tag_get(t1->y));
 	for (int i=0 ; i<end ; i++)
 	{
 		assert(t1->pad1[i] == i);
@@ -91,7 +91,7 @@ int test(void)
 	t1.y = CAP(&t2);
 	invalidate(&t2);
 	// Simple case: aligned start and end
-	__capability void *cpy = memcpy_c(t1.y, CAP(&t1), sizeof(t1));
+	void * __capability cpy = memcpy_c(t1.y, CAP(&t1), sizeof(t1));
 	assert((void*)cpy == &t2);
 	check(&t2, 0, 32);
 	invalidate(&t2);
@@ -112,7 +112,7 @@ int test(void)
 	cpy = memcpy_c(CAP(&t2), CAP(&t1.pad0[1]), sizeof(t1) - 1);
 	assert((void*)cpy == &t2);
 	// This should have invalidated the capability
-	assert(__builtin_cheri_get_cap_tag(t2.y) == 0);
+	assert(__builtin_cheri_tag_get(t2.y) == 0);
 	// Check that the non-capability data has been copied correctly
 	for (int i=0 ; i<31 ; i++)
 	{
@@ -147,7 +147,7 @@ int test(void)
 	copy = memcpy(&t2, &t1.pad0[1], sizeof(t1) - 1);
 	assert(copy == &t2);
 	// This should have invalidated the capability
-	assert(!__builtin_cheri_get_cap_tag(t2.y));
+	assert(!__builtin_cheri_tag_get(t2.y));
 	// Check that the non-capability data has been copied correctly
 	for (int i=0 ; i<31 ; i++)
 	{
@@ -162,8 +162,8 @@ int test(void)
 	// aligned base, unaligned offset + base
 	invalidate(&t2);
 	cpy = memcpy_c(
-		__builtin_cheri_cap_offset_increment(CAP(&t2), 3),
-		__builtin_cheri_cap_offset_increment(CAP(&t1), 3),
+		__builtin_cheri_offset_increment(CAP(&t2), 3),
+		__builtin_cheri_offset_increment(CAP(&t1), 3),
 		sizeof(t1)-6
 		);
 	assert((void*)cpy == &t2.pad0[3]);
@@ -175,8 +175,8 @@ int test(void)
 	// CHERI256, CFromPtr / CSetBounds on CHERI128
 	invalidate(&t2);
 	cpy = memcpy_c(
-		__builtin_cheri_cap_offset_increment(CAP(t2.pad0-1), 1),
-		__builtin_cheri_cap_offset_increment(CAP(t1.pad0-1), 1),
+		__builtin_cheri_offset_increment(CAP(t2.pad0-1), 1),
+		__builtin_cheri_offset_increment(CAP(t1.pad0-1), 1),
 		sizeof(t1)
 		);
 	assert((void*)cpy == &t2.pad0);

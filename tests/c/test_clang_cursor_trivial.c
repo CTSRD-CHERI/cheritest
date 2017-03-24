@@ -31,32 +31,32 @@ extern volatile long long exception_count;
 
 int test(void)
 {
-	__capability int *b = (__capability int*)buffer;
+	int * __capability b = (int * __capability)buffer;
 	long long count = exception_count;
 	b[41] = 12;
 	// Explicitly set the length of the capability, in case the compiler
 	// fails.
-	__capability volatile int *v = __builtin_memcap_bounds_set(b,
+	volatile int * __capability v = __builtin_cheri_bounds_set(b,
 		sizeof(buffer));
 	// Set the cursor past the end and check that dereferencing fires an
 	// exception.
-	v = __builtin_memcap_offset_increment((__capability void*)v,
+	v = __builtin_cheri_offset_increment((void * __capability)v,
 		42*sizeof(int));
 	int unused = *v;
 	assert(exception_count == count+1);
 	// Move the cursor back into range and check that it works
-	v = __builtin_memcap_offset_increment((__capability void*)v,
+	v = __builtin_cheri_offset_increment((void * __capability)v,
 		(-1)*sizeof(int));
 	assert(*v == 12);
 	// Set the cursor before the start and check that dereferencing fires
 	// an exception
-	v = __builtin_memcap_offset_set((__capability void*)v, -1);
+	v = __builtin_cheri_offset_set((void * __capability)v, -1);
 	unused = *v;
 	assert(exception_count == count+2);
 	// Move the cursor back into range and check that it works
 	// XXX: This might not work with imprecise capabilities, as the
 	// base might be lower than the start of the array.
-	v = __builtin_memcap_offset_set((__capability void*)v, 41*sizeof(int));
+	v = __builtin_cheri_offset_set((void * __capability)v, 41*sizeof(int));
 	assert(*v == 12);
 	return 0;
 }
