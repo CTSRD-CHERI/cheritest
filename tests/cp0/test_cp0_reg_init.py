@@ -304,7 +304,7 @@ class test_cp0_reg_init(BaseBERITestCase):
     @attr('beri1cache')
     def test_config1_reg_nofloat(self):
         '''Test initial value of CP0.config1'''
-        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,1,6,0,1,6,0,1,0,0,1,0,0,0), "Unexpected CP0 config1 register value on reset")
+        self.assertRegisterEqual(self.MIPS.a7, self.mkConfig1(1,16-1,1,6,1,0,6,3,1,0,0,1,0,0,0), "Unexpected CP0 config1 register value on reset")
 
     ## CHERI1 configuration with FPU, capabilities and a large TLB
     # (old cache size)
