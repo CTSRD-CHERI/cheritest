@@ -31,7 +31,7 @@ static char data[] = {1, 2, 3, 4, 5, 6, 7, 8};
 
 int test(void)
 {
-  __capability char *datacp = (__capability char *)data;
+  char * __capability datacp = (char * __capability)data;
 
   assert((void*)datacp == data);
 
