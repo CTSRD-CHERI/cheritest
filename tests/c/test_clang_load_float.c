@@ -66,9 +66,9 @@ int test_body(void)
 {
 int i;
 float total;
-__capability float *fp;
+float * __capability fp;
 
-    fp = (__capability float *) array;
+    fp = (float * __capability) array;
     total = 0.0;
     for (i=0; i<4; i++)
     {

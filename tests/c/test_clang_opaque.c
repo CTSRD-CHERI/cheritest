@@ -33,9 +33,9 @@ struct example {
   int x;
 };
 
-typedef __capability struct example *example_t;
+typedef struct example * __capability example_t;
 
-static __capability void *example_key;
+static void * __capability example_key;
 
 /* If we used the following declaration, the compiler would automatically
  * insert calls to csealdata and cunseal. Instead, we explicitly seal and
@@ -55,7 +55,7 @@ void example_init(void)
  * Set its base+offset to the otype we want to use. Note that otypes must
  * be in the range 0 to 2^24-1.
  */
-  example_key = (__capability void *) 4;
+  example_key = (void * __capability) 4;
 }
 
 example_t example_constructor(void)

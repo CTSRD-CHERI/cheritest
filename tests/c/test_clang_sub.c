@@ -40,11 +40,11 @@ int
 test(void)
 {
 
-	__capability const char *a;
-	__capability const char *b;
+	const char * __capability a;
+	const char * __capability b;
 	int x;
 
-	a = (__capability const char *) str;
+	a = (const char * __capability) str;
         b = a + 5;
         x = b - a;
 	assert(x == 5);
