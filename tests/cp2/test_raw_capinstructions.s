@@ -56,6 +56,7 @@ start:
 		csetoffset $c1, $c2, $a3
 		cincoffset $c1, $c2, $a3
 		csetbounds $c1, $c2, $a3
+		csetboundsexact $c1, $c2, $a3
                 ccleartag $c1, $c2
 		cmove     $c1,  $c2
 
