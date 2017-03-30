@@ -1,5 +1,5 @@
 BERI Processor, Peripherals, and Tools
-Copyright (c) 2009-2015 BERI Open Systems C.I.C.
+Copyright (c) 2009-2017 BERI Open Systems C.I.C.
 
 This product includes software and/or hardware developed by BERI Open Systems
 C.I.C. (http://www.beri-open-systems.org/).
@@ -11,3 +11,6 @@ FA8750-10-C-0237 ("CTSRD"), part of the DARPA CRASH research programme.
 Portions of this hardware and software were developed by SRI International and
 the University of Cambridge Computer Laboratory under DARPA/AFRL contract
 FA8750-11-C-0249 ("MRC2"), part of the DARPA MRC research programme.
+
+Portions of this hardware and software were developed by the University of
+Cambridge Computer Laboratory under EPSRC grant EP/K008528/1 ("REMS").
