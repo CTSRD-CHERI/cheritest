@@ -69,6 +69,8 @@ sandbox:
 		cseal $c29, $c1, $c1
 		csetbounds $c2, $c29, $zero
 		csetbounds $c29, $c1, $zero
+		csetboundsexact $c2, $c29, $zero
+		csetboundsexact $c29, $c1, $zero
 		csetoffset $c2, $c29, $zero
 		csetoffset $c29, $c1, $zero
 		csub $t0, $c2, $c29
