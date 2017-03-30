@@ -964,6 +964,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cseal_imprecise.s \
 		test_cp2_x_cclearreg_reg.s \
 		test_cp2_x_exl_pcc.s \
+		test_cp2_x_csetboundsexact_imprecise.s \
 		test_cp2_clearregs_gplo.s \
 		test_cp2_clearregs_gphi.s \
 		test_cp2_clearregs_caplo.s \
