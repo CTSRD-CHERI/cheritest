@@ -62,13 +62,13 @@ test:		.ent test
 		scd	$a2, 0($t1)
 		
 		#
-		# Store to double word between lld and scd; check to make
+		# Store to unaligned byte between lld and scd; check to make
 		# sure that the scd not only returns failure, but doesn't
 		# store.
 		#
 		li	$t0, 2
-		lld	$a2, 0($t1)
-		sb	$a2, 1($t1)
+		lld	$t2, 0($t1)
+		sb	$t2, 1($t1)
 		scd	$t0, 0($t1)
 		ld	$a3, 0($t1)
 
@@ -78,8 +78,8 @@ test:		.ent test
 		# store.
 		#
 		li	$t0, 1
-		lld	$a2, 0($t1)
-		sd	$a2, 0($t1)
+		lld	$t2, 0($t1)
+		sd	$t2, 0($t1)
 		scd	$t0, 0($t1)
 		ld	$a6, 0($t1)
 
