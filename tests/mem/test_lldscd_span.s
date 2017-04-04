@@ -52,13 +52,25 @@ test:		.ent test
 		jal	bev0_handler_install
 		nop
 
+		dla	$t1, dword
 		#
 		# Load the double word into another register between lld and
 		# scd; this shouldn't cause the store to fail.
 		#
-		lld	$a2, dword
-		ld	$t0, dword
-		scd	$a2, dword
+		lld	$a2, 0($t1)
+		ld	$t0, 0($t1)
+		scd	$a2, 0($t1)
+		
+		#
+		# Store to double word between lld and scd; check to make
+		# sure that the scd not only returns failure, but doesn't
+		# store.
+		#
+		li	$t0, 2
+		lld	$a2, 0($t1)
+		sb	$a2, 1($t1)
+		scd	$t0, 0($t1)
+		ld	$a3, 0($t1)
 
 		#
 		# Store to double word between lld and scd; check to make
@@ -66,10 +78,10 @@ test:		.ent test
 		# store.
 		#
 		li	$t0, 1
-		lld	$a5, dword
-		sd	$a5, dword
-		scd	$t0, dword
-		ld	$a6, dword
+		lld	$a2, 0($t1)
+		sd	$a2, 0($t1)
+		scd	$t0, 0($t1)
+		ld	$a6, 0($t1)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
