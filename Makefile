@@ -153,6 +153,7 @@ TESTDIRS=					\
 
 ifeq ($(CLANG),1)
 TESTDIRS+= $(TESTDIR)/cframework
+TESTDIRS+= $(TESTDIR)/cheriabi
 endif
 
 ifeq ($(MULTI),1)
@@ -1991,7 +1992,7 @@ $(OBJDIR)/test_clang%.o : test_clang%.c
 	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_cheriabi_clang%.o : test_cheriabi_clang%.c
-	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -mabi=sandbox -integrated-as -o $@ $<  -O3 -ffunction-sections
+	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -mabi=purecap -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
 	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
