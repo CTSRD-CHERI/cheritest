@@ -866,7 +866,6 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cscc_perm.s		\
 		test_cp2_x_csc_perm.s		\
 		test_cp2_x_csc_underflow.s	\
-		test_cp2_x_clc_perm.s		\
 		test_cp2_x_clc_align.s		\
 		test_cp2_x_clc_vaddr.s		\
 		test_cp2_x_clc_priority.s	\
@@ -957,7 +956,6 @@ TEST_CP2_FILES=					\
 		test_cp2_x_ld_align.s \
 		test_cp2_x_ld_len.s \
 		test_cp2_x_cjr_delay.s \
-		test_cp2_x_cllc_perm.s \
 		test_cp2_x_clearreg_unimp.s \
 		test_cp2_x_c0_multiop_perm.s \
 		test_cp2_x_cseal_imprecise.s \
