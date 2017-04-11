@@ -32,34 +32,34 @@
 
 		.global start
 start:		.ent start
-		move $a0, $0
-		move $a1, $0
-		addi $a0, $a0, -10
-		addiu $a1, $a0, 30
-		add  $a0, $a0, $a1
-		addu $a1, $a1, $a0
-		and $a1, $a1, $a0
-		andi $a0, $a1, 2
-		sll $a0, $a0, 4
-		dsllv $a1, $a1, $a0
-		dadd $a1, $a1, $a1
-		daddi $a1, $a1, 20
-		daddiu $a1, $a1, -10
-		daddu $s0, $a1, $a1		# s0 = 0x2800000014
-		sra $a0, $a0, 3
-		ori $a0, $a0, 16
-		ddiv $0, $s0, $a0
-		mflo $a1
-		srl $a0, $a0, 4
-		ddivu $0, $a1, $a0
-		mflo $a1
-		sll $a1, $a1, 0
-		div $0, $a1, $a0
-		mflo $a1
-		xori $a1, $a1, 40971
-		xor $a0, $a0, $a1
-		divu $0, $a0, $a1
-		mflo $s1			# s1 = 0x0000000001
+		move $a0, $0                    # a0 = 0
+		move $a1, $0                    # a1 = 0
+		addi $a0, $a0, -10              # a0 = -10
+		addiu $a1, $a0, 30              # a1 = 20
+		add  $a0, $a0, $a1              # a0 = 10
+		addu $a1, $a1, $a0              # a1 = 30
+		and $a1, $a1, $a0               # a1 = 0x01010 & 0x11110 = 0x01010 = 10
+		andi $a0, $a1, 2                # a0 = 2
+		sll $a0, $a0, 4                 # a0 = 0b10 << 4 = 0b100000 = 0x20 = 32
+		dsllv $a1, $a1, $a0             # a1 = 10 << 32 = 0xa00000000
+		dadd $a1, $a1, $a1              # a1 = 0x1400000000
+		daddi $a1, $a1, 20              # a1 = 0x1400000014
+		daddiu $a1, $a1, -10            # a1 = 0x140000000a
+		daddu $s0, $a1, $a1		# s0 = 0x2800000014 Stage 1
+		sra $a0, $a0, 3                 # a0 = 32 >> 3 = 4
+		ori $a0, $a0, 16                # a0 = 0x10100 = 20
+		ddiv $0, $s0, $a0               # 0x2800000014 / 20 = 0x200000001 rem 0
+		mflo $a1                        # a1 = 0x200000001
+		srl $a0, $a0, 4                 # a0 = 0x10100 >> 4 = 1
+		ddivu $0, $a1, $a0              # 0x200000001 rem 0
+		mflo $a1                        # a1 = 0x200000001
+		sll $a1, $a1, 0                 # a1 = 0x1
+		div $0, $a1, $a0                # 1 / 1 = 1 rem 0
+		mflo $a1                        # a1 = 1
+		xori $a1, $a1, 40971            # a1 = 1 ^ 0xa00b = 0xa00a
+		xor $a0, $a0, $a1               #
+		divu $0, $a0, $a1               #
+		mflo $s1			# s1 = 0x0000000001 Stage 2
 		dsll $a0, $s1, 20
 		mult $a0, $a1
 		mfhi $a0
