@@ -111,9 +111,9 @@ PERM_SIZE?=31
 L3_SIM?=l3mips
 SAIL_DIR?=~/bitbucket/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/src/run_mips.native
-SAIL_MIPS_EMBED_SIM=$(SAIL_DIR)/src/run_mips_embed.native
 SAIL_CHERI_SIM=$(SAIL_DIR)/src/run_cheri.native
 SAIL_CHERI128_SIM=$(SAIL_DIR)/src/run_cheri128.native
+SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 CC?=gcc
 
 ifeq ($(CAP_SIZE),256)
@@ -1752,6 +1752,7 @@ L3_LOGDIR=l3_log
 SAIL_MIPS_LOGDIR=sail_mips_log
 SAIL_MIPS_EMBED_LOGDIR=sail_mips_embed_log
 SAIL_CHERI_LOGDIR=sail_cheri_log
+SAIL_CHERI_EMBED_LOGDIR=sail_cheri_embed_log
 SAIL_CHERI128_LOGDIR=sail_cheri128_log
 QEMU_LOGDIR=qemu_log
 
@@ -1831,6 +1832,8 @@ SAIL_MIPS_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_MIPS_EMBED_LOGDIR)/,$(TESTS)))
 SAIL_CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_CHERI_LOGDIR)/,$(TESTS)))
+SAIL_CHERI_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
+	$(SAIL_CHERI_EMBED_LOGDIR)/,$(TESTS)))
 SAIL_CHERI128_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_CHERI128_LOGDIR)/,$(TESTS)))
 QEMU_TEST_LOGS := $(addsuffix .log,$(addprefix \
@@ -1932,6 +1935,7 @@ cleantest:
 	rm -f $(SAIL_MIPS_TEST_LOGS)
 	rm -f $(SAIL_MIPS_EMBED_TEST_LOGS)
 	rm -f $(SAIL_CHERI_TEST_LOGS)
+	rm -f $(SAIL_CHERI_EMBED_TEST_LOGS)
 	rm -f $(SAIL_CHERI128_TEST_LOGS)
 	rm -f $(QEMU_TEST_LOGS)
 	rm -f $(L3_LOGDIR)/*.err
@@ -2186,13 +2190,17 @@ $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles
 	mkdir -p $(SAIL_MIPS_LOGDIR)
 	-$(SAIL_MIPS_SIM) --quiet --max_instruction `./max_cycles $@ 20000 300000` --file $< > $@ 2>&1
 
-$(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_MIPS_EMBED_SIM) max_cycles
+$(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 	mkdir -p $(SAIL_MIPS_EMBED_LOGDIR)
-	-$(SAIL_MIPS_EMBED_SIM) --max_instruction `./max_cycles $@ 20000 300000` --raw $< --at 0x40000000 > $@ 2>&1
+	-$(SAIL_EMBED) --model mips --quiet --max_instruction `./max_cycles $@ 20000 300000` --raw $< --at 0x40000000 > $@ 2>&1
 
 $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles
 	mkdir -p $(SAIL_CHERI_LOGDIR)
 	-$(SAIL_CHERI_SIM) --quiet --max_instruction `./max_cycles $@ 20000 300000` --file $< > $@ 2>&1
+
+$(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
+	mkdir -p $(SAIL_CHERI_EMBED_LOGDIR)
+	-$(SAIL_EMBED) --model cheri --quiet --max_instruction `./max_cycles $@ 20000 300000` --raw $< --at 0x40000000 > $@ 2>&1
 
 $(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles
 	mkdir -p $(SAIL_CHERI128_LOGDIR)
@@ -2340,6 +2348,7 @@ nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
 nosetests_sail: nosetests_sail.xml
 nosetests_sail_embed: nosetests_sail_embed.xml
 nosetests_sail_cheri: nosetests_sail_cheri.xml
+nosetests_sail_cheri_embed: nosetests_sail_cheri_embed.xml
 nosetests_sail_cheri128: nosetests_sail_cheri128.xml
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) $(TEST_PYTHON) FORCE
@@ -2357,6 +2366,12 @@ nosetests_sail_embed.xml: $(SAIL_MIPS_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
 nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(SAIL_CHERI_LOGDIR) nosetests --with-xunit \
+	--xunit-file=$@ $(SAIL_CHERI_NOSEFLAGS) \
+            $(TESTDIRS) || true
+
+nosetests_sail_cheri_embed.xml: $(SAIL_CHERI_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	LOGDIR=$(SAIL_CHERI_EMBED_LOGDIR) nosetests --with-xunit \
 	--xunit-file=$@ $(SAIL_CHERI_NOSEFLAGS) \
             $(TESTDIRS) || true
 
