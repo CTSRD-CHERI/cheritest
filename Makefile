@@ -1754,6 +1754,7 @@ SAIL_MIPS_EMBED_LOGDIR=sail_mips_embed_log
 SAIL_CHERI_LOGDIR=sail_cheri_log
 SAIL_CHERI_EMBED_LOGDIR=sail_cheri_embed_log
 SAIL_CHERI128_LOGDIR=sail_cheri128_log
+SAIL_CHERI128_EMBED_LOGDIR=sail_cheri128_embed_log
 QEMU_LOGDIR=qemu_log
 
 RAW_LDSCRIPT=raw.ld
@@ -1836,6 +1837,8 @@ SAIL_CHERI_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_CHERI_EMBED_LOGDIR)/,$(TESTS)))
 SAIL_CHERI128_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_CHERI128_LOGDIR)/,$(TESTS)))
+SAIL_CHERI128_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
+	$(SAIL_CHERI128_EMBED_LOGDIR)/,$(TESTS)))
 QEMU_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(QEMU_LOGDIR)/,$(TESTS)))
 
@@ -1937,6 +1940,7 @@ cleantest:
 	rm -f $(SAIL_CHERI_TEST_LOGS)
 	rm -f $(SAIL_CHERI_EMBED_TEST_LOGS)
 	rm -f $(SAIL_CHERI128_TEST_LOGS)
+	rm -f $(SAIL_CHERI128_EMBED_TEST_LOGS)
 	rm -f $(QEMU_TEST_LOGS)
 	rm -f $(L3_LOGDIR)/*.err
 
@@ -2206,6 +2210,10 @@ $(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles
 	mkdir -p $(SAIL_CHERI128_LOGDIR)
 	-$(SAIL_CHERI128_SIM) --quiet --max_instruction `./max_cycles $@ 20000 300000` --file $< > $@ 2>&1
 
+$(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
+	mkdir -p $(SAIL_CHERI128_EMBED_LOGDIR)
+	-$(SAIL_EMBED) --model cheri128 --quiet --max_instruction `./max_cycles $@ 20000 300000` --raw $< --at 0x40000000 > $@ 2>&1
+
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf
 	mkdir -p $(QEMU_LOGDIR)
 	$(QEMU) -D $@ -d instr -M mipssim -cpu 5Kf \
@@ -2350,6 +2358,7 @@ nosetests_sail_embed: nosetests_sail_embed.xml
 nosetests_sail_cheri: nosetests_sail_cheri.xml
 nosetests_sail_cheri_embed: nosetests_sail_cheri_embed.xml
 nosetests_sail_cheri128: nosetests_sail_cheri128.xml
+nosetests_sail_cheri128_embed: nosetests_sail_cheri128_embed.xml
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
@@ -2378,6 +2387,12 @@ nosetests_sail_cheri_embed.xml: $(SAIL_CHERI_EMBED_TEST_LOGS) $(TEST_PYTHON) FOR
 nosetests_sail_cheri128.xml: $(SAIL_CHERI128_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(SAIL_CHERI128_LOGDIR) nosetests --with-xunit \
+	--xunit-file=$@ $(SAIL_CHERI128_NOSEFLAGS) \
+            $(TESTDIRS) || true
+
+nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	LOGDIR=$(SAIL_CHERI128_EMBED_LOGDIR) nosetests --with-xunit \
 	--xunit-file=$@ $(SAIL_CHERI128_NOSEFLAGS) \
             $(TESTDIRS) || true
 
