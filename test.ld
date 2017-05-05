@@ -44,6 +44,9 @@ MEMORY
 }
 */
 
+/* LLD needs this INPUT() command because unlike BFD it won't implicitly add it */
+INPUT(obj/init.o)
+
 SECTIONS
 {
 	. = 0x9000000040000000;
