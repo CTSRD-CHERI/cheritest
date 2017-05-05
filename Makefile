@@ -1897,8 +1897,14 @@ CLEAN_TEST = rm -r $$TMPDIR
 WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
+
 AS=mips64-as
+ifndef LLD
 LD=mips-linux-gnu-ld
+else
+# LLD assumes the start symbol is __start and doesn't fall back to start:
+LD=$(LLD) -e start
+endif
 OBJCOPY=mips64-objcopy
 OBJDUMP=mips64-objdump
 
