@@ -257,7 +257,7 @@ dump_core0:
 		#
 
 		mtc0 $at, $23
-		.ent end
+		# .ent end
 		.global end
 		
 end:
@@ -290,7 +290,7 @@ dump_not_core0:
 end_not_core0:
 		b end_not_core0
 		nop
-		.end start
+.end start
 
 		.ent exception_count_handler
 exception_count_handler:
@@ -332,7 +332,7 @@ skip_increment:
 		nop			# required here?
 		nop
 		eret
-		.end exception_count_handler
+.end exception_count_handler
 
 
 # install_tlb_entry(tlb_entry, physical_base, virtual_base, page_mask)
