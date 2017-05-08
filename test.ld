@@ -34,16 +34,6 @@ __heap_top__ = __mem_top__ - __stack_size__;
 __sp_bottom = __heap_top__;
 
 
-/*
- * XXXAR: using MEMORY breaks on Ubuntu 16.04 BFD and also won't work with LLD
- */
-/*
-MEMORY
-{
-       dmem : ORIGIN = 0x40000000, LENGTH = 1024M
-}
-*/
-
 /* LLD needs this INPUT() command because unlike BFD it won't implicitly add it */
 INPUT(obj/init.o)
 
@@ -51,18 +41,18 @@ SECTIONS
 {
 	. = 0x9000000040000000;
 
-	.text . : {
+	.text . : AT(0x40000000) {
                 . = ALIGN(8);
 		obj/init.o(.text) 
 		*(EXCLUDE_FILE (obj/init.o) .text .text.*)
-	} /*AT>dmem*/
-	.data . : { . = ALIGN(8); *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*); } /*AT>dmem*/
+	}
+	.data . : { . = ALIGN(8); *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*); }
 	.got  . : {
                     . = ALIGN(16);
                  _gp = ALIGN(16) + 0x7ff0;
                  *(.got.plt) *(.got) 
-                 } /*AT>dmem*/
-	.bss  . : { . = ALIGN(8); *(.bss); } /*AT>dmem*/ =0
+                 }
+	.bss  . : { . = ALIGN(8); *(.bss); } =0
 	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
 	__bss_start = ADDR(.bss);
 	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
