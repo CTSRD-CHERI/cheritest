@@ -689,6 +689,7 @@ TEST_CP0_FILES=					\
 TEST_FPU_FILES=					\
 		test_fpu_exception_pipeline.s	\
 		test_fpu_compare_cc.s		\
+		test_fpu_bc1t_cc.s		\
 		test_fpu_x_div.s		\
 		test_fpu_x_underflow.s		\
 		test_fpu_x_overflow.s		\
