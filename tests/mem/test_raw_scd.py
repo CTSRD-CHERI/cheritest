@@ -90,3 +90,15 @@ class test_raw_scd(BaseBERITestCase):
     def test_load_load_linked_not_matching(self):
         '''Load after store conditional which should have failed due to unmatching load linked address'''
         self.assertRegisterEqual(self.MIPS.s3, 0xfedcba9876543210, "Store conditional with unmatching load linked address wrote to memory")
+        
+    @attr('llsc')
+    @attr('scuncached')
+    def test_store_condiational_uncached(self):
+        '''Store conditional of word to uncached address should succeed'''
+        self.assertRegisterEqual(self.MIPS.s4, 1, "Store conditional of word to uncached address failed")
+
+    @attr('llsc')
+    @attr('scuncached')
+    def test_store_condiational_uncached(self):
+        '''Load after store conditional to uncached address didn't match stored value'''
+        self.assertRegisterEqual(self.MIPS.s5, 0xfedcba9876543210, "Store conditional with to uncached address didn't write to memory")

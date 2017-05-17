@@ -99,6 +99,21 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		dli	$s2, 0x0123456789abcdef
 		scd	$s2, -32($gp)			# @dword
 		ld	$s3, -32($gp)
+		
+		# Do one access uncached
+		dla	$gp, dword
+		dli	$a0, 0x00000000FFFFFFFF
+		and $gp, $gp, $a0
+		dli	$t0, 0x9000000000000000		# Cached, non-coherenet
+		daddu	$gp, $gp, $t0
+		
+		# Initialize link register to the store address.
+		lld 	$k0, 0($gp)
+		
+		# Store and load a double word into double word storage, uncached
+		dli	$s4, 0xfedcba9876543210
+		scd	$s4, 0($gp)			# @dword
+		ld	$s5, 0($gp)
 
 		# Dump registers in the simulator
 		mtc0	$v0, $26
