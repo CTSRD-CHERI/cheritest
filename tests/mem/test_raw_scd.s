@@ -102,8 +102,8 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		
 		# Do one access uncached
 		dla	$gp, dword
-		dli	$a0, 0x00000000FFFFFFFF
-		and $gp, $gp, $a0
+		dli	$at, 0x00000000FFFFFFFF
+		and $gp, $gp, $at
 		dli	$t0, 0x9000000000000000		# Cached, non-coherenet
 		daddu	$gp, $gp, $t0
 		
