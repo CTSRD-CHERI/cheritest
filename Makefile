@@ -101,6 +101,7 @@ STATCOUNTERS?=0
 DMA?=0
 DMA_VIRT?=0
 RMA?=0
+ALLOW_UNALIGNED?=0
 FUZZ_DMA?=0
 FUZZ_DMA_ONLY?=0
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
@@ -1646,7 +1647,9 @@ endif
 endif
 endif
 NOSEPRED=not false
+ifeq ($(ALLOW_UNALIGNED),0)
 NOSEPRED+=and not allow_unaligned
+endif
 NOSEPRED+=and not csettype
 NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
