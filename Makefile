@@ -367,7 +367,8 @@ RAW_LLSC_FILES=					\
 		test_raw_ll.s			\
 		test_raw_lld.s			\
 		test_raw_sc.s			\
-		test_raw_scd.s
+		test_raw_scd.s			\
+		test_raw_scd_uncached.s
 
 RAW_CP0_FILES=					\
 		test_raw_eret_error.s		\
@@ -1330,6 +1331,7 @@ and not loadcachetag \
 and not llscnotmatching \
 and not llscspan \
 and not llscnoalias \
+and not llscuncached \
 and not mtc0signex \
 and not swi \
 and not smalltlb \
