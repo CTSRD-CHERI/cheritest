@@ -48,7 +48,7 @@ test:		.ent test
 		csetbounds $c1, $c1, $t1
 		dli	$t0, 8
 		cincoffset $c2, $c0, $t0
-		csetbounds $c2, $c2, $t1
+		csetbounds $c2, $c2, $t0
 		ctoptr	$a0, $c2, $c1
 
 		ld	$fp, 16($sp)
