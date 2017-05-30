@@ -1,4 +1,5 @@
 #
+# Copyright (c) 2016-2017 Hongyan Xia
 # Copyright (c) 2013-2014 Alan A. Mujumdar
 # Copyright (c) 2015-2017 Alexandre Joannou
 # Copyright (c) 2014 SRI International
@@ -815,6 +816,7 @@ TEST_CP2_FILES=					\
 		test_cp2_creturn_trap.s		\
 		test_cp2_ccall2.s		\
 		test_cp2_ccall_fast.s		\
+		test_cp2_ccall_fast_delay.s		\
 		test_cp2_cbtu.s			\
 		test_cp2_cbts.s			\
 		test_cp2_cbnz.s			\
