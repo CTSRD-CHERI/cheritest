@@ -62,7 +62,7 @@ test:		.ent test
 
 		# Test cgettype
 		dli	$t3, 100
-		cgettype	$t3, $c2	# should return 0x0
+		cgettype	$t3, $c2	# should return -1 (unsealed)
 		sd	$t3, 24($s0)
 
 		nop

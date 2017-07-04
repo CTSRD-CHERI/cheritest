@@ -42,6 +42,6 @@ class test_cp2_csealunsealcode(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_sealunsealcode_2(self):
         '''Test that cunseal clears the otype field'''
-        self.assertRegisterEqual(self.MIPS.a1, 0,
+        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff,
             "cunseal did not clear the otype field")
 

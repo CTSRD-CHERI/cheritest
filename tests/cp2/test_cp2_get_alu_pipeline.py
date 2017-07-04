@@ -52,4 +52,4 @@ class test_cp2_get_alu_pipeline(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cgettype_alu(self):
         '''Test that cgettype results visible to ALU'''
-        self.assertRegisterEqual(self.MIPS.t3, 0x0, "cgettype returns incorrect value")
+        self.assertRegisterEqual(self.MIPS.t3, 0xffffffffffffffff, "cgettype returns incorrect value")

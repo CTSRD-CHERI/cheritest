@@ -55,6 +55,6 @@ class test_cp2_x_csealdata_perm(BaseBERITestCase):
     def test_cp2_x_csealdata_perm_4(self):
         '''Test cseal did not set the otype field when didn't have Permit_Seal
  permission'''
-        self.assertRegisterEqual(self.MIPS.a1, 0,
+        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff,
             "cseal set the otype field when didn't have Permit_Seal permission")
 
