@@ -861,6 +861,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cjalr_delay.s		\
 		test_cp2_csetboundsexact.s	\
 		test_cp2_clc_perm.s		\
+		test_cp2_csetbounds_rounding.s	\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
@@ -2232,7 +2233,7 @@ $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf
 	mkdir -p $(QEMU_LOGDIR)
 	$(QEMU) -D $@ -d instr -M mipssim -cpu 5Kf \
-	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bc 300000 -bp 0x`$(OBJDUMP) -d $(OBJDIR)/$*.elf | awk -f end.awk` || true
+	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bp 0x`$(OBJDUMP) -d $(OBJDIR)/$*.elf | awk -f end.awk` || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
