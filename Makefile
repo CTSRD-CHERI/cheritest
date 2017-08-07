@@ -589,7 +589,8 @@ TEST_ALU_FILES=					\
 		test_slti.s			\
 		test_sltiu.s			\
 		test_sltu.s			\
-		test_subu_carry.s
+		test_subu_carry.s		\
+		test_x_dext_ri.s
 
 TEST_BRANCH_FILES =				\
 		test_bltzall_large.s		\
@@ -1564,7 +1565,7 @@ and not madd \
 and not movz \
 and not rdhwr
 else
-QEMU_NOSEPRED+=and not nomthc1 and not nowatch
+QEMU_NOSEPRED+=and not no_dext and not nomthc1 and not nowatch
 endif
 
 ifneq ($(TEST_CP2),1)
