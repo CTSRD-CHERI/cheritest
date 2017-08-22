@@ -595,7 +595,8 @@ TEST_ALU_FILES=					\
 TEST_BRANCH_FILES =				\
 		test_bltzall_large.s		\
 		test_jalr_align.s		\
-		test_x_msa_bdelay.s
+		test_x_msa_bdelay.s		\
+		test_x_3d_bdelay.s
 
 TEST_MEM_FILES=					\
 		test_hardware_mappings.s	\
