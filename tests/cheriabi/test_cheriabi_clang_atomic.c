@@ -30,7 +30,7 @@
  * Test that can create a capability to a static struct
  */
 
-#include "assert.h"
+#include "../c/assert.h"
 //#include "cheri_c_test.h"
 
 _Atomic(char) c = 42;
