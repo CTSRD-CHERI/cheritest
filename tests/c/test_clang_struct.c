@@ -37,20 +37,20 @@ struct example {
 
 static struct example example_object = {0};
 
-__capability struct example *example_constructor(void)
+struct example *__capability example_constructor(void)
 {
   struct example *ptr;
-  __capability struct example *result;
+  struct example *__capability result;
 
   ptr = &example_object;
-  result = (__capability struct example *) ptr;
+  result = (struct example *__capability) ptr;
 
   return result;
 }
 
 int test(void)
 {
-  __capability struct example *e;
+  struct example *__capability e;
 
   e = example_constructor();
   assert(e->x == 0);

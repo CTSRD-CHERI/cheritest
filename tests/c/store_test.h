@@ -37,7 +37,7 @@ static TYPE PREFIX(_data)[] = {1, 2, 3, 4, 5, 6, 7, 8};
 
 int PREFIX(_test)(void)
 {
-  TYPE * __capability datacp = (TYPE __capability *)PREFIX(_data);
+  TYPE * __capability datacp = (TYPE * __capability)PREFIX(_data);
 
   for (int i=0; i<(sizeof(PREFIX(_data))/sizeof(*PREFIX(_data))); i++)
   {

@@ -39,16 +39,16 @@ static char *digits = "0123456789";
 int
 test(void)
 {
-__capability char *cp;
+	char *__capability cp;
 
 	x = 1;
 	increment();
 	assert(x == 2);
 
-	cp = (__capability char *) digits;
+	cp = (char * __capability) digits;
 	x = (__intcap_t) cp;
 	increment();
-	cp = (__capability char *) x;
+	cp = (char * __capability) x;
 	assert(*cp == '1');
 
 	return (0);
