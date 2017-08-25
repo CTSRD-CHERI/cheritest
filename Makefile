@@ -866,6 +866,7 @@ TEST_CP2_FILES=					\
 		test_cp2_csetboundsexact.s	\
 		test_cp2_clc_perm.s		\
 		test_cp2_csetbounds_rounding.s	\
+		test_cp2_cmovn.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\

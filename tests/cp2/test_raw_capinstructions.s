@@ -81,6 +81,13 @@ start:
 		cclearhi 0x1
 
 		#
+		# Conditional moves
+		#
+
+		cmovn $c1, $c2, $zero
+		cmovz $c1, $c2, $zero
+
+		#
 		# Load/store operations
 		#
 
