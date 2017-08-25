@@ -41,11 +41,11 @@ typedef	long word;		/* "word" used for medium copy speed */
 
 /* "pointer" used for optimal copy speed when pointers are large */
 #ifdef __CHERI__
-	typedef	__uintcap_t ptr;
+typedef	__uintcap_t ptr;
 #  define __CAP __capability
 #else
 # define __CAP
-	typedef	uintptr_t ptr;
+typedef	uintptr_t ptr;
 #endif
 
 #define	psize	sizeof(ptr)
@@ -62,20 +62,19 @@ typedef	long word;		/* "word" used for medium copy speed */
 
 
 #ifdef BUILD_MEMCPY_C
-	void * __CAP cmemcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
+void * __CAP 
+cmemcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
+#elif defined(MEMMOVE)
+void *
+memmove
+(void *dst0, const void *src0, size_t length)
+#elif defined(MEMCOPY)
+void *
+cmemcpy
+(void *dst0, const void *src0, size_t length)
 #else
-	#if defined(MEMCOPY) || defined(MEMMOVE)
-		void *
-		#ifdef MEMCOPY
-			cmemcpy
-		#else
-			memmove
-		#endif
-			(void *dst0, const void *src0, size_t length)
-	#else
-		void
-		bcopy(const void *src0, void *dst0, size_t length)
-	#endif
+void
+bcopy(const void *src0, void *dst0, size_t length)
 #endif
 {
 	char * __CAP dst = (char * __CAP)dst0;
@@ -137,7 +136,8 @@ typedef	long word;		/* "word" used for medium copy speed */
 		t = length / psize;
 		TLOOP(*(ptr *)dst = *(ptr *)src; src += psize; dst += psize);
 		t = length & pmask;
-		TLOOP(*dst++ = *src++);
+		//TLOOP(*dst++ = *src++);
+		TLOOP(dst[-t] = src[-t]);
 	} else {
 		/*
 		 * Copy backwards.  Otherwise essentially the same.
@@ -169,7 +169,8 @@ typedef	long word;		/* "word" used for medium copy speed */
 		t = length / psize;
 		TLOOP(src -= psize; dst -= psize; *(ptr *)dst = *(ptr *)src);
 		t = length & pmask;
-		TLOOP(*--dst = *--src);
+		//TLOOP(*--dst = *--src);
+		TLOOP(dst[-t] = src[-t]);
 	}
 done:
 #if defined(MEMCOPY) || defined(MEMMOVE)
