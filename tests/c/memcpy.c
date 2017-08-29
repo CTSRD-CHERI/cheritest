@@ -62,14 +62,14 @@ typedef	uintptr_t ptr;
 
 #ifdef BUILD_MEMCPY_C
 void * __CAP 
-cmemcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
+memcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
 #elif defined(MEMMOVE)
 void *
 memmove
 (void *dst0, const void *src0, size_t length)
 #elif defined(MEMCOPY)
 void *
-cmemcpy
+memcpy
 (void *dst0, const void *src0, size_t length)
 #else
 void
