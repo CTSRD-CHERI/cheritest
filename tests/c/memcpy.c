@@ -45,9 +45,9 @@ typedef	long word;		/* "word" used for medium copy speed */
 /* "pointer" used for optimal copy speed when pointers are large */
 #ifdef __CHERI__
 typedef	__uintcap_t ptr;
-#  define __CAP __capability
+#  define CAPABILITY __capability
 #else
-# define __CAP
+# define CAPABILITY
 typedef	uintptr_t ptr;
 #endif
 
@@ -62,8 +62,8 @@ typedef	uintptr_t ptr;
  */
 
 #if defined(MEMCPY_C)
-void * __CAP 
-memcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
+void * CAPABILITY 
+memcpy_c(void * CAPABILITY dst0, const void * CAPABILITY src0, size_t length)
 #elif defined(MEMMOVE)
 void *
 memmove
@@ -73,8 +73,8 @@ void *
 memcpy
 (void *dst0, const void *src0, size_t length)
 #elif defined(CMEMCPY_C)
-void * __CAP 
-cmemcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
+void * CAPABILITY 
+cmemcpy_c(void * CAPABILITY dst0, const void * CAPABILITY src0, size_t length)
 #elif defined(CMEMCPY)
 void *
 cmemcpy
@@ -86,8 +86,8 @@ bcopy(const void *src0, void *dst0, size_t length)
 #error One of BCOPY, MEMCPY, or MEMMOVE must be defined.
 #endif
 {
-	char * __CAP dst = (char * __CAP)dst0;
-	const char * __CAP src = (const char * __CAP)src0;
+	char * CAPABILITY dst = (char * CAPABILITY)dst0;
+	const char * CAPABILITY src = (const char * CAPABILITY)src0;
 	size_t t;
 	
 #if defined(MEMMOVE) || defined(BCOPY)
@@ -115,7 +115,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 		 * Copy forward.
 		 */
 		t = (int)src;	/* only need low bits */
-		if ((t | (int)dst) & wmask) {
+		if ((t | (int)dst) & wmask) { // XXX make sure we get virtual address from cast of dst
 			/*
 			 * Try to align operands.  This cannot be done
 			 * unless the low bits match.
@@ -134,7 +134,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 		 */
 		if (bigptr) {
 			t = (int)src;	/* only need low bits */
-			if ((t | (int)dst) & pmask) {
+			if ((t | (int)dst) & pmask) { // XXX make sure dst cast gets virtual address
 				/*
 				 * Try to align operands.  This cannot be done
 				 * unless the low bits match.
@@ -146,7 +146,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 				length -= t*wsize;
 				dst += t*wsize;
 				src += t*wsize;
-				TLOOP(((word * __CAP)dst)[-t] = ((word * __CAP)src)[-t];);
+				TLOOP(((word * CAPABILITY)dst)[-t] = ((word * CAPABILITY)src)[-t];);
 			}
 		}
 		/*
@@ -155,7 +155,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 		t = length / psize;
 		src += t*psize;
 		dst += t*psize;
-		TLOOP(((ptr * __CAP)dst)[-t] = ((ptr * __CAP)src)[-t];);
+		TLOOP(((ptr * CAPABILITY)dst)[-t] = ((ptr * CAPABILITY)src)[-t];);
 		t = length & pmask;
 		//TLOOP(*dst++ = *src++);
 		TLOOP(dst[-t] = src[-t]);
@@ -188,13 +188,13 @@ bcopy(const void *src0, void *dst0, size_t length)
 				length -= t*wsize;
 				dst -= t;
 			  src -= t;
-				TLOOP(((word * __CAP)dst)[t] = ((word * __CAP)src)[t];);
+				TLOOP(((word * CAPABILITY)dst)[t] = ((word * CAPABILITY)src)[t];);
 			}
 		}
 		t = length / psize;
 		src -= t*psize;
 		dst -= t*psize;
-		TLOOP(((ptr * __CAP)dst)[t] = ((ptr * __CAP)src)[t];);
+		TLOOP(((ptr * CAPABILITY)dst)[t] = ((ptr * CAPABILITY)src)[t];);
 		t = length & pmask;
 		//TLOOP(*--dst = *--src);
 		TLOOP(dst[-t] = src[-t]);
