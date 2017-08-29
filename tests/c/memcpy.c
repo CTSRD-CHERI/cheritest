@@ -30,7 +30,9 @@
  * SUCH DAMAGE.
  */
 
+#if !defined(CMEMCPY_C) && !defined(CMEMCPY)
 #include <stddef.h>
+#endif
 /*
  * sizeof(word) MUST BE A POWER OF TWO
  * SO THAT wmask BELOW IS ALL ONES
@@ -59,32 +61,39 @@ typedef	uintptr_t ptr;
  * (the portable versions of) bcopy, memcpy, and memmove.
  */
 
-#ifdef BUILD_MEMCPY_C
+#if defined(MEMCPY_C)
 void * __CAP 
 memcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
 #elif defined(MEMMOVE)
 void *
 memmove
 (void *dst0, const void *src0, size_t length)
-#elif defined(MEMCOPY)
+#elif defined(MEMCPY)
 void *
 memcpy
 (void *dst0, const void *src0, size_t length)
-#else
+#elif defined(CMEMCPY_C)
+void * __CAP 
+cmemcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
+#elif defined(CMEMCPY)
+void *
+cmemcpy
+(void *dst0, const void *src0, size_t length)
+#elif defined(BCOPY)
 void
 bcopy(const void *src0, void *dst0, size_t length)
+#else
+#error One of BCOPY, MEMCPY, or MEMMOVE must be defined.
 #endif
 {
 	char * __CAP dst = (char * __CAP)dst0;
 	const char * __CAP src = (const char * __CAP)src0;
 	size_t t;
 	
-#ifdef BUILD_MEMCPY_C
-	const int handle_overlap = 0;
-#elif defined(MEMCOPY)
-	const int handle_overlap = 0;
-#else
+#if defined(MEMMOVE) || defined(BCOPY)
 	const int handle_overlap = 1;
+#else
+	const int handle_overlap = 0;
 #endif
 
 	if (length == 0 || dst == src)		/* nothing to do */
@@ -191,7 +200,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 		TLOOP(dst[-t] = src[-t]);
 	}
 done:
-#if defined(MEMCOPY) || defined(MEMMOVE)
+#if !defined(BCOPY)
 	return (dst0);
 #else
 	return;
