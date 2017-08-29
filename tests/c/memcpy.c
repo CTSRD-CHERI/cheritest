@@ -52,8 +52,6 @@ typedef	uintptr_t ptr;
 #define	pmask	(psize - 1)
 #define bigptr	(psize>wsize)
 
-
-#define MEMCOPY
 /*
  * Copy a block of memory, handling overlap.
  * This is the routine that actually implements
