@@ -60,7 +60,6 @@ typedef	uintptr_t ptr;
  * (the portable versions of) bcopy, memcpy, and memmove.
  */
 
-
 #ifdef BUILD_MEMCPY_C
 void * __CAP 
 cmemcpy_c(void * __CAP dst0, const void * __CAP src0, size_t length)
@@ -80,6 +79,14 @@ bcopy(const void *src0, void *dst0, size_t length)
 	char * __CAP dst = (char * __CAP)dst0;
 	const char * __CAP src = (const char * __CAP)src0;
 	size_t t;
+	
+#ifdef BUILD_MEMCPY_C
+	const int handle_overlap = 0;
+#elif defined(MEMCOPY)
+	const int handle_overlap = 0;
+#else
+	const int handle_overlap = 1;
+#endif
 
 	if (length == 0 || dst == src)		/* nothing to do */
 		goto done;
@@ -95,7 +102,7 @@ bcopy(const void *src0, void *dst0, size_t length)
    * instruction.  XXX Is there a way to do the right thing type-wise and still
    * get the efficient instruction?
    */
-	if (dst < src) {
+	if (dst < src || !handle_overlap) {
 		/*
 		 * Copy forward.
 		 */
@@ -110,7 +117,9 @@ bcopy(const void *src0, void *dst0, size_t length)
 			else
 				t = wsize - (t & wmask);
 			length -= t;
-			TLOOP1(*dst++ = *src++);
+			dst += t;
+			src += t;
+			TLOOP1(dst[-t] = src[-t]);
 		}
 		/*
 		 * If pointers are bigger than words, try to copy by words.
@@ -127,18 +136,22 @@ bcopy(const void *src0, void *dst0, size_t length)
 				else
 					t = (psize - (t & pmask)) / wsize;
 				length -= t*wsize;
-				TLOOP(*(word *)dst = *(word *)src; src += wsize; dst += wsize);
+				dst += t*wsize;
+				src += t*wsize;
+				TLOOP(((word * __CAP)dst)[-t] = ((word * __CAP)src)[-t];);
 			}
 		}
 		/*
 		 * Copy whole words, then mop up any trailing bytes.
 		 */
 		t = length / psize;
-		TLOOP(*(ptr *)dst = *(ptr *)src; src += psize; dst += psize);
+		src += t*psize;
+		dst += t*psize;
+		TLOOP(((ptr * __CAP)dst)[-t] = ((ptr * __CAP)src)[-t];);
 		t = length & pmask;
 		//TLOOP(*dst++ = *src++);
 		TLOOP(dst[-t] = src[-t]);
-	} else {
+	}	else {
 		/*
 		 * Copy backwards.  Otherwise essentially the same.
 		 * Alignment works as before, except that it takes
@@ -153,7 +166,9 @@ bcopy(const void *src0, void *dst0, size_t length)
 			else
 				t &= wmask;
 			length -= t;
-			TLOOP1(*--dst = *--src);
+			dst -= t;
+			src -= t;
+			TLOOP1(dst[t] = src[t]);
 		}
 		if (bigptr) {
 			t = (int)src;	/* only need low bits */
@@ -163,11 +178,15 @@ bcopy(const void *src0, void *dst0, size_t length)
 				else
 					t = (psize - (t & pmask)) / wsize;
 				length -= t*wsize;
-				TLOOP(src -= wsize; dst -= wsize; *(word *)dst = *(word *)src);
+				dst -= t;
+			  src -= t;
+				TLOOP(((word * __CAP)dst)[t] = ((word * __CAP)src)[t];);
 			}
 		}
 		t = length / psize;
-		TLOOP(src -= psize; dst -= psize; *(ptr *)dst = *(ptr *)src);
+		src -= t*psize;
+		dst -= t*psize;
+		TLOOP(((ptr * __CAP)dst)[t] = ((ptr * __CAP)src)[t];);
 		t = length & pmask;
 		//TLOOP(*--dst = *--src);
 		TLOOP(dst[-t] = src[-t]);
