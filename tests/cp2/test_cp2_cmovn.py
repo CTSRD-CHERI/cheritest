@@ -42,7 +42,7 @@ class test_cp2_cmovn(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a0, 0xff, "cmovn failed to retain correct perms field")
 
     @attr('capabilities')
-    def test_cp2_cmove_offset(self):
+    def test_cp2_cmovn_offset(self):
         '''Test that cmovn retained the offset field correctly'''
         self.assertRegisterEqual(self.MIPS.a1, 0x5, "cmovn failed to retain correct offset")
 

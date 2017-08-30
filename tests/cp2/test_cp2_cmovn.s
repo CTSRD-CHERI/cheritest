@@ -37,8 +37,7 @@
 .set noat
 
 #
-# Test that if we set non-default values in a capability register, cmove to
-# another register, that we can read the same non-default values back.
+# Test CMOVN
 #
 
 		.global test
