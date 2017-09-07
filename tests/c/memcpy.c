@@ -107,8 +107,13 @@ bcopy(const void *src0, void *dst0, size_t length)
 #error One of BCOPY, MEMCPY, or MEMMOVE must be defined.
 #endif
 {
+#ifdef __CHERI__
 	char * CAPABILITY dst = __builtin_cheri_bounds_set((char * CAPABILITY)dst0,length);
 	const char * CAPABILITY src = __builtin_cheri_bounds_set((const char * CAPABILITY)src0,length);
+#else
+	char * dst = (char * )dst0;
+	const char * src = (const char * )src0;
+#endif
 	size_t t;
 	
 #if defined(MEMMOVE) || defined(BCOPY)
