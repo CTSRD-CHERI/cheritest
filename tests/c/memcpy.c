@@ -129,7 +129,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 	if (length < psize && !handle_overlap) {
 		t = length;
 		MIPSLOOP(t, 0, dst[t]=src[t];, -1);
-		return 0;
+		goto done;
 	}
 
 	/*
