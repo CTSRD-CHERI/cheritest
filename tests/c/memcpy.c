@@ -177,7 +177,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 				dst += t*wsize;
 				src += t*wsize;
 				t = -t*wsize;
-				MIPSLOOP(t, -8, *((word * CAPABILITY)(dst+t)) = *((word * CAPABILITY)(src+t));, 8/*wsize*/);
+				if (t) MIPSLOOP(t, -8, *((word * CAPABILITY)(dst+t)) = *((word * CAPABILITY)(src+t));, 8/*wsize*/);
 			}
 		}
 		/*
@@ -188,15 +188,15 @@ bcopy(const void *src0, void *dst0, size_t length)
 		dst += t*psize;
 		t = -(t*psize);
 #if !defined(_MIPS_SZCAP)
-		MIPSLOOP(t, -8, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 8/*sizeof(ptr)*/);
+		if (t) MIPSLOOP(t, -8, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 8/*sizeof(ptr)*/);
 #elif _MIPS_SZCAP==128
-		MIPSLOOP(t, -16, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 16/*sizeof(ptr)*/);
+		if (t) MIPSLOOP(t, -16, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 16/*sizeof(ptr)*/);
 #elif _MIPS_SZCAP==256
-		MIPSLOOP(t, -32, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 32/*sizeof(ptr)*/);
+		if (t) MIPSLOOP(t, -32, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 32/*sizeof(ptr)*/);
 #endif
 		t = length & pmask;
 		t = -t;
-		MIPSLOOP(t, -1, dst[t]=src[t];, 1);
+		if (t) MIPSLOOP(t, -1, dst[t]=src[t];, 1);
 	}	else {
 		/*
 		 * Copy backwards.  Otherwise essentially the same.
@@ -226,21 +226,21 @@ bcopy(const void *src0, void *dst0, size_t length)
 				length -= t*wsize;
 				dst -= t;
 			  src -= t;
-			  MIPSLOOP(t, 0, *((word * CAPABILITY)(dst+t)) = *((word * CAPABILITY)(src+t));, -8/*wsize*/);
+			  if (t) MIPSLOOP(t, 0, *((word * CAPABILITY)(dst+t)) = *((word * CAPABILITY)(src+t));, -8/*wsize*/);
 			}
 		}
 		t = length / psize;
 		src -= t*psize;
 		dst -= t*psize;
 #if !defined(_MIPS_SZCAP)
-		MIPSLOOP(t, 0, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, -8/*sizeof(ptr)*/);
+		if (t) MIPSLOOP(t, 0, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, -8/*sizeof(ptr)*/);
 #elif _MIPS_SZCAP==128
-		MIPSLOOP(t, 0, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, -16/*sizeof(ptr)*/);
+		if (t) MIPSLOOP(t, 0, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, -16/*sizeof(ptr)*/);
 #elif _MIPS_SZCAP==256
-		MIPSLOOP(t, 0, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, -32/*sizeof(ptr)*/);
+		if (t) MIPSLOOP(t, 0, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, -32/*sizeof(ptr)*/);
 #endif
 		t = length & pmask;
-		MIPSLOOP(t, 0, dst[t]=src[t];, -1);
+		if (t) MIPSLOOP(t, 0, dst[t]=src[t];, -1);
 	}
 done:
 #if !defined(BCOPY)
