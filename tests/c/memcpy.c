@@ -60,10 +60,6 @@ typedef	uintptr_t ptr;
 #define	pmask	(psize - 1)
 #define bigptr	(psize>wsize)
 
-// XXX This assembly macro depends on communicating to LLVM that this block
-// is a critical section.  This is done by the outer "if" statement that is
-// never false and is therefore optimised away.  When this no longer works,
-// we should check again if a 4 instruction loop is possible to compile.
 #define MIPSLOOP(index, last, cStatements, increment) \
 index -= increment; \
 do { \
@@ -137,14 +133,6 @@ bcopy(const void *src0, void *dst0, size_t length)
 	 */
 #define	TLOOP(s) if (t) TLOOP1(s)
 #define	TLOOP1(s) do { s; } while (--t)
-
-/*.macro copyloop load, store, src, dest, inc, induction=$4, tmp=$0
-1:
-	\load	\tmp, \induction, 0(\src)
-	\store	\tmp, \induction, 0(\dest)
-	daddiu	\induction, \induction, \inc
-	bnez	$induction, 1b
-.endm*/
 
   /*
    * Comparing pointers is not good C practice, but this should use our CPtrCmp
