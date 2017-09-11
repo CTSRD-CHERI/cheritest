@@ -61,7 +61,8 @@ typedef	uintptr_t ptr;
 #define bigptr	(psize>wsize)
 
 #define MIPSLOOP(index, last, cStatements, increment) \
-index -= increment; \
+{\
+  index -= increment; \
 do { \
 asm (\
   "addiu %[indexIn], %[indexIn], " #increment "\n" \
@@ -69,7 +70,8 @@ asm (\
   :[indexIn] "r"(index) \
 );\
 cStatements \
-} while (index!=last)
+} while (index!=last);\
+}
     
 
 /*
