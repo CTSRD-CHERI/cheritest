@@ -236,8 +236,8 @@ dump_core0:
 		# Load the exception count into k0 so that it is visible 
 		# in register dump
 		#
-
-		ld      $k0, exception_count
+		dla			$k0, exception_count
+		ld      $k0, 0($k0)
 
 		#
 		# Dump registers on the simulator (gxemul dumps regs on exit)
