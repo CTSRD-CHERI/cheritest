@@ -234,6 +234,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 		t = length / psize;
 		src -= t*psize;
 		dst -= t*psize;
+		t = (t*psize);
 #if !defined(_MIPS_SZCAP)
 		if (t) MIPSLOOP(t, 0, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, -8/*sizeof(ptr)*/);
 #elif _MIPS_SZCAP==128
