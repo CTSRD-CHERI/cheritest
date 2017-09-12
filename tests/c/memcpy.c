@@ -216,6 +216,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 			length -= t;
 			dst -= t;
 			src -= t;
+			t--;
 			MIPSLOOP(t, 0, dst[t]=src[t];, -1);
 		}
 		if (bigptr) {
@@ -226,15 +227,16 @@ bcopy(const void *src0, void *dst0, size_t length)
 				else
 					t = (psize - (t & pmask)) / wsize;
 				length -= t*wsize;
-				dst -= t;
-			  src -= t;
+				dst -= t*wsize;
+			  src -= t*wsize;
+			  t = ((t-1)*wsize);
 			  if (t) MIPSLOOP(t, 0, *((word * CAPABILITY)(dst+t)) = *((word * CAPABILITY)(src+t));, -8/*wsize*/);
 			}
 		}
 		t = length / psize;
 		src -= t*psize;
 		dst -= t*psize;
-		t = (t*psize);
+		t = ((t-1)*psize);
 #if !defined(_MIPS_SZCAP)
 		if (t) MIPSLOOP(t, 0, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, -8/*sizeof(ptr)*/);
 #elif _MIPS_SZCAP==128
