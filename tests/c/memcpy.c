@@ -201,8 +201,12 @@ bcopy(const void *src0, void *dst0, size_t length)
 #endif
 		}
 		t = length & pmask;
-		t = -t;
-		if (t) MIPSLOOP(t, -1, dst[t]=src[t];, 1);
+		if (t) {
+			src += t;
+			dst += t;
+			t = -t;
+			if (t) MIPSLOOP(t, -1, dst[t]=src[t];, 1);
+		}
 	}	else {
 		/*
 		 * Copy backwards.  Otherwise essentially the same.
@@ -253,7 +257,12 @@ bcopy(const void *src0, void *dst0, size_t length)
 #endif
 		}
 		t = length & pmask;
-		if (t) MIPSLOOP(t, 0, dst[t]=src[t];, -1);
+		if (t) {
+			dst -= t;
+			src -= t;
+			t--;
+			MIPSLOOP(t, 0, dst[t]=src[t];, -1);
+		}
 	}
 done:
 #if !defined(BCOPY)
