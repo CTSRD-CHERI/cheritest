@@ -39,9 +39,12 @@
 		.global start
 start:
 		# Load double words
-		ld	$a0, dword
-		ld	$a1, positive
-		ld	$a2, negative
+		dla	$a0, dword
+		ld	$a0, 0($a0)
+		dla	$a1, positive
+		ld	$a1, 0($a1)
+		dla	$a2, negative
+		ld	$a2, 0($a2)
 
 		# Load double words at non-zero offsets
 		dla	$t0, val1

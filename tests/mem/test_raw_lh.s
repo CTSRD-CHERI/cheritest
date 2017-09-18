@@ -37,15 +37,20 @@
 		.global start
 start:
 		# Load a half word from double word storage
-		lhu	$a0, dword
+		dla	$a0, dword
+		lhu	$a0, 0($a0)
 
 		# Load half words with sign extension
-		lh	$a1, positive
-		lh	$a2, negative
+		dla	$a1, positive
+		lh	$a1, 0($a1)
+		dla	$a2, negative
+		lh	$a2, 0($a2)
 
 		# Load half words without sign extension
-		lhu	$a3, positive
-		lhu	$a4, negative
+		dla	$a3, positive
+		lhu	$a3, 0($a3)
+		dla	$a4, negative
+		lhu	$a4, 0($a4)
 
 		# Load half words at non-zero offsets
 		dla	$t0, val1

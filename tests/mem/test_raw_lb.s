@@ -37,15 +37,20 @@
 		.global start
 start:
 		# Load a byte from double word storage
-		lbu	$a0, dword
+		dla	$a0, dword
+		lbu	$a0, 0($a0)
 
 		# Load bytes with sign extension
-		lb	$a1, positive
-		lb	$a2, negative
+		dla	$a1, positive
+		lb	$a1, 0($a1)
+		dla	$a2, negative
+		lb	$a2, 0($a2)
 
 		# Load bytes without sign extension
-		lbu	$a3, positive
-		lbu	$a4, negative
+		dla	$a3, positive
+		lbu	$a3, 0($a3)
+		dla	$a4, negative
+		lbu	$a4, 0($a4)
 
 		# Load bytes at non-zero offsets
 		dla	$t0, val1
