@@ -99,4 +99,5 @@ test:		.ent test
 
 # A double word of data that we will load and store via various
 # hardware-defined mappings.
+		.align 3
 dword:		.dword	0x0123456789abcdef

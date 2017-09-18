@@ -137,4 +137,5 @@ test:		.ent test
 
 # A double word of data that we will load via various hardware-defined
 # mappings
+		.align 3
 dword:		.dword 0x0000000000000000
