@@ -37,15 +37,20 @@
 		.global start
 start:
 		# Load a word from double word storage
-		lwu	$a0, dword
+		dla $a0, dword
+		lwu	$a0, 0($a0)
 
 		# Load words with sign extension
-		lw	$a1, positive
-		lw	$a2, negative
+		dla $a1, positive
+		lw	$a1, 0($a1)
+		dla $a2, negative
+		lw	$a2, 0($a2)
 
 		# Load words without sign extension
-		lwu	$a3, positive
-		lwu	$a4, negative
+		dla $a3, positive
+		lwu	$a3, 0($a3)
+		dla $a4, negative
+		lwu	$a4, 0($a4)
 
 		# Load words at non-zero offsets
 		dla	$t0, val1
