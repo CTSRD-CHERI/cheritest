@@ -105,6 +105,9 @@ bcopy(const void *src0, void *dst0, size_t length)
 #error One of BCOPY, MEMCPY, or MEMMOVE must be defined.
 #endif
 {
+	if (length == 0 || src0 == dst0)		/* nothing to do */
+		goto done;
+		
 #ifdef __CHERI__
 	char * CAPABILITY dst = __builtin_cheri_bounds_set((char * CAPABILITY)dst0,length);
 	const char * CAPABILITY src = __builtin_cheri_bounds_set((const char * CAPABILITY)src0,length);
@@ -119,16 +122,6 @@ bcopy(const void *src0, void *dst0, size_t length)
 #else
 	const int handle_overlap = 0;
 #endif
-
-	if (length == 0 || dst == src)		/* nothing to do */
-		goto done;
-	
-	// Fast path for small copies
-	if (length < psize && !handle_overlap) {
-		t = length-1;
-		MIPSLOOP(t, 0, dst[t]=src[t];, -1);
-		goto done;
-	}
 
 	/*
 	 * Macros: loop-t-times; and loop-t-times, t>0
