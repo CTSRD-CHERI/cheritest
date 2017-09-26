@@ -30,7 +30,7 @@
  * SUCH DAMAGE.
  */
 
-#if !defined(CMEMCPY_C) && !defined(CMEMCPY)
+#if !defined(STANDALONE)
 #if defined(LIBC_SCCS) && !defined(lint)
 static char sccsid[] = "@(#)bcopy.c	8.1 (Berkeley) 6/4/93";
 #endif /* LIBC_SCCS and not lint */
@@ -86,6 +86,10 @@ memcpy_c(void * CAPABILITY dst0, const void * CAPABILITY src0, size_t length)
 #elif defined(MEMMOVE)
 void *
 memmove
+(void *dst0, const void *src0, size_t length)
+#elif defined(CMEMMOVE)
+void *
+cmemmove
 (void *dst0, const void *src0, size_t length)
 #elif defined(MEMCPY)
 void *
