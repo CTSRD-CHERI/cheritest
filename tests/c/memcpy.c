@@ -38,6 +38,8 @@ static char sccsid[] = "@(#)bcopy.c	8.1 (Berkeley) 6/4/93";
 __FBSDID("$FreeBSD$");
 #include <sys/types.h>
 #include <stdint.h>
+#else
+typedef long vaddr_t;
 #endif
 /*
  * sizeof(word) MUST BE A POWER OF TWO
@@ -198,11 +200,11 @@ bcopy(const void *src0, void *dst0, size_t length)
 			t = -(t*psize);
 			//if (t) MIPSLOOP(t, -psize, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, PWIDTH);
 			#if !defined(_MIPS_SZCAP)
-		  MIPSLOOP(t, -psize, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 8);
+		    MIPSLOOP(t, -psize, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 8);
 			#elif _MIPS_SZCAP==128
-						MIPSLOOP(t, -psize, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 16);
+				MIPSLOOP(t, -psize, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 16);
 			#elif _MIPS_SZCAP==256
-						MIPSLOOP(t, -psize, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 32);
+				MIPSLOOP(t, -psize, *((ptr * CAPABILITY)(dst+t)) = *((ptr * CAPABILITY)(src+t));, 32);
 			#endif
 		}
 		t = length & pmask;
