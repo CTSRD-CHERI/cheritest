@@ -824,6 +824,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cbtu.s			\
 		test_cp2_cbts.s			\
 		test_cp2_cbnz.s			\
+		test_cp2_cbez.s			\
 		test_cp2_ceq.s			\
 		test_cp2_cne.s			\
 		test_cp2_clt.s			\
