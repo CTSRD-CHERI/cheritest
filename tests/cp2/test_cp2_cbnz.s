@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013 Michael Roe
+# Copyright (c) 2017 Jonathan Woodruff
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -32,7 +33,7 @@
 .set noat
 
 #
-# Test CBTS (capability branch if tag is set).
+# Test CBNZ (capability branch if not NULL).
 #
 
 		.global test
@@ -44,8 +45,8 @@ test:		.ent test
 
 		dli	$a0, 0
 		dli	$a2, 0
-		cfromptr $c22, $c0, $0
-		.word 0x4a360003 # cbez	$c22, 16 # This branch should be taken
+		cmove	$c22, $c0
+		.word 0x4a560003 # cbnz	$c22, 16 # This branch should be taken
 		dli	$a2, 1  # Branch delay slot is executed even if branch
 		dli     $a0, 1
 		nop
@@ -53,8 +54,8 @@ test:		.ent test
 L1:
 		nop
 		dli	$a1, 0
-		cmove	$c22, $c0
-		.word 0x4a360003 # cbez	$c22, 16	# This branch should not be taken
+		cfromptr $c22, $c0, $0
+		.word 0x4a560003 # cbnz	$c22, 16	# This branch should not be taken
 		nop 		# Branch delay slot
 		dli	$a1, 1
 		nop

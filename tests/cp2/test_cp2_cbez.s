@@ -33,7 +33,7 @@
 .set noat
 
 #
-# Test CBEZ (capability branch if tag is set).
+# Test CBEZ (capability branch if NULL).
 #
 
 		.global test

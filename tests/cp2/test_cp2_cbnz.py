@@ -29,7 +29,7 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test cbnz (capability branch if tag is set)
+# Test cbnz (capability branch if not NULL)
 #
 
 class test_cp2_cbnz(BaseBERITestCase):
@@ -44,9 +44,9 @@ class test_cp2_cbnz(BaseBERITestCase):
     @attr('newisa')
     @attr('capabilities')
     def test_cp2_cbnz_2(self):
-        '''Test that cbnz does not branch if the cap is not zero'''
+        '''Test that cbnz does not branch if the cap is zero'''
         self.assertRegisterEqual(self.MIPS.a1, 1,
-            "cbnz branched when cap was not zero")
+            "cbnz branched when cap was zero")
 
     @attr('newisa')
     @attr('capabilities')

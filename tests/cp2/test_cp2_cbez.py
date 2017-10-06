@@ -29,7 +29,7 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 #
-# Test cbnz (capability branch if tag is set)
+# Test cbnz (capability branch if not NULL)
 #
 
 class test_cp2_cbez(BaseBERITestCase):
