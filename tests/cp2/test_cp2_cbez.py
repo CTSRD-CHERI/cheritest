@@ -32,7 +32,7 @@ from nose.plugins.attrib import attr
 # Test cbnz (capability branch if tag is set)
 #
 
-class test_cp2_cbnz(BaseBERITestCase):
+class test_cp2_cbez(BaseBERITestCase):
 
     @attr('newisa')
     @attr('capabilities')
