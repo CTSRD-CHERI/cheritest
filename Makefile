@@ -160,9 +160,9 @@ AS=$(CHERI_SDK)/as
 endif
 # default to linking with LLD unless CHERI_SDK_USE_GNU_LD is set
 ifndef CHERI_SDK_USE_GNU_LD
-LLD=$(CHERI_SDK)/ld.lld
+LLD=$(CHERI_SDK)/ld.lld --fatal-warnings
 else
-LD=$(CHERI_SDK)/ld.bfd
+LD=$(CHERI_SDK)/ld.bfd --fatal-warnings
 endif
 
 QEMU?=$(CHERI_SDK)/qemu-system-cheri
@@ -1073,8 +1073,6 @@ TEST_CP2_FILES +=test_cp2_cmovn.s		        \
 TEST_CP2_FILES +=test_cp2_csetboundsexact.s             \
 		test_cp2_x_csetboundsexact_imprecise.s  \
 		test_cp2_x_multiop_reg.s
-
-
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
