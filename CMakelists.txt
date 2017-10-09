@@ -1,0 +1,7 @@
+# Unset all make variables that are added by the cmake build
+set(REMOVE_MAKE_ENV_VARS -u MAKE -u MAKELEVEL -u MFLAGS -u MAKEFLAGS)
+add_custom_target(run-make ALL VERBATIM USES_TERMINAL
+        COMMAND env ${REMOVE_MAKE_ENV_VARS} make
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+add_custom_target(env VERBATIM USES_TERMINAL COMMAND env | sort WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+add_custom_target(env-clean VERBATIM USES_TERMINAL COMMAND env ${REMOVE_MAKE_ENV_VARS} env | sort WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
