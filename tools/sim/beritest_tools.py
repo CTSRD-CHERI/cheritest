@@ -30,6 +30,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
+from __future__ import print_function
 
 import unittest
 import os
@@ -92,7 +93,7 @@ class BaseBERITestCase(unittest.TestCase):
 
             if self.MIPS.k0 != 0 and not expect_exception:
                 self.MIPS_EXCEPTION=Exception(self.__name__ + " threw exception unexpectedly")
-        except MipsException, e:
+        except MipsException as e:
             self.MIPS_EXCEPTION = e
 
 
@@ -299,7 +300,7 @@ class BaseICacheBERITestCase(BaseBERITestCase):
         fh = open(os.path.join(self.LOG_DIR, self.LOG_FN), "rt")
         try:
             self.ICACHE = ICacheStatus(fh)
-        except ICacheException, e:
+        except ICacheException as e:
             self.ICACHE_EXCEPTION = e
 
     def setUp(self):
@@ -363,9 +364,9 @@ class BaseICacheBERITestCase(BaseBERITestCase):
 def main():
     import sys
     if len(sys.argv) != 2:
-        print "Usage: %0 LOGFILE"%sys.argv[0]
+        print("Usage: %0 LOGFILE"%sys.argv[0])
     regs = MipsStatus(file(sys.argv[1], "rt"))
-    print regs
+    print(regs)
 
 if __name__=="__main__":
     main()
