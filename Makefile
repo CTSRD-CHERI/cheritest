@@ -2050,7 +2050,7 @@ clean: cleantest
 	rm -f $(TEST_OBJS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
 	rm -f $(TEST_CACHED_ELFS) $(TEST_CACHED_MEMS) $(TEST_CACHED_DUMPS)
 	rm -f $(TEST_MULTI_ELFS) $(TEST_MULTI_MEMS) $(TEST_MULTI_DUMPS)
-	rm -f log/*.log obj/*.mem obj/*.o obj/*.elf obj/*.dump
+	rm -f log/*.log obj/*.mem obj/*.o obj/*.elf obj/*.dump qemu_log/*.log
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
@@ -2072,7 +2072,6 @@ $(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s
 	$(AS) -I $(TESTDIR)/statcounters -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 $(OBJDIR)/test_%.o : test_%.s macros.s
-	#$(CLANG_CC) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 # Put DMA model makefile into its own file. This one is already ludicrously
@@ -2110,7 +2109,6 @@ $(OBJDIR)/test_%.o : test_%.c
 
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)BERI_VER=$(BERI_VER) $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
-#$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 
 select_init: select_init.c
 	$(CC) -o select_init select_init.c
@@ -2315,7 +2313,7 @@ $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles
 	mkdir -p $(QEMU_LOGDIR)
-	$(QEMU) -D $@ -d instr -M mipssim -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
+	$(QEMU) -D $@ -d instr -M mipssim -cpu 5Kf -bc `./max_cycles $@ 40000 300000` \
 	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bp 0x`$(OBJDUMP) -t $(OBJDIR)/$*.elf | awk -f end.awk` || true
 
 # Simulate a failure on all unit tests
@@ -2500,6 +2498,7 @@ nosetests_qemu: nosetests_qemu.xml
 NOSETESTS?=python2 -m nose
 
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
+	@echo "Nose flags: $(QEMU_NOSEFLAGS)"
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(QEMU_NOSEFLAGS) \
