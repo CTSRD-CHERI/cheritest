@@ -60,22 +60,23 @@ class BaseBERITestCase(unittest.TestCase):
     EXPECT_EXCEPTION=None
 
     @classmethod
-    def setUpClass(self):
+    def setUpClass(cls):
         '''Parse the log file and instantiate MIPS'''
-        self.cached = bool(int(os.environ.get("CACHED", "0")))
-        self.multi = bool(int(os.environ.get("MULTI1", "0")))
-        if self.LOG_FN is None:
-            if self.multi and self.cached:
-                self.LOG_FN = self.__name__ + "_cachedmulti.log"
-            elif self.multi:
-                self.LOG_FN = self.__name__ + "_multi.log"
-            elif self.cached:
-                self.LOG_FN = self.__name__ + "_cached.log"
+        cls.cached = bool(int(os.environ.get("CACHED", "0")))
+        cls.multi = bool(int(os.environ.get("MULTI1", "0")))
+        if cls.LOG_FN is None:
+            if cls.multi and cls.cached:
+                cls.LOG_FN = cls.__name__ + "_cachedmulti.log"
+            elif cls.multi:
+                cls.LOG_FN = cls.__name__ + "_multi.log"
+            elif cls.cached:
+                cls.LOG_FN = cls.__name__ + "_cached.log"
             else:
-                self.LOG_FN = self.__name__ + ".log"
-        with open(os.path.join(self.LOG_DIR, self.LOG_FN), "rt") as fh:
+                cls.LOG_FN = cls.__name__ + ".log"
+        cls.unexpected_exception = False
+        with open(os.path.join(cls.LOG_DIR, cls.LOG_FN), "rt") as fh:
             try:
-                self.MIPS = MipsStatus(fh)
+                cls.MIPS = MipsStatus(fh)
 
                 # The test framework has a default exception handler which
                 # increments k0 and returns to the instruction after the
@@ -85,16 +86,17 @@ class BaseBERITestCase(unittest.TestCase):
                 # True or False), but actually all tests which expect
                 # exceptions have custom handlers so none of them need to.
 
-                if self.EXPECT_EXCEPTION is not None:
-                    expect_exception = self.EXPECT_EXCEPTION
+                if cls.EXPECT_EXCEPTION is not None:
+                    expect_exception = cls.EXPECT_EXCEPTION
                 else:
                     # raw tests don't have the default exception handler so don't check for exceptions
-                    expect_exception =  'raw' in self.__name__
+                    expect_exception =  'raw' in cls.__name__
 
-                if self.MIPS.k0 != 0 and not expect_exception:
-                    self.MIPS_EXCEPTION=Exception(self.__name__ + " threw exception unexpectedly")
+                if cls.MIPS.k0 != 0 and not expect_exception:
+                    cls.MIPS_EXCEPTION=Exception(cls.__name__ + " threw exception unexpectedly")
+                    cls.unexpected_exception = True
             except MipsException as e:
-                self.MIPS_EXCEPTION = e
+                cls.MIPS_EXCEPTION = e
 
     def id(self):
         result = unittest.TestCase.id(self)
@@ -106,7 +108,9 @@ class BaseBERITestCase(unittest.TestCase):
         return result[:pos] + "_cached" + result[pos:]
 
     def setUp(self):
-        if not self.MIPS_EXCEPTION is None:
+        if self.unexpected_exception:
+            self.fail(self.__class__.__name__ + " threw exception unexpectedly")
+        elif self.MIPS_EXCEPTION is not None:
             raise self.MIPS_EXCEPTION
 
     def assertRegisterEqual(self, first, second, msg=None):
