@@ -25,6 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+from __future__ import print_function
+
 import sys
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as ET
@@ -35,7 +37,7 @@ import argparse
 ###
 
 if sys.version < '2.7':
-   print 'Python 2.7 or later needed for ".." notation in ElementTree findall()'
+   print('Python 2.7 or later needed for ".." notation in ElementTree findall()')
    sys.exit()
 
 def prettyPrint(element):
@@ -48,9 +50,9 @@ def prettyPrintItems(etree, tag, prefix, verbose):
   for e in etree.findall('.//%s/..'%tag):
     failure_count+=1
     if verbose:
-      print prefix + prettyPrint(e)
+        print(prefix + prettyPrint(e))
     else:
-      print prefix + e.attrib["name"]
+        print(prefix + e.attrib["name"])
   return failure_count 
 
 def main():
@@ -65,7 +67,7 @@ def main():
     failure_count += prettyPrintItems(etree, 'failure', fh.name+' F: ', args.verbose)
     failure_count += prettyPrintItems(etree, 'error', fh.name+' E: ', args.verbose)
 
-  print "Failures: %d"%failure_count
+  print("Failures: %d" % failure_count)
   if failure_count:
     sys.exit(1)
   

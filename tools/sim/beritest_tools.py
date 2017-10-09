@@ -96,15 +96,14 @@ class BaseBERITestCase(unittest.TestCase):
         except MipsException as e:
             self.MIPS_EXCEPTION = e
 
-
     def id(self):
-        id = unittest.TestCase.id(self)
+        result = unittest.TestCase.id(self)
         if not self.cached:
-            return id
+            return result
 
-        pos = id.find(".")
+        pos = result.find(".")
         assert(pos >= 0)
-        return id[:pos] + "_cached" + id[pos:]
+        return result[:pos] + "_cached" + result[pos:]
 
     def setUp(self):
         if not self.MIPS_EXCEPTION is None:

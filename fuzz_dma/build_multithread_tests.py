@@ -25,6 +25,8 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+from __future__ import print_function
+
 from os import path
 import subprocess
 from string import Template
@@ -51,7 +53,7 @@ def main():
     try:
         tests = subprocess.check_output([GENERATE_PROGRAM] + sys.argv[1:])
     except subprocess.CalledProcessError as ex:
-        print 'CALLED PROCESS ERROR', ex.output
+        print('CALLED PROCESS ERROR', ex.output)
         sys.exit(2)
 
     mode = sys.argv[1]
@@ -76,8 +78,8 @@ def main():
             source_addrs = fields[4]
             dest_addrs = fields[5]
         except IndexError as ex:
-            print 'TC {0}, SEED {1}. {2}'.format(thread_count, seed, str(ex))
-            print test_data
+            print('TC {0}, SEED {1}. {2}'.format(thread_count, seed, str(ex)))
+            print(test_data)
             sys.exit(1)
 
         test_path = PHYS_TEST_PATH if mode == 'phys' else VIRT_TEST_PATH

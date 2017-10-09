@@ -26,6 +26,8 @@
 # bluesim and gxemul. tests/fuzz/test_fuzz.py is a nose test which
 # compares the results.
 
+from __future__ import print_function
+
 import itertools, operator
 import inspect
 import string
@@ -239,7 +241,7 @@ def generate_tests(options, group, variables):
     sys.stdout.write("Generating %d %s tests..." % (num_tests, group))
     sys.stdout.flush()
     if options.count or (options.only and group!=options.only):
-        print "skip."
+        print("skip.")
         if options.count:
             return num_tests
         else:
@@ -260,7 +262,7 @@ def generate_tests(options, group, variables):
         test_asm.write(template.substitute(param_dict))
         test_asm.close()
         test_no+=1
-    print "done."
+    print("done.")
     return test_no
 
 def generate_load(options):
@@ -354,7 +356,6 @@ def generate_mul_single(options):
           ('nops', [0,1,2,4,8,16]),
         ])
 
-int
 def generate_maddsub_single(options):
     return generate_tests(
         options,
@@ -482,6 +483,6 @@ if __name__=="__main__":
     tests+=generate_branch_two_args(options)
     tests+=generate_branch_no_args(options)
     tests+=generate_jump_register(options)
-    print "Total: %d tests." % tests
+    print("Total: %d tests." % tests)
 
 

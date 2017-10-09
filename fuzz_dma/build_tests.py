@@ -24,6 +24,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
+from __future__ import print_function
 
 import sys
 import subprocess
@@ -39,7 +40,7 @@ def main():
         tests = subprocess.check_output(
             ['../x86-obj/generate_dma_test', sys.argv[1], sys.argv[2]])
     except subprocess.CalledProcessError as ex:
-        print ex.output
+        print(ex.output)
         return 1
 
     test_no = int(sys.argv[1]);
@@ -47,7 +48,7 @@ def main():
         try:
             program, setsource, sourcesize, asserts, destsize = line.split('$')
         except Exception as ex:
-            print test_no, ex, line
+            print(test_no, ex, line)
             break
 
         if len(setsource) == 0:
