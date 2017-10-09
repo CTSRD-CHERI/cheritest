@@ -2470,9 +2470,11 @@ nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHO
 
 nosetests_qemu: nosetests_qemu.xml
 
+NOSETESTS?=python2 -m nose
+
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
-	LOGDIR=$(QEMU_LOGDIR) nosetests --with-xunit \
+	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(QEMU_NOSEFLAGS) \
 	$(TESTDIRS) || true
 
