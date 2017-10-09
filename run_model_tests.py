@@ -26,6 +26,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
+from __future__ import print_function
 
 import re
 import os
@@ -43,9 +44,9 @@ def main():
         try:
             subprocess.check_output([fn])
         except subprocess.CalledProcessError as ex:
-            print 'FAILED! (assert on line {0})'.format(ex.output.strip())
+            print('FAILED! (assert on line {0})'.format(ex.output.strip()))
             continue
-        print 'Passed.'
+        print('Passed.')
 
 if __name__=='__main__':
     main()

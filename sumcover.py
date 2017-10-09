@@ -42,7 +42,7 @@
 # .cover file by summing the counts for each branch, e.g.
 #
 #   sumcover.py *.cover > all.cover
-
+from __future__ import print_function
 import sys
 
 hist = {}
@@ -58,4 +58,4 @@ for filename in filenames:
     hist[key] = hist.get(key, 0) + int(val)
 
 for w in sorted(hist, key=hist.get, reverse=True):
-  print hist[w], w
+  print(hist[w], w)

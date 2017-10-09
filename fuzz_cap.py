@@ -40,6 +40,8 @@
 # Imports
 # =======
 
+from __future__ import print_function
+
 import subprocess
 import os
 import sys
@@ -59,15 +61,15 @@ numTests = 10000
 if 'L3CHERI' in os.environ.keys():
   L3CHERI = os.environ['L3CHERI']
 else:
-  print "Please set the L3CHERI environment variable"
-  print "It should point to an L3-compiled binary"
+  print("Please set the L3CHERI environment variable")
+  print("It should point to an L3-compiled binary")
   exit()
 
 if 'BSVCHERI' in os.environ.keys():
   BSVCHERI = os.environ['BSVCHERI']
 else:
-  print "Please set the BSVCHERI environment variable"
-  print "It should point to a bluespec simulator"
+  print("Please set the BSVCHERI environment variable")
+  print("It should point to a bluespec simulator")
   exit()
 
 # =====================
@@ -327,11 +329,11 @@ postlude = [
 # Random data section
 def datasection(): return [
       " .data"
-		, "	.align	5		# Must 256-bit align capabilities"
+        , "	.align	5		# Must 256-bit align capabilities"
     , "cap1:		.dword	" + genDWord() + "	# uperms/reserved"
-	  , "	.dword	" + genDWord() + "	# otype/eaddr"
-	  , "	.dword	" + genDWord() + "	# base"
-	  , "	.dword	" + genDWord() + "	# length"
+      , "	.dword	" + genDWord() + "	# otype/eaddr"
+      , "	.dword	" + genDWord() + "	# base"
+      , "	.dword	" + genDWord() + "	# length"
   ]
     
 
@@ -372,8 +374,8 @@ def testSetGet():
   # Print test sequence
   if verbose:
     for line in testseq:
-      print line
-    print
+      print(line)
+    print()
 
   # Query resulting capability
   seq = queryCap()
@@ -396,8 +398,8 @@ def testCmp():
   # Print test sequence
   if verbose:
     for line in testseq:
-      print line
-    print
+      print(line)
+    print()
 
   # Compare resulting capabilities
   testseq.extend(
@@ -449,8 +451,8 @@ def testSealUnseal():
   # Print test sequence
   if verbose:
     for line in testseq:
-      print line
-    print
+      print(line)
+    print()
 
   # Query resulting capability
   seq = queryCap()
@@ -490,13 +492,13 @@ def gen():
   # Choose a test sequence
   testseq = []
   if chance(.33):
-    if verbose: print "{Set-Get}"
+    if verbose: print("{Set-Get}")
     testseq = testSetGet()
   elif chance(0.33):
-    if verbose: print "{PtrCmp}"
+    if verbose: print("{PtrCmp}")
     testseq = testCmp()
   else:
-    if verbose: print "{Seal-Unseal}"
+    if verbose: print("{Seal-Unseal}")
     testseq = testSealUnseal()
 
   return testseq
@@ -519,7 +521,7 @@ def shrink(test, dataseq):
     if failure != "":
       ommitted.append(omit)
       result = new
-  print ""
+  print("")
   return result
 
 # Generate, save, compile, and run a test.
@@ -531,7 +533,7 @@ def doOneTest():
   compile()
   failure = run()
   if failure != "":
-    print " failed"
+    print(" failed")
     shorter = shrink(test, dataseq)
     emit(shorter, dataseq)
     compile()
@@ -566,20 +568,20 @@ try:
   random.seed(seed)
 
   if options.filename == None:
-    print ("Setting random seed to %i" % seed)
+    print("Setting random seed to %i" % seed)
     for i in range (1,numTests):
       sys.stdout.write("\rTest %i/%i" % (i, numTests))
       sys.stdout.flush()
       doOneTest()
   else:
-    print ("Replaying " + options.filename)
+    print("Replaying " + options.filename)
     shutil.copyfile(options.filename, "captest.s")
     compile()
     failure = run()
     if failure == "":
-      print "Passed"
+      print("Passed")
     else:
-      print failure
+      print(failure)
 except KeyboardInterrupt:
-  print "\nBye!"
+  print("\nBye!")
   exit()
