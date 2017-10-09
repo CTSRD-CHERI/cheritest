@@ -33,6 +33,6 @@ class test_raw_fpu_cole_ps(BaseBERITestCase):
     @attr('floatpaired')
     def test_cole_ps_1(self):
         '''Test we can compare less than or equal paired singles'''
-        self.assertRegisterEqual(self.MIPS.s2, 0x3, "Failed to compare less than or equal 2.0, 1.0 and 2.0, 1.0 in paired single precision");
+        self.assertRegisterEqual(self.MIPS.s2, 0x3, "Failed to compare less than or equal 2.0, 1.0 and 2.0, 1.0 in paired single precision")
         self.assertRegisterEqual(self.MIPS.s5, 0x2, "Failed to compare less than or equal 1.0, 2.0 and 2.0, 1.0 in paired single precision")
         self.assertRegisterEqual(self.MIPS.a0, 0x1, "Failed to compare less than or equal 2.0, 1.0 and 1.0, 2.0 in paired single precision")

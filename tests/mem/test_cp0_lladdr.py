@@ -34,7 +34,7 @@ class test_cp0_lladdr(BaseBERITestCase):
     @attr('cached')
     def test_lladdr_reset(self):
 	'''Test that CP0 lladdr is 0 on CPU reset'''
-	self.assertRegisterEqual(self.MIPS.a0, 0, "CP0 lladdr non-zero on reset");
+	self.assertRegisterEqual(self.MIPS.a0, 0, "CP0 lladdr non-zero on reset")
 
     @attr('llsc')
     @attr('lladdr')

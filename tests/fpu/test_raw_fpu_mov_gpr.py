@@ -33,39 +33,39 @@ class test_raw_fpu_mov_gpr(BaseBERITestCase):
     @attr('floatcmove')
     def test_mov_gpr_1(self):
         '''Test MOVN.S (True)'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x41000000, "MOVN.S (True) failed");
+        self.assertRegisterEqual(self.MIPS.a0, 0x41000000, "MOVN.S (True) failed")
 
     @attr('floatcmove')
     def test_mov_gpr_2(self):
         '''Test MOVN.D (True)'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x4000000000000000, "MOVN.D (True) failed");
+        self.assertRegisterEqual(self.MIPS.a1, 0x4000000000000000, "MOVN.D (True) failed")
 
     @attr('floatcmove')
     def test_mov_gpr_3(self):
         '''Test MOVN.S (False)'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x0, "MOVN.S (False) failed");
+        self.assertRegisterEqual(self.MIPS.a2, 0x0, "MOVN.S (False) failed")
 
     @attr('floatcmove')
     def test_mov_gpr_4(self):
         '''Test MOVN.D (False)'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0, "MOVN.D (False) failed");
+        self.assertRegisterEqual(self.MIPS.a3, 0x0, "MOVN.D (False) failed")
 
     @attr('floatcmove')
     def test_mov_gpr_5(self):
         '''Test MOVZ.S (True)'''
-        self.assertRegisterEqual(self.MIPS.s0, 0x41000000, "MOVZ.S (True) failed");
+        self.assertRegisterEqual(self.MIPS.s0, 0x41000000, "MOVZ.S (True) failed")
 
     @attr('floatcmove')
     def test_mov_gpr_6(self):
         '''Test MOVZ.D (True)'''
-        self.assertRegisterEqual(self.MIPS.s1, 0x4000000000000000, "MOVZ.D (True) failed");
+        self.assertRegisterEqual(self.MIPS.s1, 0x4000000000000000, "MOVZ.D (True) failed")
 
     @attr('floatcmove')
     def test_mov_gpr_7(self):
         '''Test MOVZ.S (False)'''
-        self.assertRegisterEqual(self.MIPS.s2, 0x0, "MOVZ.S (False) failed");
+        self.assertRegisterEqual(self.MIPS.s2, 0x0, "MOVZ.S (False) failed")
 
     @attr('floatcmove')
     def test_mov_gpr_8(self):
         '''Test MOVZ.D (False)'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x0, "MOVZ.D (False) failed");
+        self.assertRegisterEqual(self.MIPS.s3, 0x0, "MOVZ.D (False) failed")

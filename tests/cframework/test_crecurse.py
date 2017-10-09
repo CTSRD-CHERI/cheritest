@@ -29,4 +29,4 @@ from beritest_tools import BaseBERITestCase
 
 class test_crecurse(BaseBERITestCase):
     def test_retval(self):
-        self.assertRegisterEqual(self.MIPS.v0, 5, "C recursion failure");
+        self.assertRegisterEqual(self.MIPS.v0, 5, "C recursion failure")

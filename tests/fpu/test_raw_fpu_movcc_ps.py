@@ -34,23 +34,23 @@ class test_raw_fpu_movcc_ps(BaseBERITestCase):
     @attr('floatpaired')
     def test_raw_fpu_movcc_ps_1(self):
         '''Test MOVF.PS (True)'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x4100000040000000, "MOVF.PS (True) failed");
+        self.assertRegisterEqual(self.MIPS.a0, 0x4100000040000000, "MOVF.PS (True) failed")
 
     @attr('floatcmove')
     @attr('floatpaired')
     def test_raw_fpu_movcc_ps_2(self):
         '''Test MOVT.PS (False)'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x0, "MOVT.PS (False) failed");
+        self.assertRegisterEqual(self.MIPS.a1, 0x0, "MOVT.PS (False) failed")
 
     @attr('floatcmove')
     @attr('floatpaired')
     def test_raw_fpu_movcc_ps_3(self):
         '''Test MOVF.PS (False)'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x0, "MOVF.PS (False) failed");
+        self.assertRegisterEqual(self.MIPS.a2, 0x0, "MOVF.PS (False) failed")
 
     @attr('floatcmove')
     @attr('floatpaired')
     def test_raw_fpu_movcc_ps_4(self):
         '''Test MOVT.PS (True)'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x4100000040000000, "MOVT.PS (True) failed");
+        self.assertRegisterEqual(self.MIPS.a3, 0x4100000040000000, "MOVT.PS (True) failed")
 

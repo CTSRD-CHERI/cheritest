@@ -38,4 +38,4 @@ class test_raw_fpu_neg_ps(BaseBERITestCase):
     @attr('floatpaired')
     def test_neg_paired_qnan(self):
         '''Test negation of a paired single when one of the pair is QNaN'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x7F810000C0000000, "neg.ps failed to echo QNaN");
+        self.assertRegisterEqual(self.MIPS.s3, 0x7F810000C0000000, "neg.ps failed to echo QNaN")

@@ -33,39 +33,39 @@ class test_raw_fpu_mov_cc(BaseBERITestCase):
     @attr('floatcmove')
     def test_raw_fpu_mov_cc_1(self):
         '''Test MOVF.S (True)'''
-        self.assertRegisterEqual(self.MIPS.s0, 0x41000000, "MOVF.S (True) failed");
+        self.assertRegisterEqual(self.MIPS.s0, 0x41000000, "MOVF.S (True) failed")
 
     @attr('floatcmove')
     def test_raw_fpu_mov_cc_2(self):
         '''Test MOVF.D (True)'''
-        self.assertRegisterEqual(self.MIPS.s1, 0x4000000000000000, "MOVF.D (True) failed");
+        self.assertRegisterEqual(self.MIPS.s1, 0x4000000000000000, "MOVF.D (True) failed")
 
     @attr('floatcmove')
     def test_raw_fpu_mov_cc_3(self):
         '''Test MOVF.S (False)'''
-        self.assertRegisterEqual(self.MIPS.s3, 0x0, "MOVF.S (False) failed");
+        self.assertRegisterEqual(self.MIPS.s3, 0x0, "MOVF.S (False) failed")
 
     @attr('floatcmove')
     def test_raw_fpu_mov_cc_4(self):
         '''Test MOVF.D (False)'''
-        self.assertRegisterEqual(self.MIPS.s4, 0x0, "MOVF.D (False) failed");
+        self.assertRegisterEqual(self.MIPS.s4, 0x0, "MOVF.D (False) failed")
 
     @attr('floatcmove')
     def test_raw_fpu_mov_cc_5(self):
         '''Test MOVT.S (True)'''
-        self.assertRegisterEqual(self.MIPS.s6, 0x41000000, "MOVT.S (True) failed");
+        self.assertRegisterEqual(self.MIPS.s6, 0x41000000, "MOVT.S (True) failed")
 
     @attr('floatcmove')
     def test_raw_fpu_mov_cc_6(self):
         '''Test MOVT.D (True)'''
-        self.assertRegisterEqual(self.MIPS.s7, 0x4000000000000000, "MOVT.D (True) failed");
+        self.assertRegisterEqual(self.MIPS.s7, 0x4000000000000000, "MOVT.D (True) failed")
 
     @attr('floatcmove')
     def test_raw_fpu_mov_cc_7(self):
         '''Test MOVT.S (False)'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x0, "MOVT.S (False) failed");
+        self.assertRegisterEqual(self.MIPS.a1, 0x0, "MOVT.S (False) failed")
 
     @attr('floatcmove')
     def test_raw_fpu_mov_cc_8(self):
         '''Test MOVT.D (False)'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x0, "MOVT.D (False) failed");
+        self.assertRegisterEqual(self.MIPS.a2, 0x0, "MOVT.D (False) failed")

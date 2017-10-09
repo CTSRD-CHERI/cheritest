@@ -43,7 +43,7 @@ def main():
         print(ex.output)
         return 1
 
-    test_no = int(sys.argv[1]);
+    test_no = int(sys.argv[1])
     for line in tests.rstrip().split('\n'):
         try:
             program, setsource, sourcesize, asserts, destsize = line.split('$')
