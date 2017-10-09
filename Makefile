@@ -148,6 +148,7 @@ ifndef CHERI_SDK_USE_GNU_AS
 AS=$(CLANG_CC) -target cheri-unknown-freebsd -fno-pic -c -Wno-unused-command-line-argument -mno-abicalls
 # TODO: use llvm-mc?
 # AS=$(CHERI_SDK)/llvm-mc -filetype=obj -foo
+USING_LLVM_ASSEMBLER=1
 else
 # use GNU as:
 AS=$(CHERI_SDK)/as
@@ -658,8 +659,13 @@ TEST_ALU_FILES=					\
 TEST_BRANCH_FILES =				\
 		test_bltzall_large.s		\
 		test_jalr_align.s		\
-		test_x_msa_bdelay.s		\
-		test_x_3d_bdelay.s
+		test_x_msa_bdelay.s
+
+# TODO: this test should just use the raw instruction bits until clang
+# understands bc1any4f $fcc0, L1
+ifneq ($(USING_LLVM_ASSEMBLER),1)
+TEST_BRANCH_FILES+=test_x_3d_bdelay.s
+endif
 
 TEST_MEM_FILES=					\
 		test_hardware_mappings.s	\
@@ -683,19 +689,25 @@ TEST_LLSC_FILES=				\
 		test_scd_unalign.s		\
 		test_scd_alias.s		\
 		test_llsc.s			\
-		test_llsc_span.s		\
-		test_lldscd.s			\
-		test_lldscd_span.s		\
+		test_lldscd_span.s
+
+#FIXME: these tests doesn't build with LLVM yet (symbol reference in sc)
+ifneq ($(USING_LLVM_ASSEMBLER),1)
+TEST_LLSC_FILES+=test_llsc_span.s               \
+		test_lldscd.s                   \
 		test_cp0_lladdr.s
+
+endif
 
 TEST_CACHE_FILES=				\
 		test_hardware_mapping_cached_read.s \
 		test_cache_instruction_data.s	\
-		test_cache_instruction_instruction.s \
 		test_cache_instruction_L2.s	\
 		test_cache_taglo.s		\
 		test_id_coherence.s
-
+ifneq ($(USING_LLVM_ASSEMBLER),1)
+TEST_CACHE_FILES+=test_cache_instruction_instruction.s
+endif
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
 		test_cp0_config1		\
@@ -927,11 +939,8 @@ TEST_CP2_FILES=					\
 		test_cp2_c0_sc.s		\
 		test_cp2_cseal_large.s		\
 		test_cp2_cjalr_delay.s		\
-		test_cp2_csetboundsexact.s	\
 		test_cp2_clc_perm.s		\
-		test_cp2_csetbounds_rounding.s	\
-		test_cp2_cmovn.s		\
-		test_cp2_cmovz.s		\
+		test_cp2_csetbounds_rounding.s  \
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
@@ -1025,7 +1034,6 @@ TEST_CP2_FILES=					\
 		test_cp2_x_multiop_disabled.s	\
 		test_cp2_x_multiop_tag.s	\
 		test_cp2_x_multiop_sealed.s	\
-		test_cp2_x_multiop_reg.s	\
 		test_cp2_x_multiop_reg2.s	\
 		test_cp2_x_multiop_adel.s	\
 		test_cp2_x_multiop_ades.s	\
@@ -1040,7 +1048,6 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cseal_imprecise.s \
 		test_cp2_x_cclearreg_reg.s \
 		test_cp2_x_exl_pcc.s \
-		test_cp2_x_csetboundsexact_imprecise.s \
 		test_cp2_clearregs_gplo.s \
 		test_cp2_clearregs_gphi.s \
 		test_cp2_clearregs_caplo.s \
@@ -1051,6 +1058,18 @@ TEST_CP2_FILES=					\
 		test_cp2_exception_epcc_unrep.s \
 		test_cp2_exception_epcc_rep.s \
 		test_cp2_exception_exl.s
+endif
+
+ifneq ($(USING_LLVM_ASSEMBLER),1)
+# FIXME: should be in newencodings branch?
+TEST_CP2_FILES +=test_cp2_cmovn.s		        \
+		test_cp2_cmovz.s
+# FIXME: csetboundsexact is not accepted by assembler
+TEST_CP2_FILES +=test_cp2_csetboundsexact.s             \
+		test_cp2_x_csetboundsexact_imprecise.s  \
+		test_cp2_x_multiop_reg.s
+
+
 endif
 
 TEST_ALU_OVERFLOW_FILES=			\
