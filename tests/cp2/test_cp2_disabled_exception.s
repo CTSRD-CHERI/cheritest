@@ -67,7 +67,7 @@ test:		.ent test
 	        # Disable CP2 in status register 
 	        mfc0    $t0, $12
                 li	$t1, 1 << 30
-                nor     $t1, $0          # invert to form mask
+                nor     $t1, $t1, $0          # invert to form mask
                 and     $t0, $t0, $t1
 	        mtc0    $t0, $12
 	        nop
