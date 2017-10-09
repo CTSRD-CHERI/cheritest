@@ -71,9 +71,10 @@ branch:	BEQL     $a0,$a2, .+16+4	# Add 4 because AS offset is relative to . but 
 .if 16 > 0
 	j       target			# Skip over the padding to save time
 	add	$s0, 1			# Branch delay
-.rept  (16)/4 - 5			# Might be < 0 for some offsets i.e. no padding
-	j	.      	 	    	# Padding (minefield, not executed)
-.endr
+# XXXAR: LLVM assembler chokes on this (but it should be skipped anyway): error: Count is negative
+# .rept  (16)/4 - 5			# Might be < 0 for some offsets i.e. no padding
+#	j	.      	 	    	# Padding (minefield, not executed)
+#.endr
 	add     $s1, 1			# Not executed except when offset is 3 or 4
 target:	add     $s2, 1			# should land here (offset>0)
 .endif # 16 > 0
