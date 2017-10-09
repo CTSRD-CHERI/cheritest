@@ -37,12 +37,12 @@ class test_cp0_compare(BaseBERITestCase):
 
     def test_cycle_count(self):
         '''Test that cycle counter interrupted CPU at the right moment.'''
-    self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a0 - 60, self.MIPS.a0 + 60, "Unexpected CP0 count cycle register value before compare register interrupt.")
+        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a0 - 60, self.MIPS.a0 + 60, "Unexpected CP0 count cycle register value before compare register interrupt.")
 
     @attr('cached')
     def test_cycle_count_cached(self):
         ''' Test that cycle counter interrupted CPU at the right moment.'''
-    self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a0 - 30, self.MIPS.a0 + 30, "Unexpected CP0 count cycle register value before compare register interrupt.")
+        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a0 - 30, self.MIPS.a0 + 30, "Unexpected CP0 count cycle register value before compare register interrupt.")
 
     def test_aaa_interrupt_fired(self):
         '''Test that compare register triggered interrupt.'''
