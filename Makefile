@@ -2242,7 +2242,7 @@ $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles
 	mkdir -p $(QEMU_LOGDIR)
 	$(QEMU) -D $@ -d instr -M mipssim -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
-	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bp 0x`$(OBJDUMP) -d $(OBJDIR)/$*.elf | awk -f end.awk` || true
+	-kernel $(OBJDIR)/$*.elf -nographic -m 3072M -bp 0x`$(OBJDUMP) -t $(OBJDIR)/$*.elf | awk -f end.awk` || true
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)

@@ -25,4 +25,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-/<end>:/ {print $1}
+# /<end>:/ {print $1}
+# parse the output of objdump/llvm-objdump -t
+/[0-9a-fA-F]+ end$/ {print $1}
