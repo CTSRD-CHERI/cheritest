@@ -120,10 +120,13 @@ bcopy(const void *src0, void *dst0, size_t length)
 {
 	if (length == 0 || src0 == dst0)		/* nothing to do */
 		goto done;
-		
-#ifdef __CHERI__
-	char * CAPABILITY dst = __builtin_cheri_bounds_set((char * CAPABILITY)dst0,length);
-	const char * CAPABILITY src = __builtin_cheri_bounds_set((const char * CAPABILITY)src0,length);
+
+#if defined(MEMMOVE_C) || defined(MEMCPY_C) || defined(CMEMCPY_C)
+	char * CAPABILITY dst = dst0;
+	const char * CAPABILITY src = src0;
+#elif defined(__CHERI__)
+	char * CAPABILITY dst = __builtin_cheri_bounds_set((__cheri_cast void * CAPABILITY)dst0,length);
+	const char * CAPABILITY src = __builtin_cheri_bounds_set((__cheri_cast const void * CAPABILITY)src0,length);
 #else
 	char * dst = (char * )dst0;
 	const char * src = (const char * )src0;
