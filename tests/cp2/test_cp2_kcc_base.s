@@ -89,6 +89,7 @@ bev0_common_handler_stub:
 		nop
 		.end bev0_common_handler_stub
 
+		.ent bev0_handler
 bev0_handler:
 		dli	$a0, 1
 		dmfc0	$k0, $14	# EPC
