@@ -33,6 +33,8 @@ __sp = __mem_top__;
 __heap_top__ = __mem_top__ - __stack_size__;
 __sp_bottom = __heap_top__;
 
+ENTRY(multi_start)
+
 SECTIONS
 {
 	. = 0x9000000040000000;
