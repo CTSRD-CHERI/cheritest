@@ -122,6 +122,11 @@ SAIL_CHERI128_SIM=$(SAIL_DIR)/src/run_cheri128.native
 SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 CC?=gcc
 
+CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension-token -Wno-error=unused -Wno-error=pedantic
+HYBRID_CFLAGS?=-fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections
+PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
+
+
 # If CHERI_SDK is set use the binaries from the CHERI SDK
 ifneq ($(CHERI_SDK),)
 # Append /bin to CHERI_SDK if needed:
@@ -2083,14 +2088,14 @@ include dmamodel.mk
 DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 
 $(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
-	$(CLANG_CC) -Ifuzz_dma -I$(DMADIR) -Werror=all -g -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections -fno-builtin
+	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -Ifuzz_dma -I$(DMADIR) -g -c -o $@ $< -fno-builtin
 
 # For some reasons, these need to be explicit, not implicit
 $(OBJDIR)/DMAAsm.o: DMAAsm.c
-	$(CLANG_CC) -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -I$(DMADIR) -c -o $@ $<
 
 $(OBJDIR)/DMAControl.o: DMAControl.c
-	$(CLANG_CC) -Werror=all -I$(DMADIR) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $< -O3 -ffunction-sections
+	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -I$(DMADIR) -c -o $@ $<
 endif
 
 
@@ -2098,13 +2103,12 @@ endif
 #$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
-	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<  -O3 -ffunction-sections
-
+	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(OBJDIR)/test_cheriabi_clang%.o : test_cheriabi_clang%.c
-	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -mabi=purecap -integrated-as -o $@ $<  -O3 -ffunction-sections
+	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -mabi=purecap -integrated-as -o $@ $<  -O3 -ffunction-sections
 
 $(OBJDIR)/test_%.o : test_%.c
-	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
+	$(CLANG_CC) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
 
 $(OBJDIR)/%.o: %.s
 	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)BERI_VER=$(BERI_VER) $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
