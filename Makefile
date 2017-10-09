@@ -2484,6 +2484,8 @@ xmlcat: xmlcat.c
 
 test_elfs: $(TEST_ELFS)
 	@echo "Build all test .elf files"
+test_objs: $(TEST_OBJS)
+	@echo "Build all test .o files"
 
 cleanerror:
 	find log -size 0 | xargs -r --verbose rm
