@@ -31,7 +31,9 @@
 # @BERI_LICENSE_HEADER_END@
 #
 from __future__ import print_function
+import nose
 
+import functools
 import unittest
 import os
 import os.path
@@ -42,6 +44,29 @@ def is_envvar_true(var):
     '''Return true iff the environment variable specified is defined and
     not set to "0"'''
     return os.environ.get(var, "0") != "0"
+
+def xfail_on(var):
+    '''
+    If the env var TEST_MACHINE matches var the test will be marked as xfail
+    Useful if certain features have not been implemented yet
+    :param var: the machine where this test is expected to fail (e.g. "qemu"
+    :return:
+    '''
+    if os.environ.get("TEST_MACHINE").lower() == var.lower():
+        return nose_xfail_hack
+    return lambda x: x
+
+# https://stackoverflow.com/questions/9613932/nose-plugin-for-expected-failures
+def nose_xfail_hack(test):
+    @functools.wraps(test)
+    def inner(*args, **kwargs):
+        try:
+            test(*args, **kwargs)
+        except Exception:
+            raise nose.SkipTest
+        else:
+            raise AssertionError('Failure expected')
+    return inner
 
 class BaseBERITestCase(unittest.TestCase):
     '''Abstract base class for test cases for the BERI CPU running under BSIM.

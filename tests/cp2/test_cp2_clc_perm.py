@@ -25,11 +25,12 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_on
 from nose.plugins.attrib import attr
 
 class test_cp2_clc_perm(BaseBERITestCase):
 
     @attr('capabilities')
+    @xfail_on("qemu")
     def test_cp2_clc_perm_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x123456789abcdef0, "CLC did not load a capability when cb.perms.Permit_Load_Capability was not set")

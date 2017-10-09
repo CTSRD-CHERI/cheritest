@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_on
 from nose.plugins.attrib import attr
 
 #
@@ -52,6 +52,7 @@ class test_cp2_x_csealdata_perm(BaseBERITestCase):
             "cseal did not set capability cause correctly when didn't have Permit_Seal")
 
     @attr('capabilities')
+    @xfail_on('qemu')
     def test_cp2_x_csealdata_perm_4(self):
         '''Test cseal did not set the otype field when didn't have Permit_Seal
  permission'''

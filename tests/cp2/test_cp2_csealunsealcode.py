@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_on
 from nose.plugins.attrib import attr
 
 #
@@ -40,6 +40,7 @@ class test_cp2_csealunsealcode(BaseBERITestCase):
             "cunseal did not clear the sealed bit")
 
     @attr('capabilities')
+    @xfail_on("qemu")
     def test_cp2_sealunsealcode_2(self):
         '''Test that cunseal clears the otype field'''
         self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff,

@@ -2500,9 +2500,12 @@ nosetests_qemu: nosetests_qemu.xml
 
 NOSETESTS?=python2 -m nose
 
+
+# set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
 	@echo "Nose flags: $(QEMU_NOSEFLAGS)"
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	TEST_MACHINE=QEMU \
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(QEMU_NOSEFLAGS) \
 	$(TESTDIRS) || true

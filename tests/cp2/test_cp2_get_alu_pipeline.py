@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_on
 from nose.plugins.attrib import attr
 
 #
@@ -50,6 +50,7 @@ class test_cp2_get_alu_pipeline(BaseBERITestCase):
         self.assertRegisterAllPermissions(self.MIPS.t2, "cgetperm returns incorrect value")
 
     @attr('capabilities')
+    @xfail_on("qemu")
     def test_cp2_cgettype_alu(self):
         '''Test that cgettype results visible to ALU'''
         self.assertRegisterEqual(self.MIPS.t3, 0xffffffffffffffff, "cgettype returns incorrect value")
