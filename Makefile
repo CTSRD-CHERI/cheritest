@@ -1,4 +1,5 @@
 #
+# Copyright (c) 2017 Alex Richardson
 # Copyright (c) 2016-2017 Hongyan Xia
 # Copyright (c) 2013-2014 Alan A. Mujumdar
 # Copyright (c) 2015-2017 Alexandre Joannou
@@ -90,6 +91,9 @@
 # remember to add them to $(TESTDIRS).  Some tests are annotated with Nose
 # attributes so that they will be excluded on gxemul -- see GXEMUL_NOSEFLAGS.
 #
+# Setting the variable CHERI_SDK will ensure that the testsuite uses binaries
+# from $(CHERI_SDK)
+#
 # "make" builds all the required parts
 # "make test" runs the tests through CHERI
 # "make gxemul-test" runs the tests through gxemul
@@ -118,16 +122,69 @@ SAIL_CHERI128_SIM=$(SAIL_DIR)/src/run_cheri128.native
 SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 CC?=gcc
 
+# If CHERI_SDK is set use the binaries from the CHERI SDK
+ifneq ($(CHERI_SDK),)
+# Append /bin to CHERI_SDK if needed:
+ifneq ($(wildcard $(CHERI_SDK)/bin),)
+CHERI_SDK:=$(CHERI_SDK)/bin
+endif
+
+CLANG_CMD=$(CHERI_SDK)/clang -integrated-as
+# CLANG_CMD=/Users/alex/cheri/llvm/cmake-build-debug/bin/clang-6.0 -integrated-as
+
+ifdef CHERI_SDK_USE_GNU_BINUTILS
+CHERI_SDK_USE_GNU_AS:=1
+CHERI_SDK_USE_GNU_LD:=1
+endif
+
+# default to assembling with clang unless CHERI_SDK_USE_GNU_AS is set
+ifndef CHERI_SDK_USE_GNU_AS
+AS=$(CLANG_CC) -target cheri-unknown-freebsd -fno-pic -c -Wno-unused-command-line-argument -mno-abicalls
+# TODO: use llvm-mc?
+# AS=$(CHERI_SDK)/llvm-mc -filetype=obj -foo
+else
+# use GNU as:
+AS=$(CHERI_SDK)/as
+endif
+# default to linking with LLD unless CHERI_SDK_USE_GNU_LD is set
+ifndef CHERI_SDK_USE_GNU_LD
+LLD=$(CHERI_SDK)/ld.lld
+else
+LD=$(CHERI_SDK)/ld.bfd
+endif
+
+QEMU?=$(CHERI_SDK)/qemu-system-cheri
+
+endif
+
+ifndef LLD
+LD?=mips-linux-gnu-ld
+else
+LD=$(LLD)
+endif
+# Use the default names from the ubuntu mips64-binutils
+AS?=mips64-as
+OBJCOPY?=mips64-objcopy
+OBJDUMP?=mips64-objdump
+
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
 else
 CAP_PRECISE?=0
 endif
 
+CLANG_CMD?=clang
 ifeq ($(CAP_SIZE),128)
-CLANG_CC?=clang -mllvm -cheri128
+CLANG_CC?=$(CLANG_CMD) -mllvm -cheri128
 else
-CLANG_CC?=clang
+CLANG_CC?=$(CLANG_CMD)
+endif
+
+USING_LLVM_ASSEMBLER?=0
+ifeq ($(USING_LLVM_ASSEMBLER),1)
+DEFSYM_FLAG=-Wa,-defsym,
+else
+DEFSYM_FLAG=-defsym=
 endif
 
 ifeq ($(CAP_SIZE),128)
@@ -1629,7 +1686,7 @@ TEST_CYCLE_LIMIT?=1500000
 #
 
 # Set BERI_VER to 2 to test cheri2
-BERI_VER?=
+BERI_VER?=0
 # Set to 0 to disable capability tests
 CHERIROOT?=../../cheri$(BERI_VER)/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
@@ -1917,16 +1974,6 @@ WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 
-AS=mips64-as
-ifndef LLD
-LD=mips-linux-gnu-ld
-else
-# LLD assumes the start symbol is __start and doesn't fall back to start:
-LD=$(LLD) -e start
-endif
-OBJCOPY=mips64-objcopy
-OBJDUMP=mips64-objdump
-
 all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
 
 test: nosetest nosetest_cached
@@ -1994,11 +2041,11 @@ $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_A
 #
 
 $(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s
-	$(AS) -I $(TESTDIR)/statcounters -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(AS) -I $(TESTDIR)/statcounters -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 $(OBJDIR)/test_%.o : test_%.s macros.s
-	#$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -defsym TEST_CP2=$(TEST_CP2) -defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	#$(CLANG_CC) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 # Put DMA model makefile into its own file. This one is already ludicrously
 # large.
@@ -2035,7 +2082,7 @@ $(OBJDIR)/test_%.o : test_%.c
 	$(CLANG_CC) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
 
 $(OBJDIR)/%.o: %.s
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb --defsym BERI_VER=$(BERI_VER) --defsym  TEST_CP2=$(TEST_CP2) --defsym CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)BERI_VER=$(BERI_VER) $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 #$(CLANG_CC)  -c -fno-pic -target cheri-unknown-freebsd -integrated-as -o $@ $<
 
 select_init: select_init.c
