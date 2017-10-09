@@ -128,7 +128,6 @@ return:
 bev0_handler:
 		li	$a2, 1
 tlb_stuff:
-		tlb_stuff:
 		dmfc0	$t0, $20
 		dli 	$t3, 0x9800000001000000
 		or		$t0, $t0, $t3
