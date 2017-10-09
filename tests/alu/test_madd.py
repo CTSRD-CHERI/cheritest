@@ -31,27 +31,27 @@ from nose.plugins.attrib import attr
 @attr('madd')
 class test_madd(BaseBERITestCase):
 
-	def test_zero(self):
-		'''Test that hi and lo are zeroed'''
-		self.assertRegisterEqual(self.MIPS.a0, 0, "Hi was not zeroed")
-		self.assertRegisterEqual(self.MIPS.a1, 0, "Lo was not zeroed")
+    def test_zero(self):
+        '''Test that hi and lo are zeroed'''
+        self.assertRegisterEqual(self.MIPS.a0, 0, "Hi was not zeroed")
+        self.assertRegisterEqual(self.MIPS.a1, 0, "Lo was not zeroed")
 
-	def test_madd_zeroed(self):
-		'''Test of MADD into zeroed hi and lo registers'''
-		self.assertRegisterEqual(self.MIPS.a2, 0xffffffffff1d3b59, "Hi was incorrect or not properly sign extended")
-		self.assertRegisterEqual(self.MIPS.a3, 0x6a4c2e10, "Lo was incorrect")
+    def test_madd_zeroed(self):
+        '''Test of MADD into zeroed hi and lo registers'''
+        self.assertRegisterEqual(self.MIPS.a2, 0xffffffffff1d3b59, "Hi was incorrect or not properly sign extended")
+        self.assertRegisterEqual(self.MIPS.a3, 0x6a4c2e10, "Lo was incorrect")
 
-	def test_madd_pos(self):
-		'''Test MADD of a positive result'''
-		self.assertRegisterEqual(self.MIPS.a4, 0xffffffffff1d3b59, "Hi was changed incorrectly")
-		self.assertRegisterEqual(self.MIPS.a5, 0x6a4c3827, "An incorrect amount was added to lo")
+    def test_madd_pos(self):
+        '''Test MADD of a positive result'''
+        self.assertRegisterEqual(self.MIPS.a4, 0xffffffffff1d3b59, "Hi was changed incorrectly")
+        self.assertRegisterEqual(self.MIPS.a5, 0x6a4c3827, "An incorrect amount was added to lo")
 
-	def test_pos_neg(self):
-		'''Test MADD of a negative result'''
-		self.assertRegisterEqual(self.MIPS.a6, 0xffffffffff1d3ad9, "An incorrect amount was subtracted from hi")
-		self.assertRegisterEqual(self.MIPS.a7, 0x6a4c3827, "Lo was changed incorrectly")
-		
-	def test_mult_madd(self):
-		'''Test MADD immediately following a MULT'''
-		self.assertRegisterEqual(self.MIPS.s1, 2048, "MADD following MULT directly gave the wrong result in Lo.")
-		self.assertRegisterEqual(self.MIPS.s0, 0, "MADD following MULT directly gave the wrong result in Hi.")
+    def test_pos_neg(self):
+        '''Test MADD of a negative result'''
+        self.assertRegisterEqual(self.MIPS.a6, 0xffffffffff1d3ad9, "An incorrect amount was subtracted from hi")
+        self.assertRegisterEqual(self.MIPS.a7, 0x6a4c3827, "Lo was changed incorrectly")
+        
+    def test_mult_madd(self):
+        '''Test MADD immediately following a MULT'''
+        self.assertRegisterEqual(self.MIPS.s1, 2048, "MADD following MULT directly gave the wrong result in Lo.")
+        self.assertRegisterEqual(self.MIPS.s0, 0, "MADD following MULT directly gave the wrong result in Hi.")

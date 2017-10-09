@@ -40,7 +40,7 @@ class test_raw_fpu_abs_2008(BaseBERITestCase):
 #
     def test_raw_fpu_abs_2008_1(self):
         '''Test single precision abs of QNaN'''
-	self.assertRegisterMaskEqual(self.MIPS.a0, 0x7f800000, 0x7f800000, "ABS.S did not return QNaN")
+    self.assertRegisterMaskEqual(self.MIPS.a0, 0x7f800000, 0x7f800000, "ABS.S did not return QNaN")
 
     @attr('floatabs2008')
     def test_raw_fpu_abs_2008_2(self):

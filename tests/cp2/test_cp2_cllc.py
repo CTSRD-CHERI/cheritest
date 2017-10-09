@@ -35,40 +35,40 @@ class test_cp2_cllc(BaseBERITestCase):
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_1(self):
-	'''That an uninterrupted cllc+cscc succeeds'''
+        '''That an uninterrupted cllc+cscc succeeds'''
         self.assertRegisterEqual(self.MIPS.a1, 1, "Uninterrupted cllc+cscc failed")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_2(self):
-	'''That an uninterrupted cllc+cscc stored untagged'''
-	self.assertRegisterEqual(self.MIPS.a5, 0, "Uninterrupted cllc+cscc stored tag")
+        '''That an uninterrupted cllc+cscc stored untagged'''
+        self.assertRegisterEqual(self.MIPS.a5, 0, "Uninterrupted cllc+cscc stored tag")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_3(self):
-	'''That an uninterrupted cllc+csetoffset+cscc succeeds'''
-	self.assertRegisterEqual(self.MIPS.a2, 1, "Uninterrupted cllc+csetoffset+cscc failed")
+        '''That an uninterrupted cllc+csetoffset+cscc succeeds'''
+        self.assertRegisterEqual(self.MIPS.a2, 1, "Uninterrupted cllc+csetoffset+cscc failed")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_4(self):
-	'''That an uninterrupted cllc+csetoffset+cscc stored the right offset'''
-	self.assertRegisterEqual(self.MIPS.a0, self.MIPS.c4.offset, "Uninterrupted cllc+csetoffset+cscc stored the wrong offset")
+        '''That an uninterrupted cllc+csetoffset+cscc stored the right offset'''
+        self.assertRegisterEqual(self.MIPS.a0, self.MIPS.c4.offset, "Uninterrupted cllc+csetoffset+cscc stored the wrong offset")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_5(self):
-	'''That an uninterrupted cllc+csetoffset+cscc wrote a tag'''
-	self.assertRegisterEqual(self.MIPS.a6, 1,  "Uninterrupted cllc+csetoffset+cscc failed to store a tag")
+        '''That an uninterrupted cllc+csetoffset+cscc wrote a tag'''
+        self.assertRegisterEqual(self.MIPS.a6, 1,  "Uninterrupted cllc+csetoffset+cscc failed to store a tag")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_8(self):
-	'''That an cllc+cscc spanning a trap fails'''
-	self.assertRegisterEqual(self.MIPS.a4, 0, "Interrupted cllc+tnei+cscc succeeded")
+        '''That an cllc+cscc spanning a trap fails'''
+        self.assertRegisterEqual(self.MIPS.a4, 0, "Interrupted cllc+tnei+cscc succeeded")

@@ -28,29 +28,29 @@
 from beritest_tools import BaseBERITestCase
 
 class test_raw_ldl(BaseBERITestCase):
-	def test_offset_zero(self):
-		self.assertRegisterEqual(self.MIPS.a1, 0xfedcba9876543210, "LDL with zero offset failed")
+    def test_offset_zero(self):
+        self.assertRegisterEqual(self.MIPS.a1, 0xfedcba9876543210, "LDL with zero offset failed")
 
-	def test_offset_one(self):
-		self.assertRegisterEqual(self.MIPS.a2, 0xdcba9876543210b0, "LDL with one offset failed")
+    def test_offset_one(self):
+        self.assertRegisterEqual(self.MIPS.a2, 0xdcba9876543210b0, "LDL with one offset failed")
 
-	def test_offset_two(self):
-		self.assertRegisterEqual(self.MIPS.a3, 0xba9876543210b1b0, "LDL with two offset failed")
+    def test_offset_two(self):
+        self.assertRegisterEqual(self.MIPS.a3, 0xba9876543210b1b0, "LDL with two offset failed")
 
-	def test_offset_three(self):
-		self.assertRegisterEqual(self.MIPS.a4, 0x9876543210b2b1b0, "LDL with three offset failed")
+    def test_offset_three(self):
+        self.assertRegisterEqual(self.MIPS.a4, 0x9876543210b2b1b0, "LDL with three offset failed")
 
-	def test_offset_four(self):
-		self.assertRegisterEqual(self.MIPS.a5, 0x76543210b3b2b1b0, "LDL with four offset failed")
+    def test_offset_four(self):
+        self.assertRegisterEqual(self.MIPS.a5, 0x76543210b3b2b1b0, "LDL with four offset failed")
 
-	def test_offset_five(self):
-		self.assertRegisterEqual(self.MIPS.a6, 0x543210b4b3b2b1b0, "LDL with five offset failed")
+    def test_offset_five(self):
+        self.assertRegisterEqual(self.MIPS.a6, 0x543210b4b3b2b1b0, "LDL with five offset failed")
 
-	def test_offset_six(self):
-		self.assertRegisterEqual(self.MIPS.a7, 0x3210b5b4b3b2b1b0, "LDL with six offset failed")
+    def test_offset_six(self):
+        self.assertRegisterEqual(self.MIPS.a7, 0x3210b5b4b3b2b1b0, "LDL with six offset failed")
 
-	def test_offset_seven(self):
-		self.assertRegisterEqual(self.MIPS.t0, 0x10b6b5b4b3b2b1b0, "LDL with seven offset failed")
+    def test_offset_seven(self):
+        self.assertRegisterEqual(self.MIPS.t0, 0x10b6b5b4b3b2b1b0, "LDL with seven offset failed")
 
-	def test_offset_eight(self):
-		self.assertRegisterEqual(self.MIPS.t1, 0xffffffffffffffff, "LDL with eight offset (skip double word) failed")
+    def test_offset_eight(self):
+        self.assertRegisterEqual(self.MIPS.t1, 0xffffffffffffffff, "LDL with eight offset (skip double word) failed")

@@ -28,17 +28,17 @@
 from beritest_tools import BaseBERITestCase
 
 class test_raw_lwr(BaseBERITestCase):
-	def test_offset_zero(self):
-		self.assertRegisterEqual(self.MIPS.a1, 0xffffffffb3b2b1fe, "LWR with zero offset failed")
+    def test_offset_zero(self):
+        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffb3b2b1fe, "LWR with zero offset failed")
 
-	def test_offset_one(self):
-		self.assertRegisterEqual(self.MIPS.a2, 0xffffffffb3b2fedc, "LWR with one offset failed")
+    def test_offset_one(self):
+        self.assertRegisterEqual(self.MIPS.a2, 0xffffffffb3b2fedc, "LWR with one offset failed")
 
-	def test_offset_two(self):
-		self.assertRegisterEqual(self.MIPS.a3, 0xffffffffb3fedcba, "LWR with two offset failed")
+    def test_offset_two(self):
+        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffb3fedcba, "LWR with two offset failed")
 
-	def test_offset_three(self):
-		self.assertRegisterEqual(self.MIPS.a4, 0xfffffffffedcba98, "LWR with three offset failed")
+    def test_offset_three(self):
+        self.assertRegisterEqual(self.MIPS.a4, 0xfffffffffedcba98, "LWR with three offset failed")
 
-	def test_offset_four(self):
-		self.assertRegisterEqual(self.MIPS.a5, 0xffffffffb3b2b176, "LWR with four offset (skip word) failed")
+    def test_offset_four(self):
+        self.assertRegisterEqual(self.MIPS.a5, 0xffffffffb3b2b176, "LWR with four offset (skip word) failed")

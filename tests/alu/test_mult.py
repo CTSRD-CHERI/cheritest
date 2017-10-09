@@ -28,22 +28,22 @@
 from beritest_tools import BaseBERITestCase
 
 class test_mult(BaseBERITestCase):
-	def test_pos_pos(self):
-		'''Test of positive number multiplied by positive number'''
-		self.assertRegisterEqual(self.MIPS.a0, 0, "Load from hi or mult failed")
-		self.assertRegisterEqual(self.MIPS.a1, 0xb88, "Load from lo or mult failed")
+    def test_pos_pos(self):
+        '''Test of positive number multiplied by positive number'''
+        self.assertRegisterEqual(self.MIPS.a0, 0, "Load from hi or mult failed")
+        self.assertRegisterEqual(self.MIPS.a1, 0xb88, "Load from lo or mult failed")
 
-	def test_neg_neg(self):
-		'''Test of negative number multiplied by negative number'''
-		self.assertRegisterEqual(self.MIPS.a2, 0, "Load from hi or mult failed")
-		self.assertRegisterEqual(self.MIPS.a3, 0xb88, "Load from lo or mult failed")
+    def test_neg_neg(self):
+        '''Test of negative number multiplied by negative number'''
+        self.assertRegisterEqual(self.MIPS.a2, 0, "Load from hi or mult failed")
+        self.assertRegisterEqual(self.MIPS.a3, 0xb88, "Load from lo or mult failed")
 
-	def test_neg_pos(self):
-		'''Test of negative number multiplied by positive number'''
-		self.assertRegisterEqual(self.MIPS.a4, 0xffffffffffffffff, "Load from hi or mult failed")
-		self.assertRegisterEqual(self.MIPS.a5, 0xfffffffffffff478, "Load from lo or mult failed")
+    def test_neg_pos(self):
+        '''Test of negative number multiplied by positive number'''
+        self.assertRegisterEqual(self.MIPS.a4, 0xffffffffffffffff, "Load from hi or mult failed")
+        self.assertRegisterEqual(self.MIPS.a5, 0xfffffffffffff478, "Load from lo or mult failed")
 
-	def test_pos_neg(self):
-		'''Test of positive number multiplied by negative number'''
-		self.assertRegisterEqual(self.MIPS.a6, 0xffffffffffffffff, "Load from hi or mult failed")
-		self.assertRegisterEqual(self.MIPS.a7, 0xfffffffffffff478, "Load from lo or mult failed")
+    def test_pos_neg(self):
+        '''Test of positive number multiplied by negative number'''
+        self.assertRegisterEqual(self.MIPS.a6, 0xffffffffffffffff, "Load from hi or mult failed")
+        self.assertRegisterEqual(self.MIPS.a7, 0xfffffffffffff478, "Load from lo or mult failed")

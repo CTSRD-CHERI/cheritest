@@ -37,14 +37,14 @@ class test_raw_fpu_cvt_s_l_d64(BaseBERITestCase):
     @attr('float64')
     def test_raw_fpu_cvt_s_l_d64_1(self):
         '''Test cvt.s.l of 0'''
-	self.assertRegisterEqual(self.MIPS.a0, 0, "0 did not convert to 0.0")
+    self.assertRegisterEqual(self.MIPS.a0, 0, "0 did not convert to 0.0")
 
     @attr('float64')
     def test_raw_fpu_cvt_s_l_d64_2(self):
         '''Test cvt.s.l of 1'''
-	self.assertRegisterEqual(self.MIPS.a1, 0x3f800000, "1 did not convert to 1.0")
+    self.assertRegisterEqual(self.MIPS.a1, 0x3f800000, "1 did not convert to 1.0")
 
     @attr('float64')
     def test_raw_fpu_cvt_s_l_d64_3(self):
         '''Test cvt.s.l of 2^32'''
-	self.assertRegisterEqual(self.MIPS.a2, 0x4f800000, "2^32 did not convert to 4294967296.0")
+    self.assertRegisterEqual(self.MIPS.a2, 0x4f800000, "2^32 did not convert to 4294967296.0")

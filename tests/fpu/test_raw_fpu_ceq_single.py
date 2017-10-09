@@ -32,4 +32,4 @@ class test_raw_fpu_ceq_single(BaseBERITestCase):
 
     def test_raw_fpu_ceq_single(self):
         '''Test single-precision equal'''
-	self.assertRegisterEqual(self.MIPS.a0, 0xc, "Compare equal gave incorrect result")
+    self.assertRegisterEqual(self.MIPS.a0, 0xc, "Compare equal gave incorrect result")

@@ -32,8 +32,8 @@ class test_cp2_x_clb_disabled(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_clb_disabled_raised(self):
-	'''Test that CLB with CP2 disabled raises an exception'''
-	self.assertRegisterEqual(self.MIPS.a2, 1, "CLB with CP2 disabled did not raise an exception")
+        '''Test that CLB with CP2 disabled raises an exception'''
+        self.assertRegisterEqual(self.MIPS.a2, 1, "CLB with CP2 disabled did not raise an exception")
 
     @attr('capabilities')
     def test_cp2_x_clb_disabled_cause(self):

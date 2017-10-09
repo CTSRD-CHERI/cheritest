@@ -36,4 +36,4 @@ class test_raw_arithmetic_combo(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.s3, 0x00FFFFFFFFFF1E6F, "Stage 4 Incorrect")
         self.assertRegisterEqual(self.MIPS.s4, 0xFFFFFFFFFFC3BE75, "Stage 5 Incorrect")
         self.assertRegisterEqual(self.MIPS.s5, 0x0, "Stage 6 Incorrect")
-		
+

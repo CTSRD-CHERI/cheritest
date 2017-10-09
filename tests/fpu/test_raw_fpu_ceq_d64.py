@@ -33,4 +33,4 @@ class test_raw_fpu_ceq_d64(BaseBERITestCase):
     @attr('float64')
     def test_raw_fpu_ceq_d64(self):
         '''Test double-precision equal'''
-	self.assertRegisterEqual(self.MIPS.a0, 0xc, "Double-precision compare equal gave incorrect result")
+    self.assertRegisterEqual(self.MIPS.a0, 0xc, "Double-precision compare equal gave incorrect result")

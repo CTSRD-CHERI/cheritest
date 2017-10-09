@@ -36,7 +36,7 @@ from nose.plugins.attrib import attr
 # a5: Result of load 
 # a6: Expected PC of faulting instruction
 # a7: final value of testdata
-	
+
 # s0: BadVAddr
 # s1: Context
 # s2: XContext

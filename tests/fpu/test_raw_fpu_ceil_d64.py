@@ -33,26 +33,26 @@ class test_raw_fpu_ceil_d64(BaseBERITestCase):
     @attr('float64')
     def test_raw_fpu_ceil_d64_1(self):
         '''Test double precision ceiling of -0.75'''
-	self.assertRegisterEqual(self.MIPS.a0, 0, "-0.75 did not round up to 0")
+    self.assertRegisterEqual(self.MIPS.a0, 0, "-0.75 did not round up to 0")
 
     @attr('float64')
     def test_raw_fpu_ceil_d64_2(self):
         '''Test double precision ceiling of -0.5'''
-	self.assertRegisterEqual(self.MIPS.a1, 0, "-0.5 did not round up to 0")
+    self.assertRegisterEqual(self.MIPS.a1, 0, "-0.5 did not round up to 0")
 
     @attr('float64')
     def test_raw_fpu_ceil_d64_3(self):
         '''Test double precision ceil of -0.25'''
-	self.assertRegisterEqual(self.MIPS.a2, 0, "-0.25 did not round up to 0")
+    self.assertRegisterEqual(self.MIPS.a2, 0, "-0.25 did not round up to 0")
 
     @attr('float64')
     def test_raw_fpu_ceil_d64_4(self):
         '''Test double precision ceil of 0.5'''
-	self.assertRegisterEqual(self.MIPS.a3, 1, "0.5 did not round up to 1")
+    self.assertRegisterEqual(self.MIPS.a3, 1, "0.5 did not round up to 1")
 
     @attr('float64')
     def test_raw_fpu_ceil_d64_5(self):
         '''Test double precision ceil of 1.5'''
-	self.assertRegisterEqual(self.MIPS.a4, 2, "1.5 did not round up to 2")
+    self.assertRegisterEqual(self.MIPS.a4, 2, "1.5 did not round up to 2")
 
 

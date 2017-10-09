@@ -37,9 +37,9 @@ class test_fpu_exception_pipeline(BaseBERITestCase):
 
     def test_fpu_exception_pipeline_1(self):
         '''Test mtc1 was cancelled by exception'''
-	self.assertRegisterEqual(self.MIPS.a0, 0x3f800000, "mtc1 was not cancelled by exception")
+    self.assertRegisterEqual(self.MIPS.a0, 0x3f800000, "mtc1 was not cancelled by exception")
 
     def test_fpu_exception_pipeline_2(self):
         '''Test add.s was cancelled by exception'''
-	self.assertRegisterEqual(self.MIPS.a1, 0, "add.s was not cancelled by exception")
+    self.assertRegisterEqual(self.MIPS.a1, 0, "add.s was not cancelled by exception")
 

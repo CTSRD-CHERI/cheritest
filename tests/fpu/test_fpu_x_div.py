@@ -33,4 +33,4 @@ class test_fpu_x_div(BaseBERITestCase):
     @attr('floatexception')
     def test_fpu_x_div(self):
         '''Test divide by zero raises an exception'''
-	self.assertRegisterEqual(self.MIPS.a2, 1, "Division by zero did not raise an exception")
+    self.assertRegisterEqual(self.MIPS.a2, 1, "Division by zero did not raise an exception")

@@ -54,7 +54,7 @@ class test_msub(BaseBERITestCase):
         '''Test msub with a negative number'''
         self.assertRegisterEqual(self.MIPS.a6, 0x80, "Subtraction of negative number incorrect")
         self.assertRegisterEqual(self.MIPS.a7, 0xfffffffffffff5e9, "Lo incorrectly affected by addition in the higher range")
-		
+        
     @attr('madd')
     def test_msub_after_mtlo(self):
         '''Test msub following mtlo'''

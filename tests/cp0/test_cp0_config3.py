@@ -45,5 +45,5 @@ class test_cp0_config3(BaseBERITestCase):
     def test_cp0_config3_ulri(self):
         '''Test CP0.Config3.ulri is set'''
         self.assertRegisterEqual((self.MIPS.a3 >> 13) & 1, 1,
-	    "CP0.config3.ulri is not set")
+        "CP0.config3.ulri is not set")
 

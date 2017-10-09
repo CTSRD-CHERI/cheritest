@@ -36,4 +36,4 @@ class test_x_dext_ri(BaseBERITestCase):
 
     @attr('no_dext')
     def test_x_dext_ri_2(self):
-	self.assertRegisterEqual(self.MIPS.a2, 1, "DEXT isn't supported, but didn't raise an exception")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "DEXT isn't supported, but didn't raise an exception")

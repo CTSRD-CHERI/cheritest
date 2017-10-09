@@ -34,19 +34,19 @@ class test_lldscd_span(BaseBERITestCase):
     @attr('cached')
     @attr('llscspan')
     def test_lld_ld_scd_success(self):
-	'''That lld+ld+scd succeeds'''
-	self.assertRegisterEqual(self.MIPS.a2, 1, "lld+ld+scd failed")
-	
+        '''That lld+ld+scd succeeds'''
+        self.assertRegisterEqual(self.MIPS.a2, 1, "lld+ld+scd failed")
+    
     @attr('llsc')
     @attr('cached')
     @attr('llscspan')
     def test_lld_sd_scd_value(self):
-	'''That an lld+scd spanning a byte store to the line does not store'''
-	self.assertRegisterNotEqual(self.MIPS.a3, 2, "Interrupted lld+sd+scd stored value")
+        '''That an lld+scd spanning a byte store to the line does not store'''
+        self.assertRegisterNotEqual(self.MIPS.a3, 2, "Interrupted lld+sd+scd stored value")
 
     @attr('llsc')
     @attr('cached')
     @attr('llscspan')
     def test_lld_sd_scd_value(self):
-	'''That an lld+scd spanning a double store to the line does not store'''
-	self.assertRegisterNotEqual(self.MIPS.a6, 1, "Interrupted lld+sd+scd stored value")
+        '''That an lld+scd spanning a double store to the line does not store'''
+        self.assertRegisterNotEqual(self.MIPS.a6, 1, "Interrupted lld+sd+scd stored value")

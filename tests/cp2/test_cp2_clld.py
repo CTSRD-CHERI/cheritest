@@ -35,33 +35,33 @@ class test_cp2_clld(BaseBERITestCase):
     @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_1(self):
-	'''That an uninterrupted clld+cscd succeeds'''
+        '''That an uninterrupted clld+cscd succeeds'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted clld+cscd failed")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_2(self):
-	'''That an uninterrupted clld+cscd stored the right value'''
-	self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "Uninterrupted clld+cscd stored wrong value")
+        '''That an uninterrupted clld+cscd stored the right value'''
+        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "Uninterrupted clld+cscd stored wrong value")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_4(self):
-	'''That an uninterrupted clld+add+cscd succeeds'''
-	self.assertRegisterEqual(self.MIPS.a2, 1, "Uninterrupted clld+add+cscd failed")
+        '''That an uninterrupted clld+add+cscd succeeds'''
+        self.assertRegisterEqual(self.MIPS.a2, 1, "Uninterrupted clld+add+cscd failed")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_5(self):
-	'''That an uninterrupted clld+add+cscd stored the right value'''
-	self.assertRegisterEqual(self.MIPS.a3, 0, "Uninterrupted clld+add+cscd stored wrong value")
+        '''That an uninterrupted clld+add+cscd stored the right value'''
+        self.assertRegisterEqual(self.MIPS.a3, 0, "Uninterrupted clld+add+cscd stored wrong value")
 
     @attr('llsc')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_clld_8(self):
-	'''That an clld+cscd spanning a trap fails'''
-	self.assertRegisterEqual(self.MIPS.a4, 0, "Interrupted clld+tnei+cscd succeeded")
+        '''That an clld+cscd spanning a trap fails'''
+        self.assertRegisterEqual(self.MIPS.a4, 0, "Interrupted clld+tnei+cscd succeeded")

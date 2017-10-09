@@ -54,7 +54,7 @@ class test_sub_overflow_minint(BaseBERITestCase):
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
 
     def test_sub_not_overflow(self):
-	'''Test that subtracting MININT from itself gives zero'''
+        '''Test that subtracting MININT from itself gives zero'''
         self.assertRegisterEqual(self.MIPS.a7, 0, "incorrect result for non-overflowed sub.")
     
     def test_result_not_written(self):

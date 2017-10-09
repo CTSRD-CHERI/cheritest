@@ -32,4 +32,4 @@ class test_raw_fpu_cole_single(BaseBERITestCase):
 
     def test_raw_fpu_cole_single(self):
         '''Test single-precision ordered, less than, or equal'''
-	self.assertRegisterEqual(self.MIPS.a0, 0x8, "Compare ordered, less than, or equal failed")
+    self.assertRegisterEqual(self.MIPS.a0, 0x8, "Compare ordered, less than, or equal failed")

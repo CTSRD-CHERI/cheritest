@@ -36,14 +36,14 @@ class test_raw_fpu_sub_inf_single(BaseBERITestCase):
 
     def test_raw_fpu_infinity_single_sub_1(self):
         '''Test sub.s 1.0 from +infinity'''
-	self.assertRegisterEqual(self.MIPS.a0, 0x7f800000, "sub.s from +infinity did not give +infinity")
+    self.assertRegisterEqual(self.MIPS.a0, 0x7f800000, "sub.s from +infinity did not give +infinity")
 
     def test_raw_fpu_infinity_single_sub_2(self):
         '''Test sub.s +Infinity from +infinity'''
-	self.assertRegisterIsSingleNaN(self.MIPS.a1, "sub.s of +Infinity from +infinity did not give NaN")
+    self.assertRegisterIsSingleNaN(self.MIPS.a1, "sub.s of +Infinity from +infinity did not give NaN")
 
     @attr('floatnan2008')
     def test_raw_fpu_infinity_single_sub_3(self):
         '''Test sub.s +Infinity from +infinity'''
-	self.assertRegisterIsSingleQNaN(self.MIPS.a1, "sub.s of +Infinity from +infinity did not give QNaN")
+    self.assertRegisterIsSingleQNaN(self.MIPS.a1, "sub.s of +Infinity from +infinity did not give QNaN")
 

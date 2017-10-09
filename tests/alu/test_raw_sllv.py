@@ -28,23 +28,23 @@
 from beritest_tools import BaseBERITestCase
 
 class test_raw_sllv(BaseBERITestCase):
-        def test_a1(self):
-		'''Test a SLLV of zero'''
-		self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")
-		self.assertRegisterEqual(self.MIPS.a1, 0x0000000076543210, "Shift of zero resulting in truncation failed")
+    def test_a1(self):
+        '''Test a SLLV of zero'''
+        self.assertRegisterEqual(self.MIPS.a0, 0xfedcba9876543210, "Initial value from dli failed to load")
+        self.assertRegisterEqual(self.MIPS.a1, 0x0000000076543210, "Shift of zero resulting in truncation failed")
 
-	def test_a2(self):
-		'''Test a SLLV of one'''
-		self.assertRegisterEqual(self.MIPS.a2, 0xffffffffeca86420, "Shift of one resulting in sign extension failed")
+    def test_a2(self):
+        '''Test a SLLV of one'''
+        self.assertRegisterEqual(self.MIPS.a2, 0xffffffffeca86420, "Shift of one resulting in sign extension failed")
 
-	def test_a3(self):
-		'''Test a SLLV of sixteen'''
-		self.assertRegisterEqual(self.MIPS.a3, 0x0000000032100000, "Shift of sixteen failed")
+    def test_a3(self):
+        '''Test a SLLV of sixteen'''
+        self.assertRegisterEqual(self.MIPS.a3, 0x0000000032100000, "Shift of sixteen failed")
 
-	def test_a4(self):
-		'''Test a SLLV of 31(max)'''
-		self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000000, "Shift of thirty-one (max) failed")
+    def test_a4(self):
+        '''Test a SLLV of 31(max)'''
+        self.assertRegisterEqual(self.MIPS.a4, 0x0000000000000000, "Shift of thirty-one (max) failed")
 
-	def test_a5(self):
-		'''Test a SLL of 32 (valid 64-bit shift but 32-bit instruction should treat as zero)'''
-		self.assertRegisterEqual(self.MIPS.a5, 0x0000000076543210, "Shift of 32 (too big) failed")
+    def test_a5(self):
+        '''Test a SLL of 32 (valid 64-bit shift but 32-bit instruction should treat as zero)'''
+        self.assertRegisterEqual(self.MIPS.a5, 0x0000000076543210, "Shift of 32 (too big) failed")

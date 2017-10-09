@@ -41,8 +41,8 @@ class test_cp2_get_mem_pipeline(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_cgetlen_mem(self):
-	'''Test that cgetlen results visible to store instructions'''
-	self.assertRegisterEqual(self.MIPS.t1, 0xffffffffffffffff, "cgetlen returns incorrect value")
+        '''Test that cgetlen results visible to store instructions'''
+        self.assertRegisterEqual(self.MIPS.t1, 0xffffffffffffffff, "cgetlen returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_cgetperm_mem(self):

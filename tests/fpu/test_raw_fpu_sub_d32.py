@@ -37,5 +37,5 @@ class test_raw_fpu_sub_d32(BaseBERITestCase):
     @attr('float32')
     def test_raw_fpu_sub_d32(self):
         '''Test can subtract in double precision when in 32-bit mode'''
-	self.assertRegisterEqual(self.MIPS.a0, 0, "Failed to subtract 1.0 from 2.0 in double precision")
+        self.assertRegisterEqual(self.MIPS.a0, 0, "Failed to subtract 1.0 from 2.0 in double precision")
         self.assertRegisterEqual(self.MIPS.a1, 0x3ff00000, "Failed to subtract 1.0 from 2.0 in double precision")

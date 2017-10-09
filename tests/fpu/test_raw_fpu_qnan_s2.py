@@ -38,22 +38,22 @@ class test_raw_fpu_qnan_s2(BaseBERITestCase):
     @attr('floatechofirstnan')
     def test_raw_fpu_qnan_s2_add(self):
         '''Test single precision add of two QNaNs'''
-	self.assertRegisterEqual(self.MIPS.a0, 0x7f900001, "add.s did not echo first QNaN")
+    self.assertRegisterEqual(self.MIPS.a0, 0x7f900001, "add.s did not echo first QNaN")
 
     @attr('floatechonan')
     @attr('floatechofirstnan')
     def test_raw_fpu_qnan_s2_sub(self):
         '''Test single precision subtract of two QNaNs'''
-	self.assertRegisterEqual(self.MIPS.a1, 0x7f900001, "sub.s did not echo first QNaN")
+    self.assertRegisterEqual(self.MIPS.a1, 0x7f900001, "sub.s did not echo first QNaN")
 
     @attr('floatechonan')
     @attr('floatechofirstnan')
     def test_raw_fpu_qnan_s2_mul(self):
         '''Test single precision multiply of two QNaNs'''
-	self.assertRegisterEqual(self.MIPS.a2, 0x7f900001, "mul.s did not echo first QNaN")
+    self.assertRegisterEqual(self.MIPS.a2, 0x7f900001, "mul.s did not echo first QNaN")
 
     @attr('floatechonan')
     @attr('floatechofirstnan')
     def test_raw_fpu_qnan_single_div(self):
         '''Test single precision divide of two QNaNs'''
-	self.assertRegisterEqual(self.MIPS.a3, 0x7f900001, "div.s did not echo first QNaN")
+    self.assertRegisterEqual(self.MIPS.a3, 0x7f900001, "div.s did not echo first QNaN")

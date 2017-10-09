@@ -36,7 +36,7 @@ class test_raw_fpu_neg_2008(BaseBERITestCase):
 
     def test_raw_fpu_neg_2008_1(self):
         '''Test NEG.S of QNaN'''
-	self.assertRegisterIsSingleNaN(self.MIPS.a0, "NEG.S did not return NaN")
+    self.assertRegisterIsSingleNaN(self.MIPS.a0, "NEG.S did not return NaN")
 
     @attr('floatabs2008')
     def test_raw_fpu_neg_2008_2(self):

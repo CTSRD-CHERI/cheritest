@@ -34,19 +34,19 @@ class test_llsc_span(BaseBERITestCase):
     @attr('cached')
     @attr('llscspan')
     def test_ll_ld_sc_success(self):
-	'''That ll+ld+sc succeeds'''
-	self.assertRegisterEqual(self.MIPS.a2, 1, "ll+ld+sc failed")
+        '''That ll+ld+sc succeeds'''
+        self.assertRegisterEqual(self.MIPS.a2, 1, "ll+ld+sc failed")
 
     @attr('llsc')
     @attr('cached')
     @attr('llscspan')
     def test_ll_sw_sc_failure(self):
-	'''That an ll+sw+sc spanning a store to the line fails'''
-	self.assertRegisterEqual(self.MIPS.t0, 0, "ll+sw+sc succeeded")
+        '''That an ll+sw+sc spanning a store to the line fails'''
+        self.assertRegisterEqual(self.MIPS.t0, 0, "ll+sw+sc succeeded")
 
     @attr('llsc')
     @attr('cached')
     @attr('llscspan')
     def test_ll_sw_sc_value(self):
-	'''That an ll+sc spanning a store to the line does not store'''
-	self.assertRegisterNotEqual(self.MIPS.a6, 1, "ll+sw+sc stored value")
+        '''That an ll+sc spanning a store to the line does not store'''
+        self.assertRegisterNotEqual(self.MIPS.a6, 1, "ll+sw+sc stored value")

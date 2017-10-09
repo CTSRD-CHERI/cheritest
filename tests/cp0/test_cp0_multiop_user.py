@@ -32,5 +32,5 @@ class test_cp0_multiop_user(BaseBERITestCase):
 
     @attr('tlb')
     def test_cp0_multiop_user_1(self):
-	'''Test that privileged operations from user space raise an exception'''
+        '''Test that privileged operations from user space raise an exception'''
         self.assertRegisterEqual(self.MIPS.a5, 9, "An unexpected number of exceptions was raised during test of privileged operations from user space")

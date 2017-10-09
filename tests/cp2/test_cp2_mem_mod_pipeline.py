@@ -41,8 +41,8 @@ class test_cp2_mem_mod_pipeline(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_mem_csetbounds(self):
-	'''Test that csetbounds uses ld results in pipeline'''
-	self.assertRegisterEqual(self.MIPS.a1, 0x100, "cgetlen returns incorrect value")
+        '''Test that csetbounds uses ld results in pipeline'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x100, "cgetlen returns incorrect value")
 
     @attr('capabilities')
     def test_cp2_mem_candperm(self):

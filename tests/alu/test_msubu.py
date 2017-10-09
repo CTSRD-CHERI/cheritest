@@ -32,12 +32,12 @@ class test_msubu(BaseBERITestCase):
 
     @attr('madd')
     def test_msubu_1(self):
-	'''Test high word of msubu result, positive argument'''
+        '''Test high word of msubu result, positive argument'''
         self.assertRegisterEqual(self.MIPS.a0, 0, "msubu gave incorrect result")
 
     @attr('madd')
     def test_msubu_2(self):
-	'''Test low word of msubu result, positive argument'''
+        '''Test low word of msubu result, positive argument'''
         self.assertRegisterEqual(self.MIPS.a1, 4, "msubu gave incorrect result")
 
     @attr('madd')

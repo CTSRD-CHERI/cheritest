@@ -33,5 +33,5 @@ class test_raw_fpu_mul_d32(BaseBERITestCase):
     @attr('float32')
     def test_raw_fpu_mul_d32(self):
         '''Test can multiply in double precision when in 32-bit mode'''
-	self.assertRegisterEqual(self.MIPS.a0, 0, "Failed to multiply 2.0 and 2.0 in double precision")
+        self.assertRegisterEqual(self.MIPS.a0, 0, "Failed to multiply 2.0 and 2.0 in double precision")
         self.assertRegisterEqual(self.MIPS.a1, 0x40100000, "Failed to multiply 2.0 and 2.0 in double precision")

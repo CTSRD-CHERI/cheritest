@@ -33,4 +33,4 @@ class test_fpu_x_overflow(BaseBERITestCase):
     @attr('floatexception')
     def test_fpu_x_overflow(self):
         '''Test floating point overflow raises an exception'''
-	self.assertRegisterEqual(self.MIPS.a2, 1, "Floating point overflow did not raise an exception")
+    self.assertRegisterEqual(self.MIPS.a2, 1, "Floating point overflow did not raise an exception")

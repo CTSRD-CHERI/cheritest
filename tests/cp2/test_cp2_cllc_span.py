@@ -37,21 +37,21 @@ class test_cp2_cllc_span(BaseBERITestCase):
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_3(self):
-	'''That an uninterrupted cllc+clc+cscc succeeds'''
-	self.assertRegisterEqual(self.MIPS.a4, 1, "Uninterrupted cllc+clc+cscc failed")
+        '''That an uninterrupted cllc+clc+cscc succeeds'''
+        self.assertRegisterEqual(self.MIPS.a4, 1, "Uninterrupted cllc+clc+cscc failed")
 
     @attr('llsc')
     @attr('llscspan')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_7(self):
-	'''That an cllc+cscc spanning a store to the line does not store'''
-	self.assertRegisterNotEqual(self.MIPS.a2, 0, "Interrupted cllc+csci+cscc stored value")
+        '''That an cllc+cscc spanning a store to the line does not store'''
+        self.assertRegisterNotEqual(self.MIPS.a2, 0, "Interrupted cllc+csci+cscc stored value")
 
     @attr('llsc')
     @attr('llscspan')
     @attr('cached')
     @attr('capabilities')
     def test_cp2_cllc_6(self):
-	'''That an cllc+csci+cscc spanning fails'''
-	self.assertRegisterEqual(self.MIPS.a3, 0, "Interrupted cllc+csci+cscc succeeded")
+        '''That an cllc+csci+cscc spanning fails'''
+        self.assertRegisterEqual(self.MIPS.a3, 0, "Interrupted cllc+csci+cscc succeeded")

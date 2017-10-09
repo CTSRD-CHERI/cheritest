@@ -33,5 +33,5 @@ class test_mc_tag_coherence(BaseBERITestCase):
     @attr('capabilities')
     @attr('multicore')
     def test_template(self):
-	'''Test that CLC and CSC update the tag bit and the capability contents atomically'''
+        '''Test that CLC and CSC update the tag bit and the capability contents atomically'''
         self.assertRegisterEqual(self.MIPS.a2, 0, "clc or csc were not atomic operations")
