@@ -171,7 +171,8 @@ size_bev1_\name = . - bev1_\name
 .macro	install_stub name address
 	dli	$a0, \address
 	dla	$a1, \name
-	dli	$a2, size_\name
+	# XXXAR: LLVM assembler doesn't allow assembler values here
+	dla	$a2, size_\name
 	jal memcpy
 	nop
 .endm
