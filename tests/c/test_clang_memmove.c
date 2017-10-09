@@ -36,9 +36,6 @@ void * cmemmove(void *dst0,
 #define STANDALONE        
 #include "memcpy.c"
 
-#define CAP(x) ((void * __capability)(x))
-
-
 
 // Test structure which will be memcpy'd.  Contains data and a capability in
 // the middle.  The capability must be aligned, but memcpy should work for any
@@ -60,7 +57,7 @@ void check(struct Test *t, int start, int end)
 	{
 		assert(t->pad0[i] == i);
 	}
-	assert((void*)t->y == t);
+	assert((__cheri_cast void*)t->y == t);
 	assert(__builtin_cheri_tag_get(t->y));
 	for (int i=0 ; i<end ; i++)
 	{
@@ -89,7 +86,7 @@ int test(void)
 		t1.pad0[i] = i;
 		t1.pad1[i] = i;
 	}
-	t1.y = CAP(&t2);
+	t1.y = TO_CAP(&t2);
 	// Simple case: aligned start and end
 	DEBUG_DUMP_REG(13, 1);
 	cmemmove(&t2, &t1, sizeof(t1));
@@ -124,7 +121,7 @@ int test(void)
 	// when using bcopy.
 	// Make sure t2 is exactly t1
 	cmemmove(&t2, &t1, sizeof(t1));
-	t2.y = CAP(&t1);
+	t2.y = TO_CAP(&t1);
 	invalidate(&t1);
 	// Simple case: aligned start and end
 	DEBUG_DUMP_REG(13, 1);

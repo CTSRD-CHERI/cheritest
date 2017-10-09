@@ -30,6 +30,9 @@
 #define __cheri_cast
 #endif
 
+#define TO_CAP(x) ((__cheri_cast void * __capability)(void*)(x))
+
+
 __attribute__((noreturn)) int __assert_fail(int);
 void  __assert(int cond, int line)
 {
