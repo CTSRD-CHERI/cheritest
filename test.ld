@@ -36,6 +36,7 @@ __sp_bottom = __heap_top__;
 
 /* LLD needs this INPUT() command because unlike BFD it won't implicitly add it */
 INPUT(obj/init.o)
+ENTRY(start)
 
 SECTIONS
 {

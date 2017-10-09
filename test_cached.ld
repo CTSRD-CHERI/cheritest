@@ -32,6 +32,10 @@ __sp = __mem_top__;
 __heap_top__ = __mem_top__ - __stack_size__;
 __sp_bottom = __heap_top__;
 
+/* LLD needs this INPUT() command because unlike BFD it won't implicitly add it */
+INPUT(obj/init.o)
+ENTRY(uncached_start)
+
 SECTIONS
 {
 	. = 0x9800000040000000;
