@@ -99,7 +99,7 @@ class MipsStatus(object):
                         reg_name = 't2'
                     elif reg_name == 't7':
                         reg_name = 't3'
-                        reg_val = int(reg[1], 16)
+                    reg_val = int(reg[1], 16)
                     reg_num = MIPS_REG_NAME2NUM.get(reg_name, None)
                     self.reg_vals[reg_num] = reg_val
                     if pc_groups:
