@@ -36,7 +36,7 @@ import subprocess
 
 def main():
     tests = sorted([fn for fn in os.listdir('x86-obj')
-                    if re.match(r'^dmamodel_[^\.]+$', fn) is not None])
+                    if re.match(r'^dmamodel_[^.]+$', fn) is not None])
     test_files = [path.abspath(path.join('x86-obj', fn)) for fn in tests]
     test_names = [fn.split('_', 1)[1] for fn in tests]
     for name, fn in zip(test_names, test_files):

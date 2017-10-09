@@ -28,7 +28,7 @@
 import tools.gxemul, tools.sim
 import os, re, itertools
 from nose.plugins.attrib import attr
-from builtins import filter
+from six.moves import filter
 
 # Parameters from the environment
 # Cached or uncached mode.

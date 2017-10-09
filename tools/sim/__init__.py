@@ -49,7 +49,7 @@ for num, name in enumerate(MIPS_REG_NUM2NAME):
 
 ## Regular expressions for parsing the log file
 hdigit="[0-9A-Fa-f]"
-THREAD_RE=re.compile(r'======  Thread\s+([0-9]+)\s+======$')
+THREAD_RE=re.compile(r'======\s+Thread\s+([0-9]+)\s+======$')
 MIPS_CORE_RE=re.compile(r'^DEBUG MIPS COREID\s+([0-9]+)$')
 MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+)\s+(0x................)$')
 MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC\s+(0x................)$')
@@ -193,6 +193,7 @@ class ThreadStatus(object):
             raise MipsException("Attempted to read register not present or undef in log file: ", key)
         return val
 
+    # noinspection PyStringFormat
     def __repr__(self):
         v = []
         for i in range(len(self.reg_vals)):

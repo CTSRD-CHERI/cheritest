@@ -156,7 +156,7 @@ def run():
 
   # Obtain output from BSV
   outputBSV = subprocess.check_output([BSVCHERI, "+regDump"],
-                                      stderr=subprocess.STDOUT)
+                                      stderr=subprocess.STDOUT).decode("utf-8")
 
   regFileBSV = {}
   for line in outputBSV.split("\n"):
