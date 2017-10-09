@@ -57,7 +57,7 @@ def prettyPrintItems(etree, tag, prefix, verbose):
 
 def main():
   parser = argparse.ArgumentParser(description='Process the XML output of nose to show failing/error test cases.')
-  parser.add_argument('fh', type=file, help='XML file (in xUnit format) to parse', metavar='FILE', nargs='+')
+  parser.add_argument('fh', type=str, help='XML file (in xUnit format) to parse', metavar='FILE', nargs='+')
   parser.add_argument('--verbose', '-v', dest='verbose', action='store_true', help='Show full error/failure details')
   args = parser.parse_args() 
  

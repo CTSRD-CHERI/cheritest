@@ -142,7 +142,7 @@ def run():
   outputL3 = subprocess.check_output(
                [L3CHERI] + ["--uart-in", "/dev/null",
                            "--ignore", "HI", "--ignore", "LO",
-                           "--format", "raw", "obj/captest.bin"])
+                           "--format", "raw", "obj/captest.bin"]).decode("utf-8")
   regFileL3 = {}
   for line in outputL3.split("\n"):
     fields = line.split()

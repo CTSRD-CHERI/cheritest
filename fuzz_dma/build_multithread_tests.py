@@ -51,7 +51,7 @@ def main():
         template = Template(template_file.read())
 
     try:
-        tests = subprocess.check_output([GENERATE_PROGRAM] + sys.argv[1:])
+        tests = subprocess.check_output([GENERATE_PROGRAM] + sys.argv[1:]).decode("utf-8")
     except subprocess.CalledProcessError as ex:
         print('CALLED PROCESS ERROR', ex.output)
         sys.exit(2)

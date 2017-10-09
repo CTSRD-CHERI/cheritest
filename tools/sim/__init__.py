@@ -299,7 +299,7 @@ class MipsStatus(object):
 
     def __repr__(self):
         v = []
-        for i,t in self.threads.iteritems():
+        for i,t in self.threads.items():
             v.append("======  Thread %3d  ======" % i)
             v.append(t.__repr__())
         return "\n".join(v)

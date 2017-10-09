@@ -360,12 +360,14 @@ class BaseICacheBERITestCase(BaseBERITestCase):
                 msg = msg + ": "
             self.fail(msg + "tag=>%r, range=>[0x%016x,0x%016x]"%(tag, expected_min, expected_max))
 
+
 def main():
     import sys
     if len(sys.argv) != 2:
-        print("Usage: %0 LOGFILE"%sys.argv[0])
-    regs = MipsStatus(file(sys.argv[1], "rt"))
+        print("Usage: %s LOGFILE" % sys.argv[0])
+    regs = MipsStatus(open(sys.argv[1], "rt"))
     print(regs)
+
 
 if __name__=="__main__":
     main()

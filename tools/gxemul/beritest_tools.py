@@ -61,7 +61,7 @@ class BaseBERITestCase(unittest.TestCase):
         fh = open(os.path.join(self.LOG_DIR, self.LOG_FN), "rt")
         try:
             self.MIPS = MipsStatus(fh)
-        except MipsException, e:
+        except MipsException as e:
             self.MIPS_EXCEPTION = e
 
     def setUp(self):

@@ -32,7 +32,7 @@
 
 import tools.gxemul, tools.sim
 import os, re, itertools
-from builtins import range
+from builtins import range, filter
 
 # Parameters from the environment
 # Cached or uncached mode.
@@ -50,7 +50,7 @@ class TestFuzz(object):
         if ONLY_TEST:
             yield ('check_answer', ONLY_TEST)
         else:
-            for test in itertools.ifilter(lambda f: TEST_FILE_RE.match(f) ,os.listdir(TEST_DIR)):
+            for test in filter(lambda f: TEST_FILE_RE.match(f) ,os.listdir(TEST_DIR)):
                 test_name=os.path.splitext(os.path.basename(test))[0]
                 yield ('check_answer', test_name)
                 

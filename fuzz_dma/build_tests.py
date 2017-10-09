@@ -38,7 +38,7 @@ def main():
 
     try:
         tests = subprocess.check_output(
-            ['../x86-obj/generate_dma_test', sys.argv[1], sys.argv[2]])
+            ['../x86-obj/generate_dma_test', sys.argv[1], sys.argv[2]]).decode("utf-8")
     except subprocess.CalledProcessError as ex:
         print(ex.output)
         return 1
