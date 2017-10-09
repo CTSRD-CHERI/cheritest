@@ -132,6 +132,11 @@ endif
 CLANG_CMD=$(CHERI_SDK)/clang -integrated-as
 # CLANG_CMD=/Users/alex/cheri/llvm/cmake-build-debug/bin/clang-6.0 -integrated-as
 OBJDUMP?=$(CHERI_SDK)/llvm-objdump
+ifeq ($(shell uname -s),Darwin)
+OBJCOPY?=gobjcopy
+else
+OBJCOPY?=$(CHERI_SDK)/objcopy
+endif
 
 ifdef CHERI_SDK_USE_GNU_BINUTILS
 CHERI_SDK_USE_GNU_AS:=1
