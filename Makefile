@@ -128,8 +128,6 @@ HYBRID_CFLAGS?=-fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated
 PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
 
 
-# For now force using the GNU binutils since clang doesn't quite work
-CHERI_SDK_USE_GNU_BINUTILS?=1
 
 # If CHERI_SDK is set use the binaries from the CHERI SDK
 ifneq ($(CHERI_SDK),)
@@ -146,6 +144,11 @@ OBJCOPY?=gobjcopy
 else
 OBJCOPY?=$(CHERI_SDK)/objcopy
 endif
+
+# For now force using the GNU AS since clang doesn't quite work
+CHERI_SDK_USE_GNU_AS?=1
+# But LLD seems to work fine
+# CHERI_SDK_USE_GNU_BINUTILS?=1
 
 ifneq ($(CHERI_SDK_USE_GNU_BINUTILS),)
 CHERI_SDK_USE_GNU_AS:=1
