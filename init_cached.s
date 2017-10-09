@@ -30,6 +30,9 @@
 .set nobopt
 .set noat
 
+
+.globl start
+.globl uncached_start
 #
 # When we want to run the CHERI unit test suite at a cached address, the
 # tests are linked with that base in mind.  This small stub jumps to the
