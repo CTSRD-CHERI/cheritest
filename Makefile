@@ -1118,6 +1118,8 @@ TEST_CLANG_FILES=				\
 		test_clang_cursor_trivial.c	\
 		test_clang_toy.c		\
 		test_clang_memcpy.c		\
+		test_clang_memmove.c		\
+		test_clang_bcopy.c		\
 		test_clang_load_data.c		\
 		test_clang_store_data.c		\
 		test_clang_struct.c		\
