@@ -1,6 +1,5 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
-from six.moves import range
 import os
 import tools.sim
 expected_uncached=[

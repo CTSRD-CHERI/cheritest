@@ -27,7 +27,6 @@ from __future__ import print_function
 
 import tools.gxemul, tools.sim
 import os
-from six.moves import range
 
 def export_test(test_name, options):
     uncached_gxemul_log    = open(os.path.join("gxemul_log", test_name + '_gxemul.log'), 'rt')
@@ -41,7 +40,6 @@ def export_test(test_name, options):
         attrs=attrs + "@attr('tlb')"
     print("""from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
-from six.moves import range
 import os
 import tools.sim
 expected_uncached=[""")

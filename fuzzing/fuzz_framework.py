@@ -20,7 +20,6 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
-from six.moves import range
 import itertools
 
 NUM_GREGS=32

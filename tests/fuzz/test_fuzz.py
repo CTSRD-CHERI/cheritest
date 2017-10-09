@@ -32,7 +32,6 @@
 
 import tools.gxemul, tools.sim
 import os, re, itertools
-from six.moves import range, filter
 
 # Parameters from the environment
 # Cached or uncached mode.
