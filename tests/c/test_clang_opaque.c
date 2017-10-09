@@ -65,8 +65,7 @@ example_t example_constructor(void)
 
   ptr = &example_object;
 
-  result = (example_t) __builtin_cheri_perms_and((void * __capability) ptr,
-    0xd);
+  result = (example_t) __builtin_cheri_perms_and((__cheri_cast struct example * __capability) ptr, 0xd);
 
   result = __builtin_cheri_seal(result, example_key);
 

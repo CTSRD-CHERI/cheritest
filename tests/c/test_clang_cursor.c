@@ -56,7 +56,7 @@ int test(void)
 {
 	// Explicitly set the size of the capability
 	int * __capability b =
-		__builtin_cheri_bounds_set((void * __capability)buffer,
+		__builtin_cheri_bounds_set((__cheri_cast int * __capability)&buffer[0],
 		42*sizeof(int));
 
 	// Check that the base is correctly set to the start of the array
@@ -76,9 +76,9 @@ int test(void)
 	assert(41*sizeof(int) == __builtin_cheri_offset_get(b));
 
 	// Check that the pointer version of the capability is what we'd expect
-	DEBUG_DUMP_REG(18, (int*)b);
+	DEBUG_DUMP_REG(18, (__cheri_cast int*)b);
 	DEBUG_DUMP_REG(19, &buffer);
-	assert(((int*)b) == &buffer[41]);
+	assert(((__cheri_cast int*)b) == &buffer[41]);
 
 	// Check that we can read all of the array back by reverse iteration
 	get(b);

@@ -68,7 +68,7 @@ int i;
 float total;
 float * __capability fp;
 
-    fp = (float * __capability) array;
+    fp = (__cheri_cast float * __capability)&array[0];
     total = 0.0;
     for (i=0; i<4; i++)
     {

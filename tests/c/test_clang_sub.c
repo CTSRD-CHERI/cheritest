@@ -44,7 +44,7 @@ test(void)
 	const char * __capability b;
 	int x;
 
-	a = (const char * __capability) str;
+	a = (__cheri_cast const char * __capability) str;
         b = a + 5;
         x = b - a;
 	assert(x == 5);

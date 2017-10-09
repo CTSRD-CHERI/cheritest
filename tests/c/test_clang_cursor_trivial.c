@@ -31,7 +31,7 @@ extern volatile long long exception_count;
 
 int test(void)
 {
-	int * __capability b = (int * __capability)buffer;
+	int * __capability b = (__cheri_cast int * __capability)&buffer[0];
 	long long count = exception_count;
 	b[41] = 12;
 	// Explicitly set the length of the capability, in case the compiler

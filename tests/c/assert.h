@@ -25,6 +25,11 @@
  * @BERI_LICENSE_HEADER_END@
  */
 
+#if !__has_feature(__cheri_cast)
+#warning "Compiler doesn't support __cheri_cast, please update!"
+#define __cheri_cast
+#endif
+
 __attribute__((noreturn)) int __assert_fail(int);
 void  __assert(int cond, int line)
 {
