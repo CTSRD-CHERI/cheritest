@@ -110,8 +110,9 @@ ALLOW_UNALIGNED?=0
 FUZZ_DMA?=0
 FUZZ_DMA_ONLY?=0
 # Can be set to 1 on command line to disable fuzz tests, which can be useful at times.
-NOFUZZ?=0
-NOFUZZR?=0
+# fuzz tests are currently broken
+NOFUZZ?=1
+NOFUZZR?=1
 CAP_SIZE?=256
 PERM_SIZE?=31
 L3_SIM?=l3mips
