@@ -48,12 +48,15 @@ MIPS_REG_NAME2NUM={}
 for num, name in enumerate(MIPS_REG_NUM2NAME):
     MIPS_REG_NAME2NUM[name] = num
 
+
 ## Regular expressions for parsing the log file
 MIPS_REG_RE=re.compile(r'\b(?!pc)(?!hi)(?!lo)(..) = (0x................)')
 MIPS_PC_RE=re.compile(r'\bpc = (0x................)')
 
+
 class MipsException(Exception):
     pass
+
 
 class MipsStatus(object):
     '''Represents the status of the MIPS CPU registers, populated by parsing
@@ -63,7 +66,7 @@ class MipsStatus(object):
         self.reg_vals = [None] * len(MIPS_REG_NUM2NAME)
         self.pc = None
         self.parse_log(fh)
-	self.reg_vals[0] = 0
+        self.reg_vals[0] = 0
         if self.pc is None:
             raise MipsException("Failed to parse PC from %s"%fh)
         for i in range(len(MIPS_REG_NUM2NAME)):
@@ -77,31 +80,31 @@ class MipsStatus(object):
             line = line.strip()
             reg_groups = MIPS_REG_RE.findall(line)
             pc_groups = MIPS_PC_RE.search(line)
-            if (reg_groups):
-		for reg in reg_groups:
-		        reg_name = reg[0]
-			if reg_name == 't0':
-				reg_name = 'a4'
-			elif reg_name == 't1':
-				reg_name = 'a5'
-			elif reg_name == 't2':
-				reg_name = 'a6'
-			elif reg_name == 't3':
-				reg_name = 'a7'
-			elif reg_name == 't4':
-				reg_name = 't0'
-			elif reg_name == 't5':
-				reg_name = 't1'
-			elif reg_name == 't6':
-				reg_name = 't2'
-			elif reg_name == 't7':
-				reg_name = 't3'
-		        reg_val = int(reg[1], 16)
-			reg_num = MIPS_REG_NAME2NUM.get(reg_name, None)
-		        self.reg_vals[reg_num] = reg_val
-            if (pc_groups):
-                reg_val = int(pc_groups.group(1), 16)
-                self.pc = reg_val
+            if reg_groups:
+                for reg in reg_groups:
+                    reg_name = reg[0]
+                    if reg_name == 't0':
+                        reg_name = 'a4'
+                    elif reg_name == 't1':
+                        reg_name = 'a5'
+                    elif reg_name == 't2':
+                        reg_name = 'a6'
+                    elif reg_name == 't3':
+                        reg_name = 'a7'
+                    elif reg_name == 't4':
+                        reg_name = 't0'
+                    elif reg_name == 't5':
+                        reg_name = 't1'
+                    elif reg_name == 't6':
+                        reg_name = 't2'
+                    elif reg_name == 't7':
+                        reg_name = 't3'
+                        reg_val = int(reg[1], 16)
+                    reg_num = MIPS_REG_NAME2NUM.get(reg_name, None)
+                    self.reg_vals[reg_num] = reg_val
+                    if pc_groups:
+                        reg_val = int(pc_groups.group(1), 16)
+                        self.pc = reg_val
 
     def __getattr__(self, key):
         '''Return a register value by name'''
