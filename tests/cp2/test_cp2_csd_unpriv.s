@@ -54,7 +54,7 @@ test:		.ent test
 		csetbounds $c1, $c1, $t1
 
 		dli	$t2, 0x0123456789abcdef
-		csdi	$t2, 0($c1)
+		csd	$t2, $zero, 0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

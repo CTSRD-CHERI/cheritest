@@ -74,7 +74,7 @@ test:		.ent test
 		#
 
 		dla     $t0, padding
-		cscr    $c1, $t0($c0)
+		csc     $c1, $t0, 0($c0)
 
 		#
 		# Clear $c1 so we can tell if the load happened
@@ -90,7 +90,7 @@ test:		.ent test
 		#
 		# Reload from an unaligned address
 		#        
-		clcr    $c1, $t0($c2) # This should raise an exception
+		clc     $c1, $t0, 0($c2) # This should raise an exception
 
 		#
 		# Check that the load didn't happen.

@@ -74,13 +74,13 @@ test:		.ent test
 		#
 
 wait:
-		clcr	$c1, $a1($c0)
+		clc 	$c1, $a1, 0($c0)
 		cbtu	$c1, wait
 		nop
 	
 		dli	$t1, 1		# Expected offset in vslid capability
 loop0:
-		clcr	$c1, $a1($c0)
+		clc 	$c1, $a1, 0($c0)
 		cbtu	$c1, tag_not_set
 		nop
 		cgetoffset $t0, $c1
@@ -123,7 +123,7 @@ not_core_zero:
 		csetoffset $c1, $c0, $t0
 		cfromptr $c2, $c0, $zero
 loop1:
-		cscr	$c1, $a1($c0)
+		csc 	$c1, $a1, 0($c0)
 		nop
 		nop
 		nop
@@ -134,7 +134,7 @@ loop1:
 		nop
 		nop
 		nop
-		cscr	$c2, $a1($c0)
+		csc 	$c2, $a1, 0($c0)
 		ld	$t0, 0($a0)
 		beqz	$t0, loop1
 		nop

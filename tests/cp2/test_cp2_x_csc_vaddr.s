@@ -74,14 +74,14 @@ test:		.ent test
                 dsub    $t0, $a4, $t1
         
 		# Store $c1 to an unaligned address (cap1)
-		cscr    $c1, $t0($c1) # This should raise an exception
+		csc     $c1, $t0, 0($c1) # This should raise an exception
 
 		# Check that the store didn't happen.
 		# $a4 is double-word aligned, so it is safe to read it with
 		# cldr.
-		cldr    $a0, $a4($c0)
+		cld     $a0, $a4, 0($c0)
 		daddiu  $t0, $a4, 8
-		cldr    $a1, $a4($c0)
+		cld     $a1, $a4, 0($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

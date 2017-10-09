@@ -74,10 +74,10 @@ test:		.ent test
 		#
 
 		dla	$t0, cap1
-		cscr	$c1, $t0($c0)
+		csc 	$c1, $t0, 0($c0)
 		ld	$t1, 0($t0)
 		sd	$t1, 0($t0)
-		clcr	$c1, $t0($c0)
+		clc 	$c1, $t0, 0($c0)
 
 		dli	$t1, 1
 		j	L1
@@ -88,7 +88,7 @@ test:		.ent test
 L1:
 		dla	$t0, cap1
 		dla	$t1, cap2
-		cscr	$c1, $t1($c0)
+		csc 	$c1, $t1, 0($c0)
 
 		ld	$s0, 0($t0)
 		ld	$t2, 0($t1)

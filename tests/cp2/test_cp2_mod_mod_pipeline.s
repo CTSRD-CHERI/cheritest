@@ -47,10 +47,10 @@ test:		.ent test
 
 		dli	$a0, 1
 		dla	$t0, cap1
-		cscr	$c0, $t0($c0)
+		csc 	$c0, $t0, 0($c0)
 		dli	$t1, 0
 		sd	$t1, 8($t0)
-		clcr    $c1, $t0($c0)
+		clc     $c1, $t0, 0($c0)
 		nop
 		nop
 		nop

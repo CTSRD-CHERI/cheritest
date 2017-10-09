@@ -75,7 +75,7 @@ test:		.ent test
 		dla	$t0, L1
 		csetoffset $c1, $c1, $t0
 		cjr	$c1
-		cldi	$a0, 0($c2)	# Exception in branch delay slot
+		cld	$a0, $zero, 0($c2)	# Exception in branch delay slot
 
 		nop
 		nop

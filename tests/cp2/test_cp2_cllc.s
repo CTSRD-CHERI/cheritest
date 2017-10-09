@@ -63,7 +63,7 @@ test:		.ent test
 		csetoffset	$c1, $c0, $a0
 		cllc	$c2, $c1
 		cscc	$a1, $c2, $c1
-		clci	$c3, 0($c1)
+		clc	$c3, $zero, 0($c1)
 		cgettag	$a5, $c3
 
 		#
@@ -73,7 +73,7 @@ test:		.ent test
 		cllc	$c2, $c1
 		csetoffset	$c2, $c0, $a0
 		cscc	$a2, $c2, $c1
-		clci	$c4, 0($c1)
+		clc	$c4, $zero, 0($c1)
 		cgettag	$a6, $c4
 
 		#

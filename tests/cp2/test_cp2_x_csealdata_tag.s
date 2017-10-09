@@ -76,10 +76,10 @@ test:		.ent test
 		#
 
 		dla	$t1, cap1
-		cscr	$c2, $t1($c0)
+		csc 	$c2, $t1, 0($c0)
 		ld	$t0, 0($t1)
 		sd	$t0, 0($t1)
-		clcr	$c2, $t1($c0)
+		clc 	$c2, $t1, 0($c0)
 
 		cseal $c1, $c1, $c2 # This should raise an exception
 

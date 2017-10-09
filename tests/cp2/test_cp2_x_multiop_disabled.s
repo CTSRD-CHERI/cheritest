@@ -176,16 +176,16 @@ L4:
 		#
 
 		dla	$t1, data
-		clcr	$c2, $t1($c1)
-		cscr	$c1, $t1($c1)
-		clbr	$t0, $t1($c1)
-		csbr	$t0, $t1($c1)
-		clhr	$t0, $t1($c1)
-		cshr	$t0, $t1($c1)
-		clwr	$t0, $t1($c1)
-		cswr	$t0, $t1($c1)
-		cldr	$t0, $t1($c1)
-		csdr	$t0, $t1($c1)
+		clc 	$c2, $t1, 0($c1)
+		csc 	$c1, $t1, 0($c1)
+		clb 	$t0, $t1, 0($c1)
+		csb 	$t0, $t1, 0($c1)
+		clh 	$t0, $t1, 0($c1)
+		csh 	$t0, $t1, 0($c1)
+		clw 	$t0, $t1, 0($c1)
+		csw 	$t0, $t1, 0($c1)
+		cld 	$t0, $t1, 0($c1)
+		csd 	$t0, $t1, 0($c1)
 		csetoffset $c1, $c1, $t1
 		cllc	$c2, $c1
 		cscc	$t0, $c1, $c1

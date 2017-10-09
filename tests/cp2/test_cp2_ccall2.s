@@ -38,7 +38,7 @@
 sandbox:
 		cmove	$c0, $c26
 		dli	$a2, 42
-		csdi	$a2, 0($c26)
+		csd	$a2, $zero, 0($c26)
 		creturn
 		nop	# branch delay slot
 
@@ -80,7 +80,7 @@ test:		.ent test
 		dli     $t0, 96
 		csetbounds $c1, $c1, $t0
 		dla     $t0, tsscap
-		cscr    $c1, $t0($c0)
+		csc     $c1, $t0, 0($c0)
 
 		#
 		# Initialize the pointer into the trusted system stack
@@ -88,7 +88,7 @@ test:		.ent test
 
 		dla     $t0, tssptr
 		dli     $t1, 0
-		csdr    $t1, $t0($c0)
+		csd     $t1, $t0, 0($c0)
 
 		#
 		# Remove the permission to access reserved registers from
@@ -224,14 +224,14 @@ do_ccall:
 		#
 
 		dla     $k0, tsscap
-		clcr    $c28, $k0($c27)
+		clc     $c28, $k0, 0($c27)
 
 		#
 		# Make $k0 the current offset into the trusted system stack
 		#
 
 		dla     $k0, tssptr
-		cldr    $k0, $k0($c27)
+		cld     $k0, $k0, 0($c27)
 
 		#
 		# Push the IDC on to the trusted system stack
@@ -340,14 +340,14 @@ do_creturn:
 		#
 
 		dla     $k0, tsscap
-		clcr    $c28, $k0($c27)
+		clc     $c28, $k0, 0($c27)
 
 		#
 		# Make $k0 the current offset into the trusted system stack.
 		#
 
 		dla     $k0, tssptr
-		cldr    $k0, $k0($c27)
+		cld     $k0, $k0, 0($c27)
 
 		#
 		# Pop the IDC ($c26) off the trusted system stack

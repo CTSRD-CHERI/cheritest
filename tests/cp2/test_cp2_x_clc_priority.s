@@ -79,7 +79,7 @@ test:		.ent test
 		# but we keep the same priority order for simplicity.
 
 		dli $t0, 33
-		clcr	$c2, $t0($c1)
+		clc 	$c2, $t0, 0($c1)
 		cgetlen $a0, $c2
 
 		ld	$fp, 16($sp)

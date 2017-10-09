@@ -53,9 +53,9 @@ test:		.ent test
 		dli	$t1, 8
 		csetbounds $c1, $c1, $t1
 
-		clhi	$a0, 0($c1)		# 64-bit aligned
-		clhi	$a1, 4($c1)		# 32-bit aligned
-		clhi	$a2, 6($c1)		# 16-bit aligned
+		clh	$a0, $zero, 0($c1)		# 64-bit aligned
+		clh	$a1, $zero, 4($c1)		# 32-bit aligned
+		clh	$a2, $zero, 6($c1)		# 16-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -71,10 +71,10 @@ test:		.ent test
 		#
 
 		dla	$t0, cap1
-		cscr	$c1, $t0($c0)
+		csc 	$c1, $t0, 0($c0)
 		dli	$t1, 5
 		sw	$t1, 0($t0)
-		clcr	$c2, $t0($c0)
+		clc 	$c2, $t0, 0($c0)
 
 		#
 		# As we're using CJR rather than CJALR, create a return

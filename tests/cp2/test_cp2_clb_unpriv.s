@@ -53,10 +53,10 @@ test:		.ent test
 		dli	$t1, 8
 		csetbounds $c1, $c1, $t1
 
-		clbi	$a0, 0($c1)		# 64-bit aligned
-		clbi	$a1, 4($c1)		# 32-bit aligned
-		clbi	$a2, 6($c1)		# 16-bit aligned
-		clbi	$a3, 7($c1)		# 8-bit aligned
+		clb	$a0, $zero, 0($c1)		# 64-bit aligned
+		clb	$a1, $zero, 4($c1)		# 32-bit aligned
+		clb	$a2, $zero, 6($c1)		# 16-bit aligned
+		clb	$a3, $zero, 7($c1)		# 8-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

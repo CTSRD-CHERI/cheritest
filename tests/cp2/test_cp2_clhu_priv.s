@@ -47,9 +47,9 @@ test:		.ent test
 		daddiu	$t1, $t0, 4
 		daddiu	$t2, $t0, 6
 
-		clhur	$a0, $t0($c1)		# 64-bit aligned
-		clhur	$a1, $t1($c1)		# 32-bit aligned
-		clhur	$a2, $t2($c1)		# 16-bit aligned
+		clhu	$a0, $t0, 0($c1)		# 64-bit aligned
+		clhu	$a1, $t1, 0($c1)		# 32-bit aligned
+		clhu	$a2, $t2, 0($c1)		# 16-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

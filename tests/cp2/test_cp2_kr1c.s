@@ -46,7 +46,7 @@ sandbox:
 		candperm $c27, $c27, $t0
 
 		dli $t0, 0
-		cldr $a0, $t0($c27)
+		cld $a0, $t0, 0($c27)
 
 		cjr $c24
 		nop			# branch delay slot

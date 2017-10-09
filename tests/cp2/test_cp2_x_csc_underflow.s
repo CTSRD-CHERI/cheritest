@@ -76,10 +76,10 @@ test:		.ent test
 		dli     $t0, 0x7f
 		candperm $c1, $c1, $t0
 
-		csci    $c0, -32($c1) # This should raise an exception
+		csc    $c0, $zero, -32($c1) # This should raise an exception
 
 		dla	$t0, underflow
-		cldr    $a0, $t0($c0)
+		cld     $a0, $t0, 0($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

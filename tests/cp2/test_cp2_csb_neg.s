@@ -65,7 +65,7 @@ test:		.ent test
 		#
 
 		dla	$t0, data
-		clbr	$a0, $t0($c0)
+		clb 	$a0, $t0, 0($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

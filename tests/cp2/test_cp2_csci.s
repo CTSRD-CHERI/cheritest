@@ -75,7 +75,7 @@ test:		.ent test
 		# Store at cap1 in memory.
 		#
 
-		csci	$c2, 32($c1)
+		csc	$c2, $zero, 32($c1)
 
 		#
 		# Load back in as general-purpose registers to check values

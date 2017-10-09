@@ -48,10 +48,10 @@ test:		.ent test
 		daddiu	$t2, $t0, 6
 		daddiu	$t3, $t0, 7
 
-		clbur	$a0, $t0($c1)		# 64-bit aligned
-		clbur	$a1, $t1($c1)		# 32-bit aligned
-		clbur	$a2, $t2($c1)		# 16-bit aligned
-		clbur	$a3, $t3($c1)		# 8-bit aligned
+		clbu	$a0, $t0, 0($c1)		# 64-bit aligned
+		clbu	$a1, $t1, 0($c1)		# 32-bit aligned
+		clbu	$a2, $t2, 0($c1)		# 16-bit aligned
+		clbu	$a3, $t3, 0($c1)		# 8-bit aligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

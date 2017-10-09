@@ -60,10 +60,10 @@ test:		.ent test
 		#
 
 		dla	$t0, cap
-		cscr	$c2, $t0($c0)
+		csc	$c2, $t0, 0($c0)
 		ld	$t1, 0($t0)
 		sd	$t1, 0($t0)
-		clcr	$c2, $t0($c0)
+		clc	$c2, $t0, 0($c0)
 
 		#
 		# Now try cincoffset

@@ -45,11 +45,11 @@ test:		.ent test
 
 		dla	$t0, data
 		dli	$t2, 0x01234567
-		cswr	$t2, $t0($c1)
+		csw 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, 4
 		dli	$t2, 0x89abcdef
-		cswr	$t2, $t0($c1)
+		csw 	$t2, $t0, 0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

@@ -41,7 +41,7 @@ sandbox:
 		# $c27 is KR1C, a reserved register
 		#
 		dli     $a0, 0
-		cldr    $a0, $zero($c27) # This should raise a C2E exception
+		cld     $a0, $zero, 0($c27) # This should raise a C2E exception
 
 		cjr     $c24
 		# branch delay slot

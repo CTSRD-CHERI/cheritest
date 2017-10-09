@@ -43,14 +43,14 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dla	$t0, cap1
-                cscr     $c0, $t0($c0)
+                csc      $c0, $t0, 0($c0)
 
 		#
 		# Load the capability back in from memory, and check that
 		# it has the right tag.
 		#
 
-                clcr     $c2, $t0($c0)
+                clc      $c2, $t0, 0($c0)
 
 		#
 		# Load a0 with a value that can't possibly be a tag, so we
@@ -68,7 +68,7 @@ test:		.ent test
 		ld	$t1, 0($t0)
                 sd      $t1, 0($t0)
 
-                clcr     $c2, $t0($c0)
+                clc      $c2, $t0, 0($c0)
 
 		#
 		# Load a1 with a value that can't possibly be a tag,

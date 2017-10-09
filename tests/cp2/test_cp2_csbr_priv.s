@@ -45,35 +45,35 @@ test:		.ent test
 
 		dla	$t0, data
 		dli	$t2, 0x01
-		csbr	$t2, $t0($c1)
+		csb 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, $t0, 1
 		dli	$t2, 0x23
-		csbr	$t2, $t0($c1)
+		csb 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, $t0, 1
 		dli	$t2, 0x45
-		csbr	$t2, $t0($c1)
+		csb 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, $t0, 1
 		dli	$t2, 0x67
-		csbr	$t2, $t0($c1)
+		csb 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, $t0, 1
 		dli	$t2, 0x89
-		csbr	$t2, $t0($c1)
+		csb 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, $t0, 1
 		dli	$t2, 0xab
-		csbr	$t2, $t0($c1)
+		csb 	$t2, $t0, 0($c1)
 
 		dli	$t2, 0xcd
 		daddiu	$t0, $t0, 1
-		csbr	$t2, $t0($c1)
+		csb 	$t2, $t0, 0($c1)
 
 		dli	$t2, 0xef
 		daddiu	$t0, $t0, 1
-		csbr	$t2, $t0($c1)
+		csb 	$t2, $t0, 0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

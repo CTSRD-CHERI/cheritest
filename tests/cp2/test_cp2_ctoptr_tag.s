@@ -44,7 +44,7 @@ test:		.ent test
 
 		dli	$a0, -1
 		dla	$t0, cap
-		clcr	$c1, $t0($c0)
+		clc 	$c1, $t0, 0($c0)
 		ctoptr	$a0, $c1, $c0
 
 		ld	$fp, 16($sp)

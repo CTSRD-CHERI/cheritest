@@ -43,10 +43,10 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dla	$t0, cap1
-                cscr     $c0, $t0($c0)
+                csc      $c0, $t0, 0($c0)
 		# Load the capability back in from memory, and check that
 		# it has the right tag.
-                clcr     $c2, $t0($c0)
+                clc      $c2, $t0, 0($c0)
 		# Load a0 with a value that can't possibly be a tag, so we
 		# can check whether the cgettag worked.
 		dli	$a0, 2
@@ -55,10 +55,10 @@ test:		.ent test
 		#
 		# Overwrite the first dword of the capability, which should
 		# clear the tag bit.
-		cldr	$t1, $t0($c0)
-                csdr    $t1, $t0($c0)
+		cld	$t1, $t0, 0($c0)
+                csd     $t1, $t0, 0($c0)
 
-                clcr    $c2, $t0($c0)
+                clc     $c2, $t0, 0($c0)
 		# Load a1 with a value that can't possibly be a tag,
 		# so we can check that cgettag worked.
 		dli	$a1, 2

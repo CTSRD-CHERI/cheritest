@@ -114,8 +114,8 @@ start:
     dli     $a4, CAP_TIMES-1
     1:
     flush_nops
-    clcr	$c1, $t0($c0)
-    cscr	$c1, $t0($c0)
+    clc 	$c1, $t0, 0($c0)
+    csc 	$c1, $t0, 0($c0)
     bne     $a4, $zero, 1b
     daddi   $a4, -1
     flush_nops

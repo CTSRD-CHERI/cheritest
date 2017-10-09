@@ -102,18 +102,18 @@ sandbox:
 		#
 
 		dla	$t1, data
-		clcr	$c2, $t1($c29)
-		clcr	$c29, $t1($c1)
-		cscr	$c2, $t1($c29)
-		cscr	$c29, $t1($c1)
-		clbr	$t0, $t1($c29)
-		csbr	$t0, $t1($c29)
-		clhr	$t0, $t1($c29)
-		cshr	$t0, $t1($c29)
-		clwr	$t0, $t1($c29)
-		cswr	$t0, $t1($c29)
-		cldr	$t0, $t1($c29)
-		csdr	$t0, $t1($c29)
+		clc 	$c2, $t1, 0($c29)
+		clc 	$c29, $t1, 0($c1)
+		csc 	$c2, $t1, 0($c29)
+		csc 	$c29, $t1, 0($c1)
+		clb 	$t0, $t1, 0($c29)
+		csb 	$t0, $t1, 0($c29)
+		clh 	$t0, $t1, 0($c29)
+		csh 	$t0, $t1, 0($c29)
+		clw 	$t0, $t1, 0($c29)
+		csw 	$t0, $t1, 0($c29)
+		cld 	$t0, $t1, 0($c29)
+		csd 	$t0, $t1, 0($c29)
 
 		#
 		# Clear $c29 with cclearhi

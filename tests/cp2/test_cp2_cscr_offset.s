@@ -49,7 +49,7 @@ test:		.ent test
 		cincoffset $c1, $c1, $t0
 
 		dla	$t0, cap
-		cscr	$c1, $t0($c0)
+		csc 	$c1, $t0, 0($c0)
 
 		ld	$a0, 8($t0)
 		dla	$t1, data

@@ -45,19 +45,19 @@ test:		.ent test
 
 		dla	$t0, data
 		dli	$t2, 0x0123
-		cshr	$t2, $t0($c1)
+		csh 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, 2
 		dli	$t2, 0x4567
-		cshr	$t2, $t0($c1)
+		csh 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, 2
 		dli	$t2, 0x89ab
-		cshr	$t2, $t0($c1)
+		csh 	$t2, $t0, 0($c1)
 
 		daddiu	$t0, 2
 		dli	$t2, 0xcdef
-		cshr	$t2, $t0($c1)
+		csh 	$t2, $t0, 0($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

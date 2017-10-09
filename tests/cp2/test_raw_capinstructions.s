@@ -104,8 +104,8 @@ start:
 
                 # store/load capability, register offset
                 dla       $a3, cap1
-		cscr      $c1, $a3($c2)
-		clcr      $c1, $a3($c2)
+		csc       $c1, $a3, 0($c2)
+		clc       $c1, $a3, 0($c2)
 
 		# store/load capability, immediate offset
 		csci      $c1, 0($c2)
@@ -124,10 +124,10 @@ start:
 		cld       $a1, $a3, -8($c2)
 
                 # load via capability, sign extend, register offset
-                clbr      $a1, $a3($c2)
-                clhr      $a1, $a3($c2)
-                clwr      $a1, $a3($c2)
-                cldr      $a1, $a3($c2)
+                clb       $a1, $a3, 0($c2)
+                clh       $a1, $a3, 0($c2)
+                clw       $a1, $a3, 0($c2)
+                cld       $a1, $a3, 0($c2)
 
 		# load via capability, sign extend, immediate offset
 		clbi      $a1, 0($c2)
@@ -141,9 +141,9 @@ start:
                 clwu      $a1, $a3, 0($c2)
 
 		# load via capability, zero extend, register offset
-		clbur     $a1, $a3($c2)
-		clhur     $a1, $a3($c2)
-		clwur     $a1, $a3($c2)
+		clbu      $a1, $a3, 0($c2)
+		clhu      $a1, $a3, 0($c2)
+		clwu      $a1, $a3, 0($c2)
 
 		# load via capability, zero extend, immediate offset
 		clbui     $a1, 0($c2)
@@ -163,10 +163,10 @@ start:
 		csd       $a1, $a3, -8($c2)
 
                 # store via capability, register offset
-                csbr      $a1, $a3($c2)
-                cshr      $a1, $a3($c2)
-                cswr      $a1, $a3($c2)
-                csdr      $a1, $a3($c2)
+                csb       $a1, $a3, 0($c2)
+                csh       $a1, $a3, 0($c2)
+                csw       $a1, $a3, 0($c2)
+                csd       $a1, $a3, 0($c2)
 
                 # store via capability, immediate offset
                 csbi      $a1, 0($c2)

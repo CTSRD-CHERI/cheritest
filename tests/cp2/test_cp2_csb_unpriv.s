@@ -54,21 +54,21 @@ test:		.ent test
 		csetbounds $c1, $c1, $t1
 
 		dli	$t2, 0x01
-		csbi	$t2, 0($c1)
+		csb	$t2, $zero, 0($c1)
 		dli	$t2, 0x23
-		csbi	$t2, 1($c1)
+		csb	$t2, $zero, 1($c1)
 		dli	$t2, 0x45
-		csbi	$t2, 2($c1)
+		csb	$t2, $zero, 2($c1)
 		dli	$t2, 0x67
-		csbi	$t2, 3($c1)
+		csb	$t2, $zero, 3($c1)
 		dli	$t2, 0x89
-		csbi	$t2, 4($c1)
+		csb	$t2, $zero, 4($c1)
 		dli	$t2, 0xab
-		csbi	$t2, 5($c1)
+		csb	$t2, $zero, 5($c1)
 		dli	$t2, 0xcd
-		csbi	$t2, 6($c1)
+		csb	$t2, $zero, 6($c1)
 		dli	$t2, 0xef
-		csbi	$t2, 7($c1)
+		csb	$t2, $zero, 7($c1)
 
 		#
 		# Load using regular MIPS instructions for checking.

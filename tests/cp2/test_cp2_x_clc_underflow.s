@@ -85,10 +85,10 @@ test:		.ent test
 		dli	$t0, 0x1234
 		csetoffset $c2, $c2, $t0
 		dla	$t0, underflow
-		cscr    $c2, $t0($c0)
+		csc     $c2, $t0, 0($c0)
 
 		cgetdefault $c2
-		clci    $c2, -32($c1) # This should raise an exception
+		clc     $c2, $zero, -32($c1) # This should raise an exception
 
 		cgetoffset $a0, $c2
 

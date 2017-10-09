@@ -53,15 +53,13 @@ test:		.ent test
 		#
 		# Store at cap1 in memory.
 		#
-		# XXXRW: Fix to use indexed address syntax once available.
-		#
 		dla	$t0, cap1
-		cscr	$c2, $t0($c0)
+		csc	$c2, $t0, 0($c0)
 
 		#
 		# Load back into another capability register
 		#
-		clcr	$c3, $t0($c0)
+		clc	$c3, $t0, 0($c0)
 
 		#
 		# Extract various values into general-purpose registers for

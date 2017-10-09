@@ -73,14 +73,14 @@ test:		.ent test
 
 		dli     $a0, 0xff
 		dli     $t0, 0
-		csbr    $a0, $t0($c1) # This should raise a C2E exception
+		csb     $a0, $t0, 0($c1) # This should raise a C2E exception
 
 		#
 		# Check that the store didn't happen
 		#
 
 		dla     $t0, data
-		clbr    $a0, $t0($c0)
+		clb     $a0, $t0, 0($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

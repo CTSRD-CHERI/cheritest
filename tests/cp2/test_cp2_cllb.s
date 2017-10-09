@@ -63,7 +63,7 @@ test:		.ent test
 		csetoffset	$c1, $c0, $t1
 		cllb	$a0, $c1
 		cscb	$a0, $a0, $c1
-		clbr	$a1, $zero($c1)
+		clb	$a1, $zero, 0($c1)
 
 		#
 		# Check to make sure we are allowed to increment the loaded

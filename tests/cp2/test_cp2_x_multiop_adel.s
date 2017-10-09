@@ -104,13 +104,13 @@ test:		.ent test
 		dli	$t1, 127	# unaligned, probably spans cache line
 		csetoffset $c3, $c1, $t1
 
-		clcr	$c2, $t1($c1)
+		clc 	$c2, $t1, 0($c1)
 		# cllc doesn't take a register offset, so use $c3 not $t1($c1)
 		cllc	$c2, $c3
 		# clbr will work at any alignment
-		clhr	$t0, $t1($c1)
-		clwr	$t0, $t1($c1)
-		cldr	$t0, $t1($c1)
+		clh 	$t0, $t1, 0($c1)
+		clw 	$t0, $t1, 0($c1)
+		cld 	$t0, $t1, 0($c1)
 		csetoffset $c3, $c1, $t1
 		# cllb will work at any alignment
 		cllh	$t0, $c3

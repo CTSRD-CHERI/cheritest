@@ -54,9 +54,9 @@ test:		.ent test
 		# The most significant bit of data is high, so the signed
 		# load operations should sign-extend it.
 		dli	$t0, 0
-		clbr	$a0, $t0($c1)
-		clhr	$a1, $t0($c1)
-		clwr	$a2, $t0($c1)
+		clb	$a0, $t0, 0($c1)
+		clh	$a1, $t0, 0($c1)
+		clw	$a2, $t0, 0($c1)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

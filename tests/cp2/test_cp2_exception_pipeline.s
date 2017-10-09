@@ -88,7 +88,7 @@ test:		.ent test
 		# Test cscr
 		dla	$t0, data
 	        syscall 0
-		cscr	$c6, $t0($c0) # not executed
+		csc 	$c6, $t0, 0($c0) # not executed
 		# If cscr was properly squashed these loads will load the
 	        # test values below, otherwise they will get the stored capability
 		ld	$a0, ($t0)
@@ -97,11 +97,11 @@ test:		.ent test
 		ld	$a3, 24($t0)
 
 		# store the test capability
-		cscr	$c6, $t0($c0)
+		csc 	$c6, $t0, 0($c0)
 	
 		# Test clcr
  		syscall 0
-		clcr	$c7, $t0($c0) # not executed
+		clc 	$c7, $t0, 0($c0) # not executed
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -74,10 +74,10 @@ test:		.ent test
 		#
 
 		dla	$t0, cap1
-		cscr	$c1, $t0($c0)
+		csc 	$c1, $t0, 0($c0)
 		ld	$t1, 0($t0)
 		sd	$t1, 0($t0)
-		clcr	$c1, $t0($c0)
+		clc 	$c1, $t0, 0($c0)
 
 		#
 		# Read its tag field to check
@@ -89,7 +89,7 @@ test:		.ent test
 		#
 		dli     $a0, 0
 		dli     $t0, 0
-		clbur   $a0, $t0($c1) # This should raise a C2E exception
+		clbu    $a0, $t0, 0($c1) # This should raise a C2E exception
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

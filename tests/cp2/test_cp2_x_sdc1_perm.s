@@ -114,7 +114,7 @@ test:		.ent test
 		# Check that the store didn't happen
 		#
 
-		cldr	$a4, $t1($c0)
+		cld 	$a4, $t1, 0($c0)
 
 no_fpu:
 		ld	$fp, 16($sp)

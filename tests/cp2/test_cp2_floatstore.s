@@ -65,7 +65,7 @@ test:		.ent test
 		# Store a capability into cap1
 
 		dla	$t0, cap1
-                cscr    $c0, $t0($c0)
+                csc     $c0, $t0, 0($c0)
 
 
 		# Overwrite the first field of cap1 with a float
@@ -90,7 +90,7 @@ test:		.ent test
 
 		# Reload the stored value as a capability
 
-		clcr	$c1, $t0($c0)
+		clc 	$c1, $t0, 0($c0)
 
 		# The tag bit should have been cleared by the FP store
 

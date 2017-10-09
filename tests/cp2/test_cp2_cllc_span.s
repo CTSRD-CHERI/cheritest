@@ -62,7 +62,7 @@ test:		.ent test
 		#
 
 		cllc	$c2, $c1
-		clci	$c2, 0($c1)
+		clc	$c2, $zero, 0($c1)
 		cscc	$a4, $c2, $c1
 
 		#
@@ -73,9 +73,9 @@ test:		.ent test
 
 		li	$t0, 1
 		cllc	$c2, $c1
-		csci	$c0, 0($c1)
+		csc	$c0, $zero, 0($c1)
 		cscc	$a3, $c2, $c1
-		clci	$c3, 0($c1)
+		clc	$c3, $zero, 0($c1)
 		cgettag	$a2, $c3
 
 		ld	$fp, 16($sp)

@@ -53,53 +53,51 @@ test:		.ent test
 		#
 		# Store at cap1 in memory.
 		#
-		# XXXRW: Fix to use indexed address syntax once available.
-		#
 		dla	$t0, cap1
 		dli	$t1, 0xFFFFFFFF00000000
 		and	$t0, $t0, $t1
-		clcr	$c16, $t0($c0)
-		cscr	$c2, $t0($c0)
+		clc	$c16, $t0, 0($c0)
+		csc	$c2, $t0, 0($c0)
 
 		#
 		# Load back into another capability register
 		#
-		clcr	$c3, $t0($c0)
+		clc	$c3, $t0, 0($c0)
 		
 		#
 		# Invalidate the line in the L1
 		#
 		daddi	$t1, $t0, 16384
-		cscr	$c16, $t1($c0)
+		csc	$c16, $t1, 0($c0)
   
 		#
 		# Load from the L2 into another capability register
 		#
-		clcr	$c4, $t0($c0)
+		clc	$c4, $t0, 0($c0)
 		
 		#
 		# Invalidate the line in the L1 & L2
 		#
 		dli	$t1, 16384*4
 		dadd	$t1, $t0, $t1
-		cscr	$c16, $t1($c0)
+		csc	$c16, $t1, 0($c0)
   
 		#
 		# Load from the DRAM into another capability register
 		#
-		clcr	$c5, $t0($c0)
+		clc	$c5, $t0, 0($c0)
 
 		#
                 # Invalidate the line in the tag cache & L1 & L2
                 #
 		dli	$t1, 16384*512
 		dadd	$t1, $t0, $t1
-                cscr    $c16, $t1($c0)
+                csc    $c16, $t1, 0($c0)
 
                 #
                 # Load both tag and data from the DRAM into capability register
                 #
-                clcr    $c6, $t0($c0)
+                clc    $c6, $t0, 0($c0)
   
 		#
 		# Extract various values into general-purpose registers for

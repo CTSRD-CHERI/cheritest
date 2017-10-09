@@ -77,16 +77,16 @@ test:		.ent test
 		# that doesn't permit this.
 
 		dla     $t0, cap1
-		cscr    $c1, $t0($c2) # This should not raise an exception
+		csc     $c1, $t0, 0($c2) # This should not raise an exception
 
 		# Check that the store did happen.
-		cldr    $s0, $t0($c0)
+		cld     $s0, $t0, 0($c0)
 		daddiu  $t0, $t0, 8
-		cldr    $s1, $t0($c0)
+		cld     $s1, $t0, 0($c0)
 		daddiu  $t0, $t0, 8
-		cldr    $s2, $t0($c0)
+		cld     $s2, $t0, 0($c0)
 		daddiu  $t0, $t0, 8
-		cldr    $s3, $t0($c0)
+		cld     $s3, $t0, 0($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

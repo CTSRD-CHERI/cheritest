@@ -84,7 +84,7 @@ test:		.ent test
 		dli     $t0, 96
 		csetbounds $c1, $c1, $t0
 		dla	$t0, tsscap
-		cscr    $c1, $t0($c0)
+		csc     $c1, $t0, 0($c0)
 
 		#
 		# Initialize the pointer into the trusted system stack
@@ -92,7 +92,7 @@ test:		.ent test
 
 		dla	$t0, tssptr
 		dli	$t1, 0
-		csdr	$t1, $t0($c0)
+		csd 	$t1, $t0, 0($c0)
 
 		#
 		# Fake the effect of having done a CCall without using
@@ -100,9 +100,9 @@ test:		.ent test
 		#
 
 		dla	$t1, L1
-		csdi    $t1, 0($c1)
-		csci    $c0, 32($c1)
-		csci	$c0, 64($c1)
+		csd     $t1, $zero, 0($c1)
+		csc     $c0, $zero, 32($c1)
+		csc	$c0, $zero, 64($c1)
 
 		#
 		# Discard the permissions to access the reserved registers
@@ -168,14 +168,14 @@ bev0_ccall_handler:
 		#
 
 		dla     $k0, tsscap
-		clcr	$c28, $k0($c27)
+		clc 	$c28, $k0, 0($c27)
 
 		#
 		# Make $k0 the current offset into the trusted system stack.
 		#
 
 		dla	$k0, tssptr
-		cldr	$k0, $k0($c27)
+		cld 	$k0, $k0, 0($c27)
 
 		#
 		# Pop the EPCC off the trusted system stack, so it will
@@ -197,7 +197,7 @@ bev0_ccall_handler:
 		# returns to user space.
 		#
 
-		cldr	$k0, $k0($c28)
+		cld 	$k0, $k0, 0($c28)
 		dmtc0	$k0, $14
 
 		nop

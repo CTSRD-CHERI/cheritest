@@ -90,10 +90,10 @@ test:		.ent test
 		#
 
 		dla	$t1, data
-		clbr	$t0, $t1($c1)
-		clhr	$t0, $t1($c1)
-		clwr	$t0, $t1($c1)
-		cldr	$t0, $t1($c1)
+		clb 	$t0, $t1, 0($c1)
+		clh 	$t0, $t1, 0($c1)
+		clw 	$t0, $t1, 0($c1)
+		cld 	$t0, $t1, 0($c1)
 		csetoffset $c1, $c1, $t1
 		cllb	$t0, $c1
 		cllh	$t0, $c1

@@ -41,7 +41,7 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dla	$t0, cap
-		clcr	$c1, $t0($c0)
+		clc 	$c1, $t0, 0($c0)
 		cfromptr $c2, $c0, $zero
 
 		ceq	$a0, $c1, $c2

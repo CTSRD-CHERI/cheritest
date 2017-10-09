@@ -47,9 +47,9 @@ test:		.ent test
 		candperm $c2, $c2, $t0
 
 		dla	$t0, cap1
-		clcr	$c1, $t0($c2)
+		clc 	$c1, $t0, 0($c2)
 		dla	$t0, cap2
-		cscr	$c1, $t0($c0)
+		csc 	$c1, $t0, 0($c0)
 
 		ld	$a0, 0($t0)
 

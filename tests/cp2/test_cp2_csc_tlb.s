@@ -144,14 +144,14 @@ testcode:
 		cincoffset $c1, $c0, $t0
 		csetbounds	$c1, $c1, $t0
 		ccleartag $c1, $c1
-		cscr	$c1, $a2($c0)
+		csc 	$c1, $a2, 0($c0)
 
 		dli	$a5, 4
 
 		#
 		# Check to see if the capability store succeeded
 		#
-		clcr     $c2, $a2($c0)
+		clc      $c2, $a2, 0($c0)
 		cgetbase $a3, $c2
 		cgetlen  $a4, $c2
 		cgettag  $a6, $c2

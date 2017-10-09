@@ -64,7 +64,7 @@ test:		.ent test
 		nop
 		nop
 		# Load $a0 and use it immediately
-		clbur   $a0, $zero($c1)
+		clbu    $a0, $zero, 0($c1)
 		daddu   $a1, $a1, $a0
 
 		ld	$fp, 16($sp)

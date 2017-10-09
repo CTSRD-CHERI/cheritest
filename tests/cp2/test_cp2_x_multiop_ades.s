@@ -103,11 +103,11 @@ test:		.ent test
 
 		dli	$t1, 127	# unaligned, probably spans cache line
 
-		cscr	$c2, $t1($c1)
+		csc 	$c2, $t1, 0($c1)
 		# csbr will work at any alignment
-		cshr	$t0, $t1($c1)
-		cswr	$t0, $t1($c1)
-		csdr	$t0, $t1($c1)
+		csh 	$t0, $t1, 0($c1)
+		csw 	$t0, $t1, 0($c1)
+		csd 	$t0, $t1, 0($c1)
 		csetoffset $c3, $c1, $t1
 		csch	$t0, $t2, $c3
 		cscw	$t0, $t2, $c3

@@ -54,7 +54,7 @@ test:		.ent test
 		csetoffset $c1, $c1, $t0
 
 		dla	$t0, cap1
-		cscr	$c1, $t0($c0)
+		csc 	$c1, $t0, 0($c0)
 
 		dla	$t1, cap2
 		ld	$t2, 0($t0)
@@ -66,7 +66,7 @@ test:		.ent test
 		ld	$t2, 24($t0)
 		sd	$t2, 24($t1)
 
-		clcr	$c2, $t1($c0)
+		clc 	$c2, $t1, 0($c0)
 
 		cgettag $a0, $c2
 

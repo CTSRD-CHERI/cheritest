@@ -140,7 +140,7 @@ testcode:
 		dli	$t0, 64
 		csetoffset $c1, $c1, $t0
 		csetbounds $c1, $c1, $t0
-		cscr	$c1, $a2($c0)
+		csc 	$c1, $a2, 0($c0)
 
 		dli	$a5, 4
 
@@ -160,7 +160,7 @@ exception_handler:
 		# Check to see if the capability store succeeded
 		#
 
-		# clcr	$c2, $a2($c0)
+		# clc 	$c2, $a2, 0($c0)
 		# cgetbase $a3, $c2
 		# cgetlen	 $a4, $c2
 		# ld	$a3, 16($a2)
