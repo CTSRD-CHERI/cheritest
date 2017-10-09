@@ -52,10 +52,10 @@ start:
                 # Clear BEV bit
 		#
 
-                mfc0	$t0, $12
+		mfc0	$t0, $12
 		ori	$t0, $t0, 0xe0	# Set KX, DX, UX
 		dli	$t1, 1 << 22	# BEV bit
-		nor	$t1, $t1
+		nor	$t1, $t1, $t1
 		and	$t0, $t0, $t1
 		mtc0	$t0, $12
 

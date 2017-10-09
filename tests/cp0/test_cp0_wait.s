@@ -103,7 +103,7 @@ bev0_handler:
 
 		mfc0	$t0, $12
 		li	$t1, 0x8000
-		nor	$t1, $t1
+		nor	$t1, $t1, $t1
 		and	$t0, $t0, $t1
 		mtc0	$t0, $12
 		

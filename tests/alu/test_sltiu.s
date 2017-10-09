@@ -56,7 +56,7 @@ test:		.ent test
 		sltiu	$a2, $zero, 1
 
 		# sltiu sign extends its immediate, so this should be true:
-		sltiu	$a3, $t3, 0xffff
+		sltiu	$a3, $t3, -1
 
 		# sltiu does an unsigned comparision, so this should be false
 		sltiu	$a4, $t1, 0

@@ -321,7 +321,7 @@ __assert_fail:
 		dadd $v0, $a0, $zero
 		# Store -1 in v1 so it's easy to visually spot that a test failed from
 		# a register dump
-		daddi $v1, $zero, 0xffff
+		dli $v1, -1
 		# TODO: Export the registers and die when not running in the simulator.
 		# Dump MIPS registers
 		mtc0 $at, $26
