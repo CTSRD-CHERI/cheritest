@@ -20,6 +20,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
+from builtins import range
 
 NUM_GREGS=32
 
@@ -58,7 +59,7 @@ class CrossVariation(Variation):
     def iterate_values(self):
         variations=inspect.getmembers(self.__class__, lambda m: isinstance(m,Variation))
         for p in itertools.product(*(v[1].iterate_values() for v in variations)):
-            yield dict((variations[i][0],p[i]) for i in xrange(len(variations)))
+            yield dict((variations[i][0],p[i]) for i in range(len(variations)))
 
 class MIPSInstruction(CrossVariation):
     pass

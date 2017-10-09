@@ -32,6 +32,7 @@
 
 import tools.gxemul, tools.sim
 import os, re, itertools
+from builtins import range
 
 # Parameters from the environment
 # Cached or uncached mode.
@@ -64,5 +65,5 @@ class TestFuzz(object):
         gxemul_log = open(os.path.join("gxemul_log", test_name + '_gxemul' +cached + ".log"), 'rt')
         gxemul_status= tools.gxemul.MipsStatus(gxemul_log)
         
-        for reg in xrange(len(tools.gxemul.MIPS_REG_NUM2NAME)):
+        for reg in range(len(tools.gxemul.MIPS_REG_NUM2NAME)):
             assert sim_status[reg] == gxemul_status[reg], "%s: (sim) 0x%016x != 0x%016x (gxemul) " % (tools.gxemul.MIPS_REG_NUM2NAME[reg], sim_status[reg], gxemul_status[reg])

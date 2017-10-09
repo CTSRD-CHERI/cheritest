@@ -1,5 +1,6 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+from builtins import range
 import os
 import tools.sim
 expected_uncached=[
@@ -75,6 +76,6 @@ class test_regfuzz_tlb_00004742(BaseBERITestCase):
   def test_registers_expected(self):
     cached=bool(int(os.getenv('CACHED',False)))
     expected=expected_cached if cached else expected_uncached
-    for reg in xrange(len(tools.sim.MIPS_REG_NUM2NAME)):
+    for reg in range(len(tools.sim.MIPS_REG_NUM2NAME)):
       self.assertRegisterExpected(reg, expected[reg])
 

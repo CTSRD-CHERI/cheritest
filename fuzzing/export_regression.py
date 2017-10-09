@@ -25,6 +25,7 @@
 
 import tools.gxemul, tools.sim
 import os
+from builtins import range
 
 def export_test(test_name, options):
     uncached_gxemul_log    = open(os.path.join("gxemul_log", test_name + '_gxemul.log'), 'rt')
@@ -38,14 +39,15 @@ def export_test(test_name, options):
         attrs=attrs + "@attr('tlb')"
     print """from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+from builtins import range
 import os
 import tools.sim
 expected_uncached=["""
-    for reg in xrange(len(tools.gxemul.MIPS_REG_NUM2NAME)):
+    for reg in range(len(tools.gxemul.MIPS_REG_NUM2NAME)):
         print "    0x%x," % uncached_gxemul_status[reg]
     print """  ]
 expected_cached=["""
-    for reg in xrange(len(tools.gxemul.MIPS_REG_NUM2NAME)):
+    for reg in range(len(tools.gxemul.MIPS_REG_NUM2NAME)):
         print "    0x%x," % cached_gxemul_status[reg]
     print """  ]
 class %(testname)s(BaseBERITestCase):
@@ -53,7 +55,7 @@ class %(testname)s(BaseBERITestCase):
   def test_registers_expected(self):
     cached=bool(int(os.getenv('CACHED',False)))
     expected=expected_cached if cached else expected_uncached
-    for reg in xrange(len(tools.sim.MIPS_REG_NUM2NAME)):
+    for reg in range(len(tools.sim.MIPS_REG_NUM2NAME)):
       self.assertRegisterExpected(reg, expected[reg])
 """ % {'attrs':attrs, 'testname':new_name}
 
