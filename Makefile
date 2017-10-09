@@ -131,6 +131,7 @@ endif
 
 CLANG_CMD=$(CHERI_SDK)/clang -integrated-as
 # CLANG_CMD=/Users/alex/cheri/llvm/cmake-build-debug/bin/clang-6.0 -integrated-as
+OBJDUMP?=$(CHERI_SDK)/llvm-objdump
 
 ifdef CHERI_SDK_USE_GNU_BINUTILS
 CHERI_SDK_USE_GNU_AS:=1
@@ -2158,9 +2159,9 @@ $(OBJDIR)/%.hex : $(OBJDIR)/%.mem
 
 #
 # Provide an annotated disassembly for the ELF image to be used in diagnosis.
-#
+# (Use flags that work for both GNU objdump and llvm-objdump
 $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
-	$(OBJDUMP) -xsSD $< > $@
+	$(OBJDUMP) -p -h -s -S -D -l $< > $@
 
 $(LOGDIR)/test_raw_trace.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace.trace
 $(LOGDIR)/test_raw_trace_cached.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace_cached.trace
