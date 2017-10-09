@@ -2432,5 +2432,9 @@ nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
 xmlcat: xmlcat.c
 	$(CC) -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
 
+
+test_elfs: $(TEST_ELFS)
+	@echo "Build all test .elf files"
+
 cleanerror:
 	find log -size 0 | xargs -r --verbose rm
