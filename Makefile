@@ -165,7 +165,7 @@ endif # CHERI_SDK_USE_GNU_AS
 
 # default to linking with LLD unless CHERI_SDK_USE_GNU_LD is set
 ifndef CHERI_SDK_USE_GNU_LD
-MIPS_LD=$(CHERI_SDK)/ld.lld --fatal-warnings -process-cap-relocs --verbose-cap-relocs
+MIPS_LD=$(CHERI_SDK)/ld.lld --fatal-warnings -process-cap-relocs
 CAPSIZEFIX = :
 else
 MIPS_LD=$(CHERI_SDK)/ld.bfd --fatal-warnings
