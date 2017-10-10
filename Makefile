@@ -165,7 +165,8 @@ endif # CHERI_SDK_USE_GNU_AS
 
 # default to linking with LLD unless CHERI_SDK_USE_GNU_LD is set
 ifndef CHERI_SDK_USE_GNU_LD
-MIPS_LD=$(CHERI_SDK)/ld.lld --fatal-warnings
+MIPS_LD=$(CHERI_SDK)/ld.lld --fatal-warnings -process-cap-relocs --verbose-cap-relocs
+CAPSIZEFIX = :
 else
 MIPS_LD=$(CHERI_SDK)/ld.bfd --fatal-warnings
 endif
@@ -179,6 +180,8 @@ MIPS_AS?=mips64-as
 MIPS_LD?=mips-linux-gnu-ld
 OBJCOPY?=mips64-objcopy
 OBJDUMP?=mips64-objdump
+CAPSIZEFIX?= $(CHERI_SDK)/capsizefix --verbose $(1)
+
 
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
