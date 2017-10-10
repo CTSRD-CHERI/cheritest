@@ -2057,16 +2057,12 @@ cleantest:
 	rm -f $(SAIL_CHERI_EMBED_TEST_LOGS)
 	rm -f $(SAIL_CHERI128_TEST_LOGS)
 	rm -f $(SAIL_CHERI128_EMBED_TEST_LOGS)
-	rm -f $(QEMU_TEST_LOGS)
+	rm -f $(QEMU_LOGDIR)/*.log
+	rm -f $(LOGDIR)/*.log
 	rm -f $(L3_LOGDIR)/*.err
 
 clean: cleantest
-	rm -f $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) $(TEST_LIB_OBJECT)
-	rm -f $(TEST_INIT_MULTI_OBJECT)
-	rm -f $(TEST_OBJS) $(TEST_ELFS) $(TEST_MEMS) $(TEST_DUMPS)
-	rm -f $(TEST_CACHED_ELFS) $(TEST_CACHED_MEMS) $(TEST_CACHED_DUMPS)
-	rm -f $(TEST_MULTI_ELFS) $(TEST_MULTI_MEMS) $(TEST_MULTI_DUMPS)
-	rm -f log/*.log obj/*.mem obj/*.o obj/*.elf obj/*.dump qemu_log/*.log
+	rm -f $(OBJDIR)/*.mem $(OBJDIR)/*.o $(OBJDIR)/*.elf $(OBJDIR)/*.dump
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
