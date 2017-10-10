@@ -274,7 +274,7 @@ dump_core0:
 		
 end:
 		b end
-		nop
+		daddiu $zero, $zero, 0  # load zero nop to indicate core 0
 
 
 dump_not_thread0:
@@ -301,7 +301,8 @@ dump_not_core0:
 
 end_not_core0:
 		b end_not_core0
-		nop
+		daddiu $zero, $zero, 1 # load 1 nop to indicate core != 0
+
 .end start
 
 		.ent exception_count_handler
