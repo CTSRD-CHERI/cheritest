@@ -2108,10 +2108,10 @@ endif
 
 # Purecap tests (must come first due to make pattern precedence)make:
 
-PURECAP_ASMDEFS=$(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2)      \
-		$(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE)      \
-		$(DEFSYM_FLAG)BUILDING_PURECAP=1        \
-		$(DEFSYM_FLAG)DIE_ON_EXCEPTION=1
+PURECAP_ASMDEFS=-Wa,-defsym,TEST_CP2=$(TEST_CP2)      \
+		-Wa,-defsym,CAP_SIZE=$(CAP_SIZE)      \
+		-Wa,-defsym,BUILDING_PURECAP=1        \
+		-Wa,-defsym,DIE_ON_EXCEPTION=1
 
 $(OBJDIR)/purecap_init.o: init.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
@@ -2123,8 +2123,8 @@ $(OBJDIR)/test_purecap_%.o: test_purecap_%.s
 
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o $(OBJDIR)/purecap_lib.o
 
-$(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o $(TEST_LDSCRIPT) $(PURECAP_INIT_OBJS)
-	$(MIPS_LD) -EB -G0 -T$(TEST_LDSCRIPT) $(PURECAP_INIT_OBJS) $< -o $@ -m elf64btsmip_cheri_fbsd
+$(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP_INIT_OBJS)
+	$(MIPS_LD) -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 
 # Once the assembler works, we can try this version too:
