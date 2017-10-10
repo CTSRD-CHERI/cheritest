@@ -100,6 +100,7 @@
 #
 TEST_CP2?=1
 CLANG?=1
+PURECAP?=1
 MULTI?=0
 MT?=0
 STATCOUNTERS?=0
@@ -1212,7 +1213,7 @@ endif
 
 
 ifeq ($(PURECAP), 1)
-TEST_PURECAP_FILES=test_purecap_clang_atomic.c
+TEST_PURECAP_FILES=$(notdir $(wildcard tests/purecap/test_*.c))
 endif
 
 TEST_CLANG_FILES=				\
