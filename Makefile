@@ -128,7 +128,11 @@ CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension
 HYBRID_CFLAGS?=-fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections
 PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
 
-
+# Use the default names from the ubuntu mips64-binutils
+AS:=mips64-as
+LD:=mips64-ld
+OBJCOPY:=mips64-objcopy
+OBJDUMP:=mips64-objdump
 
 # If CHERI_SDK is set use the binaries from the CHERI SDK
 ifneq ($(CHERI_SDK),)
@@ -175,17 +179,13 @@ endif
 
 QEMU?=$(CHERI_SDK)/qemu-system-cheri
 
-endif
+endif # neq(CHERI_SDK,)
 
 ifndef LLD
 LD?=mips-linux-gnu-ld
 else
 LD=$(LLD)
 endif
-# Use the default names from the ubuntu mips64-binutils
-AS?=mips64-as
-OBJCOPY?=mips64-objcopy
-OBJDUMP?=mips64-objdump
 
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
