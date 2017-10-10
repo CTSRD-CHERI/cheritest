@@ -145,8 +145,8 @@ else
 OBJCOPY?=$(CHERI_SDK)/objcopy
 endif
 
-# For now force using the GNU AS since clang doesn't quite work
-CHERI_SDK_USE_GNU_AS?=1
+# For now force using the GNU AS since clang doesn't quite work (5 tests broken)
+# CHERI_SDK_USE_GNU_AS?=1
 # But LLD seems to work fine
 # CHERI_SDK_USE_GNU_BINUTILS?=1
 
@@ -225,14 +225,13 @@ TESTDIRS=					\
 		$(TESTDIR)/cache		\
 		$(TESTDIR)/cp0			\
 		$(TESTDIR)/cp2			\
-		$(TESTDIR)/c			\
 		$(TESTDIR)/mt			\
 		$(TESTDIR)/pic			\
 		$(TESTDIR)/dma			
 
+CLANG_TESTDIRS=$(TESTDIR)/cframework $(TESTDIR)/c
 ifeq ($(CLANG),1)
-TESTDIRS+= $(TESTDIR)/cframework
-TESTDIRS+= $(TESTDIR)/cheriabi
+TESTDIRS+=$(CLANG_TESTDIRS)
 endif
 
 ifeq ($(MULTI),1)
@@ -2516,6 +2515,16 @@ nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
 
 xmlcat: xmlcat.c
 	$(CC) -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
+
+
+CLANG_TESTS := $(basename $(TEST_CLANG_FILES) $(C_FRAMEWORK_FILES))
+QEMU_CLANG_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CLANG_TESTS)))
+
+qemu_clang_tests: qemu_clang_tests.xml
+qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
+	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
+	--xunit-file=$@ -v $(CLANG_TESTDIRS) || true
 
 
 test_elfs: $(TEST_ELFS)
