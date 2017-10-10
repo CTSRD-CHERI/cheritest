@@ -307,6 +307,23 @@ unhandled_exception:
 		mtc0 $at, $23        
 		.end unhandled_exception
 
+
+.set assertion_error_generic,  0xdead0000
+.set assertion_error_long_cmp, 0xdead0001
+.set assertion_error_cap_cmp,  0xdead000c
+
+
+# The following functions may be called from purecap code or from non-purecap code
+# Therefore we need to either use cjr or jr
+.macro return_to_caller
+.if (BUILDING_PURECAP == 1)
+	cjr $c17
+.else
+	jr $ra
+.endif
+	nop
+.endm
+
 #
 # __assert(line number)
 # Leaves the line number in v0 (and a0), dumps registers and aborts the
@@ -316,27 +333,53 @@ unhandled_exception:
 		.global __assert_fail
 		.ent __assert_fail
 __assert_fail:
-		# Store the first argument in v0.  On a successful test result, the
+		# Store 0xdead in v0.  On a successful test result, the
 		# test will return 0 (in v0), so a non-zero value here on exit means
 		# that the test failed.
-		dadd $v0, $a0, $zero
+		dli $v0, assertion_error_generic
 		# Store -1 in v1 so it's easy to visually spot that a test failed from
 		# a register dump
 		dli $v1, -1
-		# TODO: Export the registers and die when not running in the simulator.
-		# Dump MIPS registers
-		mtc0 $at, $26
-		# Dump capability registers
-		.if(TEST_CP2 == 1)
-		  mtc2 $k0, $0, 6
-		.else
-		  nop
-		.endif
-		# Kill the simulator
-		mtc0 $at, $23
-		b end
+		b finish
 		nop
 .end __assert_fail
+
+
+# Compare capability and fail otherwise
+# void __asert_eq_long(long line, long actual, long expected)
+		.global __assert_eq_long
+		.ent __assert_eq_long
+__assert_eq_long:
+		bne $a1, $a2, L__assert_eq_long_fail
+		nop
+		return_to_caller
+L__assert_eq_long_fail:
+		# tell the test the that an integer comparison failed by writing to $v0
+		dli $v0, assertion_error_long_cmp
+		b finish
+		nop
+.end __assert_eq_long
+
+# Compare capability and fail otherwise
+# void __asert_eq_cap(long line, void* __capability actual, void* __capability expected)
+		.global __assert_eq_cap
+		.ent __assert_eq_cap
+__assert_eq_cap:
+.if(TEST_CP2 == 1)
+		cexeq $v0, $c3, $c4
+.else
+		dli $v0, 0  # always fail
+.endif
+		# if both capabilities are identical $v0 will contain 1
+		beqz $v0, L__assert_eq_cap_fail
+		nop
+		return_to_caller
+L__assert_eq_cap_fail:
+		# tell the test the that a capability comparison failed by writing to $v0
+		dli $v0, assertion_error_cap_cmp
+		b finish
+		nop
+.end __assert_eq_cap
 
 
 # C-compatible memcpy, wrapping the capability version

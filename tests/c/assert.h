@@ -43,6 +43,13 @@ void  __assert(int cond, int line)
 }
 #define assert(cond) __assert(cond, __LINE__)
 
+extern void __assert_eq_long(int line, long actual, long expected);
+#define assert_eq(actual, expected) __assert_eq_long(__LINE__, actual, expected)
+
+extern void __assert_eq_cap(int line, void* __capability actual, void* __capability expected);
+#define assert_eq_cap(actual, expected) __assert_eq_cap(__LINE__, actual, expected)
+
+
 // Dumps a value into a specified register.  Useful for debugging test cases.
 #define DEBUG_DUMP_REG(regno, val) \
     __asm__ volatile ("dadd $" #regno ", %0, $0" : : "r" (val) : #regno);

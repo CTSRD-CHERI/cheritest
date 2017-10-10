@@ -189,7 +189,8 @@ no_float:
 				
 		# Dump capability registers in the simulator
 		#
-		
+		.global finish
+finish:
 		j continue_finish
 		mtc2 $k0, $0, 6
 

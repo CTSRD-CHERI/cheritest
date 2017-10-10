@@ -40,41 +40,41 @@ _Atomic(long long) d = 42;
 
 int test(void)
 {
-	assert(*(long long*)&d == 42);
+	assert_eq(*(long long*)&d, 42);
 	*(long long*)&d = 42;
-	assert(*(long long*)&d == 42);
-	assert(d == 42);
+	assert_eq(*(long long*)&d, 42);
+	assert_eq(d, 42);
 	d++;
-	assert(d == 43);
+	assert_eq(d, 43);
 	(*(long long*)(&d))++;
-	assert(d == 44);
+	assert_eq(d, 44);
 	
-	assert(*(int*)&w == 42);
+	assert_eq(*(int*)&w, 42);
 	*(int*)&w = 42;
-	assert(*(int*)&w == 42);
-	assert(w == 42);
+	assert_eq(*(int*)&w, 42);
+	assert_eq(w, 42);
 	w++;
-	assert(w == 43);
+	assert_eq(w, 43);
 	(*(int*)(&w))++;
-	assert(w == 44);
+	assert_eq(w, 44);
 	
-	assert(*(short*)&h == 42);
+	assert_eq(*(short*)&h, 42);
 	*(short*)&h = 42;
-	assert(*(short*)&h == 42);
-	assert(h == 42);
+	assert_eq(*(short*)&h, 42);
+	assert_eq(h, 42);
 	h++;
-	assert(h == 43);
+	assert_eq(h, 43);
 	(*(short*)(&h))++;
-	assert(h == 44);
+	assert_eq(h, 44);
 	
-	assert(*(char*)&c == 42);
+	assert_eq(*(char*)&c, 42);
 	*(char*)&c = 42;
-	assert(*(char*)&c == 42);
-	assert(c == 42);
+	assert_eq(*(char*)&c, 42);
+	assert_eq(c, 42);
 	c++;
-	assert(c == 43);
+	assert_eq(c, 43);
 	(*(char*)(&c))++;
-	assert(c == 44);
+	assert_eq(c, 44);
 	
 	return 0;
 }

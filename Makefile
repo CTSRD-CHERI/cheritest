@@ -2116,12 +2116,12 @@ endif
 # Purecap tests (must come first due to make pattern precedence)make:
 
 $(OBJDIR)/purecap_init.o: init.s
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) $(DEFSYM_FLAG)BUILDING_PURECAP=1 -o $@ $<
 $(OBJDIR)/purecap_lib.o: lib.s
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) $(DEFSYM_FLAG)BUILDING_PURECAP=1 -o $@ $<
 # For some reason this doesn't work as a wildcard rule:
 $(OBJDIR)/test_purecap_%.o: test_purecap_%.s
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) $(DEFSYM_FLAG)BUILDING_PURECAP=1 -o $@ $<
 
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o $(OBJDIR)/purecap_lib.o
 
