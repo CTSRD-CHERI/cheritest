@@ -26,10 +26,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.macro  ccallfast   ccode, cdata
-        .word (0x12 << 26) | (0x05 << 21) | (\ccode << 16) | (\cdata << 11) | 42
-.endm
-
 .set mips64
 .set noreorder
 .set nobopt
@@ -100,7 +96,7 @@ test:		.ent test
         li          $t1, 0      # clear $t1, a change in $t1 means failure.
 
         # do the ccallfast and access IDC in the delay slot
-        ccallfast   1, 2
+	ccall	    $c1, $c2, 1
         cmove       $c25, $c26
 
 restored_ra:

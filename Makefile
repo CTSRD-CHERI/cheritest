@@ -1631,12 +1631,9 @@ and not berisyncistep \
 and not bev1ram \
 and not countrate \
 and not gxemultlb \
-and not ccall_hw_2 \
-and not cgetpccsetoffset \
 and not config2 \
 and not config3 \
 and not counterdev \
-and not csettype \
 and not deterministic_random \
 and not dma \
 and not dmaclang \

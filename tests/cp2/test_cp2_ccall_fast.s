@@ -28,13 +28,6 @@
 
 .include "macros.s"
 
-#.macro  ccallfast   ccode, cdata
-#        ccall       \ccode, \cdata, 42
-#.endm
-.macro  ccallfast   ccode, cdata
-        .word (0x12 << 26) | (0x05 << 21) | (\ccode << 16) | (\cdata << 11) | 42
-.endm
-
 .set mips64
 .set noreorder
 .set nobopt
@@ -264,8 +257,7 @@ invoke:         .ent invoke
                 #cfromptr    $c30, $c30, $zero
                 #cfromptr    $c31, $c31, $zero
                 # call new domain
-                #ccallfast   $c1, $c2
-                ccallfast   1, 2
+                ccall   $c1, $c2, 1
                 .end invoke
 
 uninvoke:       .ent uninvoke
@@ -336,8 +328,7 @@ uninvoke:       .ent uninvoke
                 #cfromptr    $c30, $c30, $zero
                 #cfromptr    $c31, $c31, $zero
                 # call new domain
-                #ccallfast   $c1, $c2
-                ccallfast   1, 2
+                ccall   $c1, $c2, 1
                 .end uninvoke
 
                 .data
