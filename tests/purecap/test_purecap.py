@@ -88,6 +88,9 @@ class TestClang(object):
                     exception_message = "clang assert_eq cap failed at line %d: %s" % (line_number, self.get_line(test_name, line_number))
                     exception_message += "\n>>>> Expected: " + str(sim_status.threads[0].cp2[3])
                     exception_message += "\n>>>> Actual:   " + str(sim_status.threads[0].cp2[4])
+                elif exit_code == 0xbadc:
+                    exception_message = "Died due to exception"
+                    # TODO: regdump?
                 else:
                     exception_message = "unknown test exit status %d" % (exit_code)
                 if exception_count != 0:

@@ -306,6 +306,11 @@ end_not_core0:
 
 		.ent exception_count_handler
 exception_count_handler:
+.ifdef DIE_ON_EXCEPTION
+		# TODO: only do this on a CP2 exception!
+		dli $v0, 0xbadc
+		b finish
+.endif
 		daddu	$sp, $sp, -32
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
