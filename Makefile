@@ -230,6 +230,10 @@ TESTDIRS=					\
 		$(TESTDIR)/dma			
 
 CLANG_TESTDIRS=$(TESTDIR)/cframework $(TESTDIR)/c
+ifeq ($(PURECAP),1)
+CLANG_TESTDIRS+=$(TESTDIR)/purecap
+endif
+
 ifeq ($(CLANG),1)
 TESTDIRS+=$(CLANG_TESTDIRS)
 endif
@@ -2107,8 +2111,8 @@ endif
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-$(OBJDIR)/test_cheriabi_clang%.o : test_cheriabi_clang%.c
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -mabi=purecap -integrated-as -o $@ $<  -O3 -ffunction-sections
+$(OBJDIR)/test_purecap%.o : test_purecap%.c
+	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -fno-pic -o $@ $<
 
 $(OBJDIR)/test_%.o : test_%.c
 	$(CLANG_CC) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
