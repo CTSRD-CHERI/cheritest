@@ -130,7 +130,7 @@ PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrat
 
 # Use the default names from the ubuntu mips64-binutils
 AS:=mips64-as
-LD:=mips64-ld
+LD:=mips-linux-gnu-ld
 OBJCOPY:=mips64-objcopy
 OBJDUMP:=mips64-objdump
 
