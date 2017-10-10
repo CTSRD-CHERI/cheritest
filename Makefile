@@ -1213,7 +1213,8 @@ endif
 
 
 ifeq ($(PURECAP), 1)
-TEST_PURECAP_FILES=$(notdir $(wildcard tests/purecap/test_*.c))
+TEST_PURECAP_FILES=$(notdir $(wildcard tests/purecap/test_*.c)) \
+			test_purecap_reg_init.s
 endif
 
 TEST_CLANG_FILES=				\
@@ -1926,6 +1927,8 @@ TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/statcounters/,$(basename $(RAW_STATCOUNTERS_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/multicore/,$(basename $(TEST_MULTICORE_FILES))))
 
+# XXXAR: shouldn't this also include test/c/clang_test.py, etc.?
+
 CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(LOGDIR)/,$(TESTS)))
@@ -2091,9 +2094,6 @@ $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_A
 $(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s
 	$(AS) -I $(TESTDIR)/statcounters -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
-$(OBJDIR)/test_%.o : test_%.s macros.s
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
-
 # Put DMA model makefile into its own file. This one is already ludicrously
 # large.
 ifeq ($(DMA),1)
@@ -2122,6 +2122,9 @@ $(OBJDIR)/purecap_init.o: init.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 $(OBJDIR)/purecap_lib.o: lib.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+# For some reason this doesn't work as a wildcard rule:
+$(OBJDIR)/test_purecap_%.o: test_purecap_%.s
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o $(OBJDIR)/purecap_lib.o
 
@@ -2137,6 +2140,8 @@ $(OBJDIR)/test_clang%.o : test_clang%.c
 $(OBJDIR)/test_purecap%.o : test_purecap%.c
 	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 
+$(OBJDIR)/test_%.o : test_%.s macros.s
+	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 $(OBJDIR)/test_%.o : test_%.c
 	$(CLANG_CC) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
 
