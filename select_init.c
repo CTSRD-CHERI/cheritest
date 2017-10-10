@@ -114,20 +114,20 @@ int build;
     switch (build)
     {
       case BUILD_UNCACHED:
-        printf("-Ttest.ld obj/lib.o\n");
+        printf("-Ttest.ld obj/init.o obj/lib.o\n");
         break;
       case BUILD_CACHED:
-        printf("-Ttest_cached.ld obj/init_cached.o obj/lib.o\n");
+        printf("-Ttest_cached.ld obj/init_cached.o obj/init.o obj/lib.o\n");
         break;
       case BUILD_UNCACHED_MULTI:
         /* Non-raw tests don't need init_multi.o, because init.o takes
          * care of multicore initialization.
          */
-        printf("-Ttest_cached.ld obj/lib.o\n");
+        printf("-Ttest_cached.ld obj/init.o obj/lib.o\n");
         break;
       case BUILD_CACHED_MULTI:
         /* Non-raw tests don't need init_multi.o */
-        printf("-Ttest_cached.ld obj/init_cached.o obj/lib.o\n");
+        printf("-Ttest_cached.ld obj/init_cached.o obj/init.o obj/lib.o\n");
         break;
     }
   }

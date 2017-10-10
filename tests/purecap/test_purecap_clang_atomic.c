@@ -40,7 +40,7 @@ _Atomic(long long) d = 42;
 
 int test(void)
 {
-  assert(*(long long*)&d == 42);
+	assert(*(long long*)&d == 42);
 	*(long long*)&d = 42;
 	assert(*(long long*)&d == 42);
 	assert(d == 42);

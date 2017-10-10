@@ -157,7 +157,7 @@ endif
 
 # default to assembling with clang unless CHERI_SDK_USE_GNU_AS is set
 ifndef CHERI_SDK_USE_GNU_AS
-AS=$(CLANG_CC) -target cheri-unknown-freebsd -fno-pic -c -Wno-unused-command-line-argument -mno-abicalls
+AS=$(CLANG_AS)
 # TODO: use llvm-mc?
 # AS=$(CHERI_SDK)/llvm-mc -filetype=obj -foo
 USING_LLVM_ASSEMBLER=1
@@ -198,6 +198,7 @@ CLANG_CC?=$(CLANG_CMD) -mllvm -cheri128
 else
 CLANG_CC?=$(CLANG_CMD)
 endif
+CLANG_AS=$(CLANG_CC) -target cheri-unknown-freebsd -fno-pic -c -Wno-unused-command-line-argument -mno-abicalls
 
 USING_LLVM_ASSEMBLER?=0
 ifeq ($(USING_LLVM_ASSEMBLER),1)
@@ -230,8 +231,9 @@ TESTDIRS=					\
 		$(TESTDIR)/dma			
 
 CLANG_TESTDIRS=$(TESTDIR)/cframework $(TESTDIR)/c
+PURECAP_TESTDIRS=$(TESTDIR)/purecap
 ifeq ($(PURECAP),1)
-CLANG_TESTDIRS+=$(TESTDIR)/purecap
+CLANG_TESTDIRS+=$(PURECAP_TESTDIRS)
 endif
 
 ifeq ($(CLANG),1)
@@ -1181,6 +1183,7 @@ TEST_TRAPI_FILES=				\
 
 TEST_PIC_FILES=test_pic_irq.s
 
+TEST_PURECAP_FILES=
 # Don't attempt to build clang tests unless CLANG is set to 1, because clang might not be available
 # This will cause clang tests to fail but that is better than make falling over.
 # The DMA engine also depends on clang, and works in the same way
@@ -1205,6 +1208,11 @@ endif
 
 ifeq ($(DMA_VIRT), 1)
 TEST_DMA_FILES+=test_clang_dma_virt_translate.c
+endif
+
+
+ifeq ($(PURECAP), 1)
+TEST_PURECAP_FILES=test_purecap_clang_atomic.c
 endif
 
 TEST_CLANG_FILES=				\
@@ -1322,6 +1330,7 @@ TEST_FILES=					\
 		$(FUZZ_DMA_FILES)		\
 		$(C_FRAMEWORK_FILES)		\
 		$(TEST_CLANG_FILES)		\
+		$(TEST_PURECAP_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)		\
 		$(RAW_STATCOUNTERS_FILES)	\
@@ -2106,13 +2115,26 @@ $(OBJDIR)/DMAControl.o: DMAControl.c
 endif
 
 
+# Purecap tests (must come first due to make pattern precedence)make:
+
+$(OBJDIR)/purecap_init.o: init.s
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+$(OBJDIR)/purecap_lib.o: lib.s
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+
+PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o $(OBJDIR)/purecap_lib.o
+
+$(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o $(TEST_LDSCRIPT) $(PURECAP_INIT_OBJS)
+	$(LD) -EB -G0 -T$(TEST_LDSCRIPT) $(PURECAP_INIT_OBJS) $< -o $@ -m elf64btsmip_cheri_fbsd
+
+
 # Once the assembler works, we can try this version too:
 #$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(OBJDIR)/test_purecap%.o : test_purecap%.c
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -fno-pic -o $@ $<
+	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 
 $(OBJDIR)/test_%.o : test_%.c
 	$(CLANG_CC) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
@@ -2128,9 +2150,9 @@ select_init: select_init.c
 #
 
 #$(OBJDIR)/test_clang_dma_simple.elf : $(OBJDIR)/test_clang_dma_simple.o $(DMA_LIB_OBJS)\
-	    #$(TEST_LDSCRIPT) \
-	    #$(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
-	#$(LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
+#	    #$(TEST_LDSCRIPT) \
+#	    #$(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
+#	$(LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
 $(OBJDIR)/startdramtest.elf: $(OBJDIR)/startdramtest.o $(TEST_LDSCRIPT)
 	$(LD) -EB -G0 raw.ld $< -o $@ -m elf64btsmip
@@ -2521,7 +2543,7 @@ xmlcat: xmlcat.c
 	$(CC) -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
 
 
-CLANG_TESTS := $(basename $(TEST_CLANG_FILES) $(C_FRAMEWORK_FILES))
+CLANG_TESTS := $(basename $(TEST_CLANG_FILES) $(TEST_PURECAP_FILES) $(C_FRAMEWORK_FILES))
 QEMU_CLANG_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CLANG_TESTS)))
 
 qemu_clang_tests: qemu_clang_tests.xml
@@ -2529,6 +2551,14 @@ qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ -v $(CLANG_TESTDIRS) || true
+
+PURECAP_TESTS := $(basename $(TEST_PURECAP_FILES))
+PURECAP_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
+qemu_purecap_tests: qemu_purecap_tests.xml
+qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
+	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
+	--xunit-file=$@ -v $(PURECAP_TESTDIRS) || true
 
 
 test_elfs: $(TEST_ELFS)
