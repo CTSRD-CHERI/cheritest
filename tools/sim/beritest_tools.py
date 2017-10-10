@@ -52,7 +52,7 @@ def xfail_on(var):
     :param var: the machine where this test is expected to fail (e.g. "qemu"
     :return:
     '''
-    if os.environ.get("TEST_MACHINE").lower() == var.lower():
+    if os.environ.get("TEST_MACHINE", "").lower() == var.lower():
         return nose_xfail_hack
     return lambda x: x
 
