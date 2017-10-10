@@ -1,4 +1,4 @@
-#-
+# -
 # Copyright (c) 2011 Robert M. Norton
 # All rights reserved.
 #
@@ -25,8 +25,9 @@
 # Just checks that the test produced the appropriate pass value in v0 to indicate
 # that all c asserts passed. Cribbed from tests/fuzz/fuzz.py.
 
-import tools.gxemul, tools.sim
-import os, re, itertools
+from beritest_tools import TestClangBase
+import os
+import re
 from nose.plugins.attrib import attr
 
 # Parameters from the environment
@@ -36,36 +37,34 @@ MULTI = bool(int(os.environ.get("MULTI1", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-TEST_FILE_RE=re.compile('test_[\w_]*clang_\w+\.c')
-TEST_DIR ='tests/c'
-
+TEST_FILE_RE = re.compile('test_[\w_]*clang_\w+\.c')
+TEST_DIR = 'tests/c'
 
 LOG_DIR = os.environ.get("LOGDIR", "log")
 
-#Not derived from unittest.testcase because we wish test_clang to
-#return a generator.
-class TestClang(object):
+
+# Not derived from unittest.testcase because we wish test_clang to
+# return a generator.
+class TestClang(TestClangBase):
     @attr('clang')
     def test_clang(self):
         if ONLY_TEST:
             yield ('check_answer', ONLY_TEST)
         else:
-            for test in filter(lambda f: TEST_FILE_RE.match(f) ,os.listdir(TEST_DIR)):
-                test_name=os.path.splitext(os.path.basename(test))[0]
+            for test in filter(lambda f: TEST_FILE_RE.match(f),
+                               os.listdir(TEST_DIR)):
+                test_name = os.path.splitext(os.path.basename(test))[0]
                 yield ('check_answer', test_name)
-                
+
     def check_answer(self, test_name):
         if MULTI and CACHED:
-            suffix="_cachedmulti"
+            suffix = "_cachedmulti"
         elif MULTI:
-            suffix="_multi"
+            suffix = "_multi"
         elif CACHED:
-            suffix="_cached"
+            suffix = "_cached"
         else:
-            suffix=""
-        sim_log = open(os.path.join(LOG_DIR,test_name+suffix+".log"), 'rt')
-        sim_status=tools.sim.MipsStatus(sim_log)
-        regv0=sim_status[2]
-        if regv0 != 0:
-            line=open(os.path.join(TEST_DIR,test_name+'.c')).readlines()[regv0-1]
-            assert regv0 == 0, "clang assert failed at line %d: %s" % (regv0, line.strip())
+            suffix = ""
+        with open(os.path.join(LOG_DIR, test_name + suffix + ".log"),
+                  'rt') as sim_log:
+            self.verify_clang_test(sim_log, TEST_DIR, test_name)

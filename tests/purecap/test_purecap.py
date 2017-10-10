@@ -25,8 +25,9 @@
 # Just checks that the test produced the appropriate pass value in v0 to indicate
 # that all c asserts passed. Cribbed from tests/fuzz/fuzz.py.
 
-import tools.gxemul, tools.sim
-import os, re, itertools
+from beritest_tools import TestClangBase
+import os
+import re
 from nose.plugins.attrib import attr
 
 # Parameters from the environment
@@ -44,7 +45,7 @@ LOG_DIR = os.environ.get("LOGDIR", "log")
 
 # Not derived from unittest.testcase because we wish test_clang to
 # return a generator.
-class TestClang(object):
+class TestClangPurecap(TestClangBase):
     @attr('clang')
     @attr('capabilities')
     def test_purecap(self):
@@ -67,36 +68,4 @@ class TestClang(object):
             suffix = ""
         with open(os.path.join(LOG_DIR, test_name + suffix + ".log"),
                   'rt') as sim_log:
-            sim_status = tools.sim.MipsStatus(sim_log)
-            exit_code = sim_status[2]  # load the assertion failure kind from $v0
-            line_number = sim_status[4]  # load the assertion line number from $a0
-            exception_count = sim_status[26] # exception count should be in $k0
-            exception_message = ""
-            if exit_code != 0:
-                # -1/0xdead0000 -> general assertion failure
-                if exit_code == 0xffffffffffffffff or exit_code == 0xdead0000:
-                    exception_message = "clang assert failed at line %d: %s" % (
-                        line_number, self.get_line(test_name, line_number))
-                elif exit_code == 0xdead0001:
-                    # the values are stored in a1 and a2 (registers 5 and 6)
-                    exception_message = "clang assert_eq long failed at line %d: %s" % (line_number, self.get_line(test_name, line_number))
-                    dec_and_hex = lambda value: "0x%016x (%d)" % (value, value)
-                    exception_message += "\n>>>> Expected: " + dec_and_hex(sim_status[5])
-                    exception_message += "\n>>>> Actual:   " + dec_and_hex(sim_status[6])
-                elif exit_code == 0xdead000c:
-                    # the values are stored in c3 and c4
-                    exception_message = "clang assert_eq cap failed at line %d: %s" % (line_number, self.get_line(test_name, line_number))
-                    exception_message += "\n>>>> Expected: " + str(sim_status.threads[0].cp2[3])
-                    exception_message += "\n>>>> Actual:   " + str(sim_status.threads[0].cp2[4])
-                elif exit_code == 0xbadc:
-                    exception_message = "Died due to exception"
-                    # TODO: regdump?
-                else:
-                    exception_message = "unknown test exit status %d" % (exit_code)
-                if exception_count != 0:
-                    exception_message += "\nNOTE: %d exceptions occurred, check test log!" % exception_count
-                assert False, exception_message
-
-    def get_line(self, test_name, line_number):
-        with open(os.path.join(TEST_DIR, test_name + '.c')) as src_file:
-            return src_file.readlines()[line_number - 1].strip()
+            self.verify_clang_test(sim_log, TEST_DIR, test_name)
