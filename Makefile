@@ -1742,15 +1742,15 @@ SIM:= ${CHERIROOT_ABS}/sim
 DTB_FILE:=$(CHERIROOT_ABS)/sim.dtb
 # Can be set to a custom value to customise tracing, which is useful to avoid filling up disks when fuzz testing.
 ifdef DEBUG
-	SIM_TRACE_OPTS?= +regfile +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug +StatCounters
+SIM_TRACE_OPTS?= +regfile +trace +cTrace +tlbTrace +instructionBasedCycleCounter +debug +StatCounters
 else
 ifdef CTRACE
-	SIM_TRACE_OPTS?=+trace +cTrace +instructionBasedCycleCounter
+SIM_TRACE_OPTS?=+trace +cTrace +instructionBasedCycleCounter
 else
 ifdef TRACE
-	SIM_TRACE_OPTS?=+trace +instructionBasedCycleCounter
+SIM_TRACE_OPTS?=+trace +instructionBasedCycleCounter
 else
-	SIM_TRACE_OPTS?=
+SIM_TRACE_OPTS?=
 endif
 endif
 endif
@@ -2001,13 +2001,13 @@ RUN_TEST = $(call REPEAT_5,$(RUN_TEST_COMMAND))
 # to make waves (<test name>.vcd will be dumped into your home directory):
 #
 #RUN_TEST = \
-	for attempt in 0 1 2 4 5; do if \
-	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
-    PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
-	CHERI_CONFIG=$$TMPDIR/simconfig \
-	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM) -V $(HOME)/$(1).vcd -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
-	    $(PWD)/$@; \
-	then break; else false; fi; done
+#	for attempt in 0 1 2 4 5; do if \
+#	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+#	PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
+#	CHERI_CONFIG=$$TMPDIR/simconfig \
+#	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM) -V $(HOME)/$(1).vcd -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+#	    $(PWD)/$@; \
+#	then break; else false; fi; done
 
 CLEAN_TEST = rm -r $$TMPDIR
 
@@ -2031,7 +2031,7 @@ $(CHERISOCKET):
 	$(MEMCONV) bsim && \
 	$(COPY_PISM_CONFS) && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
-    PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
+	PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	$(SIM) &
 
