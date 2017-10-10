@@ -316,7 +316,7 @@ unhandled_exception:
 # The following functions may be called from purecap code or from non-purecap code
 # Therefore we need to either use cjr or jr
 .macro return_to_caller
-.if (BUILDING_PURECAP == 1)
+.ifdef BUILDING_PURECAP
 	cjr $c17
 .else
 	jr $ra
