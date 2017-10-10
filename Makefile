@@ -128,12 +128,6 @@ CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension
 HYBRID_CFLAGS?=-fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections
 PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
 
-# Use the default names from the ubuntu mips64-binutils
-AS:=mips64-as
-LD:=mips-linux-gnu-ld
-OBJCOPY:=mips64-objcopy
-OBJDUMP:=mips64-objdump
-
 # If CHERI_SDK is set use the binaries from the CHERI SDK
 ifneq ($(CHERI_SDK),)
 # Append /bin to CHERI_SDK if needed:
@@ -141,8 +135,7 @@ ifneq ($(wildcard $(CHERI_SDK)/bin),)
 CHERI_SDK:=$(CHERI_SDK)/bin
 endif
 
-CLANG_CMD=$(CHERI_SDK)/clang -integrated-as
-# CLANG_CMD=/Users/alex/cheri/llvm/cmake-build-debug/bin/clang-6.0 -integrated-as
+CLANG_CMD?=$(CHERI_SDK)/clang -integrated-as
 OBJDUMP?=$(CHERI_SDK)/llvm-objdump
 ifeq ($(shell uname -s),Darwin)
 OBJCOPY?=gobjcopy
@@ -162,30 +155,30 @@ endif
 
 # default to assembling with clang unless CHERI_SDK_USE_GNU_AS is set
 ifndef CHERI_SDK_USE_GNU_AS
-AS=$(CLANG_AS)
+MIPS_AS=$(CLANG_AS)
 # TODO: use llvm-mc?
-# AS=$(CHERI_SDK)/llvm-mc -filetype=obj -foo
+# MIPS_AS=$(CHERI_SDK)/llvm-mc -filetype=obj -foo
 USING_LLVM_ASSEMBLER=1
-else
-# use GNU as:
-AS=$(CHERI_SDK)/as
-endif
+else # use GNU as otherwise
+MIPS_AS=$(CHERI_SDK)/as
+endif # CHERI_SDK_USE_GNU_AS
+
 # default to linking with LLD unless CHERI_SDK_USE_GNU_LD is set
 ifndef CHERI_SDK_USE_GNU_LD
-LLD=$(CHERI_SDK)/ld.lld --fatal-warnings
+MIPS_LD=$(CHERI_SDK)/ld.lld --fatal-warnings
 else
-LD=$(CHERI_SDK)/ld.bfd --fatal-warnings
+MIPS_LD=$(CHERI_SDK)/ld.bfd --fatal-warnings
 endif
 
 QEMU?=$(CHERI_SDK)/qemu-system-cheri
 
 endif # neq(CHERI_SDK,)
 
-ifndef LLD
-LD?=mips-linux-gnu-ld
-else
-LD=$(LLD)
-endif
+# Use the default names from the ubuntu mips64-binutils if CHERI_SDK is not set
+MIPS_AS?=mips64-as
+MIPS_LD?=mips-linux-gnu-ld
+OBJCOPY?=mips64-objcopy
+OBJDUMP?=mips64-objdump
 
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
@@ -2089,7 +2082,7 @@ $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_A
 #
 
 $(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s
-	$(AS) -I $(TESTDIR)/statcounters -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(MIPS_AS) -I $(TESTDIR)/statcounters -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 # Put DMA model makefile into its own file. This one is already ludicrously
 # large.
@@ -2131,11 +2124,11 @@ $(OBJDIR)/test_purecap_%.o: test_purecap_%.s
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o $(OBJDIR)/purecap_lib.o
 
 $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o $(TEST_LDSCRIPT) $(PURECAP_INIT_OBJS)
-	$(LD) -EB -G0 -T$(TEST_LDSCRIPT) $(PURECAP_INIT_OBJS) $< -o $@ -m elf64btsmip_cheri_fbsd
+	$(MIPS_LD) -EB -G0 -T$(TEST_LDSCRIPT) $(PURECAP_INIT_OBJS) $< -o $@ -m elf64btsmip_cheri_fbsd
 
 
 # Once the assembler works, we can try this version too:
-#$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
+#$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
@@ -2143,12 +2136,12 @@ $(OBJDIR)/test_purecap%.o : test_purecap%.c
 	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 
 $(OBJDIR)/test_%.o : test_%.s macros.s
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 $(OBJDIR)/test_%.o : test_%.c
 	$(CLANG_CC) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
 
 $(OBJDIR)/%.o: %.s
-	$(AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)BERI_VER=$(BERI_VER) $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)BERI_VER=$(BERI_VER) $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 select_init: select_init.c
 	$(CC) -o select_init select_init.c
@@ -2160,40 +2153,40 @@ select_init: select_init.c
 #$(OBJDIR)/test_clang_dma_simple.elf : $(OBJDIR)/test_clang_dma_simple.o $(DMA_LIB_OBJS)\
 #	    #$(TEST_LDSCRIPT) \
 #	    #$(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
-#	$(LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
+#	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
 $(OBJDIR)/startdramtest.elf: $(OBJDIR)/startdramtest.o $(TEST_LDSCRIPT)
-	$(LD) -EB -G0 raw.ld $< -o $@ -m elf64btsmip
+	$(MIPS_LD) -EB -G0 raw.ld $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_clang_dma%.elf : $(OBJDIR)/test_clang_dma%.o $(DMA_LIB_OBJS)\
 	    $(TEST_LDSCRIPT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
-	$(LD) -EB -G0 -Ttest_dram.ld obj/lib.o $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
+	$(MIPS_LD) -EB -G0 -Ttest_dram.ld obj/lib.o $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
 $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_LDSCRIPT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
-	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_CACHED_LDSCRIPT) \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_LIB_OBJECT) select_init
-	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_multi.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_MULTI_LDSCRIPT) \
 	    $(TEST_INIT_MULTI_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_LIB_OBJECT) select_init
-	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_cachedmulti.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_CACHEDMULTI_LDSCRIPT) \
 	    $(TEST_INIT_MULTI_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_LIB_OBJECT) select_init
-	$(LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
 
 #
 # Convert ELF images to raw memory images that can be loaded into simulators
