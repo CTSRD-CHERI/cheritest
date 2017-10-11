@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2012 David T. Chisnall
+ * Copyright (c) 2017 Alex Richardson
  * All rights reserved.
  *
  * This software was developed by SRI International and the University of
@@ -24,39 +24,36 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
+#include "../c/assert.h"
 
-#if !__has_feature(__cheri_cast)
-#warning "Compiler doesn't support __cheri_cast, please update!"
-#define __cheri_cast
-#endif
+#define EXPECTED_VALUE 42
 
-#define TO_CAP(x) ((__cheri_cast void * __capability)(void*)(x))
-
-typedef __attribute__((memory_address)) long vaddr_t;
+int global_int = EXPECTED_VALUE;
+int* global_cap = &global_int;
 
 
-__attribute__((noreturn)) int __assert_fail(int);
-void  __assert(int cond, int line)
+int test(void)
 {
-	if (!cond)
-	{
-		__assert_fail(line);
-	}
+	assert_eq(global_int, EXPECTED_VALUE);
+
+	int* local_cap = &global_int;
+	// compare the two capabilities
+	// XXXAR: not sure this will actually always be true (depends on DDC)
+	assert_eq_cap(global_cap, local_cap);
+
+	// check the tag bit
+	assert(__builtin_cheri_tag_get(local_cap));
+	assert(__builtin_cheri_tag_get(global_cap));
+	// Check virtual address makes sense
+	assert((vaddr_t)local_cap != 0);
+	assert((vaddr_t)global_cap != 0);
+	assert_eq((vaddr_t)local_cap, (vaddr_t)global_cap);
+
+
+
+	// actually load the values and compare
+	assert_eq(*local_cap, EXPECTED_VALUE);
+	assert_eq(*global_cap, EXPECTED_VALUE);
+
+	return 0;
 }
-#define assert(cond) __assert(cond, __LINE__)
-
-extern void __assert_eq_long(int line, long actual, long expected);
-#define assert_eq(actual, expected) __assert_eq_long(__LINE__, actual, expected)
-
-extern void __assert_eq_cap(int line, void* __capability actual, void* __capability expected);
-#define assert_eq_cap(actual, expected) __assert_eq_cap(__LINE__, actual, expected)
-
-
-// Dumps a value into a specified register.  Useful for debugging test cases.
-#define DEBUG_DUMP_REG(regno, val) \
-    __asm__ volatile ("dadd $" #regno ", %0, $0" : : "r" (val) : #regno);
-
-// Add a nop
-#define DEBUG_NOP() \
-	__asm__ volatile ("nop")
-
