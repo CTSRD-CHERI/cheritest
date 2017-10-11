@@ -282,23 +282,30 @@ class BaseBERITestCase(unittest.TestCase):
                 msg = ""
             else:
                 msg = msg + ": "
-            self.fail(msg + "0x%016x != 0x%016x"%(reg_val, expected))
+            self.fail(msg + "permissions 0x%016x != 0x%016x"%(reg_val, expected))
 
-    def assertNullCap(self, cap, msg = None):
-        self.assertRegisterEqual(cap.s     , 0, msg)
-        self.assertRegisterEqual(cap.ctype , 0, msg)
-        self.assertRegisterEqual(cap.perms , 0, msg)
-        self.assertRegisterEqual(cap.offset, 0, msg)
-        self.assertRegisterEqual(cap.base  , 0, msg)
-        self.assertRegisterEqual(cap.length, 0, msg)
+    def assertNullCap(self, cap, msg=""):
+        msg += (" " if msg else "")
+        msg += "(cap=<" + str(cap) + ">)\nshould be null but "
+        self.assertRegisterEqual(cap.t     , 0, msg + "tag set")
+        self.assertRegisterEqual(cap.s     , 0, msg + "is sealed")
+        self.assertRegisterEqual(cap.ctype , 0, msg + "has nonzero otype")
+        self.assertRegisterEqual(cap.perms , 0, msg + "has nonzero perms")
+        self.assertRegisterEqual(cap.offset, 0, msg + "has nonzero offset")
+        self.assertRegisterEqual(cap.base  , 0, msg + "has nonzero base")
+        self.assertRegisterEqual(cap.length, 0, msg + "has nonzero length")
 
-    def assertDefaultCap(self, cap, msg = None):
-        self.assertRegisterEqual(cap.s     , 0, msg)
-        self.assertRegisterEqual(cap.ctype , 0, msg)
-        self.assertRegisterAllPermissions(cap.perms , msg)
-        self.assertRegisterEqual(cap.offset, 0, msg)
-        self.assertRegisterEqual(cap.base  , 0, msg)
-        self.assertRegisterEqual(cap.length, 0xffffffffffffffff, msg)
+    def assertDefaultCap(self, cap, msg="", expected_offset=0):
+        msg += " " if msg else ""
+        offs = " with offset 0x%x" % expected_offset if expected_offset else ""
+        msg += "(cap=<" + str(cap) + ">)\nshould be default cap" + offs + " but "
+        self.assertRegisterEqual(cap.t, 1, msg + "tag not set")
+        self.assertRegisterEqual(cap.s, 0, msg + "is sealead")
+        self.assertRegisterEqual(cap.ctype, 0, msg + "has nonzero otype")
+        self.assertRegisterEqual(cap.offset, expected_offset, msg + "has wrong offset")
+        self.assertRegisterEqual(cap.base, 0, msg + "\nwrong base")
+        self.assertRegisterEqual(cap.length, 0xffffffffffffffff, msg + "\nwrong base")
+        self.assertRegisterAllPermissions(cap.perms, msg)
 
 class BaseICacheBERITestCase(BaseBERITestCase):
     '''Abstract base class for test cases for the BERI Instruction Cache.'''
