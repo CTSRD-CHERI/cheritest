@@ -261,28 +261,33 @@ class BaseBERITestCase(unittest.TestCase):
                 msg = msg + ": "
             self.fail(msg + "0x%016x is not a QNaN value"%(reg_val))
 
-    def assertRegisterAllPermissions(self, reg_val, msg=None):
+    @property
+    def max_permissions(self):
         perm_size = int(os.environ.get("PERM_SIZE", "31"))
-        passed = True
-        expected = 0
         if perm_size == 31:
-            expected = 0x7fffffff
-        if perm_size == 23:
-            expected = 0x7fffff
-        if perm_size == 19:
-            expected = 0x7ffff
-        if perm_size == 15:
-            expected = 0x787ff
-        if self.ALWAYS_FAIL:
-            passed = False
-        if expected != 0 and reg_val != expected:
-            passed = False
-        if not passed:
+            return 0x7fffffff
+        elif perm_size == 23:
+            return 0x7fffff
+        elif perm_size == 19:
+            return 0x7ffff
+        elif perm_size == 15:
+            return 0x787ff
+        assert False, "Invalid perm size %d" % perm_size
+
+    @property
+    def max_length(self):
+        return 0xffffffffffffffff
+
+    def assertRegisterAllPermissions(self, reg_val, msg=None):
+        self.assertCapPermissions(reg_val, self.max_permissions, msg)
+
+    def assertCapPermissions(self, reg_val, expected, msg=None):
+        if self.ALWAYS_FAIL or reg_val != expected:
             if msg is None:
                 msg = ""
             else:
                 msg = msg + ": "
-            self.fail(msg + "permissions 0x%016x != 0x%016x"%(reg_val, expected))
+            self.fail(msg + "permissions 0x%016x != 0x%016x" % (reg_val, expected))
 
     def assertNullCap(self, cap, msg=""):
         msg += (" " if msg else "")
@@ -295,17 +300,33 @@ class BaseBERITestCase(unittest.TestCase):
         self.assertRegisterEqual(cap.base  , 0, msg + "has nonzero base")
         self.assertRegisterEqual(cap.length, 0, msg + "has nonzero length")
 
-    def assertDefaultCap(self, cap, msg="", expected_offset=0):
+    def assertDefaultCap(self, cap, msg="", perms=None):
+        self.assertValidCap(cap, msg, offset=0, base=0, length=self.max_length, perms=perms,
+                            check_msg="default cap")
+
+    def assertValidCap(self, cap, msg="", base=0, length=0, offset=0, perms=None, check_msg=None):
         msg += " " if msg else ""
-        offs = " with offset 0x%x" % expected_offset if expected_offset else ""
-        msg += "(cap=<" + str(cap) + ">)\nshould be default cap" + offs + " but "
+        if check_msg is None:
+            check_msg = "valid cap"
+            if isinstance(offset, int) and offset != 0:
+                check_msg += " with offset 0x%x" % offset
+        msg += "(cap=<" + str(cap) + ">)\nshould be" + check_msg + " but "
+        # valid unsealed caps always have tag, !sealed, otype==0
         self.assertRegisterEqual(cap.t, 1, msg + "tag not set")
         self.assertRegisterEqual(cap.s, 0, msg + "is sealead")
         self.assertRegisterEqual(cap.ctype, 0, msg + "has nonzero otype")
-        self.assertRegisterEqual(cap.offset, expected_offset, msg + "has wrong offset")
-        self.assertRegisterEqual(cap.base, 0, msg + "\nwrong base")
-        self.assertRegisterEqual(cap.length, 0xffffffffffffffff, msg + "\nwrong base")
-        self.assertRegisterAllPermissions(cap.perms, msg)
+        # other checks:
+        if isinstance(offset, int):
+            self.assertRegisterEqual(cap.offset, offset, msg + "has wrong offset")
+        else:
+            err = "offset not in range [0x%x,0x%x]" % (offset[0], offset[-1])
+            self.assertRegisterInRange(cap.offset, offset[0], offset[-1], msg + err)
+        self.assertRegisterEqual(cap.base, base,     msg + "has wrong base")
+        self.assertRegisterEqual(cap.length, length, msg + "has wrong length")
+        if perms is None or perms == self.max_permissions:
+            self.assertRegisterAllPermissions(cap.perms, msg + "not all permissions set")
+        else:
+            self.assertCapPermissions(cap.perms, perms, msg + "has wrong permissions")
 
 class BaseICacheBERITestCase(BaseBERITestCase):
     '''Abstract base class for test cases for the BERI Instruction Cache.'''
