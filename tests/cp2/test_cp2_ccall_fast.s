@@ -71,10 +71,10 @@ L1:
                 dli         $t0, 0x1000
                 csetbounds  $c3, $c3, $t0
                 # Permissions Non_Ephemeral, Permit_Load, Permit_Store,
-                # Permit_Store.
+                # Permit_Store Permit_CCall.
                 # NB: Permit_Execute must not be included in the set of
                 # permissions used here.
-                dli         $t0, 0xd
+                dli         $t0, 0x10d
                 candperm    $c3, $c3, $t0
 
                 #
