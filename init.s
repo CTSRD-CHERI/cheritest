@@ -142,10 +142,15 @@ no_float:
 # .global crt_init_globals
 		# When building for purecap (and potentially also hybrid) we
 		# need to call crt_init_globals() before starting the test
-		dla $t9, crt_init_globals
-		cfromptr	$c12, $c0, $t9
-		jalr $t9
-		cfromptr	$c17, $c0, $31 		# return address
+		# FIXME: when nosp is merge we need this:
+		# cfromptr $c12, $c0, $sp
+		dla     $t9, crt_init_globals
+		cfromptr $c12, $c0, $t9
+		jalr    $t9
+		cfromptr $c17, $c0, $31 		# return address
+		# ensure all capability registers are NULL
+		cclearlo 0xf7fe                         # clear c1-c10 & c12-c15
+		cclearhi 0x07ff                         # clear c16-c26
 .endif
 
 		#

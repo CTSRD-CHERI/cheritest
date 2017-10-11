@@ -41,61 +41,23 @@ class test_purecap_reg_init(BaseBERITestCase):
 
     @attr('capabilities')
     def test_other_capregs(self):
+        self.assertDefaultCap(self.MIPS.cp2[0], "$ddc")
         for regnum in range(0, 31):
-            if regnum == 12 or regnum == 17:
-                continue  # already handled
-            regname = "$c" + str(regnum) + " "
-            self.assertRegisterAllPermissions(self.MIPS.cp2[regnum].perms,
-                                              regname + "should have all permissions")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].s, 0,
-                                     regname + "should not be sealed sealed")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].ctype, 0,
-                                     regname + "should not have an otype")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].length, 0xffffffffffffffff,
-                                     regname + "should span whole addr space")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].base, 0x0,
-                                     regname + "should have offset zero")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].offset, 0x0,
-                                     regname + "should have offset zero")
-    @attr('capabilities')
-    def test_c12(self):
-            regname = "$c12 "
-            self.assertRegisterAllPermissions(self.MIPS.cp2[regnum].perms,
-                                              regname + "should have all permissions")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].s, 0,
-                                     regname + "should not be sealed sealed")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].ctype, 0,
-                                     regname + "should not have an otype")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].length, 0xffffffffffffffff,
-                                     regname + "should span whole addr space")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].base, 0x0,
-                                     regname + "should have offset zero")
-            self.assertRegisterEqual(self.MIPS.cp2[regnum].offset, 0x0,
-                                     regname + "should have offset zero")
-
-    def _test_register(self, register, regname, expected_base=0x0,
-                       expected_offset=0x0, expected_length=0xffffffffffffffff):
-        self.assertRegisterAllPermissions(register.perms, regname + " should have all permissions")
-        self.assertRegisterEqual(register.s, 0, regname + " should not be sealed sealed")
-        self.assertRegisterEqual(register.ctype, 0, regname + " should not have an otype")
-        self.assertRegisterEqual(register.length, expected_length, regname + " length is wrong")
-        self.assertRegisterEqual(register.base, expected_base, regname + " base is wrong")
-        self.assertRegisterEqual(register.offset, expected_offset, regname + " offset is wrong")
-
-    @attr('capabilities')
-    def test_c12(self):
-        self._test_register(self.MIPS.cp2[12], "$c12 (jump cap)", expected_offset=self.MIPS.t9)
-
-    @attr('capabilities')
-    def test_c17(self):
-        self._test_register(self.MIPS.cp2[17], "$c17 (link cap)", expected_offset=self.MIPS.ra)
-
-    # TODO: C11 should be different once nosp is merged
-
-    @attr('capabilities')
-    def test_other_capregs(self):
-        for regnum in range(0, 31):
-            if regnum == 12 or regnum == 17:
-                continue  # already handled
-            self._test_register(self.MIPS.cp2[regnum], "$c" + str(regnum))
-
+            name = "$c" + str(regnum)
+            cap = self.MIPS.cp2[regnum]
+            if regnum == 0:
+                self.assertDefaultCap(cap, name + " (DDC)")
+            elif regnum == 11:
+                self.assertDefaultCap(cap, name + " (stack cap)")
+                # FIXME: this will change once nosp is merged:
+                # self.assertDefaultCap(cap, name + " (stack cap)", expected_offset=self.MIPS.sp)
+            elif regnum == 12:
+                self.assertDefaultCap(cap, name + " (jump cap)", expected_offset=self.MIPS.t9)
+            elif regnum == 17:
+                self.assertDefaultCap(cap, name + " (link cap)", expected_offset=self.MIPS.ra)
+            elif regnum >= 27:
+                # the kernel capabilities C27 - C31 should be default caps
+                self.assertDefaultCap(cap, name)
+            else:
+                # All other capability registers should be null
+                self.assertNullCap(cap, name)
