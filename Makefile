@@ -1073,15 +1073,15 @@ TEST_CP2_FILES=					\
 		test_cp2_csetoffset_fastcheck.s \
 		test_cp2_exception_epcc_unrep.s \
 		test_cp2_exception_epcc_rep.s \
-		test_cp2_exception_exl.s \
-		test_cp2_cmovn.s \
-		test_cp2_cmovz.s
+		test_cp2_exception_exl.s
 endif
 
 ifneq ($(USING_LLVM_ASSEMBLER),1)
-# FIXME: csetboundsexact is not accepted by assembler
-TEST_CP2_FILES +=test_cp2_csetboundsexact.s             \
+# FIXME: csetboundsexact, cmovz, cmovn is not accepted by assembler
+TEST_CP2_FILES +=test_cp2_csetboundsexact.s \
 		test_cp2_x_csetboundsexact_imprecise.s  \
+		test_cp2_cmovn.s \
+		test_cp2_cmovz.s \
 		test_cp2_x_multiop_reg.s
 endif
 
@@ -1330,7 +1330,6 @@ TEST_FILES=					\
 		$(FUZZ_DMA_FILES)		\
 		$(C_FRAMEWORK_FILES)		\
 		$(TEST_CLANG_FILES)		\
-		$(TEST_PURECAP_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)		\
 		$(RAW_STATCOUNTERS_FILES)	\
@@ -1892,21 +1891,24 @@ TEST_INIT_CACHED_OBJECT=$(OBJDIR)/init_cached.o
 TEST_INIT_MULTI_OBJECT=$(OBJDIR)/init_multi.o
 TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 
-TESTS := $(basename $(TEST_FILES))
+TESTS_WITHOUT_PURECAP := $(basename $(TEST_FILES))
+# Hacky workaround for purecap not working on all targets only add purecap tests after TEST_WITHOUT_PURECAP has been expanded
+TEST_FILES+=$(TEST_PURECAP_FILES)
+TESTS := $(TESTS_WITHOUT_PURECAP) $(basename $(TEST_PURECAP_FILES))
 TEST_OBJS := $(addsuffix .o,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_MULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHEDMULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_MULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHEDMULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
 TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_MULTI_MEMS := $(addsuffix _multi.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_MULTI_MEMS := $(addsuffix _multi.mem,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
 TEST_HEXS := $(addsuffix .hex,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_MULTI_HEXS := $(addsuffix _multi.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_MULTI_HEXS := $(addsuffix _multi.hex,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
 TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_MULTI_DUMPS := $(addsuffix _multi.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_MULTI_DUMPS := $(addsuffix _multi.dump,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
 
 TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/framework/,$(basename $(RAW_FRAMEWORK_FILES) $(TEST_FRAMEWORK_FILES)))) \
@@ -1925,31 +1927,33 @@ TEST_PYTHON := \
 
 # XXXAR: shouldn't this also include test/c/clang_test.py, etc.?
 
+
+# XXXAR: TODO: build the purecap tests as _cached and _multi (needs some select_init magic)
 CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
-	$(LOGDIR)/,$(TESTS)))
+	$(LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 CHERI_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
-	$(LOGDIR)/,$(TESTS)))
+	$(LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 CHERI_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
-	$(LOGDIR)/,$(TESTS)))
+	$(LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 ALTERA_TEST_LOGS := $(addsuffix .log,$(addprefix $(ALTERA_LOGDIR)/,$(TESTS)))
 ALTERA_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
-	$(ALTERA_LOGDIR)/,$(TESTS)))
+	$(ALTERA_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 HWSIM_TEST_LOGS := $(addsuffix .log,$(addprefix $(HWSIM_LOGDIR)/,$(TESTS)))
 HWSIM_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
-	$(HWSIM_LOGDIR)/,$(TESTS)))
+	$(HWSIM_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
-	$(GXEMUL_LOGDIR)/,$(TESTS)))
+	$(GXEMUL_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 L3_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 L3_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
-	$(L3_LOGDIR)/,$(TESTS)))
+	$(L3_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 L3_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
-	$(L3_LOGDIR)/,$(TESTS)))
+	$(L3_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 L3_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
-	$(L3_LOGDIR)/,$(TESTS)))
+	$(L3_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
 SAIL_MIPS_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_MIPS_LOGDIR)/,$(TESTS)))
 SAIL_MIPS_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
