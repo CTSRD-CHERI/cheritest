@@ -137,6 +137,17 @@ all_threads:
 		mtc0	$t0, $12
 		
 no_float:
+
+.ifdef BUILDING_PURECAP
+# .global crt_init_globals
+		# When building for purecap (and potentially also hybrid) we
+		# need to call crt_init_globals() before starting the test
+		dla $t9, crt_init_globals
+		cfromptr	$c12, $c0, $t9
+		jalr $t9
+		cfromptr	$c17, $c0, $31 		# return address
+.endif
+
 		#
 		# Explicitly initialise most registers in order to make the effects
 		# of a test on the register file more clear.  Otherwise,

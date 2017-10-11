@@ -2112,10 +2112,15 @@ PURECAP_ASMDEFS=-Wa,-defsym,TEST_CP2=$(TEST_CP2)      \
 		-Wa,-defsym,BUILDING_PURECAP=1        \
 		-Wa,-defsym,DIE_ON_EXCEPTION=1
 
+PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
+		$(OBJDIR)/purecap_lib.o \
+		$(OBJDIR)/purecap_crt_init_globals.o
 $(OBJDIR)/purecap_init.o: init.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
 $(OBJDIR)/purecap_lib.o: lib.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
+$(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c
+	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 # For some reason this doesn't work as a wildcard rule:
 $(OBJDIR)/test_purecap_%.o: test_purecap_%.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
