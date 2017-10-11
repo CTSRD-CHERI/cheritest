@@ -409,18 +409,18 @@ class TestClangBase(object):
             exception_message = "clang assert_eq long failed at line %d: %s" % (
                 line_number, self.get_line(test_dir, test_name, line_number))
             dec_and_hex = lambda value: "0x%016x (%d)" % (value, value)
-            exception_message += "\n>>>> Expected: " + dec_and_hex(
-                sim_status[5])
             exception_message += "\n>>>> Actual:   " + dec_and_hex(
+                sim_status[5])
+            exception_message += "\n>>>> Expected: " + dec_and_hex(
                 sim_status[6])
         # 0xdead000c: integer comparison failed
         elif exit_code == 0xdead000c:
             # the values are stored in c3 and c4
             exception_message = "clang assert_eq cap failed at line %d: %s" % (
                 line_number, self.get_line(test_dir, test_name, line_number))
-            exception_message += "\n>>>> Expected: " + str(
+            exception_message += "\n>>>>Actual:   " + str(
                 sim_status.threads[0].cp2[3])
-            exception_message += "\n>>>> Actual:   " + str(
+            exception_message += "\n>>>>Expected: " + str(
                 sim_status.threads[0].cp2[4])
         elif exit_code == 0xbadc:
             exception_message = "Died due to exception"
