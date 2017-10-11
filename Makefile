@@ -1209,8 +1209,9 @@ endif
 
 
 ifeq ($(PURECAP), 1)
-TEST_PURECAP_FILES=$(notdir $(wildcard tests/purecap/test_*.c)) \
-			test_purecap_reg_init.s
+TEST_PURECAP_C_SRCS=$(wildcard tests/purecap/test_*.c)
+TEST_PURECAP_ASM_SRCS=tests/purecap/test_purecap_reg_init.s
+TEST_PURECAP_FILES= $(notdir $(TEST_PURECAP_C_SRCS) $(TEST_PURECAP_ASM_SRCS))
 endif
 
 TEST_CLANG_FILES=				\
@@ -2104,8 +2105,7 @@ $(OBJDIR)/DMAControl.o: DMAControl.c
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -I$(DMADIR) -c -o $@ $<
 endif
 
-
-# Purecap tests (must come first due to make pattern precedence)make:
+##### BEGIN RULES FOR PURECAP TESTS
 
 PURECAP_ASMDEFS=-Wa,-defsym,TEST_CP2=$(TEST_CP2)      \
 		-Wa,-defsym,CAP_SIZE=$(CAP_SIZE)      \
@@ -2121,24 +2121,26 @@ $(OBJDIR)/purecap_lib.o: lib.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 $(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c
 	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-# For some reason this doesn't work as a wildcard rule:
-$(OBJDIR)/test_purecap_%.o: test_purecap_%.s
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 
-PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o $(OBJDIR)/purecap_lib.o
+srcs_to_objs = $(addprefix $(OBJDIR)/,$(addsuffix .o,$(basename $(notdir $(1)))))
+TEST_PURECAP_C_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_C_SRCS))
+TEST_PURECAP_ASM_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_ASM_SRCS))
+# Use static pattern rules here (less fragile than the implicit pattern ones)
+$(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c
+	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
+$(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 
 $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP_INIT_OBJS)
 	$(MIPS_LD) -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
+### END RULES FOR PURECAP TESTS
 
 # Once the assembler works, we can try this version too:
 #$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 
 $(OBJDIR)/test_clang%.o : test_clang%.c
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-$(OBJDIR)/test_purecap%.o : test_purecap%.c
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-
 $(OBJDIR)/test_%.o : test_%.s macros.s
 	$(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 $(OBJDIR)/test_%.o : test_%.c
