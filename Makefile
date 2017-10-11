@@ -909,7 +909,9 @@ TEST_CP2_FILES=					\
 		test_cp2_creturn_trap.s		\
 		test_cp2_ccall2.s		\
 		test_cp2_ccall_fast.s		\
-		test_cp2_ccall_fast_delay.s		\
+		test_cp2_x_ccall_fast_delay.s	\
+		test_cp2_x_ccall_fast_code_perm.s	\
+		test_cp2_x_ccall_fast_data_perm.s	\
 		test_cp2_cbtu.s			\
 		test_cp2_cbts.s			\
 		test_cp2_cbnz.s			\
@@ -1071,13 +1073,12 @@ TEST_CP2_FILES=					\
 		test_cp2_csetoffset_fastcheck.s \
 		test_cp2_exception_epcc_unrep.s \
 		test_cp2_exception_epcc_rep.s \
-		test_cp2_exception_exl.s
+		test_cp2_exception_exl.s \
+		test_cp2_cmovn.s \
+		test_cp2_cmovz.s
 endif
 
 ifneq ($(USING_LLVM_ASSEMBLER),1)
-# FIXME: should be in newencodings branch?
-TEST_CP2_FILES +=test_cp2_cmovn.s		        \
-		test_cp2_cmovz.s
 # FIXME: csetboundsexact is not accepted by assembler
 TEST_CP2_FILES +=test_cp2_csetboundsexact.s             \
 		test_cp2_x_csetboundsexact_imprecise.s  \
@@ -1657,7 +1658,8 @@ and not nofloat \
 and not pic \
 and not swisync \
 and not tlbcheck \
-and not watch
+and not watch \
+and not csettype
 
 ifdef TEST_QEMU_R4000
 QEMU_NOSEPRED+=\

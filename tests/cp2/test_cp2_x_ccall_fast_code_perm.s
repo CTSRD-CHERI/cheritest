@@ -1,4 +1,5 @@
 #-
+# Copyright (c) 2017 Alfredo Mazzinghi
 # Copyright (c) 2017 Hongyan Xia
 # Copyright (c) 2012 Michael Roe
 # All rights reserved.
@@ -31,28 +32,28 @@
 .set nobopt
 .set noat
 
-# Test whether the delay slot of ccallfast can access the IDC
-# register. As the ccallfast unseals cs and cb and installs the unsealed IDC
-# immediately, it is visible in the delay slot, and being able to read and
-# write the unsealed IDC of the new domain is a serious security vulnerability.
-# Therefore, the delay slot of ccallfast should never be allowed to read and
-# write IDC in any way.
+# Test whether it is possible to perform a fast ccall without the Permit_CCall
+# permission set on the sealed code capability.
+# Test conditions:
+# t1 must be set to 0x0: sandbox not entered.
+# t3 must be set to 0x1901: permit ccall violation on register $c1
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
 
-		#
-		# Set up 'handler' as the RAM exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, exception_handler
-		jal	bev0_handler_install
-		nop
+	.global test
+test:	.ent test
+	daddu 	$sp, $sp, -32
+	sd	$ra, 24($sp)
+	sd	$fp, 16($sp)
+	daddu	$fp, $sp, 32
+
+	#
+	# Set up 'handler' as the RAM exception handler.
+	#
+	jal	bev_clear
+	nop
+	dla	$a0, exception_handler
+	jal	bev0_handler_install
+	nop
 
         #
         # Make $c4 a template capability for user-defined type
@@ -71,10 +72,10 @@ test:		.ent test
         dli         $t0, 0x1000
         csetbounds  $c3, $c3, $t0
         # Permissions Non_Ephemeral, Permit_Load, Permit_Store,
-        # Permit_Store.
+        # Permit_Store, Permit_CCall.
         # NB: Permit_Execute must not be included in the set of
         # permissions used here.
-        dli         $t0, 0xd
+        dli         $t0, 0x10d
         candperm    $c3, $c3, $t0
 
         #
@@ -88,23 +89,25 @@ test:		.ent test
         # Make $c1 a code capability for sandbox
         #
 
-        dla         $t0, sandbox
         cgetpcc     $c1
+	dli         $t0, 0x0ff
+	candperm    $c1, $c1, $t0
+	dla         $t0, sandbox
         csetoffset  $c1, $c1, $t0
         cseal       $c1, $c1, $c4
 
         li          $t1, 0      # clear $t1, a change in $t1 means failure.
 
-        # do the ccallfast and access IDC in the delay slot
+        # do the ccallfast 
 	ccall	    $c1, $c2, 1
-        cmove       $c25, $c26
+	nop
 
 restored_ra:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		jr	$ra
-		daddiu  $sp, $sp, 32	# branch-delay slot
-		.end	test
+	ld	$fp, 16($sp)
+	ld	$ra, 24($sp)
+	jr	$ra
+	daddiu  $sp, $sp, 32	# branch-delay slot
+	.end	test
 
         .ent sandbox
 sandbox:
@@ -116,18 +119,19 @@ sandbox:
 
 #
 # Exception handler, which relies on the installation of KCC into PCC in order
-# to run.  This code assumes that the trap was in a branch delay slot.
+# to run.
 #
-		.ent exception_handler
+	.ent exception_handler
 exception_handler:
         dmfc0   $k0, $14
         daddiu  $k0, $k0, 8 # advance the EPC by two instructions
-                            # and return to restored_ra
+        		    # and return to restored_ra
+	cgetcause $t3	# store exception cause to t3 for the test suite to check.
         dmtc0   $k0, $14
         nop
         nop
-		eret
-		.end exception_handler
+	eret
+	.end exception_handler
 
 
         .data

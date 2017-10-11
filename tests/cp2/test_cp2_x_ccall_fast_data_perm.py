@@ -1,4 +1,5 @@
 #
+# Copyright (c) 2017 Alfredo Mazzinghi
 # Copyright (c) 2017 Hongyan Xia
 # Copyright (c) 2013 Michael Roe
 # All rights reserved.
@@ -33,12 +34,18 @@ from nose.plugins.attrib import attr
 # Test a ccall_fast
 #
 
-class test_cp2_ccall_fast_delay(BaseBERITestCase):
+class test_cp2_x_ccall_fast_data_perm(BaseBERITestCase):
 
     @attr('capabilities')
     @attr('ccall_hw_2')
-    def test_cp2_ccall_fast_delay_1(self):
-        '''Test that the delay slot of ccall_fast cannot access IDC'''
+    def test_cp2_x_ccall_fast_data_perm_1(self):
+        '''Test that the ccall does not enter the sandbox'''
         self.assertRegisterEqual(self.MIPS.t1, 0x0,
-                                 "the delay slot of ccallfast accesses IDC without raising an exception")
+                                 "sandbox entered without Permit_CCall on sealed data capability.")
 
+    @attr('capabilities')
+    @attr('ccall_hw_2')
+    def test_cp2_x_ccall_fast_data_perm_2(self):
+        '''Test that the exception raised has the correct cause'''
+        self.assertRegisterEqual(self.MIPS.t3, 0x1902,
+                                 "Permit_CCall violation raised with invalid cause.")
