@@ -140,15 +140,20 @@ no_float:
 
 .ifdef BUILDING_PURECAP
 # .global crt_init_globals
+
+		# remove the Permit_Execute permission from DDC to catch more errors
+		dli $at, ~(1 << 1) # All but Permit_Execute
+		candperm $0, $0, $at
+
 		# When building for purecap (and potentially also hybrid) we
 		# need to call crt_init_globals() before starting the test
 		# FIXME: when nosp is merge we need this:
 		# cfromptr $c12, $c0, $sp
 		dla     $t9, crt_init_globals
-		cfromptr $c12, $c0, $t9
+		cgetpccsetoffset $c12, $t9
 		jalr    $t9
-		cfromptr $c17, $c0, $31 		# return address
-		# ensure all capability registers are NULL
+		cgetpccsetoffset $c17, $ra 		# return address
+		# ensure all unused capability registers are NULL
 		cclearlo 0xf7fe                         # clear c1-c10 & c12-c15
 		cclearhi 0x07ff                         # clear c16-c26
 .endif
@@ -199,9 +204,9 @@ no_float:
 		beqz $k0, skip_cp2_setup 
 		nop
 		
-		cfromptr	$c12, $c0, $25
+		cgetpccsetoffset $c12, $t9
 		jalr $25
-		cfromptr	$c17, $c0, $31 			# return address
+		cgetpccsetoffset $c17, $ra			# return address
 				
 		# Dump capability registers in the simulator
 		#

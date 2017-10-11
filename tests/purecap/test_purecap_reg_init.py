@@ -33,28 +33,27 @@ from nose.plugins.attrib import attr
 class test_purecap_reg_init(BaseBERITestCase):
     @attr('capabilities')
     def test_pcc(self):
-        self.assertRegisterEqual(self.MIPS.pcc.s, 0, "CP2 PCC sealed incorrectly initialised")
-        self.assertRegisterAllPermissions(self.MIPS.pcc.perms, "CP2 PCC perms incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.pcc.ctype, 0x0, "CP2 PCC ctype incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.pcc.length, 0xffffffffffffffff, "CP2 PCC length incorrectly initialised")
-        self.assertRegisterEqual(self.MIPS.pcc.base, 0x0, "CP2 PCC base incorrectly initialised")
+        self.assertValidCap(self.MIPS.pcc, "$pcc", offset=(0x9000000040000000, 0x90000000400fffff), length=self.max_length)
 
     @attr('capabilities')
     def test_other_capregs(self):
-        self.assertDefaultCap(self.MIPS.cp2[0], "$ddc")
         for regnum in range(0, 31):
             name = "$c" + str(regnum)
             cap = self.MIPS.cp2[regnum]
             if regnum == 0:
-                self.assertDefaultCap(cap, name + " (DDC)")
+                # Default cap without permit_execute
+                self.assertDefaultCap(cap, name + " (DDC)", perms=self.max_permissions & ~2)
             elif regnum == 11:
                 self.assertDefaultCap(cap, name + " (stack cap)")
                 # FIXME: this will change once nosp is merged:
-                # self.assertDefaultCap(cap, name + " (stack cap)", expected_offset=self.MIPS.sp)
+                # self.assertValidCap(cap, name + " (jump cap)",
+                #                     offset=self.MIPS.sp, length=self.max_length)
             elif regnum == 12:
-                self.assertDefaultCap(cap, name + " (jump cap)", expected_offset=self.MIPS.t9)
+                self.assertValidCap(cap, name + " (jump cap)",
+                                    offset=self.MIPS.t9, length=self.max_length)
             elif regnum == 17:
-                self.assertDefaultCap(cap, name + " (link cap)", expected_offset=self.MIPS.ra)
+                self.assertValidCap(cap, name + " (link cap)",
+                                    offset=self.MIPS.ra, length=self.max_length)
             elif regnum >= 27:
                 # the kernel capabilities C27 - C31 should be default caps
                 self.assertDefaultCap(cap, name)
