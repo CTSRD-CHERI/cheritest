@@ -33,6 +33,7 @@
 from __future__ import print_function
 import nose
 
+import collections
 import functools
 import unittest
 import os
@@ -308,7 +309,7 @@ class BaseBERITestCase(unittest.TestCase):
         msg += " " if msg else ""
         if check_msg is None:
             check_msg = "valid cap"
-            if isinstance(offset, int) and offset != 0:
+            if not isinstance(offset, collections.Iterable) and offset != 0:
                 check_msg += " with offset 0x%x" % offset
         msg += "(cap=<" + str(cap) + ">)\nshould be" + check_msg + " but "
         # valid unsealed caps always have tag, !sealed, otype==0
@@ -316,11 +317,11 @@ class BaseBERITestCase(unittest.TestCase):
         self.assertRegisterEqual(cap.s, 0, msg + "is sealead")
         self.assertRegisterEqual(cap.ctype, 0, msg + "has nonzero otype")
         # other checks:
-        if isinstance(offset, int):
-            self.assertRegisterEqual(cap.offset, offset, msg + "has wrong offset")
-        else:
+        if isinstance(offset, collections.Iterable):
             err = "offset not in range [0x%x,0x%x]" % (offset[0], offset[-1])
             self.assertRegisterInRange(cap.offset, offset[0], offset[-1], msg + err)
+        else:
+            self.assertRegisterEqual(cap.offset, offset, msg + "has wrong offset")
         self.assertRegisterEqual(cap.base, base,     msg + "has wrong base")
         self.assertRegisterEqual(cap.length, length, msg + "has wrong length")
         if perms is None or perms == self.max_permissions:

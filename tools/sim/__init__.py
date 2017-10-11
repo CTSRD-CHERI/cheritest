@@ -58,11 +58,11 @@ CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC\s+t:([01])\s+[su]:([01]) perms:(0x'+
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
 CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
-SAIL_CAP_PCC_RE = re.compile('^DEBUG CAP PCC\s+0b([01u]{257})$')
-SAIL_CAP_REG_RE = re.compile('^DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{257})$')
-SAIL_CAP128_PCC_RE = re.compile('^DEBUG CAP PCC\s+0b([01u]{129})$')
-SAIL_CAP128_REG_RE = re.compile('^DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{129})$')
-SAIL_CAP_REG_NULL_RE = re.compile('^DEBUG CAP REG\s+([0-9]+)\s+0b0\.\.\.0$')
+SAIL_CAP_PCC_RE = re.compile(r'^DEBUG CAP PCC\s+0b([01u]{257})$')
+SAIL_CAP_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{257})$')
+SAIL_CAP128_PCC_RE = re.compile(r'^DEBUG CAP PCC\s+0b([01u]{129})$')
+SAIL_CAP128_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{129})$')
+SAIL_CAP_REG_NULL_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+0b0\.\.\.0$')
 class MipsException(Exception):
     pass
 
