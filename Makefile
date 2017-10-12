@@ -715,13 +715,11 @@ endif
 
 TEST_CACHE_FILES=				\
 		test_hardware_mapping_cached_read.s \
+		test_cache_instruction_instruction.s \
 		test_cache_instruction_data.s	\
 		test_cache_instruction_L2.s	\
 		test_cache_taglo.s		\
 		test_id_coherence.s
-ifneq ($(USING_LLVM_ASSEMBLER),1)
-TEST_CACHE_FILES+=test_cache_instruction_instruction.s
-endif
 TEST_CP0_FILES=					\
 		test_cp0_reg_init.s		\
 		test_cp0_config1		\
