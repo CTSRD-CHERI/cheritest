@@ -116,7 +116,12 @@ FUZZ_DMA_ONLY?=0
 NOFUZZ?=1
 NOFUZZR?=1
 CAP_SIZE?=256
+ifeq ($(CAP_SIZE),256)
 PERM_SIZE?=31
+endif
+ifeq ($(CAP_SIZE),128)
+PERM_SIZE?=19
+endif
 L3_SIM?=l3mips
 SAIL_DIR?=~/bitbucket/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/src/run_mips.native
