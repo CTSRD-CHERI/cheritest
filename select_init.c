@@ -123,7 +123,7 @@ int build;
         /* Non-raw tests don't need init_multi.o, because init.o takes
          * care of multicore initialization.
          */
-        printf("-Ttest_cached.ld obj/init.o obj/lib.o\n");
+        printf("-Ttest.ld obj/init.o obj/lib.o\n");
         break;
       case BUILD_CACHED_MULTI:
         /* Non-raw tests don't need init_multi.o */
