@@ -303,9 +303,9 @@ bev_clear:
 		.global unhandled_exception
 		.ent unhandled_exception
 unhandled_exception:
-		b .
-		mtc0 $at, $23        
-		.end unhandled_exception
+		b die_on_exception
+		nop
+.end unhandled_exception
 
 
 .set assertion_error_generic,  0xdead0000

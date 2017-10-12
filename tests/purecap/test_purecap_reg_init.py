@@ -42,12 +42,10 @@ class test_purecap_reg_init(BaseBERITestCase):
             cap = self.MIPS.cp2[regnum]
             if regnum == 0:
                 # Default cap without permit_execute
-                self.assertDefaultCap(cap, name + " (DDC)", perms=self.max_permissions & ~2)
+                self.assertDefaultCap(cap, name + " (DDC)", perms=self.max_nonexec_perms)
             elif regnum == 11:
-                self.assertDefaultCap(cap, name + " (stack cap)")
-                # FIXME: this will change once nosp is merged:
-                # self.assertValidCap(cap, name + " (jump cap)",
-                #                     offset=self.MIPS.sp, length=self.max_length)
+                self.assertValidCap(cap, name + " (jump cap)", perms=self.max_nonexec_perms,
+                                    offset=self.MIPS.sp, length=self.max_length)
             elif regnum == 12:
                 self.assertValidCap(cap, name + " (jump cap)",
                                     offset=self.MIPS.t9, length=self.max_length)

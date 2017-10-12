@@ -147,8 +147,9 @@ no_float:
 
 		# When building for purecap (and potentially also hybrid) we
 		# need to call crt_init_globals() before starting the test
-		# FIXME: when nosp is merge we need this:
-		# cfromptr $c12, $c0, $sp
+		# NOTE: the following requires nosp to be merged!
+		cfromptr $c11, $c0, $sp
+
 		dla     $t9, crt_init_globals
 		cgetpccsetoffset $c12, $t9
 		jalr    $t9
@@ -207,10 +208,13 @@ no_float:
 		cgetpccsetoffset $c12, $t9
 		jalr $25
 		cgetpccsetoffset $c17, $ra			# return address
-				
+
+.end start
+
 		# Dump capability registers in the simulator
 		#
-		.global finish
+.global finish
+.ent finish
 finish:
 		j continue_finish
 		mtc2 $k0, $0, 6
@@ -290,9 +294,8 @@ dump_core0:
 		#
 
 		mtc0 $at, $23
-		# .ent end
-		.global end
-		
+		nop
+.global end
 end:
 		b end
 		daddiu $zero, $zero, 0  # load zero nop to indicate core 0
@@ -324,27 +327,29 @@ end_not_core0:
 		b end_not_core0
 		daddiu $zero, $zero, 1 # load 1 nop to indicate core != 0
 
-.end start
+.end finish
 
 		.ent exception_count_handler
 exception_count_handler:
 .ifdef DIE_ON_EXCEPTION
+.global die_on_exception
+die_on_exception:
 		# TODO: only do this on a CP2 exception!
-		dli $v0, 0xbadc
+		daddiu $k0, 1		# notify test that we have an exception
+		dli $v0, 0xbadc		# exit code for die on exception
 		b finish
 .endif
 		daddu	$sp, $sp, -32
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
-	        sd      $k0,  8($sp)
+		sd      $k0,  8($sp)
 		daddu	$fp, $sp, 32
-	
 
 		# Increment exception counter
-	        dla     $ra, exception_count
+		dla     $ra, exception_count
 		ld      $k0, ($ra)
-	        addi    $k0, $k0, 1
-	        sd      $k0, ($ra)
+		addi    $k0, $k0, 1
+		sd      $k0, ($ra)
 
 		# If this is a timer interrupt, then return to the current instruction
 		dmfc0	$k0, $13

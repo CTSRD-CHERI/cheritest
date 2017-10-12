@@ -276,6 +276,10 @@ class BaseBERITestCase(unittest.TestCase):
         assert False, "Invalid perm size %d" % perm_size
 
     @property
+    def max_nonexec_perms(self):
+        return self.max_permissions & ~2
+
+    @property
     def max_length(self):
         return 0xffffffffffffffff
 
