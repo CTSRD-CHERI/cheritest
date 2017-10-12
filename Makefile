@@ -908,10 +908,6 @@ TEST_CP2_FILES=					\
 		test_cp2_ccall.s		\
 		test_cp2_creturn_trap.s		\
 		test_cp2_ccall2.s		\
-		test_cp2_ccall_fast.s		\
-		test_cp2_x_ccall_fast_delay.s	\
-		test_cp2_x_ccall_fast_code_perm.s	\
-		test_cp2_x_ccall_fast_data_perm.s	\
 		test_cp2_cbtu.s			\
 		test_cp2_cbts.s			\
 		test_cp2_cbnz.s			\
@@ -1074,7 +1070,7 @@ TEST_CP2_FILES=					\
 		test_cp2_exception_epcc_unrep.s \
 		test_cp2_exception_epcc_rep.s \
 		test_cp2_exception_exl.s
-endif
+
 
 ifneq ($(USING_LLVM_ASSEMBLER),1)
 # FIXME: csetboundsexact, cmovz, cmovn is not accepted by assembler
@@ -1083,7 +1079,16 @@ TEST_CP2_FILES +=test_cp2_csetboundsexact.s \
 		test_cp2_cmovn.s \
 		test_cp2_cmovz.s \
 		test_cp2_x_multiop_reg.s
+else
+# FIXME: likewise gas does not yet implement ccall fast
+TEST_CP2_FILES += \
+		test_cp2_ccall_fast.s		\
+		test_cp2_x_ccall_fast_delay.s	\
+		test_cp2_x_ccall_fast_code_perm.s	\
+		test_cp2_x_ccall_fast_data_perm.s
 endif
+
+endif # TEST_CP2=1
 
 TEST_ALU_OVERFLOW_FILES=			\
 		test_add_overflow.s		\
