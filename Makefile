@@ -134,6 +134,12 @@ CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension
 HYBRID_CFLAGS?=-fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections
 PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
 
+
+ifneq ($(CHERI$(CAP_SIZE)_SDK),)
+CHERI_SDK:=$(CHERI$(CAP_SIZE)_SDK)
+$(info Requested build for $(CAP_SIZE) bits, setting CHERI_SDK to $(dollar)CHERI256_SDK)
+endif
+
 # If CHERI_SDK is set use the binaries from the CHERI SDK
 ifneq ($(CHERI_SDK),)
 $(info Using CHERI SDK: $(CHERI_SDK))
