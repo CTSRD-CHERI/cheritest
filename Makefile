@@ -98,6 +98,7 @@
 # "make test" runs the tests through CHERI
 # "make gxemul-test" runs the tests through gxemul
 #
+dollar = $$
 TEST_CP2?=1
 CLANG?=1
 PURECAP?=1
@@ -130,6 +131,8 @@ PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrat
 
 # If CHERI_SDK is set use the binaries from the CHERI SDK
 ifneq ($(CHERI_SDK),)
+$(info Using CHERI SDK: $(CHERI_SDK))
+
 # Append /bin to CHERI_SDK if needed:
 ifneq ($(wildcard $(CHERI_SDK)/bin),)
 CHERI_SDK:=$(CHERI_SDK)/bin
@@ -137,11 +140,8 @@ endif
 
 CLANG_CMD?=$(CHERI_SDK)/clang -integrated-as
 OBJDUMP?=$(CHERI_SDK)/llvm-objdump
-ifeq ($(shell uname -s),Darwin)
-OBJCOPY?=gobjcopy
-else
-OBJCOPY?=$(CHERI_SDK)/objcopy
-endif
+# FIXME: elftoolchain objcopy is broken, hopefully llvm-objcopy is ready soon
+# OBJCOPY?=$(CHERI_SDK)/objcopy
 
 # For now force using the GNU AS since clang doesn't quite work (5 tests broken)
 # CHERI_SDK_USE_GNU_AS?=1
@@ -173,15 +173,33 @@ endif
 
 QEMU?=$(CHERI_SDK)/qemu-system-cheri
 
+else
+# TODO: make this an error soon
+$(info CHERI SDK not found, will try to infer tool defaults)
 endif # neq(CHERI_SDK,)
 
 # Use the default names from the ubuntu mips64-binutils if CHERI_SDK is not set
 MIPS_AS?=mips64-as
 MIPS_LD?=mips-linux-gnu-ld
-OBJCOPY?=mips64-objcopy
 OBJDUMP?=mips64-objdump
 CAPSIZEFIX?= $(CHERI_SDK)/capsizefix --verbose $(1)
+# try to find a working objcopy
+ifeq ($(OBJCOPY),)
+OBJCOPY:=$(shell command -v mips64-unknown-freeebsd-objcopy 2> /dev/null)
+endif
+ifeq ($(OBJCOPY),)
+OBJCOPY:=$(shell command -v mips64-objcopy 2> /dev/null)
+endif
+ifeq ($(OBJCOPY),)
+OBJCOPY:=$(shell command -v mips64-linux-gnuabi64-objcopy 2> /dev/null)
+endif
 
+# On Mac also fall back to gobjcopy (which supports mips)
+ifeq ($(OBJCOPY),)
+ifeq ($(shell uname -s),Darwin)
+OBJCOPY:=/usr/local/bin/gobjcopy
+endif
+endif
 
 ifeq ($(CAP_SIZE),256)
 CAP_PRECISE?=1
@@ -1210,9 +1228,9 @@ endif
 
 
 ifeq ($(PURECAP), 1)
-TEST_PURECAP_C_SRCS=$(wildcard tests/purecap/test_*.c)
-TEST_PURECAP_ASM_SRCS=tests/purecap/test_purecap_reg_init.s
-TEST_PURECAP_FILES= $(notdir $(TEST_PURECAP_C_SRCS) $(TEST_PURECAP_ASM_SRCS))
+TEST_PURECAP_C_SRCS:=$(wildcard tests/purecap/test_*.c)
+TEST_PURECAP_ASM_SRCS:=tests/purecap/test_purecap_reg_init.s
+TEST_PURECAP_FILES:= $(notdir $(TEST_PURECAP_C_SRCS) $(TEST_PURECAP_ASM_SRCS))
 endif
 
 TEST_CLANG_FILES=				\
@@ -1741,9 +1759,6 @@ MEMCONF?=$(CHERIROOT_ABS)/memoryconfig
 TOOLS_DIR= ${CHERILIBS_ABS}/tools
 TOOLS_DIR_ABS:=$(realpath $(TOOLS_DIR))
 CHERICTL=$(TOOLS_DIR_ABS)/debug/cherictl
-ifeq ($(wildcard $(CHERICTL)),)
-$(warning CHERICTL not found, set CHERILIBS variable correctly!)
-endif
 SYSTEM_CONSOLE_DIR_ABS:= /usr/groups/ecad/altera/current/quartus/sopc_builder/bin
 CHERISOCKET:= /tmp/$(USER)_beri_debug_socket
 SIM:= ${CHERIROOT_ABS}/sim
@@ -2026,9 +2041,13 @@ CLEAN_TEST = rm -r $$TMPDIR
 
 WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 
+ifeq ($(wildcard ${TOOLS_DIR_ABS}),)
+MEMCONV=$(error TOOLS_DIR_ABS not set, cannot find memconv)
+else
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
+endif
 
-all: $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
+all: sanity-check-makefile $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
 
 elfs: $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS)
 
@@ -2245,6 +2264,9 @@ $(LOGDIR)/test_raw_trace_cached.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace_
 # test_raw_trac, because % must be non-empty...
 #
 $(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.mem $(SIM) $(CHERICTL)
+ifeq ($(wildcard $(CHERICTL)),)
+	$(error CHERICTL not found, set CHERILIBS variable correctly!)
+endif
 	rm -f $$CHERI_TRACE_FILE
 	$(call PREPARE_TEST,$<) && \
 	((BERI_DEBUG_SOCKET_0=$$TMPDIR/sock \
@@ -2588,3 +2610,25 @@ qemu_test_logs: $(QEMU_TEST_LOGS)
 
 cleanerror:
 	find log -size 0 | xargs -r --verbose rm
+
+sanity-check-makefile: FORCE
+	@echo
+	@echo
+	@echo Building test suite for $(CAP_SIZE)-bit capabilities
+	@echo Permission size is $(PERM_SIZE)
+	@echo
+	@echo "Build tools:"
+	@echo "Clang:     $(CLANG_CMD)"
+	@echo "Assembler: $(MIPS_AS)"
+	@echo "Linker:    $(MIPS_LD)"
+	@echo "objdump:   $(OBJDUMP)"
+ifeq ($(OBJCOPY),)
+	# TODO: $(error) ?
+	@echo "WARNING: $(dollar)OBJCOPY not found -> only QEMU tests will work
+endif
+	@echo "objcopy:   $(OBJCOPY)"
+	@echo "cherictl:  $(CHERICTL)"
+ifeq ($(wildcard $(CHERICTL)),)
+	@echo "WARNING: $(dollar)CHERICTL not found -> can't run tests on FPGA)"
+endif
+	@echo
