@@ -30,12 +30,18 @@
 #define __cheri_cast
 #endif
 
+#ifdef __cplusplus
+#define ASM_FUNC extern "C"
+#else
+#define ASM_FUNC extern
+#endif
+
 #define TO_CAP(x) ((__cheri_cast void * __capability)(void*)(x))
 
 typedef __attribute__((memory_address)) long vaddr_t;
 
 
-__attribute__((noreturn)) int __assert_fail(int);
+ASM_FUNC __attribute__((noreturn)) int __assert_fail(int);
 void  __assert(int cond, int line)
 {
 	if (!cond)
@@ -45,10 +51,10 @@ void  __assert(int cond, int line)
 }
 #define assert(cond) __assert(cond, __LINE__)
 
-extern void __assert_eq_long(int line, long actual, long expected);
+ASM_FUNC void __assert_eq_long(int line, long actual, long expected);
 #define assert_eq(actual, expected) __assert_eq_long(__LINE__, actual, expected)
 
-extern void __assert_eq_cap(int line, void* __capability actual, void* __capability expected);
+ASM_FUNC void __assert_eq_cap(int line, void* __capability actual, void* __capability expected);
 #define assert_eq_cap(actual, expected) __assert_eq_cap(__LINE__, actual, expected)
 
 

@@ -1240,8 +1240,9 @@ endif
 
 ifeq ($(PURECAP), 1)
 TEST_PURECAP_C_SRCS:=$(wildcard tests/purecap/test_*.c)
+TEST_PURECAP_CXX_SRCS:=$(wildcard tests/purecap/test_*.cpp)
 TEST_PURECAP_ASM_SRCS:=tests/purecap/test_purecap_reg_init.s
-TEST_PURECAP_FILES:= $(notdir $(TEST_PURECAP_C_SRCS) $(TEST_PURECAP_ASM_SRCS))
+TEST_PURECAP_FILES:= $(notdir $(TEST_PURECAP_C_SRCS) $(TEST_PURECAP_ASM_SRCS) $(TEST_PURECAP_CXX_SRCS))
 endif
 
 TEST_CLANG_FILES=				\
@@ -2163,9 +2164,12 @@ $(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c
 
 srcs_to_objs = $(addprefix $(OBJDIR)/,$(addsuffix .o,$(basename $(notdir $(1)))))
 TEST_PURECAP_C_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_C_SRCS))
+TEST_PURECAP_CXX_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_CXX_SRCS))
 TEST_PURECAP_ASM_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_ASM_SRCS))
 # Use static pattern rules here (less fragile than the implicit pattern ones)
 $(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c
+	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
+$(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp
 	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
