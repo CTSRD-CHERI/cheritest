@@ -2399,7 +2399,11 @@ $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 $(QEMU_LOGDIR):
 	mkdir -p $(QEMU_LOGDIR)
 
+QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR)
+ifeq ($(wildcard $(QEMU_ABSPATH)),)
+	$(error QEMU ($(QEMU)) is missing, could not execute it)
+endif
 	$(QEMU) -D "$@" -d instr -M mipssim -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
 	-kernel "$(OBJDIR)/$*.elf" -nographic -m 3072M -bp 0x`$(OBJDUMP) -t "$(OBJDIR)/$*.elf" | awk -f end.awk` || true
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
