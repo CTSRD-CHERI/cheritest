@@ -2190,7 +2190,7 @@ $(OBJDIR)/test_%.o : test_%.c
 	$(CLANG_CC) $(CWARNFLAGS) -c -fno-pic -target cheri-unknown-freebsd -integrated-as -O3 -ffunction-sections -o $@ $<
 
 $(OBJDIR)/%.o: %.s
-	$(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb BERI_VER=1 $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 select_init: select_init.c
 	$(CC) -o select_init select_init.c
