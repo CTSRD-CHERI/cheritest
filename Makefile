@@ -1759,7 +1759,7 @@ TEST_CYCLE_LIMIT?=1500000
 #
 
 # Set BERI_VER to 2 to test cheri2
-BERI_VER?=0
+BERI_VER?=
 # Set to 0 to disable capability tests
 CHERIROOT?=../../cheri$(BERI_VER)/trunk
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
