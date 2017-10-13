@@ -2407,7 +2407,7 @@ endif
 	$(QEMU) -D "$@" -d instr -M mipssim -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
 	-kernel "$(OBJDIR)/$*.elf" -nographic -m 3072M -bp 0x`$(OBJDUMP) -t "$(OBJDIR)/$*.elf" | awk -f end.awk` || true
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
-	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; false ; fi
+	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)

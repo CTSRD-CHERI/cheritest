@@ -122,7 +122,7 @@ loop2:
 		nop				# Branch delay
 
 
-end:
+done:
 		dli	$a2, 1
 
 		ld	$fp, 16($sp)

@@ -68,7 +68,7 @@ test:		.ent test
 		addi	$a4, $a4, 1
 		dmfc0	$a2, $16, 2
 
-end:
+done:
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
