@@ -329,15 +329,21 @@ end_not_core0:
 
 .end finish
 
-		.ent exception_count_handler
-exception_count_handler:
-.ifdef DIE_ON_EXCEPTION
+		.ent die_on_exception
 .global die_on_exception
 die_on_exception:
 		# TODO: only do this on a CP2 exception!
 		daddiu $k0, 1		# notify test that we have an exception
 		dli $v0, 0xbadc		# exit code for die on exception
 		b finish
+		nop
+.end die_on_exception
+
+		.ent exception_count_handler
+exception_count_handler:
+.ifdef DIE_ON_EXCEPTION
+		b die_on_exception
+		nop
 .endif
 		daddu	$sp, $sp, -32
 		sd	$ra, 24($sp)
