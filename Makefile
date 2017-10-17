@@ -2404,7 +2404,7 @@ $(QEMU_LOGDIR):
 	mkdir -p $(QEMU_LOGDIR)
 
 QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
-$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR)
+$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR) $(QEMU)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
