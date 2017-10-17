@@ -1,4 +1,5 @@
 # -
+# Copyright (c) 2017 Alex Richardson
 # Copyright (c) 2011 Robert M. Norton
 # All rights reserved.
 #
@@ -43,29 +44,30 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_DIR = os.environ.get("LOGDIR", "log")
 
 
+def check_answer(test_name):
+    if MULTI and CACHED:
+        suffix = "_cachedmulti"
+    elif MULTI:
+        suffix = "_multi"
+    elif CACHED:
+        suffix = "_cached"
+    else:
+        suffix = ""
+    with open(os.path.join(LOG_DIR, test_name + suffix + ".log"),
+              'rt') as sim_log:
+        TestClangBase.verify_clang_test(sim_log, TEST_DIR, test_name)
+
+
 # Not derived from unittest.testcase because we wish test_clang to
 # return a generator.
-class TestClangPurecap(TestClangBase):
+class TestClangPurecap(object):
     @attr('clang')
     @attr('capabilities')
     def test_purecap(self):
         if ONLY_TEST:
-            yield ('check_answer', ONLY_TEST)
+            yield (check_answer, ONLY_TEST)
         else:
             for test in filter(lambda f: TEST_FILE_RE.match(f),
                                os.listdir(TEST_DIR)):
                 test_name = os.path.splitext(os.path.basename(test))[0]
-                yield ('check_answer', test_name)
-
-    def check_answer(self, test_name):
-        if MULTI and CACHED:
-            suffix = "_cachedmulti"
-        elif MULTI:
-            suffix = "_multi"
-        elif CACHED:
-            suffix = "_cached"
-        else:
-            suffix = ""
-        with open(os.path.join(LOG_DIR, test_name + suffix + ".log"),
-                  'rt') as sim_log:
-            self.verify_clang_test(sim_log, TEST_DIR, test_name)
+                yield (check_answer, test_name)

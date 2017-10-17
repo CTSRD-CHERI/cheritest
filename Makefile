@@ -2625,6 +2625,16 @@ qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ -v $(PURECAP_TESTDIRS) || true
 
+pytest_qemu_purecap_tests: pytest_qemu_purecap_tests.xml
+pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
+	LOGDIR=$(QEMU_LOGDIR) pytest --junit-xml=$@ --runxfail -v $(PURECAP_TESTDIRS) || true
+
+pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
+pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) $(TEST_PYTHON) FORCE
+	PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
+	LOGDIR=$(QEMU_LOGDIR) pytest --junit-xml=$@ --runxfail -v $(CLANG_TESTDIRS) || true
+
 
 test_elfs: $(TEST_ELFS)
 	@echo "Build all test .elf files"
