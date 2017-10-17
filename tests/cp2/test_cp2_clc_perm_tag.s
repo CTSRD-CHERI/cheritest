@@ -1,4 +1,5 @@
 #-
+# Copyright (c) 2017 Alfredo Mazzinghi
 # Copyright (c) 2017 Michael Roe
 # All rights reserved.
 #
@@ -25,11 +26,48 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+.set mips64
+.set noreorder
+.set noat
 
-class test_cp2_clc_perm(BaseBERITestCase):
+#
+# Test CLC when the cb does not have Permit_Load_Capability permission.
+# The capability loaded should have its tag cleared.
+#
+# Expected values to check:
+# a0 - tag bit of the capability
+#
 
-    @attr('capabilities')
-    def test_cp2_clc_perm_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x123456789abcdef0, "CLC did not load a capability when cb.perms.Permit_Load_Capability was not set")
+
+	.global test
+test:	.ent test
+	daddu 	$sp, $sp, -32
+	sd	$ra, 24($sp)
+	sd	$fp, 16($sp)
+	daddu	$fp, $sp, 32
+	
+	cgetdefault $c2
+	dli	$t0, 5		# Permit_Load and Global
+	candperm $c2, $c2, $t0
+	
+	dla	$t0, cap
+# store the test capability
+	csc	$c0, $t0, 0($c0)
+# load it back, it should have its tag cleared
+	clc 	$c1, $t0, 0($c2)
+	cgettag $a0, $c1
+	
+	ld	$fp, 16($sp)
+	ld	$ra, 24($sp)
+	daddu	$sp, $sp, 32
+	jr	$ra
+	nop			# branch-delay slot
+	.end	test
+	
+	.data
+	.align 5
+cap:
+	.dword 0
+	.dword 0
+	.dword 0
+	.dword 0

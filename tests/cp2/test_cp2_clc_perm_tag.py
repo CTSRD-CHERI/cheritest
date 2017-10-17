@@ -1,4 +1,5 @@
 #-
+# Copyright (c) 2017 Alfredo Mazzinghi
 # Copyright (c) 2017 Michael Roe
 # All rights reserved.
 #
@@ -28,8 +29,8 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp2_clc_perm(BaseBERITestCase):
+class test_cp2_clc_perm_tag(BaseBERITestCase):
 
     @attr('capabilities')
-    def test_cp2_clc_perm_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x123456789abcdef0, "CLC did not load a capability when cb.perms.Permit_Load_Capability was not set")
+    def test_cp2_clc_perm_tag_1(self):
+        self.assertRegisterEqual(self.MIPS.a0, 0, "CLC did not clear the tag when loading from capability without Permit_Load_Capability")
