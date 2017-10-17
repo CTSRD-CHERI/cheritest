@@ -2625,15 +2625,23 @@ qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ -v $(PURECAP_TESTDIRS) || true
 
+PYTEST?=pytest
+
 pytest_qemu_purecap_tests: pytest_qemu_purecap_tests.xml
 pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
-	LOGDIR=$(QEMU_LOGDIR) pytest --junit-xml=$@ --runxfail -v $(PURECAP_TESTDIRS) || true
+	LOGDIR=$(QEMU_LOGDIR) $(PYTEST) --junit-xml=$@ --runxfail -v $(PURECAP_TESTDIRS) || true
 
 pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
 pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
-	LOGDIR=$(QEMU_LOGDIR) pytest --junit-xml=$@ --runxfail -v $(CLANG_TESTDIRS) || true
+	LOGDIR=$(QEMU_LOGDIR) $(PYTEST) --junit-xml=$@ --runxfail -v $(CLANG_TESTDIRS) || true
+
+pytest_qemu: pytest_qemu.xml
+pytest_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
+	@echo "Nose preds: $(QEMU_NOSEPRED)"
+	PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU LOGDIR=$(QEMU_LOGDIR) \
+	$(PYTEST) --junit-xml=$@ --runxfail -q -a "$(QEMU_NOSEPRED)" $(TESTDIRS) || true
 
 
 test_elfs: $(TEST_ELFS)

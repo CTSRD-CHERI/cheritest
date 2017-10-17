@@ -1,4 +1,5 @@
-#-
+# -
+# Copyright (c) 2017 Alex Richardson
 # Copyright (c) 2011 Robert M. Norton
 # All rights reserved.
 #
@@ -25,49 +26,52 @@
 # Just checks that the test produced the appropriate pass value in v0 to indicate
 # that all c asserts passed. Cribbed from tests/fuzz/fuzz.py.
 
-import tools.gxemul, tools.sim
-import os, re, itertools
+from beritest_tools import TestClangBase
+import os
+import re
 from nose.plugins.attrib import attr
 
 # Parameters from the environment
 # Cached or uncached mode.
 CACHED = bool(int(os.environ.get("CACHED", "0")))
 MULTI = bool(int(os.environ.get("MULTI1", "0")))
-DMA_VIRT = bool(int(os.environ.get("DMA_VIRT", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-if DMA_VIRT:
-    TEST_FILE_RE=re.compile('test_clang_\w+\.c')
-else:
-    TEST_FILE_RE=re.compile('test_clang_(?!dma_virt)\w+\.c')
-TEST_DIR ='tests/dma'
+TEST_FILE_RE = re.compile('test_.+\.(c|cpp)')
+TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
-#Not derived from unittest.testcase because we wish test_clang to
-#return a generator.
-class TestClang(object):
-    @attr('uncached')
-    @attr('dmaclang')
-    def test_clang(self):
+LOG_DIR = os.environ.get("LOGDIR", "log")
+
+
+@attr('clang')
+@attr('capabilities')
+@attr('dma')
+def check_answer(test_name):
+    if MULTI and CACHED:
+        suffix = "_cachedmulti"
+    elif MULTI:
+        suffix = "_multi"
+    elif CACHED:
+        suffix = "_cached"
+    else:
+        suffix = ""
+    with open(os.path.join(LOG_DIR, test_name + suffix + ".log"),
+              'rt') as sim_log:
+        TestClangBase.verify_clang_test(sim_log, TEST_DIR, test_name)
+
+
+# Not derived from unittest.testcase because we wish test_clang to
+# return a generator.
+class TestClangDMA(object):
+    @attr('clang')
+    @attr('capabilities')
+    @attr('dma')
+    def test_clang_dma(self):
         if ONLY_TEST:
-            yield ('check_answer', ONLY_TEST)
+            yield (check_answer, ONLY_TEST)
         else:
-            for test in filter(lambda f: TEST_FILE_RE.match(f), os.listdir(TEST_DIR)):
-                test_name=os.path.splitext(os.path.basename(test))[0]
-                yield ('check_answer', test_name)
-
-    def check_answer(self, test_name):
-        if MULTI and CACHED:
-            suffix="_cachedmulti"
-        elif MULTI:
-            suffix="_multi"
-        elif CACHED:
-            suffix="_cached"
-        else:
-            suffix=""
-        sim_log = open(os.path.join("log",test_name+suffix+".log"), 'rt')
-        sim_status=tools.sim.MipsStatus(sim_log)
-        regv0=sim_status[2]
-        if regv0 != 0:
-            line=open(os.path.join(TEST_DIR,test_name+'.c')).readlines()[regv0-1]
-            assert regv0 == 0, "clang assert failed at line %d: %s" % (regv0, line.strip())
+            for test in filter(lambda f: TEST_FILE_RE.match(f),
+                               os.listdir(TEST_DIR)):
+                test_name = os.path.splitext(os.path.basename(test))[0]
+                yield (check_answer, test_name)

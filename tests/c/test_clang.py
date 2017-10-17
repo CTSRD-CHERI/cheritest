@@ -44,6 +44,8 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_DIR = os.environ.get("LOGDIR", "log")
 
 
+@attr('clang')
+@attr('capabilities')
 def check_answer(test_name):
     if MULTI and CACHED:
         suffix = "_cachedmulti"
