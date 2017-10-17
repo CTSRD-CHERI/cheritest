@@ -48,21 +48,37 @@ for num, name in enumerate(MIPS_REG_NUM2NAME):
     MIPS_REG_NAME2NUM[name] = num
 
 ## Regular expressions for parsing the log file
+# does a line.startswith() before full regex matching to speed up logfile parsing
+class FasterRegex(object):
+    def __init__(self, line_start, remaining):
+        self.line_start = line_start
+        assert self.line_start
+        self.regex = re.compile('^' + line_start + remaining)
+
+    def search(self, line):
+        if not line.startswith(self.line_start):
+            return None
+        return self.regex.search(line)
+
+
+
 hdigit="[0-9A-Fa-f]"
+# FIXME: is this also at start of line? If so we can speed it up by using the FastRegex class
 THREAD_RE=re.compile(r'======\s+Thread\s+([0-9]+)\s+======$')
-MIPS_CORE_RE=re.compile(r'^DEBUG MIPS COREID\s+([0-9]+)$')
-MIPS_REG_RE=re.compile(r'^DEBUG MIPS REG\s+([0-9]+)\s+(0x................)$')
-MIPS_PC_RE=re.compile(r'^DEBUG MIPS PC\s+(0x................)$')
-CAPMIPS_CORE_RE=re.compile(r'^DEBUG CAP COREID\s+([0-9]+)$')
-CAPMIPS_PC_RE = re.compile(r'^DEBUG CAP PCC\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
+MIPS_CORE_RE=FasterRegex('DEBUG MIPS COREID', r'\s+([0-9]+)$')
+MIPS_REG_RE=FasterRegex('DEBUG MIPS REG', r'\s+([0-9]+)\s+(0x................)$')
+MIPS_PC_RE=FasterRegex('DEBUG MIPS PC', r'\s+(0x................)$')
+CAPMIPS_CORE_RE=FasterRegex('DEBUG CAP COREID', r'\s+([0-9]+)$')
+CAPMIPS_PC_RE = FasterRegex('DEBUG CAP PCC', r'\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
-CAPMIPS_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
+CAPMIPS_REG_RE = FasterRegex('DEBUG CAP REG', r'\s+([0-9]+)\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
                             r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
-SAIL_CAP_PCC_RE = re.compile(r'^DEBUG CAP PCC\s+0b([01u]{257})$')
-SAIL_CAP_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{257})$')
-SAIL_CAP128_PCC_RE = re.compile(r'^DEBUG CAP PCC\s+0b([01u]{129})$')
-SAIL_CAP128_REG_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+0b([01u]{129})$')
-SAIL_CAP_REG_NULL_RE = re.compile(r'^DEBUG CAP REG\s+([0-9]+)\s+0b0\.\.\.0$')
+SAIL_CAP_PCC_RE = FasterRegex('DEBUG CAP PCC', r'\s+0b([01u]{257})$')
+SAIL_CAP_REG_RE = FasterRegex('DEBUG CAP REG', r'\s+([0-9]+)\s+0b([01u]{257})$')
+SAIL_CAP128_PCC_RE = FasterRegex('DEBUG CAP PCC', r'\s+0b([01u]{129})$')
+SAIL_CAP128_REG_RE = FasterRegex('DEBUG CAP REG', r'\s+([0-9]+)\s+0b([01u]{129})$')
+SAIL_CAP_REG_NULL_RE = FasterRegex('DEBUG CAP REG', r'\s+([0-9]+)\s+0b0\.\.\.0$')
+
 class MipsException(Exception):
     pass
 
@@ -305,7 +321,7 @@ class MipsStatus(object):
             v.append(t.__repr__())
         return "\n".join(v)
 
-MIPS_ICACHE_TAG_RE=re.compile(r'^DEBUG ICACHE TAG ENTRY\s*([0-9]+) Valid=([01]) Tag value=([0-9a-fA-F]+)$')
+MIPS_ICACHE_TAG_RE=FasterRegex('DEBUG ICACHE TAG ENTRY', r'\s*([0-9]+) Valid=([01]) Tag value=([0-9a-fA-F]+)$')
 
 class ICacheException(Exception):
     pass
