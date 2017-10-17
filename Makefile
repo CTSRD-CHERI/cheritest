@@ -1459,6 +1459,7 @@ and not mips_overflow 	\
 and not dma		\
 and not dmaclang	\
 and not statcounters	\
+and not qemu_only	\
 "
 
 L3_NOSEPRED=\
@@ -1491,7 +1492,8 @@ and not noextendedtlb \
 and not csettype \
 and not statcounters \
 and not tlbcheck \
-and not tlb_read_uninitialized
+and not tlb_read_uninitialized \
+and not qemu_only
 
 ifdef COP1
 L3_NOSEPRED+=\
@@ -1604,7 +1606,8 @@ and not clang  \
 and not pic \
 and not mt \
 and not einstr \
-and not ccall_hw_2
+and not ccall_hw_2 \
+and not qemu_only
 
 ifneq ($(CAP_SIZE),256)
 SAIL_NOSEPRED+=and not cap256
@@ -1646,8 +1649,7 @@ SAIL_CHERI_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 SAIL_CHERI128_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 
 QEMU_NOSEPRED=\
-not newisa \
-and not allow_unaligned \
+not allow_unaligned \
 and not beri \
 and not beri1cache \
 and not beri1tlb \
@@ -1688,7 +1690,9 @@ and not pic \
 and not swisync \
 and not tlbcheck \
 and not watch \
-and not csettype
+and not csettype \
+and not qemu_skip
+# XXXAM why settype is disabled?
 
 ifdef TEST_QEMU_R4000
 QEMU_NOSEPRED+=\

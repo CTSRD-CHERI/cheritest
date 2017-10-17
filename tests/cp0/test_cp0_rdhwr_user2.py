@@ -35,12 +35,24 @@ class test_cp0_rdhwr_user2(BaseBERITestCase):
     @attr('userlocal')
     def test_cp0_rdhwr_user2_1(self):
         '''Test that the user local register can be read from user space'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x123456789abcdef0, "rdhwr did not read back the expected value from the user local register")
+        self.assertRegisterEqual(self.MIPS.a1, 0x123456789abcdef0,
+                                 "rdhwr did not read back the expected value from the user local register")
 
 
     @attr('tlb')
     @attr('rdhwr')
     @attr('usercount')
+    @attr('qemu_skip')
     def test_cp0_rdhwr_user2_count(self):
         '''Test that the user count register can be read from user space'''
-        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a3-90, self.MIPS.a3, "rdhwr counter did not approximately match cp0 count ")
+        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a3-90, self.MIPS.a3,
+                                   "rdhwr counter did not approximately match cp0 count ")
+
+    @attr('tlb')
+    @attr('rdhwr')
+    @attr('usercount')
+    @attr('qemu_only')
+    def test_cp0_rdhwr_user2_count_qemu(self):
+        '''Test that the user count register can be read from user space'''
+        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a3-32000, self.MIPS.a3,
+                                   "rdhwr counter did not approximately match cp0 count ")
