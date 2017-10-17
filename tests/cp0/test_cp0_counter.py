@@ -47,5 +47,5 @@ class test_cp0_counter(BaseBERITestCase):
     @attr('qemu_only')
     def test_cp0_counter_qemu_1(self):
         '''Test that the count register gives almost the same value when it is read two different ways'''
-        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a1, self.MIPS.a1 + 4096,
+        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a1, self.MIPS.a1 + 10000,
             "rdhwr and mfc0 did not give nearly the same value for the count register")
