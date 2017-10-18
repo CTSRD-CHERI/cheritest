@@ -2060,6 +2060,8 @@ all: sanity-check-makefile $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST
 
 elfs: $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS)
 
+dumps: $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_MULTI_DUMPS)
+
 test: nosetest nosetest_cached
 
 .PHONY: FORCE
@@ -2270,7 +2272,7 @@ $(OBJDIR)/%.hex : $(OBJDIR)/%.mem
 
 #
 # Provide an annotated disassembly for the ELF image to be used in diagnosis.
-# (Use flags that work for both GNU objdump and llvm-objdump
+# (Use flags that work for both GNU objdump and llvm-objdump)
 $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
 	$(OBJDUMP) -p -h -s -S -D -l $< > $@
 
