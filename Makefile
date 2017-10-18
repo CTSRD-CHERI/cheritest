@@ -116,6 +116,7 @@ FUZZ_DMA_ONLY?=0
 NOFUZZ?=1
 NOFUZZR?=1
 CAP_SIZE?=256
+USE_CAP_TABLE?=0
 ifeq ($(CAP_SIZE),256)
 PERM_SIZE?=31
 endif
@@ -133,7 +134,6 @@ CC?=gcc
 CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension-token -Wno-error=unused -Wno-error=pedantic
 HYBRID_CFLAGS?=-fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections
 PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
-
 
 ifneq ($(CHERI$(CAP_SIZE)_SDK),)
 CHERI_SDK:=$(CHERI$(CAP_SIZE)_SDK)
@@ -2156,6 +2156,12 @@ PURECAP_ASMDEFS=-Wa,-defsym,TEST_CP2=$(TEST_CP2)      \
 		-Wa,-defsym,CAP_SIZE=$(CAP_SIZE)      \
 		-Wa,-defsym,BUILDING_PURECAP=1        \
 		-Wa,-defsym,DIE_ON_EXCEPTION=1
+
+ifeq ($(USE_CAP_TABLE),1)
+# XXXAR: TODO: add the __CHERI_CAPABILITY_TABLE__ to clang
+PURECAP_CFLAGS+=-mllvm -cheri-cap-table -D__CHERI_CAPABILITY_TABLE__=1
+PURECAP_ASMDEFS+=-Wa,-defsym,__CHERI_CAPABILITY_TABLE__=1
+endif
 
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
 		$(OBJDIR)/purecap_lib.o \

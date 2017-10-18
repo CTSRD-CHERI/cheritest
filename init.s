@@ -149,6 +149,12 @@ no_float:
 		# need to call crt_init_globals() before starting the test
 		# NOTE: the following requires nosp to be merged!
 		cfromptr $c11, $c0, $sp
+.ifdef __CHERI_CAPABILITY_TABLE__
+		# If we are using the capability table we also need to setup $cgp
+		dla $at, _CHERI_CAPABILITY_TABLE_
+		cfromptr $cgp, $c0, $at
+		# FIXME: we also wan't to set sensible bounds here and reduce permissions
+.endif
 
 		dla     $t9, crt_init_globals
 		cgetpccsetoffset $c12, $t9
@@ -156,8 +162,12 @@ no_float:
 		cgetpccsetoffset $c17, $ra 		# return address
 		# ensure all unused capability registers are NULL
 		cclearlo 0xf7fe                         # clear c1-c10 & c12-c15
+.ifdef __CHERI_CAPABILITY_TABLE__
+		cclearhi 0x03ff                         # clear c16-c25
+.else
 		cclearhi 0x07ff                         # clear c16-c26
-.endif
+.endif # __CHERI_CAPABILITY_TABLE__
+.endif # BUILDING_PURECAP
 
 		#
 		# Explicitly initialise most registers in order to make the effects
