@@ -64,11 +64,14 @@ test:
 
 		dla	$t0, L1
 
+		# LLVM Doesn't support the bc1any4f instruction yet, just use the raw bits
+		# Once it does we can uncomment the code below again
 		jr	$t0
-		.set	push
-		.set	mips3d
-		bc1any4f $fcc0, L1	# Should raise reserved instruction
-		.set	pop
+		.word 0x45400000  # bc1any4f $fcc0, L1	# Should raise reserved instruction
+		# .set	push
+		# .set	mips3d
+		# bc1any4f $fcc0, L1	# Should raise reserved instruction
+		#.set	pop
 
 L1:
 
