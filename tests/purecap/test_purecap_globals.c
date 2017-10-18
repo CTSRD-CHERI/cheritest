@@ -30,6 +30,7 @@
 
 int global_int = EXPECTED_VALUE;
 int* global_cap = &global_int;
+int global_int2 = EXPECTED_VALUE + 1;
 
 
 int test(void)
@@ -54,6 +55,10 @@ int test(void)
 	// actually load the values and compare
 	assert_eq(*local_cap, EXPECTED_VALUE);
 	assert_eq(*global_cap, EXPECTED_VALUE);
+
+	// Check that we load the correct value also for the second/third global
+	assert_eq(global_int2, EXPECTED_VALUE + 1);
+
 
 	return 0;
 }
