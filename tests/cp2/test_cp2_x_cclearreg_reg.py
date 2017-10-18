@@ -25,12 +25,11 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase, xfail_on
+from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 class test_cp2_x_cclearreg_reg(BaseBERITestCase):
 
-    @xfail_on("qemu")
     @attr('capabilities')
     def test_cp2_x_cclearreg_reg_1(self):
         '''Test that CClearRegs does not clear any registers if it raises an exception'''
