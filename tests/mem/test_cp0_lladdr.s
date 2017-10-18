@@ -40,7 +40,7 @@ test:		.ent test
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
 		daddu	$fp, $sp, 32
-
+	
 		#
 		# Save addresses that will be checked in test results;
 		# convert to physical addresses as that is what lladdr will
@@ -68,12 +68,13 @@ test:		.ent test
 		#
 		# Simple load linked and store conditional
 		#
-		ll	$t0, word1
+		dla	$t1, word1
+		ll	$t0, ($t1)
 		nop
 		nop
 		nop
 		dmfc0	$a1, $17
-		sc	$t0, word1
+		sc	$t0, ($t1)
 		nop
 		nop
 		nop
@@ -82,12 +83,13 @@ test:		.ent test
 		#
 		# Simple load linked and store conditional double word1
 		#
-		lld	$t0, dword1
+		dla	$t1, dword1
+		lld	$t0, ($t1)
 		nop
 		nop
 		nop
 		dmfc0	$a3, $17
-		scd	$t0, dword1
+		scd	$t0, ($t1)
 		nop
 		nop
 		nop
@@ -96,8 +98,10 @@ test:		.ent test
 		#
 		# If we do two load linkeds in a row, we get the second one.
 		#
-		ll	$t0, word1
-		ll	$t0, word3
+		dla	$t1, word1
+		dla	$t2, word3
+		ll	$t0, ($t1)
+		ll	$t0, ($t2)
 		nop
 		nop
 		nop
@@ -107,8 +111,10 @@ test:		.ent test
 		# If we do two load linked double words in a row, we get the
 		# second one.
 		#
-		lld	$t0, dword1
-		lld	$t0, dword2
+		dla	$t1, dword1
+		dla	$t2, dword2
+		lld	$t0, ($t1)
+		lld	$t0, ($t2)
 		nop
 		nop
 		nop
@@ -119,8 +125,9 @@ test:		.ent test
 		# an operation that clears LLbit, we should still get the
 		# same address.
 		#
-		ll	$t0, word3
-		sw	$zero, word3
+		dla	$t1, word3
+		ll	$t0, ($t1)
+		sw	$zero, ($t1)
 		nop
 		nop
 		nop
@@ -131,8 +138,9 @@ test:		.ent test
 		# word through an operation that clears LLbit, we should
 		# still get the same address.
 		#
-		lld	$t0, dword3
-		sd	$zero, dword3
+		dla	$t1, dword3
+		lld	$t0, ($t1)
+		sd	$zero, ($t1)
 		nop
 		nop
 		nop

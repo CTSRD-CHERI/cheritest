@@ -52,23 +52,25 @@ test:		.ent test
 		jal	bev0_handler_install
 		nop
 
+		# t1 holds the address of word
+		dla	$t1, word
 		#
 		# Load the word into another register between ll and sc; this
 		# shouldn't cause the store to fail.
 		#
-		ll	$a2, word
-		lwu	$t0, word
-		sc	$a2, word
+		ll	$a2, ($t1)
+		lwu	$t0, ($t1)
+		sc	$a2, ($t1)
 
 		#
 		# Store to word between ll and sc; check to make sure that
 		# the sc not only returns failure, but doesn't store.
 		#
 		li	$t0, 1
-		ll	$a5, word
-		sw	$a5, word
-		sc	$t0, word
-		lwu	$a6, word
+		ll	$a5, ($t1)
+		sw	$a5, ($t1)
+		sc	$t0, ($t1)
+		lwu	$a6, ($t1)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

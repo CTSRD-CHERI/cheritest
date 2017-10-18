@@ -50,30 +50,32 @@ test:		.ent test
 		jal	bev0_handler_install
 		nop
 
+		# t1 holds the address of dword
+		dla	$t1, dword
 		#
 		# Uninterrupted access; check to make sure the right value
 		# comes back.
 		#
-		lld	$a0, dword
-		scd	$a0, dword
-		ld	$a1, dword
+		lld	$a0, ($t1)
+		scd	$a0, ($t1)
+		ld	$a1, ($t1)
 
 		#
 		# Check to make sure we are allowed to increment the loaded
 		# number, so we can do atomic arithmetic.
 		#
-		lld	$a3, dword
+		lld	$a3, ($t1)
 		addiu	$a3, $a3, 1
-		scd	$a3, dword
-		ld	$a4, dword
+		scd	$a3, ($t1)
+		ld	$a4, ($t1)
 
 		#
 		# Trap between lld and scd; check to make sure that the scd
 		# not only returns failure, but doesn't store.
 		#
-		lld	$a7, dword
+		lld	$a7, ($t1)
 		tnei	$zero, 1
-		scd	$a7, dword
+		scd	$a7, ($t1)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

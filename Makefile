@@ -732,15 +732,10 @@ TEST_LLSC_FILES=				\
 		test_scd_unalign.s		\
 		test_scd_alias.s		\
 		test_llsc.s			\
-		test_lldscd_span.s
-
-#FIXME: these tests doesn't build with LLVM yet (symbol reference in sc)
-ifneq ($(USING_LLVM_ASSEMBLER),1)
-TEST_LLSC_FILES+=test_llsc_span.s               \
-		test_lldscd.s                   \
+		test_lldscd_span.s		\
+		test_llsc_span.s		\
+		test_lldscd.s			\
 		test_cp0_lladdr.s
-
-endif
 
 TEST_CACHE_FILES=				\
 		test_hardware_mapping_cached_read.s \
