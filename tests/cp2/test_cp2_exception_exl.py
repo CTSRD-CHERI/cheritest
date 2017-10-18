@@ -38,5 +38,5 @@ class test_cp2_exception_exl(BaseBERITestCase):
     def test_cp2_exception_exl_epcc(self):
         self.assertRegisterEqual(self.MIPS.c1.offset, 0, "An exception with EXL=1 set EPCC when it should not have done.")
         self.assertRegisterEqual(self.MIPS.c1.base, 0, "An exception with EXL=1 set EPCC when it should not have done.")
-        self.assertRegisterEqual(self.MIPS.c1.length, 0, "An exception with EXL=1 set EPCC when it should not have done.")
+        self.assertRegisterEqual(self.MIPS.c1.length, 0xffffffffffffffff, "An exception with EXL=1 set EPCC when it should not have done.")
         self.assertRegisterEqual(self.MIPS.c1.t, 0, "An exception with EXL=1 set EPCC when it should not have done.")
