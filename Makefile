@@ -1569,8 +1569,7 @@ L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
 L3_NOSEFLAGS_UNCACHED=-A "$(L3_NOSEPRED) and not cached"
 
 SAIL_NOSEPRED=\
-not newisa \
-and not beri \
+not beri \
 and not beriinitial \
 and not berisyncistep \
 and not counterdev \
