@@ -47,17 +47,42 @@ static const uint64_t function_pointer_permissions =
 static const uint64_t global_pointer_permissions =
 	~0 & ~__CHERI_CAP_PERMISSION_PERMIT_EXECUTE__;
 
-static inline void
-crt_init_globals_impl(struct capreloc* start, struct capreloc* end)
+
+__attribute__((weak))
+extern struct capreloc __start___cap_relocs;
+__attribute__((weak))
+extern struct capreloc __stop___cap_relocs;
+
+void
+crt_init_globals(void)
 {
+	struct capreloc *start_relocs;
+	struct capreloc *stop_relocs;
+#ifndef __CHERI_CAPABILITY_TABLE__
+
+	/* If we are not using the CHERI capability table we can just synthesize
+	 * the capabilities for these using the GOT and $ddc */
+	start_relocs = &__start___cap_relocs;
+	stop_relocs = &__stop___cap_relocs;
+#else
+	long start_addr, end_addr;
+	__asm__ (".option pic0\n\t"
+		 "dla %0, __start___cap_relocs\n\t"
+		 "dla %1, __stop___cap_relocs\n\t"
+		 :"=r"(start_addr), "=r"(end_addr));
+	long relocs_size = end_addr - start_addr;
+	void *ddc = __builtin_cheri_global_data_get();
+	start_relocs = __builtin_cheri_offset_set(__builtin_cheri_global_data_get(), start_addr);
+	start_relocs = __builtin_cheri_bounds_set(start_relocs, relocs_size);
+	stop_relocs = __builtin_cheri_offset_set(start_relocs, relocs_size);
+#endif
 	void *gdc = __builtin_cheri_global_data_get();
 	void *pcc = __builtin_cheri_program_counter_get();
 
 	gdc = __builtin_cheri_perms_and(gdc, global_pointer_permissions);
 	pcc = __builtin_cheri_perms_and(pcc, function_pointer_permissions);
-	for (struct capreloc *reloc = start; reloc < end; reloc++) {
-		_Bool isFunction = (reloc->permissions & function_reloc_flag) ==
-		    function_reloc_flag;
+	for (struct capreloc *reloc = start_relocs; reloc < stop_relocs; reloc++) {
+		_Bool isFunction = (reloc->permissions & function_reloc_flag) == function_reloc_flag;
 		void **dest = __builtin_cheri_offset_set(gdc, reloc->capability_location);
 		void *base = isFunction ? pcc : gdc;
 		void *src = __builtin_cheri_offset_set(base, reloc->object);
@@ -67,32 +92,4 @@ crt_init_globals_impl(struct capreloc* start, struct capreloc* end)
 		src = __builtin_cheri_offset_increment(src, reloc->offset);
 		*dest = src;
 	}
-}
-
-
-__attribute__((weak))
-extern struct capreloc __start___cap_relocs;
-__attribute__((weak))
-extern struct capreloc __stop___cap_relocs;
-void
-crt_init_globals(void)
-{
-#ifndef __CHERI_CAPABILITY_TABLE__
-
-	/* If we are not using the CHERI capability table we can just synthesize
-	 * the capabilities for these using the GOT and $ddc */
-	crt_init_globals_impl(&__start___cap_relocs, &__stop___cap_relocs);
-#else
-	long start_addr, end_addr;
-	__asm__ (".option pic0\n\t"
-		 "dla %0, __start___cap_relocs\n\t"
-		 "dla %1, __stop___cap_relocs\n\t"
-		 :"=r"(start_addr), "=r"(end_addr));
-	long relocs_size = end_addr - start_addr;
-	void *ddc = __builtin_cheri_global_data_get();
-	struct capreloc *start = __builtin_cheri_offset_set(ddc, start_addr);
-	start = __builtin_cheri_bounds_set(start, relocs_size);
-	struct capreloc *end = __builtin_cheri_offset_set(start, relocs_size);
-	crt_init_globals_impl(start, end);
-#endif
 }
