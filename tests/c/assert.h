@@ -66,3 +66,9 @@ ASM_FUNC void __assert_eq_cap(int line, void* __capability actual, void* __capab
 #define DEBUG_NOP() \
 	__asm__ volatile ("nop")
 
+int noExceptions()
+{
+	int expCount;
+	__asm__ volatile ("daddu $26, $0, %0" : "=r" (expCount) : : );
+	return expCount==0;
+}
