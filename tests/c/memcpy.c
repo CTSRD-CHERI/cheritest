@@ -133,7 +133,7 @@ bcopy(const void *src0, void *dst0, size_t length)
 #endif
 	size_t t;
 	
-#if defined(MEMMOVE) || defined(BCOPY) || defined(CMEMMOVE_C) || defined(CMEMMOVE)
+#if defined(MEMMOVE) || defined(BCOPY) || defined(MEMMOVE_C) || defined(CMEMMOVE)
 	const int handle_overlap = 1;
 #else
 	const int handle_overlap = 0;
