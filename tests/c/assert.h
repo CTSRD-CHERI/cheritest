@@ -69,6 +69,6 @@ ASM_FUNC void __assert_eq_cap(int line, void* __capability actual, void* __capab
 int noExceptions()
 {
 	int expCount;
-	__asm__ volatile ("daddu $26, $0, %0" : "=r" (expCount) : : );
+	__asm__ volatile ("daddu %0, $26, $0" : "=r" (expCount) : : );
 	return expCount==0;
 }
