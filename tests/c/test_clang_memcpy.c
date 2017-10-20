@@ -197,6 +197,7 @@ int test(void)
 	check(&t2, 0, 32);
 	/*
 	*/
+	assert(noExceptions());
 	
 	return 0;
 }

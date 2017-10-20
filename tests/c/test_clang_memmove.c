@@ -51,7 +51,7 @@ struct Test
 // Check that the copy has the data that we expect it to contain.  The start
 // and end parameters describe the range in the padding to check.  For partial
 // copies, the uncopied range will contain nonsense.
-void check(struct Test *t, int start, int end)
+__attribute__((noinline)) void check(struct Test *t, int start, int end)
 {
 	for (int i=start ; i<32 ; i++)
 	{
@@ -142,6 +142,9 @@ int test(void)
 	check(&t1, 3, 29);
 	invalidate(&t1);
 	DEBUG_DUMP_REG(13, 5);
+	// special case noticed in pkg executable.
+	cmemmove(&t1.pad0[12], &t2.pad0[12], sizeof(t1) - 16);
+	check(&t1, 12, 12);
 	// ...and finally a case where the alignment is different for both?
 	cmemmove(&t1, &t2.pad0[1], sizeof(t1) - 1);
 	// This should have invalidated the capability
@@ -152,6 +155,8 @@ int test(void)
 		assert(t1.pad0[i] == i+1);
 		assert(t1.pad1[i] == i+1);
 	}
+	
+	assert(noExceptions());
 
 //	check(&t2, 0, 32);
 	/*

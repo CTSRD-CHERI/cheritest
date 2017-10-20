@@ -157,6 +157,8 @@ int test(void)
 	/*
 	*/
 	
+	assert(noExceptions());
+	
 	return 0;
 }
 
