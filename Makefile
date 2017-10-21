@@ -2402,12 +2402,23 @@ $(QEMU_LOGDIR):
 	mkdir -p $(QEMU_LOGDIR)
 
 QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
+QEMU_FLAGS=-D "$@" -M mipssim -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
+           	-kernel "$<" -serial stdio -monitor none -nographic -m 3072M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
+# raw tests need to be started with tracing in, for the others we can start it in init.s
+$(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU_LOGDIR) $(QEMU)
+ifeq ($(wildcard $(QEMU_ABSPATH)),)
+	$(error QEMU ($(QEMU)) is missing, could not execute it)
+endif
+	$(QEMU) $(QEMU_FLAGS) -d instr || true
+	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
+	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
+
+
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR) $(QEMU)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
-	$(QEMU) -D "$@" -d instr -M mipssim -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
-	-kernel "$(OBJDIR)/$*.elf" -nographic -m 3072M -bp 0x`$(OBJDUMP) -t "$(OBJDIR)/$*.elf" | awk -f end.awk` || true
+	$(QEMU) $(QEMU_FLAGS) || true
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 

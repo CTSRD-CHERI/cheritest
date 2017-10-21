@@ -212,9 +212,12 @@ no_float:
 		
 		mfc0 $k0, $16, 1	# config1 register
 		andi $k0, $k0, 0x40	# CP2 available bit
+
+		ori $0, $0, 0xbeef	# start tracing on QEMU
+
 		beqz $k0, skip_cp2_setup 
 		nop
-		
+
 		cgetpccsetoffset $c12, $t9
 		jalr $25
 		cgetpccsetoffset $c17, $ra			# return address
@@ -307,6 +310,7 @@ dump_core0:
 		nop
 .global end
 end:
+		ori $0, $0, 0xdead	# stop tracing on QEMU
 		b end
 		daddiu $zero, $zero, 0  # load zero nop to indicate core 0
 
