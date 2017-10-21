@@ -32,8 +32,6 @@
 #include "assert.h"
 int buffer[42];
 
-extern volatile long long exception_count;
-
 __attribute__((noinline))
 void set(int* __capability x)
 {
@@ -93,6 +91,5 @@ int test(void)
 	assert(__builtin_cheri_offset_get(v) == 0);
 
 	// Nothing in this test should have triggered any exceptions
-	assert(exception_count == 0);
-	return 0;
+	return success_if_no_exceptions();
 }

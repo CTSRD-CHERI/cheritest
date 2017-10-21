@@ -36,5 +36,5 @@ int test(void)
 
   assert((__cheri_cast char*)datacp == data);
 
-  return 0;
+  return success_if_no_exceptions();
 }

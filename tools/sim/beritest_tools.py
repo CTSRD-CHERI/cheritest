@@ -426,7 +426,7 @@ class BaseICacheBERITestCase(BaseBERITestCase):
 class TestClangBase(object):
     @staticmethod
     @nose.tools.nottest
-    def verify_clang_test(sim_log, test_dir, test_name):
+    def verify_clang_test(sim_log, test_name, test_file):
         sim_status = MipsStatus(sim_log)
         exit_code = sim_status[2]  # load the assertion failure kind from $v0
         line_number = sim_status[4]  # load the assertion line number from $a0
@@ -436,12 +436,12 @@ class TestClangBase(object):
         # -1/0xdead0000 -> general assertion failure
         if exit_code == 0xffffffffffffffff or exit_code == 0xdead0000:
             exception_message = "clang assert failed at line %d: %s" % (
-                line_number, TestClangBase.get_line(test_dir, test_name, line_number))
+                line_number, TestClangBase.get_line(test_file, line_number))
         # 0xdead0001 integer comparison failed
         elif exit_code == 0xdead0001:
             # the values are stored in a1 and a2 (registers 5 and 6)
             exception_message = "clang assert_eq long failed at line %d: %s" % (
-                line_number, self.get_line(test_dir, test_name, line_number))
+                line_number, TestClangBase.get_line(test_file, line_number))
             dec_and_hex = lambda value: "0x%016x (%d)" % (value, value)
             exception_message += "\n>>>> Actual:   " + dec_and_hex(
                 sim_status[5])
@@ -451,7 +451,7 @@ class TestClangBase(object):
         elif exit_code == 0xdead000c:
             # the values are stored in c3 and c4
             exception_message = "clang assert_eq cap failed at line %d: %s" % (
-                line_number, TestClangBase.get_line(test_dir, test_name, line_number))
+                line_number, TestClangBase.get_line(test_file, line_number))
             exception_message += "\n>>>>Actual:   " + str(
                 sim_status.threads[0].cp2[3])
             exception_message += "\n>>>>Expected: " + str(
@@ -467,8 +467,8 @@ class TestClangBase(object):
 
     @staticmethod
     @nose.tools.nottest
-    def get_line(test_dir, test_name, line_number):
-        with open(os.path.join(test_dir, test_name + '.c')) as src_file:
+    def get_line(test_file, line_number):
+        with open(os.path.join(test_file)) as src_file:
             return src_file.readlines()[line_number - 1].strip()
 
 

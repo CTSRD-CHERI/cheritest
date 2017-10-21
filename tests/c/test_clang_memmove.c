@@ -156,12 +156,10 @@ int test(void)
 		assert(t1.pad1[i] == i+1);
 	}
 	
-	assert(noExceptions());
 
 //	check(&t2, 0, 32);
 	/*
 	*/
-	
-	return 0;
+	return success_if_no_exceptions();
 }
 

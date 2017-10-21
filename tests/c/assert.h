@@ -31,9 +31,7 @@
 #endif
 
 #ifdef __cplusplus
-#define ASM_FUNC extern "C"
-#else
-#define ASM_FUNC extern
+extern "C" {
 #endif
 
 #define TO_CAP(x) ((__cheri_cast void * __capability)(void*)(x))
@@ -41,7 +39,7 @@
 typedef __attribute__((memory_address)) long vaddr_t;
 
 
-ASM_FUNC __attribute__((noreturn)) int __assert_fail(int);
+__attribute__((noreturn)) int __assert_fail(int);
 void  __assert(int cond, int line)
 {
 	if (!cond)
@@ -51,10 +49,10 @@ void  __assert(int cond, int line)
 }
 #define assert(cond) __assert(cond, __LINE__)
 
-ASM_FUNC void __assert_eq_long(int line, long actual, long expected);
+void __assert_eq_long(int line, long actual, long expected);
 #define assert_eq(actual, expected) __assert_eq_long(__LINE__, actual, expected)
 
-ASM_FUNC void __assert_eq_cap(int line, void* __capability actual, void* __capability expected);
+void __assert_eq_cap(int line, void* __capability actual, void* __capability expected);
 #define assert_eq_cap(actual, expected) __assert_eq_cap(__LINE__, actual, expected)
 
 
@@ -66,9 +64,10 @@ ASM_FUNC void __assert_eq_cap(int line, void* __capability actual, void* __capab
 #define DEBUG_NOP() \
 	__asm__ volatile ("nop")
 
-int noExceptions()
-{
-	int expCount;
-	__asm__ volatile ("daddu %0, $26, $0" : "=r" (expCount) : : );
-	return expCount==0;
-}
+
+extern volatile long long exception_count;
+
+#define success_if_no_exceptions() __extension__({assert_eq(exception_count, 0); 0;})
+#ifdef __cplusplus
+} // end of exern "C"
+#endif

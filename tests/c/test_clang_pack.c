@@ -78,5 +78,6 @@ char *cp;
 
   check_struct();
 
-  return (0);
+  return success_if_no_exceptions();
+
 }

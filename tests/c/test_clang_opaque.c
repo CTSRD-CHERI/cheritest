@@ -91,5 +91,5 @@ int r;
   r = example_method(e);
   assert(r == 1);
 
-  return 0;
+  return success_if_no_exceptions();
 }

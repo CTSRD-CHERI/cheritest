@@ -48,6 +48,5 @@ test(void)
         b = a + 5;
         x = b - a;
 	assert(x == 5);
-
-	return (0);
+	return success_if_no_exceptions();
 }

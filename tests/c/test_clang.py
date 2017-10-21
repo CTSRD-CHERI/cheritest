@@ -46,7 +46,7 @@ LOG_DIR = os.environ.get("LOGDIR", "log")
 
 @attr('clang')
 @attr('capabilities')
-def check_answer(test_name):
+def check_answer(test_name, test_file):
     if MULTI and CACHED:
         suffix = "_cachedmulti"
     elif MULTI:
@@ -57,7 +57,7 @@ def check_answer(test_name):
         suffix = ""
     with open(os.path.join(LOG_DIR, test_name + suffix + ".log"),
               'rt') as sim_log:
-        TestClangBase.verify_clang_test(sim_log, TEST_DIR, test_name)
+        TestClangBase.verify_clang_test(sim_log, test_name, test_file)
 
 
 # Not derived from unittest.testcase because we wish test_clang to
@@ -72,4 +72,4 @@ class TestClang(object):
             for test in filter(lambda f: TEST_FILE_RE.match(f),
                                os.listdir(TEST_DIR)):
                 test_name = os.path.splitext(os.path.basename(test))[0]
-                yield (check_answer, test_name)
+                yield (check_answer, test_name, os.path.join(TEST_DIR, test))

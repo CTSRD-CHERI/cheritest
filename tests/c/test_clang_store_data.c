@@ -62,5 +62,6 @@ int test(void)
 	i32_test();
 	u64_test();
 	i64_test();
-	return 0;
+
+	return success_if_no_exceptions();
 }

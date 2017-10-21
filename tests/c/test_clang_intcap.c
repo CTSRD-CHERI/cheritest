@@ -50,6 +50,5 @@ test(void)
 	increment();
 	cp = (char * __capability) x;
 	assert(*cp == '1');
-
-	return (0);
+	return success_if_no_exceptions();
 }

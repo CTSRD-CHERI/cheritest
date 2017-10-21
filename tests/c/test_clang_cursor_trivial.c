@@ -58,5 +58,7 @@ int test(void)
 	// base might be lower than the start of the array.
 	v = __builtin_cheri_offset_set((void * __capability)v, 41*sizeof(int));
 	assert(*v == 12);
+
+	assert_eq(exception_count, 2);
 	return 0;
 }

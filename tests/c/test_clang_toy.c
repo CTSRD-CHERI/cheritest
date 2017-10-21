@@ -37,5 +37,5 @@ int test(void)
 	int a = 42;
 	a += anotherTest(a);
 	assert(a == 42+53);
-	return 0;
+	return success_if_no_exceptions();
 }

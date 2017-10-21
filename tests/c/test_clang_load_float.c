@@ -90,5 +90,5 @@ int test(void)
   else
     assert(1);
 
-  return 0;
+  return success_if_no_exceptions();
 }
