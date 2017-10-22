@@ -58,10 +58,10 @@ test:
 		nop
 		nop
 
-		cfc1 $t0, $f31		# Enable exception on divide by zero
+		cfc1 $t0, $31		# Enable exception on divide by zero
 		li $t1, 0x400
 		or $t0, $t0, $t1
-		ctc1 $t1, $f31
+		ctc1 $t1, $31
 		nop
 		nop
 		nop

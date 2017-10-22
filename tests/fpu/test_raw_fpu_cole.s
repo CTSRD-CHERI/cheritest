@@ -79,27 +79,27 @@ start:
 		
 		# C.OLE.S (True)
 		c.ole.s $f3, $f3
-		cfc1 $s0, $f25
+		cfc1 $s0, $25
 		
 		# C.OLE.D (True)
 		c.ole.d $f13, $f13
-		cfc1 $s1, $f25
+		cfc1 $s1, $25
 		
 		# C.OLE.S (False)
 		c.ole.s $f3, $f4
-		cfc1 $s3, $f25
+		cfc1 $s3, $25
 		
 		# C.OLE.D (False)
 		c.ole.d $f13, $f14
-		cfc1 $s4, $f25
+		cfc1 $s4, $25
 		
 		# C.OLE.S (True)
 		c.ole.s $f4, $f3
-		cfc1 $s6, $f25
+		cfc1 $s6, $25
 		
 		# C.OLE.D (True)
 		c.ole.d $f14, $f13
-		cfc1 $s7, $f25
+		cfc1 $s7, $25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

@@ -77,12 +77,12 @@ start:
 		
 		# C.EQ.PS (True)
 		c.eq.PS $f23, $f23
-		cfc1 $s2, $f25
+		cfc1 $s2, $25
 		ctc1 $0, $f31
 		
 		# C.EQ.PS (False)
 		c.eq.PS $f23, $f24
-		cfc1 $s5, $f25
+		cfc1 $s5, $25
 
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

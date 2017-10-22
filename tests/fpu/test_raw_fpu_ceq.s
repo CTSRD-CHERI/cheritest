@@ -77,19 +77,19 @@ start:
 		
 		# C.EQ.S (True)
 		c.eq.s $f3, $f3
-		cfc1 $s0, $f25
+		cfc1 $s0, $25
 		
 		# C.EQ.D (True)
 		c.eq.d $f13, $f13
-		cfc1 $s1, $f25
+		cfc1 $s1, $25
 		
 		# C.EQ.S (False)
 		c.eq.s $f3, $f4
-		cfc1 $s3, $f25
+		cfc1 $s3, $25
 		
 		# C.EQ.D (False)
 		c.eq.d $f13, $f14
-		cfc1 $s4, $f25
+		cfc1 $s4, $25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

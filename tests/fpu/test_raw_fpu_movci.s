@@ -58,7 +58,7 @@ start:
 		movt $s2, $t1, $fcc0
 
 		li $t0, 1
-		ctc1 $t0, $f25 # Set cc[0]=1
+		ctc1 $t0, $25 # Set cc[0]=1
 
 		movf $s3, $t1, $fcc0
 		movt $s4, $t1, $fcc0

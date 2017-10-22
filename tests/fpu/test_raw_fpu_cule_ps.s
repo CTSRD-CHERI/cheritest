@@ -80,22 +80,22 @@ start:
 		
 		# C.ULE.PS (True)
 		c.ule.ps $f23, $f23
-		cfc1 $s2, $f25
+		cfc1 $s2, $25
 		ctc1 $0, $f31
 		
 		# C.ULE.PS
 		c.ule.ps $f24, $f23
-		cfc1 $s5, $f25
+		cfc1 $s5, $25
 		ctc1 $0, $f31
 		
 		# C.ULE.PS
 		c.ule.ps $f23, $f24
-		cfc1 $a0, $f25
+		cfc1 $a0, $25
 		ctc1 $0, $f31
 		
 		# C.ULE.PS (QNaN)
 		c.ule.ps $f5, $f5
-		cfc1 $a3, $f25
+		cfc1 $a3, $25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

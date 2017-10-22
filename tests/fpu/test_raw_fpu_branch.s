@@ -48,7 +48,7 @@ start:
 		nop
 
 		li $t0, 1
-		ctc1 $t0, $f25		# Set cc[0]=1
+		ctc1 $t0, $25		# Set cc[0]=1
 		bc1t branch_taken
 		nop			# branch delay slot
 		b end_test
@@ -59,7 +59,7 @@ branch_taken:
 		# Individual tests
 		
 		# BC1F (Taken)
-		ctc1 $0, $f31
+		ctc1 $0, $31
 		li $t2, 4
 		mtc1 $t2, $f3
 		li $t1, 3
@@ -77,7 +77,7 @@ branch_taken:
 		
 		# Set FCSR (FCC[0] == 1)
 		lui $t0, 0x0080
-		ctc1 $t0, $f31
+		ctc1 $t0, $31
 		
 		# BC1F (Not Taken)
 		mtc1 $t2, $f4

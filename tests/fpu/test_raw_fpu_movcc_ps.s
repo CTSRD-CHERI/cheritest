@@ -72,7 +72,7 @@ start:
 		
 		# Set FCCs
 		lui $t0, 0x0F80
-		ctc1 $t0, $f31
+		ctc1 $t0, $31
 		
 		# MOVF.PS (False)
 		dmtc1 $t1, $f5

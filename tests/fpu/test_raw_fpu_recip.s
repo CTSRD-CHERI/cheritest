@@ -74,7 +74,7 @@ start:
 		
 		# RECIP.S (Denorm)
 		lui $t0, 0x0100
-		ctc1 $t0, $f31      # Enable flush to zero on denorm.
+		ctc1 $t0, $31      # Enable flush to zero on denorm.
 		lui $t0, 0x7FFF     # Some single greater than 2^(e_max-1)
 		mtc1 $t0, $f7
 		recip.s $f7, $f7

@@ -47,18 +47,18 @@ start:
 		    
 		# CTC / CFC
 		li $t0, 0xff
-		ctc1 $t0, $f25 # FCCR
-		cfc1 $a0, $f25
+		ctc1 $t0, $25 # FCCR
+		cfc1 $a0, $25
 
-		ctc1 $zero, $f25 # FCCR
-		cfc1 $a1, $f25	# FCCR
+		ctc1 $zero, $25 # FCCR
+		cfc1 $a1, $25	# FCCR
 		
 		li $t0, 0xfe800000
-		ctc1 $t0, $f31 # FCSR
-		cfc1 $a2, $f25
+		ctc1 $t0, $31 # FCSR
+		cfc1 $a2, $25
 
-		ctc1 $zero, $f31
-		cfc1 $a3, $f25
+		ctc1 $zero, $31
+		cfc1 $a3, $25
 
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

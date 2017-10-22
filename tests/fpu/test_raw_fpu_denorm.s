@@ -48,10 +48,10 @@ start:
 		nop
 		nop
 
-		cfc1 $t0, $f31		# Enable flush to zero
+		cfc1 $t0, $31		# Enable flush to zero
 		li $t1, 1 << 24
 		or $t0, $t0, $t1
-		ctc1 $t1, $f31
+		ctc1 $t1, $31
 		nop
 		nop
 		nop

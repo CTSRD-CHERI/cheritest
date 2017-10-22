@@ -51,7 +51,7 @@ test:		.ent test
 		#
 
 		dli 	$t0, 0x2
-		ctc1	$t0, $f31
+		ctc1	$t0, $31
 
 		nop
 		nop
@@ -81,7 +81,7 @@ test:		.ent test
 		# floating point operation underflowed.
 		#
 
-		cfc1	$a1, $f31
+		cfc1	$a1, $31
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

@@ -75,7 +75,7 @@ start:
 		
 		# C.F.PS (False)
 		c.f.ps $f23, $f24
-		cfc1 $s2, $f25
+		cfc1 $s2, $25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

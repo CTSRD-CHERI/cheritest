@@ -51,18 +51,18 @@ start:
 		# Individual tests
 		    
 		li $t0, 0x7c
-		ctc1 $t0, $f26 # FEXR
-		cfc1 $a0, $f26
+		ctc1 $t0, $26 # FEXR
+		cfc1 $a0, $26
 		
-		ctc1 $zero, $f26 # FEXR
-		cfc1 $a1, $f26 # FEXR
+		ctc1 $zero, $26 # FEXR
+		cfc1 $a1, $26 # FEXR
 
 		li $t0, 0x7c
-		ctc1 $t0, $f31	# FCSR
-		cfc1 $a2, $f26	# FEXR
+		ctc1 $t0, $31	# FCSR
+		cfc1 $a2, $26	# FEXR
 		
-		ctc1 $zero, $f31 # FCSR
-		cfc1 $a3, $f26	# FEXR
+		ctc1 $zero, $31 # FCSR
+		cfc1 $a3, $26	# FEXR
 
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

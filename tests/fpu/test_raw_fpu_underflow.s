@@ -50,7 +50,7 @@ start:
 		mul.s $f12, $f12, $f12 	# Should set the underflow flag
 		mfc1 $a0, $f12
 
-		cfc1 $a1, $f31
+		cfc1 $a1, $31
 
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

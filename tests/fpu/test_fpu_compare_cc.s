@@ -50,12 +50,12 @@ test:		.ent test
 		mtc0 $at, $12 
 
 		dmtc1	$zero, $f0
-		ctc1	$zero, $f25
+		ctc1	$zero, $25
 		c.eq.s	$fcc1, $f0, $f0
 		nop
 		nop
 		nop
-		cfc1	$a0, $f25
+		cfc1	$a0, $25
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

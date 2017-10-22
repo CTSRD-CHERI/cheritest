@@ -62,10 +62,10 @@ test:
 		nop
 		nop
 
-		cfc1 $t0, $f31		# Enable exception on invalid operation
+		cfc1 $t0, $31		# Enable exception on invalid operation
 		li $t1, 0x800
 		or $t0, $t0, $t1
-		ctc1 $t1, $f31
+		ctc1 $t1, $31
 		nop
 		nop
 		nop

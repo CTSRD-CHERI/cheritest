@@ -68,7 +68,7 @@ start:
 		
 		# ABS.S (Denorm)
 		lui $t0, 0x0100
-		ctc1 $t0, $f31      # Enable flush to zero on denorm.
+		ctc1 $t0, $31      # Enable flush to zero on denorm.
 		lui $t1, 0x1
 		dmtc1 $t1, $f22
 		abs.s $f22, $f22

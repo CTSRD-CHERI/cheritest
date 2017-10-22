@@ -77,20 +77,20 @@ start:
 		
 		# C.OLT.S (True)
 		c.olt.s $f4, $f3
-		cfc1 $s0, $f25
+		cfc1 $s0, $25
 		
 		# C.OLT.D (True)
 		c.olt.d $f14, $f13
-		cfc1 $s1, $f25
+		cfc1 $s1, $25
 		
 		# C.OLT.S (False)
 		c.olt.s $f3, $f3
-		cfc1 $s3, $f25
+		cfc1 $s3, $25
 		
 		# C.OLT.D
 		c.olt.d $f13, $f13
-		cfc1 $s4, $f25
-		
+		cfc1 $s4, $25
+
 		# -0.8 < 1.0
 		li $t0, 0xBF4CCCCC # 0.8
 		li $t1, 0x3F800000 # 1.0
@@ -98,7 +98,7 @@ start:
 		mtc1 $t1, $f1
 
 		c.olt.s $f0, $f1
-		cfc1 $s6, $f25
+		cfc1 $s6, $25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

@@ -79,11 +79,11 @@ start:
 		
 		# C.F.S (False)
 		c.f.s $f3, $f3
-		cfc1 $s0, $f25
+		cfc1 $s0, $25
 		
 		# C.F.D (False)
 		c.f.d $f13, $f14
-		cfc1 $s1, $f25
+		cfc1 $s1, $25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

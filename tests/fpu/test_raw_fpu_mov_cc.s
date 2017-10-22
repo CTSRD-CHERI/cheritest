@@ -51,7 +51,7 @@ start:
 		# Individual tests
 		
 		# Clear all FCCs
-		ctc1 $0, $f31
+		ctc1 $0, $31
 		
 		# MOVF.S (True)
 		lui $t1, 0x4100
@@ -70,7 +70,7 @@ start:
 		
 		# Set FCCs
 		lui $t0, 0x0F80
-		ctc1 $t0, $f31
+		ctc1 $t0, $31
 		
 		# MOVF.S (False)
 		lui $t1, 0x4100
@@ -103,7 +103,7 @@ start:
 		dmfc1 $s7, $f3
 		
 		# Clear all FCCs
-		ctc1 $0, $f31
+		ctc1 $0, $31
 		
 		# MOVT.S (False)
 		lui $t1, 0x4100

@@ -140,8 +140,8 @@ test:
 		mtc1	$zero, $f0
 		dmfc1	$t0, $f0
 		dmtc1	$zero, $f0
-		cfc1	$t0, $f31
-		ctc1	$zero, $f31
+		cfc1	$t0, $31
+		ctc1	$zero, $31
 
 		dla	$t1, data
 		lwc1	$f0, 0($t1)

@@ -81,22 +81,22 @@ start:
 		lui $t0, 0x7F81     # QNaN
 		mtc1 $t0, $f5
 		c.un.S $f3, $f5
-		cfc1 $s0, $f25
+		cfc1 $s0, $25
 		
 		# C.UN.D (True)
 		lui $t0, 0x7FF1
 		dsll $t0, $t0, 32   # QNaN
 		dmtc1 $t0, $f15
 		c.un.D $f15, $f15
-		cfc1 $s1, $f25
+		cfc1 $s1, $25
 		
 		# C.UN.S (False)
 		c.un.s $f3, $f3
-		cfc1 $s3, $f25
+		cfc1 $s3, $25
 		
 		# C.UN.D (False)
 		c.un.D $f13, $f14
-		cfc1 $s4, $f25
+		cfc1 $s4, $25
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
 		mtc0 $at, $26

@@ -99,7 +99,7 @@ start:
 		
 		# DIV.S (Denorm)
 		lui $t0, 0x0100
-		ctc1 $t0, $f31      # Enable flush to zero on denorm.
+		ctc1 $t0, $31      # Enable flush to zero on denorm.
 		lui $t0, 0x3F80     # 1.0
 		mtc1 $t0, $f21
 		lui $t1, 0x0001     # Some denormalised single

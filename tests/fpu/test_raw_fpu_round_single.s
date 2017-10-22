@@ -48,7 +48,7 @@ start:
 		nop
 		nop
 
-		cfc1 $a0, $f31		# Get floating point rounding mode
+		cfc1 $a0, $31		# Get floating point rounding mode
 		li $t0, 0x3
 		and $a0, $a0, $t0
 
