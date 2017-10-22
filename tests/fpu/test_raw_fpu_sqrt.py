@@ -29,8 +29,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_sqrt(BaseBERITestCase):
     def test_sqrt_single(self):

@@ -31,7 +31,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+
 
 class test_raw_fpu_cvt_s_w(BaseBERITestCase):
 

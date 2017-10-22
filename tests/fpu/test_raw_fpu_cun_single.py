@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+
 
 class test_raw_fpu_cun_single(BaseBERITestCase):
 

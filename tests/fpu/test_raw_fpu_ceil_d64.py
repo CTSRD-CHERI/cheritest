@@ -25,8 +25,10 @@
 # Test double-precision ceiling operation when the FPU is in 64 bit mode
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_ceil_d64(BaseBERITestCase):
 

@@ -29,8 +29,10 @@
 # Test double-precision floor operation when the FPU is in 64 bit mode
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_floor_d64(BaseBERITestCase):
 

@@ -28,8 +28,10 @@
 #
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_fpu_x_mthc1(BaseBERITestCase):
 

@@ -25,8 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_abs(BaseBERITestCase):
     def test_abs_single(self):

@@ -29,8 +29,10 @@
 # Test "Quiet Not a Number" (QNaN)
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_qnan_single(BaseBERITestCase):
 

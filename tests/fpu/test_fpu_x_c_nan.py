@@ -29,8 +29,10 @@
 # Test that comparing an IEEE 'not a number' value raises an exception
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_fpu_x_c_nan(BaseBERITestCase):
 

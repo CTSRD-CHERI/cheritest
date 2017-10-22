@@ -29,8 +29,10 @@
 # Test double-precision truncate operation when the FPU is in 64 bit mode
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_trunc_l_d64(BaseBERITestCase):
 

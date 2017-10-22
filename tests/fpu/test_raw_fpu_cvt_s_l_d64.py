@@ -29,8 +29,10 @@
 # Test conversion from a 64-bit int to a single-precision floating point value
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_cvt_s_l_d64(BaseBERITestCase):
 

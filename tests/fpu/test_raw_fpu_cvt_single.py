@@ -30,7 +30,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+
 
 class test_raw_fpu_cvt_single(BaseBERITestCase):
 

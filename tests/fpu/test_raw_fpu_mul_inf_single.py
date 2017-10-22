@@ -29,8 +29,10 @@
 # Test IEEE 747 infinity values in single-precision arithmetic
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_mul_inf_single(BaseBERITestCase):
 

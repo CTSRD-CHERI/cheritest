@@ -29,8 +29,10 @@
 # Test that floating point underflow sets a flag in the FP status register
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 class test_raw_fpu_underflow(BaseBERITestCase):
 

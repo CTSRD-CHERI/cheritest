@@ -30,7 +30,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+
 
 class test_fpu_x_disabled(BaseBERITestCase):
 

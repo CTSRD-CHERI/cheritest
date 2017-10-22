@@ -25,8 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+from beritest_tools import BaseBERITestCase
+
 
 #
 # Test double-precision subtraction when the CPU is in 32-bit mode

@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+
 
 class test_fpu_x_multiop_disabled(BaseBERITestCase):
 
