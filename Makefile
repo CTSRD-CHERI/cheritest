@@ -2398,14 +2398,15 @@ $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 	mkdir -p $(SAIL_CHERI128_EMBED_LOGDIR)
 	-$(SAIL_EMBED) --model cheri128 --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
-$(QEMU_LOGDIR):
+$(QEMU_LOGDIR)/.dir-created:
 	mkdir -p $(QEMU_LOGDIR)
+	touch "$@"
 
 QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
 QEMU_FLAGS=-D "$@" -M mipssim -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
            	-kernel "$<" -serial stdio -monitor none -nographic -m 3072M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
 # raw tests need to be started with tracing in, for the others we can start it in init.s
-$(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU_LOGDIR) $(QEMU)
+$(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU_LOGDIR)/.dir-created $(QEMU)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
@@ -2414,7 +2415,7 @@ endif
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
 
-$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR) $(QEMU)
+$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR)/.dir-created $(QEMU)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
