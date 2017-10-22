@@ -41,7 +41,7 @@
 		.global start
 start:
 		# Enable CP1
-	        mfc0    $t0, $12
+		mfc0    $t0, $12
 		dli	$t1, 1 << 29
 		or      $t0, $t0, $t1 	
 		li	$t1, 1 << 26		# Put FPU into 64 bit mode
