@@ -35,4 +35,4 @@ class test_raw_fpu_cule_d64(BaseBERITestCase):
     @attr('float64')
     def test_raw_fpu_cule_d64(self):
         '''Test double-precision unordered, less than, or equal'''
-    self.assertRegisterEqual(self.MIPS.a0, 0x8, "Double-precision compare unordered, less than, or equal failed")
+        self.assertRegisterEqual(self.MIPS.a0, 0x8, "Double-precision compare unordered, less than, or equal failed")

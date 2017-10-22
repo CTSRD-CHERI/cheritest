@@ -35,4 +35,4 @@ class test_raw_fpu_bc1t_pipeline(BaseBERITestCase):
     @attr('float_compare_pipeline')
     def test_raw_fpu_bc1t_pipeline_1(self):
         '''Test conditional branch immediately after floating point compare'''
-    self.assertRegisterEqual(self.MIPS.a0, 0, "Conditional branch immediately after compare failed")
+        self.assertRegisterEqual(self.MIPS.a0, 0, "Conditional branch immediately after compare failed")

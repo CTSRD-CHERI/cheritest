@@ -36,26 +36,26 @@ class test_raw_fpu_ceil_single(BaseBERITestCase):
 
     def test_raw_fpu_ceil_single_mode(self):
         '''Test ceiling operation'''
-    self.assertRegisterEqual(self.MIPS.a0, 0, "Default rounding mode is not round to nearest even")
+        self.assertRegisterEqual(self.MIPS.a0, 0, "Default rounding mode is not round to nearest even")
 
     def test_raw_fpu_ceil_single_1(self):
         '''Test ceiling operation'''
-    self.assertRegisterEqual(self.MIPS.a1, 0, "-0.75 did not round up to 0")
+        self.assertRegisterEqual(self.MIPS.a1, 0, "-0.75 did not round up to 0")
 
     def test_raw_fpu_ceil_single_2(self):
         '''Test ceiling operation'''
-    self.assertRegisterEqual(self.MIPS.a2, 0, "-0.5 did not round up to 0")
+        self.assertRegisterEqual(self.MIPS.a2, 0, "-0.5 did not round up to 0")
 
     def test_raw_fpu_ceil_single_3(self):
         '''Test ceiling operation'''
-    self.assertRegisterEqual(self.MIPS.a3, 0, "-0.25 did not round up to 0")
+        self.assertRegisterEqual(self.MIPS.a3, 0, "-0.25 did not round up to 0")
 
     def test_raw_fpu_ceil_single_4(self):
         '''Test ceiling operation'''
-    self.assertRegisterEqual(self.MIPS.a4, 1, "0.5 did not round up to 1")
+        self.assertRegisterEqual(self.MIPS.a4, 1, "0.5 did not round up to 1")
 
     def test_raw_fpu_ceil_single_5(self):
         '''Test ceiling operation'''
-    self.assertRegisterEqual(self.MIPS.a5, 2, "1.5 did not round up to 2")
+        self.assertRegisterEqual(self.MIPS.a5, 2, "1.5 did not round up to 2")
 
 

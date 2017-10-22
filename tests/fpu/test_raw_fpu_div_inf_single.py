@@ -38,7 +38,7 @@ class test_raw_fpu_div_inf_single(BaseBERITestCase):
 
     def test_raw_fpu_div_inf_single_1(self):
         '''Test div.s of +infinity by 1.0'''
-    self.assertRegisterEqual(self.MIPS.a0, 0x7f800000, "div.s of +infinity by 1.0 did not give +infinity")
+        self.assertRegisterEqual(self.MIPS.a0, 0x7f800000, "div.s of +infinity by 1.0 did not give +infinity")
 
     def test_raw_fpu_div_inf_single_2(self):
         '''Test div.s of +Infinity by +Infinity'''
@@ -51,7 +51,7 @@ class test_raw_fpu_div_inf_single(BaseBERITestCase):
 
     def test_raw_fpu_div_inf_single_4(self):
         '''Test div.s of 1.0 by 0.0'''
-    self.assertRegisterEqual(self.MIPS.a2, 0x7f800000, "div.s of 1.0 by 0.0 did not give +Infinity")
+        self.assertRegisterEqual(self.MIPS.a2, 0x7f800000, "div.s of 1.0 by 0.0 did not give +Infinity")
 
     def test_raw_fpu_div_inf_single_5(self):
         '''Test div.s of 0.0 by 0.0'''

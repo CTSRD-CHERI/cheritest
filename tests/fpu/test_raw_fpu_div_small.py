@@ -36,4 +36,4 @@ class test_raw_fpu_div_small(BaseBERITestCase):
 
     def test_raw_fpu_div_small_1(self):
         '''Test division of 2^-37 by itself'''
-    self.assertRegisterEqual(self.MIPS.a0, 0x3f800000, "Dividing 2^-37 by itself did not give 1.0")
+        self.assertRegisterEqual(self.MIPS.a0, 0x3f800000, "Dividing 2^-37 by itself did not give 1.0")

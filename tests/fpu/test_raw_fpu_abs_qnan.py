@@ -38,7 +38,7 @@ class test_raw_fpu_abs_qnan(BaseBERITestCase):
 
     def test_raw_fpu_abs_qnan_1(self):
         '''Test ABS.S of QNaN'''
-    self.assertRegisterIsSingleNaN(self.MIPS.a0, "ABS.S did not return NaN")
+        self.assertRegisterIsSingleNaN(self.MIPS.a0, "ABS.S did not return NaN")
 
     @attr('floatlegacyabs')
     def test_raw_fpu_abs_qnan_2(self):

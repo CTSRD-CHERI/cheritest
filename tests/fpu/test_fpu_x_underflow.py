@@ -35,4 +35,4 @@ class test_fpu_x_underflow(BaseBERITestCase):
     @attr('floatexception')
     def test_fpu_x_underflow(self):
         '''Test floating point underflow raises an exception'''
-    self.assertRegisterEqual(self.MIPS.a2, 1, "Floating point underflow did not raise an exception")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "Floating point underflow did not raise an exception")

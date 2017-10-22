@@ -38,7 +38,7 @@ class test_raw_fpu_add_inf_d64(BaseBERITestCase):
 
     def test_raw_fpu_add_inf_d64_1(self):
         '''Test add.d of 1.0 and +infinity'''
-    self.assertRegisterEqual(self.MIPS.a0, 0x7ff0000000000000, "add.d of +infinity did not give +infinity")
+        self.assertRegisterEqual(self.MIPS.a0, 0x7ff0000000000000, "add.d of +infinity did not give +infinity")
 
     def test_raw_fpu_add_inf_d64_2(self):
         '''Test add.d of +Infinity and -Infinity'''

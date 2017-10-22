@@ -36,13 +36,13 @@ class test_fpu_x_disabled(BaseBERITestCase):
 
     def test_fpu_x_disabled_1(self):
         '''Test that a floating point operation raises an exception if the FPU is disabled'''
-    self.assertRegisterEqual(self.MIPS.a2, 1, "A floating point operation with the FPU disabled did not raise an exception")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "A floating point operation with the FPU disabled did not raise an exception")
 
     def test_fpu_x_disabled_2(self):
         '''Test that CP0.cause.ExcCode is set when FPU is disabled'''
-    self.assertRegisterEqual(self.MIPS.a3, 11, "CP0.cause.exccode was not set to coprocessor unusable when the FPU was disabled")
+        self.assertRegisterEqual(self.MIPS.a3, 11, "CP0.cause.exccode was not set to coprocessor unusable when the FPU was disabled")
 
     def test_fpu_x_disabled_3(self):
         '''Test that CP0.cause.ce is set when FPU is disabled'''
-    self.assertRegisterEqual(self.MIPS.a4, 1, "CP0.cause.ce was not set to 1 when the FPU was disabled")
+        self.assertRegisterEqual(self.MIPS.a4, 1, "CP0.cause.ce was not set to 1 when the FPU was disabled")
 

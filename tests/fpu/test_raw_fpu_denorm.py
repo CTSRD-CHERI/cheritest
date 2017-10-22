@@ -36,13 +36,13 @@ class test_raw_fpu_denorm(BaseBERITestCase):
 
     def test_raw_fpu_denorm_add(self):
         '''Test that add.s flushes a denormalized result to zero'''
-    self.assertRegisterEqual(self.MIPS.a0, 0, "Denormalized result of add.s was not flushed to zero")
+        self.assertRegisterEqual(self.MIPS.a0, 0, "Denormalized result of add.s was not flushed to zero")
 
     def test_raw_fpu_denorm_sub(self):
         '''Test that sub.s flushes a denormalized result to zero'''
-    self.assertRegisterEqual(self.MIPS.a1, 0, "Denormalized result of sub.s was not flushed to zero")
+        self.assertRegisterEqual(self.MIPS.a1, 0, "Denormalized result of sub.s was not flushed to zero")
 
     def test_raw_fpu_denorm_mul(self):
         '''Test that mul.s flushes a denormalized result to zero'''
-    self.assertRegisterEqual(self.MIPS.a2, 0, "Denormalized result of mul.s was not flushed to zero")
+        self.assertRegisterEqual(self.MIPS.a2, 0, "Denormalized result of mul.s was not flushed to zero")
 

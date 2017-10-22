@@ -36,4 +36,4 @@ class test_raw_fpu_movf_s_pipeline(BaseBERITestCase):
     @attr('float_compare_pipeline')
     def test_raw_fpu_movf_s__pipeline_1(self):
         '''Test movf.s immediately after floating point compare'''
-    self.assertRegisterEqual(self.MIPS.a0, 0, "movf.s immediately after compare failed")
+        self.assertRegisterEqual(self.MIPS.a0, 0, "movf.s immediately after compare failed")

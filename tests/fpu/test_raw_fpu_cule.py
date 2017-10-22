@@ -45,4 +45,4 @@ class test_raw_fpu_cule(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.s1, 0x1, "Failed to compare unordered or less than or equal 2.0, 2.0 in in double precision")
         self.assertRegisterEqual(self.MIPS.s4, 0x0, "Failed to compare unordered or less than or equal 2.0, 1.0 in double precision")
         self.assertRegisterEqual(self.MIPS.a2, 0x1, "Failed to compare unordered or less than or equal QNaN, QNaN in double precision")
-    self.assertRegisterEqual(self.MIPS.s7, 0x1, "Failed to compare unordered or less than or equal 1.0, 2.0 in double precision")
+        self.assertRegisterEqual(self.MIPS.s7, 0x1, "Failed to compare unordered or less than or equal 1.0, 2.0 in double precision")

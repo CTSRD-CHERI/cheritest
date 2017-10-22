@@ -38,7 +38,7 @@ class test_raw_fpu_add_inf_single(BaseBERITestCase):
 
     def test_raw_fpu_add_inf_single_1(self):
         '''Test add.s of 1.0 and +infinity'''
-    self.assertRegisterEqual(self.MIPS.a0, 0x7f800000, "add.s of +infinity did not give +infinity")
+        self.assertRegisterEqual(self.MIPS.a0, 0x7f800000, "add.s of +infinity did not give +infinity")
 
     def test_raw_fpu_add_inf_single_2(self):
         '''Test add.s of +Infinity and -Infinity'''

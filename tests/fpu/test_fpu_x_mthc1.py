@@ -39,17 +39,17 @@ class test_fpu_x_mthc1(BaseBERITestCase):
     @attr('nomthc1')
     def test_fpu_x_mthc1_1(self):
         '''Test that mthc1 raises an exception'''
-    self.assertRegisterEqual(self.MIPS.a2, 1, "mthc1 did not raise an exception")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "mthc1 did not raise an exception")
 
     @attr('float64')
     @attr('nomthc1')
     def test_fpu_x_mthc1_2(self):
         '''Test that CP0.cause.ExcCode is set to reserved instruction exception after mthc1'''
-    self.assertRegisterEqual(self.MIPS.a3, 10, "CP0.cause.exccode was not set to reserved instruction exception after mthc1")
+        self.assertRegisterEqual(self.MIPS.a3, 10, "CP0.cause.exccode was not set to reserved instruction exception after mthc1")
 
     @attr('float64')
     @attr('nomthc1')
     def test_fpu_x_mthc1_3(self):
         '''Test that mthc1 has no effect on $f0 in configurations where it isn't implemented'''
-    self.assertRegisterEqual(self.MIPS.a0, 0x76543210, "$f0 was changed by mthc1")
+        self.assertRegisterEqual(self.MIPS.a0, 0x76543210, "$f0 was changed by mthc1")
 

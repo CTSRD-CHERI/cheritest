@@ -36,22 +36,22 @@ class test_raw_fpu_infinity_single(BaseBERITestCase):
 
     def test_raw_fpu_infinity_single_add(self):
         '''Test add.s of +infinity'''
-    self.assertRegisterEqual(self.MIPS.a0, 0x7f800000, "add.s of +infinity did not give +infinity")
+        self.assertRegisterEqual(self.MIPS.a0, 0x7f800000, "add.s of +infinity did not give +infinity")
 
     def test_raw_fpu_infinity_single_sub_1(self):
         '''Test sub.s from +infinity'''
-    self.assertRegisterEqual(self.MIPS.a1, 0x7f800000, "sub.s from +infinity did not give +infinity")
+        self.assertRegisterEqual(self.MIPS.a1, 0x7f800000, "sub.s from +infinity did not give +infinity")
 
     def test_raw_fpu_infinity_single_sub_2(self):
         '''Test sub.s from +infinity'''
-    self.assertRegisterMaskEqual(self.MIPS.a2, 0xffffffff, 0xff800000, "sub.s of +infinity did not give -infinity")
+        self.assertRegisterMaskEqual(self.MIPS.a2, 0xffffffff, 0xff800000, "sub.s of +infinity did not give -infinity")
 
     def test_raw_fpu_infinity_single_mul(self):
         '''Test mul.s of +infinity'''
-    self.assertRegisterEqual(self.MIPS.a3, 0x7f800000, "mul.s of +infinity did not give +infinity")
+        self.assertRegisterEqual(self.MIPS.a3, 0x7f800000, "mul.s of +infinity did not give +infinity")
 
     def test_raw_fpu_infinity_single_div(self):
         '''Test div.s of +infinity'''
-    self.assertRegisterEqual(self.MIPS.a3, 0x7f800000, "div.s of +infinity by 1.0 did not give +infinity")
+        self.assertRegisterEqual(self.MIPS.a3, 0x7f800000, "div.s of +infinity by 1.0 did not give +infinity")
 
 

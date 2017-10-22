@@ -32,4 +32,4 @@ class test_raw_fpu_cult_single(BaseBERITestCase):
 
     def test_raw_fpu_cult_single(self):
         '''Test single-precision unordered or less than'''
-    self.assertRegisterEqual(self.MIPS.a0, 0xa, "Compare unordered and less than")
+        self.assertRegisterEqual(self.MIPS.a0, 0xa, "Compare unordered and less than")

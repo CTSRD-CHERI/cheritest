@@ -32,4 +32,4 @@ class test_raw_fpu_cun_single(BaseBERITestCase):
 
     def test_raw_fpu_cun_single(self):
         '''Test single-precision compare unordered'''
-    self.assertRegisterEqual(self.MIPS.a0, 0xe, "Compare unordered gave incorrect result")
+        self.assertRegisterEqual(self.MIPS.a0, 0xe, "Compare unordered gave incorrect result")
