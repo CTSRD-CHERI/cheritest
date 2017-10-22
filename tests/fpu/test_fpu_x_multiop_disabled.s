@@ -119,8 +119,8 @@ test:
 		floor.w.s $f0, $f0
 		mov.d	$f0, $f0
 		mov.s	$f0, $f0
-		mul.d	$f0, $f0
-		mul.s	$f0, $f0
+		mul.d	$f0, $f0, $f0
+		mul.s	$f0, $f0, $f0
 		neg.d	$f0, $f0
 		neg.s	$f0, $f0
 		round.l.d $f0, $f0
