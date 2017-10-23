@@ -382,6 +382,8 @@ L__assert_eq_cap_fail:
 .end __assert_eq_cap
 
 
+.if CAP_SIZE != 0
+
 # C-compatible memcpy, wrapping the capability version
 # Note: This is currently called smemcpy (simple memcpy) so that we don't need
 # to remove the old memcpy yet.  It's also important to remember that some of
@@ -510,6 +512,8 @@ slow_memcpy_loop:                # byte-by-byte copy
 	jr       $ra                 # Return value remains in c1
 	sync
 .end memcpy_c
+
+.endif # CAP_SIZE != 0
 
 #
 # Get the ID of the current thread. Reads CP0 register 15, select 7
