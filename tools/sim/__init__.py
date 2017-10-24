@@ -139,7 +139,7 @@ def capabilityFromBinaryString128(s):
         perms = s[128-127 : 129-113]
         perms_munged = perms[0:4] + (4*perms[4:5]) + perms[4:] # replicate access_system_regs
         perms = int(perms_munged, 2)
-        e     = min(45, int(s[128-110 : 129-105], 2) ^ 48)
+        e     = min(48, int(s[128-110 : 129-105], 2))
         sealed= int(s[128-104], 2)
         B     = int(s[128-103 : 129- 84], 2)
         T     = int(s[128-83  : 129- 64], 2)
