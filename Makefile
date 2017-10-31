@@ -956,6 +956,7 @@ TEST_CP2_FILES=					\
 		test_cp2_csetbounds_cases.s		\
 		test_cp2_ceqex.s		\
 		test_cp2_cnexeq.s		\
+		test_cp2_cnexeq_imprecise.s	\
 		test_cp2_cfromptr_imprecise.s	\
 		test_cp2_csub.s			\
 		test_cp2_data_as_cap.s		\
