@@ -27,11 +27,18 @@
 
 #include "assert.h"
 
+/*
+ * Align the structure to avoid representability exceptions
+ * when sealing 128-bit capabilities
+ */
+#define SEALED_BOUND_ALIGN (1 << 12)
+#define __seal_align __attribute__((aligned(SEALED_BOUND_ALIGN)))
+
 typedef __SIZE_TYPE__ size_t;
 
 struct example {
   int x;
-};
+} __seal_align;
 
 typedef struct example * __capability example_t;
 
@@ -45,8 +52,6 @@ static void * __capability example_key;
  */
 
 static struct example example_object = {0};
-
-static char *entry[] = {0};
 
 void example_init(void)
 {
