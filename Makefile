@@ -1596,7 +1596,6 @@ and not clang  \
 and not pic \
 and not mt \
 and not einstr \
-and not ccall_hw_2 \
 and not qemu_only
 
 ifneq ($(CAP_SIZE),256)
