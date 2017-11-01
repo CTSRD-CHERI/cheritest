@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2016 Alexandre Joannou
+# Copyright (c) 2016-2017 Alexandre Joannou
 # Copyright (c) 2012 Michael Roe
 # All rights reserved.
 #
@@ -258,6 +258,7 @@ invoke:         .ent invoke
                 #cfromptr    $c31, $c31, $zero
                 # call new domain
                 ccall   $c1, $c2, 1
+                nop
                 .end invoke
 
 uninvoke:       .ent uninvoke
@@ -329,6 +330,7 @@ uninvoke:       .ent uninvoke
                 #cfromptr    $c31, $c31, $zero
                 # call new domain
                 ccall   $c1, $c2, 1
+                nop
                 .end uninvoke
 
                 .data
