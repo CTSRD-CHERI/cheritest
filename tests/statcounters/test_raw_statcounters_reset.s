@@ -92,8 +92,8 @@ start:
 
     checkstatcounter TAGCACHE, WRITE_HIT, THRESHOLD
     checkstatcounter TAGCACHE, WRITE_MISS, THRESHOLD
-    checkstatcounter TAGCACHE, READ_HIT, THRESHOLD
-    checkstatcounter TAGCACHE, READ_MISS, THRESHOLD*2
+    checkstatcounter TAGCACHE, READ_HIT, THRESHOLD*2
+    checkstatcounter TAGCACHE, READ_MISS, THRESHOLD
     checkstatcounter TAGCACHE, PFTCH_HIT, THRESHOLD
     checkstatcounter TAGCACHE, PFTCH_MISS, THRESHOLD
     checkstatcounter TAGCACHE, EVICT, THRESHOLD
@@ -109,8 +109,8 @@ start:
     checkstatcounter TAGCACHEMASTER, READ_REQ, THRESHOLD*2
     checkstatcounter TAGCACHEMASTER, WRITE_REQ, THRESHOLD
     checkstatcounter TAGCACHEMASTER, WRITE_REQ_FLIT, THRESHOLD
-    checkstatcounter TAGCACHEMASTER, READ_RSP, THRESHOLD*2
-    checkstatcounter TAGCACHEMASTER, READ_RSP_FLIT, THRESHOLD*2
+    checkstatcounter TAGCACHEMASTER, READ_RSP, THRESHOLD*3
+    checkstatcounter TAGCACHEMASTER, READ_RSP_FLIT, THRESHOLD*3
     checkstatcounter TAGCACHEMASTER, WRITE_RSP, THRESHOLD
 
     # Dump registers in the simulator
