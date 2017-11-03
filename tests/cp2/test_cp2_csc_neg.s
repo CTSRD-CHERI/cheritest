@@ -93,7 +93,7 @@ test:		.ent test
 		ld	$a0, 0($t0)
 		ld	$a1, 8($t0)
 		ld	$a2, 16($t0)
-		ld	$a3, 24($t0)
+		ld	$a3, 24($t0) # this relies on the in memory representation of the length being the same as the value represented which is not true
 
 		#
 		# Check that underflow or overflow didn't occur

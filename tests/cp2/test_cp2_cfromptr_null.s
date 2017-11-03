@@ -56,7 +56,7 @@ test:		.ent test
 		
 		cfromptr $c1, $c0, $zero
 
-		# Check the fields are zero
+		# Check the fields of a NULL capability
 		cgetperm $a0, $c1
 		cgetbase $a1, $c1
 		cgetlen  $a2, $c1

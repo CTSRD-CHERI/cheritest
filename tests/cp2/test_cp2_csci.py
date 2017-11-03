@@ -60,7 +60,7 @@ class test_cp2_csci(BaseBERITestCase):
     @attr('cap256')
     def test_cp2_csci_dword3(self):
         '''Test that csci stored the length field correctly'''
-        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "csci stored incorrect length")
+        self.assertRegisterEqual(self.MIPS.a3, 0x0000000000000000, "csci stored incorrect length")
 
     @attr('capabilities')
     def test_cp2_csci_overflow(self):

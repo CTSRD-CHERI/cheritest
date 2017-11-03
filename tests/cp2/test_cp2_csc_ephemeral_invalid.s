@@ -86,7 +86,7 @@ test:		.ent test
 		daddiu  $t0, $t0, 8
 		cld     $s2, $t0, 0($c0)
 		daddiu  $t0, $t0, 8
-		cld     $s3, $t0, 0($c0)
+		cld     $s3, $t0, 0($c0) # this relies on the in memory representation of max length to be all Fs which is not true
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

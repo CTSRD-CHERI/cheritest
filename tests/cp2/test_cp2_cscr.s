@@ -80,7 +80,7 @@ test:		.ent test
 		ld	$a0, 0($t0)
 		ld	$a1, 8($t0)
 		ld	$a2, 16($t0)
-		ld	$a3, 24($t0)
+		ld	$a3, 24($t0) # this relies on the in memory representation of the length to be the same as the in register one....
 
 		# Check that underflow or overflow didn't occur
 		dla	$t1, underflow
