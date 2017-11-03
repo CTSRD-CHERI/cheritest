@@ -33,11 +33,11 @@
 
 THRESHOLD = 100
 
-.macro checkstatcounter counter_group, counter_offset
+.macro checkstatcounter counter_group, counter_offset, threshold
     getstatcounter 6, \counter_group, \counter_offset # a2 gets the counter's value
-    sltiu   $a5, $a2, THRESHOLD # a5 <= 1 if a2 less than threshold, 0 otherwise
-    sll     $v0, $v0, 1         # shift v0 left by one
-    or      $v0, $v0, $a5       # or a5 in the lsb of v0
+    sltiu   $a5, $a2, \threshold # a5 <= 1 if a2 less than threshold, 0 otherwise
+    sll     $v0, $v0, 1          # shift v0 left by one
+    or      $v0, $v0, $a5        # or a5 in the lsb of v0
 .endm
 
 .set mips64
@@ -52,66 +52,66 @@ start:
 
     move    $v0, $zero # init result bit vector to all 0s
 
-    checkstatcounter ICACHE, WRITE_HIT
-    checkstatcounter ICACHE, WRITE_MISS
-    checkstatcounter ICACHE, READ_HIT
-    checkstatcounter ICACHE, READ_MISS
-    checkstatcounter ICACHE, PFTCH_HIT
-    checkstatcounter ICACHE, PFTCH_MISS
-    checkstatcounter ICACHE, EVICT
-    checkstatcounter ICACHE, PFTCH_EVICT
+    checkstatcounter ICACHE, WRITE_HIT, THRESHOLD
+    checkstatcounter ICACHE, WRITE_MISS, THRESHOLD
+    checkstatcounter ICACHE, READ_HIT, THRESHOLD
+    checkstatcounter ICACHE, READ_MISS, THRESHOLD*2
+    checkstatcounter ICACHE, PFTCH_HIT, THRESHOLD
+    checkstatcounter ICACHE, PFTCH_MISS, THRESHOLD
+    checkstatcounter ICACHE, EVICT, THRESHOLD
+    checkstatcounter ICACHE, PFTCH_EVICT, THRESHOLD
 
-    checkstatcounter DCACHE, WRITE_HIT
-    checkstatcounter DCACHE, WRITE_MISS
-    checkstatcounter DCACHE, READ_HIT
-    checkstatcounter DCACHE, READ_MISS
-    checkstatcounter DCACHE, PFTCH_HIT
-    checkstatcounter DCACHE, PFTCH_MISS
-    checkstatcounter DCACHE, EVICT
-    checkstatcounter DCACHE, PFTCH_EVICT
+    checkstatcounter DCACHE, WRITE_HIT, THRESHOLD
+    checkstatcounter DCACHE, WRITE_MISS, THRESHOLD
+    checkstatcounter DCACHE, READ_HIT, THRESHOLD
+    checkstatcounter DCACHE, READ_MISS, THRESHOLD*2
+    checkstatcounter DCACHE, PFTCH_HIT, THRESHOLD
+    checkstatcounter DCACHE, PFTCH_MISS, THRESHOLD
+    checkstatcounter DCACHE, EVICT, THRESHOLD
+    checkstatcounter DCACHE, PFTCH_EVICT, THRESHOLD
 
-    checkstatcounter L2CACHE, WRITE_HIT
-    checkstatcounter L2CACHE, WRITE_MISS
-    checkstatcounter L2CACHE, READ_HIT
-    checkstatcounter L2CACHE, READ_MISS
-    checkstatcounter L2CACHE, PFTCH_HIT
-    checkstatcounter L2CACHE, PFTCH_MISS
-    checkstatcounter L2CACHE, EVICT
-    checkstatcounter L2CACHE, PFTCH_EVICT
+    checkstatcounter L2CACHE, WRITE_HIT, THRESHOLD
+    checkstatcounter L2CACHE, WRITE_MISS, THRESHOLD
+    checkstatcounter L2CACHE, READ_HIT, THRESHOLD
+    checkstatcounter L2CACHE, READ_MISS, THRESHOLD*2
+    checkstatcounter L2CACHE, PFTCH_HIT, THRESHOLD
+    checkstatcounter L2CACHE, PFTCH_MISS, THRESHOLD
+    checkstatcounter L2CACHE, EVICT, THRESHOLD
+    checkstatcounter L2CACHE, PFTCH_EVICT, THRESHOLD
 
-    checkstatcounter MIPSMEM, BYTE_READ
-    checkstatcounter MIPSMEM, BYTE_WRITE
-    checkstatcounter MIPSMEM, HWORD_READ
-    checkstatcounter MIPSMEM, HWORD_WRITE
-    checkstatcounter MIPSMEM, WORD_READ
-    checkstatcounter MIPSMEM, WORD_WRITE
-    checkstatcounter MIPSMEM, DWORD_READ
-    checkstatcounter MIPSMEM, DWORD_WRITE
-    checkstatcounter MIPSMEM, CAP_READ
-    checkstatcounter MIPSMEM, CAP_WRITE
+    checkstatcounter MIPSMEM, BYTE_READ, THRESHOLD
+    checkstatcounter MIPSMEM, BYTE_WRITE, THRESHOLD
+    checkstatcounter MIPSMEM, HWORD_READ, THRESHOLD
+    checkstatcounter MIPSMEM, HWORD_WRITE, THRESHOLD
+    checkstatcounter MIPSMEM, WORD_READ, THRESHOLD
+    checkstatcounter MIPSMEM, WORD_WRITE, THRESHOLD
+    checkstatcounter MIPSMEM, DWORD_READ, THRESHOLD
+    checkstatcounter MIPSMEM, DWORD_WRITE, THRESHOLD
+    checkstatcounter MIPSMEM, CAP_READ, THRESHOLD
+    checkstatcounter MIPSMEM, CAP_WRITE, THRESHOLD
 
-    checkstatcounter TAGCACHE, WRITE_HIT
-    checkstatcounter TAGCACHE, WRITE_MISS
-    checkstatcounter TAGCACHE, READ_HIT
-    checkstatcounter TAGCACHE, READ_MISS
-    checkstatcounter TAGCACHE, PFTCH_HIT
-    checkstatcounter TAGCACHE, PFTCH_MISS
-    checkstatcounter TAGCACHE, EVICT
-    checkstatcounter TAGCACHE, PFTCH_EVICT
+    checkstatcounter TAGCACHE, WRITE_HIT, THRESHOLD
+    checkstatcounter TAGCACHE, WRITE_MISS, THRESHOLD
+    checkstatcounter TAGCACHE, READ_HIT, THRESHOLD
+    checkstatcounter TAGCACHE, READ_MISS, THRESHOLD*2
+    checkstatcounter TAGCACHE, PFTCH_HIT, THRESHOLD
+    checkstatcounter TAGCACHE, PFTCH_MISS, THRESHOLD
+    checkstatcounter TAGCACHE, EVICT, THRESHOLD
+    checkstatcounter TAGCACHE, PFTCH_EVICT, THRESHOLD
 
-    checkstatcounter L2CACHEMASTER, READ_REQ
-    checkstatcounter L2CACHEMASTER, WRITE_REQ
-    checkstatcounter L2CACHEMASTER, WRITE_REQ_FLIT
-    checkstatcounter L2CACHEMASTER, READ_RSP
-    checkstatcounter L2CACHEMASTER, READ_RSP_FLIT
-    checkstatcounter L2CACHEMASTER, WRITE_RSP
+    checkstatcounter L2CACHEMASTER, READ_REQ, THRESHOLD*2
+    checkstatcounter L2CACHEMASTER, WRITE_REQ, THRESHOLD
+    checkstatcounter L2CACHEMASTER, WRITE_REQ_FLIT, THRESHOLD
+    checkstatcounter L2CACHEMASTER, READ_RSP, THRESHOLD*2
+    checkstatcounter L2CACHEMASTER, READ_RSP_FLIT, THRESHOLD*2
+    checkstatcounter L2CACHEMASTER, WRITE_RSP, THRESHOLD
 
-    checkstatcounter TAGCACHEMASTER, READ_REQ
-    checkstatcounter TAGCACHEMASTER, WRITE_REQ
-    checkstatcounter TAGCACHEMASTER, WRITE_REQ_FLIT
-    checkstatcounter TAGCACHEMASTER, READ_RSP
-    checkstatcounter TAGCACHEMASTER, READ_RSP_FLIT
-    checkstatcounter TAGCACHEMASTER, WRITE_RSP
+    checkstatcounter TAGCACHEMASTER, READ_REQ, THRESHOLD*2
+    checkstatcounter TAGCACHEMASTER, WRITE_REQ, THRESHOLD
+    checkstatcounter TAGCACHEMASTER, WRITE_REQ_FLIT, THRESHOLD
+    checkstatcounter TAGCACHEMASTER, READ_RSP, THRESHOLD*2
+    checkstatcounter TAGCACHEMASTER, READ_RSP_FLIT, THRESHOLD*2
+    checkstatcounter TAGCACHEMASTER, WRITE_RSP, THRESHOLD
 
     # Dump registers in the simulator
     mtc0 $v0, $26
