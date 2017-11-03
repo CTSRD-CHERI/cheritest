@@ -43,23 +43,21 @@ READ_REQ_TIMES = 268
 .global start
 start:
 
-    # reset statcounters delay in v1
-    dli             $v1, DELAY_TIME
     # dword address in v0
     dli             $v0,  0x9000000040000000
     # test 1 : read request
     dli             $a5, 2      # looping just to make sure no instruction miss will be counted
     1:
-    delay           $v1
+    delay           $at, DELAY_TIME
     resetstatcounters
-    delay           $v1
+    delay           $at, DELAY_TIME
     dli             $a6, READ_REQ_TIMES - 1
     2:
     flush_nops
     ld              $t0, 0($v0)
     bne             $a6, $zero, 2b
     daddi           $a6, -1
-    delay           $v1
+    delay           $at, DELAY_TIME
     getstatcounter  6, L2CACHEMASTER, READ_REQ  # a2 takes the value of counter READ_REQ in group L2CACHEMASTER
     bne             $a5, $zero, 1b
     daddi           $a5, -1

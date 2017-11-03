@@ -75,7 +75,8 @@ WRITE_RSP      = 5
     .word (0x1F << 26) | (0x0 << 21) | (0x0 << 16) | (0x7 << 11) | (0x0 << 6) | (0x3B)
 .endm
 
-.macro delay x
+.macro delay x, y
+		dli							\x, \y
     bne             \x, $zero, 0
     daddi           \x, -1
 .endm
