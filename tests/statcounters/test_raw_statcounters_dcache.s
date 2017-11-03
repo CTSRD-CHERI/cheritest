@@ -39,19 +39,17 @@
 .global start
 start:
 
-    # reset statcounters delay in v1
-    dli             $v1,  100
     # dword address in v0
     dla             $v0,  dword
     # test 1 : read miss
-    reset_delay     $v1
+    reset_delay     $at, 100
     ld              $t0, 0($v0)
-    delay           $v1
+    delay           $at, 100
     getstatcounter  6, DCACHE, READ_MISS    # a2 takes the value of counter READ_MISS in group DCACHE
     # test 2 : eviction
-    reset_delay     $v1
-	cache           0x1, 0($v0)
-    delay           $v1
+    reset_delay     $at, 100
+    cache           0x1, 0($v0)
+    delay           $at, 100
     getstatcounter  7, DCACHE, EVICT        # a3 takes the value of counter EVICT in group DCACHE
 
     # Dump registers in the simulator

@@ -81,8 +81,9 @@ WRITE_RSP      = 5
     daddi           \x, -1
 .endm
 
-.macro reset_delay x
+.macro reset_delay x, y
     resetstatcounters  # reset stat counters
+    dli             \x, \y
     bne             \x, $zero, 0
     daddi           \x, -1
 .endm
