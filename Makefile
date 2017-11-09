@@ -2149,8 +2149,7 @@ PURECAP_ASMDEFS=-Wa,-defsym,TEST_CP2=$(TEST_CP2)      \
 		-Wa,-defsym,DIE_ON_EXCEPTION=1
 
 ifeq ($(USE_CAP_TABLE),1)
-# XXXAR: TODO: add the __CHERI_CAPABILITY_TABLE__ to clang
-PURECAP_CFLAGS+=-mllvm -cheri-cap-table -D__CHERI_CAPABILITY_TABLE__=1
+PURECAP_CFLAGS+=-mllvm -cheri-cap-table
 PURECAP_ASMDEFS+=-Wa,-defsym,__CHERI_CAPABILITY_TABLE__=1
 endif
 

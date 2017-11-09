@@ -27,8 +27,14 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
-// FIXME: we have about 10 copies of this code, it would be nice if we could
-// install this as part of clang and just #include c file in all the projects?
+#ifdef __CHERI_CAPABILITY_TABLE__
+#include <cheri_init_globals.h>
+void
+crt_init_globals(void) {
+	cheri_init_globals();
+}
+#else
+// master doesn't install cheri_init_globals.h yet
 typedef long uint64_t;
 
 struct capreloc
@@ -93,3 +99,4 @@ crt_init_globals(void)
 		*dest = src;
 	}
 }
+#endif
