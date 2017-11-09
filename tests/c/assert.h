@@ -40,7 +40,7 @@ typedef __attribute__((memory_address)) long vaddr_t;
 
 
 __attribute__((noreturn)) int __assert_fail(int);
-void  __assert(int cond, int line)
+inline void  __assert(int cond, int line)
 {
 	if (!cond)
 	{
