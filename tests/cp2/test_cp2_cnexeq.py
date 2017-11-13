@@ -45,3 +45,7 @@ class test_cp2_cnexeq(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cnexeq_4(self):
         self.assertRegisterEqual(self.MIPS.a3, 1, "CNEQEX of capabilities with different lengths did not return 1")
+
+    @attr('capabilities')
+    def test_cp2_cnexeq_5(self):
+        self.assertRegisterEqual(self.MIPS.a4, 1, "CNEQEX of capabilities with different tag bit did not return 1")

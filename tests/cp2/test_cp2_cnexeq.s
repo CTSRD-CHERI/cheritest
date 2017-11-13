@@ -30,8 +30,12 @@
 .set nobopt
 .set noat
 
-#
-#
+# a0 - cnexeq of capability with itself, should be 0
+# a1 - cnexeq of capabilities with different offset, should be 1	
+# a2 - cnexeq of capabilities with different permissions, should be 1
+# a3 - cnexeq of capabilities with different lengths, should be 1
+# a4 - cnexeq of capabilities with different tags, should be 1
+	
 
 		.global test
 test:		.ent test
@@ -58,6 +62,11 @@ test:		.ent test
 		dli	$t0, 4
 		csetbounds $c2, $c1, $t0
 		cnexeq	$a3, $c1, $c2
+
+		cgetdefault $c1
+		cgetdefault $c2
+		ccleartag $c2, $c2
+		cnexeq	$a4, $c1, $c2
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
