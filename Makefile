@@ -1094,7 +1094,8 @@ TEST_CP2_FILES=					\
 		test_cp2_csetboundsexact.s \
 		test_cp2_x_csetboundsexact_imprecise.s  \
 		test_cp2_x_multiop_reg.s \
-		test_cp2_cgettype.s
+		test_cp2_cgettype.s \
+		test_cp2_rep_underflow.s
 
 ifeq ($(USING_LLVM_ASSEMBLER),1)
 # FIXME: gas does not yet implement ccall fast
