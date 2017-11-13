@@ -66,8 +66,17 @@ class test_cp2_exception_epcc_unrep(BaseBERITestCase):
     # Check that capcause shows length violation on PCC
     #
     @attr('capabilities')
-    def test_capcause(self):
+    @attr('cap_precise')
+    def test_capcause_precise(self):
         self.assertRegisterEqual(self.MIPS.s2, 0x1ff, "incorrect capcause")
+
+    #
+    # Check that capcause shows tag violation on PCC
+    #
+    @attr('capabilities')
+    @attr('cap_imprecise')
+    def test_capcause_imprecise(self):
+        self.assertRegisterEqual(self.MIPS.s2, 0x2ff, "incorrect capcause")
 
     #
     # Check that EPC is as expected
@@ -124,15 +133,8 @@ class test_cp2_exception_epcc_unrep(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.cp2[3].s, 0, "sandbox EPCC unsealed incorrect")
 
     @attr('capabilities')
-    @attr('cap_precise')
     def test_sandbox_epcc_perms_precise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0007, "sandbox EPCC perms incorrect")
-
-    @attr('capabilities')
-    @attr('cap_imprecise')
-    def test_sandbox_epcc_perms_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0000, "sandbox EPCC perms incorrect")
-
 
     @attr('capabilities')
     def test_sandbox_epcc_ctype(self):
