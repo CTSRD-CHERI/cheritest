@@ -116,6 +116,15 @@ FUZZ_DMA_ONLY?=0
 NOFUZZ?=1
 NOFUZZR?=1
 CAP_SIZE?=256
+# CHECK that CAP_SIZE is a sensible value
+ifneq ($(CAP_SIZE),64)
+ifneq ($(CAP_SIZE),128)
+ifneq ($(CAP_SIZE),256)
+$(error "Invalid value for CAP_SIZE: $(CAP_SIZE))
+endif
+endif
+endif
+
 USE_CAP_TABLE?=0
 ifeq ($(CAP_SIZE),256)
 PERM_SIZE?=31
