@@ -10,8 +10,12 @@ add_custom_target(run-make-j1 VERBATIM USES_TERMINAL
         COMMAND env ${SET_MAKE_ENV_VARS} make -j1 elfs
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 add_custom_target(run-qemu-tests VERBATIM USES_TERMINAL
-        COMMAND env ${SET_MAKE_ENV_VARS} make -j4 qemu_test_logs
+        COMMAND env ${SET_MAKE_ENV_VARS} CAP_SIZE=128 make -j4 pytest_qemu
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+add_custom_target(run-qemu-tests-256 VERBATIM USES_TERMINAL
+	COMMAND env ${SET_MAKE_ENV_VARS} CAP_SIZE=256 make -j4 pytest_qemu
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
 add_custom_target(qemu-nosetests VERBATIM USES_TERMINAL
         COMMAND env ${SET_MAKE_ENV_VARS} make -j1 nosetests_qemu
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
