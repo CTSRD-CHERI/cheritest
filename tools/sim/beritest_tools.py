@@ -303,7 +303,7 @@ class BaseBERITestCase(unittest.TestCase):
         self.assertRegisterEqual(cap.perms , 0, msg + "has nonzero perms")
         self.assertRegisterEqual(cap.offset, 0, msg + "has nonzero offset")
         self.assertRegisterEqual(cap.base  , 0, msg + "has nonzero base")
-        self.assertRegisterEqual(cap.length, 0, msg + "has nonzero length")
+        self.assertRegisterEqual(cap.length, self.max_length, msg + "has non-compliant length")
 
     def assertDefaultCap(self, cap, msg="", perms=None):
         self.assertValidCap(cap, msg, offset=0, base=0, length=self.max_length, perms=perms,
