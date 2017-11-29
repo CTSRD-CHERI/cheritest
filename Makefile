@@ -237,7 +237,7 @@ DEFSYM_FLAG=-Wa,-defsym,
 else
 DEFSYM_FLAG=-defsym=
 # Without -march=mips4 the movz instruction will be rejected by GNU as
-MIPS_AS=$(MIPS_AS) -march=mips4
+MIPS_AS:=$(MIPS_AS) -march=mips4
 endif
 
 ifeq ($(CAP_SIZE),128)
