@@ -34,6 +34,10 @@
 start:
 		li	$a0, 0xffff
 		dsll	$a0, $a0, 16
+
+		# NOTE: QEMU does not sign extend since commit d54a299b
+		# This matches what MIPS Architecture document MD00087 Rev 5.04 (December 11, 2013) says
+		# However, at least for EPC sign extending might make more sense?
 		mtc0	$a0, $14
 
 		nop
