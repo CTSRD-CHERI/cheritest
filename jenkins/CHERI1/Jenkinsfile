@@ -6,7 +6,8 @@ def doBuild(String name, String buildArgs, String testArgs, String assembler) {
 		def clangValue = assembler == 'clang' ? '1' : '0'
 		stage(name + ' - Build') {
 			// NOPRINTS=1 might to be required for successful builds? At least for CACHECORE
-			// buildArgs +=' NOPRINTS=1'
+			// This should speed up running the tests:
+			buildArgs +=' NOPRINTS=1'
 			sh '''#!/bin/bash
 set -xe
 . /local/ecad/setup.bash \$QUARTUS_DEFAULT
@@ -65,15 +66,15 @@ try {
 	parallel(
 		"CHERI1-TEST": { cheriHardwareTest(
 			name: "CHERI1-TEST",
-			buildArgs: 'CAP=True NOPRINTS=1',
+			buildArgs: 'CAP=True',
 			testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 ALLOW_UNALIGNED=1 SIM_TRACE_OPTS= nosetests_combined.xml')
 		}, "CHERI1-CACHECORE-TEST": { cheriHardwareTest(
 			name: "CHERI1-CACHECORE-TEST",
-			buildArgs: 'CAP=True ICACHECORE=1 DCACHECORE=1 NOPRINTS=1',
+			buildArgs: 'CAP=True ICACHECORE=1 DCACHECORE=1',
 			testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached')
 		}, "CHERI1-FPU-TEST": { cheriHardwareTest(
 			name: "CHERI1-FPU-TEST",
-			buildArgs: 'CAP=True COP1=1 NOPRINTS=1',
+			buildArgs: 'CAP=True COP1=1',
 			testArgs: 'COP1=1 TEST_PS=1 CLANG=0 NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetests_combined.xml')
 		}, "CHERI1-CAP128-TEST": { cheriHardwareTest(
 			name: "CHERI1-CAP128-TEST",
