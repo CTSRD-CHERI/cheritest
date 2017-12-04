@@ -56,10 +56,22 @@ def cheriHardwareTest(Map args) {
 	}
 }
 
-parallel(
-	"CHERI1-TEST": {     cheriHardwareTest(
-		name: "CHERI1-TEST",
-		buildArgs: 'CAP=True NOPRINTS=1',
-		testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 ALLOW_UNALIGNED=1 SIM_TRACE_OPTS=')
-	}
-)
+try {
+	parallel(
+		"CHERI1-TEST": {     cheriHardwareTest(
+			name: "CHERI1-TEST",
+			buildArgs: 'CAP=True NOPRINTS=1',
+			testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 ALLOW_UNALIGNED=1 SIM_TRACE_OPTS=')
+		}
+	)
+} catch(e) {
+	/* emailext body: '$DEFAULT_CONTENT',
+		recipientProviders: [
+			[$class: 'CulpritsRecipientProvider'],
+			[$class: 'DevelopersRecipientProvider'],
+			[$class: 'RequesterRecipientProvider']
+		],
+		replyTo: '$DEFAULT_REPLYTO',
+		subject: '$DEFAULT_SUBJECT',
+		to: '$DEFAULT_RECIPIENTS' */
+}
