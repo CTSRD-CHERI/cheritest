@@ -8,9 +8,13 @@ class JobConfig {
 // TODO: instead of this we could also have a Jenkinsfile per config and use JobDSL to generate one job per jenkinsfile
 JobConfig getJobParameters() {
 	String jobName = env.JOB_NAME
+	if (jobName.contains('/')) {
+		jobName = jobName.substring(0, jobName.indexOf('/'))
+	}
 	if (jobName.endsWith('-pipeline')) {
 		jobName = jobName.minus('-pipeline')
 	}
+	echo "Computed base job names as $jobName"
 	Map config = [
 			"CHERI1-TEST": [buildArgs: 'CAP=True',
 					testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 ALLOW_UNALIGNED=1 SIM_TRACE_OPTS= nosetests_combined.xml'],
