@@ -75,7 +75,7 @@ export PATH=\$WORKSPACE/binutils/bin:\$PATH
 make clean
 # Rebuild the clang tests every time, in case clang itself has changed
 rm -f obj/*clang* log/*clang*
-''' + "make CLANG=${clangValue} ${args.testArgs} -j8 || true"
+''' + "make CLANG=${clangValue} ${args.testArgs} -j8"
 			archiveArtifacts allowEmptyArchive: false, artifacts: 'ctsrd/cheri/trunk/sim, ctsrd/cheri/trunk/sim.so, ctsrd/cheri/trunk/sim.dtb, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim.so, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim.dtb, ctsrd/cherilibs/trunk/peripherals/*.so, ctsrd/cherilibs/trunk/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
 			// JUnit Results
 			junit 'ctsrd/cheritest/trunk/nosetests_*.xml'
