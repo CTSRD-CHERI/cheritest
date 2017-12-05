@@ -2093,11 +2093,9 @@ clean_fuzz:
 	find $(FUZZ_TEST_DIR) -name 'test_fuzz*.s' | xargs -r rm
 
 cleantest:
-	rm -f $(CHERI_TEST_LOGS) $(CHERI_TEST_CACHED_LOGS)
-	rm -f $(CHERI_TEST_MULTI_LOGS)
-	rm -f $(GXEMUL_TEST_LOGS) $(GXEMUL_TEST_CACHED_LOGS)
-	rm -f $(ALTERA_TEST_LOGS) $(ALTERA_TEST_CACHED_LOGS)
-	rm -f $(L3_TEST_LOGS) $(L3_TEST_CACHED_LOGS)
+	rm -f $(GXEMUL_LOGDIR)/*.log
+	rm -f $(ALTERA_LOGDIR)/*.log
+	rm -f $(L3_LOGDIR)/*.log
 	rm -f $(SAIL_MIPS_LOGDIR)/*.log
 	rm -f $(SAIL_MIPS_EMBED_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI_LOGDIR)/*.log
