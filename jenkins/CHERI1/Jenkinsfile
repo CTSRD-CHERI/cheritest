@@ -12,7 +12,7 @@ JobConfig getJobParameters() {
 		jobName = jobName.substring(0, jobName.indexOf('/'))
 	}
 	if (jobName.endsWith('-pipeline')) {
-		jobName = jobName.minus('-pipeline')
+		jobName = jobName.substring(0, jobName.indexOf('-pipeline'))
 	}
 	echo "Computed base job names as $jobName"
 	Map config = [
