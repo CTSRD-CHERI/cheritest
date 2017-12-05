@@ -86,7 +86,7 @@ def cheriHardwareTest() {
 	return node('llvm&&bluespec') {
 		echo "Computing job parameters for ${env.JOB_NAME}"
 		JobConfig args = getJobParameters()
-		echo "Found job config: ${args.properties}"
+		echo "Found job config: BUILD_ARGS: '${args.buildArgs}'\nTEST_ARGS: '${args.testArgs}'\nASSEMBLER: ${args.assembler}"
 		stage('Checkout') {
 			// dir('ctsrd/cheritest/trunk') { git url: 'git@github.com:CTSRD-CHERI/cheritest.git', credentialsId: 'cheritest_key', branch: 'master'}
 			dir('ctsrd/cheritest/trunk') {
