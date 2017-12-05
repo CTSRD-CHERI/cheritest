@@ -12,27 +12,27 @@ JobConfig getJobParameters() {
 		jobName = jobName.minus('-pipeline')
 	}
 	Map config = [
-		"CHERI1-TEST": JobConfig.newInstance(
-			buildArgs: 'CAP=True',
-			testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 ALLOW_UNALIGNED=1 SIM_TRACE_OPTS= nosetests_combined.xml'),
-		"CHERI1-CACHECORE-TEST": JobConfig.newInstance(
-			buildArgs: 'CAP=True ICACHECORE=1 DCACHECORE=1',
-			testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'),
-		"CHERI1-FPU-TEST": JobConfig.newInstance(
-			buildArgs: 'CAP=True COP1=1',
-			testArgs: 'COP1=1 TEST_PS=1 CLANG=0 NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetests_combined.xml'),
-		"CHERI1-CAP128-TEST": JobConfig.newInstance(
-			buildArgs: 'CAP128=True',
-			testArgs: 'GENERIC_L1=1 CAP_SIZE=128 PERM_SIZE=19 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'),
-		"CHERI1-MICRO-TEST": JobConfig.newInstance(
-			buildArgs: 'MICRO=True CAP=True NOWATCH=True',
-			testArgs: 'CHERI_MICRO=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'),
-		"CHERI1-MULTI1-TEST": JobConfig.newInstance(
-			buildArgs: 'MULTI=1 CAP=True',
-			testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetests_cached.xml'),
-		"CHERI1-MULTI2-TEST": JobConfig.newInstance(
-			buildArgs: 'MULTI=2 CAP=True',
-			testArgs: 'GENERIC_L1=1 MULTI=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'),
+			"CHERI1-TEST": JobConfig.newInstance(
+					buildArgs: 'CAP=True',
+					testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 ALLOW_UNALIGNED=1 SIM_TRACE_OPTS= nosetests_combined.xml'),
+			"CHERI1-CACHECORE-TEST": JobConfig.newInstance(
+					buildArgs: 'CAP=True ICACHECORE=1 DCACHECORE=1',
+					testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'),
+			"CHERI1-FPU-TEST": JobConfig.newInstance(
+					buildArgs: 'CAP=True COP1=1',
+					testArgs: 'COP1=1 TEST_PS=1 CLANG=0 NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetests_combined.xml'),
+			"CHERI1-CAP128-TEST": JobConfig.newInstance(
+					buildArgs: 'CAP128=True',
+					testArgs: 'GENERIC_L1=1 CAP_SIZE=128 PERM_SIZE=19 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'),
+			"CHERI1-MICRO-TEST": JobConfig.newInstance(
+					buildArgs: 'MICRO=True CAP=True NOWATCH=True',
+					testArgs: 'CHERI_MICRO=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'),
+			"CHERI1-MULTI1-TEST": JobConfig.newInstance(
+					buildArgs: 'MULTI=1 CAP=True',
+					testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetests_cached.xml'),
+			"CHERI1-MULTI2-TEST": JobConfig.newInstance(
+					buildArgs: 'MULTI=2 CAP=True',
+					testArgs: 'GENERIC_L1=1 MULTI=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'),
 	]
 	JobConfig result = config.get(jobName)
 	if (!result) {
@@ -51,7 +51,7 @@ def doBuild(JobConfig args) {
 		stage('Build Simulator') {
 			// NOPRINTS=1 might to be required for successful builds? At least for CACHECORE
 			// This should speed up running the tests:
-			args.buildArgs +=' NOPRINTS=1'
+			args.buildArgs += ' NOPRINTS=1'
 			sh '''#!/bin/bash
 set -xe
 . /local/ecad/setup.bash \$QUARTUS_DEFAULT
@@ -90,17 +90,17 @@ def cheriHardwareTest() {
 				checkout scm  // get the sources from git
 			}
 			// Get the SVN sources:
-			checkout([$class          : 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '',
-				  excludedRegions : '', excludedRevprop: '', excludedUsers: '',
-				  filterChangelog : false, ignoreDirPropChanges: false, includedRegions: '',
-				  locations       : [
-					  [credentialsId        : 'cffd45a1-3d92-4d8e-a485-db5a5852fe70', depthOption: 'infinity',
-					   ignoreExternalsOption: true, local: 'ctsrd/cherilibs/trunk',
-					   remote               : 'svn+ssh://secsvn@svn-ctsrd.cl.cam.ac.uk/ctsrd/cherilibs/trunk'],
-					  [credentialsId        : 'cffd45a1-3d92-4d8e-a485-db5a5852fe70', depthOption: 'infinity',
-					   ignoreExternalsOption: true, local: 'ctsrd/cheri/trunk',
-					   remote               : 'svn+ssh://secsvn@svn-ctsrd.cl.cam.ac.uk/ctsrd/cheri/trunk']],
-				  workspaceUpdater: [$class: 'UpdateUpdater']])
+			checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '',
+					excludedRegions: '', excludedRevprop: '', excludedUsers: '',
+					filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '',
+					locations: [
+							[credentialsId: 'cffd45a1-3d92-4d8e-a485-db5a5852fe70', depthOption: 'infinity',
+									ignoreExternalsOption: true, local: 'ctsrd/cherilibs/trunk',
+									remote: 'svn+ssh://secsvn@svn-ctsrd.cl.cam.ac.uk/ctsrd/cherilibs/trunk'],
+							[credentialsId: 'cffd45a1-3d92-4d8e-a485-db5a5852fe70', depthOption: 'infinity',
+									ignoreExternalsOption: true, local: 'ctsrd/cheri/trunk',
+									remote: 'svn+ssh://secsvn@svn-ctsrd.cl.cam.ac.uk/ctsrd/cheri/trunk']],
+					workspaceUpdater: [$class: 'UpdateUpdater']])
 		}
 		doBuild(args)
 	}
@@ -108,7 +108,7 @@ def cheriHardwareTest() {
 
 try {
 	cheriHardwareTest()
-} catch(e) {
+} catch (e) {
 	error(e.toString())
 	/* emailext body: '$DEFAULT_CONTENT',
 		recipientProviders: [
