@@ -69,6 +69,7 @@ make clean
 			sh '''#!/bin/bash
 set -xe
 cd $WORKSPACE
+. /local/ecad/setup.bash \$QUARTUS_DEFAULT
 tar xjf binutils.tar.bz2
 cd \$WORKSPACE/ctsrd/cheritest/trunk
 export PATH=\$WORKSPACE/binutils/bin:\$PATH
