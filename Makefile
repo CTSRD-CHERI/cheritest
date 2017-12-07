@@ -190,7 +190,9 @@ CAPSIZEFIX = :
 else
 MIPS_LD=$(CHERI_SDK)/ld.bfd --fatal-warnings
 endif
-
+ifneq ($(wildcard $(CHERI_SDK)/qemu-system-cheri$(CAP_SIZE)),)
+QEMU?=$(CHERI_SDK)/qemu-system-cheri$(CAP_SIZE)
+endif
 QEMU?=$(CHERI_SDK)/qemu-system-cheri
 
 else
@@ -2684,6 +2686,7 @@ sanity-check-makefile: FORCE
 	@echo
 	@echo Building test suite for $(CAP_SIZE)-bit capabilities
 	@echo Permission size is $(PERM_SIZE)
+	@echo "Detected QEMU binary: $(QEMU)"
 	@echo
 	@echo "Build tools:"
 	@echo "Clang:     $(CLANG_CMD)"
