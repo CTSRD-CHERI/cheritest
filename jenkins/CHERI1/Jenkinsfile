@@ -41,7 +41,7 @@ JobConfig getJobParameters() {
 
 			"BERI1-TEST": [
 					buildArgs: '',
-					testArgs: 'TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 BERI=1 make nosetest_cached'],
+					testArgs: 'TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 BERI=1 nosetest_cached'],
 
 			"BERI1-MICRO-TEST": [
 					buildArgs: 'MICRO=True NOWATCH=True',
