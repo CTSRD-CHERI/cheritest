@@ -48,15 +48,15 @@ JobConfig getJobParameters() {
 					testArgs: 'TEST_CP2=0 CHERI_MICRO=1 NOFUZZR=1 WONTFIX=1 nosetests_combined.xml'],
 
 			"BERI1-MULTI1-TEST": [
-					buildArgs: 'NOT_FLAT=1 MULTI=1',
+					buildArgs: 'MULTI=1',
 					testArgs: 'TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cached.xml'],
 
 			"BERI1-MULTI2-TEST": [
-					buildArgs: 'NOT_FLAT=1 MULTI=2',
+					buildArgs: 'MULTI=2',
 					testArgs: 'MULTI=1 TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
 
 			"BERI1-MULTI2-TIMEBASED-TEST": [
-					buildArgs: 'NOT_FLAT=1 MULTI=2 TIMEBASED=1',
+					buildArgs: 'MULTI=2 TIMEBASED=1',
 					testArgs: 'MULTI=1 TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
 	]
 	Map result = config.get(jobName)
@@ -81,7 +81,7 @@ def doBuild(JobConfig args) {
 		stage('Build Simulator') {
 			// NOPRINTS=1 might to be required for successful builds? At least for CACHECORE
 			// This should speed up running the tests:
-			args.buildArgs += ' NOPRINTS=1'
+			args.buildArgs += ' NOPRINTS=1 NOT_FLAT=1'
 			sh '''#!/bin/bash
 set -xe
 . /local/ecad/setup.bash \$QUARTUS_DEFAULT
