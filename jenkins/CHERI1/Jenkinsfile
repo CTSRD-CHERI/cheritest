@@ -87,8 +87,8 @@ set -xe
 . /local/ecad/setup.bash \$QUARTUS_DEFAULT
 #export PATH=\$WORKSPACE/binutils/bin:\$CHERITEST_TOOL_PATH:$PATH
 cd ctsrd/cheri/trunk
-make clean
-#rm sim sim.so
+# make clean
+rm -f sim sim.so
 # build the simulator
 ''' + "make ${args.buildArgs} sim || (make clean ; make ${args.buildArgs} sim)"
 		}
