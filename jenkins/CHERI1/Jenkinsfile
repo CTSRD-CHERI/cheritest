@@ -139,6 +139,9 @@ def cheriHardwareTest() {
 }
 
 try {
+	properties([
+		pipelineTriggers([[$class: "GitHubPushTrigger"]])
+	])
 	cheriHardwareTest()
 } catch (e) {
 	error(e.toString())
