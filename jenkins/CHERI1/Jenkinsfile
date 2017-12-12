@@ -107,6 +107,8 @@ rm -f obj/*clang* log/*clang*
 			archiveArtifacts allowEmptyArchive: false, artifacts: 'ctsrd/cheri/trunk/sim, ctsrd/cheri/trunk/sim.so, ctsrd/cheri/trunk/sim.dtb, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim.so, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim.dtb, ctsrd/cherilibs/trunk/peripherals/*.so, ctsrd/cherilibs/trunk/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
 			// JUnit Results
 			junit 'ctsrd/cheritest/trunk/nosetests_*.xml'
+			warnings canComputeNew: false, canResolveRelativePaths: false, consoleParsers: [[parserName: 'Clang (LLVM based)']]
+			step([$class: 'AnalysisPublisher', canComputeNew: false])
 		}
 	}
 }
@@ -140,7 +142,11 @@ def cheriHardwareTest() {
 
 try {
 	properties([
-		pipelineTriggers([[$class: "GitHubPushTrigger"]])
+		pipelineTriggers([
+			[$class: "GitHubPushTrigger"]
+		]),
+		disableConcurrentBuilds(),
+		[$class: 'CopyArtifactPermissionProperty', projectNames: '*'],
 	])
 	cheriHardwareTest()
 } catch (e) {
