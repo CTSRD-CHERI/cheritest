@@ -45,7 +45,7 @@ test(void)
 	increment();
 	assert(x == 2);
 
-	cp = (__cheri_cast char * __capability) digits;
+	cp = (__cheri_tocap char * __capability) digits;
 	x = (__intcap_t) cp;
 	increment();
 	cp = (char * __capability) x;

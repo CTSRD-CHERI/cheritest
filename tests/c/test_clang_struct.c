@@ -43,7 +43,7 @@ struct example *__capability example_constructor(void)
   struct example *__capability result;
 
   ptr = &example_object;
-  result = (__cheri_cast struct example *__capability) ptr;
+  result = (__cheri_tocap struct example *__capability) ptr;
 
   return result;
 }

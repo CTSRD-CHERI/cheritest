@@ -69,7 +69,7 @@ int i;
 double total;
 double *__capability dp;
 
-    dp = (__cheri_cast double *__capability)&array[0];
+    dp = (__cheri_tocap double *__capability)&array[0];
     total = 0.0;
     for (i=0; i<4; i++)
     {

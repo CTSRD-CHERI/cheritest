@@ -38,7 +38,7 @@ static TYPE PREFIX(_data)[] = {1, 2, 3, 4, 5, 6, 7, 8};
 int PREFIX(_test)(void)
 {
   TYPE * dataptr = PREFIX(_data); // __cheri_cast doesn't allow array-to-pointer
-  TYPE * __capability datacp = (__cheri_cast TYPE* __capability)dataptr;
+  TYPE * __capability datacp = (__cheri_tocap TYPE* __capability)dataptr;
 
   for (int i=0; i<(sizeof(PREFIX(_data))/sizeof(*PREFIX(_data))); i++)
   {

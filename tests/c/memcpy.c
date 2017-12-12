@@ -125,8 +125,8 @@ bcopy(const void *src0, void *dst0, size_t length)
 	char * CAPABILITY dst = dst0;
 	const char * CAPABILITY src = src0;
 #elif defined(__CHERI__)
-	char * CAPABILITY dst = __builtin_cheri_bounds_set((__cheri_cast void * CAPABILITY)dst0,length);
-	const char * CAPABILITY src = __builtin_cheri_bounds_set((__cheri_cast const void * CAPABILITY)src0,length);
+	char * CAPABILITY dst = __builtin_cheri_bounds_set((__cheri_tocap void * CAPABILITY)dst0,length);
+	const char * CAPABILITY src = __builtin_cheri_bounds_set((__cheri_tocap const void * CAPABILITY)src0,length);
 #else
 	char * dst = (char * )dst0;
 	const char * src = (const char * )src0;

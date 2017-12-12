@@ -25,8 +25,8 @@
  * @BERI_LICENSE_HEADER_END@
  */
 
-#if !__has_feature(__cheri_cast)
-#warning "Compiler doesn't support __cheri_cast, please update!"
+#if !__has_feature(cheri_casts)
+#warning "Compiler doesn't support cheri_casts, please update!"
 #define __cheri_cast
 #endif
 
@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-#define TO_CAP(x) ((__cheri_cast void * __capability)(void*)(x))
+#define TO_CAP(x) ((__cheri_tocap void * __capability)(void*)(x))
 
 typedef __attribute__((memory_address)) long vaddr_t;
 

@@ -57,7 +57,7 @@ void check(struct Test *t, int start, int end)
 	{
 		assert(t->pad0[i] == i);
 	}
-	assert((__cheri_cast void*)t->y == t);
+	assert((__cheri_fromcap void*)t->y == t);
 	assert(__builtin_cheri_tag_get(t->y));
 	for (int i=0 ; i<end ; i++)
 	{

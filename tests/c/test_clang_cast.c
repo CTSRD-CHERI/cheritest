@@ -32,9 +32,9 @@ static char data[] = {1, 2, 3, 4, 5, 6, 7, 8};
 int test(void)
 {
   // FIXME: __cheri_cast doesn't allow array-to-pointer decay :(
-  char * __capability datacp = (__cheri_cast char * __capability)&data[0];
+  char * __capability datacp = (__cheri_tocap char * __capability)&data[0];
 
-  assert((__cheri_cast char*)datacp == data);
+  assert((__cheri_fromcap char*)datacp == data);
 
   return success_if_no_exceptions();
 }

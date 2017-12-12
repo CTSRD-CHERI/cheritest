@@ -68,7 +68,7 @@ void check(struct Test *t, int start, int end)
 	{
 		assert(t->pad0[i] == i);
 	}
-	assert((__cheri_cast void*)t->y == t);
+	assert((__cheri_fromcap void*)t->y == t);
 	assert(__builtin_cheri_tag_get(t->y));
 	for (int i=0 ; i<end ; i++)
 	{
@@ -101,28 +101,28 @@ int test(void)
 	invalidate(&t2);
 	// Simple case: aligned start and end
 	void * __capability cpy = cmemcpy_c(t1.y, TO_CAP(&t1), sizeof(t1));
-	assert((__cheri_cast void*)cpy == &t2);
+	assert((__cheri_fromcap void*)cpy == &t2);
 	check(&t2, 0, 32);
 	invalidate(&t2);
 	
 	// Test that it still works with an unaligned start...
 	cpy = cmemcpy_c(TO_CAP(&t2.pad0[3]), TO_CAP(&t1.pad0[3]), sizeof(t1) - 3);
-	assert((__cheri_cast void*)cpy == &t2.pad0[3]);
+	assert((__cheri_fromcap void*)cpy == &t2.pad0[3]);
 	check(&t2, 3, 32);
 	
 	// ...or an unaligned end...
 	cpy = cmemcpy_c(TO_CAP(&t2), TO_CAP(&t1), sizeof(t1) - 3);
-	assert((__cheri_cast void*)cpy == &t2);
+	assert((__cheri_fromcap void*)cpy == &t2);
 	check(&t2, 0, 29);
 	
 	// ...or both...
 	cpy = cmemcpy_c(TO_CAP(&t2.pad0[3]), TO_CAP(&t1.pad0[3]), sizeof(t1) - 6);
-	assert((__cheri_cast void*)cpy == &t2.pad0[3]);
+	assert((__cheri_fromcap void*)cpy == &t2.pad0[3]);
 	check(&t2, 3, 29);
 	invalidate(&t2);
 	// ...and finally a case where the alignment is different for both?
 	cpy = cmemcpy_c(TO_CAP(&t2), TO_CAP(&t1.pad0[1]), sizeof(t1) - 1);
-	assert((__cheri_cast void*)cpy == &t2);
+	assert((__cheri_fromcap void*)cpy == &t2);
 	// This should have invalidated the capability
 	assert(__builtin_cheri_tag_get(t2.y) == 0);
 	
@@ -179,7 +179,7 @@ int test(void)
 		__builtin_cheri_offset_increment(TO_CAP(&t1), 3),
 		sizeof(t1)-6
 		);
-	assert((__cheri_cast void*)cpy == &t2.pad0[3]);
+	assert((__cheri_fromcap void*)cpy == &t2.pad0[3]);
 //	check(&t2, 3, 29);
 
 	// unaligned base, aligned offset + base
@@ -192,7 +192,7 @@ int test(void)
 		__builtin_cheri_offset_increment(TO_CAP(t1.pad0-1), 1),
 		sizeof(t1)
 		);
-	assert((__cheri_cast void*)cpy == &t2.pad0);
+	assert((__cheri_fromcap void*)cpy == &t2.pad0);
 
 	check(&t2, 0, 32);
 	/*
