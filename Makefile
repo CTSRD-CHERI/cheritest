@@ -1693,8 +1693,11 @@ and not swisync \
 and not tlbcheck \
 and not watch \
 and not csettype \
-and not qemu_skip
+and not qemu_skip \
+and not mtc0signex
 # XXXAM why settype is disabled?
+# XXXAR: mtc0signex was added here because since upstream QEMU commit d54a299b
+# the mtc0 instruction no longer sign extends
 
 ifdef TEST_QEMU_R4000
 QEMU_NOSEPRED+=\
