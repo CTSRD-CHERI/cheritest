@@ -155,13 +155,15 @@ $(info Using CHERI SDK: $(CHERI_SDK))
 
 # Append /bin to CHERI_SDK if needed:
 ifneq ($(wildcard $(CHERI_SDK)/bin),)
-CHERI_SDK:=$(CHERI_SDK)/bin
+CHERI_SDK_BINDIR:=$(CHERI_SDK)/bin
+else
+CHERI_SDK_BINDIR:=$(CHERI_SDK)
 endif
 
-CLANG_CMD?=$(CHERI_SDK)/clang -integrated-as
-OBJDUMP?=$(CHERI_SDK)/llvm-objdump
+CLANG_CMD?=$(CHERI_SDK_BINDIR)/clang -integrated-as
+OBJDUMP?=$(CHERI_SDK_BINDIR)/llvm-objdump
 # FIXME: elftoolchain objcopy is broken, hopefully llvm-objcopy is ready soon
-# OBJCOPY?=$(CHERI_SDK)/objcopy
+# OBJCOPY?=$(CHERI_SDK_BINDIR)/objcopy
 
 # For now force using the GNU AS since clang doesn't quite work (5 tests broken)
 # CHERI_SDK_USE_GNU_AS?=1
@@ -177,34 +179,34 @@ endif
 ifndef CHERI_SDK_USE_GNU_AS
 MIPS_AS=$(CLANG_AS)
 # TODO: use llvm-mc?
-# MIPS_AS=$(CHERI_SDK)/llvm-mc -filetype=obj -foo
+# MIPS_AS=$(CHERI_SDK_BINDIR)/llvm-mc -filetype=obj -foo
 USING_LLVM_ASSEMBLER=1
 else # use GNU as otherwise
-MIPS_AS=$(CHERI_SDK)/as
+MIPS_AS=$(CHERI_SDK_BINDIR)/as
 endif # CHERI_SDK_USE_GNU_AS
 
 # default to linking with LLD unless CHERI_SDK_USE_GNU_LD is set
 ifndef CHERI_SDK_USE_GNU_LD
-MIPS_LD=$(CHERI_SDK)/ld.lld --fatal-warnings -process-cap-relocs
+MIPS_LD=$(CHERI_SDK_BINDIR)/ld.lld --fatal-warnings -process-cap-relocs
 CAPSIZEFIX = :
 else
-MIPS_LD=$(CHERI_SDK)/ld.bfd --fatal-warnings
+MIPS_LD=$(CHERI_SDK_BINDIR)/ld.bfd --fatal-warnings
 endif
-ifneq ($(wildcard $(CHERI_SDK)/qemu-system-cheri$(CAP_SIZE)),)
-QEMU?=$(CHERI_SDK)/qemu-system-cheri$(CAP_SIZE)
+ifneq ($(wildcard $(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)),)
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)
 endif
-QEMU?=$(CHERI_SDK)/qemu-system-cheri
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri
 
 else
 # TODO: make this an error soon
 $(info CHERI SDK not found, will try to infer tool defaults)
-endif # neq(CHERI_SDK,)
+endif # neq(CHERI_SDK_BINDIR,)
 
 # Use the default names from the ubuntu mips64-binutils if CHERI_SDK is not set
 MIPS_AS?=mips64-as
 MIPS_LD?=mips-linux-gnu-ld
 OBJDUMP?=mips64-objdump
-CAPSIZEFIX?= $(CHERI_SDK)/capsizefix --verbose $(1)
+CAPSIZEFIX?= $(CHERI_SDK_BINDIR)/capsizefix --verbose $(1)
 # try to find a working objcopy
 ifeq ($(OBJCOPY),)
 OBJCOPY:=$(shell command -v mips64-unknown-freeebsd-objcopy 2> /dev/null)
