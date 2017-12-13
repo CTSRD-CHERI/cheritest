@@ -2056,10 +2056,16 @@ CLEAN_TEST = rm -r $$TMPDIR
 
 WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 
-ifeq ($(wildcard ${TOOLS_DIR_ABS}),)
-MEMCONV=$(error TOOLS_DIR_ABS not set, cannot find memconv)
+ifeq ($(wildcard $(TOOLS_DIR_ABS)),)
+MEMCONV=$(error Cannot find find memConv.py, set CHERILIBS to the cherilibs/trunk directory )
 else
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
+endif
+
+ifeq ($(wildcard $(CHERIROOT_ABS)),)
+CHERI_SW_MEM_BIN=$(error Cannot find find CHERIROOT/sw/mem.bin, set CHERIROOT to the cheri/trunk directory )
+else
+CHERI_SW_MEM_BIN=${CHERIROOT_ABS}/sw/mem.bin
 endif
 
 all: sanity-check-makefile $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
@@ -2078,7 +2084,7 @@ test_hardware: altera-nosetest altera-nosetest_cached
 $(CHERISOCKET):
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp ${CHERIROOT_ABS}/sw/mem.bin mem.bin && \
+	cp $(CHERI_SW_MEM_BIN) mem.bin && \
 	$(MEMCONV) bsim && \
 	$(COPY_PISM_CONFS) && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
@@ -2723,6 +2729,16 @@ cleanerror:
 sanity-check-makefile: FORCE
 	@echo
 	@echo
+	@echo "cheri source directory: $(CHERIROOT_ABS)"
+	@echo "cheri libs directory: $(CHERILIBS_ABS)"
+	@echo "cheri tools directory: $(TOOLS_DIR_ABS)"
+ifeq ($(wildcard $(CHERILIBS_ABS)),)
+	@echo "WARNING: \$(dollar)CHERLIBS not set -> will not be able to run simulator tests"
+endif
+ifeq ($(wildcard $(CHERIROOT_ABS)),)
+	@echo "WARNING: \$(dollar)CHERIROOT not set -> will not be able to run simulator tests"
+endif
+
 	@echo Building test suite for $(CAP_SIZE)-bit capabilities
 	@echo Permission size is $(PERM_SIZE)
 	@echo "Detected QEMU binary: $(QEMU)"
@@ -2739,6 +2755,6 @@ endif
 	@echo "objcopy:   $(OBJCOPY)"
 	@echo "cherictl:  $(CHERICTL)"
 ifeq ($(wildcard $(CHERICTL)),)
-	@echo "WARNING: $(dollar)CHERICTL not found -> can't run tests on FPGA)"
+	@echo "WARNING: \$(dollar)CHERICTL not found -> can't run tests on FPGA"
 endif
 	@echo
