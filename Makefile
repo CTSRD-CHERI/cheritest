@@ -1382,7 +1382,9 @@ TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
 ifdef TEST_PS
+ifneq ($(USING_LLVM_ASSEMBLER),1)
 TEST_FILES+= $(RAW_PS_FILES)
+endif
 endif
 
 ifeq ($(FUZZ_DMA_ONLY), 1)
