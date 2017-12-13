@@ -1930,18 +1930,18 @@ TEST_FILES+=$(TEST_PURECAP_FILES)
 TESTS := $(TESTS_WITHOUT_PURECAP) $(basename $(TEST_PURECAP_FILES))
 TEST_OBJS := $(addsuffix .o,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_MULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_CACHEDMULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHEDMULTI_ELFS := $(addsuffix _cachedmulti.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_MULTI_MEMS := $(addsuffix _multi.mem,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_MEMS := $(addsuffix _multi.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_HEXS := $(addsuffix .hex,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_MULTI_HEXS := $(addsuffix _multi.hex,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_HEXS := $(addsuffix _multi.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_MULTI_DUMPS := $(addsuffix _multi.dump,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_DUMPS := $(addsuffix _multi.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 
 TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/framework/,$(basename $(RAW_FRAMEWORK_FILES) $(TEST_FRAMEWORK_FILES)))) \
@@ -2165,34 +2165,74 @@ endif
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
 		$(OBJDIR)/purecap_lib.o \
 		$(OBJDIR)/purecap_crt_init_globals.o
+PURECAP_INIT_CACHED_OBJS=$(OBJDIR)/purecap_init_cached.o $(PURECAP_INIT_OBJS)
 $(OBJDIR)/purecap_init.o: init.s
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
+$(OBJDIR)/purecap_init_cached.o: init_cached.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
 $(OBJDIR)/purecap_lib.o: lib.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 $(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c
 	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 
+ifdef VERBOSE
+_V=
+else
+_V=@
+endif
 srcs_to_objs = $(addprefix $(OBJDIR)/,$(addsuffix .o,$(basename $(notdir $(1)))))
 TEST_PURECAP_C_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_C_SRCS))
 TEST_PURECAP_CXX_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_CXX_SRCS))
 TEST_PURECAP_ASM_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_ASM_SRCS))
 # Use static pattern rules here (less fragile than the implicit pattern ones)
 $(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
+	@echo PURECAP_CC $@
+	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
+	@echo PURECAP_CXX $@
+	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
+	@echo PURECAP_AS $@
+	$(_V)$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 
 $(OBJDIR)/tmp_purecap_test_switch.o: tests/purecap/test_purecap_switch.c
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $< -DCOMPILE_SWITCH_FN=1
+	@echo PURECAP_CC $@
+	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $< -DCOMPILE_SWITCH_FN=1
 # HACK to get a test with multiple sources working
 $(OBJDIR)/test_purecap_switch.elf: $(OBJDIR)/test_purecap_switch.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
-	$(MIPS_LD) --no-fatal-warnings -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	@echo "MULTIOBJ LINKING HACK $@"
+	$(_V)$(MIPS_LD) -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_switch_cached.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
+	@echo "MULTIOBJ LINKING HACK cached $@"
+	$(_V)$(MIPS_LD) -EB -G0 -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_switch_multi.elf: $(OBJDIR)/test_purecap_switch.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
+	@echo "MULTIOBJ LINKING HACK multi $@"
+	$(_V)$(MIPS_LD) -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_switch_cachedmulti.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
+	@echo "MULTIOBJ LINKING HACK cached multi$@"
+	$(_V)$(MIPS_LD) -EB -G0 -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+
+$(OBJDIR)/test_purecap_%_cached.elf : $(OBJDIR)/test_purecap_%.o \
+	    test_purecap_cached.ld \
+	    $(PURECAP_INIT_CACHED_OBJS) select_init
+	@echo "PURECAP_LD cached $@"
+	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+
+$(OBJDIR)/test_purecap_%_multi.elf : $(OBJDIR)/test_purecap_%.o \
+	    test_purecap.ld \
+	    $(PURECAP_INIT_OBJS) select_init
+	@echo "PURECAP_LD multi $@"
+	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+
+$(OBJDIR)/test_purecap_%_cachedmulti.elf : $(OBJDIR)/test_purecap_%.o \
+	    test_purecap_cached.ld \
+	    $(PURECAP_INIT_CACHED_OBJS) select_init
+	@echo "PURECAP_LD cached multi $@"
+	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP_INIT_OBJS)
-	$(MIPS_LD) -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
-
+	@echo "PURECAP_LD $@"
+	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 
 ### END RULES FOR PURECAP TESTS
