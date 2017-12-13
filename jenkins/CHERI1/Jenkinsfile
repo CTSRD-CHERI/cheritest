@@ -81,7 +81,9 @@ def doBuild(JobConfig args) {
 		stage('Build Simulator') {
 			// NOPRINTS=1 might to be required for successful builds? At least for CACHECORE
 			// This should speed up running the tests:
-			args.buildArgs += ' NOPRINTS=1 NOT_FLAT=1'
+			args.buildArgs += ' NOPRINTS=1'
+			// NOT_FLAT speeds up incremental builds but it might slow down the simulator
+			// args.buildArgs += ' NOT_FLAT=1'
 			sh '''#!/bin/bash
 set -xe
 . /local/ecad/setup.bash \$QUARTUS_DEFAULT
