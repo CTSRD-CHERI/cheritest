@@ -1662,14 +1662,11 @@ and not berisyncistep \
 and not bev1ram \
 and not countrate \
 and not gxemultlb \
-and not config2 \
-and not config3 \
 and not counterdev \
 and not deterministic_random \
 and not dma \
 and not dmaclang \
 and not dumpicache \
-and not einstr \
 and not extendedtlb \
 and not float64initial \
 and not floatfexr \
@@ -1682,7 +1679,6 @@ and not floatpaired \
 and not floatrecipflushesdenorm \
 and not ignorebadex \
 and not invalidateL2 \
-and not largepage2 \
 and not lladdr \
 and not llscspan \
 and not loadcachetag \
