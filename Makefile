@@ -1668,7 +1668,6 @@ and not dma \
 and not dmaclang \
 and not dumpicache \
 and not extendedtlb \
-and not float64initial \
 and not floatfirextended \
 and not floatlegacyabs \
 and not float_mov_signex \
