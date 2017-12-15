@@ -2492,6 +2492,9 @@ endif
 
 
 NOSETESTS?=python2 -m nose
+ifeq ($(USING_LLVM_ASSEMBLER),0)
+NOSETESTS:=TEST_ASSEMBLER=gnu $(NOSETESTS)
+endif
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)

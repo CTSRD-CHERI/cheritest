@@ -46,6 +46,7 @@ def is_envvar_true(var):
     not set to "0"'''
     return os.environ.get(var, "0") != "0"
 
+
 def xfail_on(var):
     '''
     If the env var TEST_MACHINE matches var the test will be marked as xfail
@@ -56,6 +57,24 @@ def xfail_on(var):
     if os.environ.get("TEST_MACHINE", "").lower() == var.lower():
         return nose_xfail_hack
     return lambda x: x
+
+
+def xfail_gnu_binutils(test):
+    '''
+    If the env var TEST_ASSEMBLER matches "gnu" the test will be marked as xfail
+    Useful if certain features have not been implemented yet
+    '''
+    if os.environ.get("TEST_ASSEMBLER", "").lower() != "gnu":
+        return test
+    if isinstance(test, type):
+        for k, v in vars(test).items():
+            if k.startswith("test_"):
+                setattr(test, k, nose_xfail_hack(test))
+        return test
+    else:
+        assert callable(test)
+        return nose_xfail_hack(test)
+
 
 # https://stackoverflow.com/questions/9613932/nose-plugin-for-expected-failures
 def nose_xfail_hack(test):

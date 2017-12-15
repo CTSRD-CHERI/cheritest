@@ -25,9 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
 from nose.plugins.attrib import attr
 
+@xfail_gnu_binutils
 class test_cp2_rep_underflow(BaseBERITestCase):
 
     @attr('capabilities')

@@ -26,13 +26,13 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
 from nose.plugins.attrib import attr
 
 #
 # Test a ccall_fast
 #
-
+@xfail_gnu_binutils
 class test_cp2_x_ccall_fast_delay(BaseBERITestCase):
 
     @attr('capabilities')
