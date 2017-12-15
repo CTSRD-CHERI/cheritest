@@ -457,13 +457,10 @@ class BaseICacheBERITestCase(BaseBERITestCase):
 class TestClangBase(object):
     @staticmethod
     @nose.tools.nottest
-    def verify_clang_test(sim_log, test_name, test_file):
-        sim_status = MipsStatus(sim_log)
-        exit_code = sim_status[2]  # load the assertion failure kind from $v0
+    def _get_exception_message(sim_status, exit_code, test_file):
         line_number = sim_status[4]  # load the assertion line number from $a0
         exception_count = sim_status[26]  # exception count should be in $k0
-        if exit_code == 0:
-            return
+
         # -1/0xdead0000 -> general assertion failure
         if exit_code == 0xffffffffffffffff or exit_code == 0xdead0000:
             exception_message = "clang assert failed at line %d: %s" % (
@@ -494,6 +491,16 @@ class TestClangBase(object):
             exception_message = "unknown test exit status %d" % (exit_code)
         if exception_count != 0:
             exception_message += "\nNOTE: %d exceptions occurred, check test log!" % exception_count
+        return exception_message
+
+    @staticmethod
+    @nose.tools.nottest
+    def verify_clang_test(sim_log, test_name, test_file):
+        sim_status = MipsStatus(sim_log)
+        exit_code = sim_status[2]  # load the assertion failure kind from $v0
+        if exit_code == 0:
+            return
+        exception_message = TestClangBase._get_exception_message(sim_status, exit_code, test_file)
         assert False, exception_message
 
     @staticmethod

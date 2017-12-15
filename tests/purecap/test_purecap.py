@@ -29,6 +29,7 @@
 from beritest_tools import TestClangBase
 import os
 import re
+import sys
 from nose.plugins.attrib import attr
 
 # Parameters from the environment
@@ -59,16 +60,30 @@ def check_answer(test_name, test_file):
         TestClangBase.verify_clang_test(sim_log, test_name, test_file)
 
 
-# Not derived from unittest.testcase because we wish test_clang to
-# return a generator.
-class TestClangPurecap(object):
+def get_all_tests():
+    return filter(lambda f: TEST_FILE_RE.match(f), os.listdir(TEST_DIR))
+
+if "pytest" not in sys.modules:
+    # Not derived from unittest.testcase because we wish test_clang to
+    # return a generator.
+    class TestClangPurecap(object):
+        @attr('clang')
+        @attr('capabilities')
+        def test_purecap(self):
+            if ONLY_TEST:
+                yield (check_answer, ONLY_TEST)
+            else:
+                for test in get_all_tests():
+                    test_name = os.path.splitext(os.path.basename(test))[0]
+                    yield (check_answer, test_name, os.path.join(TEST_DIR, test))
+else:
+    import pytest
+
+    # TODO: ids=idfn
+    @pytest.mark.parametrize("test", get_all_tests())
     @attr('clang')
     @attr('capabilities')
-    def test_purecap(self):
-        if ONLY_TEST:
-            yield (check_answer, ONLY_TEST)
-        else:
-            for test in filter(lambda f: TEST_FILE_RE.match(f),
-                               os.listdir(TEST_DIR)):
-                test_name = os.path.splitext(os.path.basename(test))[0]
-                yield (check_answer, test_name, os.path.join(TEST_DIR, test))
+    def test_purecap(test):
+        test_name = os.path.splitext(os.path.basename(test))[0]
+        test_file = os.path.join(TEST_DIR, test)
+        check_answer(test_name, test_file)
