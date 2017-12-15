@@ -1968,29 +1968,29 @@ TEST_PYTHON := \
 # XXXAR: TODO: build the purecap tests as _cached and _multi (needs some select_init magic)
 CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix $(LOGDIR)/,$(TESTS)))
 CHERI_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
-	$(LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(LOGDIR)/,$(TESTS)))
 CHERI_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
-	$(LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(LOGDIR)/,$(TESTS)))
 CHERI_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
-	$(LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(LOGDIR)/,$(TESTS)))
 ALTERA_TEST_LOGS := $(addsuffix .log,$(addprefix $(ALTERA_LOGDIR)/,$(TESTS)))
 ALTERA_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
-	$(ALTERA_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(ALTERA_LOGDIR)/,$(TESTS)))
 HWSIM_TEST_LOGS := $(addsuffix .log,$(addprefix $(HWSIM_LOGDIR)/,$(TESTS)))
 HWSIM_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
-	$(HWSIM_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(HWSIM_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
-	$(GXEMUL_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(GXEMUL_LOGDIR)/,$(TESTS)))
 L3_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 L3_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
-	$(L3_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(L3_LOGDIR)/,$(TESTS)))
 L3_TEST_MULTI_LOGS := $(addsuffix _multi.log,$(addprefix \
-	$(L3_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(L3_LOGDIR)/,$(TESTS)))
 L3_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
-	$(L3_LOGDIR)/,$(TESTS_WITHOUT_PURECAP)))
+	$(L3_LOGDIR)/,$(TESTS)))
 SAIL_MIPS_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_MIPS_LOGDIR)/,$(TESTS)))
 SAIL_MIPS_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
