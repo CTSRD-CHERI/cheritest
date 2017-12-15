@@ -23,13 +23,13 @@ JobConfig getJobParameters() {
 	echo "Computed base job names as $jobName"
 	Map config = [
 			"CHERI1-TEST": [buildArgs: 'CAP=True',
-					testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 ALLOW_UNALIGNED=1 SIM_TRACE_OPTS= nosetests_combined.xml'],
+					testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 ALLOW_UNALIGNED=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-CACHECORE-TEST": [
 					buildArgs: 'CAP=True ICACHECORE=1 DCACHECORE=1',
 					testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-FPU-TEST": [
 					buildArgs: 'CAP=True COP1=1',
-					testArgs: 'COP1=1 TEST_PS=1 CLANG=0 NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetests_combined.xml'],
+					testArgs: 'COP1=1 TEST_PS=1 CLANG=0 NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-CAP128-TEST": [
 					buildArgs: 'CAP128=True',
 					testArgs: 'GENERIC_L1=1 CAP_SIZE=128 PERM_SIZE=19 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'],
@@ -38,7 +38,7 @@ JobConfig getJobParameters() {
 					testArgs: 'CHERI_MICRO=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-MULTI1-TEST": [
 					buildArgs: 'MULTI=1 CAP=True',
-					testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetests_cached.xml'],
+					testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-MULTI2-TEST": [
 					buildArgs: 'MULTI=2 CAP=True',
 					testArgs: 'GENERIC_L1=1 MULTI=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
@@ -51,11 +51,11 @@ JobConfig getJobParameters() {
 
 			"BERI1-MICRO-TEST": [
 					buildArgs: 'MICRO=True NOWATCH=True',
-					testArgs: 'TEST_CP2=0 CHERI_MICRO=1 NOFUZZR=1 WONTFIX=1 nosetests_combined.xml'],
+					testArgs: 'TEST_CP2=0 CHERI_MICRO=1 NOFUZZR=1 WONTFIX=1 nosetest_cached'],
 
 			"BERI1-MULTI1-TEST": [
 					buildArgs: 'MULTI=1',
-					testArgs: 'TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cached.xml'],
+					testArgs: 'TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'],
 
 			"BERI1-MULTI2-TEST": [
 					buildArgs: 'MULTI=2',
@@ -99,7 +99,7 @@ ${prepareAssembler}
 cd \$WORKSPACE/ctsrd/cheritest/trunk
 # always do a full clean in case the linker/compiler has changed
 make clean
-make ${assemblerTestFlag} ${args.testArgs} -j8
+make ${assemblerTestFlag} ${args.testArgs} -j16
 """
 		// JUnit Results
 		junit 'ctsrd/cheritest/trunk/nosetests_*.xml'
