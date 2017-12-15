@@ -123,7 +123,7 @@ test:		.ent test
 		bne $v1, $t1, error
 		nop
 		# Stage 2 attempt the failing inc offsets.
-		dli	$t3, 0x7fe940
+		dli	$t3, 0x7f6940
 		cincoffset $c1, $c1, $t3
 		dli	$t3, 0xfffffffffffff0e8
 		cincoffset $c1, $c1, $t3
