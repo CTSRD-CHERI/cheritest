@@ -155,13 +155,15 @@ $(info Using CHERI SDK: $(CHERI_SDK))
 
 # Append /bin to CHERI_SDK if needed:
 ifneq ($(wildcard $(CHERI_SDK)/bin),)
-CHERI_SDK:=$(CHERI_SDK)/bin
+CHERI_SDK_BINDIR:=$(CHERI_SDK)/bin
+else
+CHERI_SDK_BINDIR:=$(CHERI_SDK)
 endif
 
-CLANG_CMD?=$(CHERI_SDK)/clang -integrated-as
-OBJDUMP?=$(CHERI_SDK)/llvm-objdump
+CLANG_CMD?=$(CHERI_SDK_BINDIR)/clang -integrated-as
+OBJDUMP?=$(CHERI_SDK_BINDIR)/llvm-objdump
 # FIXME: elftoolchain objcopy is broken, hopefully llvm-objcopy is ready soon
-# OBJCOPY?=$(CHERI_SDK)/objcopy
+# OBJCOPY?=$(CHERI_SDK_BINDIR)/objcopy
 
 # For now force using the GNU AS since clang doesn't quite work (5 tests broken)
 # CHERI_SDK_USE_GNU_AS?=1
@@ -177,34 +179,34 @@ endif
 ifndef CHERI_SDK_USE_GNU_AS
 MIPS_AS=$(CLANG_AS)
 # TODO: use llvm-mc?
-# MIPS_AS=$(CHERI_SDK)/llvm-mc -filetype=obj -foo
+# MIPS_AS=$(CHERI_SDK_BINDIR)/llvm-mc -filetype=obj -foo
 USING_LLVM_ASSEMBLER=1
 else # use GNU as otherwise
-MIPS_AS=$(CHERI_SDK)/as
+MIPS_AS=$(CHERI_SDK_BINDIR)/as
 endif # CHERI_SDK_USE_GNU_AS
 
 # default to linking with LLD unless CHERI_SDK_USE_GNU_LD is set
 ifndef CHERI_SDK_USE_GNU_LD
-MIPS_LD=$(CHERI_SDK)/ld.lld --fatal-warnings -process-cap-relocs
+MIPS_LD=$(CHERI_SDK_BINDIR)/ld.lld --fatal-warnings -process-cap-relocs
 CAPSIZEFIX = :
 else
-MIPS_LD=$(CHERI_SDK)/ld.bfd --fatal-warnings
+MIPS_LD=$(CHERI_SDK_BINDIR)/ld.bfd --fatal-warnings
 endif
-ifneq ($(wildcard $(CHERI_SDK)/qemu-system-cheri$(CAP_SIZE)),)
-QEMU?=$(CHERI_SDK)/qemu-system-cheri$(CAP_SIZE)
+ifneq ($(wildcard $(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)),)
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)
 endif
-QEMU?=$(CHERI_SDK)/qemu-system-cheri
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri
 
 else
 # TODO: make this an error soon
 $(info CHERI SDK not found, will try to infer tool defaults)
-endif # neq(CHERI_SDK,)
+endif # neq(CHERI_SDK_BINDIR,)
 
 # Use the default names from the ubuntu mips64-binutils if CHERI_SDK is not set
 MIPS_AS?=mips64-as
 MIPS_LD?=mips-linux-gnu-ld
 OBJDUMP?=mips64-objdump
-CAPSIZEFIX?= $(CHERI_SDK)/capsizefix --verbose $(1)
+CAPSIZEFIX?= $(CHERI_SDK_BINDIR)/capsizefix --verbose $(1)
 # try to find a working objcopy
 ifeq ($(OBJCOPY),)
 OBJCOPY:=$(shell command -v mips64-unknown-freeebsd-objcopy 2> /dev/null)
@@ -1380,7 +1382,9 @@ TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
 ifdef TEST_PS
+ifneq ($(USING_LLVM_ASSEMBLER),1)
 TEST_FILES+= $(RAW_PS_FILES)
+endif
 endif
 
 ifeq ($(FUZZ_DMA_ONLY), 1)
@@ -1662,17 +1666,12 @@ and not berisyncistep \
 and not bev1ram \
 and not countrate \
 and not gxemultlb \
-and not config2 \
-and not config3 \
 and not counterdev \
 and not deterministic_random \
 and not dma \
 and not dmaclang \
 and not dumpicache \
-and not einstr \
 and not extendedtlb \
-and not float64initial \
-and not floatfexr \
 and not floatfirextended \
 and not floatlegacyabs \
 and not float_mov_signex \
@@ -1682,7 +1681,6 @@ and not floatpaired \
 and not floatrecipflushesdenorm \
 and not ignorebadex \
 and not invalidateL2 \
-and not largepage2 \
 and not lladdr \
 and not llscspan \
 and not loadcachetag \
@@ -1934,18 +1932,18 @@ TEST_FILES+=$(TEST_PURECAP_FILES)
 TESTS := $(TESTS_WITHOUT_PURECAP) $(basename $(TEST_PURECAP_FILES))
 TEST_OBJS := $(addsuffix .o,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_ELFS := $(addsuffix .elf,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_MULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_CACHEDMULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHED_ELFS := $(addsuffix _cached.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_ELFS := $(addsuffix _multi.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_CACHEDMULTI_ELFS := $(addsuffix _cachedmulti.elf,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_MEMS := $(addsuffix .mem,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_MULTI_MEMS := $(addsuffix _multi.mem,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHED_MEMS := $(addsuffix _cached.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_MEMS := $(addsuffix _multi.mem,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_HEXS := $(addsuffix .hex,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_MULTI_HEXS := $(addsuffix _multi.hex,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHED_HEXS := $(addsuffix _cached.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_HEXS := $(addsuffix _multi.hex,$(addprefix $(OBJDIR)/,$(TESTS)))
 TEST_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(TESTS)))
-TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
-TEST_MULTI_DUMPS := $(addsuffix _multi.dump,$(addprefix $(OBJDIR)/,$(TESTS_WITHOUT_PURECAP)))
+TEST_CACHED_DUMPS := $(addsuffix _cached.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
+TEST_MULTI_DUMPS := $(addsuffix _multi.dump,$(addprefix $(OBJDIR)/,$(TESTS)))
 
 TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/framework/,$(basename $(RAW_FRAMEWORK_FILES) $(TEST_FRAMEWORK_FILES)))) \
@@ -2060,10 +2058,16 @@ CLEAN_TEST = rm -r $$TMPDIR
 
 WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 
-ifeq ($(wildcard ${TOOLS_DIR_ABS}),)
-MEMCONV=$(error TOOLS_DIR_ABS not set, cannot find memconv)
+ifeq ($(wildcard $(TOOLS_DIR_ABS)),)
+MEMCONV=$(error Cannot find find memConv.py, set CHERILIBS to the cherilibs/trunk directory )
 else
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
+endif
+
+ifeq ($(wildcard $(CHERIROOT_ABS)),)
+CHERI_SW_MEM_BIN=$(error Cannot find find CHERIROOT/sw/mem.bin, set CHERIROOT to the cheri/trunk directory )
+else
+CHERI_SW_MEM_BIN=${CHERIROOT_ABS}/sw/mem.bin
 endif
 
 all: sanity-check-makefile $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_HEXS) $(TEST_CACHED_HEXS)
@@ -2082,7 +2086,7 @@ test_hardware: altera-nosetest altera-nosetest_cached
 $(CHERISOCKET):
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp ${CHERIROOT_ABS}/sw/mem.bin mem.bin && \
+	cp $(CHERI_SW_MEM_BIN) mem.bin && \
 	$(MEMCONV) bsim && \
 	$(COPY_PISM_CONFS) && \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
@@ -2112,7 +2116,10 @@ cleantest:
 	rm -f $(L3_LOGDIR)/*.err
 
 clean: cleantest
-	rm -f $(OBJDIR)/*.mem $(OBJDIR)/*.o $(OBJDIR)/*.elf $(OBJDIR)/*.dump
+	rm -f $(OBJDIR)/*.mem
+	rm -f $(OBJDIR)/*.o
+	rm -f $(OBJDIR)/*.elf
+	rm -f $(OBJDIR)/*.dump
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
@@ -2169,34 +2176,74 @@ endif
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
 		$(OBJDIR)/purecap_lib.o \
 		$(OBJDIR)/purecap_crt_init_globals.o
+PURECAP_INIT_CACHED_OBJS=$(OBJDIR)/purecap_init_cached.o $(PURECAP_INIT_OBJS)
 $(OBJDIR)/purecap_init.o: init.s
+	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
+$(OBJDIR)/purecap_init_cached.o: init_cached.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
 $(OBJDIR)/purecap_lib.o: lib.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 $(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c
 	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 
+ifdef VERBOSE
+_V=
+else
+_V=@
+endif
 srcs_to_objs = $(addprefix $(OBJDIR)/,$(addsuffix .o,$(basename $(notdir $(1)))))
 TEST_PURECAP_C_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_C_SRCS))
 TEST_PURECAP_CXX_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_CXX_SRCS))
 TEST_PURECAP_ASM_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_ASM_SRCS))
 # Use static pattern rules here (less fragile than the implicit pattern ones)
 $(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
+	@echo PURECAP_CC $@
+	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
+	@echo PURECAP_CXX $@
+	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
+	@echo PURECAP_AS $@
+	$(_V)$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 
 $(OBJDIR)/tmp_purecap_test_switch.o: tests/purecap/test_purecap_switch.c
-	$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $< -DCOMPILE_SWITCH_FN=1
+	@echo PURECAP_CC $@
+	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $< -DCOMPILE_SWITCH_FN=1
 # HACK to get a test with multiple sources working
 $(OBJDIR)/test_purecap_switch.elf: $(OBJDIR)/test_purecap_switch.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
-	$(MIPS_LD) --no-fatal-warnings -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	@echo "MULTIOBJ LINKING HACK $@"
+	$(_V)$(MIPS_LD) -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_switch_cached.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
+	@echo "MULTIOBJ LINKING HACK cached $@"
+	$(_V)$(MIPS_LD) -EB -G0 -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_switch_multi.elf: $(OBJDIR)/test_purecap_switch.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
+	@echo "MULTIOBJ LINKING HACK multi $@"
+	$(_V)$(MIPS_LD) -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_switch_cachedmulti.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
+	@echo "MULTIOBJ LINKING HACK cached multi$@"
+	$(_V)$(MIPS_LD) -EB -G0 -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+
+$(OBJDIR)/test_purecap_%_cached.elf : $(OBJDIR)/test_purecap_%.o \
+	    test_purecap_cached.ld \
+	    $(PURECAP_INIT_CACHED_OBJS) select_init
+	@echo "PURECAP_LD cached $@"
+	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+
+$(OBJDIR)/test_purecap_%_multi.elf : $(OBJDIR)/test_purecap_%.o \
+	    test_purecap.ld \
+	    $(PURECAP_INIT_OBJS) select_init
+	@echo "PURECAP_LD multi $@"
+	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+
+$(OBJDIR)/test_purecap_%_cachedmulti.elf : $(OBJDIR)/test_purecap_%.o \
+	    test_purecap_cached.ld \
+	    $(PURECAP_INIT_CACHED_OBJS) select_init
+	@echo "PURECAP_LD cached multi $@"
+	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP_INIT_OBJS)
-	$(MIPS_LD) -EB -G0 -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
-
+	@echo "PURECAP_LD $@"
+	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 
 ### END RULES FOR PURECAP TESTS
@@ -2687,6 +2734,16 @@ cleanerror:
 sanity-check-makefile: FORCE
 	@echo
 	@echo
+	@echo "cheri source directory: $(CHERIROOT_ABS)"
+	@echo "cheri libs directory: $(CHERILIBS_ABS)"
+	@echo "cheri tools directory: $(TOOLS_DIR_ABS)"
+ifeq ($(wildcard $(CHERILIBS_ABS)),)
+	@echo "WARNING: \$(dollar)CHERLIBS not set -> will not be able to run simulator tests"
+endif
+ifeq ($(wildcard $(CHERIROOT_ABS)),)
+	@echo "WARNING: \$(dollar)CHERIROOT not set -> will not be able to run simulator tests"
+endif
+
 	@echo Building test suite for $(CAP_SIZE)-bit capabilities
 	@echo Permission size is $(PERM_SIZE)
 	@echo "Detected QEMU binary: $(QEMU)"
@@ -2703,6 +2760,6 @@ endif
 	@echo "objcopy:   $(OBJCOPY)"
 	@echo "cherictl:  $(CHERICTL)"
 ifeq ($(wildcard $(CHERICTL)),)
-	@echo "WARNING: $(dollar)CHERICTL not found -> can't run tests on FPGA)"
+	@echo "WARNING: \$(dollar)CHERICTL not found -> can't run tests on FPGA"
 endif
 	@echo

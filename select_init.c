@@ -109,6 +109,29 @@ int build;
         break;
     }
   }
+  else if (strncmp(cp, "test_purecap_", strlen("test_purecap_")) == 0)
+  {
+    const char* purecap_init_objs = "obj/purecap_init.o obj/purecap_crt_init_globals.o obj/purecap_lib.o";
+    switch (build)
+    {
+      case BUILD_UNCACHED:
+        printf("-Ttest_purecap.ld %s\n", purecap_init_objs);
+        break;
+      case BUILD_CACHED:
+        printf("-Ttest_purecap_cached.ld obj/purecap_init_cached.o %s\n", purecap_init_objs);
+        break;
+      case BUILD_UNCACHED_MULTI:
+        /* Non-raw tests don't need init_multi.o, because init.o takes
+         * care of multicore initialization.
+         */
+        printf("-Ttest_purecap.ld %s\n", purecap_init_objs);
+        break;
+      case BUILD_CACHED_MULTI:
+        /* Non-raw tests don't need init_multi.o */
+        printf("-Ttest_purecap_cached.ld obj/purecap_init_cached.o %s\n", purecap_init_objs);
+        break;
+    }
+  }
   else
   {
     switch (build)

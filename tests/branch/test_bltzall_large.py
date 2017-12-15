@@ -34,7 +34,6 @@ from nose.plugins.attrib import attr
 
 class test_bltzall_large(BaseBERITestCase):
 
-    @attr('beri')
     def test_bltzall_large_1(self):
         '''Test that bltzall jumped to the right place'''
         self.assertRegisterEqual(self.MIPS.a2, 0x1234, "bltzall did not jump to the right place")

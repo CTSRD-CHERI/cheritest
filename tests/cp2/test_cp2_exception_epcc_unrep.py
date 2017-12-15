@@ -161,5 +161,7 @@ class test_cp2_exception_epcc_unrep(BaseBERITestCase):
 
     @attr('capabilities')
     @attr('cap_imprecise')
+    @attr('cap_null_length')
     def test_sandbox_epcc_length_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].length, 0, "sandbox EPCC length incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].length, 0xffffffffffffffff,
+                                 "sandbox EPCC length incorrect")

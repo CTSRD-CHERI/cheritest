@@ -43,7 +43,8 @@
 		.global start
 		.ent start
 start:     
-		# First enable CP1 
+		# First enable CP1
+		mfc0 $at, $12
 		dli $t1, 1 << 29
 		or $at, $at, $t1   # Enable CP1    
 		mtc0    $at, $12 

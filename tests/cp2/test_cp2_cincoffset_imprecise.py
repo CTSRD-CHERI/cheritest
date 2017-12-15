@@ -71,4 +71,5 @@ class test_cp2_cincoffset_imprecise(BaseBERITestCase):
     @attr('cap_imprecise')
     @attr('cap_null_length')
     def test_cp2_cincoffset_precise_len_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0, "CIncOffset did not set length to zero when the result was imprecise")
+        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff,
+                                 "CIncOffset did not set length to the expected NULL length when the result was imprecise")
