@@ -72,7 +72,9 @@ test:		.ent test
 
 
 		cgetdefault $c1
-		dli $t0, 1
+		# cseal allows a precision of at most 8 bits for sealed capabilities,
+		# so try to seal with a base and length that requires more.
+		dli $t0, 0x101
 		csetoffset $c1, $c1, $t0
 		csetbounds $c1, $c1, $t0
 
