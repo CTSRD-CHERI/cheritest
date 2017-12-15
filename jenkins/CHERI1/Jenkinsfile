@@ -179,7 +179,10 @@ try {
 			disableConcurrentBuilds(),
 			[$class: 'CopyArtifactPermissionProperty', projectNames: '*'],
 	])
-	cheriHardwareTest()
+	// XXXAR: maybe the timeout works better outside of a node() block
+	timeout(120) {
+		cheriHardwareTest()
+	}
 } catch (e) {
 	error(e.toString())
 	/* emailext body: '$DEFAULT_CONTENT',
