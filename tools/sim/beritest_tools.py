@@ -100,10 +100,17 @@ class BaseBERITestCase(unittest.TestCase):
             else:
                 cls.LOG_FN = cls.__name__ + ".log"
         cls.unexpected_exception = False
-        with open(os.path.join(cls.LOG_DIR, cls.LOG_FN), "rt") as fh:
-            try:
-                cls.MIPS = MipsStatus(fh)
+        cls._MIPS = None
+        try:
+            cls.parseLog(os.path.join(cls.LOG_DIR, cls.LOG_FN))
+        except Exception as e:
+            cls._SETUP_EXCEPTION = e
 
+    @classmethod
+    def parseLog(cls, filename):
+        with open(filename, "rt") as fh:
+            try:
+                cls._MIPS = MipsStatus(fh)
                 # The test framework has a default exception handler which
                 # increments k0 and returns to the instruction after the
                 # exception. We assert that k0 is zero here to check there
@@ -123,6 +130,11 @@ class BaseBERITestCase(unittest.TestCase):
                     cls.unexpected_exception = True
             except MipsException as e:
                 cls.MIPS_EXCEPTION = e
+
+    @property
+    def MIPS(self):
+        assert self._MIPS, "Test case was not set up properly: " + str(self._SETUP_EXCEPTION)
+        return self._MIPS
 
     def id(self):
         result = unittest.TestCase.id(self)
