@@ -2540,7 +2540,8 @@ nosetests_cachedmulti: nosetests_cachedmulti.xml
 #
 
 nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
-	./xmlcat nosetests_uncached.xml nosetests_cached.xml > nosetests_combined.xml
+	rm -f nosetests_combined.xml
+	./xmlcat nosetests_uncached.xml nosetests_cached.xml | tee nosetests_combined.xml
 
 #
 # Use the target FORCE to force the xmk files to be rebuilt each time.
