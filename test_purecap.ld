@@ -42,7 +42,7 @@ SECTIONS
 	.text . : AT(0x40000000) {
                 . = ALIGN(8);
 		obj/purecap_init.o(.text)
-		*(EXCLUDE_FILE (obj/init.o) .text .text.*)
+		*(EXCLUDE_FILE (obj/purecap_init.o) .text .text.*)
 	}
 	.data . : { . = ALIGN(8); *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*); }
 	.got  . : {
