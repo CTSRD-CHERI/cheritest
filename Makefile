@@ -2541,7 +2541,8 @@ nosetests_cachedmulti: nosetests_cachedmulti.xml
 
 nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 	rm -f nosetests_combined.xml
-	./xmlcat nosetests_uncached.xml nosetests_cached.xml | tee nosetests_combined.xml
+	# ./xmlcat nosetests_uncached.xml nosetests_cached.xml | tee nosetests_combined.xml
+	@echo "XMLCAT SEEMS TO BE BROKEN!"; exit 1
 
 #
 # Use the target FORCE to force the xmk files to be rebuilt each time.
