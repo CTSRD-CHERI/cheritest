@@ -9,3 +9,9 @@ select_init
 max_cycles
 qemu_log/
 obj/
+
+out\.txt
+
+*.s~
+
+*.log~
