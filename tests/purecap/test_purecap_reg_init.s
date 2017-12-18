@@ -36,6 +36,40 @@
 
 		.global test
 test:		.ent test
+		# "read" all the capability registers again to make sure the cclear
+		# instruction's effect is seen in the debug register file.
+		cmove $c1,  $c1
+		cmove $c2,  $c2
+		cmove $c3,  $c3
+		cmove	$c4,  $c4
+		cmove $c5,  $c5
+		cmove $c6,  $c6
+		cmove $c7,  $c7
+		cmove	$c8,  $c8
+		cmove $c9,  $c9
+		cmove	$c10, $c10
+		cmove $c11, $c11
+		cmove $c12, $c12
+		cmove $c13, $c13
+		cmove	$c14, $c14
+		cmove $c15, $c15
+		cmove $c16, $c16
+		cmove $c17, $c17
+		cmove	$c18, $c18
+		cmove $c19, $c19
+		cmove	$c20, $c20
+		cmove $c21, $c21
+		cmove $c22, $c22
+		cmove $c23, $c23
+		cmove	$c24, $c24
+		cmove $c25, $c25
+		cmove $c26, $c26
+		cmove $c27, $c27
+		cmove	$c28, $c28
+		cmove $c29, $c29
+		cmove	$c30, $c30
+		cmove $c31, $c31
+
 		jr	$ra
 		nop			# branch-delay slot
 		.end	test
