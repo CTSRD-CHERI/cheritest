@@ -33,7 +33,8 @@ from nose.plugins.attrib import attr
 class test_purecap_reg_init(BaseBERITestCase):
     @attr('capabilities')
     def test_pcc(self):
-        self.assertValidCap(self.MIPS.pcc, "$pcc", offset=(0x9000000040000000, 0x90000000400fffff), length=self.max_length)
+        self.MIPS.pcc.offset = (self.MIPS.pcc.offset & 0x00FFFFFFFFFFFFFF);
+        self.assertValidCap(self.MIPS.pcc, "$pcc", offset=(0x00000040000000, 0x000000400fffff) , length=self.max_length)
 
     @attr('capabilities')
     def test_other_capregs(self):
