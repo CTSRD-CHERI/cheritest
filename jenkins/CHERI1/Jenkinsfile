@@ -2,6 +2,7 @@ class JobConfig {
 	String buildArgs
 	String testArgs
 	String name = null
+	static Object gitInfo = null
 
 	// TODO: for some reason I can't make these globals, so let's just put them here
 	static String clangArchiveName = 'cheri-multi-master-clang-llvm.tar.xz'
@@ -109,10 +110,11 @@ make ${assemblerTestFlag} ${args.testArgs} -j16
 def doBuild(JobConfig args) {
 	if (args.name.startsWith('BERI')) {
 		if (!args.testArgs.contains('TEST_CP2=0')) {
-			return error("BERI tests need TEST_CP2=0 set")
+			error("BERI tests need TEST_CP2=0 set")
+			return
 		}
 	}
-	return timeout(120) {
+	timeout(120) {
 		copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
 		copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
 		stage('Build Simulator') {
@@ -145,14 +147,14 @@ rm -f sim sim.so
 }
 
 def cheriHardwareTest() {
-	return node('llvm&&bluespec') {
+	node('llvm&&bluespec') {
 		echo "Computing job parameters for ${env.JOB_NAME}"
 		JobConfig args = getJobParameters()
 		echo "Found job config: BUILD_ARGS: '${args.buildArgs}'\nTEST_ARGS: '${args.testArgs}'"
 		stage('Checkout') {
 			// dir('ctsrd/cheritest/trunk') { git url: 'git@github.com:CTSRD-CHERI/cheritest.git', credentialsId: 'cheritest_key', branch: 'master'}
 			dir('ctsrd/cheritest/trunk') {
-				checkout scm  // get the sources from git
+				args.gitInfo = checkout scm  // get the sources from git
 			}
 			// Get the SVN sources:
 			checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '',
@@ -167,7 +169,46 @@ def cheriHardwareTest() {
 									remote: 'svn+ssh://secsvn@svn-ctsrd.cl.cam.ac.uk/ctsrd/cheri/trunk']],
 					workspaceUpdater: [$class: 'UpdateUpdater']])
 		}
-		doBuild(args)
+		try {
+			doBuild(args)
+		} finally {
+			def message = "${env.JOB_NAME}: ${currentBuild.description}"
+			def githubCommitStatusContext = "ci/jenkins/build-status/${env.JOB_NAME}"
+			echo("result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
+			// it seems like the currentBuild.Result will always be null (PENDING) unless I set it explicitly here
+			if (currentBuild.result == null)
+				currentBuild.result = currentBuild.currentResult
+			echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
+			Map githubNotifierOptions = [
+					$class: 'GitHubCommitStatusSetter',
+					// errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+					errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+					contextSource: [$class: "ManuallyEnteredCommitContextSource", context: githubCommitStatusContext],
+					/*statusResultSource: [
+							$class: 'ConditionalStatusResultSource',
+							results: [
+									[$class: 'BetterThanOrEqualBuildResult', result: 'SUCCESS', state: 'SUCCESS', message: message],
+									[$class: 'BetterThanOrEqualBuildResult', result: 'UNSTABLE', state: 'FAILURE', message: message],
+									[$class: 'BetterThanOrEqualBuildResult', result: 'FAILURE', state: 'FAILURE', message: message],
+									[$class: 'AnyBuildResult', message: 'Something went wrong', state: 'ERROR']
+							]
+					]*/
+					// statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: 'SUCCESS']] ]
+			]
+			def gitHubCommitSHA = JobConfig.gitInfo?.GIT_COMMIT
+			def gitHubRepoURL = JobConfig.gitInfo?.GIT_URL
+			if (gitHubCommitSHA)
+				githubNotifierOptions['commitShaSource'] = [$class: "ManuallyEnteredShaSource", sha: gitHubCommitSHA]
+			if (gitHubRepoURL) {
+				if (gitHubRepoURL.endsWith('.git')) {
+					gitHubRepoURL = gitHubRepoURL.substring(0, gitHubRepoURL.indexOf('.git'))
+				}
+				githubNotifierOptions['reposSource'] = [$class: "ManuallyEnteredRepositorySource", url: gitHubRepoURL]
+			}
+			echo("${githubNotifierOptions}")
+			echo("${currentBuild}")
+			step(githubNotifierOptions)
+		}
 	}
 }
 
