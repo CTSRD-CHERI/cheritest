@@ -100,6 +100,7 @@ ${prepareAssembler}
 cd \$WORKSPACE/ctsrd/cheritest/trunk
 # always do a full clean in case the linker/compiler has changed
 make clean
+rm -f nose*.xml
 make ${assemblerTestFlag} ${args.testArgs} -j16
 """
 		// JUnit Results
