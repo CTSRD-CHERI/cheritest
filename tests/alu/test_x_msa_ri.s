@@ -31,10 +31,9 @@
 .set noat
 
 #
-# Test that the DEXT instructions (which isn't implemented by BERI) raises
-# a reserved instruction exception.
-# 
-# This is a regression test for a bug in BERI.
+# Test that the MDMX/MSA major opcode raises a reserved instruction exception.
+# We reuse this instruction for the large immediate CSC and therefore it
+# should cause a trap when used without COP2 enabled
 #
 
 .global test

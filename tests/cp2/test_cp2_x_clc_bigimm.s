@@ -31,11 +31,8 @@
 .set noat
 
 #
-# Test that the JALX major opcode (switch to micromips mode) raises
-# a reserved instruction exception.
-# We reuse this instruction for the large immediate CLC/CSC and therefore it
-# should cause a trap when used without COP2 enabled
-# 
+# Test that an unliagned big immediate CLC raises an unaligned exception instead of
+# a reserved instruction error
 #
 
 .global test
@@ -62,8 +59,12 @@ test:
 		dli	$t0, 42
 
 
-		# Check that a load of address 0xfffffffff0 raises an exception
-		.word 0x7400ffff # clcbi $c0, -16($c0)
+		# Check that a load of address 0x1 raises an exception (not aligned)
+		dla $t0, 17
+		cincoffset $c1, $c0, $t0
+		# c1 contains address 17 -> loading $c1 - 16 will cause an error
+		# TODO: when assembler support is merged use that instead of raw bits
+		.word 0x7421ffff	# clcbi	$c1, -16($c1)
 		nop
 
 		ld	$fp, 16($sp)

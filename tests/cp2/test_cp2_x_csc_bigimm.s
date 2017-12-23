@@ -30,11 +30,10 @@
 .set nobopt
 .set noat
 
+
 #
-# Test that the DEXT instructions (which isn't implemented by BERI) raises
-# a reserved instruction exception.
-# 
-# This is a regression test for a bug in BERI.
+# Test that an unliagned big immediate CSC raises an unaligned exception instead of
+# a reserved instruction error
 #
 
 .global test
@@ -60,8 +59,12 @@ test:
 
 		dli	$t0, 42
 
-		# Check that a store to address 0xfffffffff0 raises an exception
-		.word 0x7800ffff # cscbi $c0, -16($c0)
+		# Check that a load of address 0x1 raises an exception (not aligned)
+		dla $t0, 17
+		cincoffset $c1, $c0, $t0
+		# c1 contains address 17 -> storing to $c1 - 16 will cause an error
+		# TODO: when assembler support is merged use that instead of raw bits
+		.word 0x7821ffff	# cscbi	$c1, -16($c1)
 		nop
 
 		ld	$fp, 16($sp)
