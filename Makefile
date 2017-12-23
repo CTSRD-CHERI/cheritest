@@ -1869,7 +1869,7 @@ else
 NOSEPRED+=and not cap_precise
 endif
 # CHERI supports experimental CLC since r30617
-NOSEPRED+=not no_experimental_clc
+NOSEPRED+=and not no_experimental_clc
 endif
 ifneq ($(CLANG),1)
 NOSEPRED+=and not clang and not dmaclang
