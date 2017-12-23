@@ -31,15 +31,16 @@
 .set noat
 
 #
-# Test that the DEXT instructions (which isn't implemented by BERI) raises
+# Test that the JALX major opcode (switch to micromips mode) raises
 # a reserved instruction exception.
+# We reuse this instruction for the large immediate CLC/CSC and therefore it
+# should cause a trap when used without COP2 enabled
 # 
-# This is a regression test for a bug in BERI.
 #
 
 .global test
 .ent test
-test:
+test:			
 		daddu 	$sp, $sp, -32
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
@@ -60,19 +61,10 @@ test:
 
 		dli	$t0, 42
 
-		# Turn off CP2 (to ensure this faults even with experimental CSC)
-		mfc0	$t0, $12
-		dli	$t1, 1 << 30
-		not	$t1
-		and	$t0, $t0, $t1
-		mtc0	$t0, $12
 
-
-		# From LLVM test:
-		# CHECK:        andi.b  $w2, $w29, 48           # encoding: [0x78,0x30,0xe8,0x80]
-		# andi.b  $w2, $w29, 48
-		# .word 0x7830e880
-		.word 0x78000000
+		# Check that a load of address 0xfffffffff0 raises an exception
+		.word 0x7400ffff # clcbi $c0, -16($c0)
+		nop
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

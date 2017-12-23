@@ -1107,7 +1107,9 @@ TEST_CP2_FILES=					\
 		test_cp2_csetboundsexact.s \
 		test_cp2_x_csetboundsexact_imprecise.s  \
 		test_cp2_x_multiop_reg.s \
-		test_cp2_cgettype.s 
+		test_cp2_x_clc_bigimm.s \
+		test_cp2_x_csc_bigimm.s \
+		test_cp2_cgettype.s
 
 ifeq ($(USING_LLVM_ASSEMBLER),1)
 # FIXME: gas does not yet implement ccall fast
@@ -1694,7 +1696,8 @@ and not tlbcheck \
 and not watch \
 and not csettype \
 and not qemu_skip \
-and not mtc0signex
+and not mtc0signex \
+and not no_experimental_clc
 # XXXAM why settype is disabled?
 # XXXAR: mtc0signex was added here because since upstream QEMU commit d54a299b
 # the mtc0 instruction no longer sign extends
@@ -1865,6 +1868,8 @@ NOSEPRED+=and not cap_imprecise
 else
 NOSEPRED+=and not cap_precise
 endif
+# CHERI supports experimental CLC since r30617
+NOSEPRED+=not no_experimental_clc
 endif
 ifneq ($(CLANG),1)
 NOSEPRED+=and not clang and not dmaclang
@@ -1891,6 +1896,7 @@ endif
 else
 NOSEPRED+=and not nowatch
 endif
+
 ifneq ($(NOSEPRED),)
 NOSEFLAGS?=-A "$(NOSEPRED) and not uncached"
 NOSEFLAGS_UNCACHED?=-A "$(NOSEPRED) and not cached"

@@ -29,15 +29,16 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 
-class test_x_msa_ri(BaseBERITestCase):
-    def test_x_msa_ri(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "MSA isn't supported, but didn't raise an exception")
+class test_cp2_x_clc_bigimm(BaseBERITestCase):
+    def test_cp2_x_clc_bigimm(self):
+        self.assertRegisterEqual(self.MIPS.a2, 1, "CLC bigimm with bad address didn't raise an exception")
 
     @attr(no_experimental_clc=True)
-    def test_x_msa_ri_csc_bigimm_not_implemented(self):
-        self.assertRegisterEqual(self.MIPS.a3, 10, "MSA isn't supported, but didn't raise RESERVED_INSTRUCTION")
+    def test_cp2_x_clc_bigimm_not_implemented(self):
+        self.assertRegisterEqual(self.MIPS.a3, 10, "CLC bigimm not implemented but didn't raise RESERVED INSTR")
 
     @attr('capabilities')
     @attr(no_experimental_clc=False)
-    def test_x_msa_ri_csc_bigimm_cp2_off(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0xb, "CSC bigimm with cp2 off didn't raise CP2 unusuable")
+    def test_cp2_x_clc_bigimm_bad_addr(self):
+        self.assertRegisterEqual(self.MIPS.a3, 4, "CLC bigimm didn't raise ADDRL (Store to an illegal address)")
+

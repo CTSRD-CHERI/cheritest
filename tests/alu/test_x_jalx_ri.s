@@ -61,6 +61,12 @@ test:
 
 		dli	$t0, 42
 
+		# Turn off CP2 (to ensure this faults even with experimental CLC)
+		mfc0	$t0, $12
+		dli	$t1, 1 << 30
+		not	$t1
+		and	$t0, $t0, $t1
+		mtc0	$t0, $12
 
 		.set	push
 		.set	mips64r2
