@@ -574,7 +574,6 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_cvt_d_l_d64.s	\
 		test_raw_fpu_cvt_l_d_d64.s	\
 		test_raw_fpu_cvt_l_s_d64.s	\
-		test_fpu_exception_pipeline.s	\
 		test_fpu_x_disabled.s		\
 		test_fpu_x_ldc1_disabled.s	\
 		test_fpu_x_mthc1.s		\
@@ -932,7 +931,6 @@ TEST_CP2_FILES=					\
 		test_cp2_cllc_span.s		\
 		test_cp2_clld_span.s		\
 		test_cp2_cllw_span.s		\
-		test_cp2_cllw_span.s		\
 		test_cp2_cllh_span.s		\
 		test_cp2_cllb_span.s		\
 		test_cp2_ccall.s		\
@@ -1114,7 +1112,6 @@ TEST_CP2_FILES=					\
 ifeq ($(USING_LLVM_ASSEMBLER),1)
 # FIXME: gas does not yet implement ccall fast
 TEST_CP2_FILES += \
-		test_cp2_rep_underflow.s	\
 		test_cp2_ccall_fast.s		\
 		test_cp2_x_ccall_fast_delay.s	\
 		test_cp2_x_ccall_fast_code_perm.s	\
@@ -1140,9 +1137,7 @@ TEST_ALU_OVERFLOW_FILES=			\
 		test_sub_overflow.s		\
 		test_sub_overflow_minint.s	\
 		test_subu_overflow.s		\
-		test_madd_lo_overflow.s		\
-		test_subu_overflow.s
-
+		test_madd_lo_overflow.s
 TEST_MEM_UNALIGN_FILES=				\
 		test_lh_unalign.s		\
 		test_lw_unalign.s		\
