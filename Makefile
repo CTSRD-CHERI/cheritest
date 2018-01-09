@@ -141,8 +141,8 @@ SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 CC?=gcc
 
 CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension-token -Wno-error=unused -Wno-error=pedantic
-HYBRID_CFLAGS?=-fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections
-PURECAP_CFLAGS?=-fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
+HYBRID_CFLAGS?=-g -fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections
+PURECAP_CFLAGS?=-g -fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
 
 ifneq ($(CHERI$(CAP_SIZE)_SDK),)
 CHERI_SDK:=$(CHERI$(CAP_SIZE)_SDK)
@@ -2498,6 +2498,8 @@ endif
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
+$(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log
+	$(CHERI_SDK_BINDIR)/symbolize-cheri-trace.py $< "$(OBJDIR)/`basename $< .log`.elf" > $@
 
 NOSETESTS?=python2 -m nose
 ifeq ($(USING_LLVM_ASSEMBLER),0)
@@ -2710,6 +2712,8 @@ qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) $(TEST_PYTHON) FORCE
 
 PURECAP_TESTS := $(basename $(TEST_PURECAP_FILES))
 PURECAP_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
+PURECAP_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(PURECAP_TESTS)))
+purecap_dumps: $(PURECAP_DUMPS)
 qemu_purecap_tests: qemu_purecap_tests.xml
 qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
