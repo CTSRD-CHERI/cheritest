@@ -47,6 +47,21 @@
         ld      $fp, 16($sp)
         daddu   $sp, 32
 .endm
+
+.macro mips_function_entry extra_stack_space=0
+	daddiu	$sp, $sp, -(\extra_stack_space + 16)
+	sd	$ra, (\extra_stack_space + 8)($sp)
+	sd	$fp, (\extra_stack_space)($sp)
+	daddiu	$fp, $sp, (\extra_stack_space + 16)
+.endm
+
+.macro mips_function_return extra_stack_space=0
+	ld      $ra, (\extra_stack_space + 8)($sp)
+	ld      $fp, (\extra_stack_space)($sp)
+	jr $ra
+	daddiu	$fp, $sp, (\extra_stack_space + 16)
+.endm
+
         
 # The maximum number of hw threads (threads*cores) we expect for
 # any configuration. This is so that we can allocate a conservative
@@ -77,4 +92,35 @@ max_thread_count = 32
         #csetoffset \dest, \source, $0
         csetbounds \dest, \source, \offset
         #csetoffset \dest, \dest, $at
+.endm
+
+
+.macro jump_to_usermode function
+		# To test user code we must set up a TLB entry.
+		dmtc0	$zero, $5		# Write 0 to page mask i.e. 4k pages
+		dmtc0	$zero, $0		# TLB index
+		dmtc0	$zero, $10		# TLB entryHi
+
+		dla	$a0, \function		# Load address of testcode
+		and	$a2, $a0, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
+		dsrl	$a3, $a2, 6		# Put PFN in correct position for EntryLow
+		or	$a3, 0x13   		# Set valid and global bits, uncached
+		dmtc0	$a3, $2			# TLB EntryLow0
+		daddu	$a4, $a3, 0x40		# Add one to PFN for EntryLow1
+		dmtc0	$a4, $3			# TLB EntryLow1
+		tlbwi				# Write Indexed TLB Entry
+
+		dli	$a5, 0			# Initialise test flag
+
+		and	$k0, $a0, 0xfff		# Get offset of testcode within page.
+		dmtc0	$k0, $14		# Put EPC
+		dmfc0	$t2, $12		# Read status
+		ori	$t2, 0x12		# Set user mode, exl
+		and	$t2, 0xffffffffefffffff	# Clear cu0 bit
+		dmtc0	$t2, $12		# Write status
+		nop
+		nop
+		eret				# Jump to test code
+		nop
+		nop
 .endm

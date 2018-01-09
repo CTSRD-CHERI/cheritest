@@ -800,6 +800,7 @@ TEST_CP0_FILES=					\
 		test_cp0_rdhwr_user.s		\
 		test_cp0_rdhwr_user2.s		\
 		test_cp0_rdhwr_counter.s	\
+		test_cp0_rdhwr_statcounters_icount.s	\
 		test_cp0_tlbwi_user.s		\
 		test_cp0_hwrenable.s		\
 		test_cp0_syncistep.s		\
@@ -1751,6 +1752,9 @@ endif
 ifeq ($(PERM_SIZE),15)
 QEMU_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
 endif
+QEMU_NOSEPRED+=and beri_statcounters != 'icount'
+# QEMU_NOSEPRED+=and not beri_statcounters
+
 
 QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
 
