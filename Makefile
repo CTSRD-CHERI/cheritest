@@ -2344,7 +2344,7 @@ $(OBJDIR)/%.hex : $(OBJDIR)/%.mem
 # Provide an annotated disassembly for the ELF image to be used in diagnosis.
 # (Use flags that work for both GNU objdump and llvm-objdump)
 $(OBJDIR)/%.dump: $(OBJDIR)/%.elf
-	$(OBJDUMP) -p -h -s -S -D -l $< > $@
+	$(OBJDUMP) -p -h -s -S -d -l $< > $@
 
 $(LOGDIR)/test_raw_trace.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace.trace
 $(LOGDIR)/test_raw_trace_cached.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace_cached.trace
