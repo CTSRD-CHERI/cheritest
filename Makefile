@@ -2287,7 +2287,7 @@ $(OBJDIR)/startdramtest.elf: $(OBJDIR)/startdramtest.o $(TEST_LDSCRIPT)
 $(OBJDIR)/test_clang_dma%.elf : $(OBJDIR)/test_clang_dma%.o $(DMA_LIB_OBJS)\
 	    $(TEST_LDSCRIPT) \
 	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
-	$(MIPS_LD) -EB -G0 -Ttest_dram.ld obj/lib.o $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
+	$(MIPS_LD) -EB -G0 -Ttest_dram.ld $(OBJDIR)/lib.o $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
 $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_LDSCRIPT) \
