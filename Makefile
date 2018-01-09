@@ -2733,6 +2733,14 @@ pytest_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU LOGDIR=$(QEMU_LOGDIR) \
 	$(PYTEST) --junit-xml=$@ --runxfail -q -a "$(QEMU_NOSEPRED)" $(TESTDIRS) || true
 
+QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
+# TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
+$(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
+	PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU LOGDIR=$(QEMU_LOGDIR) \
+		$(PYTEST) --junit-xml=$@ --runxfail -q -a "$(QEMU_NOSEPRED)" $< || true
+
 
 test_elfs: $(TEST_ELFS)
 	@echo "Build all test .elf files"
