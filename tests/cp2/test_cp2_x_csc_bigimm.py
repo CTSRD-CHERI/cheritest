@@ -28,7 +28,7 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-
+@attr('capabilities')
 class test_cp2_x_csc_bigimm(BaseBERITestCase):
     def test_cp2_x_clc_bigimm(self):
         self.assertRegisterEqual(self.MIPS.a2, 1, "CLC bigimm with bad address didn't raise an exception")
@@ -37,7 +37,6 @@ class test_cp2_x_csc_bigimm(BaseBERITestCase):
     def test_cp2_x_csc_bigimm_not_implemented(self):
         self.assertRegisterEqual(self.MIPS.a3, 10, "CSC bigimm not implemented but didn't raise RESERVED INSTR")
 
-    @attr('capabilities')
     @attr(no_experimental_clc=False)
     def test_cp2_x_csc_bigimm_bad_addr(self):
         self.assertRegisterEqual(self.MIPS.a3, 5, "CSC bigimm didn't raise ADDRS (Store to an illegal address)")
