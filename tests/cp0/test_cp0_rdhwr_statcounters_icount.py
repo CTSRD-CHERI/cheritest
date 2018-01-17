@@ -31,13 +31,8 @@ from nose.plugins.attrib import attr
 
 # Test that rdhwr counter register is not accessible from user mode when the coprocessor
 # enable bit is not set.
+@attr('statcounters')
 class test_cp0_rdhwr_statcounters_icount(BaseBERITestCase):
-    @attr('tlb')
-    @attr('rdhwr')
-    def test_hwena_cleared(self):
-        '''Test that hwrena is cleared'''
-        self.assertRegisterEqual(self.MIPS.a4, 1 << 4, "hwrena was not set to icount only")
-
     @attr('tlb')
     @attr('rdhwr')
     def test_hwena_cleared(self):
