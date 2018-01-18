@@ -45,7 +45,7 @@ class test_purecap_reg_init(BaseBERITestCase):
                 # Default cap without permit_execute
                 self.assertDefaultCap(cap, name + " (DDC)", perms=self.max_nonexec_perms)
             elif regnum == 11:
-                self.assertValidCap(cap, name + " (jump cap)", perms=self.max_nonexec_perms,
+                self.assertValidCap(cap, name + " (stack cap)", perms=self.max_nonexec_perms,
                                     offset=self.MIPS.sp, length=self.max_length)
             elif regnum == 12:
                 self.assertValidCap(cap, name + " (jump cap)",
