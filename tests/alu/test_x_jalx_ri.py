@@ -30,14 +30,15 @@ from nose.plugins.attrib import attr
 
 
 class test_x_jalx_ri(BaseBERITestCase):
+    @attr('no_experimental_clc')
     def test_x_jalx_ri(self):
         self.assertRegisterEqual(self.MIPS.a2, 1, "JALX isn't supported, but didn't raise an exception")
 
-    @attr(no_experimental_clc=True)
+    @attr('no_experimental_clc')
     def test_x_jalx_ri_clc_bigimm_not_implemented(self):
         self.assertRegisterEqual(self.MIPS.a3, 10, "JALX isn't supported, but didn't raise RESERVED_INSTRUCTION")
 
     @attr('capabilities')
-    @attr(no_experimental_clc=False)
+    @attr('experimental_clc')
     def test_x_jalx_ri_clc_bigimm_cp2_off(self):
         self.assertRegisterEqual(self.MIPS.a3, 0xb, "CLC bigimm with cp2 off didn't raise CP2 unusuable")

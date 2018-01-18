@@ -1613,7 +1613,8 @@ and not clang  \
 and not pic \
 and not mt \
 and not einstr \
-and not qemu_only
+and not qemu_only \
+and not experimental_clc
 
 ifneq ($(CAP_SIZE),256)
 SAIL_NOSEPRED+=and not cap256
