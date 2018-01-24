@@ -59,7 +59,12 @@ test:		.ent test
 		#
 
 		mfc0	$a0, $9		# Read from CP0 count register
-		daddiu	$a0, $a0, 1000	# += 1000
+
+		# Try to wait for 1 second. If the CPU runs at 100MHz and the
+		# count register increments every two ticks, we need to set the
+		# CP0_Compare register to CP0_Count + 50 million
+		dli	$t0, (50 * 1000 * 1000)
+		daddu	$a0, $a0, $t0
 		mtc0	$a0, $11	# Write to CP0 compare register
 
 		#
