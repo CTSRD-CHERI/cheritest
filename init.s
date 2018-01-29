@@ -260,15 +260,9 @@ continue_finish:
 		beqz $k0, dump_core0
 		nop
 
-		# Check for QEMU:
-		# https://github.com/CTSRD-CHERI/qemu/issues/56
-		mfc0 $k0, $15		# PrId
-		andi $k0, $k0, 0xffff
-		# QEMU ID from https://github.com/CTSRD-CHERI/qemu/commit/12b39eaa9a3c17c7b0438b1536d8b6b9849cc1fc
-		# only check the lower 16 bits to avoid using another register
-		xor $k0, 0x0401
+		# FIXME: for now we assume QEMU is not SMP
 		# TODO: how to get CoreId and ThreadId from QEMU?
-		beqz $k0, dump_core0 # FIXME: for now we assume QEMU is not SMP
+		branch_if_is_qemu dump_core0, $k0
 		nop
 
 		mfc0 $k0, $15, 6	# CoreId

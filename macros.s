@@ -124,3 +124,14 @@ max_thread_count = 32
 		nop
 		nop
 .endm
+
+.macro branch_if_is_qemu target_label, tmpreg
+	# Check for QEMU: https://github.com/CTSRD-CHERI/qemu/issues/56
+	mfc0 \tmpreg, $15		# PrId
+	andi \tmpreg, \tmpreg, 0xffff
+	# QEMU ID from https://github.com/CTSRD-CHERI/qemu/commit/12b39eaa9a3c17c7b0438b1536d8b6b9849cc1fc
+	# only check the lower 16 bits to avoid using another register
+	xor \tmpreg, 0x0401
+	beqz \tmpreg, \target_label
+	nop
+.endm

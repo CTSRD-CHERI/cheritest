@@ -36,6 +36,7 @@
 #
 # Test the wait instruction.
 #
+.include "macros.s"
 
 		.global test
 test:		.ent test
@@ -59,7 +60,22 @@ test:		.ent test
 		#
 
 		mfc0	$a0, $9		# Read from CP0 count register
+		branch_if_is_qemu LQEMU_wait, $t1
+LSimulator_wait:
+		# wait 1000 * 2 cycles on simulators
 		daddiu	$a0, $a0, 1000	# += 1000
+		b Lwrite_compare
+		nop
+LQEMU_wait:
+		# QEMU doesn't increment the Count register based on cycles,
+		# instead it uses time (50 increments per second).
+		# Witht he current implementation in QEMU the small increment
+		# used by the simulators will cause the implementation in
+		# QEMU to underflow and wait for almost the maximum ~80 seconds
+		dli $t1, (1000 * 1000) # wait for 20ms
+		daddu	$a0, $a0, $t1
+
+Lwrite_compare:
 		mtc0	$a0, $11	# Write to CP0 compare register
 
 		#
