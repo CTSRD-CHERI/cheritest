@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_on
 from nose.plugins.attrib import attr
 
-
+@xfail_on("L3")
 class test_x_msa_ri(BaseBERITestCase):
     @attr('no_experimental_clc')
     def test_x_msa_ri(self):

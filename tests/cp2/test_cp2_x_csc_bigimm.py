@@ -25,9 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_on
 from nose.plugins.attrib import attr
 
+@xfail_on("L3")
 @attr('capabilities')
 class test_cp2_x_csc_bigimm(BaseBERITestCase):
     def test_cp2_x_clc_bigimm(self):
