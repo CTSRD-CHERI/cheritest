@@ -26,18 +26,21 @@
 #
 
 from beritest_tools import BaseBERITestCase
-
+from nose.plugins.attrib import attr
 
 class test_raw_fpu_ceil_nan_single(BaseBERITestCase):
 
+    @attr('float_round_maxint')
     def test_raw_fpu_ceil_nan_single_1(self):
         '''Test CEIL.W.S of QNan'''
         self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "CEIL.W.S of QNaN did not return MAXINT")
 
+    @attr('float_round_maxint')
     def test_raw_fpu_ceil_nan_single_2(self):
         '''Test CEIL.W.S of +Inf'''
         self.assertRegisterEqual(self.MIPS.a1, 0x7fffffff, "CEIL.W.S of +Infinity did not return MAXINT")
 
+    @attr('float_round_maxint')
     def test_raw_fpu_ceil_nan_single_3(self):
         '''Test CEIL.W.S of 2^32'''
         self.assertRegisterEqual(self.MIPS.a2, 0x7fffffff, "CEIL.W.S of 2^32 did not return MAXINT")
