@@ -30,15 +30,15 @@ from beritest_tools import BaseBERITestCase
 
 class test_raw_fpu_round_nan_single(BaseBERITestCase):
 
-    '''Test ROUND.W.S of QNan'''
     def test_raw_fpu_round_nan_single_1(self):
+        '''Test ROUND.W.S of QNan'''
         self.assertRegisterEqual(self.MIPS.a0, 0x7fffffff, "ROUND.W.S of QNaN did not return MAXINT")
 
-    '''Test ROUND.W.S of +Inf'''
     def test_raw_fpu_round_nan_single_2(self):
+        '''Test ROUND.W.S of +Inf'''
         self.assertRegisterEqual(self.MIPS.a1, 0x7fffffff, "ROUND.W.S of +Infinity did not return MAXINT")
 
-    '''Test ROUND.W.S of 2^32'''
     def test_raw_fpu_round_nan_single_3(self):
+        '''Test ROUND.W.S of 2^32'''
         self.assertRegisterEqual(self.MIPS.a2, 0x7fffffff, "ROUND.W.S of 2^32 did not return MAXINT")
 
