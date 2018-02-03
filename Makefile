@@ -1382,9 +1382,10 @@ TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
 ifdef TEST_PS
-ifneq ($(USING_LLVM_ASSEMBLER),1)
-TEST_FILES+= $(RAW_PS_FILES)
+ifeq ($(USING_LLVM_ASSEMBLER),1)
+$(error "The LLVM assembler does not support paired single instructions")
 endif
+TEST_FILES+= $(RAW_PS_FILES)
 endif
 
 ifeq ($(FUZZ_DMA_ONLY), 1)
@@ -1836,6 +1837,9 @@ NOSEPRED+=and not berisyncistep
 endif
 ifdef COP1
 NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd and not float_mtc_signex and not float_mov_signex and not floatabs2008 and not float_round_upwards
+ifndef TEST_PS
+NOSEPRED+=and not floatpaired
+endif
 ifdef WONTFIX
 NOSEPRED+=and not floatpairedrounding
 endif
