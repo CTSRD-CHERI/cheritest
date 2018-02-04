@@ -1841,7 +1841,7 @@ ifndef TEST_PS
 NOSEPRED+=and not floatpaired
 endif
 ifdef WONTFIX
-NOSEPRED+=and not floatpairedrounding and not float_round_maxint
+NOSEPRED+=and not float_multiply_rounding and not float_round_maxint
 endif
 else
 NOSEPRED+=and not float

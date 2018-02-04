@@ -38,7 +38,7 @@ class test_raw_fpu_mul_ps(BaseBERITestCase):
         self.assertRegisterInRange(self.MIPS.s2, 0x4140000043674C07, 0x4140000043674C08, "Failed paired single multiply.")
 
     @attr('floatpaired')
-    @attr('floatpairedrounding')
+    @attr('float_multiply_rounding')
     def test_mul_paired_rounding(self):
         '''Test we can multiply paired singles, and check rounding'''
         self.assertRegisterEqual(self.MIPS.s2, 0x4140000043674C08, "Failed paired single multiply (checking rounding).")

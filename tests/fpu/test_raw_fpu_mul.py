@@ -46,6 +46,7 @@ class test_raw_fpu_mul(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.s0, 0x4010000000000000, "Failed to multiply 2.0 and 2.0 in double precision")
 
     @attr('float64')
+    @attr('float_multiply_rounding')
     def test_mul_double_2(self):
         '''Test we can multiply -0.276510*0.274042 in double precision'''
         self.assertRegisterEqual(self.MIPS.a0, 0xbfb366026f2c13a9, "MUL.D of -0.276510*0.274042 gave incorrect result")
