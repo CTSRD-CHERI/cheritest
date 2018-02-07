@@ -1851,7 +1851,7 @@ ifneq ($(TEST_CP2),1)
 NOSEPRED+=and not capabilities and not clang
 else
 ifneq ($(CAP_SIZE),256)
-NOSEPRED+=and not cap256 and not cap_null_length
+NOSEPRED+=and not cap256
 endif
 ifneq ($(CAP_SIZE),128)
 NOSEPRED+=and not cap128
