@@ -55,7 +55,7 @@ test:		.ent test
 		dli	$a2, 0	# a2 will be set to 1 if an exception happens
 
 		cgetdefault $c1
-		dli	$t0, 0x7fff
+		cgetperm $t0, $c1
 		ccheckperm $c1, $t0
 
 		dli	$t0, 0x4
