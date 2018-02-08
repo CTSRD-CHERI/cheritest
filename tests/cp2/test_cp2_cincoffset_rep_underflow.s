@@ -25,15 +25,47 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
-from nose.plugins.attrib import attr
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
 
-class test_cp2_rep_underflow(BaseBERITestCase):
+# Regression test for qemu bug that caused some capabilities
+# to be flagged as unrepresentable even when within bounds.
+# The bug was triggered when the representable region underflows below 0.
+#
+# Expected values to check
+# a0 - must be 1, incoffset with positive increment works
+# a1 - must be 1, incoffset with negative increment works
 
-    @attr('capabilities')
-    def test_cp2_rep_underflow_pos(self):
-        self.assertRegisterEqual(self.MIPS.a0, 1, "CIncOffset did not increment correctly with immediate")
-
-    @attr('capabilities')
-    def test_cp2_rep_underflow_neg(self):
-        self.assertRegisterEqual(self.MIPS.a1, 1, "CIncOffset did not decrement correctly with immediate")
+		.global test
+test:
+		.ent test
+		daddu	$sp, $sp, -32
+		sd	$ra, 24($sp)
+		sd	$fp, 16($sp)
+		daddu	$fp, $sp, 32
+	
+		cgetdefault $c1
+		dli $t0, 0x130000000
+		csetbounds $c1, $c1, $t0
+		li $t0, 0x1000
+		csetoffset $c1, $c1, $t0
+		li $t0, 0x1010
+		csetoffset $c3, $c1, $t0
+		dli	$t0, 16
+		cincoffset $c2, $c1, $t0
+		cexeq $a0, $c2, $c3
+	
+		li $t0, 0xff0
+		csetoffset $c3, $c1, $t0
+		dli	$t0, -16
+		cincoffset $c2, $c1, $t0
+		cexeq $a1, $c2, $c3
+	
+		ld	$fp, 16($sp)
+		ld	$ra, 24($sp)
+		daddu	$sp, $sp, 32
+		jr	$ra
+		nop
+		.end test
