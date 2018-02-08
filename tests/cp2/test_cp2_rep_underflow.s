@@ -53,12 +53,14 @@ test:
 	csetoffset $c1, $c1, $t0
 	li $t0, 0x1010
 	csetoffset $c3, $c1, $t0
-	cincoffset $c2, $c1, 16
+	dli	$t0, 16
+	cincoffset $c2, $c1, $t0
 	cexeq $a0, $c2, $c3
 
 	li $t0, 0xff0
 	csetoffset $c3, $c1, $t0
-	cincoffset $c2, $c1, -16
+	dli	$t0, -16
+	cincoffset $c2, $c1, $t0
 	cexeq $a1, $c2, $c3
 
 	ld	$fp, 16($sp)
