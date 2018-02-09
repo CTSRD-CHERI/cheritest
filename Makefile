@@ -2515,6 +2515,7 @@ NOSETESTS?=python2 -m nose
 ifeq ($(USING_LLVM_ASSEMBLER),0)
 NOSETESTS:=TEST_ASSEMBLER=gnu $(NOSETESTS)
 endif
+NOSETESTS:=PYTHONPATH=tools/sim $(NOSETESTS)
 
 # Simulate a failure on all unit tests
 failnosetest: cleantest $(CHERI_TEST_LOGS)
@@ -2535,11 +2536,11 @@ fuzz_generate: $(FUZZ_SCRIPT)
 
 # The rather unpleasant side-effect of snorting too much candy floss...
 nose_fuzz: $(SIM) fuzz_run_tests
-	PYTHONPATH=tools/sim CACHED=0 $(NOSETESTS) --with-xunit \
+	CACHED=0 $(NOSETESTS) --with-xunit \
 	    --xunit-file=nosetests_fuzz.xml $(NOSEFLAGS_UNCACHED) tests/fuzz || true
 
 nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
-	PYTHONPATH=tools/sim CACHED=1 $(NOSETESTS) --with-xunit \
+	CACHED=1 $(NOSETESTS) --with-xunit \
 	    --xunit-file=nosetests_fuzz_cached.xml $(NOSEFLAGS) tests/fuzz || true
 
 
@@ -2568,39 +2569,39 @@ nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 # file each time.
 
 nosetests_uncached.xml: $(CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=0 \
+	PERM_SIZE=$(PERM_SIZE) CACHED=0 \
 	$(NOSETESTS) --with-xunit --xunit-file=nosetests_uncached.xml \
 	$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 \
+	PERM_SIZE=$(PERM_SIZE) CACHED=1 \
 	$(NOSETESTS) --with-xunit --xunit-file=nosetests_cached.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) MULTI1=1 \
+	PERM_SIZE=$(PERM_SIZE) MULTI1=1 \
 	$(NOSETESTS) --with-xunit --xunit-file=nosetests_multi.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_cachedmulti.xml: $(CHERI_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) MULTI1=1 CACHED=1 \
+	PERM_SIZE=$(PERM_SIZE) MULTI1=1 CACHED=1 \
 	$(NOSETESTS) --with-xunit --xunit-file=nosetests_cachedmulti.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest: all $(ALTERA_TEST_LOGS)
-	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(ALTERA_LOGDIR) $(NOSETESTS) \
+	CACHED=0 LOGDIR=$(ALTERA_LOGDIR) $(NOSETESTS) \
 	    $(NOSEFLAGS_UNCACHED) $(ALTERA_NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(ALTERA_LOGDIR) $(NOSETESTS) \
+	CACHED=1 LOGDIR=$(ALTERA_LOGDIR) $(NOSETESTS) \
 	    $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) $(TESTDIRS) || true
 
 hwsim-nosetest: $(CHERISOCKET) all $(HWSIM_TEST_LOGS)
-	PYTHONPATH=tools/sim CACHED=0 LOGDIR=$(HWSIM_LOGDIR) $(NOSETESTS) \
+	CACHED=0 LOGDIR=$(HWSIM_LOGDIR) $(NOSETESTS) \
 	$(NOSEFLAGS_UNCACHED) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
 
 hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
-	PYTHONPATH=tools/sim CACHED=1 LOGDIR=$(HWSIM_LOGDIR) $(NOSETESTS) \
+	CACHED=1 LOGDIR=$(HWSIM_LOGDIR) $(NOSETESTS) \
 	    $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_gxemul: nosetests_gxemul_uncached.xml
@@ -2632,25 +2633,25 @@ nosetests_l3_multi: nosetests_l3_multi.xml
 nosetests_l3_cachedmulti: nosetests_l3_cachedmulti.xml
 
 nosetests_l3.xml: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) LOGDIR=$(L3_LOGDIR) \
+	PERM_SIZE=$(PERM_SIZE) LOGDIR=$(L3_LOGDIR) \
 	TEST_MACHINE=L3 \
 	$(NOSETESTS) --with-xunit --xunit-file=nosetests_l3.xml \
 	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 LOGDIR=$(L3_LOGDIR) \
+	PERM_SIZE=$(PERM_SIZE) CACHED=1 LOGDIR=$(L3_LOGDIR) \
 	TEST_MACHINE=L3 \
 	$(NOSETESTS) --with-xunit --xunit-file=nosetests_l3_cached.xml \
 	$(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) MULTI1=1 LOGDIR=$(L3_LOGDIR) \
+	PERM_SIZE=$(PERM_SIZE) MULTI1=1 LOGDIR=$(L3_LOGDIR) \
 	TEST_MACHINE=L3 \
 	$(NOSETESTS) --with-xunit --xunit-file=nosetests_l3_multi.xml \
 	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) CACHED=1 MULTI1=1 \
+	PERM_SIZE=$(PERM_SIZE) CACHED=1 MULTI1=1 \
 	TEST_MACHINE=L3 \
 	LOGDIR=$(L3_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
@@ -2664,37 +2665,37 @@ nosetests_sail_cheri128: nosetests_sail_cheri128.xml
 nosetests_sail_cheri128_embed: nosetests_sail_cheri128_embed.xml
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(SAIL_MIPS_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(SAIL_MIPS_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_embed.xml: $(SAIL_MIPS_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(SAIL_MIPS_EMBED_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(SAIL_MIPS_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(SAIL_CHERI_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(SAIL_CHERI_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_cheri_embed.xml: $(SAIL_CHERI_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(SAIL_CHERI_EMBED_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(SAIL_CHERI_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_cheri128.xml: $(SAIL_CHERI128_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(SAIL_CHERI128_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(SAIL_CHERI128_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	PERM_SIZE=$(PERM_SIZE) \
 	LOGDIR=$(SAIL_CHERI128_EMBED_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(SAIL_CHERI128_NOSEFLAGS) \
             $(TESTDIRS) || true
@@ -2705,7 +2706,7 @@ nosetests_qemu: nosetests_qemu.xml
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
 	@echo "Nose flags: $(QEMU_NOSEFLAGS)"
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) \
+	PERM_SIZE=$(PERM_SIZE) \
 	TEST_MACHINE=QEMU \
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(QEMU_NOSEFLAGS) \
@@ -2720,7 +2721,7 @@ QEMU_CLANG_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CLANG_TES
 
 qemu_clang_tests: qemu_clang_tests.xml
 qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
+	PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ -v $(CLANG_TESTDIRS) || true
 
@@ -2730,7 +2731,7 @@ PURECAP_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(PURECAP_TESTS)))
 purecap_dumps: $(PURECAP_DUMPS)
 qemu_purecap_tests: qemu_purecap_tests.xml
 qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
+	PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ -v $(PURECAP_TESTDIRS) || true
 
