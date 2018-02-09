@@ -30,6 +30,6 @@ from beritest_tools import BaseBERITestCase
 
 class test_raw_coherence_sequential(BaseBERITestCase):
     def test_corr1_r2(self):
-        self.assertRegisterEqual(self.MIPS.a1, self.MIPS.a1, "CORR1 test fail, Register 2 had init value")
+        self.assertRegisterNotEqual(self.MIPS.a1, 0, "CORR1 test fail, Register 2 had init value")
 
 

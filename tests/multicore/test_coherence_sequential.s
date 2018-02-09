@@ -36,16 +36,12 @@
 # memory model
 #
 
-		.global start
-start:
-		#
-		# Setup Stack
-		#
+		.global test
+test:
 		mfc0    $k0, $12
 		li      $k1, 0xF0000000 
 		or      $k0, $k0, $k1 
 		mtc0    $k0, $12 
-		dla     $sp, __sp
 		mfc0    $t0, $15, 6
 		andi    $t0, $t0, 0xFFFF
 		dli     $k0, 0x400  
@@ -79,7 +75,6 @@ core_0_corr1:
 
                 ld      $a2, 0($t0)
                 ld      $a3, 0($t0)
-	
 		j       core_0_coww
 		nop		
 
@@ -126,58 +121,14 @@ core_0_corw:
                 addi    $t1, $zero, 3
                 lw      $a0, 16($t0)  
                 sw      $t1, 16($t0)
-                j       finish
+                j       end
                 nop
 
 core_1_corw:
                 addi    $t1, $zero, 6
                 lw      $a3, 24($t0)  
                 sw      $t1, 24($t0)
-                j       finish
+                j       end
                 nop
                
-# End all tests
-finish:
-		# Dump registers in the simulator
-		mtc0    $v0, $26 
-		nop
-		nop                
-
-                # Terminate the simulator 
-                # many nop's are needed to ensure that both cores have enough
-                # time to dump the register file. From experiments its clear
-                # that even when cores in sync, one of them will kill the 
-                # simulator before the second one has had a chance to finish
-                # the dump 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-                nop
-                nop 
-
-                mtc0    $v0, $23 
-
-end:
-		b       end
-		nop
-
 dword:          .dword  0x0123456789abcdef
