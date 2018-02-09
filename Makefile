@@ -2483,8 +2483,13 @@ $(QEMU_LOGDIR)/.dir-created:
 	touch "$@"
 
 QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
-QEMU_FLAGS=-D "$@" -M mipssim -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
-           -kernel "$<" -serial stdio -monitor none -nographic -m 3072M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
+QEMU_FLAGS=-D "$@" -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
+           -kernel "$<" -serial stdio -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
+ifeq ($(MULTI),1)
+QEMU_FLAGS+=-smp 2 -M malta
+else
+QEMU_FLAGS+=-M mipssim
+endif
 # raw tests need to be started with tracing in, for the others we can start it in init.s
 $(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU_LOGDIR)/.dir-created $(QEMU)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
