@@ -47,6 +47,16 @@ def is_envvar_true(var):
     return os.environ.get(var, "0") != "0"
 
 
+def xfail_if(cond):
+    '''
+    :param cond: whether this test is expected to fail
+    :return:
+    '''
+    if cond:
+        return nose_xfail_hack
+    return lambda x: x
+
+
 def xfail_on(var):
     '''
     If the env var TEST_MACHINE matches var the test will be marked as xfail
@@ -54,10 +64,7 @@ def xfail_on(var):
     :param var: the machine where this test is expected to fail (e.g. "qemu"
     :return:
     '''
-    if os.environ.get("TEST_MACHINE", "").lower() == var.lower():
-        return nose_xfail_hack
-    return lambda x: x
-
+    return xfail_if(os.environ.get("TEST_MACHINE", "").lower() == var.lower())
 
 def xfail_gnu_binutils(test):
     '''
