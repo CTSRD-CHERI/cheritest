@@ -260,11 +260,6 @@ continue_finish:
 		beqz $k0, dump_core0
 		nop
 
-		# FIXME: for now we assume QEMU is not SMP
-		# TODO: how to get CoreId and ThreadId from QEMU?
-		branch_if_is_qemu dump_core0, $k0
-		nop
-
 		mfc0 $k0, $15, 6	# CoreId
 		andi $k0, $k0, 0xffff
 		bnez $k0, dump_not_core0
