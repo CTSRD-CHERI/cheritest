@@ -26,7 +26,7 @@
 # Just checks that the test produced the appropriate pass value in v0 to indicate
 # that all c asserts passed. Cribbed from tests/fuzz/fuzz.py.
 
-from beritest_tools import TestClangBase
+from beritest_tools import TestClangBase, nose_xfail_hack
 import os
 import re
 import sys
@@ -44,6 +44,7 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 LOG_DIR = os.environ.get("LOGDIR", "log")
 
+
 @attr('clang')
 @attr('capabilities')
 def check_answer(test_name, test_file):
@@ -58,6 +59,18 @@ def check_answer(test_name, test_file):
     with open(os.path.join(LOG_DIR, test_name + suffix + ".log"),
               'rt') as sim_log:
         TestClangBase.verify_clang_test(sim_log, test_name, test_file)
+
+
+def _is_xfail(test_name):
+    if os.getenv("TEST_MACHINE", "").lower() == "l3":
+        return test_name in ("test_purecap_statcounters")
+    return False
+
+
+def get_test_function(test_name):
+    if _is_xfail(test_name):
+        return nose_xfail_hack(check_answer)
+    return check_answer
 
 
 def get_all_tests():
@@ -75,7 +88,7 @@ if "pytest" not in sys.modules:
             else:
                 for test in get_all_tests():
                     test_name = os.path.splitext(os.path.basename(test))[0]
-                    yield (check_answer, test_name, os.path.join(TEST_DIR, test))
+                    yield (get_test_function(test_name), test_name, os.path.join(TEST_DIR, test))
 else:
     import pytest
 
@@ -86,4 +99,5 @@ else:
     def test_purecap(test):
         test_name = os.path.splitext(os.path.basename(test))[0]
         test_file = os.path.join(TEST_DIR, test)
-        check_answer(test_name, test_file)
+        test_func = get_test_function(test_name)
+        test_func(test_name, test_file)
