@@ -1,0 +1,1 @@
+../../cheri-c-tests/stack_cap.c

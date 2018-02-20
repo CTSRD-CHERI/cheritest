@@ -141,8 +141,8 @@ SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 CC?=gcc
 
 CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension-token -Wno-error=unused -Wno-error=pedantic
-HYBRID_CFLAGS?=-g -fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections
-PURECAP_CFLAGS?=-g -fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections
+HYBRID_CFLAGS?=-g -fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections -nostdlibinc
+PURECAP_CFLAGS?=-g -fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections -nostdlibinc -Itests/purecap
 
 ifneq ($(CHERI$(CAP_SIZE)_SDK),)
 CHERI_SDK:=$(CHERI$(CAP_SIZE)_SDK)

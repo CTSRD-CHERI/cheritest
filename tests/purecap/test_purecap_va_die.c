@@ -1,0 +1,1 @@
+../../cheri-c-tests/va_die.c
