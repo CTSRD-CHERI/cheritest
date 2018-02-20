@@ -351,15 +351,25 @@ die_on_exception:
 
 		.ent exception_count_handler
 exception_count_handler:
-.ifdef DIE_ON_EXCEPTION
-		b die_on_exception
-		nop
-.endif
 		daddu	$sp, $sp, -32
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
 		sd      $k0,  8($sp)
 		daddu	$fp, $sp, 32
+
+.ifdef DIE_ON_EXCEPTION
+		dla	$k0, continue_after_exception
+		beqz	$k0, die_on_exception		# abort if variable is NULL
+		nop
+
+		ld	$ra, 0($k0)
+		ble	$ra, $zero, die_on_exception	# also abort if die_on_exception is not greater 0
+		nop
+
+		dsubu	$ra, $ra, 1		# reduce number of skippable exceptions by one
+		sd	$ra, 0($k0)
+.endif
+
 
 		# Increment exception counter
 		dla     $ra, exception_count
@@ -434,6 +444,11 @@ other_threads_go:
 		.align 3
 .globl exception_count
 exception_count:
-		.dword	0x0
+		.8byte	0x0
+.size exception_count, 8
+.globl continue_after_exception
+continue_after_exception:
+		.8byte	0x0
+.size continue_after_exception, 8
 reset_barrier:
                 mkBarrier
