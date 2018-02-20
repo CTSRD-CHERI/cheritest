@@ -71,7 +71,7 @@ def _is_xfail(test_name):
     return False
 
 
-def get_test_function(test_name):
+def _get_tests_function(test_name):
     if _is_xfail(test_name):
         return nose_xfail_hack(check_answer)
     return check_answer
@@ -92,7 +92,7 @@ if "pytest" not in sys.modules:
             else:
                 for test in get_all_tests():
                     test_name = os.path.splitext(os.path.basename(test))[0]
-                    yield (get_test_function(test_name), test_name, os.path.join(TEST_DIR, test))
+                    yield (_get_tests_function(test_name), test_name, os.path.join(TEST_DIR, test))
 else:
     import pytest
 
@@ -103,5 +103,5 @@ else:
     def test_purecap(test):
         test_name = os.path.splitext(os.path.basename(test))[0]
         test_file = os.path.join(TEST_DIR, test)
-        test_func = get_test_function(test_name)
+        test_func = _get_tests_function(test_name)
         test_func(test_name, test_file)
