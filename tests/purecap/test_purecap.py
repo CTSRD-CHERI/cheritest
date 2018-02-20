@@ -62,11 +62,16 @@ def check_answer(test_name, test_file):
 
 
 def _is_xfail(test_name):
-    failing_c_tests = ()
-    if test_name in failing_c_tests:
-        return True
+    # L3 doesn't implement the statcounters instructions
     if os.getenv("TEST_MACHINE", "").lower() == "l3":
-        return test_name in ("test_purecap_statcounters")
+        if test_name in ("test_purecap_statcounters",):
+            return True
+
+    # on QEMU 256 the cheri-c-tests union.c tests is failing because we do an XOR with -1
+    if os.getenv("TEST_MACHINE", "").lower() == "qemu" and os.getenv("PERM_SIZE") == "31":
+        if test_name in ("test_purecap_union",):
+            return True
+
     return False
 
 
