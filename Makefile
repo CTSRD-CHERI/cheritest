@@ -2241,23 +2241,23 @@ $(OBJDIR)/test_purecap_%_cached.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap_cached.ld \
 	    $(PURECAP_INIT_CACHED_OBJS) select_init
 	@echo "PURECAP_LD cached $@"
-	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap_%_multi.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap.ld \
 	    $(PURECAP_INIT_OBJS) select_init
 	@echo "PURECAP_LD multi $@"
-	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap_%_cachedmulti.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap_cached.ld \
 	    $(PURECAP_INIT_CACHED_OBJS) select_init
 	@echo "PURECAP_LD cached multi $@"
-	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP_INIT_OBJS)
 	@echo "PURECAP_LD $@"
-	$(_V)$(MIPS_LD) --no-fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 
 ### END RULES FOR PURECAP TESTS
