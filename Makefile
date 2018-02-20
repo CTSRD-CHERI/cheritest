@@ -2723,6 +2723,9 @@ qemu_purecap_tests: qemu_purecap_tests.xml
 qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
 	$(QEMU_NOSETESTS) --with-xunit --xunit-file=$@ -v $(PURECAP_TESTDIRS) || true
 
+qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
+
+
 PYTEST?=pytest
 PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
 QEMU_PYTEST=TEST_MACHINE=QEMU LOGDIR=$(QEMU_LOGDIR) $(PYTEST)
