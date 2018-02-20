@@ -96,6 +96,7 @@ start:
 		jal	bev_clear
 		nop
 
+.ifdef OLD_ZEROBSS
 zero_bss:
 		dla     $t0, __bss_start
 		dla     $t1, __bss_end
@@ -106,6 +107,12 @@ zero_bss:
 		b       1b
 		dadd    $t0, $t0, 1
 2:
+.else
+	dla $a0, __bss_start
+	dla $a1, __bss_end
+	dsubu $a1, $a1, $a0
+	jal bzero
+.endif
 
 all_threads:
 	        mfc0    $at, $12

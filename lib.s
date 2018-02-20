@@ -46,7 +46,46 @@ EXCV_CACHE=16
 EXCV_COMMON=24
 EXCV_INT=32
 EXCV_NUM=5
-	
+
+
+/*
+ * bzero(ptr, n) (copied from CheriBSD)
+ */
+.global bzero
+.ent bzero
+bzero:
+	.set at
+	blt	$a1, 12, smallclr	# small amount to clear?
+	dsubu	$a3, $zero, $a0	# compute # bytes to word align address
+	and	$a3, $a3, (8 - 1)
+	beq	$a3, $zero, 1f		# skip if word aligned
+	dsubu	$a1, $a1, $a3	# subtract from remaining count
+	sdl	$zero, 0($a0)		# clear 1 - 7 bytes to align
+	daddu	$a0, $a0, $a3
+1:
+	and	$v0, $a1, (8 - 1)	# compute number of words left
+	dsubu	$a3, $a1, $v0
+	move	$a1, $v0
+	daddu	$a3, $a3, $a0	# compute ending address
+2:
+	daddu	$a0, $a0, 8	# clear words
+	bne	$a0, $a3, 2b		#  unrolling loop does not help
+	sd	$zero, -8($a0)	#  since we are limited by memory speed
+smallclr:
+	ble	$a1, $zero, 2f
+	daddu	$a3, $a1, $a0	# compute ending address
+1:
+	daddu	$a0, $a0, 1	# clear bytes
+	bne	$a0, $a3, 1b
+	sb	$zero, -1($a0)
+2:
+	jr	$ra
+	nop
+	.set noat
+.end bzero
+
+
+
 #
 # POSIX-like void *memcpy(dest, src, len), arguments taken as a0, a1, a2,
 # return value via v0.  Uses t0 to hold the in-flight value.
