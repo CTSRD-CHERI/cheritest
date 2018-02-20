@@ -34,7 +34,8 @@ class test_purecap_reg_init(BaseBERITestCase):
     @attr('capabilities')
     def test_pcc(self):
         self.MIPS.pcc.offset = (self.MIPS.pcc.offset & 0x00FFFFFFFFFFFFFF);
-        self.assertValidCap(self.MIPS.pcc, "$pcc", offset=(0x00000040000000, 0x000000400fffff) , length=self.max_length)
+        self.assertValidCap(self.MIPS.pcc, "$pcc", offset=(0x00000040000000, 0x000000400fffff),
+                            length=self.max_length, perms=self.max_nostore_perms)
 
     @attr('capabilities')
     def test_other_capregs(self):
@@ -48,10 +49,10 @@ class test_purecap_reg_init(BaseBERITestCase):
                 self.assertValidCap(cap, name + " (stack cap)", perms=self.max_nonexec_perms,
                                     offset=self.MIPS.sp, length=self.max_length)
             elif regnum == 12:
-                self.assertValidCap(cap, name + " (jump cap)",
+                self.assertValidCap(cap, name + " (jump cap)", perms=self.max_nostore_perms,
                                     offset=self.MIPS.t9, length=self.max_length)
             elif regnum == 17:
-                self.assertValidCap(cap, name + " (link cap)",
+                self.assertValidCap(cap, name + " (link cap)", perms=self.max_nostore_perms,
                                     offset=self.MIPS.ra, length=self.max_length)
             elif regnum >= 27:
                 # the kernel capabilities C27 - C31 should be default caps

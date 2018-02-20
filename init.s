@@ -150,7 +150,7 @@ no_float:
 
 		# remove the Permit_Execute permission from DDC to catch more errors
 		dli $at, ~(1 << 1) # All but Permit_Execute
-		candperm $0, $0, $at
+		candperm $c0, $c0, $at
 
 		# When building for purecap (and potentially also hybrid) we
 		# need to call crt_init_globals() before starting the test
@@ -162,11 +162,21 @@ no_float:
 		cfromptr $cgp, $c0, $at
 		# FIXME: we also wan't to set sensible bounds here and reduce permissions
 .endif
+		# clear  Permit_Store + Permit_StoreCapability on $c12 + $c17
+		dli	$at, ~((1 << 3) | (1 << 5))
+		cgetpcc	$c12
+		# jump forward 4 instrs afters the cgetpcc to clear permissions from pcc
+		cincoffset	$c12, $c12, 16
+		candperm	$c12, $c12, $at
+		cjr	$c12
+		nop			# the cjr jumps here
+		# Now PCC should no longer have permit_store/permit_store_capability
 
-		dla     $t9, crt_init_globals
-		cgetpccsetoffset $c12, $t9
-		jalr    $t9
-		cgetpccsetoffset $c17, $ra 		# return address
+		dla	$t9, crt_init_globals
+		cgetpccsetoffset $c12, $t9	# Call crt_init_globals
+		cjalr	$c12, $c17
+		nop
+
 		# ensure all unused capability registers are NULL
 		cclearlo 0xf7fe                         # clear c1-c10 & c12-c15
 .ifdef __CHERI_CAPABILITY_TABLE__
