@@ -66,12 +66,6 @@ def _is_xfail(test_name):
     if os.getenv("TEST_MACHINE", "").lower() == "l3":
         if test_name in ("test_purecap_statcounters",):
             return True
-
-    # on QEMU 256 the cheri-c-tests union.c tests is failing because we do an XOR with -1
-    if os.getenv("TEST_MACHINE", "").lower() == "qemu" and os.getenv("PERM_SIZE") == "31":
-        if test_name in ("test_purecap_union",):
-            return True
-
     return False
 
 
