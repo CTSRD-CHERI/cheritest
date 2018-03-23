@@ -1,1 +1,1 @@
-../../cheri-c-tests/badcall.c
+../../cheri-c-tests/clang-purecap/clang_purecap_badcall.c

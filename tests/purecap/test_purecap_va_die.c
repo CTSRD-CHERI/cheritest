@@ -1,1 +1,1 @@
-../../cheri-c-tests/va_die.c
+../../cheri-c-tests/clang-purecap/clang_purecap_va_die.c

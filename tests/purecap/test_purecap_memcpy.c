@@ -1,1 +1,1 @@
-../../cheri-c-tests/memcpy.c
+../../cheri-c-tests/libc/libc_memcpy.c

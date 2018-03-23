@@ -1,1 +1,1 @@
-../../cheri-c-tests/capret.c
+../../cheri-c-tests/clang-purecap/clang_purecap_capret.c

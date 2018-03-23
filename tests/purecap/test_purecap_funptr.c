@@ -1,1 +1,1 @@
-../../cheri-c-tests/funptr.c
+../../cheri-c-tests/clang-purecap/clang_purecap_funptr.c

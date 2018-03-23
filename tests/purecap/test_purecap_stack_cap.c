@@ -1,1 +1,1 @@
-../../cheri-c-tests/stack_cap.c
+../../cheri-c-tests/clang-purecap/clang_purecap_stack_cap.c

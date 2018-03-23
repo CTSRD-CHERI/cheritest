@@ -1,1 +1,1 @@
-../../cheri-c-tests/byval_args.c
+../../cheri-c-tests/clang-purecap/clang_purecap_byval_args.c

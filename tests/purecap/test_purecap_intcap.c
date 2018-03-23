@@ -1,1 +1,1 @@
-../../cheri-c-tests/intcap.c
+../../cheri-c-tests/clang-purecap/clang_purecap_intcap.c

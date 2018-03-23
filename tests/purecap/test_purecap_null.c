@@ -1,1 +1,1 @@
-../../cheri-c-tests/null.c
+../../cheri-c-tests/clang-purecap/clang_purecap_null.c

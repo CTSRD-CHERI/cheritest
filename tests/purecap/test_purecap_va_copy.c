@@ -1,1 +1,1 @@
-../../cheri-c-tests/va_copy.c
+../../cheri-c-tests/clang-purecap/clang_purecap_va_copy.c

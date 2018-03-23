@@ -1,1 +1,1 @@
-../../cheri-c-tests/output.c
+../../cheri-c-tests/clang-purecap/clang_purecap_output.c

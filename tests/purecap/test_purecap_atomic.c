@@ -1,1 +1,1 @@
-../../cheri-c-tests/atomic.c
+../../cheri-c-tests/clang-purecap/clang_purecap_atomic.c

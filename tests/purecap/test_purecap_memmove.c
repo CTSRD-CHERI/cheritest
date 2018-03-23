@@ -1,1 +1,1 @@
-../../cheri-c-tests/memmove.c
+../../cheri-c-tests/libc/libc_memmove.c

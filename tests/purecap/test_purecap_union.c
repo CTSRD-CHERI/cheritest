@@ -1,1 +1,1 @@
-../../cheri-c-tests/union.c
+../../cheri-c-tests/clang-purecap/clang_purecap_union.c

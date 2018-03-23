@@ -1,1 +1,1 @@
-../../cheri-c-tests/smallint.c
+../../cheri-c-tests/clang-purecap/clang_purecap_smallint.c
