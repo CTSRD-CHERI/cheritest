@@ -70,9 +70,8 @@ typedef	uintptr_t ptr;
   index -= increment; \
 do { \
 asm (\
-  "daddiu %[indexIn], %[indexIn], " #increment "\n" \
-  :[indexOut] "=r"(index) \
-  :[indexIn] "r"(index) \
+  "daddiu %[indexOut], %[indexOut], " #increment "\n" \
+  :[indexOut] "+r"(index) \
 );\
 cStatements \
 } while (index!=last);\

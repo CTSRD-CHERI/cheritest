@@ -181,7 +181,7 @@ def setGitHubStatusBasedOnCurrentResult(JobConfig args) {
 }
 
 def cheriHardwareTest() {
-	node('llvm&&bluespec') {
+	node('bluespec') {
 		echo "Computing job parameters for ${env.JOB_NAME}"
 		JobConfig args = getJobParameters()
 		echo "Found job config: BUILD_ARGS: '${args.buildArgs}'\nTEST_ARGS: '${args.testArgs}'"
