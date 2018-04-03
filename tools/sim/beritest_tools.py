@@ -41,6 +41,8 @@ import os.path
 
 from tools.sim import *
 
+from nose.plugins.attrib import attr
+
 def is_envvar_true(var):
     '''Return true iff the environment variable specified is defined and
     not set to "0"'''
@@ -95,6 +97,7 @@ def nose_xfail_hack(test):
             raise AssertionError('Failure expected')
     return inner
 
+
 class BaseBERITestCase(unittest.TestCase):
     '''Abstract base class for test cases for the BERI CPU running under BSIM.
     Concrete subclasses may override class variables LOG_DIR (for the location
@@ -105,38 +108,43 @@ class BaseBERITestCase(unittest.TestCase):
 
     LOG_DIR = os.environ.get("LOGDIR", "log")
     LOG_FN = None
-    MIPS = None
     MIPS_EXCEPTION = None
     ## Trigger a test failure (for testing the test-cases)
     ALWAYS_FAIL = is_envvar_true("DEBUG_ALWAYS_FAIL")
     EXPECT_EXCEPTION=None
 
-    @classmethod
-    def setUpClass(cls):
-        '''Parse the log file and instantiate MIPS'''
-        cls.cached = bool(int(os.environ.get("CACHED", "0")))
-        cls.multi = bool(int(os.environ.get("MULTI1", "0")))
-        if cls.LOG_FN is None:
-            if cls.multi and cls.cached:
-                cls.LOG_FN = cls.__name__ + "_cachedmulti.log"
-            elif cls.multi:
-                cls.LOG_FN = cls.__name__ + "_multi.log"
-            elif cls.cached:
-                cls.LOG_FN = cls.__name__ + "_cached.log"
-            else:
-                cls.LOG_FN = cls.__name__ + ".log"
-        cls.unexpected_exception = False
-        cls._MIPS = None
-        try:
-            cls.parseLog(os.path.join(cls.LOG_DIR, cls.LOG_FN))
-        except Exception as e:
-            cls._SETUP_EXCEPTION = e
+    cached = bool(int(os.environ.get("CACHED", "0")))
+    multi = bool(int(os.environ.get("MULTI1", "0")))
 
-    @classmethod
-    def parseLog(cls, filename):
+    def __init__(self, *args, **kwargs):
+        super(BaseBERITestCase, self).__init__(*args, **kwargs)
+        self._MIPS = None  # type: MipsStatus
+        self.unexpected_exception = False
+
+    @nose.tools.nottest
+    def _do_setup(self):
+        '''Parse the log file and instantiate MIPS'''
+        assert self.cached is not None
+        assert self.multi is not None
+        if self.LOG_FN is None:
+            if self.multi and self.cached:
+                self.LOG_FN = self.__class__.__name__ + "_cachedmulti.log"
+            elif self.multi:
+                self.LOG_FN = self.__class__.__name__ + "_multi.log"
+            elif self.cached:
+                self.LOG_FN = self.__class__.__name__ + "_cached.log"
+            else:
+                self.LOG_FN = self.__class__.__name__ + ".log"
+        assert self._MIPS is None
+        try:
+            self.parseLog(os.path.join(self.LOG_DIR, self.LOG_FN))
+        except Exception as e:
+            self._SETUP_EXCEPTION = e
+
+    def parseLog(self, filename):
         with open(filename, "rt") as fh:
             try:
-                cls._MIPS = MipsStatus(fh)
+                self._MIPS = MipsStatus(fh)
                 # The test framework has a default exception handler which
                 # increments k0 and returns to the instruction after the
                 # exception. We assert that k0 is zero here to check there
@@ -145,20 +153,23 @@ class BaseBERITestCase(unittest.TestCase):
                 # True or False), but actually all tests which expect
                 # exceptions have custom handlers so none of them need to.
 
-                if cls.EXPECT_EXCEPTION is not None:
-                    expect_exception = cls.EXPECT_EXCEPTION
+                if self.EXPECT_EXCEPTION is not None:
+                    expect_exception = self.EXPECT_EXCEPTION
                 else:
                     # raw tests don't have the default exception handler so don't check for exceptions
-                    expect_exception =  'raw' in cls.__name__
+                    expect_exception = 'raw' in self.__name__
 
-                if cls.MIPS.k0 != 0 and not expect_exception:
-                    cls.MIPS_EXCEPTION=Exception(cls.__name__ + " threw exception unexpectedly")
-                    cls.unexpected_exception = True
+                if self.MIPS.k0 != 0 and not expect_exception:
+                    self.MIPS_EXCEPTION = Exception(self.__name__ + " threw exception unexpectedly")
+                    self.unexpected_exception = True
             except MipsException as e:
-                cls.MIPS_EXCEPTION = e
+                self.MIPS_EXCEPTION = e
 
     @property
     def MIPS(self):
+        # type: () -> MipsStatus
+        if self._MIPS is None:
+            self._do_setup()
         assert self._MIPS, "Test case was not set up properly: " + str(self._SETUP_EXCEPTION)
         return self._MIPS
 
@@ -172,6 +183,8 @@ class BaseBERITestCase(unittest.TestCase):
         return result[:pos] + "_cached" + result[pos:]
 
     def setUp(self):
+        mips_regs = self.MIPS  # force setup of the whole class
+        assert mips_regs is not None
         if self.unexpected_exception:
             self.fail(self.__class__.__name__ + " threw exception unexpectedly")
         elif self.MIPS_EXCEPTION is not None:
@@ -376,6 +389,7 @@ class BaseBERITestCase(unittest.TestCase):
         else:
             self.assertCapPermissions(cap.perms, perms, msg + "has wrong permissions")
 
+
 class BaseICacheBERITestCase(BaseBERITestCase):
     '''Abstract base class for test cases for the BERI Instruction Cache.'''
 
@@ -520,6 +534,75 @@ class TestClangBase(object):
     def get_line(test_file, line_number):
         with open(os.path.join(test_file)) as src_file:
             return src_file.readlines()[line_number - 1].strip()
+
+
+# Wrap the test base classes inside another class to avoid running them
+# See https://stackoverflow.com/a/25695512/894271
+class BERITestBaseClasses:
+    class UnalignedLoadStoreTestCase(BaseBERITestCase):
+        is_load_or_store = None
+        expected_load_value = None
+
+        def _do_setup(self):
+            self.assertIsNotNone(self.is_load_or_store, "Must define class variable is_load_or_store")
+            self.assertIn(self.is_load_or_store, ("load", "store"),
+                          "Class variable is_load_or_store must be 'load' or 'store'")
+            if self.is_load_or_store == "load":
+                self.assertIsNotNone(self.expected_load_value, "Must define class variable expected_load_value")
+            super(BERITestBaseClasses.UnalignedLoadStoreTestCase, self)._do_setup()
+
+        def test_returned(self):
+            self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by " + self.is_load_or_store + " instruction")
+
+        @attr('trap_unaligned_ld_st')
+        def test_epc(self):
+            self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
+
+        @attr('trap_unaligned_ld_st')
+        def test_handled(self):
+            self.assertRegisterEqual(self.MIPS.a2, 1, "sd exception handler not run")
+
+        @attr('trap_unaligned_ld_st')
+        def test_exl_in_handler(self):
+            self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
+
+        @attr('trap_unaligned_ld_st')
+        def test_cause_bd(self):
+            self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")
+
+        @attr('trap_unaligned_ld_st')
+        def test_cause_code(self):
+            if self.is_load_or_store == "load":
+                kind = "AdEL"
+                code = 4
+            elif self.is_load_or_store == "store":
+                kind = "AdES"
+                code = 5
+            else:
+                self.fail("not initialized correctly")
+            self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, code, "Code not set to " + kind)
+
+        @attr('trap_unaligned_ld_st')
+        def test_not_exl_after_handler(self):
+            self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
+
+        @attr('trap_unaligned_ld_st')
+        def test_badvaddr(self):
+            self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s0, "BadVAddr equal to Unaligned Address")
+
+        @attr('allow_unaligned')
+        def test_unaligned_loads_ok(self):
+            if self.is_load_or_store == "load":
+                self.assertRegisterEqual(self.MIPS.a7, self.expected_load_value, "Loaded value is wrong!")
+            else:
+                self.assertRegisterEqual(self.MIPS.a7, 42, "BadVAddr should not have been set")
+            # Check that a2 - a6 haven't changed
+            self.assertRegisterEqual(self.MIPS.a2, 0, "exception should not have been triggered")
+            self.assertRegisterEqual(self.MIPS.a3, 0, "exception should not have been triggered")
+            self.assertRegisterEqual(self.MIPS.a4, 0, "exception should not have been triggered")
+            self.assertRegisterEqual(self.MIPS.a5, 0, "exception should not have been triggered")
+            # TODO: should we really be testing this?
+            self.assertRegisterEqual(self.MIPS.a6, 0x640080e1, "Wrong status value")
 
 
 def main():

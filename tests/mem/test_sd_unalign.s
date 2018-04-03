@@ -60,7 +60,7 @@ test:		.ent test
 		dli	$a4, 0
 		dli	$a5, 0
 		dli	$a6, 0
-		dli	$a7, 0
+		dli	$a7, 42
 
 		#
 		# Save the desired EPC value for this exception so we can
@@ -113,6 +113,9 @@ bev0_handler:
 		.end bev0_handler
 
 		.data
-		.align	5
+		.p2align	6
+		.fill 64, 1, 0x34
+		.p2align	6
+		# ensure cache-line alignment
 bytes:		.dword	0x5656565656565656
 		.dword	0x7878787878787878
