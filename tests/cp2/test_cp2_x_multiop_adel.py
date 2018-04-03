@@ -35,6 +35,14 @@ class test_cp2_x_multiop_adel(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a1, 0, "Unexpected exceptions raised during test of multiple operations raising AdEL")
 
     @attr('capabilities')
-    def test_cp2_x_multiop_adel_2(self):
+    @attr('trap_unaligned_ld_st')
+    def test_cp2_x_multiop_adel_unalign_trap(self):
+        # If we trap on unaligned csd/cld we should get 8 exceptions here
         self.assertRegisterEqual(self.MIPS.a2, 8, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
+
+    @attr('capabilities')
+    @attr('allow_unaligned')
+    def test_cp2_x_multiop_adel_unalign_ok(self):
+        # Otherwise it should only be 5 (clc and the cll* instrs)
+        self.assertRegisterEqual(self.MIPS.a2, 5, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
 

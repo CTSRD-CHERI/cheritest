@@ -103,16 +103,18 @@ test:		.ent test
 
 		dli	$t1, 127	# unaligned, probably spans cache line
 
-		csc 	$c2, $t1, 0($c1)
-		# csbr will work at any alignment
-		csh 	$t0, $t1, 0($c1)
-		csw 	$t0, $t1, 0($c1)
-		csd 	$t0, $t1, 0($c1)
+		csc 	$c2, $t1, 0($c1) # trap #1 / #1 with unaligned
+		csb 	$t0, $t1, 0($c1) # csb will work at any alignment
+		csh 	$t0, $t1, 0($c1) # trap #2 / no trap with unaligned
+		csw 	$t0, $t1, 0($c1) # trap #3 / no trap with unaligned
+		csd 	$t0, $t1, 0($c1) # trap #4 / no trap with unaligned
 		csetoffset $c3, $c1, $t1
-		csch	$t0, $t2, $c3
-		cscw	$t0, $t2, $c3
-		cscd	$t0, $t2, $c3
-		cscc	$t0, $c1, $c3
+		# The csc[bhwd]/cscc instructions always trap (even with unaligned load okay)
+		cscb	$t0, $t2, $c3  # cscb will work at any alignment
+		csch	$t0, $t2, $c3  # trap #5 / #2 with unaligned
+		cscw	$t0, $t2, $c3  # trap #6 / #3 with unaligned
+		cscd	$t0, $t2, $c3  # trap #7 / #4 with unaligned
+		cscc	$t0, $c1, $c3  # trap #8 / #5 with unaligned
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)

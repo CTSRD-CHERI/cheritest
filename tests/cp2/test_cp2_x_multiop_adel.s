@@ -102,20 +102,20 @@ test:		.ent test
 		#
 
 		dli	$t1, 127	# unaligned, probably spans cache line
-		csetoffset $c3, $c1, $t1
 
-		clc 	$c2, $t1, 0($c1)
+		clc 	$c2, $t1, 0($c1) # trap #1
+		clb 	$t0, $t1, 0($c1) # clbr will work at any alignment
+		clh 	$t0, $t1, 0($c1) # trap #2 / no trap with unaligned load
+		clw 	$t0, $t1, 0($c1) # trap #3 / no trap with unaligned load
+		cld 	$t0, $t1, 0($c1) # trap #4 / no trap with unaligned load
+
 		# cllc doesn't take a register offset, so use $c3 not $t1($c1)
-		cllc	$c2, $c3
-		# clbr will work at any alignment
-		clh 	$t0, $t1, 0($c1)
-		clw 	$t0, $t1, 0($c1)
-		cld 	$t0, $t1, 0($c1)
 		csetoffset $c3, $c1, $t1
-		# cllb will work at any alignment
-		cllh	$t0, $c3
-		cllw	$t0, $c3
-		clld	$t0, $c3
+		cllc	$c2, $c3  # trap #5 / #2 with unaligned load
+		cllb	$t0, $c3  # cllb will work at any alignment
+		cllh	$t0, $c3  # trap #6 / #3 with unaligned load
+		cllw	$t0, $c3  # trap #7 / #4 with unaligned load
+		clld	$t0, $c3  # trap #8 / #5 with unaligned load
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
