@@ -1660,8 +1660,7 @@ SAIL_CHERI_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 SAIL_CHERI128_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 
 QEMU_NOSEPRED=\
-not allow_unaligned \
-and not beri \
+not beri \
 and not beri1cache \
 and not beri1tlb \
 and not beri2cache \
@@ -1702,6 +1701,13 @@ and not no_experimental_clc
 # XXXAM why settype is disabled?
 # XXXAR: mtc0signex was added here because since upstream QEMU commit d54a299b
 # the mtc0 instruction no longer sign extends
+
+ifeq ($(ALLOW_UNALIGNED),0)
+#$(error QEMU now supports unaligned access)
+QEMU_NOSEPRED+=and not allow_unaligned
+else
+QEMU_NOSEPRED+=and not trap_unaligned_ld_st and not alignex
+endif
 
 ifdef TEST_QEMU_R4000
 QEMU_NOSEPRED+=\
@@ -2513,7 +2519,7 @@ endif
 $(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log
 	$(CHERI_SDK_BINDIR)/symbolize-cheri-trace.py $< "$(OBJDIR)/`basename $< .log`.elf" > $@
 
-NOSETESTS?=python2 -m nose
+NOSETESTS?=python2.7 -m nose
 ifeq ($(USING_LLVM_ASSEMBLER),0)
 NOSETESTS:=TEST_ASSEMBLER=gnu $(NOSETESTS)
 endif
