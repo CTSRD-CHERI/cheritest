@@ -1690,6 +1690,13 @@ ifeq ($(PERM_SIZE),15)
 SAIL_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
 endif
 
+ifeq ($(ALLOW_UNALIGNED),0)
+SAIL_NOSEPRED+=and not allow_unaligned
+else
+$(error Sail does not support unaligned access)
+SAIL_NOSEPRED+=and not trap_unaligned_ld_st and not alignex
+endif
+
 SAIL_MIPS_NOSEFLAGS=-A "$(SAIL_NOSEPRED) and not capabilities"
 SAIL_CHERI_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 SAIL_CHERI128_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
