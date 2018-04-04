@@ -250,6 +250,36 @@ else
 QEMU?=qemu-system-cheri
 endif
 
+
+QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
+ifneq ($(QEMU_ABSPATH),)
+QEMU_VERSION:=$(shell $(QEMU_ABSPATH) --version)
+
+ifneq ($(findstring Compiled for CHERI256,$(QEMU_VERSION)),)
+$(info QEMU built for CHERI256)
+QEMU_CAP_SIZE=256
+QEMU_CAP_PRECISE=1
+endif
+
+ifneq ($(findstring Compiled for CHERI128,$(QEMU_VERSION)),)
+QEMU_CAP_SIZE=128
+ifneq ($(findstring Compiled for CHERI128 (magic),$(QEMU_VERSION)),)
+$(info QEMU built for magic CHERI128)
+QEMU_CAP_PRECISE=1
+else
+$(info QEMU built for CHERI128)
+QEMU_CAP_PRECISE=0
+endif
+endif
+
+endif  # ifneq ($(QEMU_ABSPATH),)
+
+QEMU_UNALIGNED_OKAY?=0
+QEMU_CAP_SIZE?=-1
+QEMU_CAP_PRECISE?=-1
+
+
+
 #
 # List of directories in which to find test source and .py files.
 #
@@ -2490,7 +2520,6 @@ $(QEMU_LOGDIR)/.dir-created:
 	mkdir -p $(QEMU_LOGDIR)
 	touch "$@"
 
-QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
 QEMU_FLAGS=-D "$@" -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
            -kernel "$<" -serial stdio -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
 ifeq ($(MULTI),1)
@@ -2506,7 +2535,6 @@ endif
 	$(QEMU) $(QEMU_FLAGS) -d instr || true
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
-
 
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR)/.dir-created $(QEMU)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
@@ -2701,9 +2729,18 @@ nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHO
 
 nosetests_qemu: nosetests_qemu.xml
 
+check_valid_qemu: FORCE
+	# We have detected QEMU features, now check that it matches with the makefile
+	# options:
+ifneq ($(CAP_PRECISE), $(QEMU_CAP_PRECISE))
+	$(error CAP_PRECISE set to '$(CAP_PRECISE)' but QEMU precise capabilities=$(QEMU_CAP_PRECISE). Change CAP_PRECISE or select a different $(dollar)QEMU)
+endif
+ifneq ($(CAP_SIZE), $(QEMU_CAP_SIZE))
+	$(error CAP_SIZE set to '$(CAP_SIZE)' but QEMU capability size=$(QEMU_CAP_SIZE). Change CAP_SIZE or select a different $(dollar)QEMU)
+endif
 
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
-nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) check_valid_qemu FORCE
 	@echo "Nose flags: $(QEMU_NOSEFLAGS)"
 	LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) --with-xunit \
 	--xunit-file=$@ $(QEMU_NOSEFLAGS) \
@@ -2717,7 +2754,7 @@ CLANG_TESTS := $(basename $(TEST_CLANG_FILES) $(TEST_PURECAP_FILES) $(C_FRAMEWOR
 QEMU_CLANG_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CLANG_TESTS)))
 
 qemu_clang_tests: qemu_clang_tests.xml
-qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) $(TEST_PYTHON) FORCE
+qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
 	PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
 	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
 	--xunit-file=$@ -v $(CLANG_TESTDIRS) || true
@@ -2738,21 +2775,21 @@ PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
 QEMU_PYTEST=TEST_MACHINE=QEMU LOGDIR=$(QEMU_LOGDIR) $(PYTEST)
 
 pytest_qemu_purecap_tests: pytest_qemu_purecap_tests.xml
-pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
+pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
 	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v $(PURECAP_TESTDIRS) || true
 
 pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
-pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) $(TEST_PYTHON) FORCE
+pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
 	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v $(CLANG_TESTDIRS) || true
 
 pytest_qemu: pytest_qemu.xml
-pytest_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) FORCE
+pytest_qemu.xml: $(QEMU_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
 	@echo "Nose preds: $(QEMU_NOSEPRED)"
 	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -q -a "$(QEMU_NOSEPRED)" $(TESTDIRS) || true
 
 QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
-$(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py FORCE
+$(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
 	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -q -a "$(QEMU_NOSEPRED)" $< || true
@@ -2784,6 +2821,8 @@ endif
 	@echo Building test suite for $(CAP_SIZE)-bit capabilities
 	@echo Permission size is $(PERM_SIZE)
 	@echo "Detected QEMU binary: $(QEMU)"
+	@echo "    QEMU CHERI capability size: $(QEMU_CAP_SIZE)"
+	@echo "    QEMU built with precise capabilities: $(QEMU_CAP_PRECISE)"
 	@echo
 	@echo "Build tools:"
 	@echo "Clang:     $(CLANG_CMD)"
