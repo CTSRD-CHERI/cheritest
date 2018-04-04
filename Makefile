@@ -254,6 +254,11 @@ endif
 QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
 ifneq ($(QEMU_ABSPATH),)
 QEMU_VERSION:=$(shell $(QEMU_ABSPATH) --version)
+QEMU_UNALIGNED_OKAY_STRING=Built with support for unaligned loads/stores
+ifneq ($(findstring $(QEMU_UNALIGNED_OKAY_STRING),$(QEMU_VERSION)),)
+$(info QEMU built with unliagned support)
+QEMU_UNALIGNED_OKAY=1
+endif
 
 ifneq ($(findstring Compiled for CHERI256,$(QEMU_VERSION)),)
 $(info QEMU built for CHERI256)
@@ -1732,8 +1737,8 @@ and not no_experimental_clc
 # XXXAR: mtc0signex was added here because since upstream QEMU commit d54a299b
 # the mtc0 instruction no longer sign extends
 
-ifeq ($(ALLOW_UNALIGNED),0)
-#$(error QEMU now supports unaligned access)
+ifeq ($(QEMU_UNALIGNED_OKAY),0)
+# ifeq ($(ALLOW_UNALIGNED),0)
 QEMU_NOSEPRED+=and not allow_unaligned
 else
 QEMU_NOSEPRED+=and not trap_unaligned_ld_st and not alignex
@@ -2730,8 +2735,6 @@ nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHO
 nosetests_qemu: nosetests_qemu.xml
 
 check_valid_qemu: FORCE
-	# We have detected QEMU features, now check that it matches with the makefile
-	# options:
 ifneq ($(CAP_PRECISE), $(QEMU_CAP_PRECISE))
 	$(error CAP_PRECISE set to '$(CAP_PRECISE)' but QEMU precise capabilities=$(QEMU_CAP_PRECISE). Change CAP_PRECISE or select a different $(dollar)QEMU)
 endif
@@ -2823,6 +2826,7 @@ endif
 	@echo "Detected QEMU binary: $(QEMU)"
 	@echo "    QEMU CHERI capability size: $(QEMU_CAP_SIZE)"
 	@echo "    QEMU built with precise capabilities: $(QEMU_CAP_PRECISE)"
+	@echo "    QEMU built with support for unaligned loads: $(QEMU_UNALIGNED_OKAY)"
 	@echo
 	@echo "Build tools:"
 	@echo "Clang:     $(CLANG_CMD)"
