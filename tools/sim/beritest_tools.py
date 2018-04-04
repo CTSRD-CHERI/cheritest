@@ -143,27 +143,24 @@ class BaseBERITestCase(unittest.TestCase):
 
     def parseLog(self, filename):
         with open(filename, "rt") as fh:
-            try:
-                self._MIPS = MipsStatus(fh)
-                # The test framework has a default exception handler which
-                # increments k0 and returns to the instruction after the
-                # exception. We assert that k0 is zero here to check there
-                # weren't any unexpected exceptions. The EXPECT_EXCEPTION
-                # class variable can be overridden in subclasses (set to
-                # True or False), but actually all tests which expect
-                # exceptions have custom handlers so none of them need to.
+            self._MIPS = MipsStatus(fh)
+            # The test framework has a default exception handler which
+            # increments k0 and returns to the instruction after the
+            # exception. We assert that k0 is zero here to check there
+            # weren't any unexpected exceptions. The EXPECT_EXCEPTION
+            # class variable can be overridden in subclasses (set to
+            # True or False), but actually all tests which expect
+            # exceptions have custom handlers so none of them need to.
 
-                if self.EXPECT_EXCEPTION is not None:
-                    expect_exception = self.EXPECT_EXCEPTION
-                else:
-                    # raw tests don't have the default exception handler so don't check for exceptions
-                    expect_exception = 'raw' in self.__name__
+            if self.EXPECT_EXCEPTION is not None:
+                expect_exception = self.EXPECT_EXCEPTION
+            else:
+                # raw tests don't have the default exception handler so don't check for exceptions
+                expect_exception = 'raw' in self.__name__
 
-                if self.MIPS.k0 != 0 and not expect_exception:
-                    self.MIPS_EXCEPTION = Exception(self.__name__ + " threw exception unexpectedly")
-                    self.unexpected_exception = True
-            except MipsException as e:
-                self.MIPS_EXCEPTION = e
+            if self.MIPS.k0 != 0 and not expect_exception:
+                self.MIPS_EXCEPTION = Exception(self.__name__ + " threw exception unexpectedly")
+                self.unexpected_exception = True
 
     @property
     def MIPS(self):
