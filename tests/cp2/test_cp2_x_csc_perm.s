@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -71,20 +72,44 @@ test:		.ent test
 		#
 		# Remove Permit_Store_Capability from $c2
 		#
-		
+
 		dli $t0, 0x1df
 		candperm $c2, $c0, $t0
+
 
 		# Try to store the capability via a capability
 		# that doesn't permit this.
 
-		dla     $t0, cap1
-		csc      $c1, $t0, 0($c2) # This should raise an exception
-
+		dla	$t0, cap1
+		clc	$c3, $t0, 0($c0) # load the original value into $c3
+		csc	$c1, $t0, 0($c2) # This should raise an exception
 		# Check that the store didn't happen.
-		cld     $a0, $t0, 0($c0)
-		daddiu  $t0, $t0, 8
-		cld     $a1, $t0, 0($c0)
+		clc	$c4, $t0, 0($c0)
+
+
+		# Now check that it also doesn't happen when Permit_Store is missing
+		# Store 1 to second_check so that the trap handler fills in the
+		# other two registers
+		dla $t0, second_check
+		dli $t1, 1
+		csd $t1, $t0, 0($c0)
+
+		# $a5 will be set to 1 if the exception handler is called
+		dli	$a5, 0
+		# Remove Permit_Store
+		dli	$t0, ~__CHERI_CAP_PERMISSION_PERMIT_STORE__
+		candperm	$c2, $c0, $t0
+
+		# Try to store the capability via a capability
+		# that doesn't permit this.
+		dla	$t0, cap1
+		csc	$c1, $t0, 0($c2) # This should raise an exception
+		# Check that the store didn't happen.
+		clc	$c5, $t0, 0($c0)
+
+		# load the first 16 bytes:
+		cld	$a0, $t0, 0($c0)
+		cld	$a1, $t0, 8($c0)
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
@@ -95,10 +120,22 @@ test:		.ent test
 
 		.ent bev0_handler
 bev0_handler:
+		dla $k0, second_check
+		cld $k0, $k0, 0($c0)
+		bne $k0, $zero, .Lsecond_check
+		nop
+.Lfirst_check:
 		li	$a2, 1
 		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		b .Lreturn_from_trap
+		nop
+.Lsecond_check:
+		li	$a5, 1
+		cgetcause $a6
+
+.Lreturn_from_trap:
+		dmfc0	$k1, $14	# EPC
+		daddiu	$k0, $k1, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
 		nop
 		nop
@@ -111,6 +148,9 @@ bev0_handler:
 		.align	3
 data:		.dword	0x0123456789abcdef
 		.dword  0x0123456789abcdef
+
+second_check:
+		.8byte 0
 
 		.align 5
 cap1:		.dword 0x0 

@@ -82,6 +82,7 @@ SAIL_CAP_REG_NULL_RE = FasterRegex('DEBUG CAP REG', r'\s+([0-9]+)\s+0b0\.\.\.0$'
 class MipsException(Exception):
     pass
 
+
 class Capability(object):
     def __init__(self, t, s, perms, ctype, offset, base, length):
         self.t      = t
@@ -95,6 +96,12 @@ class Capability(object):
     def __repr__(self):
         return 't:%x s:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x'%(
             self.t, self.s, self.perms, self.ctype, self.offset, self.base, self.length)
+
+    def __eq__(self, other):
+        return self.t == other.t and self.s == other.s and \
+            self.ctype == other.ctype and self.perms == other.perms and \
+            self.offset == other.offset and self.base == other.base and \
+            self.length == other.length
 
 def capabilityFromStrings(t, s, perms, ctype, offset, base, length):
     return Capability(
@@ -316,7 +323,7 @@ class MipsStatus(object):
 
     def __repr__(self):
         v = []
-        for i,t in self.threads.items():
+        for i, t in self.threads.items():
             v.append("======  Thread %3d  ======" % i)
             v.append(t.__repr__())
         return "\n".join(v)

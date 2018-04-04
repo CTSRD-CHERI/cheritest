@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,23 +34,40 @@ from nose.plugins.attrib import attr
 # permission.
 #
 
+@attr('capabilities')
 class test_cp2_x_csc_perm(BaseBERITestCase):
 
-    @attr('capabilities')
-    def test_cp2_x_csc_perm_1(self):
-        '''Test CSC did not store a capability without Permit_Store_Capability'''
+    def test_cp2_x_csc_perm_loaded_values(self):
+        '''Test CSC did not store a capability without Permit_Store_Capability permission'''
+        self.assertNullCap(self.MIPS.c3, "Original value should be null")
+        self.assertCapabilitiesEqual(self.MIPS.c4, self.MIPS.c3,
+            "CSC wrote a capability without Permit_Store_Capability permission")
+        self.assertCapabilitiesEqual(self.MIPS.c5, self.MIPS.c3,
+            "CSC wrote a capability without Permit_Store permission")
+
+    def test_cp2_x_csc_perm_no_permit_store_cap_bytes(self):
+        '''Test CSC did not store a capability without Permit_Store_Capability permission'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
             "CSC wrote a capability without Permit_Store_Capability permission")
+        self.assertRegisterEqual(self.MIPS.a1, 0,
+            "CSC wrote a capability without Permit_Store_Capability permission")
 
-    @attr('capabilities')
-    def test_cp2_x_csc_perm_2(self):
+    def test_cp2_x_csc_perm_no_permit_store_cap_triggered(self):
         '''Test CSC raises an exception when it does not have Permit_Store_Capability permission'''
         self.assertRegisterEqual(self.MIPS.a2, 1,
             "CSC did not raise an exception when it did not have Permit_Store_Capability permission")
 
-    @attr('capabilities')
-    def test_cp2_x_csc_perm_3(self):
+    def test_cp2_x_csc_perm_no_permit_store_cap_cause(self):
         '''Test capability cause was set correctly when didn't have Permit_Store_Capability permission'''
         self.assertRegisterEqual(self.MIPS.a3, 0x1502,
             "CSC did not set capability cause correctly when didn't have Permit_Store_Capability permission")
 
+    def test_cp2_x_csc_perm_no_permit_store_triggered(self):
+        '''Test CSC raises an exception when it does not have Permit_Store permission'''
+        self.assertRegisterEqual(self.MIPS.a5, 1,
+            "CSC did not raise an exception when it did not have Permit_Store permission")
+
+    def test_cp2_x_csc_perm_no_permit_store_cause(self):
+        '''Test capability cause was set correctly when didn't have Permit_Store permission'''
+        self.assertRegisterEqual(self.MIPS.a6, 0x1302,
+            "CSC did not set capability cause correctly when didn't have Permit_Store permission")

@@ -351,6 +351,7 @@ class BaseBERITestCase(unittest.TestCase):
             self.fail(msg + "permissions 0x%016x != 0x%016x" % (reg_val, expected))
 
     def assertNullCap(self, cap, msg=""):
+        # type: (Capability, str) -> None
         msg += (" " if msg else "")
         msg += "(cap=<" + str(cap) + ">)\nshould be null but "
         self.assertRegisterEqual(cap.t     , 0, msg + "tag set")
@@ -362,8 +363,13 @@ class BaseBERITestCase(unittest.TestCase):
         self.assertRegisterEqual(cap.length, self.max_length, msg + "has non-compliant length")
 
     def assertDefaultCap(self, cap, msg="", perms=None):
+        # type: (Capability, str, int) -> None
         self.assertValidCap(cap, msg, offset=0, base=0, length=self.max_length, perms=perms,
                             check_msg="default cap")
+
+    def assertCapabilitiesEqual(self, cap1, cap2, msg=""):
+        # type: (Capability, Capability, str) -> None
+        assert cap1 == cap2, msg
 
     def assertValidCap(self, cap, msg="", base=0, length=0, offset=0, perms=None, check_msg=None):
         msg += " " if msg else ""
