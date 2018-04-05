@@ -180,8 +180,8 @@ class BaseBERITestCase(unittest.TestCase):
         return result[:pos] + "_cached" + result[pos:]
 
     def setUp(self):
-        mips_regs = self.MIPS  # force setup of the whole class
-        assert mips_regs is not None
+        # mips_regs = self.MIPS  # force setup of the whole class
+        # assert mips_regs is not None
         if self.unexpected_exception:
             self.fail(self.__class__.__name__ + " threw exception unexpectedly")
         elif self.MIPS_EXCEPTION is not None:
