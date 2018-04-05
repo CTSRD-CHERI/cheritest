@@ -134,9 +134,9 @@ PERM_SIZE?=19
 endif
 L3_SIM?=l3mips
 SAIL_DIR?=~/bitbucket/sail
-SAIL_MIPS_SIM=$(SAIL_DIR)/src/run_mips.native
-SAIL_CHERI_SIM=$(SAIL_DIR)/src/run_cheri.native
-SAIL_CHERI128_SIM=$(SAIL_DIR)/src/run_cheri128.native
+SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
+SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
+SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
 SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 CC?=gcc
 
@@ -2505,7 +2505,7 @@ endif
 
 $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles
 	mkdir -p $(SAIL_MIPS_LOGDIR)
-	-$(SAIL_MIPS_SIM) --quiet --max_instruction `./max_cycles $@ 20000 300000` --file $< > $@ 2>&1
+	-timeout 5m $(SAIL_MIPS_SIM) $< > $@ 2>&1
 
 $(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 	mkdir -p $(SAIL_MIPS_EMBED_LOGDIR)
@@ -2513,7 +2513,7 @@ $(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 
 $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles
 	mkdir -p $(SAIL_CHERI_LOGDIR)
-	-$(SAIL_CHERI_SIM) --quiet --max_instruction `./max_cycles $@ 20000 300000` --file $< > $@ 2>&1
+	-timeout 5m $(SAIL_CHERI_SIM) $< > $@ 2>&1
 
 $(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 	mkdir -p $(SAIL_CHERI_EMBED_LOGDIR)
@@ -2521,7 +2521,7 @@ $(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 
 $(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles
 	mkdir -p $(SAIL_CHERI128_LOGDIR)
-	-$(SAIL_CHERI128_SIM) --quiet --max_instruction `./max_cycles $@ 20000 300000` --file $< > $@ 2>&1
+	-timeout 5m $(SAIL_CHERI128_SIM) $< > $@ 2>&1
 
 $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 	mkdir -p $(SAIL_CHERI128_EMBED_LOGDIR)
