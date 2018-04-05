@@ -1693,7 +1693,6 @@ endif
 ifeq ($(ALLOW_UNALIGNED),0)
 SAIL_NOSEPRED+=and not allow_unaligned
 else
-$(error Sail does not support unaligned access)
 SAIL_NOSEPRED+=and not trap_unaligned_ld_st and not alignex
 endif
 
