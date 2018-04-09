@@ -63,7 +63,7 @@ def check_answer(test_name, test_file):
 
 def _is_xfail(test_name):
     # L3 doesn't implement the statcounters instructions
-    if os.getenv("TEST_MACHINE", "").lower() == "l3":
+    if os.getenv("TEST_MACHINE", "").lower() in ("l3", "sail"):
         if test_name in ("test_purecap_statcounters",):
             return True
     return False

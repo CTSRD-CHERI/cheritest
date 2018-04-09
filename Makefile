@@ -1648,7 +1648,6 @@ and not extendedtlb \
 and not csettype \
 and not statcounters \
 and not float \
-and not clang  \
 and not pic \
 and not mt \
 and not einstr \
@@ -1696,6 +1695,10 @@ else
 SAIL_NOSEPRED+=and not trap_unaligned_ld_st and not alignex
 endif
 
+ifneq ($(CLANG),1)
+SAIL_NOSEPRED+=and not clang
+endif
+
 SAIL_MIPS_NOSEFLAGS=-A "$(SAIL_NOSEPRED) and not capabilities"
 SAIL_CHERI_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
 SAIL_CHERI128_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
@@ -1739,6 +1742,7 @@ and not csettype \
 and not qemu_skip \
 and not mtc0signex \
 and not no_experimental_clc
+
 # XXXAM why settype is disabled?
 # XXXAR: mtc0signex was added here because since upstream QEMU commit d54a299b
 # the mtc0 instruction no longer sign extends
@@ -2505,7 +2509,7 @@ endif
 
 $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles
 	mkdir -p $(SAIL_MIPS_LOGDIR)
-	-timeout 5m $(SAIL_MIPS_SIM) $< > $@ 2>&1
+	-timeout 2m $(SAIL_MIPS_SIM) $< > $@ 2>&1
 
 $(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 	mkdir -p $(SAIL_MIPS_EMBED_LOGDIR)
@@ -2513,7 +2517,7 @@ $(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 
 $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles
 	mkdir -p $(SAIL_CHERI_LOGDIR)
-	-timeout 5m $(SAIL_CHERI_SIM) $< > $@ 2>&1
+	-timeout 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
 
 $(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 	mkdir -p $(SAIL_CHERI_EMBED_LOGDIR)
@@ -2521,7 +2525,7 @@ $(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 
 $(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles
 	mkdir -p $(SAIL_CHERI128_LOGDIR)
-	-timeout 5m $(SAIL_CHERI128_SIM) $< > $@ 2>&1
+	-timeout 2m $(SAIL_CHERI128_SIM) $< > $@ 2>&1
 
 $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
 	mkdir -p $(SAIL_CHERI128_EMBED_LOGDIR)
