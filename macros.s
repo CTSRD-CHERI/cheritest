@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2013-2015 Robert M. Norton
 # Copyright (c) 2015 Jonathan Woodruff
+# Copyright (c) 2017-2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -135,6 +136,35 @@ trap_count:
 
 .endm
 
+
+.macro clear_counting_exception_handler_regs
+	dli $a1, 0
+	dli $a2, 0
+	dli $a3, 0
+	dli $a4, 0
+	dli $a5, 0
+.endm
+
+# Store CP0 Cause and capcause and the exception count as an integer value in
+# capreg \capreg.
+# Bits 0-7 are capcause.reg, 8-15 are capcause.cause
+# Bits 16-31 are the low 16 bits of CP0_Cause (i.e. the cause is bits 18-22)
+# Bits 32-63 are the exception count
+# This assumes Exception count is in a1, CPO_Cause is in a2 and Capcause in a3
+# See DEFINE_COUNTING_CHERI_TRAP_HANDLER
+.macro save_counting_exception_handler_cause capreg
+	# Clear the high 48 bits of $a2 (CPO_Cause) and shift by 16
+	andi	$a2, $a2, 0xffff
+	dsll	$a2, 16
+	# Ensure the high bits of capcause are empty
+	andi	$a3, $a3, 0xffff
+	# Shift exception count to the high 32 bits
+	dsll	$a1, $a1, 32
+	# combine all the values and store in capreg offset field
+	or	$a3, $a3, $a1
+	or	$a3, $a3, $a2
+	CFromInt	\capreg, $a3
+.endm
 
 # Invokes the special syscall trap that will instruct the
 # DEFINE_COUNTING_CHERI_TRAP_HANDLER to jump to finish instred of returning

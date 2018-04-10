@@ -392,6 +392,37 @@ class BaseBERITestCase(unittest.TestCase):
         else:
             self.assertCapPermissions(cap.perms, perms, msg + "has wrong permissions")
 
+    def assertCompressedTrapInfo(self, capreg, mips_cause=-1, cap_cause=None,
+                                 cap_reg=None, trap_count=None, no_trap=False, msg=None):
+        # type: (Capability, int, int, int, int, bool, str) -> None
+        '''
+        :param capreg: The register containing the compressed exception info
+                       (see save_counting_exception_handler_cause in macros.s)
+        :param mips_cause: the expected self.MIPS.Cause.* value or None
+        :param cap_cause:  The expected cself.MIPS.CapCause.* value or None
+        :param cap_reg:    The expected capreg or None
+        :param trap_count: The expected number of traps so far or None if it doesn't matter
+        :param no_trap: If true then we expect the exception handler to not have been triggered
+                        (Note: The test should invoke clear_counting_exception_handler_regs)
+        :param msg: Additional message to print on failure
+        :return:
+        '''
+        if no_trap:
+            self.assertNullCap(capreg, msg=msg)
+            return
+        # See macros.s for the layout of the offset field
+        # Extract cause (bits 18-23)
+        cause_value = (capreg.offset >> 18) & 0x1f
+        self.assertRegisterEqual(cause_value, mips_cause, msg + ": MIPS cause wrong")
+        if cap_reg is not None:
+            value = capreg.offset & 0xff  # CapCause.RegNum in Bits 0-7
+            self.assertRegisterEqual(value, cap_reg, msg + ": cap reg wrong")
+        if cap_cause is not None:
+            value = (capreg.offset >> 8) & 0xff  # CapCause.Cause is Bits 8-15
+            self.assertRegisterEqual(value, cap_cause, msg + ": cap cause wrong")
+        if trap_count is not None:
+            value = capreg.offset >> 32  # Bits 32-63
+            self.assertRegisterEqual(value, trap_count, msg + ": trap count wrong")
 
 class BaseICacheBERITestCase(BaseBERITestCase):
     '''Abstract base class for test cases for the BERI Instruction Cache.'''
