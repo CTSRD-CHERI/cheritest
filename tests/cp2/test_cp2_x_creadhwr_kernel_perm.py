@@ -36,7 +36,7 @@ import copy
 #
 @attr('capabilities')
 @attr('cap_hwregs')
-class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
+class test_cp2_x_creadhwr_kernel_perm(BaseBERITestCase):
     def test_pcc_has_no_access_sys_regs(self):
         self.assertCapPermissions(self.MIPS.c14, self.max_permissions & ~1024,
             "$pcc for the test function should not have Access system registers")
@@ -102,7 +102,7 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
         self.assertCompressedTrapInfo(self.MIPS.c17,
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-            cap_reg=29, trap_count=7, msg="Accessing KCC should fail")
+            cap_reg=29, trap_count=7, msg="Accessing KR1C should fail")
 
     def test_user_mode_kr1c(self):
         self.assertCompressedTrapInfo(self.MIPS.c18,
@@ -129,8 +129,15 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
         self.assertValidCap(self.MIPS.c31, offset=(0x0, 0x2000), base=0,
             length=self.max_length, perms=self.max_permissions & ~1024)
         # check that kr1c and kr2c were updated by the writes in kernel mode:
-        self.assertIntCap(self.MIPS.c27, int_value=0xbad1)
-        self.assertIntCap(self.MIPS.c28, int_value=0xbad1)
+        self.assertDefaultCap(self.MIPS.c27, offset=27)
+        self.assertDefaultCap(self.MIPS.c28, offset=28)
+
+    def test_kernel_mode_read_ok(self):
+        self.assertDefaultCap(self.MIPS.c22, offset=31, msg="c22 should contain initial EPCC")
+        self.assertDefaultCap(self.MIPS.c23, offset=30, msg="c23 should contain initial KDC")
+        self.assertDefaultCap(self.MIPS.c24, offset=29, msg="c24 should contain initial KCC")
+        self.assertDefaultCap(self.MIPS.c25, offset=27, msg="c25 should contain initial KR1C")
+        self.assertDefaultCap(self.MIPS.c26, offset=28, msg="c26 should contain initial KR2C")
 
     def test_total_exception_count(self):
         self.assertRegisterEqual(self.MIPS.v0, 10, "Wrong number of exceptions triggered")

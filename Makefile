@@ -1156,6 +1156,7 @@ TEST_CP2_FILES += \
 		test_cp2_ccall_fast.s		\
 		test_cp2_x_ccall_fast_delay.s	\
 		test_cp2_x_ccall_fast_code_perm.s	\
+		test_cp2_x_creadhwr_kernel_perm.s \
 		test_cp2_x_cwritehwr_kernel_perm.s \
 		test_cp2_x_ccall_fast_data_perm.s
 endif
