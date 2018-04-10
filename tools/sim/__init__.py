@@ -341,6 +341,42 @@ class MipsStatus(object):
         FPE = 15
         COP2 = 18
 
+    # See "Table 4.2: Capability Exception Codes" in the CHERI reference
+    class CapCause(object):
+        NONE = 0x00
+        Length_Violation = 0x01
+        Tag_Violation = 0x02
+        Seal_Violation = 0x03
+        Type_Violation = 0x04
+        Call_Trap = 0x05
+        Return_Trap = 0x06
+        Trusted_Stack_Underflow = 0x07
+        User_Permission_Violation = 0x08
+        TLB_Store_Capability_Violation = 0x09
+        Bounds_Not_Exactly_Representable = 0x0a
+        # reserved = 0x0b
+        # reserved = 0x0c
+        # reserved = 0x0d
+        # reserved = 0x0e
+        # reserved = 0x0f
+        Global_Violation = 0x10
+        Permit_Execute_Violation = 0x11
+        Permit_Load_Violation = 0x12
+        Permit_Store_Violation = 0x13
+        Permit_Load_Capability_Violation = 0x14
+        Permit_Store_Capability_Violation = 0x15
+        Permit_Store_Local_Capability_Violation = 0x16
+        Permit_Seal_Violation = 0x17
+        Access_System_Registers_Violation = 0x18
+        Permit_CCall_Violation = 0x19
+        Access_CCall_IDC_Violation = 0x1a
+        Permit_Unseal_Violation = 0x1b
+        # reserved = 0x1c
+        # reserved = 0x1d
+        # reserved = 0x1e
+        # reserved = 0x1f
+
+
 MIPS_ICACHE_TAG_RE=FasterRegex('DEBUG ICACHE TAG ENTRY', r'\s*([0-9]+) Valid=([01]) Tag value=([0-9a-fA-F]+)$')
 
 class ICacheException(Exception):
