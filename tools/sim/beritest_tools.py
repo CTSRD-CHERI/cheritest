@@ -38,6 +38,7 @@ import functools
 import unittest
 import os
 import os.path
+import inspect
 
 from tools.sim import *
 
@@ -126,6 +127,18 @@ class BaseBERITestCase(unittest.TestCase):
         '''Parse the log file and instantiate MIPS'''
         assert self.cached is not None
         assert self.multi is not None
+        # The test class name should be the same as the test class file minus .py
+        # TODO: we could relax this restriction now that we know how to get
+        # the file name for the file containing the test defintion and just
+        # always use that
+        class_defintion_file = inspect.getfile(self.__class__)
+        expected_class_name = os.path.basename(class_defintion_file)
+        # remove .py
+        expected_class_name = os.path.splitext(expected_class_name)[0]
+        class_name = self.__class__.__name__
+        self.assertEqual(expected_class_name, class_name,
+                         "Invalid python test class name, it should match the file name")
+
         if self.LOG_FN is None:
             if self.multi and self.cached:
                 self.LOG_FN = self.__class__.__name__ + "_cachedmulti.log"
