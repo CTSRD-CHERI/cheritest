@@ -113,9 +113,12 @@
 	# For now just exit the test on any syscall trap
 	# TODO: should we check for code == 42?
 	# dmfc0 	$k1, $8, 1	# Get BadInstr
+
+	# On exit store total exception count in v0
 	j finish
-	nop
+	daddiu	$v0, $a1, -1	# subtract 1 to not count this syscall exception
 .Lnot_syscall:
+	# Otherwise skip the instruction and return from the handler
 	dmfc0	$a5, $14		# a5 = EPC
 	daddiu	$k0, $a5, 4		# EPC += 4 to bump PC forward on ERET
 	dmtc0	$k0, $14

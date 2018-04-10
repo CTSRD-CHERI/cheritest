@@ -80,8 +80,47 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
             mips_cause=self.MIPS.Cause.ReservedInstruction,
             trap_count=4, msg="Accessing invalid reg should fail")
 
-    def test_write_in_user_mode(self):
-        pass
+    # In user mode none of the registers should be accessible
+
+    def test_usermode_pcc_has_access_sys_regs(self):
+        self.assertCapPermissions(self.MIPS.c25, self.max_permissions,
+            "$pcc in usermode should have access sys regs")
+
+    def test_user_mode_epcc(self):
+        self.assertCompressedTrapInfo(self.MIPS.c15,
+            mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
+            cap_reg=31, trap_count=5, msg="Accessing EPCC should fail")
+
+    def test_user_mode_kdc(self):
+        self.assertCompressedTrapInfo(self.MIPS.c16,
+            mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
+            cap_reg=30, trap_count=6, msg="Accessing KDC should fail")
+
+    def test_user_mode_kcc(self):
+        self.assertCompressedTrapInfo(self.MIPS.c17,
+            mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
+            cap_reg=29, trap_count=7, msg="Accessing KR1C should fail")
+
+    def test_user_mode_kr1c(self):
+        self.assertCompressedTrapInfo(self.MIPS.c18,
+            mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
+            cap_reg=22, trap_count=8, msg="Accessing KR2C should fail")
+
+    def test_user_mode_kr2c(self):
+        self.assertCompressedTrapInfo(self.MIPS.c19,
+            mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
+            cap_reg=23, trap_count=9, msg="Accessing KCC should fail")
+
+    def test_user_mode_invalid_reg(self):
+        # CapHWR 28 doesn't exist so this should raise reserved instr
+        self.assertCompressedTrapInfo(self.MIPS.c20,
+            mips_cause=self.MIPS.Cause.ReservedInstruction,
+            trap_count=10, msg="Accessing invalid reg should fail")
 
     def test_final_values(self):
         self.assertDefaultCap(self.MIPS.c29, offset=29)
@@ -92,4 +131,7 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
         # check that kr1c and kr2c were updated by the writes in kernel mode:
         self.assertIntCap(self.MIPS.c27, int_value=0xbad1)
         self.assertIntCap(self.MIPS.c28, int_value=0xbad1)
+
+    def test_total_exception_count(self):
+        self.assertRegisterEqual(self.MIPS.v0, 10, "Wrong number of exceptions triggered")
 

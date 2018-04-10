@@ -61,10 +61,7 @@ BEGIN_TEST
 	SetSpecialRegOffset EPCC, 31
 
 	# Clear the registers set by the counting trap handler
-	li $a2, 0
-	li $a3, 0
-	li $a4, 0
-	li $a5, 0
+	clear_counting_exception_handler_regs
 
 	# remove Access_System_Registers
 	dla $t9, without_access_sys_regs
@@ -116,6 +113,7 @@ END_TEST
 
 .ent userspace_test
 userspace_test:
+	cgetpcc $c26
 
 	# Current trap count should be 4
 	# Last registers used to store exception details was $c7
@@ -134,7 +132,7 @@ userspace_test:
 	try_write_cap_hwreg $22, $c18	# Write KR1C (trap #8)
 	try_write_cap_hwreg $23, $c19	# Write KR2C (trap #9)
 
-	# Try to read a non-existent kernel special capreg (trap #4)
+	# Try to read a non-existent kernel special capreg (trap #10)
 	# Should fail with reserved instr
 	try_write_cap_hwreg $28, $c20
 
