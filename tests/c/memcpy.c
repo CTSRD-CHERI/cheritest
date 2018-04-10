@@ -1,1 +1,1 @@
-/local/scratch/lmp53//cheri/cheri-c-tests/clang-hybrid/memcpy.c
+../../cheri-c-tests/clang-hybrid/memcpy.c

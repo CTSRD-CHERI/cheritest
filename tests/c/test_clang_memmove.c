@@ -1,1 +1,1 @@
-/local/scratch/lmp53/cheri/cheritest/cheri-c-tests/clang-hybrid/clang_hybrid_memmove.c
+../../cheri-c-tests/clang-hybrid/clang_hybrid_memmove.c
