@@ -351,14 +351,24 @@ class BaseBERITestCase(unittest.TestCase):
             self.fail(msg + "permissions 0x%016x != 0x%016x" % (reg_val, expected))
 
     def assertNullCap(self, cap, msg=""):
+        self._assertInvalidCap(cap, offset=0, msg=msg)
+
+    def assertIntCap(self, cap, int_value, msg=""):
+        self._assertInvalidCap(cap, offset=int_value, msg=msg)
+
+    def _assertInvalidCap(self, cap, offset=0, msg=""):
         # type: (Capability, str) -> None
         msg += (" " if msg else "")
-        msg += "(cap=<" + str(cap) + ">)\nshould be null but "
+        msg += "(cap=<" + str(cap) + ">)\nshould be "
+        if offset == 0:
+            msg += "null but "
+        else:
+            msg += "and untagged integer value but "
         self.assertRegisterEqual(cap.t     , 0, msg + "tag set")
         self.assertRegisterEqual(cap.s     , 0, msg + "is sealed")
         self.assertRegisterEqual(cap.ctype , 0, msg + "has nonzero otype")
         self.assertRegisterEqual(cap.perms , 0, msg + "has nonzero perms")
-        self.assertRegisterEqual(cap.offset, 0, msg + "has nonzero offset")
+        self.assertRegisterEqual(cap.offset, offset, msg + "has wrong offset")
         self.assertRegisterEqual(cap.base  , 0, msg + "has nonzero base")
         self.assertRegisterEqual(cap.length, self.max_length, msg + "has non-compliant length")
 
