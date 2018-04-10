@@ -328,6 +328,19 @@ class MipsStatus(object):
             v.append(t.__repr__())
         return "\n".join(v)
 
+    class Cause(object):
+        AdEL = 4
+        AdES = 5
+        IBUS = 6
+        DBUS = 7
+        SYSCALL = 8
+        BREAK = 8
+        ReservedInstruction = 10
+        OVERFLOW = 12
+        TRAP = 13
+        FPE = 15
+        COP2 = 18
+
 MIPS_ICACHE_TAG_RE=FasterRegex('DEBUG ICACHE TAG ENTRY', r'\s*([0-9]+) Valid=([01]) Tag value=([0-9a-fA-F]+)$')
 
 class ICacheException(Exception):
