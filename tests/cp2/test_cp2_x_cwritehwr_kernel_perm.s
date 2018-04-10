@@ -46,10 +46,7 @@
 	save_counting_exception_handler_cause \cause_capreg
 .endm
 
-BEGIN_TEST
-	# Set up exception handler
-	set_mips_bev0_handler counting_trap_handler
-
+BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 	# Set the offset field in the special registers so that we can verify
 	# they didn't change
 	# Note: we can't just clear them, since KCC is needed in the exception
@@ -145,6 +142,3 @@ userspace_test:
 	EXIT_TEST_WITH_COUNTING_CHERI_TRAP_HANDLER
 .end userspace_test
 
-
-
-DEFINE_COUNTING_CHERI_TRAP_HANDLER counting_trap_handler

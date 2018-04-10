@@ -46,11 +46,7 @@ END_TEST
 # If the test needs a trap handler use the code inside the ifdef instead:
 .ifdef THIS_TEST_NEEDS_A_TRAP_HANDLER
 
-DEFINE_COUNTING_CHERI_TRAP_HANDLER
-
-BEGIN_TEST
-	# Set up exception handler
-	set_mips_bev0_handler counting_trap_handler
+BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 	# Test itself goes here
 	nop
 
@@ -60,8 +56,6 @@ BEGIN_TEST
 	teq $zero, $zero	# or any other code that causes a trap
 	# Save exception details in a capreg (test the value in python using self.assertCompressedTrapInfo())
 	save_counting_exception_handler_cause $c3
-
-
 END_TEST
 
 .endif # THIS_TEST_NEEDS_A_TRAP_HANDLER

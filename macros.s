@@ -72,6 +72,32 @@
 .endm
 
 
+
+# Use the UserLocal register to store the exception count
+# TODO: we could also use some other COP0 register instead? E.g. Compare?
+# There also seems to be Kscratch (dmf0 $a1, $31, 2/3) but not sure
+# that that is implemented in BERI
+.macro __get_counting_trap_handler_count dest
+.ifndef COUNTING_TRAP_HANDLER_STORE_TO_MEM
+	dmfc0	\dest, $4, 2
+.else
+	# In case we can't use the UserLocal register store to memory instead
+	dla $k0, trap_count
+	cld \dest, $k0, 0($c0)
+.endif
+.endm
+
+.macro __set_counting_trap_handler_count src
+.ifndef COUNTING_TRAP_HANDLER_STORE_TO_MEM
+	dmtc0	\src, $4, 2
+.else
+	# In case we can't use the UserLocal register store to memory instead
+	dla $k0, trap_count
+	csd \src, $k0, 0($c0)
+.endif
+.endm
+
+
 # define a trap handler function that sets the following:
 # a1 = Trap count
 # a2 = Cause (mfc0 $a2, $13)
@@ -80,26 +106,14 @@
 # a5 = EPC
 # On return it just jumps to EPC+4 (i.e. it doesn't handle traps in branches/jumps)
 # This handler also allows exiting from usermode by treating sycall as a request to exit
-.macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler, global_range_cap_reg=c0
-
+.macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler
 .text
 .ent \name
 \name:
 	# increment trap_count and keep result in a1
-.ifdef COUNTING_EXCEPTION_HANDLER_STORE_TO_MEM
-	dla	$k0, trap_count
-	cld	$a1, $k0, 0($\global_range_cap_reg)
-	daddiu	$a1, $a1, 1		# a1 = number of traps so far
-	cld	$a1, $k0, 0($\global_range_cap_reg)
-.else
-	# There also seems to be Kscratch (dmf0 $a1, $31, 2/3) but not sure
-	# that that is implemented in BERI
-	# TODO: we could also use some other COP0 register instead? E.g. Compare?
-	# Use the UserLocal register to store the exception count
-	dmfc0	$a1, $4, 2		# a1 = Old exception count
-	daddiu	$a1, $a1, 1		# a1 = number of traps so far
-	dmtc0	$a1, $4, 2		# save new count
-.endif
+	__get_counting_trap_handler_count $a1	# get old exception count
+	daddiu $a1, $a1, 1			# a1 = new exception count
+	__set_counting_trap_handler_count $a1	# save exception count value
 	dmfc0 	$a2, $13		# a2 = Cause
 	cgetcause $a3			# a3 = CapCause
 	dmfc0	$a4, $8			# a4 = BadVaddr
@@ -129,8 +143,9 @@
 	eret
 .end \name
 
-.ifdef COUNTING_EXCEPTION_HANDLER_STORE_TO_MEM
+.ifdef COUNTING_TRAP_HANDLER_STORE_TO_MEM
 .data
+.balign 8
 trap_count:
 		.8byte 0
 .size trap_count, 8
@@ -178,13 +193,17 @@ trap_count:
 .endm
 
 
-# Define the test function. Optional argument 1 can be used to declare
-# extra stack space used by the function.
-.macro BEGIN_TEST extra_stack_space=0
+.macro __SET_DEFAULT_TEST_ASM_OPTS
 	.set mips64
 	.set noreorder
 	.set nobopt
 	.set noat
+.endm
+
+# Define the test function. Optional argument 1 can be used to declare
+# extra stack space used by the function.
+.macro BEGIN_TEST extra_stack_space=0
+	__SET_DEFAULT_TEST_ASM_OPTS
 	.text
 	.global test
 	.ent test
@@ -198,6 +217,28 @@ trap_count:
 	mips_function_return \extra_stack_space
 	.end test
 .endm
+
+
+# Start a test that installs the default counting trap handler
+# See DEFINE_COUNTING_CHERI_TRAP_HANDLER for the registers it sets on traps
+# Using the macro save_counting_exception_handler_cause can shorten the test even more
+.macro BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+.text
+	__SET_DEFAULT_TEST_ASM_OPTS
+	DEFINE_COUNTING_CHERI_TRAP_HANDLER counting_trap_handler
+
+	BEGIN_TEST
+		# Set up exception handler
+		set_mips_bev0_handler counting_trap_handler
+		# Clear all registers used by the trap handler to ensure they
+		# are zero if the expected exception doesn't trigger
+		clear_counting_exception_handler_regs
+		# Ensure that the exception count is zero
+		# UserLocal should already be initialized to zero but better to be safe
+		__set_counting_trap_handler_count $zero
+		# ready to run test code:
+.endm
+
 
         
 # The maximum number of hw threads (threads*cores) we expect for
