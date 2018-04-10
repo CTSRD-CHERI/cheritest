@@ -135,6 +135,37 @@ trap_count:
 
 .endm
 
+
+# Invokes the special syscall trap that will instruct the
+# DEFINE_COUNTING_CHERI_TRAP_HANDLER to jump to finish instred of returning
+# to EPC + 4
+.macro EXIT_TEST_WITH_COUNTING_CHERI_TRAP_HANDLER
+	syscall 42
+	nop
+.endm
+
+
+# Define the test function. Optional argument 1 can be used to declare
+# extra stack space used by the function.
+.macro BEGIN_TEST extra_stack_space=0
+	.set mips64
+	.set noreorder
+	.set nobopt
+	.set noat
+	.text
+	.global test
+	.ent test
+	test:
+		mips_function_entry \extra_stack_space
+.endm
+
+# End of the test function. Optional argument 1 can be used to declare
+# extra stack space used by the function (must match BEGIN_TEST value).
+.macro END_TEST extra_stack_space=0
+	mips_function_return \extra_stack_space
+	.end test
+.endm
+
         
 # The maximum number of hw threads (threads*cores) we expect for
 # any configuration. This is so that we can allocate a conservative
