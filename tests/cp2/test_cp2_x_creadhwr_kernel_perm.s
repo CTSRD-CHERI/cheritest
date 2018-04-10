@@ -111,7 +111,8 @@ with_access_sys_regs:
 
 END_TEST
 
-
+# ensure that the userspace test code is page aligned so that it fits on one page
+.balign 4096
 .ent userspace_test
 userspace_test:
 
