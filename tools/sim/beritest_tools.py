@@ -340,6 +340,9 @@ class BaseBERITestCase(unittest.TestCase):
         self.assertCapPermissions(reg_val, self.max_permissions, msg)
 
     def assertCapPermissions(self, reg_val, expected, msg=None):
+        # Allow passing either the permissions value or a cap reg:
+        if isinstance(reg_val, Capability):
+            reg_val = reg_val.perms
         if self.ALWAYS_FAIL or reg_val != expected:
             if msg is None:
                 msg = ""
