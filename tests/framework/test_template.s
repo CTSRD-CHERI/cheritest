@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2011 (holder)
+# Copyright (c) 2018 (holder)
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -30,25 +30,38 @@
 .set nobopt
 .set noat
 
+.include "macros.s"
+
 #
 # Short block comment describing the test: what instruction/behaviour are we
 # investigating; what properties are we testing, what properties are deferred
 # to other tests?  What might we want to test as well in the future?
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
+	# Test itself goes here
+	nop
+END_TEST
 
-		# Test itself goes here
-		nop
+# If the test needs a trap handler use the code inside the ifdef instead:
+.ifdef THIS_TEST_NEEDS_A_TRAP_HANDLER
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+DEFINE_COUNTING_CHERI_TRAP_HANDLER
+
+BEGIN_TEST
+	# Set up exception handler
+	set_mips_bev0_handler counting_trap_handler
+	# Test itself goes here
+	nop
+
+	# Clear the registers used by the trap handler so that saving them
+	# doesn't yield the previous exception values
+	clear_counting_exception_handler_regs
+	teq $zero, $zero	# or any other code that causes a trap
+	# Save exception details in a capreg (test the value in python using self.assertCompressedTrapInfo())
+	save_counting_exception_handler_cause $c3
+
+
+END_TEST
+
+.endif # THIS_TEST_NEEDS_A_TRAP_HANDLER
