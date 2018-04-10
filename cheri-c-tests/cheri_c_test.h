@@ -30,13 +30,12 @@
 #ifndef TEST_CUSTOM_FRAMEWORK
 #include <assert.h>
 #endif
-#include <stdint.h>
 
 #ifndef __FreeBSD__
 #warning The test suite is currently expected to work only on FreeBSD.
 #endif
 
-typedef void (*cheri_handler)(void *, int);
+typedef void (*cheri_handler)(void *__capability, int);
 
 extern cheri_handler test_fault_handler;
 extern volatile int faults;
@@ -82,5 +81,14 @@ void test_setup(void);
 
 #define ASSERT_HAS_NOT_PERMISSION(x, perm) \
 	assert_eq((__builtin_cheri_perms_get((void*)x) & __CHERI_CAP_PERMISSION_PERMIT_ ## perm ## __), 0)
+
+// Dumps a value into a specified register.  Useful for debugging test cases.
+#define DEBUG_DUMP_REG(regno, val) \
+	__asm__ volatile ("dadd $" #regno ", %0, $0" : : "r" (val) : #regno);
+// Add a nop
+#define DEBUG_NOP() \
+	__asm__ volatile ("nop")
+
+#define TO_CAP(x) ((__cheri_tocap void * __capability)(void*)(x))
 
 #include "cheri_c_testdecls.h"
