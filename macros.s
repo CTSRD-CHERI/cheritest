@@ -62,6 +62,79 @@
 	daddiu	$fp, $sp, (\extra_stack_space + 16)
 .endm
 
+.macro set_mips_bev0_handler handler
+	jal	bev_clear
+	nop
+	dla	$a0, \handler
+	jal	bev0_handler_install
+	nop
+.endm
+
+
+# define a trap handler function that sets the following:
+# a1 = Trap count
+# a2 = Cause (mfc0 $a2, $13)
+# a3 = capcause (cgetcause $a3)
+# a4 = BadVAddr
+# a5 = EPC
+# On return it just jumps to EPC+4 (i.e. it doesn't handle traps in branches/jumps)
+# This handler also allows exiting from usermode by treating sycall as a request to exit
+.macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler, global_range_cap_reg=c0
+
+.text
+.ent \name
+\name:
+	# increment trap_count and keep result in a1
+.ifdef COUNTING_EXCEPTION_HANDLER_STORE_TO_MEM
+	dla	$k0, trap_count
+	cld	$a1, $k0, 0($\global_range_cap_reg)
+	daddiu	$a1, $a1, 1		# a1 = number of traps so far
+	cld	$a1, $k0, 0($\global_range_cap_reg)
+.else
+	# There also seems to be Kscratch (dmf0 $a1, $31, 2/3) but not sure
+	# that that is implemented in BERI
+	# TODO: we could also use some other COP0 register instead? E.g. Compare?
+	# Use the UserLocal register to store the exception count
+	dmfc0	$a1, $4, 2		# a1 = Old exception count
+	daddiu	$a1, $a1, 1		# a1 = number of traps so far
+	dmtc0	$a1, $4, 2		# save new count
+.endif
+	dmfc0 	$a2, $13		# a2 = Cause
+	cgetcause $a3			# a3 = CapCause
+	dmfc0	$a4, $8			# a4 = BadVaddr
+
+	# Check if this is a syscall and exit if it is
+	li	$k0, (8 << 2)		# Syscall is cause 8
+	andi	$k1, $a2, (0x1f << 2)	# Extract the cause bits
+	bne $k0, $k1, .Lnot_syscall
+	nop
+.Lsyscall:
+	# For now just exit the test on any syscall trap
+	# TODO: should we check for code == 42?
+	# dmfc0 	$k1, $8, 1	# Get BadInstr
+	j finish
+	nop
+.Lnot_syscall:
+	dmfc0	$a5, $14		# a5 = EPC
+	daddiu	$k0, $a5, 4		# EPC += 4 to bump PC forward on ERET
+	dmtc0	$k0, $14
+	ssnop
+	ssnop
+	ssnop
+	ssnop
+	eret
+.end \name
+
+.ifdef COUNTING_EXCEPTION_HANDLER_STORE_TO_MEM
+.data
+trap_count:
+		.8byte 0
+.size trap_count, 8
+.text
+.endif
+
+.endm
+
         
 # The maximum number of hw threads (threads*cores) we expect for
 # any configuration. This is so that we can allocate a conservative
