@@ -228,6 +228,20 @@ max_thread_count = 32
         #csetoffset \dest, \dest, $at
 .endm
 
+.macro cgetnull dest
+	cfromptr \dest, $c1, $zero
+.endm
+
+.macro CFromInt dest, src
+	cgetnull \dest
+	cincoffset \dest, \dest, \src
+.endm
+
+.macro CFromIntImm dest, value, tmpreg=at
+	dli $\tmpreg, \value
+	CFromInt \dest, $\tmpreg
+.endm
+
 
 .macro jump_to_usermode function
 		# To test user code we must set up a TLB entry.
@@ -238,7 +252,7 @@ max_thread_count = 32
 		dla	$a0, \function		# Load address of testcode
 		and	$a2, $a0, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
 		dsrl	$a3, $a2, 6		# Put PFN in correct position for EntryLow
-		or	$a3, 0x13   		# Set valid and global bits, uncached
+		ori	$a3, $a3, 0x13		# Set valid and global bits, uncached
 		dmtc0	$a3, $2			# TLB EntryLow0
 		daddu	$a4, $a3, 0x40		# Add one to PFN for EntryLow1
 		dmtc0	$a4, $3			# TLB EntryLow1
@@ -254,8 +268,8 @@ max_thread_count = 32
 		dmtc0	$t2, $12		# Write status
 		nop
 		nop
-		eret				# Jump to test code
 		nop
+		eret				# Jump to test code
 		nop
 .endm
 
