@@ -101,10 +101,7 @@ with_access_sys_regs:
 	cgetpcc $c15
 	csetoffset $c14, $c14, $zero	# set offset to 0 to simplify checks
 
-	.set at		# jump_to_usermode needs $at
 	jump_to_usermode userspace_test
-	.set noat
-
 END_TEST
 
 
