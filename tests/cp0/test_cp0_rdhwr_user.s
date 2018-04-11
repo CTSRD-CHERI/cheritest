@@ -24,24 +24,12 @@
 # Test that CP0 is not accessible from user mode when the coprocessor
 # enable bit is not set.
 
-.set mips64
-.set noreorder
-.set nobopt
+.include "macros.s"
 
-.global test
-test:   .ent    test
-		daddu	$sp, $sp, -16
-		sd	$ra, 8($sp)
-		sd	$fp, 0($sp)
-		daddu	$fp, $sp, 16
-
-		jal     bev_clear
-		nop
-		
+BEGIN_TEST
 		#
 		# Install exception handler
 		#
-
 		dla	$a0, exception_handler
 		jal 	bev0_handler_install
 		nop
@@ -50,51 +38,18 @@ test:   .ent    test
 		# Set CP0.HWREna to zero, so that user-mode programs do not
 		# have access to hardware registers via rdhwr.
 		#
-
 		dmtc0	$zero, $7
 
-                # To test user code we must set up a TLB entry.
-	
- 		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
-		dmtc0	$zero, $0		# TLB index 
-		dmtc0	$zero, $10		# TLB entryHi
-
-		dla     $a0, testcode		# Load address of testcode
-		and     $a2, $a0, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
-		dsrl    $a3, $a2, 6		# Put PFN in correct position for EntryLow
-		or      $a3, 0x13   		# Set valid and global bits, uncached
-		dmtc0	$a3, $2			# TLB EntryLow0
-		daddu 	$a4, $a3, 0x40		# Add one to PFN for EntryLow1
-		dmtc0	$a4, $3			# TLB EntryLow1
-		tlbwi				# Write Indexed TLB Entry
-
-		dli	$a5, 0			# Initialise test flag
-	
-		and     $k0, $a0, 0xfff		# Get offset of testcode within page.
-	        dmtc0   $k0, $14		# Put EPC
-                dmfc0   $t2, $12                # Read status
-                ori     $t2, 0x12               # Set user mode, exl
-                and     $t2, 0xffffffffefffffff # Clear cu0 bit
-                dmtc0   $t2, $12                # Write status
-                nop
-                nop
-	        eret                            # Jump to test code
-                nop
-                nop
-
-the_end:	
-		ld	$ra, 8($sp)
-		ld	$fp, 0($sp)
-		jr      $ra
-		daddu	$sp, $sp, 16
-.end    test
+		jump_to_usermode testcode
+the_end:
+END_TEST
 	
 testcode:
 		nop
 		add	$a5, 1			# Set the test flag
 		.set push
 		.set mips32r2
-		rdhwr 	$a1, $29
+		rdhwr 	$a1, $29		# This should trap and end the test
 		.set pop
 
 exception_handler:
