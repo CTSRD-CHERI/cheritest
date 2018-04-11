@@ -32,13 +32,6 @@
 # access the kernel-only registers.
 #
 
-.macro SetSpecialRegOffset reg, imm
-	CGet\reg	$c1
-	dli		$at, \imm
-	CSetOffset	$c1, $c1, $at
-	CSet\reg	$c1
-.endm
-
 .macro try_write_cap_hwreg cap_hwreg_number, cause_capreg
 	clear_counting_exception_handler_regs
 	CWriteHwr $c1, \cap_hwreg_number

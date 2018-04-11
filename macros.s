@@ -131,7 +131,8 @@
 	dmfc0	$a5, $14		# a5 = EPC
 	daddiu	$k0, $a5, 4		# EPC += 4 to bump PC forward on ERET
 	dmtc0	$k0, $14
-	ssnop
+	# move exception count to $v0 to simplify tests that don't use user mode
+	move	$v0, $a1	# instead of ssnop
 	ssnop
 	ssnop
 	ssnop
@@ -289,6 +290,14 @@ max_thread_count = 32
 	CFromInt \dest, $\tmpreg
 .endm
 
+# Does a CSetOffset with an immediate value on a special capability register
+# E.g. `SetSpecialRegOffset Default, 0x123` or `SetSpecialRegOffset EPCC, 0x123`
+.macro SetSpecialRegOffset reg, imm
+	CGet\reg	$c1
+	dli		$at, \imm
+	CSetOffset	$c1, $c1, $at
+	CSet\reg	$c1
+.endm
 
 .macro jump_to_usermode function
 	.set push
