@@ -21,28 +21,17 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+.include "macros.s"
+
 # Simple TLB test which configures a TLB entry for the lowest virtual
 # page in the user address space and attempts a to execute code in it,
 # returning via a system call.
 
-.set mips64
-.set noreorder
-.set nobopt
-
-.global test
-test:   .ent    test
-		daddu	$sp, $sp, -16
-		sd	$ra, 8($sp)
-		sd	$fp, 0($sp)
-		daddu	$fp, $sp, 16
-
-		jal     bev_clear
-		nop
-		
+BEGIN_TEST
 		# Install exception handler
 		dla	$a0, exception_handler
 		jal 	bev0_handler_install
-		nop		
+		nop
 	
 		#
 		# Check to see if we already have a TLB entry for page 0
@@ -91,11 +80,7 @@ L1:
 		nop
 
 after_syscall:	
-		ld	$ra, 8($sp)
-		ld	$fp, 0($sp)
-		jr      $ra
-		daddu	$sp, $sp, 16
-.end    test
+END_TEST
 	
 testcode:
         .rept 10

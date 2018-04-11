@@ -21,23 +21,13 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+.include "macros.s"
+
 # Simple TLB test which configures a read only TLB entry for the
 # lowest virtual page in the xuseg segment and attempts a store via it.
 
-.set mips64
-.set noreorder
-.set nobopt
+BEGIN_TEST
 
-.global test
-test:   .ent    test
-		daddu	$sp, $sp, -16
-		sd	$ra, 8($sp)
-		sd	$fp, 0($sp)
-		daddu	$fp, $sp, 16
-
-		jal     bev_clear
-		nop
-		
 		# Install exception handler
 		dla	$a0, exception_handler
 		jal 	bev0_handler_install
@@ -67,11 +57,7 @@ illegal_store:  sd      $t0, 0($a4)		# Store to write protected virtual address
 
 		ld      $a5, 0($a4)             # Load what we just stored.
 
-		ld	$ra, 8($sp)
-		ld	$fp, 0($sp)
-		jr      $ra
-		daddu	$sp, $sp, 16
-.end    test
+END_TEST
 
 exception_handler:
 		dmfc0   $a6, $13		# Cause

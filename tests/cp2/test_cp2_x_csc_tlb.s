@@ -26,26 +26,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+.include "macros.s"
+
 #
 # Test that trying to store a capability raises an exception if the
 # 'disable capability store' bit is set in the TLB entry for the page.
 #
 
-.include "macros.s"
-.set mips64
-.set noreorder
-.set nobopt
-
-.global test
-test:   .ent    test
-		daddu	$sp, $sp, -16
-		sd	$ra, 8($sp)
-		sd	$fp, 0($sp)
-		daddu	$fp, $sp, 16
-
-		jal     bev_clear
-		nop
-		
+BEGIN_TEST
 		#
 		# Install exception handler
 		#
@@ -57,7 +45,7 @@ test:   .ent    test
 		#
                 # To test user code we must set up a TLB entry.
 		#
-	
+.set at
 		#
 		# Write 0 to page mask i.e. 4k pages
 		#
@@ -107,13 +95,10 @@ test:   .ent    test
                 nop
                 nop
 
-the_end:	
-		ld	$ra, 8($sp)
-		ld	$fp, 0($sp)
-		jr      $ra
-		daddu	$sp, $sp, 16
-.end    test
-	
+the_end:
+END_TEST
+
+
 testcode:
 		nop
 		dli	$a5, 1			# Set the test flag
