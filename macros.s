@@ -104,33 +104,28 @@
 # a3 = capcause (cgetcause $a3)
 # a4 = BadVAddr
 # a5 = EPC
+# a6 = Status
 # On return it just jumps to EPC+4 (i.e. it doesn't handle traps in branches/jumps)
 # This handler also allows exiting from usermode by treating sycall as a request to exit
 .macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler
 .text
 .ent \name
 \name:
+	# Check if this is a syscall and exit if it is
+	dmfc0 	$k0, $13		# k0 = Cause
+	andi	$k1, $k0, (0x1f << 2)	# Extract the cause bits
+	daddiu	$k1, -(8 << 2)		# Syscall is cause 8
+	beqz	$k1, .Lsyscall
+	nop
 	# increment trap_count and keep result in a1
 	__get_counting_trap_handler_count $a1	# get old exception count
 	daddiu $a1, $a1, 1			# a1 = new exception count
 	__set_counting_trap_handler_count $a1	# save exception count value
-	dmfc0 	$a2, $13		# a2 = Cause
-	cgetcause $a3			# a3 = CapCause
-	dmfc0	$a4, $8			# a4 = BadVaddr
-
-	# Check if this is a syscall and exit if it is
-	li	$k0, (8 << 2)		# Syscall is cause 8
-	andi	$k1, $a2, (0x1f << 2)	# Extract the cause bits
-	bne $k0, $k1, .Lnot_syscall
-	nop
-.Lsyscall:
-	# For now just exit the test on any syscall trap
-	# TODO: should we check for code == 42?
-	# dmfc0 	$k1, $8, 1	# Get BadInstr
-
-	# On exit store total exception count in v0
-	j finish
-	daddiu	$v0, $a1, -1	# subtract 1 to not count this syscall exception
+	move 	$a2, $k0			# a2 = Cause
+	# FIXME: this should only be done if CP2 is enabled!
+	cgetcause $a3				# a3 = CapCause
+	dmfc0	$a4, $8				# a4 = BadVaddr
+	dmfc0   $a6, $12			# a6 = status
 .Lnot_syscall:
 	# Otherwise skip the instruction and return from the handler
 	dmfc0	$a5, $14		# a5 = EPC
@@ -141,6 +136,14 @@
 	ssnop
 	ssnop
 	eret
+.Lsyscall:
+	# For now just exit the test on any syscall trap
+	# TODO: should we check for code == 42?
+	# dmfc0 	$k1, $8, 1	# Get BadInstr
+	# On exit store total exception count in v0
+	__get_counting_trap_handler_count $v0	# get exception count in $v0
+	j finish
+	nop
 .end \name
 
 .ifdef COUNTING_TRAP_HANDLER_STORE_TO_MEM
@@ -288,6 +291,8 @@ max_thread_count = 32
 
 
 .macro jump_to_usermode function
+	.set push
+	.set at
 		# To test user code we must set up a TLB entry.
 		dmtc0	$zero, $5		# Write 0 to page mask i.e. 4k pages
 		dmtc0	$zero, $0		# TLB index
@@ -315,6 +320,7 @@ max_thread_count = 32
 		nop
 		eret				# Jump to test code
 		nop
+	.set pop
 .endm
 
 .macro branch_if_is_qemu target_label, tmpreg
