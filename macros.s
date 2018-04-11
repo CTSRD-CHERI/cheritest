@@ -201,7 +201,6 @@ trap_count:
 	.set mips64
 	.set noreorder
 	.set nobopt
-	.set noat
 .endm
 
 # Define the test function. Optional argument 1 can be used to declare
