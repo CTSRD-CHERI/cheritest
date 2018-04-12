@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
 from nose.plugins.attrib import attr
 import copy
 
@@ -36,6 +36,7 @@ import copy
 #
 @attr('capabilities')
 @attr('cap_hwregs')
+@xfail_gnu_binutils
 class test_cp2_x_creadhwr_kernel_perm(BaseBERITestCase):
     def test_pcc_has_no_access_sys_regs(self):
         self.assertCapPermissions(self.MIPS.c14, self.max_permissions & ~1024,
