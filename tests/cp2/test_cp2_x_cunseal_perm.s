@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013-2014 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -29,10 +30,6 @@
 #
 
 .include "macros.s"
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
 
 #
 # Test that cunseal checks for permitSeal permission
@@ -41,26 +38,7 @@
 sandbox:
 		creturn
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
+BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		#
 		# Make $c1 a data capability for 'data'
 		#
@@ -95,33 +73,16 @@ test:		.ent test
 
 		cmove	$c4, $c0
 
+		clear_counting_exception_handler_regs
 		cunseal $c4, $c3, $c2 # This should raise an exception
+		save_counting_exception_handler_cause $c5	# store trap info in $c5
 
 		# The exception handler should return to here, and
 		# $c4 should have been unchanged by the failed attempt to
 		# unseal, so $c4.base should be 0.
 		cgetbase $a0, $c4
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
-
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
-		.end bev0_handler
+END_TEST
 
 		.data
 		.align	12

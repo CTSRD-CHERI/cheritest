@@ -31,24 +31,20 @@ from nose.plugins.attrib import attr
 #
 # Test that cunseal raises a C2E exception if it doesn't have Permit_Seal
 #
-
+@attr('capabilities')
 class test_cp2_x_cunseal_perm(BaseBERITestCase):
 
-    @attr('capabilities')
-    def test_cp2_x_cunseal_perm_1(self):
+    def test_cp2_x_cunseal_result(self):
         '''Test cunseal did not unseal when did not have Permit_Seal'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
             "cunseal unsealed when did not have permission")
 
-    @attr('capabilities')
-    def test_cp2_x_cunseal_perm_2(self):
-        '''Test cunseal raises an exception does not have Permit_Seal'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "cunseal did not raise an exception when did not have permission")
+    def test_cp2_x_cunseal_capcause(self):
+        self.assertRegisterEqual(self.MIPS.a3, 0x1b02)
+        self.assertCp2Fault(self.MIPS.c5, cap_reg=2, trap_count=1,
+                            cap_cause=self.MIPS.CapCause.Permit_Unseal_Violation,
+                            msg="Capability cause was not set correcly when cunseal did not have permission")
 
-    @attr('capabilities')
-    def test_cp2_x_cunseal_perm_3(self):
-        '''Test capability cause was set correcly when cunseal did not have Permit_Seal'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1b02,
-            "Capability cause was not set correcly when cunseal did not have permission")
+    def test_trap_count(self):
+        self.assertRegisterEqual(self.MIPS.v0, 1, "Expected one trap")
 

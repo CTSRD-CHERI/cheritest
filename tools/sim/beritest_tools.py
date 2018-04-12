@@ -419,8 +419,8 @@ class BaseBERITestCase(unittest.TestCase):
             self.assertCapPermissions(cap.perms, perms, msg + "has wrong permissions")
 
     def assertCompressedTrapInfo(self, capreg, mips_cause=-1, cap_cause=None,
-                                 cap_reg=None, trap_count=None, no_trap=False, msg=None):
-        # type: (Capability, int, int, int, int, bool, str) -> None
+                                 cap_reg=None, trap_count=None, no_trap=False, msg=""):
+        # type: (BaseBERITestCase, Capability, int, int, int, int, bool, str) -> None
         '''
         :param capreg: The register containing the compressed exception info
                        (see save_counting_exception_handler_cause in macros.s)
@@ -449,6 +449,17 @@ class BaseBERITestCase(unittest.TestCase):
         if trap_count is not None:
             value = capreg.offset >> 32  # Bits 32-63
             self.assertRegisterEqual(value, trap_count, msg + ": trap count wrong")
+
+    def assertCp2Fault(self, capreg, cap_cause, cap_reg=None, trap_count=None, msg=""):
+        # type: (BaseBERITestCase, Capability, int, int, int, str) -> None
+        """
+            Check that capreg holds compressed trap info
+        """
+        self.assertCompressedTrapInfo(capreg, mips_cause=MipsStatus.Cause.COP2,
+                                      cap_cause=cap_cause, cap_reg=cap_reg,
+                                      trap_count=trap_count, msg=msg)
+
+
 
 class BaseICacheBERITestCase(BaseBERITestCase):
     '''Abstract base class for test cases for the BERI Instruction Cache.'''

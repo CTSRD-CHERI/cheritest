@@ -174,18 +174,23 @@ trap_count:
 # Bits 32-63 are the exception count
 # This assumes Exception count is in a1, CPO_Cause is in a2 and Capcause in a3
 # See DEFINE_COUNTING_CHERI_TRAP_HANDLER
+# This does not change the values of $a1, $a2 or $a3
 .macro save_counting_exception_handler_cause capreg
-	# Clear the high 48 bits of $a2 (CPO_Cause) and shift by 16
-	andi	$a2, $a2, 0xffff
-	dsll	$a2, 16
-	# Ensure the high bits of capcause are empty
+	.set push
+	.set noat
+	# Clear the high 48 bits of $a2 (CPO_Cause) into $at and shift by 16
+	andi	$at, $a2, 0xffff
+	dsll	$at, 16			# Bits 16-31 set
+	# Ensure the high bits of capcause are empty (they should be anyway)
 	andi	$a3, $a3, 0xffff
+	or	$at, $at, $a3		# Add capcause in bits 0-16
 	# Shift exception count to the high 32 bits
+	# Strictly speaking this modifies $a1 but it should never use more than 32 bits
 	dsll	$a1, $a1, 32
-	# combine all the values and store in capreg offset field
-	or	$a3, $a3, $a1
-	or	$a3, $a3, $a2
-	CFromInt	\capreg, $a3
+	or	$at, $at, $a1		# Add count in bits 31-63
+	dsra	$a1, $a1, 32		# restore $a1
+	CFromInt	\capreg, $at	# store result in capreg
+	.set pop
 .endm
 
 # Invokes the special syscall trap that will instruct the
