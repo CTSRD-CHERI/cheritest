@@ -51,7 +51,7 @@ test:		.ent test
 		candperm $c2, $c2, $t0
 		cseal	$c2, $c2, $c1
 
-		dli	$t0, 0x80	# Permit_Seal
+		dli	$t0, 0x200	# Permit_Unseal
 		candperm $c1, $c1, $t0
 
 		cunseal	$c1, $c2, $c1

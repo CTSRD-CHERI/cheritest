@@ -66,7 +66,7 @@ test:		.ent test
 		# Make $c1 local
 		#
 
-		dli      $t0, 0x80 # Permit_Seal (not Global)
+		dli      $t0, 0x200 # Permit_Unseal (not Global)
 		candperm $c1, $c1, $t0
 
 		#

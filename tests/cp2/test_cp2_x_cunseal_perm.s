@@ -83,10 +83,11 @@ test:		.ent test
 		cseal	$c3, $c1, $c2
 
 		#
-		# Remove Permit_Seal permission from $c2
+		# Remove Permit_Unseal permission from $c2
 		#
 
-		candperm $c2, $c2, $zero
+                dli      $t0, 0xfffffdff
+		candperm $c2, $c2, $t0
 
 		#
 		# Clear $c4 so we can later tell if its been modified
