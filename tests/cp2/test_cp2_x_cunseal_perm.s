@@ -64,7 +64,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		# Remove Permit_Unseal permission from $c2
 		#
 
-                dli      $t0, 0xfffffdff
+		dli	$t0, ~__CHERI_CAP_PERMISSION_PERMIT_UNSEAL__
 		candperm $c2, $c2, $t0
 
 		#

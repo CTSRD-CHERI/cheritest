@@ -348,6 +348,7 @@ max_thread_count = 32
 .endm
 
 
+# These macros names are so long to match the names used in clang
 .set __CHERI_CAP_PERMISSION_GLOBAL__, 1
 .set __CHERI_CAP_PERMISSION_PERMIT_EXECUTE__, 2
 .set __CHERI_CAP_PERMISSION_PERMIT_LOAD__, 4
