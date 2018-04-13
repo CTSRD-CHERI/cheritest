@@ -130,7 +130,7 @@ ifeq ($(CAP_SIZE),256)
 PERM_SIZE?=31
 endif
 ifeq ($(CAP_SIZE),128)
-PERM_SIZE?=19
+PERM_SIZE?=15
 endif
 L3_SIM?=l3mips
 SAIL_DIR?=~/bitbucket/sail
