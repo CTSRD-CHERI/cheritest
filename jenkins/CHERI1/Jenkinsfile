@@ -33,7 +33,7 @@ JobConfig getJobParameters() {
 					testArgs: 'COP1=1 CLANG=0 NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-CAP128-TEST": [
 					buildArgs: 'CAP128=True',
-					testArgs: 'GENERIC_L1=1 CAP_SIZE=128 PERM_SIZE=19 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached nosetest'],
+					testArgs: 'GENERIC_L1=1 CAP_SIZE=128 PERM_SIZE=15 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached nosetest'],
 			"CHERI1-MICRO-TEST": [
 					buildArgs: 'MICRO=True CAP=True NOWATCH=True',
 					testArgs: 'CHERI_MICRO=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'],
