@@ -28,7 +28,8 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_raw_counterdev(BaseBERITestCase):
+class test_raw_rma_read(BaseBERITestCase):
+
     @attr('counterdev')
     def test_t0(self):
         self.assertRegisterEqual(self.MIPS.t0, 0x900000007f800000, "Unexpected counter address")
