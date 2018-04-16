@@ -158,7 +158,7 @@ test:		.ent test
 		# Branches
 		#
 
-		cbts $c1, L1
+		cbts	$c1, L1
 		nop
 L1:
 		cbtu	$c1, L2
@@ -170,6 +170,12 @@ L3:
 		cjr	$c4
 		nop
 L4:
+		cbez	$c1, L5
+		nop
+L5:
+		cbnz	$c1, L6
+		nop
+L6:
 
 		#
 		# Loads and stores
