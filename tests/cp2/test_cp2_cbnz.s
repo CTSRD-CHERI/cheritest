@@ -46,7 +46,7 @@ test:		.ent test
 		dli	$a0, 0
 		dli	$a2, 0
 		cmove	$c22, $c0
-		.word 0x4a560003 # cbnz	$c22, 16 # This branch should be taken
+		cbnz	$c22, L1	# This branch should be taken
 		dli	$a2, 1  # Branch delay slot is executed even if branch
 		dli     $a0, 1
 		nop
@@ -55,7 +55,7 @@ L1:
 		nop
 		dli	$a1, 0
 		cfromptr $c22, $c0, $0
-		.word 0x4a560003 # cbnz	$c22, 16	# This branch should not be taken
+		cbnz	$c22, L2	# This branch should not be taken
 		nop 		# Branch delay slot
 		dli	$a1, 1
 		nop
