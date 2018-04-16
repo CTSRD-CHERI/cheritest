@@ -36,4 +36,4 @@ class test_cp2_x_multiop_disabled(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_x_multiop_disabled_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 56, "Unexpected number of exceptions raised during test of CP2 operations with CP2 disabled")
+        self.assertRegisterEqual(self.MIPS.a2, 59, "Unexpected number of exceptions raised during test of CP2 operations with CP2 disabled")

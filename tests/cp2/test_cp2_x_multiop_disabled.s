@@ -213,6 +213,14 @@ L6:
 		cclearhi 0x1
 
 		#
+		# Capability register move instructions
+		#
+
+		cmove	$c2, $c1
+		cmovz	$c2, $c1, $zero
+		cmovn	$c2, $c1, $zero
+
+		#
 		# Enable CP2
 		#
 
