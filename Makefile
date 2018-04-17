@@ -1021,6 +1021,7 @@ TEST_CP2_FILES=					\
 		test_cp2_clc_perm_tag.s		\
 		test_cp2_csetbounds_rounding.s  \
 		test_cp2_csch_align.s		\
+		test_cp2_ctestsubset.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
