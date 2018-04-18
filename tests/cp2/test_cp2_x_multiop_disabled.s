@@ -153,6 +153,7 @@ test:		.ent test
 		cle $t0, $c1, $c1
 		cltu $t0, $c1, $c1
 		cleu $t0, $c1, $c1
+		ctestsubset $t0, $c1, $c1
 
 		#
 		# Branches
