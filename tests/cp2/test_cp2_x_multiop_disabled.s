@@ -136,6 +136,7 @@ test:		.ent test
 		cincoffset $c2, $c1, $zero
 		cseal $c2, $c1, $c1
 		csetbounds $c2, $c1, $zero
+		csetboundsexact $c2, $c1, $zero
 		csetcause $zero
 		csetoffset $c2, $c1, $zero
 		csub $t0, $c1, $c1
