@@ -96,7 +96,21 @@ sandbox:
 		cltu	$t0, $c29, $c1
 		cleu	$t0, $c1, $c29
 		cleu	$t0, $c29, $c1
+		ctestsubset $t0, $c1, $c29
+		ctestsubset $t0, $c29, $c1
 		
+		#
+		# Register moves
+		#
+
+		cmove	$c29, $c1
+		cmove	$c1, $c29
+		cmovz	$c29, $c1, $zero
+		cmovz	$c1, $c29, $zero
+		dli	$t1, 1
+		cmovn	$c29, $c1, $t1
+		cmovn	$c1, $c29, $t1
+
 		#
 		# Loads and stores
 		#
