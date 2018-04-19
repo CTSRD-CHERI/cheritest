@@ -267,6 +267,11 @@ l3:
 		cfromptr $c3, $c1, $zero
 		ctoptr	 $t0, $c1, $c2
 
+		cbuildcap $c3, $c2, $c1
+		ccopytype $c3, $c2, $c1
+		ccseal   $c3, $c1, $c1
+		ctestsubset $a0, $c1, $c2
+
 		# Dump registers in the simulator
 		mtc0 $v0, $26
 		nop
