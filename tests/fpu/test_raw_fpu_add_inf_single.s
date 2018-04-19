@@ -57,7 +57,7 @@ start:
 		add.s $f3, $f1, $f2
 		mfc1 $a0, $f3
 
-		lui $t0, 0xff80		# IEEE 743 -infinity
+		lui $t0, 0xff80		# IEEE 754 -infinity
 		mtc1 $t0, $f2
 
 		add.s $f3, $f1, $f2
