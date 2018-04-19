@@ -647,7 +647,10 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_mov_ex.s \
 		test_raw_fpu_add_inf_d64.s \
 		test_raw_fpu_rounding_mode.s \
-		test_raw_fpu_trunc_l_s_nan_d64.s
+		test_raw_fpu_trunc_l_s_nan_d64.s \
+		test_raw_fpu_ceil_nan_d64.s \
+		test_raw_fpu_ceil_w_d_nan_d64.s \
+		test_raw_fpu_ceil_l_s_nan_d64.s
 
 RAW_PS_FILES=\
 		test_raw_fpu_abs_ps.s		\
