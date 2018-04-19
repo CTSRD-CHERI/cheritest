@@ -44,7 +44,9 @@ test:		.ent test
 		daddu	$fp, $sp, 32
 
 		dli	$a0, 0
-		dli	$a1, 0
+		dli	$a1, 2
+		dli	$a2, 0
+		dli	$a3, 2
 
 		#
 		# $c1 contains a capability for the array 'data'
