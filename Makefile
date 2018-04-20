@@ -653,7 +653,10 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_ceil_l_s_nan_d64.s \
 		test_raw_fpu_floor_l_s_nan_d64.s \
 		test_raw_fpu_floor_nan_d64.s \
-		test_raw_fpu_floor_w_d_nan_d64.s
+		test_raw_fpu_floor_w_d_nan_d64.s \
+		test_raw_fpu_round_l_s_nan_d64.s \
+		test_raw_fpu_round_nan_d64.s \
+		test_raw_fpu_round_w_d_nan_d64.s
 
 RAW_PS_FILES=\
 		test_raw_fpu_abs_ps.s		\
