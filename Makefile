@@ -1033,6 +1033,7 @@ TEST_CP2_FILES=					\
 		test_cp2_csch_align.s		\
 		test_cp2_ctestsubset.s		\
 		test_cp2_ccopytype.s		\
+		test_cp2_cbuildcap.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
