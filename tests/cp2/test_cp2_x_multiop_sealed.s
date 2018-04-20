@@ -116,6 +116,7 @@ test:		.ent test
 		cseal $c2, $c1, $c3
 		cseal $c2, $c3, $c1
 		csetbounds $c2, $c1, $zero
+		csetboundsexact $c2, $c1, $zero
 		# csetoffset is complicated
 		# ctoptr does not check the sealed bit
 		# cunseal requires a sealed capability, so don't test
