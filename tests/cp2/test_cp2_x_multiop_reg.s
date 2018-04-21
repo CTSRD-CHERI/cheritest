@@ -37,7 +37,7 @@
 
 #
 # Test that (some) CP2 instructions raise an exception if one of the operands
-# is a reserved registwr and PCC does not grant permission to access it.
+# is a reserved register and PCC does not grant permission to access it.
 #
 
 sandbox:
@@ -135,6 +135,22 @@ sandbox:
 
 		cclearhi 0x2000
 
+		#
+		# Branches
+		#
+
+		cbez	$c29, L1
+		nop
+L1:
+		cbnz	$c29, L2
+		nop
+L2:
+		cbts	$c29, L3
+		nop
+L3:
+		cbtu	$c29, L4
+		nop
+L4:
 		cjr	$c24
 		nop		# Branch delay slot
 
