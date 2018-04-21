@@ -36,7 +36,6 @@
 .set noreorder
 .set nobopt
 .set noat
-
 .include "macros.s"
 
 # Contants used by lib.s to refer to exception vectors 

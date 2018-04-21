@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test of reading *ptr after reading ptr. In the POWER memory model, this
 # is guaranteed not to be reordered in a multicore system.
@@ -43,13 +43,7 @@
 # to 2 by core 0.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 
 		#
 		# At the beginning, all threads other than thread zero will
@@ -203,12 +197,7 @@ not_thread0:
 other_core:
 end:
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 

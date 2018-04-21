@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # These are regression tests to check that arithmetic results on
 # general-purpose registers are properly forward into CP2 inputs.  A bug
@@ -41,13 +41,7 @@
 # 'before' or 'after' value was used.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dla	$s0, data
 
 		# Test cincoffset
@@ -74,12 +68,7 @@ test:		.ent test
 		csetoffset	$c5, $c5, $t3
 		cgetoffset	$a3, $c5
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 # Word to load for feeding into tests.
 		.data

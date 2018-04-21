@@ -29,6 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
 		.text
 		.global start

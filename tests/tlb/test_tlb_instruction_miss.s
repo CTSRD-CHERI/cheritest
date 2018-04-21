@@ -26,22 +26,12 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-#.set noat
+.include "macros.s"
 
 #
 # Test that a very simple TLB handler using the automatically filled EntryHi will work as expected.
 #
-
-		.global test
-test:		.ent test
-		daddu 		$sp, $sp, -32
-		sd		$ra, 24($sp)
-		sd		$fp, 16($sp)
-		daddu		$fp, $sp, 32
-
+BEGIN_TEST
 		jal		bev_clear
 		nop
 
@@ -82,12 +72,7 @@ mapped_code:
 		dli		$a5, 0xbeef
 	
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Exception handler.  This exception handler sets EPC to the original victim instruction,

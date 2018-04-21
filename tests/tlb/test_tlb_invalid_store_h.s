@@ -43,19 +43,11 @@
 # s4: Status
 # s5: Cause
 # s6: EPC
-	
-.set mips64
-.set noreorder
-.set nobopt
+
+.include "macros.s"
 
 page=0xafa # A randomly chosen (even) page
-	
-.global test
-test:   .ent    test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		#
 		# Set up 'handler' as the RAM exception handler.
@@ -95,12 +87,7 @@ test:   .ent    test
 desired_epc:	sh      $a5, 0($a4)		# Load from virtual address
 		lh      $a7, 0($a0)		# Check that the store didn't work...
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Exception handler.  

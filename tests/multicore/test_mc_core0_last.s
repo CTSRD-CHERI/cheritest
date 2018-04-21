@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # All threads return their core/thread id's, and core0 finishes last.
 #
@@ -38,13 +38,7 @@
 # core finishes first.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dmfc0	$t0, $15, 7		# Thread Id ...
 		andi	$t0, $t0, 0xffff	# ... in bottom 16 bits
 		bnez	$t0, not_core_zero	# If we're not thread zero
@@ -93,9 +87,4 @@ not_core_zero:
 		mfc0	$a1, $15, 1	# ThreadId
 		andi	$a1, $a1, 0xffff
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

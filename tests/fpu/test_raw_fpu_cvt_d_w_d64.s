@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test conversion from 32-bit int to double-precision floating point when
 # the FPU is in 64-bit mode

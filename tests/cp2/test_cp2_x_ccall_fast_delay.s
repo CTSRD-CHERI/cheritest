@@ -30,7 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 # Test whether the delay slot of ccallfast can access the IDC
 # register. As the ccallfast unseals cs and cb and installs the unsealed IDC
 # immediately, it is visible in the delay slot, and being able to read and
@@ -38,13 +38,7 @@
 # Therefore, the delay slot of ccallfast should never be allowed to read and
 # write IDC in any way.
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#

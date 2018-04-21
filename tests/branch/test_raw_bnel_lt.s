@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bnel (branch on equal, likely), less than case and forward jump.
 #

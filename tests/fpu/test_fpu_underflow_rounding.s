@@ -29,20 +29,14 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # IEEE 754 allows the check for underflow to happen either before or after
 # rounding. In this test, we do a multiplication whose exact result is
 # subnormal, but which gets rounded up to a normal value.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set the FCSR
 		#  - Round upwards
@@ -83,9 +77,4 @@ test:		.ent test
 
 		cfc1	$a1, $31
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

@@ -35,13 +35,7 @@
 # Test that CLC raises an exception if do not have Permit_Load permission.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up exception handler
 		#
@@ -69,12 +63,7 @@ test:		.ent test
 		clc	$c2, $zero, 0($c1) # This should raise an exception
 		cgetoffset $a0, $c2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop
-		.end test
+END_TEST
 
 		.ent bev0_handler
 bev0_handler:

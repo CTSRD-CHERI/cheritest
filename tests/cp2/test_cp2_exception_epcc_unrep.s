@@ -55,13 +55,7 @@
 # $c2 - saved PCC from sandbox
 # $c3 - saved EPCC from exception
 #
-                .global test
-test:           .ent test
-                daddu   $sp, $sp, -32
-                sd      $ra, 24($sp)
-                sd      $fp, 16($sp)
-                daddu   $fp, $sp, 32
-
+BEGIN_TEST
                 #
                 # Set up 'handler' as the RAM exception handler.
                 #
@@ -133,12 +127,7 @@ sandbox_end:
                 nop
 
 return:
-                ld      $fp, 16($sp)
-                ld      $ra, 24($sp)
-                daddu   $sp, $sp, 32
-                jr      $ra
-                nop                     # branch-delay slot
-                .end    test
+END_TEST
 #
 # Exception handler, which relies on the installation of KCC into PCC in order
 # to run.  This code assumes that the trap was not in a branch delay slot.

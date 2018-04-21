@@ -30,7 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test the SRL (Shift Right Logical) instruction.
 #

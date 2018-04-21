@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 # a0 - cnexeq of capability with itself, should be 0
 # a1 - cnexeq of capabilities with different offset, should be 1	
 # a2 - cnexeq of capabilities with different permissions, should be 1
@@ -37,13 +37,7 @@
 # a4 - cnexeq of capabilities with different tags, should be 1
 	
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		cgetdefault $c1
 		cmove	$c2, $c1
 		cnexeq	$a0, $c1, $c2
@@ -68,12 +62,7 @@ test:		.ent test
 		ccleartag $c2, $c2
 		cnexeq	$a4, $c1, $c2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 data:		.dword 0

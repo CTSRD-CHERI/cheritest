@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Short block comment describing the test: what instruction/behaviour are we
 # investigating; what properties are we testing, what properties are deferred

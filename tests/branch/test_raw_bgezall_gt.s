@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bgezall (branch on greater than or equal to zero and link likely,
 # signed), greater than case.  Confirm that branch decision is correct,

@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that the rdhwr instruction can be used to read the user local register.
 # The C run time uses this register to hold the thread local pointer.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		# UserLocal is readable as hardware register 29
 		# and writable as CP0 register 4, select 2.
 		# Hardware register 29 can be accessed if CP0 is accessible
@@ -66,9 +60,4 @@ test:		.ent test
 		rdhwr	$a0, $29
 		.set pop
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

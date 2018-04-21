@@ -37,13 +37,7 @@
 # ($kdc).  This replicates the work an operating system would perform in
 # order to ensure that an OS would work!
 #
-
-		.global test
-test:		.ent test
-		daddu	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		#
 		# Save out all capability registers but $kcc and $kdc.
@@ -231,12 +225,7 @@ test:		.ent test
 		daddiu	$t0, $t0, 32
 		clc 	$c31, $t0, 0($c30)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end test
+END_TEST
 
 		#
 		# 32-byte aligned storage for 30 adjacent capability

@@ -43,13 +43,7 @@
 # (Forwarding the interrupt to irq 4 should cause IP6 to be set, as IP0 and
 # IP1 are reserved for software interrupts).
 #
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dmfc0	$t0, $15, 7		# Thread Id ...
 		andi	$t0, $t0, 0xffff	# ... in bottom 16 bits
 		bnez	$t0, end		# If we're not thread zero
@@ -131,12 +125,7 @@ end:
 		dla	$t0, cleared
 		ld	$a4, 0($t0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop				# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 

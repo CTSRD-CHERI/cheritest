@@ -33,13 +33,7 @@
 .set noat
 
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		# Make $c1 differemt from $pcc
 		cgetdefault $c1
 		dli	$t0, 4
@@ -59,10 +53,5 @@ test:		.ent test
 		cgetlen    $a3, $c1
 		cgetoffset $a4, $c1
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 

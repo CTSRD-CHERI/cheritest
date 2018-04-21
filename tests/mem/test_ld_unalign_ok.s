@@ -29,30 +29,19 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test LD of an unaligned address, when the CPU supports the extension to
 # allow unaligned accesses.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dla	$t0, data
 		daddiu	$t0, $t0, 1
 		dli	$a0, 0
 		ld	$a0, 0($t0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 6

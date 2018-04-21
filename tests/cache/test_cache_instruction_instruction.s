@@ -34,6 +34,7 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
 idx10:      # need to be copied at 0x9800000000000140
             dli     $t0, 0x9800000000000280 # dest
@@ -69,13 +70,7 @@ idx404:     # need to be copied at 0x9800000000003280
             dla     $t0, finish
             jr      $t0
 idx404_end: move    $t0, $zero    # branch-delay slot
-
-        .global test
-test:   .ent    test
-        daddu   $sp, $sp, -32
-        sd      $ra, 24($sp)
-        sd      $fp, 16($sp)
-        daddu   $fp, $sp, 32
+BEGIN_TEST
 
         dli     $a0, 0x9800000000000140 # dest
         dla     $a1, idx10              # src
@@ -146,9 +141,4 @@ finish:
         nop
         nop
 
-        ld      $fp, 16($sp)
-        ld      $ra, 24($sp)
-        daddu   $sp, $sp, 32
-        jr      $ra
-        nop            # branch-delay slot
-        .end    test
+END_TEST

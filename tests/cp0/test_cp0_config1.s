@@ -29,18 +29,12 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test the inital value of CP0.config1
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dmfc0	$a0, $16, 1
 
 		andi	$a1, $a0, 0x1	# Floating point config
@@ -51,9 +45,4 @@ test:		.ent test
 		dsrl	$a3, $a0, 6
 		andi	$a3, $a3, 0x1	# CP2 config
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

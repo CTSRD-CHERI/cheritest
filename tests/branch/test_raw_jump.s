@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test jump.  Confirm that we end up in the right place, and that the branch
 # delay slot is properly executed.

@@ -37,13 +37,7 @@
 # sealed bit if it were a valid capability.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Create a sealed capability
 		#
@@ -75,12 +69,7 @@ test:		.ent test
 		cgetoffset $t0, $c2
 		dsubu	$a1, $t0, $a0
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 5

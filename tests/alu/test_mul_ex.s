@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test MUL when one of the operands is not the valid sign-extension of
 # a 32-bit value. The result is UNPREDICTABLE in the MIPS ISA.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$t0, 1
 		dsll	$t0, $t0, 32
 		daddiu	$t0, $t0, 2
@@ -58,9 +52,4 @@ test:		.ent test
 		nop
 		nop
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

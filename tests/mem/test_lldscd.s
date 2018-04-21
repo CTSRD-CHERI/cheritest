@@ -28,19 +28,14 @@
 .set mips64
 .set noreorder
 .set nobopt
+.include "macros.s"
 
 #
 # Check that various operations interrupt load linked + store conditional
 # double word.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up nop exception handler.
 		#
@@ -77,12 +72,7 @@ test:		.ent test
 		tnei	$zero, 1
 		scd	$a7, ($t1)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 
 #

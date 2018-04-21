@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test carry propogation when a positive integer subtracted from a negative
 # integer gives a result which is greater than MAXINT.
@@ -37,21 +37,10 @@
 # This is a regression test for a bug in the L3 formal model of the MIPS ISA.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$t0, 0x40000000
 		daddu	$t1, $t0, $zero
 		subu	$t1, $0, $t1
 		subu	$a0, $t0, $t1
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

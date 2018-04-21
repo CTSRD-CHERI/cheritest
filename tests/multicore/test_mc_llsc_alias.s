@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test for cache line aliasing with load linked/store conditional.
 #
@@ -40,13 +40,7 @@
 # by the MIPS ISA, which allows the block size to be anything.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dmfc0	$t0, $15, 7		# Thread Id ...
 		andi	$t0, $t0, 0xffff	# ... in bottom 16 bits
 		bnez	$t0, not_core_zero	# If we're not thread zero
@@ -119,12 +113,7 @@ loop1:
 
 end:
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 5

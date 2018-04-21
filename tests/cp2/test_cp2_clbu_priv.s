@@ -36,13 +36,7 @@
 # privileged capability.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dla	$t0, data
 		daddiu	$t1, $t0, 4
 		daddiu	$t2, $t0, 6
@@ -53,12 +47,7 @@ test:		.ent test
 		clbu	$a2, $t2, 0($c1)		# 16-bit aligned
 		clbu	$a3, $t3, 0($c1)		# 8-bit aligned
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 3

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bne (branch on not equal), less than case and backward jump.  Of
 # course, this first requires a forward jump.

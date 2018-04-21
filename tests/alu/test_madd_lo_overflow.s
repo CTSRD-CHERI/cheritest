@@ -29,18 +29,12 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Tests the case in MADD when bits should overflow from lo into hi on and add
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$t0, 65535
 		li	$t1, 65537
 		mult	$t0, $t1
@@ -53,9 +47,4 @@ test:		.ent test
 		mfhi	$a2
 		mflo	$a3
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

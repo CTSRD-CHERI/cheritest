@@ -29,8 +29,8 @@
 .set noreorder
 .set nobopt
 .set noat
-
-# Tests to exercise the MOV instructions for moving values between general purpose 
+.include "macros.s"
+# Tests to exercise the MOV instructions for moving values between general purpose
 # and floating point (COP1) registers.
 
 		.text

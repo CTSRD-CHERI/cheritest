@@ -35,13 +35,7 @@
 # Test cunseal with a local capability
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Make $c1 a template capability for type 0x1234
 		#
@@ -77,12 +71,7 @@ test:		.ent test
 
 		cgetperm $a0, $c3	
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
                 .data
                 .align  12

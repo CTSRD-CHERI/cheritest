@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test NEG.S of a "Quiet Not a Number" (QNaN), with the FPU in IEEE 754-2008
 # mode.

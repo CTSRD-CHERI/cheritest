@@ -31,20 +31,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 # Test whether it is possible to perform a fast ccall without the Permit_CCall
 # permission set on the sealed code capability.
 # Test conditions:
 # t1 must be set to 0x0: sandbox not entered.
 # t3 must be set to 0x1901: permit ccall violation on register $c1
-
-
-	.global test
-test:	.ent test
-	daddu 	$sp, $sp, -32
-	sd	$ra, 24($sp)
-	sd	$fp, 16($sp)
-	daddu	$fp, $sp, 32
+BEGIN_TEST
 
 	#
 	# Set up 'handler' as the RAM exception handler.

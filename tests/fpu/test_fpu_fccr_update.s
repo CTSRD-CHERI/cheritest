@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that an update of a floating point condition code by a comparison
 # instruction leaves the other floating point condition codes unchanged.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		mfc0 $at, $12
 		dli $t1, 1 << 29	# Enable CP1
 		or $at, $at, $t1
@@ -71,9 +65,4 @@ test:		.ent test
 		c.eq.s	$fcc2, $f0, $f0
 		cfc1	$a2, $31
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

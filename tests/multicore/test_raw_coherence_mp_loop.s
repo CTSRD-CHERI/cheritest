@@ -30,7 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Check that all the cores in the system are alive and function correctly
 #

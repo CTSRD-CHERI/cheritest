@@ -36,13 +36,7 @@
 # defined yet.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Clear the BEV flag
 		#
@@ -68,12 +62,7 @@ test:		.ent test
 
 		.word 0x49e60000	
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch delay slot
-		.end	test
+END_TEST
 
 		.ent bev0_handler
 bev0_handler:

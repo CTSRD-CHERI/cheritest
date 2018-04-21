@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Check that initial values of 'HI' and 'LO' can be loaded and are zeroed.
 # Other tests for HI and LO are in test_hilo.

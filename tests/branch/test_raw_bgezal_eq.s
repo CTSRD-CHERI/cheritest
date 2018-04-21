@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bgezal (branch on greater than or equal to zero and link, signed),
 # equal case.  Confirm that branch decision is correct, control flow is as

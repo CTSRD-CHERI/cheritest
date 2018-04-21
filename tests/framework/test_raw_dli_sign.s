@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Check that 32-bit and 64-bit load immediates of negative numbers work as
 # expected.  The former implies a sign extension on load.

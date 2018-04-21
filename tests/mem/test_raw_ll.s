@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Unit test for load linked.  ll comes in only a sign-extended flavour, unlike
 # lw.

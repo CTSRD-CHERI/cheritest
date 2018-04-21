@@ -30,7 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # These are regression tests to check that CP2 operations which entered the
 # pipeline after an exception is triggered are correctly squashed and do
@@ -41,13 +41,7 @@
 # by a capability operation. Check to see that the capability
 # state is not updated, even though capability modification instruction will
 # have entered the pipeline.
-
-		.global test
-test:		.ent test
-		daddu	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 	
 		#
 		# Set up exception handler.
@@ -102,12 +96,7 @@ test:		.ent test
 
 		mfc1	$a1, $f2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Exception handler

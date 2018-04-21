@@ -29,8 +29,9 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
-		.global start
+.global start
 start:
 		dla	$a0, dword
 

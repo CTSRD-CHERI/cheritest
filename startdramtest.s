@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # The idea is that all the information for the test is in DRAM, so this just
 # jumps to the start of DRAM

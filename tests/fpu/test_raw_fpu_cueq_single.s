@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test single-precision 'unordered or equal' (c.ueq.s)
 #

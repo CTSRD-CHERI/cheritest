@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test floating point comparisons can store the result in condition codes
 # other than $fcc0. (This feature was added in MIPS IV).
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		mfc0 $at, $12
 		dli $t1, 1 << 29	# Enable CP1
 		or $at, $at, $t1
@@ -57,9 +51,4 @@ test:		.ent test
 		nop
 		cfc1	$a0, $25
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

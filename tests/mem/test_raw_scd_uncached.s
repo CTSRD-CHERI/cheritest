@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test SCD to an uncached address. The behaviour is undefined in the MIPS
 # ISA. This is a regression test for a bug in BERI in which it deadlocked

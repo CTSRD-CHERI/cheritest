@@ -26,23 +26,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set noat
+.include "macros.s"
 
 #
 # Test CLLC when the cb does not have Permit_Load_Capability permission.
 # The capability loaded should have its tag cleared.
 #
 #
-
-
-	.global test
-test:	.ent test
-	daddu 	$sp, $sp, -32
-	sd	$ra, 24($sp)
-	sd	$fp, 16($sp)
-	daddu	$fp, $sp, 32
+BEGIN_TEST
 	
 	cgetdefault $c2
 	dli	$t0, 5		# Permit_Load and Global
@@ -63,13 +54,8 @@ test:	.ent test
 	csetoffset $c2, $c2, $t0
 	cllc 	$c1, $c2
 	cgettag $a0, $c1
-	
-	ld	$fp, 16($sp)
-	ld	$ra, 24($sp)
-	daddu	$sp, $sp, 32
-	jr	$ra
-	nop			# branch-delay slot
-	.end	test
+
+END_TEST
 	
 	.data
 	.align 5

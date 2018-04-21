@@ -31,20 +31,14 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test the case where there is a store instruction immediately after a
 # software interrupt. The store should be cancelled. This is a regression
 # test for a pipeline bug in CHERI1.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up exception handler.
 		#
@@ -109,12 +103,7 @@ test:		.ent test
 		ld	$a1, 0($a0)
 
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Our actual exception handler, which tests various properties.  This code

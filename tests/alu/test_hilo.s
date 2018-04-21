@@ -25,9 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
+.include "macros.s"
 
 #
 # Test for 'HI' and 'LO' registers used with integer multiply and divide.  The
@@ -35,13 +33,7 @@
 # is working as intended, not to fully exercise multiply or divide.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Check that we can load values into, and extract values out
 		# of HI and LO for context switching purposes.
@@ -92,9 +84,4 @@ test:		.ent test
 		mfhi	$a6
 		mflo	$a7
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

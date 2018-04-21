@@ -30,7 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test beq (branch on equal) preceeded by two loads. This case arose
 # in the strcmp function in FreeBSD and was found to be problem for

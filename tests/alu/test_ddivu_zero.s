@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test what happens when a divide by zero is followed by a trap if equal
 # testing for the divisor being zero. This instruction sequence is often
@@ -42,13 +42,7 @@
 # van be done in parallel with the test.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up exception handler
 		#
@@ -81,12 +75,7 @@ test:		.ent test
 		mfhi	$a3		# will return to 'exit'.
 
 exit:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.ent bev0_handler
 bev0_handler:

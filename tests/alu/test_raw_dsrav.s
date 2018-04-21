@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Tests the Doubleword Shift Right Arithmetic Variable instruction which is a
 # 64-bit instruction.  Any extra padding added on the left should be sign

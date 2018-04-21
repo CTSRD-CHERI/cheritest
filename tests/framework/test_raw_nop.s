@@ -29,8 +29,9 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
-		.global start
+.global start
 start:
 		# Set all registers to known values so that we can check they
 		# are unmodified after the NOP.

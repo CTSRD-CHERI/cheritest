@@ -29,14 +29,9 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
-.global test
-.ent test
-test:		
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		#
 		# Set up exception handler
@@ -74,12 +69,7 @@ test:
 
 		dmfc1	$a0, $f0
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop
-.end test
+END_TEST
 
 .ent bev0_handler
 bev0_handler:

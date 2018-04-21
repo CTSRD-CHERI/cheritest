@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Perform a few basic tests involving capability register offset: query the
 # starting offset of $c2, increase the offset, and query it again.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$t0, 100
 		dli	$a0, 1
 		dli	$a1, 2
@@ -50,9 +44,4 @@ test:		.ent test
 		cincoffset	$c2, $c2, $t0
 		cgetoffset	$a1, $c2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

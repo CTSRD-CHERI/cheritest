@@ -36,13 +36,7 @@
 # bit
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		# If the floating point unit is not present, skip the test
 		dmfc0	$t0, $16, 1
 		andi	$t0, $t0, 0x1
@@ -97,12 +91,7 @@ test:		.ent test
 		cgettag  $a2, $c1
 
 no_fpu:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 3

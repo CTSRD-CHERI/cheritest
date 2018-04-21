@@ -29,20 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
-
+.include "macros.s"
 #
 # Test that an unliagned big immediate CSC raises an unaligned exception instead of
 # a reserved instruction error
 #
 
-.global test
-.ent test
-test:
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		#
 		# Set up exception handler
@@ -67,12 +60,7 @@ test:
 		.word 0x7821ffff	# cscbi	$c1, -16($c1)
 		nop
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop
-.end test
+END_TEST
 
 .ent bev0_handler
 bev0_handler:

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test single-precision round to long word when the FPU is in 64-bit mode
 #

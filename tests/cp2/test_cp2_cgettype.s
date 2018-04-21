@@ -29,20 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 # Test behaviour of cgettype with sealed and unsealed capabilities.
 #
 # Expected values to check:
 # a0 - must be 0x01, type of the sealed capability
 # a1 - must be 0xffffffffffffffff, type of the unsealed capability
-
-	.global test
-test:
-	.ent test
-	daddu	$sp, $sp, -32
-	sd	$ra, 24($sp)
-	sd	$fp, 16($sp)
-	daddu 	$fp, $sp, 32
+BEGIN_TEST
 
 	# prepare a sealed capability
 	cgetdefault	$c1
@@ -58,9 +51,4 @@ test:
 	cgetdefault	$c2
 	cgettype	$a1, $c2
 
-	ld	$fp, 16($sp)
-	ld	$ra, 24($sp)
-	daddu	$sp, $sp, 32
-	jr	$ra
-	nop
-	.end test
+END_TEST

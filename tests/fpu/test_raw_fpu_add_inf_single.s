@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test IEEE 'infinity' value in single-precision arithmetic
 #

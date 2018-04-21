@@ -38,13 +38,7 @@
 # This is a regression test - the _cached version of the test failed.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$a0, 1
 		dla	$t0, cap1
 		csc 	$c0, $t0, 0($c0)
@@ -69,12 +63,7 @@ test:		.ent test
 		nop
 		cgetperm $a0, $c1
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align	5		# Must 256-bit align capabilities

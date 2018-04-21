@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test abs.s of a "Quiet Not a Number" (QNaN)
 #

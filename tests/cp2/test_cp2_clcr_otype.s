@@ -29,29 +29,18 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Load an untagged all 1's bit pattern into a capability register and check
 # the otype. The result depends on the bit representation of capabilities.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dla	$t0, cap
 		clc 	$c1, $t0, 0($c0)
 		cgettype $a0, $c1
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 5

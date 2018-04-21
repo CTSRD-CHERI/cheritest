@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test the pseudo-random number generator used by TLBWR.
 # In BERI1, it's not very random (intentionally, to make trace comparison
@@ -37,13 +37,7 @@
 #
 # This version of the test enables the BERI extended TLB.
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Check that the CPU supports the BERI extended TLB
 		#
@@ -234,9 +228,4 @@ thrash_loop:
 
 test_failed:
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

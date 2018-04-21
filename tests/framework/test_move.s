@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Load an immediate into $t1, then move to $t2.  In MIPS, move is actually a
 # pseudo-instruction wrapped around a no-op arithmetic instruction by the

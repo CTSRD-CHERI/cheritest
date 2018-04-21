@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test what happens to the upper bits after MOV.S. This is UNDEFINED in the
 # MIPS ISA.

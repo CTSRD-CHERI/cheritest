@@ -31,7 +31,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test the watchpoint functionality for instruction accesses.
 #
@@ -39,13 +39,7 @@
 # On cheri2 watchpoints are only accurate to 8 bytes, so control the alignment of
 # the test to ensure that desired_epc has correct alignment.
                 .align  8
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up exception handler.
 		#
@@ -103,12 +97,7 @@ desired_epc:
                 dmfc0   $a7, $19        # Read back watchHi
 
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Our actual exception handler, which tests various properties.  This code

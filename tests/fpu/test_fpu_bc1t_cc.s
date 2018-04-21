@@ -29,18 +29,12 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test BC1T with a condition flag other than $fcc0
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		mfc0 $at, $12
 		dli $t1, 1 << 29	# Enable CP1
 		or $at, $at, $t1
@@ -71,9 +65,4 @@ L2:
 L3:
 		
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

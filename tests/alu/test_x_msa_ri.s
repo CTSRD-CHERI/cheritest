@@ -29,20 +29,14 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that the MDMX/MSA major opcode raises a reserved instruction exception.
 # We reuse this instruction for the large immediate CSC and therefore it
 # should cause a trap when used without COP2 enabled
 #
 
-.global test
-.ent test
-test:
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		#
 		# Set up exception handler
@@ -73,12 +67,7 @@ test:
 		# .word 0x7830e880
 		.word 0x78000000
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop
-.end test
+END_TEST
 
 .ent bev0_handler
 bev0_handler:

@@ -30,18 +30,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Very basic test which checks that register forwarding works as it
 # should for arithmetic and load instructions.
 #
 
-	.global	test
-test:	.ent	test
-	daddu 	$sp, $sp, -32
-	sd	$ra, 24($sp)
-	sd	$fp, 16($sp)
-	daddu	$fp, $sp, 32
+BEGIN_TEST
 
 	dla     $t2, testdata
 	# initialise loop counter
@@ -146,12 +141,7 @@ loop:
 	bnez    $t0, loop
 	li      $t0, 0
 
-	ld	$fp, 16($sp)
-	ld	$ra, 24($sp)
-	daddu	$sp, $sp, 32
-	jr	$ra
-	nop			# branch-delay slot
-	.end	test
+END_TEST
 
 .data
 .align 5

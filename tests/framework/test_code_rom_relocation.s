@@ -25,10 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+.include "macros.s"
 
 #
 # This tests that we can relocate code to the exception handler address in
@@ -36,13 +33,7 @@
 # exception handling tests to work.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up 'handler' as the ROM exception handler.
 		#
@@ -62,12 +53,7 @@ back:
 		li	$t2, 3
 
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 handler:
 		dla	$a0, back

@@ -40,14 +40,9 @@
 .set mips64
 .set noreorder
 .set nobopt
-	
-.global test
-test:   .ent    test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+.include "macros.s"
 
+BEGIN_TEST
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#
@@ -91,12 +86,7 @@ desired_epc2:	sd      $a7, 0($a7)		# Load from bad kernel space address (too lar
                 move    $s1, $s2                # stash cause
 
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Exception handler.  

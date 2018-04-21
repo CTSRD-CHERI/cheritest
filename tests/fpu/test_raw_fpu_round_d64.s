@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test double-precision rounding when the FPU is in 64-bit mode
 #

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Tests the Doubleword Shift Right Logical instruction which is a 64-bit
 # instruction.  Any extra padding added on the left should be zero rather

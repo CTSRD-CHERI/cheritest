@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that the DEXT instructions (which isn't implemented by BERI) raises
 # a reserved instruction exception.
@@ -37,13 +37,7 @@
 # This is a regression test for a bug in BERI.
 #
 
-.global test
-.ent test
-test:			
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		#
 		# Set up exception handler
@@ -65,12 +59,7 @@ test:
 		dext	$a0, $t0, 1, 8
 		.set	pop
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop
-.end test
+END_TEST
 
 .ent bev0_handler
 bev0_handler:

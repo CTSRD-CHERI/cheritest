@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 # Test the 32-bit 'sub' instruction with registers whose upper 32 bits are
 # not the valid sign extension of the lower 32 bits. The result is
 # "unpredictable" according to the MIPS specification.

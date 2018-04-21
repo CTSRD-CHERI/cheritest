@@ -29,8 +29,9 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
-		.global start
+.global start
 start:
 		li	$a0, 0xffff
 		dsll	$a0, $a0, 16

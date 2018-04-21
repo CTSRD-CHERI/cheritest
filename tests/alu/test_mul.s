@@ -29,18 +29,12 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test the MUL instruction
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$t0, 2
 		dli	$t1, 3
 		mul	$a0, $t0, $t1	# 2*3 = 6
@@ -58,9 +52,4 @@ test:		.ent test
 		move	$t1, $t0
 		mul	$a3, $t0, $t1	# 2^16*2^16 mod 2^32 = 0
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test blez (branch on less than or equal to zero, signed), equal case and
 # forward jump.

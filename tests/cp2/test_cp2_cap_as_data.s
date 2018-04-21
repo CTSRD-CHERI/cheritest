@@ -29,20 +29,14 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Copy a capability as data, and then read its fields using CGetLen etc.
 # This will clear the tag bit, but operating system code (e.g. paging) might
 # rely on the other fields being copied correctly.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		cgetdefault $c1
 		dla	$t0, data
 		csetoffset $c1, $c1, $t0
@@ -86,12 +80,7 @@ test:		.ent test
 		cgetoffset $t2, $c1
 		xor	$a4, $a4, $t2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 

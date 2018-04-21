@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test single-precision arithmetic when both operands are "Quiet Not a Number" 
 # (QNaN). Which of the two QNaNs is echoed in the result is not defined in

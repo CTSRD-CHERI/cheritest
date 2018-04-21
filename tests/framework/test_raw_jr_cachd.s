@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # This is a regression test for a CHERI bug in which, following a jump into
 # cached memory, several instructions that follow the jump are read in as

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test MADD.D and MSUB.D with the FPU in 64-bit mode.
 #

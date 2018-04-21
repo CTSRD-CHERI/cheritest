@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test single-precision divide by a small number.
 # This is a regression test for a bug in gxemul.

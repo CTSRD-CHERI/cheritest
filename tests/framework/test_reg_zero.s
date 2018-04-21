@@ -25,22 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+.include "macros.s"
 
 #
 # This test checks that register zero behaves the way it should: each of
 # $t0, $t1, and $t2 should be zero as at the end, as well as $zero.
 #
 
-		.global	test
-test:		.ent	test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		# Pull an initial value out
 		move	$t0, $zero
@@ -54,9 +46,4 @@ test:		.ent	test
 		move	$zero, $t3
 		move	$t2, $zero
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

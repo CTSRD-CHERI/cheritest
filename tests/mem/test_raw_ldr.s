@@ -29,8 +29,9 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
-		.global start
+.global start
 start:
 		dli	$a1, 0xb7b6b5b4b3b2b1b0
 		move	$a2, $a1

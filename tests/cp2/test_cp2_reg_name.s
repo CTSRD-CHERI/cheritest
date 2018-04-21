@@ -41,13 +41,7 @@
 # well.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set the offset of c0 to 0, because bad things will happen
 		# if it is non-zero
@@ -117,9 +111,4 @@ test:		.ent test
 		dli		$t0, 32
 		csetoffset	$c31, $c31, $t0
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

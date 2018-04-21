@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bltzall (branch on less than zero and link likely, signed), greater
 # than case.

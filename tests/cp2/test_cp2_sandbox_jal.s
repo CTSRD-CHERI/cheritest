@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that jal (jump and link) works in a sandbox
 #
@@ -43,13 +43,7 @@ sandbox:
 		cjr     $c24
 		nop	# branch delay slot
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# $a0 will be set to 1 if sandbox is called
 		#
@@ -68,11 +62,7 @@ test:		.ent test
 		nop			# Branch delay slot
 
 finally:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# Branch delay slot
-		.end	test
+
+END_TEST
 
 

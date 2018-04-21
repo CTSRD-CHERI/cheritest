@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test a burst of sequential stores to memory from registers.  Repeat multiple
 # times so that the sequence runs from the instruction cache at least once.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$k0, 8
 
 		dla	$gp, dword
@@ -121,12 +115,7 @@ loop:
 		bne	$k0, $zero, loop
 		nop			# branch-delay slot
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 dword:		.dword	0x0000000000000000	# 0

@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that a BEV=0 trap instruction in a branch delay slot returns the right
 # EPC.  EPC should point at the branch rather than the trap instruction.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#
@@ -86,12 +80,7 @@ branch_target:
 		li	$a6, 1
 
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Exception handler.  This code assumes that the trap is in a branch-delay

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test blezl (branch on less than or equal to zero, signed), greater than case.
 #

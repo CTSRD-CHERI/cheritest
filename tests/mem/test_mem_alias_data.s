@@ -30,20 +30,14 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test for reads from aliased memory regions. It works on cheri2 because
 # addresses at the same page offset will alias in the caches, but this
 # might not work for cheri.
 #
 
-		.global test
-		.ent test
-test:
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
                 dla     $a0, page0
                 dla     $a1, page1
@@ -84,12 +78,7 @@ loop:
                 sub     $t0, 1
         
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 .data
 page0:  

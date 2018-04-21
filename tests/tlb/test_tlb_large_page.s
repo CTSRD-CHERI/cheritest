@@ -25,23 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+.include "macros.s"
 
 #
 # Map the RAM (physical address 0x40000000 and upward) at virtual address
 # 0 and upward, using 4MB pages.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
                 # Find out how many TLB entries there are
                 #
@@ -122,12 +113,7 @@ loop:
 		and	$t0, $t0, $t1
 		ld      $a6, 0($t0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 data:		.dword 0x1234

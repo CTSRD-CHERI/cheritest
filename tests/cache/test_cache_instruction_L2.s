@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Exercise cache instructions
 #
@@ -41,13 +41,7 @@
 # 
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Retrieve CP0 config register so that test cases can
 		# determine expected behaviour for our instruction sequence.
@@ -148,12 +142,7 @@ test:		.ent test
 		ld $a6, 0($t0)
 
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 # A double word of data that we will load and store via various
 # hardware-defined mappings.

@@ -40,13 +40,7 @@
 # Unlike test_cp2_cswitch, this test clears capability registers between
 # store and load to ensure that all fields are being handled properly.
 #
-
-		.global test
-test:		.ent test
-		daddu	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		# Ensure all capability registers are set to the default.
     cmove		$c1, $c0
@@ -390,12 +384,7 @@ test:		.ent test
 		daddiu	$t0, $t0, 32
 		clc 	$c31, $t0, 0($c30)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end test
+END_TEST
 
 		#
 		# 32-byte aligned storage for 30 adjacent capability

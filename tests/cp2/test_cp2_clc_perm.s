@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test CLC when the cb does not have Permit_Load_Capability permission,
 # and the capability to be loaded does not have the tag bit set.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		cgetdefault $c2
 		dli	$t0, 5		# Permit_Load and Global
 		candperm $c2, $c2, $t0
@@ -53,12 +47,7 @@ test:		.ent test
 
 		ld	$a0, 0($t0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 5

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 # Regression test for qemu bug that caused some capabilities
 # to be flagged as unrepresentable even when within bounds.
 # The bug was triggered when the representable region underflows below 0.
@@ -37,14 +37,7 @@
 # Expected values to check
 # a0 - must be 1, incoffset with positive increment works
 # a1 - must be 1, incoffset with negative increment works
-
-		.global test
-test:
-		.ent test
-		daddu	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 	
 		cgetdefault $c1
 		dli $t0, 0x130000000
@@ -63,9 +56,4 @@ test:
 		cincoffset $c2, $c1, $t0
 		cexeq $a1, $c2, $c3
 	
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop
-		.end test
+END_TEST

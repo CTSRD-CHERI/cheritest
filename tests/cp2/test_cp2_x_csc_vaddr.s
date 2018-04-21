@@ -37,13 +37,7 @@
 # register on csc address exception.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up exception handler
 		#
@@ -83,12 +77,7 @@ test:		.ent test
 		daddiu  $t0, $a4, 8
 		cld     $a1, $a4, 0($c0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.ent bev0_handler
 bev0_handler:

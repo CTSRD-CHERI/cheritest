@@ -38,13 +38,7 @@
 sandbox:
 		creturn
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		# Put a non-zero value in c1.base, so we can tell when
 		# c2 has been changed.
 		dli		$t0, 0x1000
@@ -70,9 +64,4 @@ test:		.ent test
 		cgetlen		$a2, $c2	# Should be 0x1000
 		cgettype	$a3, $c2	# Should be 0x1234
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

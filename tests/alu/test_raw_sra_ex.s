@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Tests the Shift Right Arithmetic instruction which is a 32-bit instruction
 # Any new far left bits should  be correctly sign extended.  There should be

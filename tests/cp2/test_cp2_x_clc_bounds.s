@@ -35,13 +35,7 @@
 # just after the end of the capability. This is a regression test for a
 # bug found by the automatic test generator.
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up exception handler
 		#
@@ -69,12 +63,7 @@ test:		.ent test
 		clc	$c2, $zero, 32($c1) # This should raise an exception
 		cgetoffset $a0, $c2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop
-		.end test
+END_TEST
 
 		.ent bev0_handler
 bev0_handler:

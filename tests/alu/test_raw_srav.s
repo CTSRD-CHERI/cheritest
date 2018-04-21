@@ -30,8 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
-
+.include "macros.s"
 		.global start
 start:
 		li	$t0, 0x76543210

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Regression test for a pipeline bug in which a beq following a load is
 # improperly taken, even if the two arguments differ.

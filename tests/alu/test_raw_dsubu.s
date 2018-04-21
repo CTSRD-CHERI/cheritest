@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Simple test for dsubu -- not intended to rigorously check arithmetic
 # correctness, rather, register behaviour and instruction interpretation.

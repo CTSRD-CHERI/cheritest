@@ -35,13 +35,7 @@
 # Test ctoptr with an offset that is out of bounds
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$a0, -1
 
 		cgetdefault $c1
@@ -52,9 +46,4 @@ test:		.ent test
 		
 		ctoptr $a0, $c1, $c0
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

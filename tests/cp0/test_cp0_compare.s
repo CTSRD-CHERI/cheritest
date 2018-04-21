@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Exercise CP0 count and compare functionality: read the cycle counter, set
 # the compare register to count + 1000, then spin in a loop to see if the
@@ -37,13 +37,7 @@
 # requires interrupts to be enabled.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#
@@ -102,12 +96,7 @@ eret_target:
 		mfc0	$a4, $12	# Status register after ERET
 
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Exception handler.  Query CP0 count and status registers so we can make sure

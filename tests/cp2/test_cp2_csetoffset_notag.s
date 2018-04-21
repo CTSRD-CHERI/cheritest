@@ -29,20 +29,14 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that csetoffset will work on non-capability data (i.e. tag unset)
 # that just happens to have a set bit in the position that would be the
 # sealed bit if it were a valid capability.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Create a sealed capability
 		#
@@ -75,12 +69,7 @@ test:		.ent test
 		csetoffset $c2, $c2, $t0
 		cgetoffset $a0, $c2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 5

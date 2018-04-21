@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bltzal (branch on less than zero and link, signed), less than case.
 # Confirm that branch decision is correct, control flow is as expected, that

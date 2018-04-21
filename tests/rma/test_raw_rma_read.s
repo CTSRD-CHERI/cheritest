@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that the CHERI counter device is present, returns sequential values,
 # and doesn't accept values written to it.  Explicitly use uncached xkphys

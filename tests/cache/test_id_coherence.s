@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test coherence of the intruction and data caches.
 #
@@ -41,13 +41,7 @@
 # so a MIPS_conforming CPU is not required to pass this test.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		li	$a0, 15
 		dli	$a1, 0
 		dla	$a2, L2
@@ -75,12 +69,7 @@ L2:		addi	$t0, $zero, 0
 		bgtz	$a0, L1
 		addi	$a0, $a0, -1
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 3

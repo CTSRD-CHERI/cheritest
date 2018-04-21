@@ -38,13 +38,7 @@
 .set BASE_ADDRESS, 0x9800001234567000
 .set LENGTH, 0x1000
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		# Make $c1 a template capability for the user-defined type
 		# 0x1234.
 		dli	$t0, 0x1234
@@ -83,9 +77,4 @@ test:		.ent test
 		# $c3.perm should be equal to $c2.perms
 		cgetperm $a4, $c3
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

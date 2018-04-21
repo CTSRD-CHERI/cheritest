@@ -28,18 +28,13 @@
 .set mips64
 .set noreorder
 .set nobopt
+.include "macros.s"
 
 #
 # Check that the CP0 "lladdr" register is properly updated during load linked
 # and store conditional operations.
 #
-
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 	
 		#
 		# Save addresses that will be checked in test results;
@@ -146,12 +141,7 @@ test:		.ent test
 		nop
 		dmfc0	$s6, $17
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 word1:		.word	0xffffffff

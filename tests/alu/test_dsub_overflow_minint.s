@@ -30,7 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Overflow dsub, firing an arithmetic exception handler with slightly
 # special case of subtracting maximally negative integer from itself.
@@ -39,13 +39,7 @@
 #
 
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up exception handler.
 		#
@@ -89,12 +83,7 @@ desired_epc:
 		mfc0	$a6, $12	# Status register after ERET
 
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Our actual exception handler, which tests various properties.  This code

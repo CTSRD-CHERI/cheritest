@@ -36,13 +36,7 @@
 # Test candperm with one of the user-defined permission bit set.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$a0, 1
 		dli	$a1, 2
 		dli	$a3, 3
@@ -64,9 +58,4 @@ test:		.ent test
 		candperm $c2, $c0, $t0
 		cgetperm $a3, $c2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

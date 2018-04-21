@@ -25,7 +25,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # This unit tests that registers can be properly initialised from software.
 #

@@ -29,20 +29,14 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test the pseudo-random number generator used by TLBWR.
 # In BERI1, it's not very random (intentionally, to make trace comparison
 # easy): it decrements by 1 every time TLBWR is called.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Find out how many TLB entries there are
 		#
@@ -128,9 +122,4 @@ loop:
 
 		mfc0	$a6, $1		# TLB Random
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

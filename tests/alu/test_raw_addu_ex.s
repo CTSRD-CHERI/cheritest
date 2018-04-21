@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test the 32-bit addu operation with the upper 32 bits of a 64 bit register
 # not being a valid sign extension of a 32-bit value. The result is

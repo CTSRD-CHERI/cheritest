@@ -44,13 +44,7 @@
 # CHERI1.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dmfc0	$t0, $15, 7		# Thread Id ...
 		andi	$t1, $t0, 0xffff	# ... in bottom 16 bits
 		bnez	$t1, not_core_zero	# If we're not thread zero
@@ -132,12 +126,7 @@ end:
 		dla	$a0, result
 		ld	$a0, 0($a0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 x:		.align 3

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test jump and link register.  Confirm that control flow is roughly as
 # expected, that the desired register updated, and that $ra is *not* updated.

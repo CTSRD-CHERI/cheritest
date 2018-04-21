@@ -30,18 +30,12 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that a very simple TLB handler using the automatically filled EntryHi will work as expected.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		# Initialise the in-memory page table to all zeros
 		dli     $t0, 0x9800000001000000
 		li      $t1, 64
@@ -109,12 +103,7 @@ skip_add:
 		daddi $a3, -128
 	
 return:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 #
 # Exception handler.  This exception handler sets EPC to the original victim instruction,

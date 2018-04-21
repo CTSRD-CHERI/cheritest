@@ -32,13 +32,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
-                .global test
-test:           .ent    test
-                daddu       $sp, $sp, -32
-                sd          $ra, 24($sp)
-                sd          $fp, 16($sp)
-                daddu       $fp, $sp, 32
+BEGIN_TEST
 
                 #
                 # Remove the permission to access reserved registers from
@@ -121,12 +115,8 @@ L1:
                 # check that register $a4 has been cleared on return from the sandbox
                 # nothing to actually do, just inspect the value of a4 in the test framework
                 # terminate the test
-                ld          $fp, 16($sp)
-                ld          $ra, 24($sp)
-                daddu       $sp, $sp, 32
-                jr          $ra
-                nop			# branch-delay slot
-                .end test
+
+END_TEST
 
 sandbox:        .ent sandbox
                 # landing here... setup new DDC from received IDC

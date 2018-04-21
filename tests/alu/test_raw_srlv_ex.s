@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Tests the Shift Right Logical Variable instruction which is a 32-bit
 # instruction.  Any extra padding added on the left should be zero rather

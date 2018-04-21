@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Load from an address into reg a1, and then immediately move the value into
 # a second register.  MIPS 4400 doesn't require (although does encourage)

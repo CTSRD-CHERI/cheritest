@@ -32,7 +32,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Checks that the higher regions of memory work as expected. This is a
 # regression for a bug which occurred in the switch to the AXI bus.

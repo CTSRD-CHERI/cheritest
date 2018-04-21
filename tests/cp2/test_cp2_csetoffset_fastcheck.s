@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that has different behavour depending on whether the fast
 # representable bounds check is in use for csetoffset. This
 # check is approximate, and hence architecturally visible.
 #
-
-.global test
-test:           .ent test
-        daddu   $sp, $sp, -32
-        sd      $ra, 24($sp)
-        sd      $fp, 16($sp)
-        daddu   $fp, $sp, 32
+BEGIN_TEST
 # Construct the example capability given in the paper
         dli     $t0, 0x0010000000200000
         csetoffset $c1, $c0, $t0
@@ -80,11 +74,5 @@ test:           .ent test
         cgetoffset $s2, $c5
         cgetbase   $s3, $c5
 
-        
-        ld      $fp, 16($sp)
-        ld      $ra, 24($sp)
-        daddu   $sp, $sp, 32
-        jr      $ra
-        nop                     # branch-delay slot
-.end    test
+END_TEST
 

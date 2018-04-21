@@ -55,7 +55,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 # Given two capabilities in c3 and c4 perform various comparisons
 # with tags set/unset and accumulate the answer in a0.
 # c5 and c6 are trashsed.
@@ -90,13 +90,7 @@
 		add        $a0, $v0
 .endm
 	
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Construct two equal capabilities with non-zero base and offset.
 		#
@@ -187,12 +181,7 @@ test:		.ent test
 		# Stash the answer
 		move       $a5, $a0
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 data:		.dword 0

@@ -29,17 +29,11 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		cgetdefault $c1
 		cmove	$c2, $c1
 		cexeq	$a0, $c1, $c2
@@ -59,12 +53,7 @@ test:		.ent test
 		csetbounds $c2, $c1, $t0
 		cexeq	$a3, $c1, $c2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 data:		.dword 0

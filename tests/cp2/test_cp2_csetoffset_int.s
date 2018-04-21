@@ -36,13 +36,7 @@
 # a capability register.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$a0, 2
 		dli	$a1, -1
 		cfromptr $c1, $c0, $zero	# Should clear the tag
@@ -51,9 +45,4 @@ test:		.ent test
 		csetoffset $c1, $c1, $t0	# Should succeed
 		cgetoffset $a1, $c1		# Check that offset was changed
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

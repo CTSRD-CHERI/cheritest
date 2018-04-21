@@ -43,13 +43,7 @@
 # $a2 - EPC register from last trap (should be 0x10)
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#
@@ -92,12 +86,7 @@ return:
                 # with a2
                 dla     $a3, expected_epc
         
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 
 #

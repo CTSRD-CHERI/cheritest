@@ -28,6 +28,7 @@
 .set mips64
 .set noreorder
 .set nobopt
+.include "macros.s"
 
 #
 # Test which tries the 64-bit doubleword multiplication operator with each
@@ -35,13 +36,7 @@
 # (remainder) and lo (quotient).
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$t0, 0x0fedcba987654321
 		dli	$t1, 0x0101010101010101 
 		#$zero prevents assembler adding checking instructions
@@ -67,9 +62,4 @@ test:		.ent test
 		mfhi	$a6
 		mflo	$a7
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

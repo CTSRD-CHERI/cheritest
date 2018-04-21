@@ -37,13 +37,7 @@
 # CPU.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# At the beginning, all threads other than thread zero will
 		# be spinning on reset_barrier. Thread zero will call
@@ -125,12 +119,7 @@ test_ok:
 		sync
 		ld	$a0, 0($t0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 

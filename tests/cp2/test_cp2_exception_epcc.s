@@ -71,13 +71,7 @@
 #     - length from EPCC on second trap (should be equal to $s0)
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up 'handler' as the RAM exception handler.
 		#
@@ -159,12 +153,7 @@ sandbox_end:
 restored_ra:
 		move	$a6, $ra
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 
 

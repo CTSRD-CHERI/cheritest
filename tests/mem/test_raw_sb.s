@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Unit test that stores bytes to, and then loads bytes from, memory.
 #

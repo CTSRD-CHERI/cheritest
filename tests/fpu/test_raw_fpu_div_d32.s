@@ -25,7 +25,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test double-precision division when the FPU is in 32-bit mode
 #

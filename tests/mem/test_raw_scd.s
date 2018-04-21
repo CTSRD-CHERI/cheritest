@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Unit test that stores double words to, and then loads double words from,
 # memory using store conditional.  Interruption behaviour is deferred to a

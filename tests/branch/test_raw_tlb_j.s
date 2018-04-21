@@ -30,7 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test for a sequence of instructions on Cheri2 that triggered a bug.
 # Problem occurs when a branch is already past execute when an exception

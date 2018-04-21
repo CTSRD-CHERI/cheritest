@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Initialization for multi-threaded CPUs that makes all threads apart from
 # thread 0 just spin.

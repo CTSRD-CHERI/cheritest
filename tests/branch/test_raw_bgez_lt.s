@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bgez (branch on greater than or equal to zero, signed), less than case.
 #

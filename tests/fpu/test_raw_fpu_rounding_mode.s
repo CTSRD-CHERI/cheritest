@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that the FPU supports the "round towards +infinity" rounding mode,
 # also known as RP or FE_UPWARDS.

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Load from an address into reg a1, and then immediately store the value into
 # memory.  As per raw_load_delay.s, MIPS 4400 doesn't require (although does

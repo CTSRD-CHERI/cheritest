@@ -36,13 +36,7 @@
 # query instructions are handled properly.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		# Test cgetbase
 		dli	$t0, 100
 		cgetbase	$t0, $c2	# should return 0x0
@@ -63,9 +57,4 @@ test:		.ent test
 		cgettype	$t3, $c2	# should return -1 (unsealed)
 		or	$t3, $t3, 0
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

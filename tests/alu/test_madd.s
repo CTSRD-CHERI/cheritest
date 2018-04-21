@@ -29,6 +29,7 @@
 .set mips64
 .set noreorder
 .set nobopt
+.include "macros.s"
 
 #
 # Test of madd which multiplies two 32-bit numbers and then adds the 64-bit
@@ -37,13 +38,7 @@
 # stored in hi (most-significant 32 bits) and lo (least-significant 32 bits).
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		li	$t0, 123
 		li	$t1, 0
 		mult	$t0, $t1
@@ -83,9 +78,4 @@ test:		.ent test
 		mfhi	$s0
 		mflo	$s1
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

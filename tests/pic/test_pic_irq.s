@@ -31,7 +31,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test PIC0 
 #
@@ -41,13 +41,7 @@
 # (Forwarding the interrupt to irq 4 should cause IP6 to be set, as IP0 and
 # IP1 are reserved for software interrupts).
 #
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 	        dli     $a0, 0x900000007f804000 # PIC_BASE 
 		sd	$zero, 0($a0)		# disable source 0
 		sd	$zero, 8($a0)		# disable source 1
@@ -87,9 +81,4 @@ test:		.ent test
 		sd      $t0, 256($a1)           # clear source 2   
 		ld      $a4, 0($a1)             # read interrupt pending  
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop				# branch-delay slot
-		.end	test
+END_TEST

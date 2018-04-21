@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Confirm that we can read static data from various hardware-defined mapped
 # regions:
@@ -48,13 +48,7 @@
 # mapping, not its specific caching properties.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Calculate the physical address of the memory we will be
 		# working with, which can then be offset by various segment
@@ -106,12 +100,7 @@ test:		.ent test
 		daddu	$t0, $gp, $t0
 		ld	$a1, 0($t0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 # A double word of data that we will load via various hardware-defined
 # mappings

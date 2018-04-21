@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test lld/scd with a load instruction that aliases to the same cache line
 # as the load linked address. According to the MIPS ISA, this is
@@ -41,13 +41,7 @@
 # mapped to the same cache line as x.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dla	$a0, mutex
 		lld	$a1, 0($a0)
 		dli	$a2, 1
@@ -66,12 +60,7 @@ test:		.ent test
 
 		scd	$a2, 0($a0)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 

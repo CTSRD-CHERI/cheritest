@@ -29,8 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
-
+.include "macros.s"
 .globl start
 .globl uncached_start
 #

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Unit test that load double words from memory.  Unlike shorter loads, there
 # is no distinction between sign-extended and unsigned loads, but we do

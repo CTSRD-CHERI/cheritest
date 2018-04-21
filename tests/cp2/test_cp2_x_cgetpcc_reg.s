@@ -46,13 +46,7 @@ sandbox:
 		cjr     $c24
 		nop		# branch delay slot
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up exception handler
 		#
@@ -89,12 +83,7 @@ test:		.ent test
 		cgetoffset	$a0, $c27	# Should be 0
 		cgetlen $a1, $c27	# Should be 8
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# Branch-delay slot
-		.end	test
+END_TEST
 
 		.ent bev0_handler
 bev0_handler:

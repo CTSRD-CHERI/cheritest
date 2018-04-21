@@ -34,18 +34,12 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that CP2 instructions raise an exception if CP2 is disabled
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Clear the BEV flag
 		#
@@ -232,12 +226,7 @@ L6:
 		or	$t1, $t1, $t0
 		mtc0	$t1, $12
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.ent bev0_handler
 bev0_handler:

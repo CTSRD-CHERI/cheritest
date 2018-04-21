@@ -42,13 +42,7 @@
 #
 # Unlike test_cp2_cswitch_clr, do this multiple times!
 #
-
-		.global test
-test:		.ent test
-		daddu	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 
 		# Ensure all capability registers are set to the default.
     cmove		$c1, $c0
@@ -436,12 +430,7 @@ done:
 		bne	$t3, $zero, loop
 		nop
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end test
+END_TEST
 
 		#
 		# 32-byte aligned storage for 30 adjacent capability

@@ -35,13 +35,7 @@
 # Test clbi with a negative immediate offset
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Make $c1 a capability for the variable 'data'
 		#
@@ -61,12 +55,7 @@ test:		.ent test
 		dli     $t0, 8
 		clb	$a0, $t0, -8($c1)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align	5		# 256-bit align

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bgtz (branch on greater than zero, signed), greater than case and
 # backward jump.  Of course, this first requires a forward jump.

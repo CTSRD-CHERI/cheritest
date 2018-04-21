@@ -36,13 +36,7 @@
 # same capability field values.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Tweak capability offset field so that we can tell if offset 
 		# and base are in the right order.
@@ -71,12 +65,7 @@ test:		.ent test
 		cgetlen		$a3, $c3
 		cgettag  	$a4, $c3
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align	5		# Must 256-bit align capabilities

@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that the rdhwr instruction can be used to read the high resolution
 # cycle counter.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		# The counter is readable as hardware register 2
 		# and CP0 register 9, select 0.
 		# Hardware register 2 can be accessed if CP0 is accessible
@@ -60,9 +54,4 @@ test:		.ent test
 		rdhwr	$a2, $2
 		.set pop
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

@@ -34,13 +34,7 @@
 #
 # Test lbu (load byte unsigned) indirected via a constrained c0.
 #
-
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 		li	$s2, 0
 
 		#
@@ -83,12 +77,7 @@ test:		.ent test
 
 		csetdefault $c30
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 3

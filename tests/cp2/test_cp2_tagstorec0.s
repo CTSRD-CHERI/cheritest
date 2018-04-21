@@ -35,13 +35,7 @@
 # Test that writing non-capability data to an address clears the tag bit
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dla	$t0, cap1
                 csc      $c0, $t0, 0($c0)
 
@@ -78,12 +72,7 @@ test:		.ent test
 		dli	$a1, 2
                 cgettag $a1, $c2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align	5                  # Must 256-bit align capabilities

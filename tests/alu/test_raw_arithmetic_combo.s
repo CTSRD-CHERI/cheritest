@@ -29,8 +29,9 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
-		.global start
+.global start
 start:		.ent start
 		move $a0, $0                    # a0 = 0
 		move $a1, $0                    # a1 = 0

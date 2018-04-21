@@ -38,13 +38,7 @@
 .macro cclearregs regset regmask
                 .word (0x12 << 26) | (0xf << 21) | (\regset << 16) | (\regmask)
 .endm   
-
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 1:
 
                 # clear gplo16
@@ -123,9 +117,4 @@ test:		.ent test
                 cmove   $c30, $c30
                 cmove   $c31, $c31
                 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test what happens when a MUL instruction (which puts the multiplication
 # result in a register) is followed by MFHI/MFLO. According to the MIPS ISA
@@ -45,13 +45,7 @@
 # exception in the kernel.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		dli	$t0, 5
 		mtlo	$t0
 		mthi	$t0
@@ -74,9 +68,4 @@ test:		.ent test
 		mflo	$a1
 		mfhi	$a2
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

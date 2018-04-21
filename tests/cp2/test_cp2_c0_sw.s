@@ -35,13 +35,7 @@
 # Test sw (store word) indirected via a constrainted c0.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up $c1 to point at data.
 		# We want $c1.length to be 8.
@@ -78,12 +72,7 @@ test:		.ent test
 		dla	$t2, overflow
 		ld	$a2, 0($t2)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.data
 		.align 3

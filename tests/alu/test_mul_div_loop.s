@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # This test runs a loop of multiplying and dividing numbers with a seed from
 # -10 to 10.  We just test that the final results are correct.

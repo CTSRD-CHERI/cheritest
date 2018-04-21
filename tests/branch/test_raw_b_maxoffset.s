@@ -30,7 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test a simple forward branch with maximum (positive) offset.  $t0 is
 # assigned before the branch, $t1 in the branch-delay slot, $t2 should

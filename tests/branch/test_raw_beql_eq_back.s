@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test beql (branch on equal, likely), equal case and backward jump.  Of
 # course, this first requires a forward jump.

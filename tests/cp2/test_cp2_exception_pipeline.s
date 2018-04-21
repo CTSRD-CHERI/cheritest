@@ -41,13 +41,7 @@
 # by a capability operation. Check to see that the capability
 # state is not updated, even though capability modification instruction will
 # have entered the pipeline.
-
-		.global test
-test:		.ent test
-		daddu	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 	
 		#
 		# Set up exception handler.
@@ -103,12 +97,7 @@ test:		.ent test
  		syscall 0
 		clc 	$c7, $t0, 0($c0) # not executed
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 # The exception handler just returns to the instruction two after the faulting one.
 

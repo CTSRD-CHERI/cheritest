@@ -29,19 +29,13 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that CUnseal sets the global bit correctly when the destination
 # register and ct are the same register.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		cgetdefault $c1
 		dli	$t0, 2
 		csetoffset $c1, $c1, $t0
@@ -58,9 +52,4 @@ test:		.ent test
 
 		cgetperm $a0, $c1
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

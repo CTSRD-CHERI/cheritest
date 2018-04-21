@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test bgtzl (branch on greater than zero likely, signed), equal case.
 #

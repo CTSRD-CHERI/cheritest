@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test that ERET returns to ErrorEPC (not EPC) if CP0.Status.ERL is set
 #

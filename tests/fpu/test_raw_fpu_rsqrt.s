@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 # Tests to exercise the reciprocal square root ALU instruction.
 
 		.text

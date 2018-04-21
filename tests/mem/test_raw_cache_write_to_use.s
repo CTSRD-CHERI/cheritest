@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Unit test that stores a series of bytes to memory to test cache store-to-use
 # forwarding in sequential cycles.

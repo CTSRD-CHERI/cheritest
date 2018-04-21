@@ -29,7 +29,7 @@
 .set noreorder
 .set nobopt
 .set noat
-
+.include "macros.s"
 #
 # Test for pipeline hazard when a floating point compare is immediately
 # followed by movt.

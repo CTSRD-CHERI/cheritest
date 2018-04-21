@@ -28,6 +28,7 @@
 .set mips64
 .set noreorder
 .set nobopt
+.include "macros.s"
 
 #
 # Test what happens when there is a normal load or store operation between
@@ -36,13 +37,7 @@
 # but a load will not.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Set up nop exception handler.
 		#
@@ -72,12 +67,7 @@ test:		.ent test
 		sc	$t0, ($t1)
 		lwu	$a6, ($t1)
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 
 #

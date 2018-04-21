@@ -41,13 +41,7 @@
 # if the address is not correctly aligned.
 #
 
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
-
+BEGIN_TEST
 		#
 		# Clear the BEV flag
 		#
@@ -116,12 +110,7 @@ test:		.ent test
 		cscd	$t0, $t2, $c3  # trap #7 / #4 with unaligned
 		cscc	$t0, $c1, $c3  # trap #8 / #5 with unaligned
 
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 
 		.ent bev0_handler
 bev0_handler:

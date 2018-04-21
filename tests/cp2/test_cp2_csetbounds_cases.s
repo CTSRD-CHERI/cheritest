@@ -35,13 +35,7 @@
 #
 # Test the CSetBounds instruction with cases discovered in the wild.
 #
-
-		.global test
-test:		.ent test
-		daddu 	$sp, $sp, -32
-		sd	$ra, 24($sp)
-		sd	$fp, 16($sp)
-		daddu	$fp, $sp, 32
+BEGIN_TEST
 		
 		# $a0 will be non-zero if any test fails.
 		move $a0, $0
@@ -192,12 +186,7 @@ error:
 		li $a0, 1
 
 finally:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
 		
 		.align 3
 return_to_c17:
