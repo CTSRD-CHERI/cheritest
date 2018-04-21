@@ -1040,6 +1040,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cbuildcap.s		\
 		test_cp2_cllc_perm_tag.s	\
 		test_cp2_ctestsubset_tag.s	\
+		test_cp2_clc_tlb.s		\
 		test_cp2_x_bounds.s		\
 		test_cp2_x_clbu_tag.s		\
 		test_cp2_x_clbu_reg.s		\
@@ -1116,7 +1117,6 @@ TEST_CP2_FILES=					\
 		test_cp2_x_ccheckperm.s		\
 		test_cp2_x_ccheckperm_2.s	\
 		test_cp2_x_cchecktype.s		\
-		test_cp2_x_clc_tlb.s		\
 		test_cp2_x_csc_tlb.s		\
 		test_cp2_x_cllc_tlb.s		\
 		test_cp2_csc_tlb.s		\
