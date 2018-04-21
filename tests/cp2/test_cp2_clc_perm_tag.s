@@ -50,10 +50,18 @@ test:	.ent test
 	dli	$t0, 5		# Permit_Load and Global
 	candperm $c2, $c2, $t0
 	
+	#
+	# Store the test capability
+	#
+
+	cgetdefault $c1
 	dla	$t0, cap
-# store the test capability
-	csc	$c0, $t0, 0($c0)
-# load it back, it should have its tag cleared
+	csc	$c1, $t0, 0($c0)
+
+	#
+	# Load it back, it should have its tag cleared
+	#
+
 	clc 	$c1, $t0, 0($c2)
 	cgettag $a0, $c1
 	
