@@ -50,17 +50,25 @@
 .endm
 
 .macro mips_function_entry extra_stack_space=0
+.set push
+.set noreorder
+.set nobopt
 	daddiu	$sp, $sp, -(\extra_stack_space + 16)
 	sd	$ra, (\extra_stack_space + 8)($sp)
 	sd	$fp, (\extra_stack_space)($sp)
 	daddiu	$fp, $sp, (\extra_stack_space + 16)
+.set pop
 .endm
 
 .macro mips_function_return extra_stack_space=0
-	ld      $ra, (\extra_stack_space + 8)($sp)
-	ld      $fp, (\extra_stack_space)($sp)
-	jr $ra
-	daddiu	$fp, $sp, (\extra_stack_space + 16)
+.set push
+.set noreorder
+.set nobopt
+	ld	$ra, (\extra_stack_space + 8)($sp)
+	ld	$fp, (\extra_stack_space)($sp)
+	jr	$ra
+	daddiu	$sp, $sp, (\extra_stack_space + 16)	# Branch delay slot
+.set pop
 .endm
 
 .macro set_mips_bev0_handler handler

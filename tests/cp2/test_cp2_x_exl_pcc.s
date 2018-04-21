@@ -50,6 +50,7 @@ sandbox:
 		nop
 
 BEGIN_TEST
+
 		#
 		# Set up exception handler
 		#
@@ -114,7 +115,7 @@ BEGIN_TEST
 		nop			# Branch delay slot
 
 catch:
-
+		nop	# Apparently the handler jumps to catch + 4 so we need a nop here
 END_TEST
 
 		.ent bev0_handler
