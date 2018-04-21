@@ -29,7 +29,7 @@
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
-class test_cp2_x_clc_tlb(BaseBERITestCase):
+class test_cp2_clc_tlb(BaseBERITestCase):
 
     @attr('capabilities')
     @attr('tlb')
