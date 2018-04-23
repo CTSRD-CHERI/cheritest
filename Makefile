@@ -1338,7 +1338,6 @@ ifeq ($(MULTI),1)
 TEST_MULTICORE_FILES=				\
 		test_raw_coherence_setup.s	\
 		test_raw_coherence_mp_loop.s	\
-		test_coherence_sequential.s	\
 		test_mc_pics.s			\
 		test_mc_pic_irq.s		\
 		test_mc_rdhwr.s			\
