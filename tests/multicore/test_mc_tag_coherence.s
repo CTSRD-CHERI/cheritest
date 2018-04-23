@@ -143,8 +143,8 @@ END_TEST
 stop:
 		.dword 0
 
-cap:		.align 5
-		.dword 0
+		.align 5
+cap:		.dword 0
 		.dword 0
 		.dword 0
 		.dword 0
