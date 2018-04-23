@@ -107,7 +107,7 @@ MT?=0
 STATCOUNTERS?=0
 DMA?=0
 DMA_VIRT?=0
-RMA?=0
+TEST_RMA?=0
 ALLOW_UNALIGNED?=0
 FUZZ_DMA?=0
 FUZZ_DMA_ONLY?=0
@@ -358,7 +358,7 @@ ifdef TEST_TRACE_ONLY
 TESTDIRS= $(TESTDIR)/trace
 endif
 
-ifdef RMA
+ifeq ($(TEST_RMA),1)
 TESTDIRS+= $(TESTDIR)/rma
 endif
 
@@ -692,7 +692,7 @@ else
 RAW_DMA_FILES=
 endif
 
-ifeq ($(RMA),1)
+ifeq ($(TEST_RMA),1)
 RAW_RMA_FILES=test_raw_rma_read.s
 else
 RAW_RMA_FILES=
@@ -1372,7 +1372,7 @@ else
 RAW_STATCOUNTERS_FILES=
 endif
 
-ifeq ($(RMA), 1)
+ifeq ($(TEST_RMA), 1)
 TEST_RMA_FILES = test_raw_rma_read.s
 else
 TEST_RMA_FILES=
