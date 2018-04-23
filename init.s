@@ -324,7 +324,8 @@ end:
 dump_not_thread0:
 dump_not_core0:
 
-		ld $k0, exception_count
+		dla	$k0, exception_count
+		ld	$k0, 0($k0)
 
 		#
 		# Dump registers even though core/thread not zero, so we
