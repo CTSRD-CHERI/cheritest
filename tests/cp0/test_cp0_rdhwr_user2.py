@@ -54,5 +54,5 @@ class test_cp0_rdhwr_user2(BaseBERITestCase):
     @attr('qemu_only')
     def test_cp0_rdhwr_user2_count_qemu(self):
         '''Test that the user count register can be read from user space'''
-        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a3-64000, self.MIPS.a3,
+        self.assertRegisterInRange(self.MIPS.a3, self.MIPS.a2, self.MIPS.a2 + 80000,
                                    "rdhwr counter did not approximately match cp0 count ")
