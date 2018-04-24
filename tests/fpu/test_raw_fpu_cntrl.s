@@ -30,8 +30,11 @@
 .set nobopt
 .set noat
 .include "macros.s"
-# Tests to exercise the MOV instructions for moving values between general purpose
-# and floating point (COP1) registers.
+
+#
+# Tests to exercise the MOV instructions for moving values between general
+# purpose and floating point (COP1) registers.
+#
 
 		.text
 		.global start
@@ -45,6 +48,17 @@ start:
 		or $at, $at, $t1
 		mtc0    $at, $12 
 		    
+		#
+		# Potential pipeline hazard
+		#
+
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
+
 		# Individual tests
 		    
 		# MTC / MFC

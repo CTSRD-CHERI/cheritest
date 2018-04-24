@@ -44,8 +44,19 @@ start:
 		or $at, $at, $t1   # Enable CP1    
 		mtc0    $at, $12 
 		    
-		# Individual tests
+		#
+		# Potential pipeline hazard
+		#
+
+		nop
+		nop
+		nop
+		nop
+		nop
+		nop
 		    
+		# Individual tests
+
 		# CTC / CFC
 		li $t0, 0xff
 		ctc1 $t0, $25 # FCCR
