@@ -1048,6 +1048,7 @@ TEST_CP2_FILES=					\
 		test_cp2_ll_zeroex.s		\
 		test_cp2_load_pipeline.s	\
 		test_cp2_mem_mod_pipeline.s	\
+		test_cp2_memory_cursor_location	\
 		test_cp2_mod_mod_pipeline.s	\
 		test_cp2_reg_init.s		\
 		test_cp2_reg_name.s		\
