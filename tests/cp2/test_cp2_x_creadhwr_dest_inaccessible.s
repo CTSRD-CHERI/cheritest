@@ -61,26 +61,27 @@ without_access_sys_regs:
 	CFromIntImm $c1, 0xbad1	# Writing value from kernel mode without access sysregs
 
 
-.macro try_read_into_cap_hwreg dest, cause_capreg
+# Verify that we check for Access_sysregs on the GPR
+.macro try_read_hwr0_into_cap_gpr gpr, cause_capreg
 	clear_counting_exception_handler_regs
-	CReadHwr \dest, $0
+	CReadHwr \gpr, $0
 	# Save exception details in cause_capreg
 	save_counting_exception_handler_cause \cause_capreg
 .endm
 	# Try to read into EPCC (should fail - trap #1). Save exception details in $c2
-	try_read_into_cap_hwreg $c31, $c2
+	try_read_hwr0_into_cap_gpr $c31, $c2
 	# Try to read KDC (should fail - trap #2). Save exception details in $c3
-	try_read_into_cap_hwreg $c30, $c3
+	try_read_hwr0_into_cap_gpr $c30, $c3
 	# Try to read KCC (should fail - trap #3). Save exception details in $c4
-	try_read_into_cap_hwreg $c29, $c4
+	try_read_hwr0_into_cap_gpr $c29, $c4
 	# KR1C and KR2C should also not be permitted work
-	try_read_into_cap_hwreg $c28, $c5	# Read into KR2C (trap #4)
-	try_read_into_cap_hwreg $c27, $c6	# Read into KR1C (trap #5)
+	try_read_hwr0_into_cap_gpr $c28, $c5	# Read into KR2C (trap #4)
+	try_read_hwr0_into_cap_gpr $c27, $c6	# Read into KR1C (trap #5)
 
 	# But reading into $c26 is fine
-	try_read_into_cap_hwreg $c26, $c7
+	try_read_hwr0_into_cap_gpr $c26, $c7
 	# same with $ddc
-	try_read_into_cap_hwreg $c0, $c8
+	try_read_hwr0_into_cap_gpr $c0, $c8
 
 last_trap:
 	teq $zero, $zero	# trap #6

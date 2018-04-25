@@ -58,27 +58,27 @@ without_access_sys_regs:
 	cgetpcc $c14	# Check that $pcc doesn't have access system registers
 	csetoffset $c14, $c14, $zero	# set offset to 0 to simplify checks
 
-# write into $ddc
-.macro try_write_into_cap_hwreg src, cause_capreg
+# Verify that we check for Access_sysregs on the GPR
+.macro try_write_from_cap_gpr_to_hwr0 gpr, cause_capreg
 	clear_counting_exception_handler_regs
-	CWriteHwr \src, $0
+	CWriteHwr \gpr, $0
 	# Save exception details in cause_capreg
 	save_counting_exception_handler_cause \cause_capreg
 .endm
 	# Try to write into EPCC (should fail - trap #1). Save exception details in $c2
-	try_write_into_cap_hwreg $c31, $c2
+	try_write_from_cap_gpr_to_hwr0 $c31, $c2
 	# Try to write KDC (should fail - trap #2). Save exception details in $c3
-	try_write_into_cap_hwreg $c30, $c3
+	try_write_from_cap_gpr_to_hwr0 $c30, $c3
 	# Try to write KCC (should fail - trap #3). Save exception details in $c4
-	try_write_into_cap_hwreg $c29, $c4
+	try_write_from_cap_gpr_to_hwr0 $c29, $c4
 	# KR1C and KR2C should also not be permitted work
-	try_write_into_cap_hwreg $c28, $c5	# write into KR2C (trap #4)
-	try_write_into_cap_hwreg $c27, $c6	# write into KR1C (trap #5)
+	try_write_from_cap_gpr_to_hwr0 $c28, $c5	# write into KR2C (trap #4)
+	try_write_from_cap_gpr_to_hwr0 $c27, $c6	# write into KR1C (trap #5)
 
 	# But writing from $c26 is fine
-	try_write_into_cap_hwreg $c26, $c7
+	try_write_from_cap_gpr_to_hwr0 $c26, $c7
 	# same with $ddc
-	try_write_into_cap_hwreg $c0, $c8
+	try_write_from_cap_gpr_to_hwr0 $c0, $c8
 
 last_trap:
 	teq $zero, $zero	# trap #6
