@@ -41,7 +41,7 @@ BEGIN_TEST
 		cgetdefault $c1
 		dla	$t0, cap_buffer
 		csetoffset $c1, $c1, $t0
-		dli	$s0, CAP_SIZE
+		dli	$s0, (CAP_SIZE / 8)
 		csetbounds $c1, $c1, $s0
 
 		# Load __intcap_t clc:
@@ -59,10 +59,20 @@ BEGIN_TEST
 		cld	$a4, $zero, 24($c1)
 .endif
 
+		# check that storing int __intcap_t value and loading it back works
+		CFromIntImm $c4, 0x1234
+		csc	$c4, $zero, 0($c1)
+		clc	$c5, $zero, 0($c1)
+
+		# Check that cllc+cscc also work
+		CFromIntImm $c7, 0x5678
+		cllc 	$c6, $c1	# start a ll so the sc succeeds
+		cscc	$s1, $c7, $c1
+		cllc	$c8, $c1	# load back again using ll
 END_TEST
 
 		.data
-		.align 3
+		.balign (CAP_SIZE / 8)	# ensure this is a valid target for clc
 cap_buffer:
 # FIXME: once we drop binutils we could just use .chericap 42 here...
 .if CAP_SIZE < 16

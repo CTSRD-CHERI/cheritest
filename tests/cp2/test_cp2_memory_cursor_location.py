@@ -39,8 +39,17 @@ class test_cp2_memory_cursor_location(BaseBERITestCase):
         self.assertIntCap(self.MIPS.c3, 42, "Should load an __intcap_t with value 42")
 
     def test_offset_42(self):
-        '''Test that candperm sets permissions immediately after cmove'''
         self.assertRegisterEqual(self.MIPS.a0, 42, "Should load an __intcap_t with value 42")
+
+    def test_store_load(self):
+        self.assertIntCap(self.MIPS.c4, 0x1234, "The capability to store should be 0x1234")
+        self.assertIntCap(self.MIPS.c5, 0x1234, "The value loaded back from memory should be 0x1234")
+
+    def test_store_load_ll_sc(self):
+        self.assertRegisterEqual(self.MIPS.s1, 1, "cscc should have succeeded")
+        self.assertIntCap(self.MIPS.c6, 0x1234, "The original ll value should be the previous constant 0x1234")
+        self.assertIntCap(self.MIPS.c7, 0x5678, "The value to store with sc should be 0x5678")
+        self.assertIntCap(self.MIPS.c8, 0x5678, "The value loaded back with ll should be 0x5678")
 
     @attr('cap128')
     def test_raw_bytes_128(self):
