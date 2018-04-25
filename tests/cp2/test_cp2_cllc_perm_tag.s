@@ -34,9 +34,8 @@
 #
 #
 BEGIN_TEST
-	
 	cgetdefault $c2
-	dli	$t0, 5		# Permit_Load and Global
+	dli	$t0, (CHERI_PERM_LOAD | CHERI_PERM_GLOBAL)
 	candperm $c2, $c2, $t0
 	
 	#
@@ -51,6 +50,7 @@ BEGIN_TEST
 	# Load it back, it should have its tag cleared
 	#
 
+	dla $a0, 42
 	csetoffset $c2, $c2, $t0
 	cllc 	$c1, $c2
 	cgettag $a0, $c1

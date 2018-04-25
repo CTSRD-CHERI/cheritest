@@ -35,3 +35,8 @@ class test_cp2_cllc_perm_tag(BaseBERITestCase):
     @attr('cached')
     def test_cp2_cllc_perm_tag_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "CLLC did not clear the tag when loading from capability without Permit_Load_Capability")
+
+    @attr('capabilities')
+    @attr('cached')
+    def test_cp2_cllc_perm_tag_no_trap(self):
+        self.assertRegisterEqual(self.MIPS.k0, 0, "CLLC trapped without Permit_Load_Capability")

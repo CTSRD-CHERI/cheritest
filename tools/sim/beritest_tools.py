@@ -121,6 +121,7 @@ class BaseBERITestCase(unittest.TestCase):
         super(BaseBERITestCase, self).__init__(*args, **kwargs)
         self._MIPS = None  # type: MipsStatus
         self.unexpected_exception = False
+        self._SETUP_EXCEPTION = None
 
     @nose.tools.nottest
     def _do_setup(self):
@@ -150,11 +151,16 @@ class BaseBERITestCase(unittest.TestCase):
                 self.LOG_FN = self.__class__.__name__ + ".log"
         assert self._MIPS is None
         try:
-            self.parseLog(os.path.join(self.LOG_DIR, self.LOG_FN))
+            if self.EXPECT_EXCEPTION is not None:
+                expect_exception = self.EXPECT_EXCEPTION
+            else:
+                # raw tests don't have the default exception handler so don't check for exceptions
+                expect_exception = 'raw' in class_name or "_x_" in class_name
+            self.parseLog(os.path.join(self.LOG_DIR, self.LOG_FN), expect_exception)
         except Exception as e:
             self._SETUP_EXCEPTION = e
 
-    def parseLog(self, filename):
+    def parseLog(self, filename, expect_exception=False):
         with open(filename, "rt") as fh:
             self._MIPS = MipsStatus(fh)
             # The test framework has a default exception handler which
@@ -164,22 +170,19 @@ class BaseBERITestCase(unittest.TestCase):
             # class variable can be overridden in subclasses (set to
             # True or False), but actually all tests which expect
             # exceptions have custom handlers so none of them need to.
-
-            if self.EXPECT_EXCEPTION is not None:
-                expect_exception = self.EXPECT_EXCEPTION
-            else:
-                # raw tests don't have the default exception handler so don't check for exceptions
-                expect_exception = 'raw' in self.__name__
-
-            if self.MIPS.k0 != 0 and not expect_exception:
-                self.MIPS_EXCEPTION = Exception(self.__name__ + " threw exception unexpectedly")
+            if self._MIPS.k0 != 0 and not expect_exception:
+                self.MIPS_EXCEPTION = Exception(self.__class__.__name__ + " threw " +
+                                                str(self._MIPS.k0) + " exception(s) unexpectedly")
                 self.unexpected_exception = True
+                raise self.MIPS_EXCEPTION
 
     @property
     def MIPS(self):
         # type: () -> MipsStatus
         if self._MIPS is None:
             self._do_setup()
+            assert self._SETUP_EXCEPTION is None, str(self._SETUP_EXCEPTION)
+            assert self.unexpected_exception is False, str(self.MIPS_EXCEPTION)
         assert self._MIPS, "Test case was not set up properly: " + str(self._SETUP_EXCEPTION)
         return self._MIPS
 

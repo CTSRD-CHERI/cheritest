@@ -229,6 +229,7 @@ class ThreadStatus(object):
         v.append("PCC: %s"%(self.pcc))
         return "\n".join(v)
 
+
 class MipsStatus(object):
     '''Represents the status of the MIPS CPU registers, populated by parsing
     a log file. If x is a MipsStatus object, registers can be accessed by name
