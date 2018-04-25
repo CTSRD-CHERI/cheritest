@@ -33,6 +33,23 @@
 # code that uses globals depends on this representation.
 #
 
+.macro load_raw_cap_bytes r1, r2, r3, r4
+		# Set bad values to ensure we are actually loading from memory
+		dli \r1, 0xbad1
+		dli \r2, 0xbad2
+		dli \r3, 0xbad3
+		dli \r4, 0xbad4
+		# Load the appropriate number of 64-bit values from memory
+		cld	\r1, $zero, 0($c1)
+.if CAP_SIZE > 64
+		cld	\r2, $zero, 8($c1)
+.endif
+.if CAP_SIZE > 128
+		cld	\r3, $zero, 16($c1)
+		cld	\r4, $zero, 24($c1)
+.endif
+.endm
+
 BEGIN_TEST
 		#
 		# Set up $c1 to point at data.
@@ -50,19 +67,14 @@ BEGIN_TEST
 		cgetoffset	$a0, $c3
 
 		# now load the raw bytes into a1-a4
-		cld	$a1, $zero, 0($c1)
-.if CAP_SIZE > 64
-		cld	$a2, $zero, 8($c1)
-.endif
-.if CAP_SIZE > 128
-		cld	$a3, $zero, 16($c1)
-		cld	$a4, $zero, 24($c1)
-.endif
+		load_raw_cap_bytes $a1, $a2, $a3, $a4
 
 		# check that storing int __intcap_t value and loading it back works
 		CFromIntImm $c4, 0x1234
 		csc	$c4, $zero, 0($c1)
 		clc	$c5, $zero, 0($c1)
+		# Check the raw bytes after csc (in t0-t3)
+		load_raw_cap_bytes $t0, $t1, $t2, $t3
 
 		# Check that cllc+cscc also work
 		CFromIntImm $c7, 0x5678
@@ -72,16 +84,8 @@ BEGIN_TEST
 
 		clc	$c9, $zero, 0($c1)	# load back with clc to check cllc matches clc
 
-
 		# Finally load the final raw bytes into s4-s7
-		cld	$s4, $zero, 0($c1)
-.if CAP_SIZE > 64
-		cld	$s5, $zero, 8($c1)
-.endif
-.if CAP_SIZE > 128
-		cld	$s6, $zero, 16($c1)
-		cld	$s7, $zero, 24($c1)
-.endif
+		load_raw_cap_bytes $s4, $s5, $s6, $s7
 
 END_TEST
 
