@@ -51,10 +51,10 @@ BEGIN_TEST
 
 		# now load the raw bytes into a1-a4
 		cld	$a1, $zero, 0($c1)
-.if CAP_SIZE > 8
+.if CAP_SIZE > 64
 		cld	$a2, $zero, 8($c1)
 .endif
-.if CAP_SIZE > 16
+.if CAP_SIZE > 128
 		cld	$a3, $zero, 16($c1)
 		cld	$a4, $zero, 24($c1)
 .endif
@@ -75,14 +75,14 @@ END_TEST
 		.balign (CAP_SIZE / 8)	# ensure this is a valid target for clc
 cap_buffer:
 # FIXME: once we drop binutils we could just use .chericap 42 here...
-.if CAP_SIZE < 16
+.if CAP_SIZE < 128
 .error "This test probably needs adjusting for CHERI64"
 		.8byte 42	# FIXME: is this correct?
 .else
 		.8byte 0	# compressed info (128)/ permissions (256)
 		.8byte 42	# untagged __intcap_t 42 cursor
 .endif
-.if CAP_SIZE > 16
+.if CAP_SIZE > 128
 		.8byte 0
 		.8byte 0
 .endif
