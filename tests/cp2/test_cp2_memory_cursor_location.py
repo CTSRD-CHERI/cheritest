@@ -33,6 +33,7 @@ from nose.plugins.attrib import attr
 # Clang will always emit an untagged __intcap_t value in this way so all C
 # code that uses globals depends on this representation.
 #
+
 @attr('capabilities')
 class test_cp2_memory_cursor_location(BaseBERITestCase):
     def test_load_intcap(self):
@@ -47,18 +48,19 @@ class test_cp2_memory_cursor_location(BaseBERITestCase):
 
     def test_store_load_ll_sc(self):
         self.assertRegisterEqual(self.MIPS.s1, 1, "cscc should have succeeded")
-        self.assertIntCap(self.MIPS.c6, 0x1234, "The original ll value should be the previous constant 0x1234")
-        self.assertIntCap(self.MIPS.c7, 0x5678, "The value to store with sc should be 0x5678")
-        self.assertIntCap(self.MIPS.c8, 0x5678, "The value loaded back with ll should be 0x5678")
+        self.assertIntCap(self.MIPS.c6, 0x1234, "The original cllc value should be the previous constant 0x1234")
+        self.assertIntCap(self.MIPS.c7, 0x5678, "The value to store with cscc should be 0x5678")
+        self.assertIntCap(self.MIPS.c8, 0x5678, "The value loaded back with cllc should be 0x5678")
+        self.assertIntCap(self.MIPS.c9, 0x5678, "The value loaded back with clc should also be 0x5678")
 
     @attr('cap128')
-    def test_raw_bytes_128(self):
+    def test_initial_raw_bytes_128(self):
         self.assertRegisterEqual(self.MIPS.s0, 16, "CAP_SIZE should be 16")
         self.assertRegisterEqual(self.MIPS.a1, 0, "Bytes 0-7 should be zero")
         self.assertRegisterEqual(self.MIPS.a2, 42, "Bytes 8-15 should contain cursor")
 
     @attr('cap256')
-    def test_raw_bytes_128(self):
+    def test_initial_raw_bytes_256(self):
         self.assertRegisterEqual(self.MIPS.s0, 32, "CAP_SIZE should be 32")
         self.assertRegisterEqual(self.MIPS.a1, 0, "Bytes 0-7 should be zero")
         self.assertRegisterEqual(self.MIPS.a2, 42, "Bytes 8-15 should contain cursor")
@@ -66,6 +68,25 @@ class test_cp2_memory_cursor_location(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a4, 0, "Bytes 24-31 should be zero")
 
     @attr('cap64')
-    def test_raw_bytes_128(self):
+    def test_initial_raw_bytes_64(self):
+        self.assertRegisterEqual(self.MIPS.s0, 8, "CAP_SIZE should be 8")
+        self.fail("Not implemented for CHERI64")
+
+    @attr('cap128')
+    def test_final_raw_bytes_128(self):
+        self.assertRegisterEqual(self.MIPS.s0, 16, "CAP_SIZE should be 16")
+        self.assertRegisterEqual(self.MIPS.s4, 0, "Bytes 0-7 should be zero")
+        self.assertRegisterEqual(self.MIPS.s5, 0x5678, "Bytes 8-15 should contain cursor")
+
+    @attr('cap256')
+    def test_final_raw_bytes_256(self):
+        self.assertRegisterEqual(self.MIPS.s0, 32, "CAP_SIZE should be 32")
+        self.assertRegisterEqual(self.MIPS.s4, 0, "Bytes 0-7 should be zero")
+        self.assertRegisterEqual(self.MIPS.s5, 42, "Bytes 8-15 should contain cursor")
+        self.assertRegisterEqual(self.MIPS.s6, 0, "Bytes 16-23 should be zero")
+        self.assertRegisterEqual(self.MIPS.s7, 0, "Bytes 24-31 should be zero")
+
+    @attr('cap64')
+    def test_final_raw_bytes_64(self):
         self.assertRegisterEqual(self.MIPS.s0, 8, "CAP_SIZE should be 8")
         self.fail("Not implemented for CHERI64")

@@ -69,6 +69,20 @@ BEGIN_TEST
 		cllc 	$c6, $c1	# start a ll so the sc succeeds
 		cscc	$s1, $c7, $c1
 		cllc	$c8, $c1	# load back again using ll
+
+		clc	$c9, $zero, 0($c1)	# load back with clc to check cllc matches clc
+
+
+		# Finally load the final raw bytes into s4-s7
+		cld	$s4, $zero, 0($c1)
+.if CAP_SIZE > 64
+		cld	$s5, $zero, 8($c1)
+.endif
+.if CAP_SIZE > 128
+		cld	$s6, $zero, 16($c1)
+		cld	$s7, $zero, 24($c1)
+.endif
+
 END_TEST
 
 		.data
