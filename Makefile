@@ -2829,7 +2829,7 @@ QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v -a "$(QEMU_NOSEPRED)" $< || true
+	$(QEMU_PYTEST) "--junit-xml=$(basename $@).xml" --runxfail -v -a "$(QEMU_NOSEPRED)" $< || true
 
 
 test_elfs: $(TEST_ELFS)
