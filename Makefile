@@ -2050,6 +2050,19 @@ TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/statcounters/,$(basename $(RAW_STATCOUNTERS_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/multicore/,$(basename $(TEST_MULTICORE_FILES))))
 
+ifeq ($(CLANG), 1)
+TEST_PYTHON +=	tests/c/test_clang.py
+# dummy target to make the pytest/qemu/target work
+$(QEMU_LOGDIR)/test_clang.log: tests/c/test_clang.py
+	echo "DUMMY" > $@
+endif
+ifeq ($(PURECAP), 1)
+TEST_PYTHON +=	tests/purecap/test_purecap.py
+# dummy target to make the pytest/qemu/target work
+$(QEMU_LOGDIR)/test_purecap.log: tests/purecap/test_purecap.py
+	echo "DUMMY" > $@
+endif
+
 # XXXAR: shouldn't this also include test/c/clang_test.py, etc.?
 
 
