@@ -30,15 +30,9 @@ from nose.plugins.attrib import attr
 
 class test_cp2_csetboundsexact(BaseBERITestCase):
 
-#
-# It is theoretically possible that the could be an encoding scheme that
-# raises an exception in this test because the capability is not representable.
-# None of the currently defined encoding schemes will do this.
-#
-
     @attr('capabilities')
     def test_cp2_csetboundsexact(self):
-        self.assertRegisterEqual(self.MIPS.a0, 4, "CSetBoundsExact did not set the length to the expected value")
+        self.assertRegisterEqual(self.MIPS.a0, 8, "CSetBoundsExact did not set the length to the expected value")
 
 
     @attr('capabilities')

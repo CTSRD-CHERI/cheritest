@@ -36,31 +36,55 @@
 #
 
 BEGIN_TEST
+		#
+		# Make $c1 a capability for array 'data'
+		#
+
+		cgetdefault $c1
 		dla	$t0, data
-		csetoffset $c1, $c0, $t0
-		dli	$t1, 4
-		csetboundsexact $c1, $c1, $t1
+		csetoffset $c1, $c1, $t0
+		dli	$t1, 8
+		csetbounds $c1, $c1, $t1
 
 		#
-		# The length should be 4 bytes.
+		# Make $c3 something we can detect if it's been overwritten
 		#
 
-		cgetlen	$a0, $c1
+		cgetdefault $c3
+		dli	$t0, 5
+		csetoffset $c3, $c3, $t0
+
+		#
+		# Use CSetBoundsExact to make $c2's bounds the same as $c1
+		#
+
+		cgetdefault $c2
+		cgetbase $t0, $c1
+		csetoffset $c2, $c2, $t0
+		cgetlen $t0, $c1
+		csetboundsexact $c3, $c2, $t0
+
+		#
+		# The length should be 8 bytes.
+		#
+
+		cgetlen	$a0, $c3
 
 		#
 		# The offset should point to the array 'data'
 		#
 
-		cgetbase $a1, $c1
-		cgetoffset $t1, $c1
+		cgetbase $a1, $c3
+		cgetoffset $t1, $c3
 		daddu	$a1, $a1, $t1
+		dla	$t0, data
 		dsubu	$a1, $a1, $t0
 
 		#
 		# The offset should be zero.
 		#
 
-		cgetoffset $a2, $c1
+		cgetoffset $a2, $c3
 		
 END_TEST
 
