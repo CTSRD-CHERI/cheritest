@@ -977,6 +977,7 @@ TEST_CP2_FILES=					\
 		test_cp2_csbr_unpriv.s		\
 		test_cp2_csb_unpriv.s		\
 		test_cp2_csc_ephemeral_invalid.s\
+		test_cp2_cscc_untagged.s	\
 		test_cp2_csch_align.s		\
 		test_cp2_csci.s			\
 		test_cp2_csc_neg.s		\
