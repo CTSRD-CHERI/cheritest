@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2011 (holder)
+# Copyright (c) 2018 Michael Roe
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -40,8 +40,12 @@ class test_cp2_ctestsubset_tag(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_ctestsubset_tag_3(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0, "CTestSubset returned true when sealed bits were different")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "CTestSubset returned false when sealed bits were different and capability is a subset")
 
     @attr('capabilities')
     def test_cp2_ctestsubset_tag_4(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0, "CTestSubset returned true when sealed bits were different")
+        self.assertRegisterEqual(self.MIPS.a3, 1, "CTestSubset returned false when sealed bits were different and capability is a subset")
+
+    @attr('capabilities')
+    def test_cp2_ctestsubset_tag_4(self):
+        self.assertRegisterEqual(self.MIPS.a4, 0, "CTestSubset returned true when sealed bits different and capability is not a subset")

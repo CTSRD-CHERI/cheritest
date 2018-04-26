@@ -65,6 +65,7 @@ BEGIN_TEST
 
 		ctestsubset $a2, $c1, $c2
 		ctestsubset $a3, $c2, $c1
+		ctestsubset $a4, $c2, $c3
 END_TEST
 
 		.data
