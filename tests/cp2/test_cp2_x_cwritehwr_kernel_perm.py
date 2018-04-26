@@ -129,7 +129,7 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
         # EPCC will be somewhere on the first userspace page and won't have access_sys_regs
         self.assertValidCap(self.MIPS.c31, offset=(0x0, 0x2000), base=0,
             length=self.max_length, perms=self.max_permissions & ~1024)
-        # check that kr1c and kr2c were updated by the writes in kernel mode:
+        # check that kr1c and kr2c were updated by the writes to chwr $22 and $23 in kernel mode:
         self.assertIntCap(self.MIPS.c27, int_value=0xbad1)
         self.assertIntCap(self.MIPS.c28, int_value=0xbad1)
 
