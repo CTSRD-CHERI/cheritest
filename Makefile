@@ -981,6 +981,7 @@ TEST_CP2_FILES=					\
 		test_cp2_csci.s			\
 		test_cp2_csc_neg.s		\
 		test_cp2_cscr_offset.s		\
+		test_cp2_cscr_untagged.s	\
 		test_cp2_cscr.s			\
 		test_cp2_csc_tlb.s		\
 		test_cp2_csdr_priv.s		\
