@@ -31,7 +31,7 @@
 .set noat
 .include "macros.s"
 #
-# Test double-precision convert with nan, infinite, and too large operands.
+# Test single-precision convert with nan, infinite, and too large operands.
 #
 		.text
 		.global start
