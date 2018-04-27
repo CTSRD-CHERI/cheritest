@@ -34,36 +34,41 @@ from nose.plugins.attrib import attr
 # should be tagged as such.
 #
 
-@attr('cached')
 class test_cp2_cscc_untagged(BaseBERITestCase):
 
     @attr('capabilities')
     @attr('cap256')
+    @attr('cached')
     def test_cp2_cscc_untagged_256_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "CSCC did not store the otype/perms correcty (256 bit representation)")
 
     @attr('capabilities')
     @attr('cap256')
+    @attr('cached')
     def test_cp2_cscc_untagged_256_2(self):
         self.assertRegisterEqual(self.MIPS.a1, 42, "CSCC did not store the cursor correcty (256 bit representation)")
 
     @attr('capabilities')
     @attr('cap256')
+    @attr('cached')
     def test_cp2_cscc_untagged_256_3(self):
         self.assertRegisterEqual(self.MIPS.a2, 0, "CSCC did not store the base correcty (256 bit representation)")
 
     @attr('capabilities')
     @attr('cap256')
+    @attr('cached')
     def test_cp2_cscc_untagged_256_4(self):
         self.assertRegisterEqual(self.MIPS.a3, 0, "CSCC did not store the length correcty (256 bit representation)")
 
     @attr('capabilities')
     @attr('cap128')
+    @attr('cached')
     def test_cp2_cscc_untagged_128_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "CSCC did not store the bounds/perms correctly (128 bit representation)")
 
     @attr('capabilities')
     @attr('cap128')
+    @attr('cached')
     def test_cp2_cscc_untagged_128_2(self):
         self.assertRegisterEqual(self.MIPS.a1, 42, "CSCC did not store the cursor correctly (128 bit representation)")
 
