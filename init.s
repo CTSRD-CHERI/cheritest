@@ -108,10 +108,11 @@ zero_bss:
 		dadd    $t0, $t0, 1
 2:
 .else
-	dla $a0, __bss_start
-	dla $a1, __bss_end
-	dsubu $a1, $a1, $a0
-	jal bzero
+		dla $a0, __bss_start
+		dla $a1, __bss_end
+		dsubu $a1, $a1, $a0
+		jal bzero
+		nop			# Branch delay slot
 .endif
 
 all_threads:
