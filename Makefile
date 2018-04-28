@@ -115,6 +115,7 @@ FUZZ_DMA_ONLY?=0
 # fuzz tests are currently broken
 NOFUZZ?=1
 NOFUZZR?=1
+TEST_CAPHWR?=1
 CAP_SIZE?=256
 # CHECK that CAP_SIZE is a sensible value
 ifneq ($(CAP_SIZE),64)
@@ -1640,6 +1641,10 @@ endif
 
 ifdef CHERI_MICRO
 L3_NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
+endif
+
+ifeq ($(TEST_CAPHWR),0)
+L3_NOSEPRED+=and not cap_hwregs
 endif
 
 L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
