@@ -36,6 +36,9 @@
 #
 
 BEGIN_TEST
+
+		dli $a2, 3
+L1:
 		mfc0 $t0, $12
 		dli $t1, 1 << 29	# Disable CP1
 		nor $t1, $t1, $t1
@@ -61,6 +64,10 @@ BEGIN_TEST
 		#
 
 		cfc1 $a0, $31		# This should not raise an exception
+
+		daddiu $a2, $a2, -1
+		bnez $a2, L1
+		nop
 
 		#
 		# Indicate test completion
