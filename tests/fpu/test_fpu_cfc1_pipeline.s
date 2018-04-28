@@ -2,7 +2,7 @@
 # Copyright (c) 2018 Michael Roe
 # All rights reserved.
 #
- This software was developed by the University of Cambridge Computer
+# This software was developed by the University of Cambridge Computer
 # Laboratory as part of the Rigorous Engineering of Mainstream Systems (REMS)
 # project, funded by EPSRC grant EP/K008528/1.
 #
