@@ -867,6 +867,7 @@ TEST_FPU_FILES=					\
 		test_fpu_bc1t_cc.s		\
 		test_fpu_underflow_rounding.s	\
 		test_fpu_fccr_update.s		\
+		test_fpu_cfc1_pipeline.s	\
 		test_fpu_x_div.s		\
 		test_fpu_x_underflow.s		\
 		test_fpu_x_overflow.s		\
