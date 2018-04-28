@@ -61,3 +61,9 @@ class test_cp2_cap_as_data(BaseBERITestCase):
         '''Test that copying a capability as data copies offset'''
         self.assertRegisterEqual(self.MIPS.a4, 0, "Copying a capability as data did not copy the offset")
 
+    @attr('capabilities')
+    @attr('cap_copy_as_data')
+    def test_cp2_cap_as_data_cursor(self):
+        '''Test that copying a capability as data copies cursor'''
+        self.assertRegisterEqual(self.MIPS.a5, 0, "Copying a capability as data did not copy the cursor")
+

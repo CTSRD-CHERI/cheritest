@@ -80,6 +80,14 @@ BEGIN_TEST
 		cgetoffset $t2, $c1
 		xor	$a4, $a4, $t2
 
+		cgetbase   $a5, $c2
+		cgetoffset $t2, $c2
+		daddu	$a5, $a5, $t2
+		cgetbase   $t2, $c1
+		dsubu	$a5, $a5, $t2
+		cgetoffset $t2, $c1
+		dsubu	$a5, $a5, $t2
+
 END_TEST
 
 		.data
