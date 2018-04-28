@@ -94,7 +94,6 @@ END_TEST
 cap_buffer:
 # FIXME: once we drop binutils we could just use .chericap 42 here...
 .if CAP_SIZE < 128
-.error "This test probably needs adjusting for CHERI64"
 		.8byte 42	# FIXME: is this correct?
 .else
 		.8byte 0	# compressed info (128)/ permissions (256)
