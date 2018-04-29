@@ -87,7 +87,7 @@ BEGIN_TEST
 		nop                     # Nop because the watchHi and Lo registers might fire early.
 desired_epc:
 		mflo	$t0
-		mult	$a0, $a1
+		mult	$a3, $a4
 
 		#
 		# Exception return.
