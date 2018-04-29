@@ -1766,6 +1766,7 @@ and not lladdr \
 and not llscspan \
 and not loadcachetag \
 and not mt \
+and not mul_hilo_cleared \
 and not nofloat \
 and not pic \
 and not swisync \
