@@ -1567,7 +1567,6 @@ and not deterministic_random \
 and not noextendedtlb \
 and not csettype \
 and not statcounters \
-and not tlbcheck \
 and not tlb_read_uninitialized \
 and not qemu_only
 
@@ -2542,12 +2541,12 @@ endif
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
 	mkdir -p $(L3_LOGDIR)
 ifdef TRACE
-	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --trace 2 $(L3_MULTI) $< 2> $@.err > $@ || true
+	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --ignore TLB --trace 2 $(L3_MULTI) $< 2> $@.err > $@ || true
 else
 ifdef PROFILE
 	rm -f mlmon.out
 endif
-	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO $(L3_MULTI) $< 2> $@.err > $@ || true
+	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --ignore TLB $(L3_MULTI) $< 2> $@.err > $@ || true
 ifdef PROFILE
 	mlprof -raw true -show-line true `which $(L3_SIM)` mlmon.out > $(L3_LOGDIR)/$*.cover
 endif
