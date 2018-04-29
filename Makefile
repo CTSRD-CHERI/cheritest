@@ -1556,6 +1556,7 @@ and not llscspan \
 and not llscnoalias \
 and not llscuncached \
 and not mtc0signex \
+and not mul_hilo_unchanged \
 and not swi \
 and not smalltlb \
 and not beri2tlb \
@@ -1895,6 +1896,7 @@ NOSEPRED+=and not dumpicache
 NOSEPRED+=and not loadcachetag
 NOSEPRED+=and not errorepc
 NOSEPRED+=and not tlbcheck
+NOSEPRED+=and not mul_hilo_cleared
 ifeq ($(BERI_VER),2)
 NOSEPRED+=and not invalidateL2only
 NOSEPRED+=and not lladdr
