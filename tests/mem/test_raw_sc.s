@@ -56,7 +56,7 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		dla	$gp, dword
 		dli	$a0, 0x00000000FFFFFFFF
 		and $gp, $gp, $a0
-		dli	$t0, 0x9800000000000000		# Cached, non-coherenet
+		dli	$t0, 0x9800000000000000		# Cached, non-coherent
 		daddu	$gp, $gp, $t0
 
 		# Initialize link register to the store address.
