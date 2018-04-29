@@ -1667,6 +1667,7 @@ and not llscnotmatching \
 and not llscspan \
 and not llscnoalias \
 and not mtc0signex \
+and not mul_hilo_cleared \
 and not swi \
 and not smalltlb \
 and not beri2tlb \
