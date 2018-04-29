@@ -757,6 +757,7 @@ TEST_ALU_FILES=					\
 		test_sltiu.s			\
 		test_sltu.s			\
 		test_subu_carry.s		\
+		test_div_zero_ex.s		\
 		test_x_dext_ri.s		\
 		test_x_jalx_ri.s		\
 		test_x_msa_ri.s
