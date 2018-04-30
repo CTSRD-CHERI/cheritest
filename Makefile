@@ -164,7 +164,7 @@ endif
 CLANG_CMD?=$(CHERI_SDK_BINDIR)/clang -integrated-as
 OBJDUMP?=$(CHERI_SDK_BINDIR)/llvm-objdump
 # FIXME: elftoolchain objcopy is broken, hopefully llvm-objcopy is ready soon
-OBJCOPY?=$(CHERI_SDK_BINDIR)/objcopy
+#OBJCOPY?=$(CHERI_SDK_BINDIR)/objcopy
 
 # For now force using the GNU AS since clang doesn't quite work (5 tests broken)
 # CHERI_SDK_USE_GNU_AS?=1
