@@ -378,51 +378,51 @@ RAW_FRAMEWORK_FILES=				\
 		test_raw_movz_zero.s
 
 RAW_ALU_FILES=					\
-		test_raw_add.s			\
 		test_raw_add_ex.s		\
-		test_raw_addi.s			\
 		test_raw_addi_ex.s		\
-		test_raw_addiu.s		\
+		test_raw_addi.s			\
 		test_raw_addiu_ex.s		\
-		test_raw_addu.s			\
+		test_raw_addiu.s		\
+		test_raw_add.s			\
 		test_raw_addu_ex.s		\
+		test_raw_addu.s			\
+		test_raw_andi.s			\
 		test_raw_and.s			\
 		test_raw_arithmetic_combo.s	\
-		test_raw_sub.s			\
-		test_raw_sub_ex.s		\
-		test_raw_subu.s			\
-		test_raw_subu_ex.s		\
-		test_raw_dadd.s			\
 		test_raw_daddi.s		\
 		test_raw_daddiu.s		\
+		test_raw_dadd.s			\
 		test_raw_daddu.s		\
-		test_raw_dsub.s			\
-		test_raw_dsubu.s		\
-		test_raw_andi.s			\
-		test_raw_nor.s			\
-		test_raw_or.s			\
-		test_raw_ori.s			\
-		test_raw_xor.s			\
-		test_raw_xori.s			\
-		test_raw_sll.s			\
-		test_raw_sllv.s			\
-		test_raw_srl.s			\
-		test_raw_srl_ex.s		\
-		test_raw_srlv.s			\
-		test_raw_srlv_ex.s		\
-		test_raw_sra.s			\
-		test_raw_sra_ex.s		\
-		test_raw_srav.s			\
-		test_raw_srav_ex.s		\
+		test_raw_dsll32.s		\
 		test_raw_dsll.s			\
 		test_raw_dsllv.s		\
-		test_raw_dsll32.s		\
-		test_raw_dsrl.s			\
-		test_raw_dsrlv.s		\
-		test_raw_dsrl32.s		\
+		test_raw_dsra32.s		\
 		test_raw_dsra.s			\
 		test_raw_dsrav.s		\
-		test_raw_dsra32.s
+		test_raw_dsrl32.s		\
+		test_raw_dsrl.s			\
+		test_raw_dsrlv.s		\
+		test_raw_dsub.s			\
+		test_raw_dsubu.s		\
+		test_raw_nor.s			\
+		test_raw_ori.s			\
+		test_raw_or.s			\
+		test_raw_sll.s			\
+		test_raw_sllv.s			\
+		test_raw_sra_ex.s		\
+		test_raw_sra.s			\
+		test_raw_srav_ex.s		\
+		test_raw_srav.s			\
+		test_raw_srl_ex.s		\
+		test_raw_srl.s			\
+		test_raw_srlv_ex.s		\
+		test_raw_srlv.s			\
+		test_raw_sub_ex.s		\
+		test_raw_sub.s			\
+		test_raw_subu_ex.s		\
+		test_raw_subu.s			\
+		test_raw_xori.s			\
+		test_raw_xor.s
 
 RAW_BRANCH_FILES=				\
 		test_raw_jump.s			\
