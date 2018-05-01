@@ -535,127 +535,126 @@ RAW_CP2_FILES=					\
 		test_raw_capinstructions.s
 
 RAW_FPU_FILES =					\
-		test_raw_fpu_cntrl.s		\
-		test_raw_fpu_abs.s		\
-		test_raw_fpu_abs_qnan.s		\
 		test_raw_fpu_abs_2008.s		\
-		test_raw_fpu_add.s		\
-		test_raw_fpu_sub.s		\
-		test_raw_fpu_mul.s		\
-		test_raw_fpu_div.s		\
-		test_raw_fpu_neg.s		\
-		test_raw_fpu_neg_qnan.s		\
-		test_raw_fpu_neg_2008.s		\
-		test_raw_fpu_recip.s		\
-		test_raw_fpu_sqrt.s		\
-		test_raw_fpu_rsqrt.s		\
-		test_raw_fpu_cf.s		\
-		test_raw_fpu_cun.s		\
-		test_raw_fpu_ceq.s		\
-		test_raw_fpu_cueq.s		\
-		test_raw_fpu_colt.s		\
-		test_raw_fpu_cult.s		\
-		test_raw_fpu_cole.s		\
-		test_raw_fpu_cule.s		\
-		test_raw_fpu_branch.s		\
-		test_raw_fpu_blikely.s		\
-		test_raw_fpu_mov_gpr.s		\
-		test_raw_fpu_mov_cc.s		\
+		test_raw_fpu_abs_qnan.s		\
+		test_raw_fpu_abs.s		\
 		test_raw_fpu_add_d32.s		\
-		test_raw_fpu_sub_d32.s		\
-		test_raw_fpu_mul_d32.s		\
-		test_raw_fpu_div_d32.s		\
-		test_raw_fpu_sqrt_d32.s		\
-		test_raw_fpu_cvt_d32.s		\
-		test_raw_fpu_cole_single.s	\
-		test_raw_fpu_colt_single.s	\
-		test_raw_fpu_cule_single.s	\
-		test_raw_fpu_cult_single.s	\
-		test_raw_fpu_cueq_single.s	\
-		test_raw_fpu_ceq_single.s	\
-		test_raw_fpu_cun_single.s	\
-		test_raw_fpu_colt_d64.s		\
-		test_raw_fpu_cole_d64.s		\
-		test_raw_fpu_ceq_d64.s		\
-		test_raw_fpu_cun_d64.s		\
-		test_raw_fpu_cueq_d64.s		\
-		test_raw_fpu_cule_d64.s		\
-		test_raw_fpu_cult_d64.s		\
-		test_raw_fpu_cvt_single.s	\
-		test_raw_fpu_round_single.s	\
-		test_raw_fpu_ceil_single.s	\
-		test_raw_fpu_floor_single.s	\
-		test_raw_fpu_trunc_single.s	\
-		test_raw_fpu_qnan_single.s	\
-		test_raw_fpu_qnan_s2.s		\
-		test_raw_fpu_underflow.s	\
-		test_raw_fpu_div_small.s	\
-		test_raw_fpu_denorm.s		\
-		test_raw_fpu_trunc_d64.s	\
-		test_raw_fpu_trunc_l_d64.s	\
-		test_raw_fpu_trunc_l_s_d64.s	\
-		test_raw_fpu_floor_d64.s	\
-		test_raw_fpu_floor_l_d64.s	\
-		test_raw_fpu_floor_l_s_d64.s	\
+		test_raw_fpu_add_inf_d64.s 	\
+		test_raw_fpu_add_inf_single.s	\
+		test_raw_fpu_add.s		\
+		test_raw_fpu_bc1t_pipeline.s	\
+		test_raw_fpu_blikely.s		\
+		test_raw_fpu_branch.s		\
 		test_raw_fpu_ceil_d64.s		\
 		test_raw_fpu_ceil_l_d64.s	\
 		test_raw_fpu_ceil_l_s_d64.s	\
-		test_raw_fpu_round_d64.s	\
-		test_raw_fpu_round_l_d64.s	\
-		test_raw_fpu_round_l_s_d64.s	\
-		test_raw_fpu_cvt_s_w.s		\
-		test_raw_fpu_cvt_s_l_d64.s	\
-		test_raw_fpu_cvt_w_d_d64.s	\
-		test_raw_fpu_cvt_d_w_d64.s	\
+		test_raw_fpu_ceil_l_s_nan_d64.s \
+		test_raw_fpu_ceil_nan_d64.s	\
+		test_raw_fpu_ceil_nan_single.s	\
+		test_raw_fpu_ceil_single.s	\
+		test_raw_fpu_ceil_w_d_nan_d64.s \
+		test_raw_fpu_ceq_d64.s		\
+		test_raw_fpu_ceq.s		\
+		test_raw_fpu_ceq_single.s	\
+		test_raw_fpu_cf.s		\
+		test_raw_fpu_cntrl.s		\
+		test_raw_fpu_cole_d64.s		\
+		test_raw_fpu_cole.s		\
+		test_raw_fpu_cole_single.s	\
+		test_raw_fpu_colt_d64.s		\
+		test_raw_fpu_colt.s		\
+		test_raw_fpu_colt_single.s	\
+		test_raw_fpu_cueq_d64.s		\
+		test_raw_fpu_cueq.s		\
+		test_raw_fpu_cueq_single.s	\
+		test_raw_fpu_cule_d64.s		\
+		test_raw_fpu_cule.s		\
+		test_raw_fpu_cule_single.s	\
+		test_raw_fpu_cult_d64.s		\
+		test_raw_fpu_cult.s		\
+		test_raw_fpu_cult_single.s	\
+		test_raw_fpu_cun_d64.s		\
+		test_raw_fpu_cun.s		\
+		test_raw_fpu_cun_single.s	\
+		test_raw_fpu_cvt_d32.s		\
 		test_raw_fpu_cvt_d_l_d64.s	\
+		test_raw_fpu_cvt_d_w_d64.s	\
 		test_raw_fpu_cvt_l_d_d64.s	\
 		test_raw_fpu_cvt_l_s_d64.s	\
-		test_raw_fpu_bc1t_pipeline.s	\
-		test_raw_fpu_movt_s_pipeline.s	\
-		test_raw_fpu_movf_s_pipeline.s	\
-		test_raw_fpu_movt_pipeline.s	\
+		test_raw_fpu_cvt_l_s_nan_d64.s	\
+		test_raw_fpu_cvt_nan_d64.s	\
+		test_raw_fpu_cvt_nan_single.s	\
 		test_raw_fpu_cvt.s		\
+		test_raw_fpu_cvt_single.s	\
+		test_raw_fpu_cvt_s_l_d64.s	\
+		test_raw_fpu_cvt_s_w.s		\
+		test_raw_fpu_cvt_w_d_d64.s	\
+		test_raw_fpu_cvt_w_d_nan_d64.s	\
 		test_raw_fpu_cvtw.s		\
-		test_raw_fpu_movci.s		\
-		test_raw_fpu_sd_ld.s		\
-		test_raw_fpu_sw_lw.s		\
-		test_raw_fpu_xc1.s		\
-		test_raw_fpu_add_inf_single.s	\
-		test_raw_fpu_sub_inf_single.s	\
-		test_raw_fpu_mul_inf_single.s	\
+		test_raw_fpu_denorm.s		\
+		test_raw_fpu_div_d32.s		\
 		test_raw_fpu_div_inf_single.s	\
-		test_raw_fpu_infinity_single.s	\
-		test_raw_fpu_trunc_nan_single.s \
-		test_raw_fpu_trunc_nan_d64.s	\
-		test_raw_fpu_trunc_w_d_nan_d64.s \
-		test_raw_fpu_round_nan_single.s \
-		test_raw_fpu_ceil_nan_single.s \
-		test_raw_fpu_floor_nan_single.s \
-		test_raw_fpu_fir.s \
-		test_raw_fpu_fccr.s \
-		test_raw_fpu_fexr.s \
-		test_raw_fpu_fenr.s \
-		test_raw_fpu_madd_single.s \
-		test_raw_fpu_madd_d64.s	\
-		test_raw_fpu_mtc1_ex.s \
-		test_raw_fpu_mov_ex.s \
-		test_raw_fpu_add_inf_d64.s \
-		test_raw_fpu_rounding_mode.s \
-		test_raw_fpu_trunc_l_s_nan_d64.s \
-		test_raw_fpu_ceil_nan_d64.s \
-		test_raw_fpu_ceil_w_d_nan_d64.s \
-		test_raw_fpu_ceil_l_s_nan_d64.s \
+		test_raw_fpu_div.s		\
+		test_raw_fpu_div_small.s	\
+		test_raw_fpu_fccr.s 		\
+		test_raw_fpu_fenr.s 		\
+		test_raw_fpu_fexr.s 		\
+		test_raw_fpu_fir.s 		\
+		test_raw_fpu_floor_d64.s	\
+		test_raw_fpu_floor_l_d64.s	\
+		test_raw_fpu_floor_l_s_d64.s	\
 		test_raw_fpu_floor_l_s_nan_d64.s \
-		test_raw_fpu_floor_nan_d64.s \
+		test_raw_fpu_floor_nan_d64.s	\
+		test_raw_fpu_floor_nan_single.s	\
+		test_raw_fpu_floor_single.s	\
 		test_raw_fpu_floor_w_d_nan_d64.s \
+		test_raw_fpu_infinity_single.s	\
+		test_raw_fpu_madd_d64.s		\
+		test_raw_fpu_madd_single.s	\
+		test_raw_fpu_mov_cc.s		\
+		test_raw_fpu_movci.s		\
+		test_raw_fpu_mov_ex.s		\
+		test_raw_fpu_movf_s_pipeline.s	\
+		test_raw_fpu_mov_gpr.s		\
+		test_raw_fpu_movt_pipeline.s	\
+		test_raw_fpu_movt_s_pipeline.s	\
+		test_raw_fpu_mtc1_ex.s		\
+		test_raw_fpu_mul_d32.s		\
+		test_raw_fpu_mul_inf_single.s	\
+		test_raw_fpu_mul.s		\
+		test_raw_fpu_neg_2008.s		\
+		test_raw_fpu_neg_qnan.s		\
+		test_raw_fpu_neg.s		\
+		test_raw_fpu_qnan_s2.s		\
+		test_raw_fpu_qnan_single.s	\
+		test_raw_fpu_recip.s		\
+		test_raw_fpu_round_d64.s	\
+		test_raw_fpu_rounding_mode.s	\
+		test_raw_fpu_round_l_d64.s	\
+		test_raw_fpu_round_l_s_d64.s	\
 		test_raw_fpu_round_l_s_nan_d64.s \
-		test_raw_fpu_round_nan_d64.s \
+		test_raw_fpu_round_nan_d64.s	\
+		test_raw_fpu_round_nan_single.s \
+		test_raw_fpu_round_single.s	\
 		test_raw_fpu_round_w_d_nan_d64.s \
-		test_raw_fpu_cvt_nan_d64.s \
-		test_raw_fpu_cvt_nan_single.s \
-		test_raw_fpu_cvt_l_s_nan_d64.s \
-		test_raw_fpu_cvt_w_d_nan_d64.s
-
+		test_raw_fpu_rsqrt.s		\
+		test_raw_fpu_sd_ld.s		\
+		test_raw_fpu_sqrt_d32.s		\
+		test_raw_fpu_sqrt.s		\
+		test_raw_fpu_sub_d32.s		\
+		test_raw_fpu_sub_inf_single.s	\
+		test_raw_fpu_sub.s		\
+		test_raw_fpu_sw_lw.s		\
+		test_raw_fpu_trunc_d64.s	\
+		test_raw_fpu_trunc_l_d64.s	\
+		test_raw_fpu_trunc_l_s_d64.s	\
+		test_raw_fpu_trunc_l_s_nan_d64.s \
+		test_raw_fpu_trunc_nan_d64.s	\
+		test_raw_fpu_trunc_nan_single.s \
+		test_raw_fpu_trunc_single.s	\
+		test_raw_fpu_trunc_w_d_nan_d64.s \
+		test_raw_fpu_underflow.s	\
+		test_raw_fpu_xc1.s
 RAW_PS_FILES=\
 		test_raw_fpu_abs_ps.s		\
 		test_raw_fpu_add_ps.s		\
