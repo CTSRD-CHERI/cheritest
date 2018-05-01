@@ -578,6 +578,7 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_cvt_d32.s		\
 		test_raw_fpu_cvt_d_l_d64.s	\
 		test_raw_fpu_cvt_d_w_d64.s	\
+		test_raw_fpu_cvt_d_w_ex.s	\
 		test_raw_fpu_cvt_l_d_d64.s	\
 		test_raw_fpu_cvt_l_s_d64.s	\
 		test_raw_fpu_cvt_l_s_nan_d64.s	\
@@ -587,6 +588,7 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_cvt_single.s	\
 		test_raw_fpu_cvt_s_l_d64.s	\
 		test_raw_fpu_cvt_s_w.s		\
+		test_raw_fpu_cvt_s_w_ex.s	\
 		test_raw_fpu_cvt_w_d_d64.s	\
 		test_raw_fpu_cvt_w_d_nan_d64.s	\
 		test_raw_fpu_cvtw.s		\
