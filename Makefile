@@ -855,24 +855,23 @@ TEST_CP0_FILES=					\
 		test_cp0_multiop_supervisor.s
 
 TEST_FPU_FILES=					\
-		test_fpu_exception_pipeline.s	\
-		test_fpu_compare_cc.s		\
 		test_fpu_bc1t_cc.s		\
-		test_fpu_underflow_rounding.s	\
-		test_fpu_fccr_update.s		\
 		test_fpu_cfc1_pipeline.s	\
-		test_fpu_x_div.s		\
-		test_fpu_x_underflow.s		\
-		test_fpu_x_overflow.s		\
+		test_fpu_compare_cc.s		\
+		test_fpu_exception_pipeline.s	\
+		test_fpu_fccr_update.s		\
+		test_fpu_underflow_rounding.s	\
 		test_fpu_x_c_nan.s		\
 		test_fpu_x_disabled.s		\
+		test_fpu_x_div.s		\
 		test_fpu_x_ldc1_disabled.s	\
 		test_fpu_x_mthc1.s		\
-		test_fpu_x_reserved.s		\
-		test_fpu_x_multiop_disabled.s	\
 		test_fpu_x_multiop_disabled2.s	\
-		test_fpu_x_multiop_disabled3.s
-
+		test_fpu_x_multiop_disabled3.s	\
+		test_fpu_x_multiop_disabled.s	\
+		test_fpu_x_overflow.s		\
+		test_fpu_x_reserved.s		\
+		test_fpu_x_underflow.s
 
 ifeq ($(TEST_CP2),1)
 TEST_CP2_FILES=					\
@@ -1414,6 +1413,9 @@ TEST_FILES=					\
 		$(RAW_LLSC_FILES)		\
 		$(RAW_CP0_FILES)		\
 		$(RAW_PIC_FILES)		\
+		$(RAW_DMA_FILES)		\
+		$(RAW_STATCOUNTERS_FILES)	\
+		$(RAW_RMA_FILES)		\
 		$(TEST_FRAMEWORK_FILES)		\
 		$(TEST_ALU_FILES)		\
 		$(TEST_BRANCH_FILES)		\
@@ -1428,16 +1430,13 @@ TEST_FILES=					\
 		$(TEST_MEM_UNALIGN_FILES)	\
 		$(TEST_TRAPI_FILES)		\
 		$(FUZZ_TEST_FILES)		\
-		$(RAW_DMA_FILES)		\
 		$(TEST_DMA_FILES)		\
 		$(FUZZ_DMA_FILES)		\
 		$(C_FRAMEWORK_FILES)		\
 		$(TEST_CLANG_FILES)		\
 		$(TEST_MULTICORE_FILES)		\
 		$(TEST_MT_FILES)		\
-		$(RAW_STATCOUNTERS_FILES)	\
-		$(TEST_PIC_FILES)		\
-		$(RAW_RMA_FILES)
+		$(TEST_PIC_FILES)
 
 
 ifdef COP1
