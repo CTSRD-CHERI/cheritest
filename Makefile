@@ -337,12 +337,6 @@ ifeq ($(FUZZ_DMA),1)
 TESTDIRS+=$(TESTDIR)/fuzz_dma
 endif
 
-ifeq ($(BRIEF_GXEMUL),1)
-GXEMUL_LOG_FILTER=grep -A100 'cpu0:    pc = '
-else
-GXEMUL_LOG_FILTER=cat
-endif
-
 ifdef COP1
 TESTDIRS+= $(TESTDIR)/fpu
 endif
@@ -2003,6 +1997,11 @@ GXEMUL_LOGDIR=gxemul_log
 GXEMUL_BINDIR?=/usr/groups/ctsrd/gxemul/CTSRD-CHERI-gxemul-testversion
 GXEMUL_TRACE_OPTS?=-i
 GXEMUL_OPTS=-V -E oldtestmips -M 3072 $(GXEMUL_TRACE_OPTS) -p "end"
+ifeq ($(BRIEF_GXEMUL),1)
+GXEMUL_LOG_FILTER=grep -A100 'cpu0:    pc = '
+else
+GXEMUL_LOG_FILTER=cat
+endif
 L3_LOGDIR=l3_log
 SAIL_MIPS_LOGDIR=sail_mips_log
 SAIL_MIPS_EMBED_LOGDIR=sail_mips_embed_log
