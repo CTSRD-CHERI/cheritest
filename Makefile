@@ -99,6 +99,7 @@
 # "make gxemul-test" runs the tests through gxemul
 #
 dollar = $$
+TEST_FPU?=0
 TEST_CP2?=1
 CLANG?=1
 PURECAP?=1
