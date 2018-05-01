@@ -337,8 +337,12 @@ ifeq ($(FUZZ_DMA),1)
 TESTDIRS+=$(TESTDIR)/fuzz_dma
 endif
 
-ifdef COP1
+ifeq ($(TEST_FPU),1)
 TESTDIRS+= $(TESTDIR)/fpu
+else
+ifdef COP1
+$(error "COP1 has been replaced by TEST_FPU")
+endif
 endif
 
 ifdef COP1_ONLY
@@ -1433,7 +1437,7 @@ TEST_FILES=					\
 		$(TEST_PIC_FILES)
 
 
-ifdef COP1
+ifeq ($(TEST_FPU),1)
 TEST_FILES+=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
@@ -1564,7 +1568,7 @@ and not statcounters \
 and not tlb_read_uninitialized \
 and not qemu_only
 
-ifdef COP1
+ifeq ($(TEST_FPU),1)
 L3_NOSEPRED+=\
 and not nofloat \
 and not float32 \
@@ -1917,7 +1921,7 @@ NOSEPRED+=and not dumpicache
 endif
 NOSEPRED+=and not berisyncistep
 endif
-ifdef COP1
+ifeq ($(TEST_FPU),1)
 NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd and not float_mtc_signex and not float_mov_signex and not floatabs2008 and not float_round_upwards
 ifndef TEST_PS
 NOSEPRED+=and not floatpaired
