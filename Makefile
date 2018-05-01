@@ -610,13 +610,6 @@ RAW_FPU_FILES =					\
 		test_raw_fpu_cvt_d_l_d64.s	\
 		test_raw_fpu_cvt_l_d_d64.s	\
 		test_raw_fpu_cvt_l_s_d64.s	\
-		test_fpu_x_disabled.s		\
-		test_fpu_x_ldc1_disabled.s	\
-		test_fpu_x_mthc1.s		\
-		test_fpu_x_reserved.s		\
-		test_fpu_x_multiop_disabled.s	\
-		test_fpu_x_multiop_disabled2.s	\
-		test_fpu_x_multiop_disabled3.s	\
 		test_raw_fpu_bc1t_pipeline.s	\
 		test_raw_fpu_movt_s_pipeline.s	\
 		test_raw_fpu_movf_s_pipeline.s	\
@@ -872,7 +865,15 @@ TEST_FPU_FILES=					\
 		test_fpu_x_div.s		\
 		test_fpu_x_underflow.s		\
 		test_fpu_x_overflow.s		\
-		test_fpu_x_c_nan.s
+		test_fpu_x_c_nan.s		\
+		test_fpu_x_disabled.s		\
+		test_fpu_x_ldc1_disabled.s	\
+		test_fpu_x_mthc1.s		\
+		test_fpu_x_reserved.s		\
+		test_fpu_x_multiop_disabled.s	\
+		test_fpu_x_multiop_disabled2.s	\
+		test_fpu_x_multiop_disabled3.s
+
 
 ifeq ($(TEST_CP2),1)
 TEST_CP2_FILES=					\
