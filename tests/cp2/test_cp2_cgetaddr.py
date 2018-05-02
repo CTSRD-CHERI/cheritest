@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2018 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -32,5 +33,18 @@ class test_cp2_cgetaddr(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_cgetaddr_1(self):
-        '''Test CGetAddr returns the address'''
-        self.assertRegisterEqual(self.MIPS.a0, 1, "CGetAddr did not return the expected address")
+        '''Test CGetAddr returns the address (a0 + 1) '''
+        self.assertRegisterEqual(self.MIPS.a1, self.MIPS.a0 + 1, "CGetAddr did not return the expected address")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "CGetAddr did not return the expected address")
+
+    @attr('capabilities')
+    def test_cp2_cgetaddr_out_of_bouds_pos(self):
+        '''Test CGetAddr returns the address even if the capability is out of bounds (offset > len) '''
+        self.assertRegisterEqual(self.MIPS.a3, self.MIPS.a0 + 0x12345,
+                                 "CGetAddr did not return the expected address for out-of-bounds addresses")
+
+    @attr('capabilities')
+    def test_cp2_cgetaddr_out_of_bouds_neg(self):
+        '''Test CGetAddr returns the address even if the capability is out of bounds (negative offset)'''
+        self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a0 - 1,
+                                 "CGetAddr did not return the expected address for out-of-bounds addresses")

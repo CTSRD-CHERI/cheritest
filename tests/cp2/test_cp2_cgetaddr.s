@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2018 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -42,13 +43,24 @@ BEGIN_TEST
 	csetoffset $c1, $c1, $a0
 	dli	$t0, 8
 	csetbounds $c1, $c1, $t0
+
+	# Create a capability for data + 1
 	dli	$t0, 1
-	cincoffset $c1, $c1, $t0
+	cincoffset $c2, $c1, $t0
+	cgetaddr $a1, $c2	# should be data + 1
+	# $a2 now contains addr of $c1 (data + 1) minus addr of data -> 1
+	dsubu	$a2, $a1, $a0
 
-	cgetaddr $a1, $c1
+	# check that we still get a sensible value for out-of-bounds capabilities
+	dli	$t0, 0x12345
+	cincoffset $c2, $c1, $t0
+	cgetaddr $a3, $c2	# should be data + 0x12345
 
-	dsubu	$a0, $a1, $a0
-	
+	# check that negative offsets work
+	dli	$t0, -1
+	cincoffset $c3, $c1, $t0
+	cgetaddr $a4, $c3	# should be data - 1
+
 END_TEST
 
 	.data
