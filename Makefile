@@ -853,7 +853,8 @@ TEST_CP0_FILES=					\
 		test_cp0_mtc0_user.s		\
 		test_cp0_hwre_init.s		\
 		test_cp0_multiop_user.s		\
-		test_cp0_multiop_supervisor.s
+		test_cp0_multiop_supervisor.s	\
+		test_cp0_k0.s
 
 TEST_FPU_FILES=					\
 		test_fpu_bc1t_cc.s		\
