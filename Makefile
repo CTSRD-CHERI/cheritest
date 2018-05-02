@@ -908,6 +908,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cfromptr_imprecise.s	\
 		test_cp2_cfromptr_null.s	\
 		test_cp2_cfromptr.s		\
+		test_cp2_cgetaddr.s		\
 		test_cp2_cgettype.s		\
 		test_cp2_cincoffset_imprecise.s \
 		test_cp2_cincoffset_notag.s	\
