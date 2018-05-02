@@ -795,22 +795,47 @@ TEST_CACHE_FILES=				\
 		test_cache_instruction_L2.s	\
 		test_cache_taglo.s		\
 		test_id_coherence.s
+
 TEST_CP0_FILES=					\
-		test_cp0_reg_init.s		\
+		test_break.s			\
+		test_cp0_cache_user.s		\
+		test_cp0_ccres.s		\
+		test_cp0_compare.s		\
 		test_cp0_config1		\
 		test_cp0_config2		\
 		test_cp0_config3		\
 		test_cp0_config5		\
 		test_cp0_config6		\
+		test_cp0_counter.s		\
+		test_cp0_eret_user.s		\
+		test_cp0_hwre_init.s		\
+		test_cp0_hwrenable.s		\
+		test_cp0_k0.s			\
+		test_cp0_mtc0_user.s		\
+		test_cp0_multiop_supervisor.s	\
+		test_cp0_multiop_user.s		\
+		test_cp0_rdhwr_counter.s	\
+		test_cp0_rdhwr_statcounters_icount.s	\
+		test_cp0_rdhwr_user2.s		\
+		test_cp0_rdhwr_user.s		\
+		test_cp0_reg_init.s		\
+		test_cp0_ri.s			\
+		test_cp0_syncistep.s		\
+		test_cp0_tlbwi_user.s		\
+		test_cp0_userlocal.s		\
+		test_cp0_user.s			\
+		test_cp0_wait.s			\
+		test_cp0_watch_instr.s		\
+		test_cp0_watch_load.s		\
+		test_cp0_watch_store.s		\
 		test_eret.s			\
-		test_exception_bev0_trap.s	\
 		test_exception_bev0_trap_bd.s	\
+		test_exception_bev0_trap.s	\
 		test_exception_exl.s		\
-		test_break.s			\
-		test_syscall.s			\
 		test_syscall2.s			\
 		test_syscall50.s		\
 		test_syscall_cache_store.s	\
+		test_syscall.s			\
 		test_teq_eq.s			\
 		test_teq_gt.s			\
 		test_teq_lt.s			\
@@ -825,36 +850,12 @@ TEST_CP0_FILES=					\
 		test_tlt_lt.s			\
 		test_tlt_overflow.s		\
 		test_tltu_eq.s			\
-		test_tltu_gt_sign.s		\
 		test_tltu_gt.s			\
+		test_tltu_gt_sign.s		\
 		test_tltu_lt.s			\
 		test_tne_eq.s			\
 		test_tne_gt.s			\
-		test_tne_lt.s			\
-		test_cp0_compare.s		\
-		test_cp0_watch_instr.s		\
-		test_cp0_watch_load.s		\
-		test_cp0_watch_store.s		\
-		test_cp0_user.s			\
-		test_cp0_eret_user.s		\
-		test_cp0_ri.s			\
-		test_cp0_cache_user.s		\
-		test_cp0_counter.s		\
-		test_cp0_userlocal.s		\
-		test_cp0_rdhwr_user.s		\
-		test_cp0_rdhwr_user2.s		\
-		test_cp0_rdhwr_counter.s	\
-		test_cp0_rdhwr_statcounters_icount.s	\
-		test_cp0_tlbwi_user.s		\
-		test_cp0_hwrenable.s		\
-		test_cp0_syncistep.s		\
-		test_cp0_ccres.s		\
-		test_cp0_wait.s			\
-		test_cp0_mtc0_user.s		\
-		test_cp0_hwre_init.s		\
-		test_cp0_multiop_user.s		\
-		test_cp0_multiop_supervisor.s	\
-		test_cp0_k0.s
+		test_tne_lt.s
 
 TEST_FPU_FILES=					\
 		test_fpu_bc1t_cc.s		\
