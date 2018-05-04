@@ -134,7 +134,7 @@ cd ctsrd/cheri/trunk
 rm -f sim sim.so
 # build the simulator
 ''' + "make ${args.buildArgs} sim || (make clean ; make ${args.buildArgs} sim)"
-			archiveArtifacts allowEmptyArchive: false, artifacts: 'ctsrd/cheri/trunk/sim, ctsrd/cheri/trunk/sim.so, ctsrd/cheri/trunk/sim.dtb, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim.so, ctsrd/cheri/trunk/build_cap_tags_0_sim/sim.dtb, ctsrd/cherilibs/trunk/peripherals/*.so, ctsrd/cherilibs/trunk/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
+			archiveArtifacts allowEmptyArchive: false, artifacts: 'ctsrd/cheri/trunk/build_*_sim/sim, ctsrd/cheri/trunk/build_*_sim/sim.so, ctsrd/cheri/trunk/build_*_sim/sim.dtb, ctsrd/cherilibs/trunk/peripherals/*.so, ctsrd/cherilibs/trunk/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
 		}
 		timeout(90) {
 			runTests(args, "binutils")
