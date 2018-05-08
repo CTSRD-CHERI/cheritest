@@ -1,28 +1,45 @@
 cmake_minimum_required(VERSION 3.4)
 project(cheritest LANGUAGES NONE)
-# Unset all make variables that are added by the cmake build
-set(SET_MAKE_ENV_VARS -u MAKE -u MAKELEVEL -u MFLAGS -u MAKEFLAGS
-	COP1=1 CLANG=1)
-add_custom_target(run-make ALL VERBATIM USES_TERMINAL
-	COMMAND env ${SET_MAKE_ENV_VARS} make -j8 -k elfs
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-add_custom_target(run-make-gnu-as ALL VERBATIM USES_TERMINAL
-	COMMAND env ${SET_MAKE_ENV_VARS} CHERI_SDK_USE_GNU_AS=1 make -j8 -k elfs
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-add_custom_target(run-make-j1 VERBATIM USES_TERMINAL
-        COMMAND env ${SET_MAKE_ENV_VARS} make -j1 elfs
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-add_custom_target(run-qemu-tests VERBATIM USES_TERMINAL
-        COMMAND env ${SET_MAKE_ENV_VARS} CAP_SIZE=128 make -j4 pytest_qemu
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-add_custom_target(run-qemu-tests-256 VERBATIM USES_TERMINAL
-	COMMAND env ${SET_MAKE_ENV_VARS} CAP_SIZE=256 make -j4 pytest_qemu
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-add_custom_target(qemu-nosetests VERBATIM USES_TERMINAL
-	COMMAND env ${SET_MAKE_ENV_VARS} make -j1 nosetests_qemu
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-add_custom_target(purecap-qemu VERBATIM USES_TERMINAL
-	COMMAND env ${SET_MAKE_ENV_VARS} make -j1 qemu_purecap_tests
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+function(add_targets _suffix _flags _objdir)
+	# Unset all make variables that are added by the cmake build
+	set(SET_MAKE_ENV_VARS -u MAKE -u MAKELEVEL -u MFLAGS -u MAKEFLAGS ${_flags})
+	set(_objdir_flags OBJDIR=${_objdir} QEMU_LOGDIR=${_objdir}/qemu_log)
+	file(MAKE_DIRECTORY ${_objdir})
+	add_custom_target(run-make${_suffix} ALL VERBATIM USES_TERMINAL
+		COMMAND env ${SET_MAKE_ENV_VARS} make -j8 -k elfs ${_objdir_flags}
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+	add_custom_target(run-make${_suffix}-j1 VERBATIM USES_TERMINAL
+		COMMAND env ${SET_MAKE_ENV_VARS} make -j1 elfs ${_objdir_flags}
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+	add_custom_target(run-qemu-tests${_suffix} VERBATIM USES_TERMINAL
+		COMMAND env ${SET_MAKE_ENV_VARS} make -j4 pytest_qemu ${_objdir_flags}
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+	add_custom_target(qemu-nosetests${_suffix} VERBATIM USES_TERMINAL
+		COMMAND env ${SET_MAKE_ENV_VARS} make -j1 nosetests_qemu ${_objdir_flags}
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+	add_custom_target(qemu-pytest${_suffix} VERBATIM USES_TERMINAL
+		COMMAND env ${SET_MAKE_ENV_VARS} make -j1 nosetests_qemu ${_objdir_flags}
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+	add_custom_target(purecap-qemu${_suffix} VERBATIM USES_TERMINAL
+		COMMAND env ${SET_MAKE_ENV_VARS} make -j1 qemu_purecap_tests ${_objdir_flags}
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+endfunction()
+
+foreach(_capsize 128 256)
+	set(_target_prefix "-${_capsize}")
+	set(_cheri_flag "CAP_SIZE=${_capsize}")
+	add_targets("${_target_prefix}" "TEST_FPU=0 CLANG=1 ${_cheri_flag}"
+		"${CMAKE_CURRENT_BINARY_DIR}/llvm-${_capsize}")
+	add_targets("${_target_prefix}-with-fpu" "TEST_FPU=1 CLANG=1 ${_cheri_flag}"
+		"${CMAKE_CURRENT_BINARY_DIR}/llvm-${_capsize}")
+
+	# Use a different builddir for binutils:
+	add_targets("${_target_prefix}-binutils" "CHERI_SDK_USE_GNU_AS=1 TEST_FPU=0 CLANG=0 ${_cheri_flag}"
+		"${CMAKE_CURRENT_BINARY_DIR}/binutils-${_capsize}")
+	add_targets("${_target_prefix}-binutils-with-fpu" "CHERI_SDK_USE_GNU_AS=1 TEST_FPU=1 CLANG=0 ${_cheri_flag}"
+		"${CMAKE_CURRENT_BINARY_DIR}/binutils-${_capsize}")
+endforeach()
+
 add_custom_target(env VERBATIM USES_TERMINAL COMMAND env | sort WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 add_custom_target(env-clean VERBATIM USES_TERMINAL COMMAND env ${SET_MAKE_ENV_VARS} env | sort WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

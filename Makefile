@@ -2000,6 +2000,7 @@ endif
 
 VPATH=$(TESTDIRS)
 OBJDIR=obj
+SELECT_INIT:=$(OBJDIR)/select_init
 LOGDIR=log
 ALTERA_LOGDIR=altera_log
 HWSIM_LOGDIR=hwsim_log
@@ -2347,25 +2348,25 @@ $(OBJDIR)/test_purecap_switch_cachedmulti.elf: $(OBJDIR)/test_purecap_switch.o t
 
 $(OBJDIR)/test_purecap_%_cached.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap_cached.ld \
-	    $(PURECAP_INIT_CACHED_OBJS) select_init
+	    $(PURECAP_INIT_CACHED_OBJS) $(SELECT_INIT)
 	@echo "PURECAP_LD cached $@"
-	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap_%_multi.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap.ld \
-	    $(PURECAP_INIT_OBJS) select_init
+	    $(PURECAP_INIT_OBJS) $(SELECT_INIT)
 	@echo "PURECAP_LD multi $@"
-	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap_%_cachedmulti.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap_cached.ld \
-	    $(PURECAP_INIT_CACHED_OBJS) select_init
+	    $(PURECAP_INIT_CACHED_OBJS) $(SELECT_INIT)
 	@echo "PURECAP_LD cached multi $@"
-	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
-$(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP_INIT_OBJS)
+$(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP_INIT_OBJS) $(SELECT_INIT)
 	@echo "PURECAP_LD $@"
-	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `./select_init $@` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(MIPS_LD) --fatal-warnings -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
 
 
 ### END RULES FOR PURECAP TESTS
@@ -2383,8 +2384,8 @@ $(OBJDIR)/test_%.o : test_%.c
 $(OBJDIR)/%.o: %.s
 	$(MIPS_AS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
-select_init: select_init.c
-	$(CC) -o select_init select_init.c
+$(SELECT_INIT): select_init.c
+	$(CC) -o $@ $<
 
 #
 # Targets for ELF images
@@ -2392,41 +2393,41 @@ select_init: select_init.c
 
 #$(OBJDIR)/test_clang_dma_simple.elf : $(OBJDIR)/test_clang_dma_simple.o $(DMA_LIB_OBJS)\
 #	    #$(TEST_LDSCRIPT) \
-#	    #$(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
-#	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
+#	    #$(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $(SELECT_INIT)
+#	$(MIPS_LD) -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)`  $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
 $(OBJDIR)/startdramtest.elf: $(OBJDIR)/startdramtest.o $(TEST_LDSCRIPT)
 	$(MIPS_LD) -EB -G0 raw.ld $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_clang_dma%.elf : $(OBJDIR)/test_clang_dma%.o $(DMA_LIB_OBJS)\
 	    $(TEST_LDSCRIPT) \
-	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $(SELECT_INIT)
 	$(MIPS_LD) -EB -G0 -Ttest_dram.ld $(OBJDIR)/lib.o $< -o $@ $(DMA_LIB_OBJS) -m elf64btsmip
 
 $(OBJDIR)/test_%.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_LDSCRIPT) \
-	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) select_init
-	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+	    $(TEST_INIT_OBJECT) $(TEST_LIB_OBJECT) $(SELECT_INIT)
+	$(MIPS_LD) -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_cached.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_CACHED_LDSCRIPT) \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(TEST_LIB_OBJECT) select_init
-	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+	    $(TEST_LIB_OBJECT) $(SELECT_INIT)
+	$(MIPS_LD) -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_multi.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_MULTI_LDSCRIPT) \
 	    $(TEST_INIT_MULTI_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(TEST_LIB_OBJECT) select_init
-	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+	    $(TEST_LIB_OBJECT) $(SELECT_INIT)
+	$(MIPS_LD) -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)`  $< -o $@ -m elf64btsmip
 
 $(OBJDIR)/test_%_cachedmulti.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_CACHEDMULTI_LDSCRIPT) \
 	    $(TEST_INIT_MULTI_OBJECT) \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
-	    $(TEST_LIB_OBJECT) select_init
-	$(MIPS_LD) -EB -G0 `./select_init $@`  $< -o $@ -m elf64btsmip
+	    $(TEST_LIB_OBJECT) $(SELECT_INIT)
+	$(MIPS_LD) -EB -G0 `$(SELECT_INIT) $@ $(OBJDIR)`  $< -o $@ -m elf64btsmip
 
 #
 # Convert ELF images to raw memory images that can be loaded into simulators

@@ -52,6 +52,7 @@ int build;
   }
 
   cp = argv[1];
+  const char* objdir = argc > 2 ? argv[2] : "obj";
   /* remove any path before the file name */
   cp1 = rindex(cp, '/');
   if (cp1)
@@ -79,14 +80,14 @@ int build;
         printf("-Traw.ld\n");
         break;
       case BUILD_CACHED:
-        printf("-Traw_cached.ld obj/init_cached.o\n");
+        printf("-Traw_cached.ld %s/init_cached.o\n", objdir);
         break;
       case BUILD_UNCACHED_MULTI:
         /* raw_mc tests are aware of cores, so just link with raw.ld */
         printf("-Traw.ld\n");
         break;
       case BUILD_CACHED_MULTI:
-        printf("-Traw_cached.ld obj/init_cached.o\n");
+        printf("-Traw_cached.ld %s/init_cached.o\n", objdir);
     }
   }
   else if (strncmp(cp, "test_raw_", 9) == 0)
@@ -97,28 +98,30 @@ int build;
         printf("-Traw.ld\n");
         break;
       case BUILD_CACHED:
-        printf("-Traw_cached.ld obj/init_cached.o\n");
+        printf("-Traw_cached.ld %s/init_cached.o\n", objdir);
         break;
       case BUILD_UNCACHED_MULTI:
         /* init_multi.o will work for cached and uncached */
-        printf("-Traw_multi.ld obj/init_multi.o\n");
+        printf("-Traw_multi.ld %s/init_multi.o\n", objdir);
         break;
       case BUILD_CACHED_MULTI:
         /* init_multi.o will work for cached and uncached */
-        printf("-Traw_cachedmulti.ld obj/init_multi.o\n");
+        printf("-Traw_cachedmulti.ld %s/init_multi.o\n", objdir);
         break;
     }
   }
   else if (strncmp(cp, "test_purecap_", strlen("test_purecap_")) == 0)
   {
-    const char* purecap_init_objs = "obj/purecap_init.o obj/purecap_crt_init_globals.o obj/purecap_lib.o";
+    const char* purecap_init_objs = NULL;
+    asprintf(&purecap_init_objs, "%s/purecap_init.o %s/purecap_crt_init_globals.o"
+      " %s/purecap_lib.o", objdir, objdir, objdir);
     switch (build)
     {
       case BUILD_UNCACHED:
         printf("-Ttest_purecap.ld %s\n", purecap_init_objs);
         break;
       case BUILD_CACHED:
-        printf("-Ttest_purecap_cached.ld obj/purecap_init_cached.o %s\n", purecap_init_objs);
+        printf("-Ttest_purecap_cached.ld %s/purecap_init_cached.o %s\n", objdir, purecap_init_objs);
         break;
       case BUILD_UNCACHED_MULTI:
         /* Non-raw tests don't need init_multi.o, because init.o takes
@@ -128,29 +131,30 @@ int build;
         break;
       case BUILD_CACHED_MULTI:
         /* Non-raw tests don't need init_multi.o */
-        printf("-Ttest_purecap_cached.ld obj/purecap_init_cached.o %s\n", purecap_init_objs);
+        printf("-Ttest_purecap_cached.ld %s/purecap_init_cached.o %s\n", objdir, purecap_init_objs);
         break;
     }
+    free(purecap_init_objs);
   }
   else
   {
     switch (build)
     {
       case BUILD_UNCACHED:
-        printf("-Ttest.ld obj/init.o obj/lib.o\n");
+        printf("-Ttest.ld %s/init.o %s/lib.o\n", objdir, objdir);
         break;
       case BUILD_CACHED:
-        printf("-Ttest_cached.ld obj/init_cached.o obj/init.o obj/lib.o\n");
+        printf("-Ttest_cached.ld %s/init_cached.o %s/init.o %s/lib.o\n", objdir, objdir, objdir);
         break;
       case BUILD_UNCACHED_MULTI:
         /* Non-raw tests don't need init_multi.o, because init.o takes
          * care of multicore initialization.
          */
-        printf("-Ttest.ld obj/init.o obj/lib.o\n");
+        printf("-Ttest.ld %s/init.o %s/lib.o\n", objdir, objdir);
         break;
       case BUILD_CACHED_MULTI:
         /* Non-raw tests don't need init_multi.o */
-        printf("-Ttest_cached.ld obj/init_cached.o obj/init.o obj/lib.o\n");
+        printf("-Ttest_cached.ld %s/init_cached.o %s/init.o %s/lib.o\n", objdir, objdir, objdir);
         break;
     }
   }
