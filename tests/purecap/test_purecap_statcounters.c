@@ -52,7 +52,7 @@ typedef struct statcounters_bank
 
 
 // TODO the itlbmiss/dtlbmiss/cycle/inst counters are not reset with that
-static inline void resetStatCounters (void)
+__attribute__((used)) static inline void resetStatCounters (void)
 {
 	__asm __volatile(".word (0x1F << 26) | (0x0 << 21) | (0x0 << 16) | (0x7 << 11) | (0x0 << 6) | (0x3B)");
 }
@@ -152,58 +152,58 @@ enum
     STATCOUNTERS_WRITE_RSP      = 5
 };
 
-DEFINE_GET_STAT_COUNTER(cycle,2,0);
-DEFINE_GET_STAT_COUNTER(inst,4,0);
-DEFINE_GET_STAT_COUNTER(itlb_miss,5,0);
-DEFINE_GET_STAT_COUNTER(dtlb_miss,6,0);
-DEFINE_GET_STAT_COUNTER(icache_write_hit,8,0);
-DEFINE_GET_STAT_COUNTER(icache_write_miss,8,1);
-DEFINE_GET_STAT_COUNTER(icache_read_hit,8,2);
-DEFINE_GET_STAT_COUNTER(icache_read_miss,8,3);
-DEFINE_GET_STAT_COUNTER(icache_evict,8,6);
-DEFINE_GET_STAT_COUNTER(dcache_write_hit,9,0);
-DEFINE_GET_STAT_COUNTER(dcache_write_miss,9,1);
-DEFINE_GET_STAT_COUNTER(dcache_read_hit,9,2);
-DEFINE_GET_STAT_COUNTER(dcache_read_miss,9,3);
-DEFINE_GET_STAT_COUNTER(dcache_evict,9,6);
-DEFINE_GET_STAT_COUNTER(dcache_set_tag_write,9,8);
-DEFINE_GET_STAT_COUNTER(dcache_set_tag_read,9,9);
-DEFINE_GET_STAT_COUNTER(l2cache_write_hit,10,0);
-DEFINE_GET_STAT_COUNTER(l2cache_write_miss,10,1);
-DEFINE_GET_STAT_COUNTER(l2cache_read_hit,10,2);
-DEFINE_GET_STAT_COUNTER(l2cache_read_miss,10,3);
-DEFINE_GET_STAT_COUNTER(l2cache_evict,10,6);
-DEFINE_GET_STAT_COUNTER(l2cache_set_tag_write,10,8);
-DEFINE_GET_STAT_COUNTER(l2cache_set_tag_read,10,9);
-DEFINE_GET_STAT_COUNTER(mem_byte_read,11,0);
-DEFINE_GET_STAT_COUNTER(mem_byte_write,11,1);
-DEFINE_GET_STAT_COUNTER(mem_hword_read,11,2);
-DEFINE_GET_STAT_COUNTER(mem_hword_write,11,3);
-DEFINE_GET_STAT_COUNTER(mem_word_read,11,4);
-DEFINE_GET_STAT_COUNTER(mem_word_write,11,5);
-DEFINE_GET_STAT_COUNTER(mem_dword_read,11,6);
-DEFINE_GET_STAT_COUNTER(mem_dword_write,11,7);
-DEFINE_GET_STAT_COUNTER(mem_cap_read,11,8);
-DEFINE_GET_STAT_COUNTER(mem_cap_write,11,9);
-DEFINE_GET_STAT_COUNTER(mem_cap_read_tag_set,11,10);
-DEFINE_GET_STAT_COUNTER(mem_cap_write_tag_set,11,11);
-DEFINE_GET_STAT_COUNTER(tagcache_write_hit,12,0);
-DEFINE_GET_STAT_COUNTER(tagcache_write_miss,12,1);
-DEFINE_GET_STAT_COUNTER(tagcache_read_hit,12,2);
-DEFINE_GET_STAT_COUNTER(tagcache_read_miss,12,3);
-DEFINE_GET_STAT_COUNTER(tagcache_evict,12,6);
-DEFINE_GET_STAT_COUNTER(l2cachemaster_read_req,13,0);
-DEFINE_GET_STAT_COUNTER(l2cachemaster_write_req,13,1);
-DEFINE_GET_STAT_COUNTER(l2cachemaster_write_req_flit,13,2);
-DEFINE_GET_STAT_COUNTER(l2cachemaster_read_rsp,13,3);
-DEFINE_GET_STAT_COUNTER(l2cachemaster_read_rsp_flit,13,4);
-DEFINE_GET_STAT_COUNTER(l2cachemaster_write_rsp,13,5);
-DEFINE_GET_STAT_COUNTER(tagcachemaster_read_req,14,0);
-DEFINE_GET_STAT_COUNTER(tagcachemaster_write_req,14,1);
-DEFINE_GET_STAT_COUNTER(tagcachemaster_write_req_flit,14,2);
-DEFINE_GET_STAT_COUNTER(tagcachemaster_read_rsp,14,3);
-DEFINE_GET_STAT_COUNTER(tagcachemaster_read_rsp_flit,14,4);
-DEFINE_GET_STAT_COUNTER(tagcachemaster_write_rsp,14,5);
+DEFINE_GET_STAT_COUNTER(cycle,2,0)
+DEFINE_GET_STAT_COUNTER(inst,4,0)
+DEFINE_GET_STAT_COUNTER(itlb_miss,5,0)
+DEFINE_GET_STAT_COUNTER(dtlb_miss,6,0)
+DEFINE_GET_STAT_COUNTER(icache_write_hit,8,0)
+DEFINE_GET_STAT_COUNTER(icache_write_miss,8,1)
+DEFINE_GET_STAT_COUNTER(icache_read_hit,8,2)
+DEFINE_GET_STAT_COUNTER(icache_read_miss,8,3)
+DEFINE_GET_STAT_COUNTER(icache_evict,8,6)
+DEFINE_GET_STAT_COUNTER(dcache_write_hit,9,0)
+DEFINE_GET_STAT_COUNTER(dcache_write_miss,9,1)
+DEFINE_GET_STAT_COUNTER(dcache_read_hit,9,2)
+DEFINE_GET_STAT_COUNTER(dcache_read_miss,9,3)
+DEFINE_GET_STAT_COUNTER(dcache_evict,9,6)
+DEFINE_GET_STAT_COUNTER(dcache_set_tag_write,9,8)
+DEFINE_GET_STAT_COUNTER(dcache_set_tag_read,9,9)
+DEFINE_GET_STAT_COUNTER(l2cache_write_hit,10,0)
+DEFINE_GET_STAT_COUNTER(l2cache_write_miss,10,1)
+DEFINE_GET_STAT_COUNTER(l2cache_read_hit,10,2)
+DEFINE_GET_STAT_COUNTER(l2cache_read_miss,10,3)
+DEFINE_GET_STAT_COUNTER(l2cache_evict,10,6)
+DEFINE_GET_STAT_COUNTER(l2cache_set_tag_write,10,8)
+DEFINE_GET_STAT_COUNTER(l2cache_set_tag_read,10,9)
+DEFINE_GET_STAT_COUNTER(mem_byte_read,11,0)
+DEFINE_GET_STAT_COUNTER(mem_byte_write,11,1)
+DEFINE_GET_STAT_COUNTER(mem_hword_read,11,2)
+DEFINE_GET_STAT_COUNTER(mem_hword_write,11,3)
+DEFINE_GET_STAT_COUNTER(mem_word_read,11,4)
+DEFINE_GET_STAT_COUNTER(mem_word_write,11,5)
+DEFINE_GET_STAT_COUNTER(mem_dword_read,11,6)
+DEFINE_GET_STAT_COUNTER(mem_dword_write,11,7)
+DEFINE_GET_STAT_COUNTER(mem_cap_read,11,8)
+DEFINE_GET_STAT_COUNTER(mem_cap_write,11,9)
+DEFINE_GET_STAT_COUNTER(mem_cap_read_tag_set,11,10)
+DEFINE_GET_STAT_COUNTER(mem_cap_write_tag_set,11,11)
+DEFINE_GET_STAT_COUNTER(tagcache_write_hit,12,0)
+DEFINE_GET_STAT_COUNTER(tagcache_write_miss,12,1)
+DEFINE_GET_STAT_COUNTER(tagcache_read_hit,12,2)
+DEFINE_GET_STAT_COUNTER(tagcache_read_miss,12,3)
+DEFINE_GET_STAT_COUNTER(tagcache_evict,12,6)
+DEFINE_GET_STAT_COUNTER(l2cachemaster_read_req,13,0)
+DEFINE_GET_STAT_COUNTER(l2cachemaster_write_req,13,1)
+DEFINE_GET_STAT_COUNTER(l2cachemaster_write_req_flit,13,2)
+DEFINE_GET_STAT_COUNTER(l2cachemaster_read_rsp,13,3)
+DEFINE_GET_STAT_COUNTER(l2cachemaster_read_rsp_flit,13,4)
+DEFINE_GET_STAT_COUNTER(l2cachemaster_write_rsp,13,5)
+DEFINE_GET_STAT_COUNTER(tagcachemaster_read_req,14,0)
+DEFINE_GET_STAT_COUNTER(tagcachemaster_write_req,14,1)
+DEFINE_GET_STAT_COUNTER(tagcachemaster_write_req_flit,14,2)
+DEFINE_GET_STAT_COUNTER(tagcachemaster_read_rsp,14,3)
+DEFINE_GET_STAT_COUNTER(tagcachemaster_read_rsp_flit,14,4)
+DEFINE_GET_STAT_COUNTER(tagcachemaster_write_rsp,14,5)
 
 // helper functions
 
