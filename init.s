@@ -150,21 +150,22 @@ no_float:
 # .global crt_init_globals
 
 		# remove the Permit_Execute permission from DDC to catch more errors
-		dli $at, ~(1 << 1) # All but Permit_Execute
-		candperm $c0, $c0, $at
+		dli	$at, ~(CHERI_PERM_EXECUTE) # All but Permit_Execute
+		cgetdefault	$c1
+		candperm	$c1, $c1, $at
+		csetdefault	$c1
 
 		# When building for purecap (and potentially also hybrid) we
 		# need to call crt_init_globals() before starting the test
-		# NOTE: the following requires nosp to be merged!
-		cfromptr $c11, $c0, $sp
+		cfromptr	$c11, $c1, $sp
 .ifdef __CHERI_CAPABILITY_TABLE__
 		# If we are using the capability table we also need to setup $cgp
 		dla $at, _CHERI_CAPABILITY_TABLE_
-		cfromptr $cgp, $c0, $at
+		cfromptr $cgp, $c1, $at
 		# FIXME: we also wan't to set sensible bounds here and reduce permissions
 .endif
 		# clear  Permit_Store + Permit_StoreCapability on $c12 + $c17
-		dli	$at, ~((1 << 3) | (1 << 5))
+		dli	$at, ~(CHERI_PERM_STORE | CHERI_PERM_STORE_CAP)
 		cgetpcc	$c12
 		# jump forward 4 instrs afters the cgetpcc to clear permissions from pcc
 		cincoffset	$c12, $c12, 16
