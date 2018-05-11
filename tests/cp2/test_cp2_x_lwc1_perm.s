@@ -74,7 +74,7 @@ BEGIN_TEST
 		dla	$a1, bev0_common_handler_stub
 		dli	$a2, 12	# instruction count
 		dsll	$a2, 2	# convert to byte count
-		jal	memcpy
+		jal	memcpy_nocap
 		nop		# branch delay slot	
 
 		# $a2 will be set to 1 if the exception handler is called

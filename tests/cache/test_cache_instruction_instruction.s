@@ -78,43 +78,43 @@ BEGIN_TEST
         # it depends on the object file and that information is not accessible
         # in the MIPS asm parser (yet)
         dla     $a2, idx10_end-idx10    # len
-        jal     memcpy
+        jal	memcpy_nocap
         nop
 
         dli     $a0, 0x9800000000000280 # dest
         dla     $a1, idx20              # src
         dla     $a2, idx20_end-idx20    # len
-        jal     memcpy
+        jal	memcpy_nocap
         nop
 
         dli     $a0, 0x9800000000001080 # dest
         dla     $a1, idx132             # src
         dla     $a2, idx132_end-idx132  # len
-        jal     memcpy
+        jal	memcpy_nocap
         nop
 
         dli     $a0, 0x9800000000001c60 # dest
         dla     $a1, idx227             # src
         dla     $a2, idx227_end-idx227  # len
-        jal     memcpy
+        jal	memcpy_nocap
         nop
 
         dli     $a0, 0x9800000000000a60 # dest
         dla     $a1, idx83              # src
         dla     $a2, idx83_end-idx83    # len
-        jal     memcpy
+        jal	memcpy_nocap
         nop
 
         dli     $a0, 0x9800000000003e80 # dest
         dla     $a1, idx500             # src
         dla     $a2, idx500_end-idx500  # len
-        jal     memcpy
+        jal	memcpy_nocap
         nop
 
         dli     $a0, 0x9800000000003280 # dest
         dla     $a1, idx404             # src
         dla     $a2, idx404_end-idx404  # len
-        jal     memcpy
+        jal	memcpy_nocap
         nop
 
         #start fetching instruction cache lines at different indexes

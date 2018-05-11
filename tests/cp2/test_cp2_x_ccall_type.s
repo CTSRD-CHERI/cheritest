@@ -64,7 +64,7 @@ BEGIN_TEST
 		dla	$a1, bev0_ccall_handler_stub
 		dli	$a2, 9 		# 32-bit instruction count
 		dsll	$a2, 2		# Convert to byte count
-		jal memcpy
+		jal	memcpy_nocap
 		nop			# branch-delay slot
 
                 # Make $c1 a template capability for a user-defined type

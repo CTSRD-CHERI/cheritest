@@ -47,7 +47,7 @@ BEGIN_TEST
 		dli	$a0, 0x9800000010000000
 		dla	$a1, target
 		dli	$a2, 0x80
-		jal	memcpy
+		jal	memcpy_nocap
 		nop	# Branch delay slot
 
 		#
@@ -57,7 +57,7 @@ BEGIN_TEST
 		dli	$a0, 0x9800000010000000 + 131072 - 4
 		dla	$a1, branch
 		dli	$a2, 0x80
-		jal	memcpy
+		jal	memcpy_nocap
 		nop	# Branch delay slot
 
 		sync # Ensure that instruction writes are propagated.
