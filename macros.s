@@ -288,10 +288,6 @@ max_thread_count = 32
         #csetoffset \dest, \dest, $at
 .endm
 
-.macro cgetnull dest
-	cfromptr \dest, $c1, $zero
-.endm
-
 .macro CFromInt dest, src
 	cgetnull \dest
 	cincoffset \dest, \dest, \src
@@ -301,6 +297,20 @@ max_thread_count = 32
 	dli $\tmpreg, \value
 	CFromInt \dest, $\tmpreg
 .endm
+
+
+# Workaround for binutils:
+.ifdef _GNU_AS_
+.macro cgetnull dest
+	cfromptr	\dest, $c1, $zero
+.endm
+
+.macro cfromddc dest, src
+	cfromptr	\dest, $c0, \src
+.endm
+
+.endif  # _GNU_AS_
+
 
 # Does a CSetOffset with an immediate value on a special capability register
 # E.g. `SetSpecialRegOffset Default, 0x123` or `SetSpecialRegOffset EPCC, 0x123`
