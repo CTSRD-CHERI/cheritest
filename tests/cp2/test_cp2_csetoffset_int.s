@@ -39,7 +39,7 @@
 BEGIN_TEST
 		dli	$a0, 2
 		dli	$a1, -1
-		cfromptr $c1, $c0, $zero	# Should clear the tag
+		cgetnull $c1	# Should clear the tag
 		cgettag $a0, $c1		# Check tag is cleared
 		dli	$t0, 5
 		csetoffset $c1, $c1, $t0	# Should succeed

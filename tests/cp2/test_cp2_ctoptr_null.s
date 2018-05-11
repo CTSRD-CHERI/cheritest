@@ -43,7 +43,7 @@ BEGIN_TEST
 		dli	$t0, 4
 		csetbounds $c1, $c1, $t0
 
-		cfromptr $c2, $c0, $zero
+		cgetnull $c2
 		dli	$a0, 1
 		ctoptr	$a0, $c2, $c1
 

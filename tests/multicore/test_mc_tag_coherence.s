@@ -115,7 +115,7 @@ not_core_zero:
 		dla	$a1, cap
 		dli	$t0, 1
 		csetoffset $c1, $c0, $t0
-		cfromptr $c2, $c0, $zero
+		cgetnull $c2
 loop1:
 		csc 	$c1, $a1, 0($c0)
 		nop

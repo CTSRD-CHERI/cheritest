@@ -36,7 +36,7 @@
 #
 
 BEGIN_TEST
-		cfromptr $c1, $c0, $zero
+		cgetnull $c1
 		dli	$t0, 42
 		cincoffset $c1, $c1, $t0
 

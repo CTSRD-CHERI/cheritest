@@ -64,7 +64,7 @@ BEGIN_TEST
                 #
 
                 dmtc0    $zero, $14
-                cfromptr $c31, $c0, $0
+                cgetnull $c31
 
                 nop
                 nop

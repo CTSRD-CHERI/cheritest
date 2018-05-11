@@ -36,7 +36,7 @@
 BEGIN_TEST
 		dla	$t0, cap
 		clc 	$c1, $t0, 0($c0)
-		cfromptr $c2, $c0, $zero
+		cgetnull $c2
 
 		ceq	$a0, $c1, $c2
 		cexeq	$a1, $c1, $c2

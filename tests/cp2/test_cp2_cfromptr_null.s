@@ -47,8 +47,8 @@ BEGIN_TEST
 		cincoffset $c1, $c1, $t0
 		csetbounds  $c1, $c1, $t0
 		csetoffset $c1, $c1, $t0
-		
-		cfromptr $c1, $c0, $zero
+
+		cgetnull $c1
 
 		# Check the fields of a NULL capability
 		cgetperm $a0, $c1

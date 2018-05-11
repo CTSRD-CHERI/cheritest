@@ -79,8 +79,8 @@ BEGIN_TEST
 		cgetbase	$t0, $c2
 		dsubu		$a2, $a2, $t0
 
-		cfromptr $c3, $c0, $zero
-		cfromptr $c4, $c0, $zero
+		cgetnull $c3
+		cgetnull $c4
 		cmovn $c3, $c2, $zero
 		cexeq $a4, $c3, $c4
 
