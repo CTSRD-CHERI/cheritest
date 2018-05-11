@@ -26,6 +26,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define BUILD_UNCACHED 0
@@ -112,7 +113,7 @@ int build;
   }
   else if (strncmp(cp, "test_purecap_", strlen("test_purecap_")) == 0)
   {
-    const char* purecap_init_objs = NULL;
+    char* purecap_init_objs = NULL;
     asprintf(&purecap_init_objs, "%s/purecap_init.o %s/purecap_crt_init_globals.o"
       " %s/purecap_lib.o", objdir, objdir, objdir);
     switch (build)
