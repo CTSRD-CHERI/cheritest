@@ -84,16 +84,16 @@ smallclr:
 .end bzero
 
 
-
+# for purecap code memcpy needs to be smemcpy
 #
 # POSIX-like void *memcpy(dest, src, len), arguments taken as a0, a1, a2,
 # return value via v0.  Uses t0 to hold the in-flight value.
 #
 
 		.text
-		.global memcpy
-		.ent memcpy
-memcpy:
+		.global memcpy_nocap
+		.ent memcpy_nocap
+memcpy_nocap:
 		daddu	$sp, $sp, -32
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
@@ -101,9 +101,9 @@ memcpy:
 
 		move	$v0, $a0	# Return initial value of dest.
 
-memcpy_loop:
+.Lmemcpy_loop:
 		# Check up front -- length could start out as zero.
-		beq	$a2, $zero, memcpy_done
+		beq	$a2, $zero, .Lmemcpy_done
 		nop
 
 		lb	$t0, 0($a1)
@@ -114,17 +114,19 @@ memcpy_loop:
 		daddiu	$a1, 1
 		daddiu	$a2, -1
 
-		b memcpy_loop
+		b .Lmemcpy_loop
 		nop			# branch-delay slot
 
-memcpy_done:
+.Lmemcpy_done:
 
 		ld	$fp, 16($sp)
 		ld	$ra, 24($sp)
 		daddu	$sp, $sp, 32
 		jr	$ra
 		sync			# branch-delay slot
-		.end memcpy
+		.end memcpy_nocap
+
+
 
 ################################################################################
 # Exception handling infrastructure
@@ -211,7 +213,7 @@ size_bev1_\name = . - bev1_\name
 	dla	$a1, \name
 	# XXXAR: LLVM assembler doesn't allow assembler values here
 	dla	$a2, size_\name
-	jal memcpy
+	jal memcpy_nocap
 	nop
 .endm
 
@@ -444,6 +446,16 @@ smemcpy:
 	daddi    $a0, $a2, 0        # Move the length to arg0 (delay slot)
 .end smemcpy
 
+
+.ifdef __CHERI_PURE_CAPABILITY__
+.global memcpy
+.ent memcpy
+memcpy:
+	b memcpy_c
+	nop
+.end memcpy
+.endif
+
 #
 # Capability Memcpy - copies from one capability to another.  
 # __capability void *memcpy_c(__capability void *dst,
@@ -539,16 +551,24 @@ unaligned_end:
 	csb      $a2, $a1, -1($c3)
 
 memcpy_c_return:
-	jr       $ra                 # Return value remains in c1
-	sync
+.ifdef __CHERI_PURE_CAPABILITY__
+	cjr	$c17
+.else
+	jr	$ra	# Return value remains in c3
+.endif
+	sync	# branch delay slow
 
 slow_memcpy_loop:                # byte-by-byte copy
 	clb      $a2, $a1, 0($c4)
 	daddi    $a1, $a1, 1
 	bne      $a0, $a1, slow_memcpy_loop
 	csb      $a2, $a1, -1($c3)
-	jr       $ra                 # Return value remains in c1
-	sync
+.ifdef __CHERI_PURE_CAPABILITY__
+	cjr	$c17
+.else
+	jr	$ra	# Return value remains in c3
+.endif
+	sync	# branch delay slow
 .end memcpy_c
 
 .endif # CAP_SIZE != 0
