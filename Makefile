@@ -127,7 +127,7 @@ endif
 endif
 endif
 
-USE_CAP_TABLE?=0
+USE_CAP_TABLE?=1
 ifeq ($(CAP_SIZE),256)
 PERM_SIZE?=31
 endif
@@ -2289,11 +2289,13 @@ endif
 PURECAP_ASMDEFS=-Wa,-defsym,TEST_CP2=$(TEST_CP2)      \
 		-Wa,-defsym,CAP_SIZE=$(CAP_SIZE)      \
 		-Wa,-defsym,BUILDING_PURECAP=1        \
+		-Wa,-defsym,__CHERI_PURE_CAPABILITY__=1        \
 		-Wa,-defsym,DIE_ON_EXCEPTION=1
 
 ifeq ($(USE_CAP_TABLE),1)
-PURECAP_CFLAGS+=-cheri-cap-table
-PURECAP_ASMDEFS+=-Wa,-defsym,__CHERI_CAPABILITY_TABLE__=1
+PURECAP_CFLAGS+=-cheri-cap-table-abi=pcrel
+PURECAP_ASMDEFS+=-cheri-cap-table-abi=pcrel
+PURECAP_ASMDEFS+=-Wa,-defsym,__CHERI_CAPABILITY_TABLE__=2
 endif
 
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
