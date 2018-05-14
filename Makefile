@@ -2845,8 +2845,18 @@ qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
 
 qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
 
-
-PYTEST?=pytest
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command -v py.test-3 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command pytest-3 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command pytest 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=/pytest/not/found/you/must/set/PYTEST/on/cmdline/or/install/it
+endif
 PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
 QEMU_PYTEST=TEST_MACHINE=QEMU LOGDIR=$(QEMU_LOGDIR) $(PYTEST)
 
