@@ -28,6 +28,7 @@
 from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
 from nose.plugins.attrib import attr
 import copy
+import os
 
 
 #
@@ -137,8 +138,14 @@ class test_cp2_x_creadhwr_kernel_perm(BaseBERITestCase):
         self.assertDefaultCap(self.MIPS.c22, offset=31, msg="c22 should contain initial EPCC")
         self.assertDefaultCap(self.MIPS.c23, offset=30, msg="c23 should contain initial KDC")
         self.assertDefaultCap(self.MIPS.c24, offset=29, msg="c24 should contain initial KCC")
-        self.assertDefaultCap(self.MIPS.c25, offset=27, msg="c25 should contain initial KR1C")
-        self.assertDefaultCap(self.MIPS.c26, offset=28, msg="c26 should contain initial KR2C")
+        if os.environ.get("TEST_MACHINE", "").lower() == "sim":
+            # Hardware doesn't mirror KR1C/KR2C from the general purpose registers to the special ones
+            # TODO: do we want this behaviour in QEMU as well?
+            self.assertNullCap(self.MIPS.c25, msg="KR1C should not be mirrored to caphwregs in bluespec")
+            self.assertNullCap(self.MIPS.c26, msg="KR1C should not be mirrored to caphwregs in bluespec")
+        else:
+            self.assertDefaultCap(self.MIPS.c25, offset=27, msg="c25 should contain initial KR1C")
+            self.assertDefaultCap(self.MIPS.c26, offset=28, msg="c26 should contain initial KR2C")
 
     def test_total_exception_count(self):
         self.assertRegisterEqual(self.MIPS.v0, 10, "Wrong number of exceptions triggered")
