@@ -87,12 +87,14 @@ END_TEST
 		.ent bev0_handler
 bev0_handler:
 		li	$a2, 1
-		cgetoffset $a1, $c31
-		cgettag $a4, $c31
+		cgetepcc $c27
+		cgetoffset $a1, $c27
+		cgettag $a4, $c27
 		cgetcause $a3
 		dla	$k0, finally
-		cgetdefault $c31
-		csetoffset $c31, $c31, $k0
+		cgetdefault $c27
+		csetoffset $c27, $c27, $k0
+		csetepcc $c27
 		dmtc0	$k0, $14
 		nop
 		nop

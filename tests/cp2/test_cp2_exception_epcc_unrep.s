@@ -143,10 +143,11 @@ exception_handler:
                 # Save sandbox EPC for later inspection
                 dmfc0   $s3, $14
                 # Save EPCC
-                cmove   $c3, $c31
+                cgetepcc   $c3
 
                 # Remove sandboxing
-                cmove   $c31, $c0       # Move $c0 into $epcc
+                cgetdefault	$c4
+                csetepcc	$c4	# Move $ddc into $epcc
                 # Set EPC to continue after exception return
                 dla     $k0, return
                 dmtc0   $k0, $14

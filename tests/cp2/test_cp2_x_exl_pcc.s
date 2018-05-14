@@ -91,7 +91,7 @@ BEGIN_TEST
 		dmtc0	$t0, $14	# EPC
 		cgetdefault $c1
 		csetoffset $c1, $c1, $t0
-		cmove	$c31, $c1	# Should use csetepcc
+		csetepcc	$c1
 
 		#
 		# Set EXL

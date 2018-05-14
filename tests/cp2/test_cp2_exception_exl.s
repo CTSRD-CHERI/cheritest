@@ -64,7 +64,8 @@ BEGIN_TEST
                 #
 
                 dmtc0    $zero, $14
-                cgetnull $c31
+                cgetnull $c27
+                csetepcc $c27
 
                 nop
                 nop
@@ -82,8 +83,9 @@ END_TEST
                 .ent bev0_handler
 bev0_handler:
                 dmfc0   $a0, $14        # EPC
-                cmove   $c1, $c31       # save EPCC
-                cgetdefault  $c31       # restore EPCC
+                cgetepcc	$c1	# save EPCC
+                cgetdefault	$c27
+                csetepcc	$c27       # restore EPCC
                 dla     $k0, exit
                 dmtc0   $k0, $14        # EPC
                 nop

@@ -175,10 +175,11 @@ exception_handler:
 		nop
 
 		# Save old EPCC
-		cmove	$c3, $c31
+		cgetepcc	$c3
 
 		# Remove sandboxing
-		cmove	$c31, $c0	# Move $c0 into $epcc
+		cgetdefault	$c4
+		csetepcc	$c4	# Move $ddc into $epcc
 
 		# Save sandbox EPC for later inspection
 		dmfc0	$s2, $14
@@ -192,10 +193,10 @@ exception_handler:
 
 install_sandbox:
 		# Save old EPCC
-		cmove	$c2, $c31
+		cgetepcc	$c2
 
 		# Install sandboxing
-		cmove	$c31, $c1
+		csetepcc	$c1
 
 		# Set up new PC -- offset 0
 		dmtc0	$zero, $14	# Set EPC

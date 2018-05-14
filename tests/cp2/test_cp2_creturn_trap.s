@@ -172,7 +172,8 @@ bev0_ccall_handler:
 		# returns to user space.
 		#
 
-		clc	$c31, $k0, 32($c28)
+		clc	$c26, $k0, 32($c28)
+		csetepcc	$c26
 
 		#
 		# Pop the IDC ($c26) off the trusted system stack.

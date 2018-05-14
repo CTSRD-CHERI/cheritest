@@ -112,9 +112,10 @@ bev0_handler:
 		li	$a2, 1
 		cgetcause $a3
 		dmfc0	$a5, $14	# EPC
-		cgetdefault $c31
+		cgetdefault $c27
 		dla	$k0, finally	# Return to here, not the call site
-		csetoffset $c31, $c31, $k0
+		csetoffset	$c27, $c27, $k0
+		csetepcc	$c27
 		dmtc0	$k0, $14
 		nop
 		nop

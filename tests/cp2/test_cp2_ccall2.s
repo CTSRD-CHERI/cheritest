@@ -228,19 +228,19 @@ do_ccall:
 
 		csc	$c26, $k0, 0($c28)
 
+
+		# We can now use $idc as a temp register
+
 		#
 		# Bump the EPCC.offset (user's PC) by 1 instruction (4 bytes)
-		#
-
-		cgetoffset $k1, $c31
-		daddi	$k1, $k1, 8
-		csetoffset $c31, $c31, $k1
-
+		# XXXAR: ccall has a branch delay slot so it's actually 8
+		cgetepcc	$c26
+		cincoffset	$c26, $c26, 8
+		csetepcc	$c26
 		#
 		# Push EPCC (the user's PCC) on to the trusted system stack
 		#
-
-		csc	$c31, $k0, 32($c28)
+		csc	$c26, $k0, 32($c28)
 
 		#
 		# Check that $c1 and $c2 are valid capabilities (tag set)
@@ -292,7 +292,8 @@ do_ccall:
 		# bad $c1.
 		#
 
-		cunseal $c31, $c1, $c27
+		cunseal $c26, $c1, $c27
+		csetepcc $c26
 
 		#
 		# Unseal the data capability into IDC ($c26)
@@ -339,26 +340,25 @@ do_creturn:
 		cld     $k0, $k0, 0($c27)
 
 		#
-		# Pop the IDC ($c26) off the trusted system stack
-		#
-
-		clc	$c26, $k0, 0($c28)
-
-		#
 		# Pop the EPCC off the trusted system stack, so it will
 		# restored to the user's PCC when this exception handler
 		# returns to user space.
-		#
+		# XXXAR: Use $c26 as a tempreg since it will be loaded next
 
-		clc     $c31, $k0, 32($c28)
-
+		clc	$c26, $k0, 32($c28)
+		csetepcc	$c26
 		#
 		# Set the return address (EPC) to the offset in the EPCC
 		# that was restored from the trusted system stack.
 		#
+		cgetoffset $k1, $c26  # Don't clobber k0, it is used later!
+		dmtc0   $k1, $14
 
-		cgetoffset $k0, $c31
-		dmtc0   $k0, $14
+		#
+		# Pop the IDC ($c26) off the trusted system stack
+		#
+
+		clc	$c26, $k0, 0($c28)
 
 		nop
 		nop
