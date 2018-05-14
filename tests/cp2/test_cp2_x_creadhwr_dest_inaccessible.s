@@ -68,8 +68,16 @@ without_access_sys_regs:
 	# Save exception details in cause_capreg
 	save_counting_exception_handler_cause \cause_capreg
 .endm
-	# Try to read into EPCC (should fail - trap #1). Save exception details in $c2
+	# C31 can no longer be accessed directly -> skip this test for now
+	# since we will reuse $c31 as the $cnull. Once that change has been
+	# made we should check that writing to c31 is non-trapping
+.ifdef CAN_USE_C31_AS_CAP_GPR_EPCC
 	try_read_hwr0_into_cap_gpr $c31, $c2
+.else
+	clear_counting_exception_handler_regs
+	teq $zero, $zero	# trap #1
+	save_counting_exception_handler_cause $c2
+.endif
 	# Try to read KDC (should fail - trap #2). Save exception details in $c3
 	try_read_hwr0_into_cap_gpr $c30, $c3
 	# Try to read KCC (should fail - trap #3). Save exception details in $c4

@@ -127,10 +127,12 @@ BEGIN_TEST
 		csc 	$c27, $t0, 0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc 	$c28, $t0, 0($c30)
+		cgetepcc $c27
+		csc 	$c27, $t0, 0($c30)
 
 		daddiu	$t0, $t0, 32
-		csc 	$c31, $t0, 0($c30)
+		csc 	$c28, $t0, 0($c30)
+
 
 		#
 		# Now reverse the process.
@@ -221,9 +223,10 @@ BEGIN_TEST
 
 		daddiu	$t0, $t0, 32
 		clc 	$c28, $t0, 0($c30)
+		csetepcc $c28
 
 		daddiu	$t0, $t0, 32
-		clc 	$c31, $t0, 0($c30)
+		clc 	$c28, $t0, 0($c30)
 
 END_TEST
 
@@ -289,7 +292,7 @@ data:		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c0
 		.dword	0x0011223344556677, 0x8899aabbccddeeff
 		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c27
 		.dword	0x0011223344556677, 0x8899aabbccddeeff
-		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c28
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# epcc
 		.dword	0x0011223344556677, 0x8899aabbccddeeff
-		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c31
+		.dword	0x0011223344556677, 0x8899aabbccddeeff	# c28
 		.dword	0x0011223344556677, 0x8899aabbccddeeff

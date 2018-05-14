@@ -198,11 +198,14 @@ dostore:
 		daddiu	$t0, $t0, cap_width
 		csc 	$c27, $t0, 0($c30)
 
+		# EPCC is stored before c28 so we have a temporary on load
+		daddiu	$t0, $t0, cap_width
+		cgetepcc	$c27
+		csc	$c27, $t0, 0($c30)
+
 		daddiu	$t0, $t0, cap_width
 		csc 	$c28, $t0, 0($c30)
 
-		daddiu	$t0, $t0, cap_width
-		csc 	$c31, $t0, 0($c30)
 
 invalidatecaps:
 		#
@@ -329,9 +332,11 @@ invalidatecaps:
 		cincbase	$c28, $c28, $t0
 		candperm	$c28, $c28, $t1
 
-		csetoffset	$c31, $c31, $t2
-		cincbase	$c31, $c31, $t0
-		candperm	$c31, $c31, $t1
+		cgetepcc	$c28
+		csetoffset	$c28, $c28, $t2
+		cincbase	$c28, $c28, $t0
+		candperm	$c28, $c28, $t1
+		csetepcc	$c28
 loadcaps:
 		#
 		# Now reverse the process.
@@ -420,11 +425,14 @@ loadcaps:
 		daddiu	$t0, $t0, cap_width
 		clc 	$c27, $t0, 0($c30)
 
+		# Epcc is loaded before c28 since we need a tempreg
+		daddiu	$t0, $t0, cap_width
+		clc 	$c28, $t0, 0($c30)
+		csetepcc	$c28
+
 		daddiu	$t0, $t0, cap_width
 		clc 	$c28, $t0, 0($c30)
 
-		daddiu	$t0, $t0, cap_width
-		clc 	$c31, $t0, 0($c30)
 done:
 		daddiu	$t3, $t3, -1
 		bne	$t3, $zero, loop

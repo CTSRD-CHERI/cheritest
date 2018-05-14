@@ -50,11 +50,11 @@ class test_cp2_x_creadhwr_dest_inaccessible(BaseBERITestCase):
             "c14 and c13 should be identical except for permissions")
 
     # Writing EPCC, KDC and KCC should fail
-    def test_no_sysregs_in_kernel_mode_epcc(self):
+    # TODO: turn this into a check NULL is not overwritten
+    def test_nullreg_target(self):
         self.assertCompressedTrapInfo(self.MIPS.c2,
-            mips_cause=self.MIPS.Cause.COP2,
-            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-            cap_reg=31, trap_count=1, msg="Accessing EPCC should fail")
+            mips_cause=self.MIPS.Cause.TRAP,
+            trap_count=1, msg="Accessing EPCC should fail")
         self.assertDefaultCap(self.MIPS.c31, offset=self.MIPS.a7,
             perms=self.max_permissions & ~1024, msg="EPCC should be at last trap")
 

@@ -68,7 +68,8 @@ test:		.ent test
 		cmove	$c28, $c28
 		cmove $c29, $c29
 		cmove	$c30, $c30
-		cmove $c31, $c31
+		# TODO: reeanble once c31 is null
+		# cmove $c31, $c31
 
 		jr	$ra
 		nop			# branch-delay slot

@@ -65,8 +65,15 @@ without_access_sys_regs:
 	# Save exception details in cause_capreg
 	save_counting_exception_handler_cause \cause_capreg
 .endm
-	# Try to write into EPCC (should fail - trap #1). Save exception details in $c2
+	# TODO: check that using null register as target works
+.if 0
 	try_write_from_cap_gpr_to_hwr0 $c31, $c2
+.else
+	clear_counting_exception_handler_regs
+	teq $zero, $zero  # trap #1 (added here to keep numbers the same after removing direct EPCC access)
+	save_counting_exception_handler_cause $c2
+.endif
+
 	# Try to write KDC (should fail - trap #2). Save exception details in $c3
 	try_write_from_cap_gpr_to_hwr0 $c30, $c3
 	# Try to write KCC (should fail - trap #3). Save exception details in $c4

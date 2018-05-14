@@ -49,15 +49,14 @@ class test_cp2_x_cwritehwr_src_inaccessible(BaseBERITestCase):
         self.assertCapabilitiesEqual(c14_with_access_sys_regs, self.MIPS.c13,
             "c14 and c13 should be identical except for permissions")
 
-    # Writing EPCC, KDC and KCC should fail
-    def test_no_sysregs_in_kernel_mode_epcc(self):
+    def test_null_reg(self):
         self.assertCompressedTrapInfo(self.MIPS.c2,
-            mips_cause=self.MIPS.Cause.COP2,
-            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-            cap_reg=31, trap_count=1, msg="Accessing EPCC should fail")
+            mips_cause=self.MIPS.Cause.TRAP,
+            trap_count=1, msg="Accessing EPCC should fail")
         self.assertDefaultCap(self.MIPS.c31, offset=self.MIPS.a7,
             perms=self.max_permissions & ~1024, msg="EPCC should be at last trap")
 
+    # Writing KDC and KCC should fail
     def test_no_sysregs_in_kernel_mode_kdc(self):
         self.assertCompressedTrapInfo(self.MIPS.c3,
             mips_cause=self.MIPS.Cause.COP2,

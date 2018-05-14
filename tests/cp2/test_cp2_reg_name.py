@@ -164,7 +164,3 @@ class test_cp2_reg_name(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_reg_name_c30(self):
         self.assertRegisterEqual(self.MIPS.c30.offset, 31, "CP2 C30 name mismatch")
-
-    @attr('capabilities')
-    def test_cp2_reg_name_c31(self):
-        self.assertRegisterEqual(self.MIPS.c31.offset, 32, "CP2 C31 name mismatch")

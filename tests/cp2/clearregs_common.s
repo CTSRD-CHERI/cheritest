@@ -98,4 +98,7 @@
                 cmove   $c28, $c28
                 cmove   $c29, $c29
                 cmove   $c30, $c30
+.if 0
+		# EPCC should no longer be accessed directly
                 cmove   $c31, $c31
+.endif

@@ -108,7 +108,5 @@ BEGIN_TEST
 		csetoffset	$c29, $c29, $t0
 		dli		$t0, 31
 		csetoffset	$c30, $c30, $t0
-		dli		$t0, 32
-		csetoffset	$c31, $c31, $t0
 
 END_TEST

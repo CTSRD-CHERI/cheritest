@@ -157,11 +157,14 @@ BEGIN_TEST
 		daddiu	$t0, $t0, 32
 		csc 	$c27, $t0, 0($c30)
 
+		# Store epcc before c27 so we have a tempreg
+		daddiu	$t0, $t0, 32
+		cgetepcc $c27
+		csc 	$c27, $t0, 0($c30)
+
 		daddiu	$t0, $t0, 32
 		csc 	$c28, $t0, 0($c30)
 
-		daddiu	$t0, $t0, 32
-		csc 	$c31, $t0, 0($c30)
 
 		#
 		# Scrub capability registers in between to make sure that
@@ -287,9 +290,11 @@ BEGIN_TEST
 		cincbase	$c28, $c28, $t0
 		candperm	$c28, $c28, $t1
 
-		csetoffset	$c31, $c31, $t2
-		cincbase	$c31, $c31, $t0
-		candperm	$c31, $c31, $t1
+		cgetepcc	$c28
+		csetoffset	$c28, $c28, $t2
+		cincbase	$c28, $c28, $t0
+		candperm	$c28, $c28, $t1
+		csetepcc	$c28
 
 		#
 		# Now reverse the process.
@@ -378,11 +383,14 @@ BEGIN_TEST
 		daddiu	$t0, $t0, 32
 		clc 	$c27, $t0, 0($c30)
 
+		# Load epcc first to hve c28 as a tempreg
+		daddiu	$t0, $t0, 32
+		clc	$c28, $t0, 0($c30)
+		csetepcc $c28
+
 		daddiu	$t0, $t0, 32
 		clc 	$c28, $t0, 0($c30)
 
-		daddiu	$t0, $t0, 32
-		clc 	$c31, $t0, 0($c30)
 
 END_TEST
 
