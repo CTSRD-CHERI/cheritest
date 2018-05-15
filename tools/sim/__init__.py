@@ -251,27 +251,22 @@ class MipsStatus(object):
         for line in self.fh:
             line = line.strip()
             thread_groups = THREAD_RE.search(line)
-            core_groups = MIPS_CORE_RE.search(line)
-            reg_groups = MIPS_REG_RE.search(line)
-            pc_groups = MIPS_PC_RE.search(line)
-            cap_core_groups = CAPMIPS_CORE_RE.search(line)
-            cap_reg_groups = CAPMIPS_REG_RE.search(line)
-            cap_pc_groups = CAPMIPS_PC_RE.search(line)
-            sail_cap_pcc_groups=SAIL_CAP_PCC_RE.search(line)
-            sail_cap_reg_groups=SAIL_CAP_REG_RE.search(line)
-            sail_cap_reg_null_groups=SAIL_CAP_REG_NULL_RE.search(line)
-            sail_cap128_pcc_groups=SAIL_CAP128_PCC_RE.search(line)
-            sail_cap128_reg_groups=SAIL_CAP128_REG_RE.search(line)
-            if (thread_groups):
+            if thread_groups:
                 thread = int(thread_groups.group(1))
+                continue
             # We use 'thread' for both thread id and core id.
             # This will need fixing if we ever have a CPU with both
             # multiple threads and multiple cores.
-            if (core_groups):
+            core_groups = MIPS_CORE_RE.search(line)
+            if core_groups:
                 thread = int(core_groups.group(1))
-            if (cap_core_groups):
+                continue
+            cap_core_groups = CAPMIPS_CORE_RE.search(line)
+            if cap_core_groups:
                 thread = int(cap_core_groups.group(1))
-            if (reg_groups):
+                continue
+            reg_groups = MIPS_REG_RE.search(line)
+            if reg_groups:
                 reg_num = int(reg_groups.group(1))
                 reg_val_hex = reg_groups.group(2)
                 if 'u' in reg_val_hex:
@@ -281,44 +276,62 @@ class MipsStatus(object):
                     reg_val = int(reg_val_hex, 16)
                 t = self.threads[thread]
                 t.reg_vals[reg_num] = reg_val
-            if (pc_groups):
+                continue
+            pc_groups = MIPS_PC_RE.search(line)
+            if pc_groups:
                 reg_val = int(pc_groups.group(1), 16)
                 t = self.threads[thread]
                 t.pc = reg_val
-            if (cap_reg_groups):
+                continue
+            cap_reg_groups = CAPMIPS_REG_RE.search(line)
+            if cap_reg_groups:
                 cap_reg_num = int(cap_reg_groups.group(1))
                 t = self.threads[thread]
                 t.cp2[cap_reg_num] = capabilityFromStrings(*cap_reg_groups.groups()[1:8])
-            if (cap_pc_groups):
+                continue
+            cap_pc_groups = CAPMIPS_PC_RE.search(line)
+            if cap_pc_groups:
                 t = self.threads[thread]
                 t.pcc = capabilityFromStrings(*cap_pc_groups.groups()[0:7])
+                continue
 
             if not is_sail:
                 continue  # the following regexes are only interesting for SAIL
 
-            if (sail_cap_pcc_groups):
+            sail_cap_pcc_groups = SAIL_CAP_PCC_RE.search(line)
+
+            if sail_cap_pcc_groups:
                 pcc_string = sail_cap_pcc_groups.group(1)
                 t = self.threads[thread]
                 t.pcc = capabilityFromBinaryString(pcc_string)
-            if (sail_cap_reg_groups):
+                continue
+            sail_cap_reg_groups = SAIL_CAP_REG_RE.search(line)
+            if sail_cap_reg_groups:
                 cap_reg_num = int(sail_cap_reg_groups.group(1))
                 cap_string = sail_cap_reg_groups.group(2)
                 t = self.threads[thread]
                 t.cp2[cap_reg_num] = capabilityFromBinaryString(cap_string)
-            if (sail_cap_reg_null_groups):
+                continue
+            sail_cap_reg_null_groups = SAIL_CAP_REG_NULL_RE.search(line)
+            if sail_cap_reg_null_groups:
                 # special case for null cap due to fact that sail abreviates printed cap with '...'. Arg.
                 cap_reg_num = int(sail_cap_reg_null_groups.group(1))
                 t = self.threads[thread]
                 t.cp2[cap_reg_num] = Capability(0,0,0,0,0,0,0)
-            if (sail_cap128_pcc_groups):
+                continue
+            sail_cap128_pcc_groups = SAIL_CAP128_PCC_RE.search(line)
+            if sail_cap128_pcc_groups:
                 pcc_string = sail_cap128_pcc_groups.group(1)
                 t = self.threads[thread]
                 t.pcc = capabilityFromBinaryString128(pcc_string)
-            if (sail_cap128_reg_groups):
+                continue
+            sail_cap128_reg_groups = SAIL_CAP128_REG_RE.search(line)
+            if sail_cap128_reg_groups:
                 cap_reg_num = int(sail_cap128_reg_groups.group(1))
                 cap_string = sail_cap128_reg_groups.group(2)
                 t = self.threads[thread]
                 t.cp2[cap_reg_num] = capabilityFromBinaryString128(cap_string)
+                continue
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''
