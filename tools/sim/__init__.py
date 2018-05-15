@@ -254,6 +254,12 @@ class MipsStatus(object):
             if thread_groups:
                 thread = int(thread_groups.group(1))
                 continue
+
+            # All other regexes start with "DEBUG " so skip any lines that don't
+            # start with DEBUG to save time
+            if not line.startswith("DEBUG "):
+                continue
+
             # We use 'thread' for both thread id and core id.
             # This will need fixing if we ever have a CPU with both
             # multiple threads and multiple cores.
