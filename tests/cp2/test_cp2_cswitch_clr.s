@@ -383,7 +383,7 @@ BEGIN_TEST
 		daddiu	$t0, $t0, 32
 		clc 	$c27, $t0, 0($c30)
 
-		# Load epcc first to hve c28 as a tempreg
+		# Load epcc first to have c28 as a tempreg
 		daddiu	$t0, $t0, 32
 		clc	$c28, $t0, 0($c30)
 		csetepcc $c28
