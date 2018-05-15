@@ -31,6 +31,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+import os
 import re
 from collections import defaultdict
 
@@ -246,6 +247,7 @@ class MipsStatus(object):
     def parse_log(self):
         '''Parse a log file and populate self.reg_vals and self.pc'''
         thread = 0
+        is_sail = os.getenv("TEST_MACHINE", "").lower() == "sail"
         for line in self.fh:
             line = line.strip()
             thread_groups = THREAD_RE.search(line)
@@ -290,6 +292,10 @@ class MipsStatus(object):
             if (cap_pc_groups):
                 t = self.threads[thread]
                 t.pcc = capabilityFromStrings(*cap_pc_groups.groups()[0:7])
+
+            if not is_sail:
+                continue  # the following regexes are only interesting for SAIL
+
             if (sail_cap_pcc_groups):
                 pcc_string = sail_cap_pcc_groups.group(1)
                 t = self.threads[thread]
