@@ -40,7 +40,7 @@ typedef __attribute__((memory_address)) long vaddr_t;
 
 
 __attribute__((noreturn)) int __assert_fail(int);
-inline void  __assert(int cond, int line)
+static inline void __assert(int cond, int line)
 {
 	if (!cond)
 	{
@@ -63,6 +63,11 @@ void __assert_eq_cap(int line, void* __capability actual, void* __capability exp
 // Add a nop
 #define DEBUG_NOP() \
 	__asm__ volatile ("nop")
+
+
+extern void cheri_trace_str(__SIZE_TYPE__ straddr, __SIZE_TYPE__ len, int format);
+#define DEBUG_MSG(str) cheri_trace_str((vaddr_t)str, __builtin_strlen(str), 0)
+#define DEBUG_MEMDUMP(mem, len) cheri_trace_str((vaddr_t)str, __builtin_strlen(str), 1)
 
 
 extern volatile long long exception_count;

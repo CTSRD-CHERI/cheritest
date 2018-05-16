@@ -573,6 +573,20 @@ slow_memcpy_loop:                # byte-by-byte copy
 
 .endif # CAP_SIZE != 0
 
+
+# Use the magic QEMU no-op to print a message to the logfile:
+
+global_func cheri_trace_str
+	li	$0, 0xface
+.ifdef __CHERI_PURE_CAPABILITY__
+	cjr	$c17
+	nop
+.else
+	jr	$ra	# Return value remains in c3
+	nop
+.endif
+.end cheri_trace_str
+
 #
 # Get the ID of the current thread. Reads CP0 register 15, select 7
 # (processor ID, so needs appropriate privilege).

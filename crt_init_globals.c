@@ -100,3 +100,15 @@ crt_init_globals(void)
 	}
 }
 #endif
+
+
+// Also provide a simple purecap strlen function:
+__SIZE_TYPE__ strlen(const char* str)
+{
+	const char* p = str;
+
+	while (*p != '\0')
+		p++;
+
+	return p - str;
+}
