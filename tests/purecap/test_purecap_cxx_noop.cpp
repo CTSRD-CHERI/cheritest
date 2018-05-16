@@ -26,8 +26,13 @@
  */
 #include "../c/assert.h"
 
+__attribute__((noinline)) void cxx_function(const char* msg) {
+	DEBUG_MSG(msg);
+}
+
 extern "C" int test(void)
 {
 	assert(1);
+	cxx_function("hello, world");
 	return 0;
 }
