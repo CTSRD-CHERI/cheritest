@@ -235,7 +235,7 @@ do_ccall:
 		# Bump the EPCC.offset (user's PC) by 1 instruction (4 bytes)
 		# XXXAR: ccall has a branch delay slot so it's actually 8
 		cgetepcc	$c26
-		cincoffset	$c26, $c26, 8
+		cincoffsetimm	$c26, $c26, 8
 		csetepcc	$c26
 		#
 		# Push EPCC (the user's PCC) on to the trusted system stack
