@@ -1689,7 +1689,8 @@ and not pic \
 and not mt \
 and not einstr \
 and not qemu_only \
-and not experimental_clc
+and not no_experimental_clc \
+and not experimental_csc
 
 ifneq ($(CAP_SIZE),256)
 SAIL_NOSEPRED+=and not cap256
@@ -1779,7 +1780,8 @@ and not watch \
 and not csettype \
 and not qemu_skip \
 and not mtc0signex \
-and not no_experimental_clc
+and not no_experimental_clc \
+and not no_experimental_csc
 
 # XXXAM why settype is disabled?
 # XXXAR: mtc0signex was added here because since upstream QEMU commit d54a299b
@@ -1966,6 +1968,7 @@ NOSEPRED+=and not cap_precise
 endif
 # CHERI supports experimental CLC since r30617
 NOSEPRED+=and not no_experimental_clc
+NOSEPRED+=and not no_experimental_csc
 endif
 ifneq ($(CLANG),1)
 NOSEPRED+=and not clang and not dmaclang
