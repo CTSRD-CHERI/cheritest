@@ -52,7 +52,7 @@ BEGIN_TEST
 		nop
 		nop
 		nop
-		cmove  $c1, $c0
+		cgetdefault  $c1
 		candperm $c1, $c1, $zero
 		nop
 		nop

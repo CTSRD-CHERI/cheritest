@@ -37,8 +37,9 @@
 
 BEGIN_TEST
 		dli	$a0, 0
-		cmove	$c1, $c0
-		cbtu	$c0, L1	# This branch should not be taken
+		cgetdefault	$c1
+		cgetdefault $c2
+		cbtu	$c2, L1	# This branch should not be taken
 		nop	# Branch delay slot
 		dli     $a0, 1
 L1:

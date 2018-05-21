@@ -38,8 +38,8 @@
 BEGIN_TEST
 		dli	$a0, 0
 		dli	$a2, 0
-		cmove	$c1, $c0
-		cbts	$c0, L1	# This branch should be taken
+		cgetdefault	$c1
+		cbts	$c1, L1	# This branch should be taken
 		dli	$a2, 1  # Branch delay slot is executed even if branch
 		dli     $a0, 1
 L1:

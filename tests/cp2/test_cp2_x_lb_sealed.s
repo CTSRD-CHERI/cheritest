@@ -65,7 +65,7 @@ BEGIN_TEST
 		# Save c0
 		#
 
-		cmove   $c2, $c0
+		cgetdefault   $c2
 
 		#
 		# Make $c1 a template capability for type 0x1234
@@ -94,7 +94,7 @@ BEGIN_TEST
 		# Restore c0
 		#
 
-		cmove   $c0, $c2
+		csetdefault   $c2
 
 END_TEST
 

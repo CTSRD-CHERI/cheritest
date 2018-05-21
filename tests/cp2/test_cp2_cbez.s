@@ -48,7 +48,7 @@ BEGIN_TEST
 L1:
 		nop
 		dli	$a1, 0
-		cmove	$c22, $c0
+		cgetdefault	$c22
 		cbez	$c22, L2	# This branch should not be taken
 		nop 		# Branch delay slot
 		dli	$a1, 1

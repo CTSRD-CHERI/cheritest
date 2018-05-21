@@ -94,7 +94,7 @@ BEGIN_TEST
 		# Clear $c4 so we can tell if the following cunseal succeeds
 		#
 
-		cmove	$c4, $c0
+		cgetdefault	$c4
 
 		#
 		# Try to unseal $c2 with a template capability that is itself

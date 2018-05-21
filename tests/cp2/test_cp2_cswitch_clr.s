@@ -43,32 +43,32 @@
 BEGIN_TEST
 
 		# Ensure all capability registers are set to the default.
-    cmove		$c1, $c0
-    cmove		$c2, $c0
-    cmove		$c3, $c0
-    cmove		$c4, $c0
-    cmove		$c5, $c0
-    cmove		$c6, $c0
-    cmove		$c7, $c0
-    cmove		$c8, $c0
-    cmove		$c9, $c0
-    cmove		$c10, $c0
-    cmove		$c11, $c0
-    cmove		$c12, $c0
-    cmove		$c13, $c0
-    cmove		$c14, $c0
-    cmove		$c15, $c0
-    cmove		$c16, $c0
-    cmove		$c17, $c0
-    cmove		$c18, $c0
-    cmove		$c19, $c0
-    cmove		$c20, $c0
-    cmove		$c21, $c0
-    cmove		$c22, $c0
-    cmove		$c23, $c0
-    cmove		$c24, $c0
-    cmove		$c25, $c0
-    cmove		$c26, $c0
+    cgetdefault		$c1
+    cgetdefault		$c2
+    cgetdefault		$c3
+    cgetdefault		$c4
+    cgetdefault		$c5
+    cgetdefault		$c6
+    cgetdefault		$c7
+    cgetdefault		$c8
+    cgetdefault		$c9
+    cgetdefault		$c10
+    cgetdefault		$c11
+    cgetdefault		$c12
+    cgetdefault		$c13
+    cgetdefault		$c14
+    cgetdefault		$c15
+    cgetdefault		$c16
+    cgetdefault		$c17
+    cgetdefault		$c18
+    cgetdefault		$c19
+    cgetdefault		$c20
+    cgetdefault		$c21
+    cgetdefault		$c22
+    cgetdefault		$c23
+    cgetdefault		$c24
+    cgetdefault		$c25
+    cgetdefault		$c26
 
 		#
 		# Save out all capability registers but $kcc and $kdc.

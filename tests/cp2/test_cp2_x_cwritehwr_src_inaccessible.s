@@ -84,8 +84,10 @@ without_access_sys_regs:
 
 	# But writing from $c26 is fine
 	try_write_from_cap_gpr_to_hwr0 $c26, $c7
-	# same with $ddc
-	try_write_from_cap_gpr_to_hwr0 $c0, $c8
+	# same with $c1
+	try_write_from_cap_gpr_to_hwr0 $c1, $c8
+	# TODO: $cnull
+	# try_write_from_cap_gpr_to_hwr0 $cnull, $c9
 
 last_trap:
 	teq $zero, $zero	# trap #6

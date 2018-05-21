@@ -67,7 +67,7 @@
                 move    $29, $29
                 move    $30, $30
                 move    $31, $31
-                cmove   $c0, $c0
+                cgetdefault   $c0
                 cmove   $c1, $c1
                 cmove   $c2, $c2
                 cmove   $c3, $c3

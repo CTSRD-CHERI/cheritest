@@ -135,7 +135,7 @@ testcode:
 		# Clear $c2 so we can tell if the clcr suceeded
 		#
 
-		cmove	$c2, $c0
+		cgetdefault	$c2
 
 		#
 		# This should not raise an exception but tag of c2

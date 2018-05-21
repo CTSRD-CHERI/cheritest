@@ -36,7 +36,7 @@
 #
 
 sandbox:
-		cmove	$c0, $c26
+		csetdefault $c26
 		dli	$a2, 42
 		csd	$a2, $zero, 0($c26)
 		creturn
@@ -143,7 +143,7 @@ L1:
 		# the trusted system stack by ccall
 		#
 
-		cmove $c26, $c0
+		cgetdefault $c26
 
 		#
 		# Clear $c0 so that the sandbox doesn't have access to it
@@ -163,7 +163,7 @@ L1:
 		# the trusted system stack by creturn
 		#
 
-		cmove $c0, $c26
+		csetdefault $c26
 
 END_TEST
 

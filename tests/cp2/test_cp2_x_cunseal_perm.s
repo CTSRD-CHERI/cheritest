@@ -71,7 +71,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		# Clear $c4 so we can later tell if its been modified
 		#
 
-		cmove	$c4, $c0
+		cgetdefault	$c4
 
 		clear_counting_exception_handler_regs
 		cunseal $c4, $c3, $c2 # This should raise an exception

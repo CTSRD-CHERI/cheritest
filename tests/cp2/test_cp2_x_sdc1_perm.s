@@ -84,7 +84,7 @@ BEGIN_TEST
 		# Save c0
 		#
 
-		cmove   $c2, $c0
+		cgetdefault   $c2
 
 		#
 		# Make $c0 a read-only capability
@@ -102,7 +102,7 @@ BEGIN_TEST
 		# Restore c0
 		#
 
-		cmove   $c0, $c2
+		csetdefault   $c2
 
 		#
 		# Check that the store didn't happen

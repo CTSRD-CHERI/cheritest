@@ -42,7 +42,7 @@ BEGIN_TEST
 
 		# Set the offset, base, and length to something non-zero so
 		# we can tell when they've been set to zero.
-		cmove $c1, $c0
+		cgetdefault $c1
 		dli $t0, 4
 		cincoffset $c1, $c1, $t0
 		csetbounds  $c1, $c1, $t0

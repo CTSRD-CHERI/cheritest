@@ -62,7 +62,7 @@ BEGIN_TEST
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
 
-		cmove   $c27, $c0
+		cgetdefault   $c27
 		
 		# Run sandbox with restricted permissions
 		dli     $t0, 0x1ff

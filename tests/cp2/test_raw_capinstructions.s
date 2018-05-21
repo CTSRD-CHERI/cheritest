@@ -219,8 +219,8 @@ start:
 		cscc	$t1, $c1, $c4
 
 		# check capability fields
-		cmove $c1, $c0
-		cmove $c2, $c0
+		cgetdefault $c1
+		cgetdefault $c2
 		dli $a2, 0
 		ccheckperm $c1, $a2
 		cchecktype $c1, $c2
@@ -250,7 +250,7 @@ l0:
 		nop
 
 l1:
-		cmove    $c1, $c0
+		cgetdefault    $c1
                 cbts     $c1, l2
                 # branch delay slot
 		nop
