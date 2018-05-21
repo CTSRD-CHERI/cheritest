@@ -2081,6 +2081,7 @@ $(QEMU_LOGDIR)/test_clang.log: tests/c/test_clang.py
 endif
 ifeq ($(PURECAP), 1)
 TEST_PYTHON +=	tests/purecap/test_purecap.py
+TEST_PYTHON +=	tests/purecap/test_purecap_reg_init.py
 # dummy target to make the pytest/qemu/target work
 $(QEMU_LOGDIR)/test_purecap.log: tests/purecap/test_purecap.py
 	echo "DUMMY" > $@

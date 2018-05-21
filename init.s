@@ -161,6 +161,8 @@ no_float:
 .ifdef __CHERI_CAPABILITY_TABLE__
 		# If we are using the capability table we also need to setup $cgp
 		dla $at, _CHERI_CAPABILITY_TABLE_
+		# TODO: should this be a setoffset instead of cfromptr to have a
+		# tagged $cgp even if the capability table is empty?
 		cfromptr $cgp, $c1, $at
 		# FIXME: we also wan't to set sensible bounds here and reduce permissions
 .endif
