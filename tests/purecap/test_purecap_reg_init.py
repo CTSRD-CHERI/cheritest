@@ -59,4 +59,7 @@ class test_purecap_reg_init(BaseBERITestCase):
                 self.assertDefaultCap(cap, name)
             else:
                 # All other capability registers should be null
+                # Note: $c26 should also be null since _CHERI_CAPABILITY_TABLE_ will have
+                # value zero because there are no global capabilities. This ensures
+                # that we can reuse the same checks for both cap-table and legacy ABI
                 self.assertNullCap(cap, name)
