@@ -1,12 +1,9 @@
 *.hex
 *.pyc
 /.cache
-nosetests_cached.xml
-nosetests_uncached.xml
-nosetests_gxemul_cached.xml
-nosetests_gxemul_uncached.xml
-nosetests_qemu.xml
-pytest_qemu*.xml
+/nosetests_*.xml
+/pytest_qemu*.xml
+/qemu_*_tests.xml
 select_init
 max_cycles
 qemu_log/
