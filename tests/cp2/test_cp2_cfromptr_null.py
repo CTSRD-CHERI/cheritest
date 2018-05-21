@@ -66,6 +66,7 @@ class test_cp2_cfromptr_null(BaseBERITestCase):
         '''Test that cfromptr of a NULL pointer clears the sealed bit'''
         self.assertRegisterEqual(self.MIPS.a5, 0, "cfromptr did not clear the sealed bit")
 
+    @attr('capabilities')
     def test_cp2_cfromptr_null_notzr(self):
         '''Test that cfromptr of a NULL pointer gives null cap when the register used is zero but not zr.'''
         self.assertNullCap(self.MIPS.c2, "Check that cfromptr gives null when register is zero but not zr.")
