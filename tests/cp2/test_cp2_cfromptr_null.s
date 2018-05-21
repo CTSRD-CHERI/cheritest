@@ -58,4 +58,8 @@ BEGIN_TEST
 		cgettag  $a4, $c1
 		cgetsealed $a5, $c1
 
+		# Regression test for sail bug where cfromptr was checking whether
+		# register was rt, not whether it's value was zero.
+		li       $t0, 0
+		cfromptr $c2, $c3, $t0
 END_TEST
