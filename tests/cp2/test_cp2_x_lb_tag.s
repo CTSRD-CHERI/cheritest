@@ -67,7 +67,8 @@ BEGIN_TEST
 		# Clear $c0's tag, so it isn't a valid capability
 		#
 
-		ccleartag $c0, $c0
+		ccleartag $c3, $c2
+		csetdefault $c3
 
 
 		dla	$t1, data

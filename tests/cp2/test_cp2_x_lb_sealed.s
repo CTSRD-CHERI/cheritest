@@ -80,9 +80,10 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0xd # Permit_Store, Permit_Load and Global
-		cgetdefault $c0
-		candperm $c0, $c0, $t0
-		cseal	$c0, $c0, $c1
+		cgetdefault $c3
+		candperm $c3, $c3, $t0
+		cseal	$c3, $c3, $c1
+		csetdefault $c3
 		
 		#
 		# Read from memory - implicitly references $c0

@@ -43,7 +43,8 @@ BEGIN_TEST
 		csetbounds  $c1, $c1, $t0
 		dli	 $t0, 8
 		csetoffset $c1, $c1, $t0
-		
-		ctoptr $a0, $c1, $c0
+
+		cgetdefault $c3
+		ctoptr $a0, $c1, $c3
 
 END_TEST

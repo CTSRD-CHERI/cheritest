@@ -48,7 +48,8 @@ BEGIN_TEST
 		csc 	$c1, $t0, 0($c0)
 		clc 	$c2, $t0, 0($c0)
 		cgettag $a0, $c2
-		ccleartag $c1, $c0
+		cgetdefault $c1
+		ccleartag $c1, $c1
 		csc 	$c1, $t0, 0($c0)
 		clc 	$c2, $t0, 0($c0)
 		cgettag $a1, $c2

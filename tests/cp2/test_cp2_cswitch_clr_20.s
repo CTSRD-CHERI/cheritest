@@ -109,16 +109,16 @@ dostore:
 		# Save out all capability registers but $kcc and $kdc.
 		#
 		move	$t0, $t8
-		csc 	$c0, $t0, 0($c30)
-
 .if CAP_SIZE==128
 		cap_width = 16
 .else
 		cap_width = 32
 .endif
-
-		daddiu	$t0, $t0, cap_width
+		# Save $c1 first and then use it to save $ddc
+		daddiu	$t0, $t0, cap_width	# increment $t0 for $c1 slot
 		csc 	$c1, $t0, 0($c30)
+		cgetdefault $c1
+		csc 	$c1, $t0, -cap_width($c30)	# store $ddc
 
 		daddiu	$t0, $t0, cap_width
 		csc 	$c2, $t0, 0($c30)
@@ -216,15 +216,14 @@ invalidatecaps:
 		dli	$t1, 0
 		dli	$t2, 0x010101
 
-		cgetdefault $c0
-
-		csetoffset $c0, $c0, $t2
-		cincbase	$c0, $c0, $t0
-		cgetdefault $c0
-		candperm $c0, $c0, $t1
-
+		cgetdefault	$c1
 		csetoffset	$c1, $c1, $t2
 		cincbase	$c1, $c1, $t0
+		candperm	$c1, $c1, $t1
+		csetdefault	$c1
+
+		csetoffset	$c1, $c1, $t2
+		# cincbase	$c1, $c1, $t0	# This causes a length violation during csetbounds since $c1 is already changed
 		candperm	$c1, $c1, $t1
 
 		csetoffset	$c2, $c2, $t2
@@ -345,7 +344,8 @@ loadcaps:
 		# Now reverse the process.
 		#
 		move	$t0, $t8
-		clc 	$c0, $t0, 0($c30)
+		clc 	$c1, $t0, 0($c30)
+		csetdefault $c1
 
 		daddiu	$t0, $t0, cap_width
 		clc 	$c1, $t0, 0($c30)

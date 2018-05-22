@@ -88,8 +88,9 @@ without_access_sys_regs:
 
 	# But reading into $c26 is fine
 	try_read_hwr0_into_cap_gpr $c26, $c7
-	# same with $ddc
-	try_read_hwr0_into_cap_gpr $c0, $c8
+	# same with $c1
+	try_read_hwr0_into_cap_gpr $c1, $c8
+	csetdefault $c1
 
 last_trap:
 	teq $zero, $zero	# trap #6

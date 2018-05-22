@@ -74,10 +74,12 @@ BEGIN_TEST
 		# Save out all capability registers but $kcc and $kdc.
 		#
 		dla	$t0, data
-		csc 	$c0, $t0, 0($c30)
 
 		daddiu	$t0, $t0, 32
 		csc 	$c1, $t0, 0($c30)
+		# Save $ddc now that $c1 is saved
+		cgetdefault $c1
+		csc	$c1, $t0, -32($c30)
 
 		daddiu	$t0, $t0, 32
 		csc 	$c2, $t0, 0($c30)
@@ -174,15 +176,14 @@ BEGIN_TEST
 		dli	$t1, 0
 		dli	$t2, 0x010101
 
-		cgetdefault $c0
-
-		csetoffset $c0, $c0, $t2
-		cincbase	$c0, $c0, $t0
-		cgetdefault $c0
-		candperm $c0, $c0, $t1
-
+		cgetdefault	$c1
 		csetoffset	$c1, $c1, $t2
 		cincbase	$c1, $c1, $t0
+		candperm	$c1, $c1, $t1
+		csetdefault	$c1
+
+		csetoffset	$c1, $c1, $t2
+		# cincbase	$c1, $c1, $t0	# This causes a length violation during csetbounds since $c1 is already changed
 		candperm	$c1, $c1, $t1
 
 		csetoffset	$c2, $c2, $t2
@@ -303,7 +304,8 @@ BEGIN_TEST
 		# Now reverse the process.
 		#
 		dla	$t0, data
-		clc 	$c0, $t0, 0($c30)
+		clc 	$c1, $t0, 0($c30)
+		csetdefault $c1
 
 		daddiu	$t0, $t0, 32
 		clc 	$c1, $t0, 0($c30)

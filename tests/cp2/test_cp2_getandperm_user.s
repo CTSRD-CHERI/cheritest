@@ -40,8 +40,8 @@ BEGIN_TEST
 		dli	$a0, 1
 		dli	$a1, 2
 		dli	$a3, 3
-
-		cgetperm	$a0, $c0
+		cgetdefault	$c1
+		cgetperm	$a0, $c1
 
 		lui	$t0, 0x4000
 		or	$t0, 0x01

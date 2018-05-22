@@ -73,7 +73,7 @@ BEGIN_TEST
 expected_epc:
                 # Attempt to clear tag. This should cause exception
                 # as cp2 is disabled.
-                ccleartag $c1, $c0
+                ccleartag $c1, $c1
 
 return:
                 # Re-enable CP2 in status register 

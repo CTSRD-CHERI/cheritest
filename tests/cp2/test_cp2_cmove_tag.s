@@ -46,7 +46,8 @@ BEGIN_TEST
 		csetbounds $c2, $c2, $t0
 
 		# Clear c1's tag bit
-		ccleartag $c1, $c0
+		cgetdefault $c1
+		ccleartag $c1, $c1
 
 		# Move should copy c1's tag and its current value (base=0)
 		# into c2.

@@ -47,8 +47,9 @@ BEGIN_TEST
 		# if it is non-zero
 		#
 		dli		$t0, 0
-		cgetdefault $c0
-		csetoffset $c0, $c0, $t0
+		cgetdefault	$c1
+		csetoffset	$c1, $c1, $t0
+		csetdefault	$c1
 		dli		$t0, 2
 		csetoffset	$c1, $c1, $t0
 		dli		$t0, 3

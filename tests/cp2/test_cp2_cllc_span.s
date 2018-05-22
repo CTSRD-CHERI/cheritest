@@ -65,10 +65,10 @@ BEGIN_TEST
 		# sure that the cscc not only returns failure, but doesn't
 		# store.
 		#
-
+		cgetdefault $c4
 		li	$t0, 1
 		cllc	$c2, $c1
-		csc	$c0, $zero, 0($c1)
+		csc	$c4, $zero, 0($c1)
 		cscc	$a3, $c2, $c1
 		clc	$c3, $zero, 0($c1)
 		cgettag	$a2, $c3

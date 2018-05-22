@@ -38,8 +38,9 @@
 BEGIN_TEST
 		dli	$a0, -1
 		dla	$t0, cap
-		clc 	$c1, $t0, 0($c0)
-		ctoptr	$a0, $c1, $c0
+		cgetdefault $c3
+		clc 	$c1, $t0, 0($c3)
+		ctoptr	$a0, $c1, $c3
 
 END_TEST
 

@@ -71,7 +71,8 @@ BEGIN_TEST
 		dli     $t0, 0x7f
 		candperm $c1, $c1, $t0
 
-		csc    $c0, $zero, -32($c1) # This should raise an exception
+		cgetdefault $c3
+		csc    $c3, $zero, -32($c1) # This should raise an exception
 
 		dla	$t0, underflow
 		cld     $a0, $t0, 0($c0)

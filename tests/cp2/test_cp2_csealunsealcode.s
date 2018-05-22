@@ -43,7 +43,7 @@ sandbox:
 BEGIN_TEST
 		li      $t0, 0xC0DE
 		cgetdefault $c1
-		csetoffset $c1, $c1, $c1
+		csetoffset $c1, $c1, $t0
 
 		dla	$t0, sandbox
 		cgetdefault $c2

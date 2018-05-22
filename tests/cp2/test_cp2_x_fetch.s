@@ -81,7 +81,8 @@ END_TEST
 bev0_handler:
 		li	$a2, 1
 		cgetcause $a3
-		csetepcc $c0
+		cgetdefault $c27
+		csetepcc $c27
 		dla	$k0, finally
 		dmtc0	$k0, $14
 		nop

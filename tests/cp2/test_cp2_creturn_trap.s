@@ -95,11 +95,12 @@ BEGIN_TEST
 
 		dla	$t1, L1
 		csd     $t1, $zero, 0($c1)
-		csc     $c0, $zero, 32($c1)
-		csc	$c0, $zero, 64($c1)
+		cgetdefault $c2
+		csc     $c2, $zero, 32($c1)
+		csc	$c2, $zero, 64($c1)
 
 		#
-		# Discard the permissions to access the reserved registers
+		# Discard the permissions to access the reserved registersm
 		#
 
 		dli     $t0, 0x1ff

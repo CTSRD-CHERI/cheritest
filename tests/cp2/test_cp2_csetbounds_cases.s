@@ -144,11 +144,12 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x300000
 		csetbounds $c1, $c1, $t1
-		cseal $c1, $c1, $c0
+		cgetdefault $c3
+		cseal $c1, $c1, $c3
 		dla $t2, data
 		csc $c1, $t2, 0($c0)
 		clc $c1, $t2, 0($c0)
-		cunseal $c1, $c1, $c0
+		cunseal $c1, $c1, $c3
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
