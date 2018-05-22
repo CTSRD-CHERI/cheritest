@@ -67,7 +67,10 @@
                 move    $29, $29
                 move    $30, $30
                 move    $31, $31
-                cgetdefault   $c0
+.if 0
+                # $c0 is currently not accessible
+                cmove   $c0, $c0
+.endif
                 cmove   $c1, $c1
                 cmove   $c2, $c2
                 cmove   $c3, $c3

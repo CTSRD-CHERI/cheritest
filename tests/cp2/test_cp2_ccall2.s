@@ -151,7 +151,8 @@ L1:
 		# Clear $c0 so that the sandbox doesn't have access to it
 		#
 
-		cgetnull $c0
+		cgetnull $c27
+		csetdefault $c27
 
 		#
 		# Invoke the sandbox

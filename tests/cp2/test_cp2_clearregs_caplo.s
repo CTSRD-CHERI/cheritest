@@ -69,8 +69,8 @@ BEGIN_TEST
 
                 # Write a non-zero value to some of the cleared registers to ensure it
                 # sticks.
-                cmove   $c4,  $c0
-                cgetdefault   $c10
+                cgetdefault	$c4
+                cgetdefault	$c10
 
 .include        "tests/cp2/clearregs_common.s"
                 
