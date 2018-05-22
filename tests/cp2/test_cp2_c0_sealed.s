@@ -48,7 +48,8 @@ BEGIN_TEST
 		#
 
 		dli $t0, 0x1234
-		csetoffset $c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 
 		#
 		# Clear $a1 so we can tell if the cgetlen later on succeeds

@@ -42,7 +42,8 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 1
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli	$t0, 0x7
 		candperm $c2, $c0, $t0
 		cseal	$c2, $c2, $c1

@@ -79,7 +79,8 @@ BEGIN_TEST
 		#
 
 		dli	$t1, 0x1111
-		csetoffset $c2, $c0, $t1
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t1
 
 		cseal $c1, $c1, $c2
 
@@ -88,7 +89,8 @@ BEGIN_TEST
 		#
 	
 		dli	$t1, 0x2222
-		csetoffset $c3, $c0, $t1
+		cgetdefault $c3
+		csetoffset $c3, $c3, $t1
 
 		#
 		# Try to unseal with the wrong capability

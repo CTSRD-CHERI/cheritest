@@ -56,7 +56,8 @@ BEGIN_TEST
 		dli	$a2, 0
 
 		dla     $t0, sandbox
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 
 		#
 		# Write $c1 to memory, overwrite its otype field in memory,

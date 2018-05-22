@@ -104,7 +104,8 @@ L1:
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c4, $c0, $t0
+		cgetdefault $c4
+		csetoffset $c4, $c4, $t0
 
 		#
 		# Make $c3 a data capability for the array at address data

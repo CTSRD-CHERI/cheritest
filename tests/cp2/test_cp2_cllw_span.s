@@ -48,7 +48,8 @@ BEGIN_TEST
 		nop
 
 		dla	$t1, word
-		csetoffset $c1, $c0, $t1
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t1
 
 		#
 		# Load the double word into another register between cllw and

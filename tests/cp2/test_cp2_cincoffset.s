@@ -38,7 +38,8 @@
 
 BEGIN_TEST
 		dli	$t0, 1
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli	$t0, 2
 		cincoffset $c1, $c1, $t0
 		cgetoffset $a0, $c1

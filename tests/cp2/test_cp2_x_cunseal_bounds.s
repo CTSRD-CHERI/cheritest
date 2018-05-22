@@ -67,14 +67,16 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 
 		#
 		# Make $c2 a sealed data capability for 'data'
 		#
 
 		dla	$t0, data
-		csetoffset $c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 		dli	$t0, 0x1000
 		csetbounds	$c2, $c2, $t0
 		dli	$t0, 3

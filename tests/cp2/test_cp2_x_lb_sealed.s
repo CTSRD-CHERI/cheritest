@@ -72,7 +72,8 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 
 		#
 		# Make $c0 a sealed data capability

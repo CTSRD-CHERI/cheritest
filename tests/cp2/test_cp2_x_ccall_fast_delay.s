@@ -54,14 +54,16 @@ BEGIN_TEST
         #
 
         dli         $t0, 0x1234
-        csetoffset  $c4, $c0, $t0
+        cgetdefault $c4
+        csetoffset  $c4, $c4, $t0
 
         #
         # Make $c3 a data capability for the array at address data
         #
 
         dla         $t0, data
-        cincoffset  $c3, $c0, $t0
+        cgetdefault $c3
+        cincoffset  $c3, $c3, $t0
         dli         $t0, 0x1000
         csetbounds  $c3, $c3, $t0
         # Permissions Non_Ephemeral, Permit_Load, Permit_Store,

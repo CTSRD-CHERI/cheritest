@@ -114,7 +114,8 @@ not_core_zero:
 		dla	$a0, stop
 		dla	$a1, cap
 		dli	$t0, 1
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		cgetnull $c2
 loop1:
 		csc 	$c1, $a1, 0($c0)

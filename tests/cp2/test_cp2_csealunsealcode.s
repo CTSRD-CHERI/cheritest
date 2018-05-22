@@ -42,10 +42,12 @@ sandbox:
 
 BEGIN_TEST
 		li      $t0, 0xC0DE
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $c1
 
 		dla	$t0, sandbox
-		csetoffset $c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 		
 		cseal	$c2, $c2, $c1
                 cunseal $c3, $c2, $c1

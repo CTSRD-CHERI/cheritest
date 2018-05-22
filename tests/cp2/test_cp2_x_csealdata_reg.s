@@ -71,7 +71,8 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c29, $c0, $t0
+		cgetdefault $c29
+		csetoffset $c29, $c29, $t0
 
 		#
 		# Take away the permission to access reserved registers,

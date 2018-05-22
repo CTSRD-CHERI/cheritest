@@ -56,7 +56,8 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 
 		cseal	$c3, $c1, $c2
 
