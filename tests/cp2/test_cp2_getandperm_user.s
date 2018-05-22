@@ -45,17 +45,20 @@ BEGIN_TEST
 
 		lui	$t0, 0x4000
 		or	$t0, 0x01
-		candperm $c1, $c0, $t0
+		cgetdefault $c1
+		candperm $c1, $c1, $t0
 		cgetperm $a1, $c1
 
 		lui	$t0, 0x40
 		or	$t0, 0x01
-		candperm $c2, $c0, $t0
+		cgetdefault $c2
+		candperm $c2, $c2, $t0
 		cgetperm $a2, $c2
 		
 		lui	$t0, 0x4
 		or	$t0, 0x01
-		candperm $c2, $c0, $t0
+		cgetdefault $c2
+		candperm $c2, $c2, $t0
 		cgetperm $a3, $c2
 
 END_TEST

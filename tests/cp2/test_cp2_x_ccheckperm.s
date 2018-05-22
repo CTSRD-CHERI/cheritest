@@ -49,7 +49,8 @@ BEGIN_TEST
 		dli	$a2, 0	# a2 will be set to 1 if an exception happens
 
 		dli	$t0, 0x7ffd
-		candperm $c1, $c0, $t0
+		cgetdefault $c1
+		candperm $c1, $c1, $t0
 		dli	$t0, 0x2
 		ccheckperm $c1, $t0	# Should raise an exception
 

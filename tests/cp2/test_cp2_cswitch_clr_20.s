@@ -218,7 +218,8 @@ invalidatecaps:
 
 		csetoffset	$c0, $c0, $t2
 		cincbase	$c0, $c0, $t0
-		candperm	$c0, $c0, $t1
+		cgetdefault $c0
+		candperm $c0, $c0, $t1
 
 		csetoffset	$c1, $c1, $t2
 		cincbase	$c1, $c1, $t0

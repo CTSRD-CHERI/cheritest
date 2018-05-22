@@ -91,6 +91,7 @@ BEGIN_TEST
 		#
 
 		dli     $t0, 0x1f7 # Permit_Store not granted
+		cgetdefault $c0
 		candperm $c0, $c0, $t0
 
 		dla	$t1, data

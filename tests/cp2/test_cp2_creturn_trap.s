@@ -103,7 +103,8 @@ BEGIN_TEST
 		#
 
 		dli     $t0, 0x1ff
-		candperm $c1, $c0, $t0
+		cgetdefault $c1
+		candperm $c1, $c1, $t0
 
 		#
 		# Run 'sandbox' with restricted permissions

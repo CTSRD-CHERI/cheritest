@@ -67,7 +67,8 @@ BEGIN_TEST
 		#
 		
 		dli $t0, 0x1df
-		candperm $c2, $c0, $t0
+		cgetdefault $c2
+		candperm $c2, $c2, $t0
 
 		# Try to store the capability via a capability
 		# that doesn't permit this.

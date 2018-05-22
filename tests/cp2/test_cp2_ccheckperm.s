@@ -53,15 +53,18 @@ BEGIN_TEST
 		ccheckperm $c1, $t0
 
 		dli	$t0, 0x4
-		candperm $c1, $c0, $t0
+		cgetdefault $c1
+		candperm $c1, $c1, $t0
 		ccheckperm $c1, $t0
 
 		dli	$t0, 0x8
-		candperm $c1, $c0, $t0
+		cgetdefault $c1
+		candperm $c1, $c1, $t0
                 ccheckperm $c1, $t0
 
 		dli	$t0, 0x7
-		candperm $c1, $c0, $t0
+		cgetdefault $c1
+		candperm $c1, $c1, $t0
 		dli	$t0, 0x1
 		ccheckperm $c1, $t0
 

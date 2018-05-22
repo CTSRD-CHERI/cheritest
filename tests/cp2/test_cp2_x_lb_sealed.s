@@ -80,6 +80,7 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0xd # Permit_Store, Permit_Load and Global
+		cgetdefault $c0
 		candperm $c0, $c0, $t0
 		cseal	$c0, $c0, $c1
 		

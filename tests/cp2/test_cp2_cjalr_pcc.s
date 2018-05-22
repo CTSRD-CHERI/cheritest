@@ -48,7 +48,8 @@ BEGIN_TEST
 		# Permit_Store_Ephemeral_Capability.
 
 		dli $t0, 0x7f
-		candperm $c1, $c0, $t0
+		cgetdefault $c1
+		candperm $c1, $c1, $t0
 
 		dla	$t0, sandbox
 		csetoffset $c1, $c1, $t0
