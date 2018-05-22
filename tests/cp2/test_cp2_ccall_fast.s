@@ -61,7 +61,8 @@ L1:
                 #
 
                 dla         $t0, data
-                cincoffset  $c3, $c0, $t0
+                cgetdefault $c3
+                cincoffset $c3, $c3, $t0
                 dli         $t0, 0x1000
                 csetbounds  $c3, $c3, $t0
                 # Permissions Non_Ephemeral, Permit_Load, Permit_Store,

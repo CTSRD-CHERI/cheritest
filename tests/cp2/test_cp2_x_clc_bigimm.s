@@ -55,7 +55,8 @@ BEGIN_TEST
 
 		# Check that a load of address 0x1 raises an exception (not aligned)
 		dla $t0, 17
-		cincoffset $c1, $c0, $t0
+		cgetdefault $c1
+		cincoffset $c1, $c1, $t0
 		# c1 contains address 17 -> loading $c1 - 16 will cause an error
 		# TODO: when assembler support is merged use that instead of raw bits
 		.word 0x7421ffff	# clcbi	$c1, -16($c1)

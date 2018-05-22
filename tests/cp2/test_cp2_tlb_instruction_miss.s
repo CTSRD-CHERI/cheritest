@@ -56,7 +56,8 @@ BEGIN_TEST
 	dla	$a4, mapped_code
 	dli	$a2, 0xFFFFFFFF
 	and	$a4, $a2, $a4
-	cincoffset $c1, $c0, $a4
+	cgetdefault $c1
+	cincoffset $c1, $c1, $a4
 	dli	$a2, 0x1000
 	csetbounds $c1, $c1, $a2
 
