@@ -2849,10 +2849,10 @@ ifeq ($(PYTEST),)
 PYTEST:=$(shell command -v py.test-3 2> /dev/null)
 endif
 ifeq ($(PYTEST),)
-PYTEST:=$(shell command pytest-3 2> /dev/null)
+PYTEST:=$(shell command -v pytest-3 2> /dev/null)
 endif
 ifeq ($(PYTEST),)
-PYTEST:=$(shell command pytest 2> /dev/null)
+PYTEST:=$(shell command -v pytest 2> /dev/null)
 endif
 ifeq ($(PYTEST),)
 PYTEST:=/pytest/not/found/you/must/set/PYTEST/on/cmdline/or/install/it
