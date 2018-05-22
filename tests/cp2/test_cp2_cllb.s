@@ -54,7 +54,8 @@ BEGIN_TEST
 		#
 
 		dla	$t1, word
-		csetoffset	$c1, $c0, $t1
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t1
 		cllb	$a0, $c1
 		cscb	$a0, $a0, $c1
 		clb	$a1, $zero, 0($c1)
@@ -80,15 +81,18 @@ BEGIN_TEST
 
 		# Load a byte from double word storage
 		dla	$t0, dword
-		csetoffset	$c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 		cllb	$s0, $c2
 		
 		# Load bytes with sign extension
 		dla	$t0, positive
-		csetoffset	$c3, $c0, $t0
+		cgetdefault $c3
+		csetoffset $c3, $c3, $t0
 		cllb	$s1, $c3
 		dla	$t0, negative
-		csetoffset	$c4, $c0, $t0
+		cgetdefault $c4
+		csetoffset $c4, $c4, $t0
 		cllb	$s2, $c4
 
 		# Load bytes without sign extension 

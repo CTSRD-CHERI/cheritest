@@ -53,7 +53,8 @@ BEGIN_TEST
 		candperm 	$c1, $c1, $t0
 
 		dli		$t0, 0x1234
-		csetoffset	$c3, $c0, $t0
+		cgetdefault $c3
+		csetoffset $c3, $c3, $t0
 
 		cseal		$c1, $c1, $c3
 

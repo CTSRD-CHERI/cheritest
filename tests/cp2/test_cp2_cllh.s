@@ -54,7 +54,8 @@ BEGIN_TEST
 		#
 
 		dla	$t1, hword
-		csetoffset	$c1, $c0, $t1
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t1
 		cllh	$a0, $c1
 		csch	$a0, $a0, $c1
 		clh	$a1, $zero, 0($c1)
@@ -81,15 +82,18 @@ BEGIN_TEST
 
 		# Load a half-word from double word storage
 		dla	$t0, dword
-		csetoffset	$c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 		cllh	$s0, $c2
 
 		# Load words with sign extension
 		dla	$t0, positive
-		csetoffset	$c3, $c0, $t0
+		cgetdefault $c3
+		csetoffset $c3, $c3, $t0
 		cllh	$s1, $c3
 		dla	$t0, negative
-		csetoffset	$c4, $c0, $t0
+		cgetdefault $c4
+		csetoffset $c4, $c4, $t0
 		cllh	$s2, $c4
 
 		# Load words unsigned

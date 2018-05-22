@@ -54,7 +54,8 @@ L1:
                 #
 
                 dli         $t0, 0x1234
-                csetoffset  $c4, $c0, $t0
+                cgetdefault $c4
+                csetoffset $c4, $c4, $t0
 
                 #
                 # Make $c3 a data capability for the array at address data
@@ -168,7 +169,8 @@ invoke:         .ent invoke
                 #TODO more stuff ?
                 # prepare backup of first domain's code and data capabilities in c23 and c24
                 dli         $t0, 0x4321
-                csetoffset  $c4, $c0, $t0
+                cgetdefault $c4
+                csetoffset $c4, $c4, $t0
 
                 # prepare code capability
                 cgetpcc     $c23

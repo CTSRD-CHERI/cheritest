@@ -174,7 +174,9 @@ BEGIN_TEST
 		dli	$t1, 0
 		dli	$t2, 0x010101
 
-		csetoffset	$c0, $c0, $t2
+		cgetdefault $c0
+
+		csetoffset $c0, $c0, $t2
 		cincbase	$c0, $c0, $t0
 		cgetdefault $c0
 		candperm $c0, $c0, $t1
