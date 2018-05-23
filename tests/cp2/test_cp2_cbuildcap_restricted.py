@@ -33,3 +33,11 @@ class test_cp2_cbuildcap_restricted(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cbuildcap_restricted_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "CBuildCap did not restore capability correctly")
+
+    @attr('capabilities')
+    def test_cp2_cbuildcap_restricted_2(self):
+        self.assertCapabilitiesEqual(self.MIPS.c4, self.MIPS.c2, "CBuildCap did not restore capability correctly")
+
+    @attr('capabilities')
+    def test_cp2_cbuildcap_restricted_3(self):
+        self.assertCapabilitiesEqual(self.MIPS.c5, self.MIPS.c3, "ccleartag on cbuildcap result not equal to input")

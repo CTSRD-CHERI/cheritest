@@ -57,7 +57,7 @@ BEGIN_TEST
 		csetbounds $c2, $c2, $t0
 
 		#
-		# Clear the tag on $c2 to somulate it being swapped out and the
+		# Clear the tag on $c2 to simulate it being swapped out and the
 		# swapped back in.
 		#
 
@@ -68,9 +68,11 @@ BEGIN_TEST
 		# as a subset.
 		#
 
-		cbuildcap $c3, $c1, $c3
+		cbuildcap $c4, $c1, $c3
 
-		cexeq	$a0, $c2, $c3
+		cexeq	$a0, $c2, $c4
+
+		ccleartag $c5, $c4	# create an untagged version and compare to c3
 
 END_TEST
 
