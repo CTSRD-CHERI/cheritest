@@ -103,14 +103,6 @@ BEGIN_TEST
 		clw 	$t0, $t1, 0($c1) # trap #3 / no trap with unaligned load
 		cld 	$t0, $t1, 0($c1) # trap #4 / no trap with unaligned load
 
-		# cllc doesn't take a register offset, so use $c3 not $t1($c1)
-		csetoffset $c3, $c1, $t1
-		cllc	$c2, $c3  # trap #5 / #2 with unaligned load
-		cllb	$t0, $c3  # cllb will work at any alignment
-		cllh	$t0, $c3  # trap #6 / #3 with unaligned load
-		cllw	$t0, $c3  # trap #7 / #4 with unaligned load
-		clld	$t0, $c3  # trap #8 / #5 with unaligned load
-
 END_TEST
 
 		.ent bev0_handler
@@ -145,7 +137,7 @@ expected_exception:
 
 
 		.data
-		.align	7	# NB: Cache line algined
+		.align	7	# NB: Cache line aligned
 data:
 
 		.rept	160
