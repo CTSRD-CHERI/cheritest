@@ -1168,6 +1168,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_multiop_ades.s	\
 		test_cp2_x_multiop_disabled.s	\
 		test_cp2_x_multiop_length.s	\
+		test_cp2_x_multiop_ll_adel.s	\
 		test_cp2_x_multiop_permit_load.s \
 		test_cp2_x_multiop_permit_store.s \
 		test_cp2_x_multiop_reg2.s	\
