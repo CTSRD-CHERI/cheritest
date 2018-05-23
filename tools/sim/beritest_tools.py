@@ -403,7 +403,7 @@ class BaseBERITestCase(unittest.TestCase):
             check_msg = "valid cap"
             if not isinstance(offset, collections.Iterable) and offset != 0:
                 check_msg += " with offset 0x%x" % offset
-        msg += "(cap=<" + str(cap) + ">)\nshould be" + check_msg + " but "
+        msg += "(cap=<" + str(cap) + ">)\nshould be " + check_msg + " but "
         # valid unsealed caps always have tag, !sealed, otype==0
         self.assertRegisterEqual(cap.t, 1, msg + "tag not set")
         self.assertRegisterEqual(cap.s, 0, msg + "is sealead")
