@@ -900,6 +900,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cbts.s			\
 		test_cp2_cbtu.s			\
 		test_cp2_cbuildcap.s		\
+		test_cp2_cbuildcap_restricted.s	\
 		test_cp2_ccall2.s		\
 		test_cp2_ccall.s		\
 		test_cp2_ccheckperm.s		\
