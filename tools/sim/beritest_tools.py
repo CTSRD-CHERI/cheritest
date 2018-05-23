@@ -379,7 +379,7 @@ class BaseBERITestCase(unittest.TestCase):
         if offset == 0:
             msg += "null but "
         else:
-            msg += "and untagged integer value but "
+            msg += "an untagged integer value but "
         self.assertRegisterEqual(cap.t     , 0, msg + "tag set")
         self.assertRegisterEqual(cap.s     , 0, msg + "is sealed")
         self.assertRegisterEqual(cap.ctype , 0, msg + "has nonzero otype")
