@@ -43,10 +43,13 @@ BEGIN_TEST
 		# Save out all capability registers but $kcc and $kdc.
 		#
 		dla	$t0, data
-		csc 	$c0, $t0, 0($c30)
 
 		daddiu	$t0, $t0, 32
 		csc 	$c1, $t0, 0($c30)
+
+		# now that $c1 has been saved use it to save $ddc
+		cgetdefault $c1
+		csc 	$c1, $t0, -32($c30)
 
 		daddiu	$t0, $t0, 32
 		csc 	$c2, $t0, 0($c30)
@@ -138,7 +141,8 @@ BEGIN_TEST
 		# Now reverse the process.
 		#
 		dla	$t0, data
-		clc 	$c0, $t0, 0($c30)
+		clc 	$c1, $t0, 0($c30)
+		csetdefault $c1
 
 		daddiu	$t0, $t0, 32
 		clc 	$c1, $t0, 0($c30)

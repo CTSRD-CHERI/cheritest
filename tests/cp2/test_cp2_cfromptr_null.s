@@ -42,7 +42,7 @@ BEGIN_TEST
 
 		# Set the offset, base, and length to something non-zero so
 		# we can tell when they've been set to zero.
-		cmove $c1, $c0
+		cgetdefault $c1
 		dli $t0, 4
 		cincoffset $c1, $c1, $t0
 		csetbounds  $c1, $c1, $t0
@@ -58,4 +58,8 @@ BEGIN_TEST
 		cgettag  $a4, $c1
 		cgetsealed $a5, $c1
 
+		# Regression test for sail bug where cfromptr was checking whether
+		# register was rt, not whether it's value was zero.
+		li       $t0, 0
+		cfromptr $c2, $c3, $t0
 END_TEST

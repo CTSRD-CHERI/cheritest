@@ -55,12 +55,14 @@ BEGIN_TEST
 		# tell if $c1 has been (incorrectly) overwritten by a
 		# failed cunseal operation.
 		dli      $t0, 1
-		cincoffset $c1, $c0, $t0
+		cgetdefault $c1
+		cincoffset $c1, $c1, $t0
 
 		# $c2 isn't sealed, but we set $c3's effective address
 		# to 0 so cunseal won't raise an exception due to the
 		# otypes not matching.
-		csetoffset $c3, $c0, $0
+		cgetdefault $c3
+		csetoffset $c3, $c3, $0
 
 		# Put a recognizable value in $a0 so we can tell if the
 		# test never makes it back from the exception handler.

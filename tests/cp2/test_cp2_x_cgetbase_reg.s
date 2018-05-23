@@ -62,11 +62,12 @@ BEGIN_TEST
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
 
-		cmove   $c27, $c0
+		cgetdefault   $c27
 		
 		# Run sandbox with restricted permissions
 		dli     $t0, 0x1ff
-		candperm $c2, $c0, $t0
+		cgetdefault $c2
+		candperm $c2, $c2, $t0
 		dla     $t0, sandbox
 		csetoffset $c2, $c2, $t0
 		cjalr   $c2, $c24

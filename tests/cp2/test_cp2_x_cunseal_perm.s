@@ -56,7 +56,8 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 
 		cseal	$c3, $c1, $c2
 
@@ -71,7 +72,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		# Clear $c4 so we can later tell if its been modified
 		#
 
-		cmove	$c4, $c0
+		cgetdefault	$c4
 
 		clear_counting_exception_handler_regs
 		cunseal $c4, $c3, $c2 # This should raise an exception

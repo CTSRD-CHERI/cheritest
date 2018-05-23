@@ -39,7 +39,7 @@
 BEGIN_TEST
 		dli	$a0, 0
 		dli	$a2, 0
-		cmove	$c22, $c0
+		cgetdefault	$c22
 		cbnz	$c22, L1	# This branch should be taken
 		dli	$a2, 1  # Branch delay slot is executed even if branch
 		dli     $a0, 1

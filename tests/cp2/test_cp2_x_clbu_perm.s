@@ -56,7 +56,8 @@ BEGIN_TEST
 
 		cgetdefault $c1
 		dla     $t0, data
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli     $t0, 8
                 csetbounds $c1, $c1, $t0
 		dli     $t0, 0xb # Permit_Load not granted

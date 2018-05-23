@@ -43,41 +43,43 @@
 BEGIN_TEST
 
 		# Ensure all capability registers are set to the default.
-    cmove		$c1, $c0
-    cmove		$c2, $c0
-    cmove		$c3, $c0
-    cmove		$c4, $c0
-    cmove		$c5, $c0
-    cmove		$c6, $c0
-    cmove		$c7, $c0
-    cmove		$c8, $c0
-    cmove		$c9, $c0
-    cmove		$c10, $c0
-    cmove		$c11, $c0
-    cmove		$c12, $c0
-    cmove		$c13, $c0
-    cmove		$c14, $c0
-    cmove		$c15, $c0
-    cmove		$c16, $c0
-    cmove		$c17, $c0
-    cmove		$c18, $c0
-    cmove		$c19, $c0
-    cmove		$c20, $c0
-    cmove		$c21, $c0
-    cmove		$c22, $c0
-    cmove		$c23, $c0
-    cmove		$c24, $c0
-    cmove		$c25, $c0
-    cmove		$c26, $c0
+    cgetdefault		$c1
+    cgetdefault		$c2
+    cgetdefault		$c3
+    cgetdefault		$c4
+    cgetdefault		$c5
+    cgetdefault		$c6
+    cgetdefault		$c7
+    cgetdefault		$c8
+    cgetdefault		$c9
+    cgetdefault		$c10
+    cgetdefault		$c11
+    cgetdefault		$c12
+    cgetdefault		$c13
+    cgetdefault		$c14
+    cgetdefault		$c15
+    cgetdefault		$c16
+    cgetdefault		$c17
+    cgetdefault		$c18
+    cgetdefault		$c19
+    cgetdefault		$c20
+    cgetdefault		$c21
+    cgetdefault		$c22
+    cgetdefault		$c23
+    cgetdefault		$c24
+    cgetdefault		$c25
+    cgetdefault		$c26
 
 		#
 		# Save out all capability registers but $kcc and $kdc.
 		#
 		dla	$t0, data
-		csc 	$c0, $t0, 0($c30)
 
 		daddiu	$t0, $t0, 32
 		csc 	$c1, $t0, 0($c30)
+		# Save $ddc now that $c1 is saved
+		cgetdefault $c1
+		csc	$c1, $t0, -32($c30)
 
 		daddiu	$t0, $t0, 32
 		csc 	$c2, $t0, 0($c30)
@@ -174,12 +176,14 @@ BEGIN_TEST
 		dli	$t1, 0
 		dli	$t2, 0x010101
 
-		csetoffset	$c0, $c0, $t2
-		cincbase	$c0, $c0, $t0
-		candperm	$c0, $c0, $t1
-
+		cgetdefault	$c1
 		csetoffset	$c1, $c1, $t2
 		cincbase	$c1, $c1, $t0
+		candperm	$c1, $c1, $t1
+		csetdefault	$c1
+
+		csetoffset	$c1, $c1, $t2
+		# cincbase	$c1, $c1, $t0	# This causes a length violation during csetbounds since $c1 is already changed
 		candperm	$c1, $c1, $t1
 
 		csetoffset	$c2, $c2, $t2
@@ -300,7 +304,8 @@ BEGIN_TEST
 		# Now reverse the process.
 		#
 		dla	$t0, data
-		clc 	$c0, $t0, 0($c30)
+		clc 	$c1, $t0, 0($c30)
+		csetdefault $c1
 
 		daddiu	$t0, $t0, 32
 		clc 	$c1, $t0, 0($c30)

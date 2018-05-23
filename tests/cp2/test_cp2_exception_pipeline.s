@@ -71,7 +71,8 @@ BEGIN_TEST
 
 		# Create a test capability for loading and storing
 		dla		$t0, data
-		csetoffset	$c6, $c0, $t0
+		cgetdefault $c6
+		csetoffset $c6, $c6, $t0
 		dli     	$t0, 32
 		csetbounds	$c6, $c6, $t0
 		dli		$t0, 0x1ff

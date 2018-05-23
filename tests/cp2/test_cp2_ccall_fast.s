@@ -54,14 +54,16 @@ L1:
                 #
 
                 dli         $t0, 0x1234
-                csetoffset  $c4, $c0, $t0
+                cgetdefault $c4
+                csetoffset $c4, $c4, $t0
 
                 #
                 # Make $c3 a data capability for the array at address data
                 #
 
                 dla         $t0, data
-                cincoffset  $c3, $c0, $t0
+                cgetdefault $c3
+                cincoffset $c3, $c3, $t0
                 dli         $t0, 0x1000
                 csetbounds  $c3, $c3, $t0
                 # Permissions Non_Ephemeral, Permit_Load, Permit_Store,
@@ -167,7 +169,8 @@ invoke:         .ent invoke
                 #TODO more stuff ?
                 # prepare backup of first domain's code and data capabilities in c23 and c24
                 dli         $t0, 0x4321
-                csetoffset  $c4, $c0, $t0
+                cgetdefault $c4
+                csetoffset $c4, $c4, $t0
 
                 # prepare code capability
                 cgetpcc     $c23
@@ -214,38 +217,39 @@ invoke:         .ent invoke
                 li          $30, 0
                 li          $31, 0
                 # clear all capability registers not passed to the sandbox
-                cfromptr    $c0, $c0, $zero
-                #cfromptr    $c1, $c1, $zero # code cap to invoke
-                #cfromptr    $c2, $c2, $zero # data cap to invoke
-                cfromptr    $c3, $c3, $zero
-                cfromptr    $c4, $c4, $zero
-                cfromptr    $c5, $c5, $zero
-                cfromptr    $c6, $c6, $zero
-                cfromptr    $c7, $c7, $zero
-                cfromptr    $c8, $c8, $zero
-                cfromptr    $c9, $c9, $zero
-                cfromptr    $c10, $c10, $zero
-                cfromptr    $c11, $c11, $zero
-                cfromptr    $c12, $c12, $zero
-                cfromptr    $c13, $c13, $zero
-                cfromptr    $c14, $c14, $zero
-                cfromptr    $c15, $c15, $zero
-                cfromptr    $c16, $c16, $zero
-                cfromptr    $c17, $c17, $zero
-                cfromptr    $c18, $c18, $zero
-                cfromptr    $c19, $c19, $zero
-                cfromptr    $c20, $c20, $zero
-                cfromptr    $c21, $c21, $zero
-                cfromptr    $c22, $c22, $zero
-                #cfromptr    $c23, $c23, $zero # code cap to return to
-                #cfromptr    $c24, $c24, $zero # data cap to return to
-                cfromptr    $c25, $c25, $zero
-                cfromptr    $c26, $c26, $zero
-                #cfromptr    $c27, $c27, $zero
-                #cfromptr    $c28, $c28, $zero
-                #cfromptr    $c29, $c29, $zero
-                #cfromptr    $c30, $c30, $zero
-                #cfromptr    $c31, $c31, $zero
+                #cgetnull	$c1 # code cap to invoke
+                #cgetnull	$c2 # data cap to invoke
+                cgetnull	$c3
+                # cgetnull	$c0  # direct access to $ddc no longer allowed
+                csetdefault	$c3
+                cgetnull	$c4
+                cgetnull	$c5
+                cgetnull	$c6
+                cgetnull	$c7
+                cgetnull	$c8
+                cgetnull	$c9
+                cgetnull	$c10
+                cgetnull	$c11
+                cgetnull	$c12
+                cgetnull	$c13
+                cgetnull	$c14
+                cgetnull	$c15
+                cgetnull	$c16
+                cgetnull	$c17
+                cgetnull	$c18
+                cgetnull	$c19
+                cgetnull	$c20
+                cgetnull	$c21
+                cgetnull	$c22
+                #cgetnull	$c23 # code cap to return to
+                #cgetnull	$c24 # data cap to return to
+                cgetnull	$c25
+                cgetnull	$c26
+                #cgetnull	$c27
+                #cgetnull	$c28
+                #cgetnull	$c29
+                #cgetnull	$c30
+                #cgetnull	$c31
                 # call new domain
                 ccall   $c1, $c2, 1
                 nop
@@ -286,38 +290,39 @@ uninvoke:       .ent uninvoke
                 li          $30, 0
                 li          $31, 0
                 # clear all capability registers not passed to the sandbox
-                cfromptr    $c0, $c0, $zero
-                #cfromptr    $c1, $c1, $zero # code cap to invoke
-                #cfromptr    $c2, $c2, $zero # data cap to invoke
-                cfromptr    $c3, $c3, $zero
-                cfromptr    $c4, $c4, $zero
-                cfromptr    $c5, $c5, $zero
-                cfromptr    $c6, $c6, $zero
-                cfromptr    $c7, $c7, $zero
-                cfromptr    $c8, $c8, $zero
-                cfromptr    $c9, $c9, $zero
-                cfromptr    $c10, $c10, $zero
-                cfromptr    $c11, $c11, $zero
-                cfromptr    $c12, $c12, $zero
-                cfromptr    $c13, $c13, $zero
-                cfromptr    $c14, $c14, $zero
-                cfromptr    $c15, $c15, $zero
-                cfromptr    $c16, $c16, $zero
-                cfromptr    $c17, $c17, $zero
-                cfromptr    $c18, $c18, $zero
-                cfromptr    $c19, $c19, $zero
-                cfromptr    $c20, $c20, $zero
-                cfromptr    $c21, $c21, $zero
-                cfromptr    $c22, $c22, $zero
-                cfromptr    $c23, $c23, $zero # code cap to return to
-                cfromptr    $c24, $c24, $zero # data cap to return to
-                cfromptr    $c25, $c25, $zero
-                cfromptr    $c26, $c26, $zero
-                #cfromptr    $c27, $c27, $zero
-                #cfromptr    $c28, $c28, $zero
-                #cfromptr    $c29, $c29, $zero
-                #cfromptr    $c30, $c30, $zero
-                #cfromptr    $c31, $c31, $zero
+                cgetnull    $c3
+                csetdefault $c3
+                #cgetnull	$c1 # code cap to invoke
+                #cgetnull	$c2 # data cap to invoke
+                cgetnull	$c3
+                cgetnull	$c4
+                cgetnull	$c5
+                cgetnull	$c6
+                cgetnull	$c7
+                cgetnull	$c8
+                cgetnull	$c9
+                cgetnull	$c10
+                cgetnull	$c11
+                cgetnull	$c12
+                cgetnull	$c13
+                cgetnull	$c14
+                cgetnull	$c15
+                cgetnull	$c16
+                cgetnull	$c17
+                cgetnull	$c18
+                cgetnull	$c19
+                cgetnull	$c20
+                cgetnull	$c21
+                cgetnull	$c22
+                cgetnull	$c23 # code cap to return to
+                cgetnull	$c24 # data cap to return to
+                cgetnull	$c25
+                cgetnull	$c26
+                #cgetnull	$c27
+                #cgetnull	$c28
+                #cgetnull	$c29
+                #cgetnull	$c30
+                #cgetnull	$c31
                 # call new domain
                 ccall   $c1, $c2, 1
                 nop

@@ -54,7 +54,8 @@ BEGIN_TEST
 		#
 
 		dla	$a0, cap1
-		csetoffset	$c1, $c0, $a0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $a0
 		cllc	$c2, $c1
 		cscc	$a1, $c2, $c1
 		clc	$c3, $zero, 0($c1)
@@ -65,7 +66,8 @@ BEGIN_TEST
 		#
 
 		cllc	$c2, $c1
-		csetoffset	$c2, $c0, $a0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $a0
 		cscc	$a2, $c2, $c1
 		clc	$c4, $zero, 0($c1)
 		cgettag	$a6, $c4

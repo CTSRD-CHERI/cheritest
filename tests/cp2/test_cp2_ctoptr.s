@@ -36,12 +36,14 @@
 
 BEGIN_TEST
 		dli	$t0, 4
-		cincoffset $c1, $c0, $t0
+		cgetdefault $c1
+		cincoffset $c1, $c1, $t0
 		# Length of one page to enable a precise base.
 		dli $t1, 0x1000
 		csetbounds $c1, $c1, $t1
 		dli	$t0, 8
-		cincoffset $c2, $c0, $t0
+		cgetdefault $c2
+		cincoffset $c2, $c2, $t0
 		csetbounds $c2, $c2, $t0
 		ctoptr	$a0, $c2, $c1
 

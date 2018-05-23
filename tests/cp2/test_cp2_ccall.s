@@ -66,11 +66,13 @@ BEGIN_TEST
                 # Make $c1 a template capability for a user-defined type
 		# whose otype is 0x1234
 		dli	 $t0, 0x1234
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 
 		# Make $c2 a data capability for the array at address data
 		dla      $t0, data
-		csetoffset $c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 		dli      $t0, 0x1000
 		csetbounds  $c2, $c2, $t0
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
@@ -82,11 +84,12 @@ BEGIN_TEST
 
 		# Seal data capability $c2 to the offset of $c1, and store
 		# result in $c3.
-    cseal	 $c3, $c2, $c1
+		cseal	 $c3, $c2, $c1
 
 		# Make $c4 a code capability for sandbox
 		dla	 $t0, sandbox
-		csetoffset $c4, $c0, $t0
+		cgetdefault $c4
+		csetoffset $c4, $c4, $t0
 		dli      $t0, 0x1000
 		csetbounds  $c4, $c4, $t0
 		cseal	 $c4, $c4, $c1

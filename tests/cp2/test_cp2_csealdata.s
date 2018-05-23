@@ -42,7 +42,8 @@ BEGIN_TEST
 		# Make $c1 a template capability for the user-defined type
 		# 0x1234.
 		dli	$t0, 0x1234
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 
 		# Make $c2 a data capability for the array at address data
 		cgetdefault $c2

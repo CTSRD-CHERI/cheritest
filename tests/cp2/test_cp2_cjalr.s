@@ -57,7 +57,8 @@ BEGIN_TEST
 		# Permit_Store_Ephemeral_Capability.
 
 		dli $t1, 0x7f
-		candperm $c1, $c0, $t1
+		cgetdefault $c1
+		candperm $c1, $c1, $t1
 
 		# Save $ra so we can return from this subroutine
 		move	$a1, $ra

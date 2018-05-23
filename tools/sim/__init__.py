@@ -176,10 +176,11 @@ class MipsStatus(object):
         thread = 0
         for line in self.fh:
             line = line.strip()
-            thread_groups = THREAD_RE.search(line)
-            if thread_groups:
-                thread = int(thread_groups.group(1))
-                continue
+            if line.endswith("======"):
+                thread_groups = THREAD_RE.search(line)
+                if thread_groups:
+                    thread = int(thread_groups.group(1))
+                    continue
 
             # All other regexes start with "DEBUG " so skip any lines that don't
             # start with DEBUG to save time

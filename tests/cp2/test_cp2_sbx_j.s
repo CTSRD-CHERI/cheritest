@@ -61,7 +61,8 @@ BEGIN_TEST
 		#
 
 		dla     $t0, sandbox
-		cincoffset	$c1, $c0, $t0
+		cgetdefault $c1
+		cincoffset $c1, $c1, $t0
 		dli			$t0, 28 # Size of sandbox
 		csetbounds	$c1, $c1, $t0 
 		cjalr   $c1, $c24

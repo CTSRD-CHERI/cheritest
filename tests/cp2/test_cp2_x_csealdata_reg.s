@@ -71,7 +71,8 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c29, $c0, $t0
+		cgetdefault $c29
+		csetoffset $c29, $c29, $t0
 
 		#
 		# Take away the permission to access reserved registers,
@@ -79,7 +80,8 @@ BEGIN_TEST
 		#
 
 		dli $t0, 0x1ff
-		candperm $c2, $c0, $t0
+		cgetdefault $c2
+		candperm $c2, $c2, $t0
 
 		#
 		# Call sandbox2 with restricted permissions in $PCC

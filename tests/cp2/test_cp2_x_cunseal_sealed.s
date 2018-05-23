@@ -68,7 +68,8 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 
 		#
 		# Make $c2 a sealed data capability for 'data'
@@ -94,7 +95,7 @@ BEGIN_TEST
 		# Clear $c4 so we can tell if the following cunseal succeeds
 		#
 
-		cmove	$c4, $c0
+		cgetdefault	$c4
 
 		#
 		# Try to unseal $c2 with a template capability that is itself

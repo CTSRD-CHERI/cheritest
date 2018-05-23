@@ -37,7 +37,8 @@
 
 BEGIN_TEST
 		dla	$t0, data
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli	$t1, 4
 		csetbounds $c1, $c1, $t1
 

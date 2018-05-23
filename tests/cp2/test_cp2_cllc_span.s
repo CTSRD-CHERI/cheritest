@@ -48,7 +48,8 @@ BEGIN_TEST
 		nop
 
 		dla	$t1, cap1
-		csetoffset $c1, $c0, $t1
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t1
 
 		#
 		# Load the capability into another register between cllc and
@@ -64,10 +65,10 @@ BEGIN_TEST
 		# sure that the cscc not only returns failure, but doesn't
 		# store.
 		#
-
+		cgetdefault $c4
 		li	$t0, 1
 		cllc	$c2, $c1
-		csc	$c0, $zero, 0($c1)
+		csc	$c4, $zero, 0($c1)
 		cscc	$a3, $c2, $c1
 		clc	$c3, $zero, 0($c1)
 		cgettag	$a2, $c3

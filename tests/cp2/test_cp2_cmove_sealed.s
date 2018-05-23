@@ -42,7 +42,8 @@ BEGIN_TEST
 		# Put a non-zero value in c1.base, so we can tell when
 		# c2 has been changed.
 		dli		$t0, 0x1000
-		cincoffset	$c1, $c0, $t0
+		cgetdefault $c1
+		cincoffset $c1, $c1, $t0
 
 		dli		$t0, 0x1000
 		csetbounds		$c1, $c1, $t0
@@ -52,7 +53,8 @@ BEGIN_TEST
 		candperm 	$c1, $c1, $t0
 
 		dli		$t0, 0x1234
-		csetoffset	$c3, $c0, $t0
+		cgetdefault $c3
+		csetoffset $c3, $c3, $t0
 
 		cseal		$c1, $c1, $c3
 

@@ -54,7 +54,8 @@ BEGIN_TEST
 		#
 
 		dla     $t0, data
-		cincoffset $c1, $c0, $t0
+		cgetdefault $c1
+		cincoffset $c1, $c1, $t0
 .if CAP_SIZE==128
 		# The length of this capability should be small for the compressed 
 		# case so that the lower bound is precise.
@@ -70,7 +71,8 @@ BEGIN_TEST
 		dli     $t0, 0x7f
 		candperm $c1, $c1, $t0
 
-		csc    $c0, $zero, -32($c1) # This should raise an exception
+		cgetdefault $c3
+		csc    $c3, $zero, -32($c1) # This should raise an exception
 
 		dla	$t0, underflow
 		cld     $a0, $t0, 0($c0)

@@ -44,11 +44,13 @@ test:
 		dli       $a1, 0
 
 		# c0 should have a valid cap, c1 an invalid one
-		ccleartag $c1, $c0
+		cgetdefault $c1
+		ccleartag $c1, $c1
 
 		# Check that the branches are taken when they should be and that their
 		# delay slots execute.
-		cbts      $c0, clear1
+		cgetdefault $c2
+		cbts      $c2, clear1
 		daddi     $a0, $a0, 1
 cont1:
 		cbtu      $c1, clear2
@@ -59,7 +61,7 @@ cont2:
 		cbts      $c1, clear3
 		daddi     $a0, $a0, 2
 cont3:
-		cbtu      $c0, clear4
+		cbtu      $c2, clear4
 		daddi     $a1, $a1, 2
 cont4:
 

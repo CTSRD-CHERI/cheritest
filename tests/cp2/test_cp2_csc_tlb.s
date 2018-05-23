@@ -125,7 +125,8 @@ testcode:
 		# This should NOT raise an exception.
 		#
 		dli	$t0, 64
-		cincoffset $c1, $c0, $t0
+		cgetdefault $c1
+		cincoffset $c1, $c1, $t0
 		csetbounds	$c1, $c1, $t0
 		ccleartag $c1, $c1
 		csc 	$c1, $a2, 0($c0)

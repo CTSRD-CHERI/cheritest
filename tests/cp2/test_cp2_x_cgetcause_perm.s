@@ -61,7 +61,8 @@ BEGIN_TEST
 		# Run sandbox with restricted permissions
 		# All permissions except Access_System_Registers
 		dli     $t0, 0xff
-		candperm $c2, $c0, $t0
+		cgetdefault $c2
+		candperm $c2, $c2, $t0
 		dla     $t0, sandbox
 		csetoffset $c2, $c2, $t0
 		cjalr   $c2, $c24

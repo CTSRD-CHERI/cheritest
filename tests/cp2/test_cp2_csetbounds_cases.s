@@ -47,7 +47,8 @@ BEGIN_TEST
 		# Stage 1 setting up the initial capability.
 
 		dli	$t0, 0x1600f4000
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x20000
 		csetbounds $c1, $c1, $t1
 		# Get and assert that the base and length are what we set.
@@ -79,7 +80,8 @@ BEGIN_TEST
 
 		# Stage 1 setting up the initial capability.
 		dli	$t0, 0x7fffffe8c0
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x0
 		csetbounds $c1, $c1, $t1
 		# Get and assert that the base and length are what we set.
@@ -106,7 +108,8 @@ BEGIN_TEST
 
 		# Stage 1 setting up the initial capability.
 		dli	$t0, 0x16022e000
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x400000
 		csetbounds $c1, $c1, $t1
 		# Get and assert that the base and length are what we set.
@@ -137,14 +140,16 @@ BEGIN_TEST
 
 		# Stage 1 setting up the initial capability.
 		dli	$t0, 0x160600000
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x300000
 		csetbounds $c1, $c1, $t1
-		cseal $c1, $c1, $c0
+		cgetdefault $c3
+		cseal $c1, $c1, $c3
 		dla $t2, data
 		csc $c1, $t2, 0($c0)
 		clc $c1, $t2, 0($c0)
-		cunseal $c1, $c1, $c0
+		cunseal $c1, $c1, $c3
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
@@ -160,7 +165,8 @@ BEGIN_TEST
 
 		# Stage 1 setting up the initial capability.
 		dli	$t0, 0x98000000600f9000
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x38000
 		csetbounds $c1, $c1, $t1
 		dli $t2, 0x88c0

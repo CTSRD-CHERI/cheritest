@@ -38,7 +38,8 @@
 BEGIN_TEST
 # Construct the example capability given in the paper
         dli     $t0, 0x0010000000200000
-        csetoffset $c1, $c0, $t0
+        cgetdefault $c1
+        csetoffset $c1, $c1, $t0
         dli     $t0, 0x0000000000e01000
         csetbounds $c1, $c1, $t0
 

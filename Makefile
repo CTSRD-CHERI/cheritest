@@ -2081,6 +2081,7 @@ $(QEMU_LOGDIR)/test_clang.log: tests/c/test_clang.py
 endif
 ifeq ($(PURECAP), 1)
 TEST_PYTHON +=	tests/purecap/test_purecap.py
+TEST_PYTHON +=	tests/purecap/test_purecap_reg_init.py
 # dummy target to make the pytest/qemu/target work
 $(QEMU_LOGDIR)/test_purecap.log: tests/purecap/test_purecap.py
 	echo "DUMMY" > $@
@@ -2844,8 +2845,18 @@ qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
 
 qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
 
-
-PYTEST?=pytest
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command -v py.test-3 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command -v pytest-3 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command -v pytest 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=/pytest/not/found/you/must/set/PYTEST/on/cmdline/or/install/it
+endif
 PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
 QEMU_PYTEST=TEST_MACHINE=QEMU LOGDIR=$(QEMU_LOGDIR) $(PYTEST)
 

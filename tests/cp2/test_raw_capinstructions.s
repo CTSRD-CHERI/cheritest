@@ -93,7 +93,8 @@ start:
 		#
 
 		dla	$t0, cap1
-		csetoffset $c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 
 		# store/load capability, register and immediate offset
 		csc	  $c1, $a3, 0($c2)
@@ -219,8 +220,8 @@ start:
 		cscc	$t1, $c1, $c4
 
 		# check capability fields
-		cmove $c1, $c0
-		cmove $c2, $c0
+		cgetdefault $c1
+		cgetdefault $c2
 		dli $a2, 0
 		ccheckperm $c1, $a2
 		cchecktype $c1, $c2
@@ -244,13 +245,14 @@ start:
 
 l0:
 		dla       $t1, l1
-		csetoffset $c1, $c0, $t1
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t1
 		cjalr     $c0, $c24
 		# branch delay slot
 		nop
 
 l1:
-		cmove    $c1, $c0
+		cgetdefault    $c1
                 cbts     $c1, l2
                 # branch delay slot
 		nop

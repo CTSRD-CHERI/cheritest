@@ -10,7 +10,7 @@ function(add_targets _suffix _flags _objdir)
 		COMMAND env ${SET_MAKE_ENV_VARS} make -j8 -k elfs ${_objdir_flags}
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 	add_custom_target(run-make${_suffix}-j1 VERBATIM USES_TERMINAL
-		COMMAND env ${SET_MAKE_ENV_VARS} make -j1 elfs ${_objdir_flags}
+		COMMAND env ${SET_MAKE_ENV_VARS} make -j1 -k elfs ${_objdir_flags}
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 	add_custom_target(run-qemu-tests${_suffix} VERBATIM USES_TERMINAL
 		COMMAND env ${SET_MAKE_ENV_VARS} make -j4 pytest_qemu ${_objdir_flags}

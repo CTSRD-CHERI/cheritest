@@ -54,7 +54,8 @@ BEGIN_TEST
 		#
 
 		dla	$t1, dword
-		csetoffset	$c1, $c0, $t1
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t1
 		clld	$a0, $c1
 		cscd	$a0, $a0, $c1
 		cld	$a1, $zero, 0($c1)

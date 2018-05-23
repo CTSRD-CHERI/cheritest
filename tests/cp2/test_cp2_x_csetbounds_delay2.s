@@ -54,7 +54,8 @@ BEGIN_TEST
 		#
 
 		dla     $t0, data
-		csetoffset $c1, $c0, $t0
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
 		dli     $t0, 0x1000
 		csetbounds $c1, $c1, $t0
 		dli     $t0, 0x5
@@ -65,7 +66,8 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 1
-		csetoffset $c2, $c0, $t0
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
 
 		#
 		# Seal $c1 with $c2 so that an attempt to CSetBounds $c1 will

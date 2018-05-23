@@ -53,14 +53,15 @@ BEGIN_TEST
 		# Save c0
 		#
 
-		cmove   $c2, $c0
+		cgetdefault   $c2
 
 		#
 		# Make $c0 a read-only capability
 		#
 
 		dli     $t0, 0x1f7 # Permit_Store not granted
-		candperm $c0, $c0, $t0
+		candperm $c3, $c2, $t0
+		csetdefault $c3
 
 		dla	$t1, data
 		dli     $a0, 0
@@ -70,7 +71,7 @@ BEGIN_TEST
 		# Restore c0
 		#
 
-		cmove   $c0, $c2
+		csetdefault   $c2
 
 		#
 		# Check that the store byte didn't succeed

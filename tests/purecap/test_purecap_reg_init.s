@@ -68,7 +68,7 @@ test:		.ent test
 		cmove	$c28, $c28
 		cmove $c29, $c29
 		cmove	$c30, $c30
-		# TODO: reeanble once c31 is null
+		# TODO: reenable once c31 is no longer reserved
 		# cmove $c31, $c31
 
 		jr	$ra

@@ -36,7 +36,7 @@
 #
 
 sandbox:
-		cmove	$c0, $c26
+		csetdefault $c26
 		dli	$a2, 42
 		csd	$a2, $zero, 0($c26)
 		creturn
@@ -104,14 +104,16 @@ L1:
 		#
 
 		dli	$t0, 0x1234
-		csetoffset $c4, $c0, $t0
+		cgetdefault $c4
+		csetoffset $c4, $c4, $t0
 
 		#
 		# Make $c3 a data capability for the array at address data
 		#
 
 		dla        $t0, data
-		cincoffset $c3, $c0, $t0
+		cgetdefault $c3
+		cincoffset $c3, $c3, $t0
 		dli        $t0, 0x1000
 		csetbounds $c3, $c3, $t0
 		# Permissions Non_Ephemeral, Permit_Load, Permit_Store,
@@ -143,13 +145,14 @@ L1:
 		# the trusted system stack by ccall
 		#
 
-		cmove $c26, $c0
+		cgetdefault $c26
 
 		#
 		# Clear $c0 so that the sandbox doesn't have access to it
 		#
 
-		cgetnull $c0
+		cgetnull $c27
+		csetdefault $c27
 
 		#
 		# Invoke the sandbox
@@ -163,7 +166,7 @@ L1:
 		# the trusted system stack by creturn
 		#
 
-		cmove $c0, $c26
+		csetdefault $c26
 
 END_TEST
 
