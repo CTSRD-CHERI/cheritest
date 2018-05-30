@@ -150,14 +150,14 @@ no_fpu:
 		beqz	$t0, no_cp2
 		nop
 		
-		clb	$t0,   $zero, 0($c0)
-		clh	$t0,   $zero, 0($c0)
-		clw	$t0,   $zero, 0($c0)
-		cld	$t0,   $zero, 0($c0)
-		csb	$zero, $zero, 0($c0)
-		csh	$zero, $zero, 0($c0)
-		csw	$zero, $zero, 0($c0)
-		csd	$zero, $zero, 0($c0)
+		clb	$t0,   $zero, 0($ddc)
+		clh	$t0,   $zero, 0($ddc)
+		clw	$t0,   $zero, 0($ddc)
+		cld	$t0,   $zero, 0($ddc)
+		csb	$zero, $zero, 0($ddc)
+		csh	$zero, $zero, 0($ddc)
+		csw	$zero, $zero, 0($ddc)
+		csd	$zero, $zero, 0($ddc)
 
 		cllb	$t0, $c0
 		cllh	$t0, $c0

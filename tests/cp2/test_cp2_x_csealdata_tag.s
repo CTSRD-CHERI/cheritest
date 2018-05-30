@@ -71,10 +71,10 @@ BEGIN_TEST
 		#
 
 		dla	$t1, cap1
-		csc 	$c2, $t1, 0($c0)
+		csc 	$c2, $t1, 0($ddc)
 		ld	$t0, 0($t1)
 		sd	$t0, 0($t1)
-		clc 	$c2, $t1, 0($c0)
+		clc 	$c2, $t1, 0($ddc)
 
 		cseal $c1, $c1, $c2 # This should raise an exception
 

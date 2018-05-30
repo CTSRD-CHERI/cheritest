@@ -64,7 +64,7 @@ BEGIN_TEST
 		cgetdefault   $c1
 
 		#
-		# Make $c0 a write-only capability
+		# Make $ddc a write-only capability
 		#
 
 		dli     $t0, 0xb # Permit_Load not granted

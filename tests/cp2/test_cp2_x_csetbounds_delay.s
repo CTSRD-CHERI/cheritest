@@ -68,10 +68,10 @@ BEGIN_TEST
 		#
 
 		dla	$t0, cap1
-		csc 	$c1, $t0, 0($c0)
+		csc 	$c1, $t0, 0($ddc)
 		ld	$t1, 0($t0)
 		sd	$t1, 0($t0)
-		clc 	$c1, $t0, 0($c0)
+		clc 	$c1, $t0, 0($ddc)
 
 		dli	$t1, 1
 		j	L1
@@ -82,7 +82,7 @@ BEGIN_TEST
 L1:
 		dla	$t0, cap1
 		dla	$t1, cap2
-		csc 	$c1, $t1, 0($c0)
+		csc 	$c1, $t1, 0($ddc)
 
 		ld	$s0, 0($t0)
 		ld	$t2, 0($t1)

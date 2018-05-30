@@ -36,7 +36,7 @@
 # even if the offset itself is aligned.
 #
 # XXX: This test doesn't work at the moment, because it needs to install
-# an exception handler that can cope with $c0 being set to an unexpected
+# an exception handler that can cope with $ddc being set to an unexpected
 # value.
 
 BEGIN_TEST

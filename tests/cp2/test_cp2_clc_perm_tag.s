@@ -47,7 +47,7 @@ BEGIN_TEST
 
 	cgetdefault $c1
 	dla	$t0, cap
-	csc	$c1, $t0, 0($c0)
+	csc	$c1, $t0, 0($ddc)
 
 	#
 	# Load it back, it should have its tag cleared

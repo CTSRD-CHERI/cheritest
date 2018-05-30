@@ -50,48 +50,48 @@ BEGIN_TEST
 		dla	$t0, cap1
 		dli	$t1, 0xFFFFFFFF00000000
 		and	$t0, $t0, $t1
-		clc	$c16, $t0, 0($c0)
-		csc	$c2, $t0, 0($c0)
+		clc	$c16, $t0, 0($ddc)
+		csc	$c2, $t0, 0($ddc)
 
 		#
 		# Load back into another capability register
 		#
-		clc	$c3, $t0, 0($c0)
+		clc	$c3, $t0, 0($ddc)
 		
 		#
 		# Invalidate the line in the L1
 		#
 		daddi	$t1, $t0, 16384
-		csc	$c16, $t1, 0($c0)
+		csc	$c16, $t1, 0($ddc)
   
 		#
 		# Load from the L2 into another capability register
 		#
-		clc	$c4, $t0, 0($c0)
+		clc	$c4, $t0, 0($ddc)
 		
 		#
 		# Invalidate the line in the L1 & L2
 		#
 		dli	$t1, 16384*4
 		dadd	$t1, $t0, $t1
-		csc	$c16, $t1, 0($c0)
+		csc	$c16, $t1, 0($ddc)
   
 		#
 		# Load from the DRAM into another capability register
 		#
-		clc	$c5, $t0, 0($c0)
+		clc	$c5, $t0, 0($ddc)
 
 		#
                 # Invalidate the line in the tag cache & L1 & L2
                 #
 		dli	$t1, 16384*512
 		dadd	$t1, $t0, $t1
-                csc    $c16, $t1, 0($c0)
+                csc    $c16, $t1, 0($ddc)
 
                 #
                 # Load both tag and data from the DRAM into capability register
                 #
-                clc    $c6, $t0, 0($c0)
+                clc    $c6, $t0, 0($ddc)
   
 		#
 		# Extract various values into general-purpose registers for

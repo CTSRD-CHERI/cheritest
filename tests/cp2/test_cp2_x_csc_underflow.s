@@ -75,7 +75,7 @@ BEGIN_TEST
 		csc    $c3, $zero, -32($c1) # This should raise an exception
 
 		dla	$t0, underflow
-		cld     $a0, $t0, 0($c0)
+		cld     $a0, $t0, 0($ddc)
 
 END_TEST
 

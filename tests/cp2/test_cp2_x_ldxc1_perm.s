@@ -89,7 +89,7 @@ BEGIN_TEST
 		cgetdefault $c2
 
 		#
-		# Make $c0 a read-only capability
+		# Make $ddc a read-only capability
 		#
 
 		dli     $t0, 0xb # Permit_Load not granted

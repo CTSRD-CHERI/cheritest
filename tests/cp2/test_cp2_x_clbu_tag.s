@@ -68,10 +68,10 @@ BEGIN_TEST
 		#
 
 		dla	$t0, cap1
-		csc 	$c1, $t0, 0($c0)
+		csc 	$c1, $t0, 0($ddc)
 		ld	$t1, 0($t0)
 		sd	$t1, 0($t0)
-		clc 	$c1, $t0, 0($c0)
+		clc 	$c1, $t0, 0($ddc)
 
 		#
 		# Read its tag field to check

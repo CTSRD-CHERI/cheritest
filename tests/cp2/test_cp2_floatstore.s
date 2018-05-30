@@ -81,11 +81,11 @@ BEGIN_TEST
 
 		# Reload the stored value as a 32-bit word
 
-		clw	$a1, $t0, 0($c0)
+		clw	$a1, $t0, 0($ddc)
 
 		# Reload the stored value as a capability
 
-		clc 	$c1, $t0, 0($c0)
+		clc 	$c1, $t0, 0($ddc)
 
 		# The tag bit should have been cleared by the FP store
 

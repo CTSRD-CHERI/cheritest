@@ -74,7 +74,7 @@ BEGIN_TEST
 		dli     $t0, 96
 		csetbounds $c1, $c1, $t0
 		dla     $t0, tsscap
-		csc     $c1, $t0, 0($c0)
+		csc     $c1, $t0, 0($ddc)
 
 		#
 		# Initialize the pointer into the trusted system stack
@@ -82,7 +82,7 @@ BEGIN_TEST
 
 		dla     $t0, tssptr
 		dli     $t1, 0
-		csd     $t1, $t0, 0($c0)
+		csd     $t1, $t0, 0($ddc)
 
 		#
 		# Remove the permission to access reserved registers from
@@ -141,14 +141,14 @@ L1:
 		cseal	$c1, $c1, $c4
 
 		#
-		# Move $c0 into IDC ($c26) so that it will be saved onto
+		# Move $ddc into IDC ($c26) so that it will be saved onto
 		# the trusted system stack by ccall
 		#
 
 		cgetdefault $c26
 
 		#
-		# Clear $c0 so that the sandbox doesn't have access to it
+		# Clear $ddc so that the sandbox doesn't have access to it
 		#
 
 		cgetnull $c27
@@ -162,7 +162,7 @@ L1:
 		nop			# branch delay slot
 
 		#
-		# Restore $c0 from the IDC ($c26) that has been popped off
+		# Restore $ddc from the IDC ($c26) that has been popped off
 		# the trusted system stack by creturn
 		#
 

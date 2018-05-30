@@ -87,7 +87,7 @@ BEGIN_TEST
 		cgetdefault   $c2
 
 		#
-		# Make $c0 a read-only capability
+		# Make $ddc a read-only capability
 		#
 
 		dli     $t0, 0x1f7 # Permit_Store not granted
@@ -109,7 +109,7 @@ BEGIN_TEST
 		# Check that the store didn't happen
 		#
 
-		clw 	$a4, $t1, 0($c0)
+		clw 	$a4, $t1, 0($ddc)
 
 no_fpu:
 END_TEST

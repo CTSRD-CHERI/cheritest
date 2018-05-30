@@ -48,12 +48,12 @@ BEGIN_TEST
 		# Store at cap1 in memory.
 		#
 		dla	$t0, cap1
-		csc	$c2, $t0, 0($c0)
+		csc	$c2, $t0, 0($ddc)
 
 		#
 		# Load back into another capability register
 		#
-		clc	$c3, $t0, 0($c0)
+		clc	$c3, $t0, 0($ddc)
 
 		#
 		# Extract various values into general-purpose registers for

@@ -48,7 +48,7 @@ BEGIN_TEST
 		csetbounds $c1, $c1, $t1
 
 		#
-		# Install new $c0
+		# Install new $ddc
 		#
 		csetdefault $c1
 

@@ -76,10 +76,10 @@ BEGIN_TEST
 		# that doesn't permit this.
 
 		dla	$t0, cap1
-		clc	$c3, $t0, 0($c0) # load the original value into $c3
+		clc	$c3, $t0, 0($ddc) # load the original value into $c3
 		csc	$c1, $t0, 0($c2) # This should raise an exception
 		# Check that the store didn't happen.
-		clc	$c4, $t0, 0($c0)
+		clc	$c4, $t0, 0($ddc)
 
 
 		# Now check that it also doesn't happen when Permit_Store is missing
@@ -87,7 +87,7 @@ BEGIN_TEST
 		# other two registers
 		dla $t0, second_check
 		dli $t1, 1
-		csd $t1, $t0, 0($c0)
+		csd $t1, $t0, 0($ddc)
 
 		# $a5 will be set to 1 if the exception handler is called
 		dli	$a5, 0
@@ -101,18 +101,18 @@ BEGIN_TEST
 		dla	$t0, cap1
 		csc	$c1, $t0, 0($c2) # This should raise an exception
 		# Check that the store didn't happen.
-		clc	$c5, $t0, 0($c0)
+		clc	$c5, $t0, 0($ddc)
 
 		# load the first 16 bytes:
-		cld	$a0, $t0, 0($c0)
-		cld	$a1, $t0, 8($c0)
+		cld	$a0, $t0, 0($ddc)
+		cld	$a1, $t0, 8($ddc)
 
 END_TEST
 
 		.ent bev0_handler
 bev0_handler:
 		dla $k0, second_check
-		cld $k0, $k0, 0($c0)
+		cld $k0, $k0, 0($ddc)
 		bne $k0, $zero, .Lsecond_check
 		nop
 .Lfirst_check:

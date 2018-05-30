@@ -42,10 +42,10 @@ BEGIN_TEST
 		dli	$a0, 1
 		dla	$t0, cap1
 		cgetdefault $c1
-		csc	$c1, $t0, 0($c0)
+		csc	$c1, $t0, 0($ddc)
 		dli	$t1, 0
 		sd	$t1, 8($t0)
-		clc	$c1, $t0, 0($c0)
+		clc	$c1, $t0, 0($ddc)
 		nop
 		nop
 		nop

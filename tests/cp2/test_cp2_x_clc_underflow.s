@@ -80,7 +80,7 @@ BEGIN_TEST
 		dli	$t0, 0x1234
 		csetoffset $c2, $c2, $t0
 		dla	$t0, underflow
-		csc     $c2, $t0, 0($c0)
+		csc     $c2, $t0, 0($ddc)
 
 		cgetdefault $c2
 		clc     $c2, $zero, -32($c1) # This should raise an exception

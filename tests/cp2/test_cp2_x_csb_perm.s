@@ -74,7 +74,7 @@ BEGIN_TEST
 		#
 
 		dla     $t0, data
-		clb     $a0, $t0, 0($c0)
+		clb     $a0, $t0, 0($ddc)
 
 END_TEST
 

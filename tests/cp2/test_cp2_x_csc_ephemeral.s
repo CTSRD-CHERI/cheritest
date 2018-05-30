@@ -77,9 +77,9 @@ BEGIN_TEST
 		csc      $c1, $t0, 0($c2) # This should raise an exception
 
 		# Check that the store didn't happen.
-		cld     $a0, $t0, 0($c0)
+		cld     $a0, $t0, 0($ddc)
 		daddiu  $t0, $t0, 8
-		cld     $a1, $t0, 0($c0)
+		cld     $a1, $t0, 0($ddc)
 
 END_TEST
 

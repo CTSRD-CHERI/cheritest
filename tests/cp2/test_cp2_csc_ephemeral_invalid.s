@@ -75,13 +75,13 @@ BEGIN_TEST
 		csc     $c1, $t0, 0($c2) # This should not raise an exception
 
 		# Check that the store did happen.
-		cld     $s0, $t0, 0($c0)
+		cld     $s0, $t0, 0($ddc)
 		daddiu  $t0, $t0, 8
-		cld     $s1, $t0, 0($c0)
+		cld     $s1, $t0, 0($ddc)
 		daddiu  $t0, $t0, 8
-		cld     $s2, $t0, 0($c0)
+		cld     $s2, $t0, 0($ddc)
 		daddiu  $t0, $t0, 8
-		cld     $s3, $t0, 0($c0) # this relies on the in memory representation of max length to be all Fs which is not true
+		cld     $s3, $t0, 0($ddc) # this relies on the in memory representation of max length to be all Fs which is not true
 
 END_TEST
 

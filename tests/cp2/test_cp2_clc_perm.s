@@ -43,7 +43,7 @@ BEGIN_TEST
 		dla	$t0, cap1
 		clc 	$c1, $t0, 0($c2)
 		dla	$t0, cap2
-		csc 	$c1, $t0, 0($c0)
+		csc 	$c1, $t0, 0($ddc)
 
 		ld	$a0, 0($t0)
 

@@ -76,7 +76,7 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t0
 
 		#
-		# Make $c0 a sealed data capability
+		# Make $ddc a sealed data capability
 		#
 
 		dli	$t0, 0xd # Permit_Store, Permit_Load and Global
@@ -86,7 +86,7 @@ BEGIN_TEST
 		csetdefault $c3
 		
 		#
-		# Read from memory - implicitly references $c0
+		# Read from memory - implicitly references $ddc
 		#
 
 		dla	$t1, data

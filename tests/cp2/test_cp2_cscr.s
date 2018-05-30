@@ -64,7 +64,7 @@ BEGIN_TEST
 		#
 		#
 		dla	$t0, cap1
-		csc	$c2, $t0, 0($c0)
+		csc	$c2, $t0, 0($ddc)
 
 		#
 		# Load back in as general-purpose registers to check values

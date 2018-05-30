@@ -68,7 +68,7 @@ BEGIN_TEST
 		#
 
 		dla     $t0, padding
-		csc     $c1, $t0, 0($c0)
+		csc     $c1, $t0, 0($ddc)
 
 		#
 		# Clear $c1 so we can tell if the load happened

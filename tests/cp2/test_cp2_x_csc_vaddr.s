@@ -73,9 +73,9 @@ BEGIN_TEST
 		# Check that the store didn't happen.
 		# $a4 is double-word aligned, so it is safe to read it with
 		# cldr.
-		cld     $a0, $a4, 0($c0)
+		cld     $a0, $a4, 0($ddc)
 		daddiu  $t0, $a4, 8
-		cld     $a1, $a4, 0($c0)
+		cld     $a1, $a4, 0($ddc)
 
 END_TEST
 

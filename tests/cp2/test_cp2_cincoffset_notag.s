@@ -56,10 +56,10 @@ BEGIN_TEST
 		#
 
 		dla	$t0, cap
-		csc	$c2, $t0, 0($c0)
+		csc	$c2, $t0, 0($ddc)
 		ld	$t1, 0($t0)
 		sd	$t1, 0($t0)
-		clc	$c2, $t0, 0($c0)
+		clc	$c2, $t0, 0($ddc)
 
 		#
 		# Now try cincoffset

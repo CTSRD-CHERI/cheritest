@@ -83,7 +83,7 @@ BEGIN_TEST
 		# Test cscr
 		dla	$t0, data
 	        syscall 0
-		csc 	$c6, $t0, 0($c0) # not executed
+		csc 	$c6, $t0, 0($ddc) # not executed
 		# If cscr was properly squashed these loads will load the
 	        # test values below, otherwise they will get the stored capability
 		ld	$a0, ($t0)
@@ -92,11 +92,11 @@ BEGIN_TEST
 		ld	$a3, 24($t0)
 
 		# store the test capability
-		csc 	$c6, $t0, 0($c0)
+		csc 	$c6, $t0, 0($ddc)
 	
 		# Test clcr
  		syscall 0
-		clc 	$c7, $t0, 0($c0) # not executed
+		clc 	$c7, $t0, 0($ddc) # not executed
 
 END_TEST
 

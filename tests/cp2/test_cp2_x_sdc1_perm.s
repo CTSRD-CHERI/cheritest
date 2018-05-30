@@ -109,7 +109,7 @@ BEGIN_TEST
 		# Check that the store didn't happen
 		#
 
-		cld 	$a4, $t1, 0($c0)
+		cld 	$a4, $t1, 0($ddc)
 
 no_fpu:
 END_TEST

@@ -147,8 +147,8 @@ BEGIN_TEST
 		cgetdefault $c3
 		cseal $c1, $c1, $c3
 		dla $t2, data
-		csc $c1, $t2, 0($c0)
-		clc $c1, $t2, 0($c0)
+		csc $c1, $t2, 0($ddc)
+		clc $c1, $t2, 0($ddc)
 		cunseal $c1, $c1, $c3
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1

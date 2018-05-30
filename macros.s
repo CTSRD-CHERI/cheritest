@@ -91,7 +91,7 @@
 .else
 	# In case we can't use the UserLocal register store to memory instead
 	dla $k0, trap_count
-	cld \dest, $k0, 0($c0)
+	cld \dest, $k0, 0($ddc)
 .endif
 .endm
 
@@ -101,7 +101,7 @@
 .else
 	# In case we can't use the UserLocal register store to memory instead
 	dla $k0, trap_count
-	csd \src, $k0, 0($c0)
+	csd \src, $k0, 0($ddc)
 .endif
 .endm
 
@@ -309,6 +309,9 @@ max_thread_count = 32
 	cfromptr	\dest, $c0, \src
 .endm
 
+# Add register aliases for GNU AS
+.set $ddc, $c0
+.set $cnull, $c0
 .endif  # _GNU_AS_
 
 

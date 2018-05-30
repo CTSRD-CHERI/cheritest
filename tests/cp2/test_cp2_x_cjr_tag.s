@@ -66,10 +66,10 @@ BEGIN_TEST
 		#
 
 		dla	$t0, cap1
-		csc 	$c1, $t0, 0($c0)
+		csc 	$c1, $t0, 0($ddc)
 		dli	$t1, 5
 		sw	$t1, 0($t0)
-		clc 	$c2, $t0, 0($c0)
+		clc 	$c2, $t0, 0($ddc)
 
 		#
 		# As we're using CJR rather than CJALR, create a return

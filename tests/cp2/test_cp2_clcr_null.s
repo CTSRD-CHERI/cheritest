@@ -35,7 +35,7 @@
 
 BEGIN_TEST
 		dla	$t0, cap
-		clc 	$c1, $t0, 0($c0)
+		clc 	$c1, $t0, 0($ddc)
 		cgetnull $c2
 
 		ceq	$a0, $c1, $c2

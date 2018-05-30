@@ -37,7 +37,7 @@
 
 BEGIN_TEST
 		dla	$t0, cap
-		clc 	$c1, $t0, 0($c0)
+		clc 	$c1, $t0, 0($ddc)
 		cgettype $a0, $c1
 
 END_TEST

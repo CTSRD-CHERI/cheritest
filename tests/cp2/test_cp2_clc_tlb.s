@@ -128,7 +128,7 @@ testcode:
 		cgetdefault $c1
 		cincoffset $c1, $c1, $t0
 		csetbounds	$c1, $c1, $t0
-		csc 	$c1, $a2, 0($c0)
+		csc 	$c1, $a2, 0($ddc)
 
 		dli	$a5, 4
 
@@ -143,7 +143,7 @@ testcode:
 		# should be cleared
 		#
 
-		clc 	$c2, $a2, 0($c0)
+		clc 	$c2, $a2, 0($ddc)
 
 		cgetbase $a3, $c2
 		cgetlen  $a4, $c2

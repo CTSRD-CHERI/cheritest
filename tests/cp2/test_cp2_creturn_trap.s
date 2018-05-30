@@ -78,7 +78,7 @@ BEGIN_TEST
 		dli     $t0, 96
 		csetbounds $c1, $c1, $t0
 		dla	$t0, tsscap
-		csc     $c1, $t0, 0($c0)
+		csc     $c1, $t0, 0($ddc)
 
 		#
 		# Initialize the pointer into the trusted system stack
@@ -86,7 +86,7 @@ BEGIN_TEST
 
 		dla	$t0, tssptr
 		dli	$t1, 0
-		csd 	$t1, $t0, 0($c0)
+		csd 	$t1, $t0, 0($ddc)
 
 		#
 		# Fake the effect of having done a CCall without using

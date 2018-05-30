@@ -37,7 +37,7 @@
 
 BEGIN_TEST
 		#
-		# Save $c0 so can restore it later
+		# Save $ddc so can restore it later
 		#
 
 		cgetdefault $c1
@@ -64,19 +64,19 @@ BEGIN_TEST
 		cseal $c3, $c1, $c2
 
 		#
-		# ... and copy it to $c0
+		# ... and copy it to $ddc
 		#
 
 		csetdefault $c3
 
 		#
-		# Try a capability operation that doesn't use the sealed $c0
+		# Try a capability operation that doesn't use the sealed $ddc
 		#
 
 		cgetlen $a1, $c1
 
 		#
-		# Restore the original $c0
+		# Restore the original $ddc
 		#
 
 		csetdefault $c1

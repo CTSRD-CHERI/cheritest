@@ -39,9 +39,9 @@
 
 BEGIN_TEST
 		dla	$t0, x
-		clc 	$c1, $t0, 0($c0)
+		clc 	$c1, $t0, 0($ddc)
 		dla	$t0, y
-		csc 	$c1, $t0, 0($c0)
+		csc 	$c1, $t0, 0($ddc)
 		ld	$a0, 0($t0)
 		ld	$a1, 8($t0)
 		ld	$a2, 16($t0)

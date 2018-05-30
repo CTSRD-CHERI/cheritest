@@ -48,7 +48,7 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t0
 
 		dla	$t0, cap1
-		csc 	$c1, $t0, 0($c0)
+		csc 	$c1, $t0, 0($ddc)
 
 		dla	$t1, cap2
 		ld	$t2, 0($t0)
@@ -60,7 +60,7 @@ BEGIN_TEST
 		ld	$t2, 24($t0)
 		sd	$t2, 24($t1)
 
-		clc 	$c2, $t1, 0($c0)
+		clc 	$c2, $t1, 0($ddc)
 
 		cgettag $a0, $c2
 

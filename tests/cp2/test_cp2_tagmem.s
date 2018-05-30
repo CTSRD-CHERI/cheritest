@@ -45,13 +45,13 @@
 BEGIN_TEST
 		dla	$t0, cap1
 		cgetdefault	$c1
-		csc 	$c1, $t0, 0($c0)
-		clc 	$c2, $t0, 0($c0)
+		csc 	$c1, $t0, 0($ddc)
+		clc 	$c2, $t0, 0($ddc)
 		cgettag $a0, $c2
 		cgetdefault $c1
 		ccleartag $c1, $c1
-		csc 	$c1, $t0, 0($c0)
-		clc 	$c2, $t0, 0($c0)
+		csc 	$c1, $t0, 0($ddc)
+		clc 	$c2, $t0, 0($ddc)
 		cgettag $a1, $c2
 		
 		# Exercise a potential victim buffer in the tag cache.
@@ -59,25 +59,25 @@ BEGIN_TEST
 		dla	$t2, cap1+0x1000	# A different address
 		cgetdefault	$c1
 		# Store a valid cap to an address that conflicts with one in the cache.
-		csc 	$c1, $t1, 0($c0)
+		csc 	$c1, $t1, 0($ddc)
 		# Load data from the old address, swapping with the victim buffer.
-		clc 	$c2, $t0, 0($c0)
+		clc 	$c2, $t0, 0($ddc)
 		# Load another address, evicting the victim buffer
-		clc 	$c3, $t2, 0($c0)
+		clc 	$c3, $t2, 0($ddc)
 		# Load the evicted address to see if it has the tag set
-		clc 	$c1, $t1, 0($c0)
+		clc 	$c1, $t1, 0($ddc)
 		cgettag	$a2, $c1
 		
 		# Store data on either side of capability to ensure the tag is preserved. 
 		cgetdefault	$c1
 		# Store a valid cap
-		csc 	$c1, $t1, 0($c0)
+		csc 	$c1, $t1, 0($ddc)
 		# Store general-purpose data just before the capability
 		sd	$t0, -8($t0)
 		# Store general-purpose data just after the capability
 		sd	$t0, cap_width($t0)
 		# Load the evicted address to see if it has the tag set
-		clc 	$c1, $t1, 0($c0)
+		clc 	$c1, $t1, 0($ddc)
 		cgettag	$a3, $c1
 
 END_TEST
