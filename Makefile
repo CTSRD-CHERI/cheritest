@@ -1854,6 +1854,9 @@ endif
 QEMU_NOSEPRED+=and beri_statcounters != 'icount'
 # QEMU_NOSEPRED+=and not beri_statcounters
 
+# TODO: does the hardware allow unaligned cll*/csc*?
+QEMU_NOSEPRED+=and not allow_unaligned_cllsc
+
 
 QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
 

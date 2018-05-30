@@ -1,6 +1,6 @@
 #-
-# Copyright (c) 2015 Michael Roe
-# Copyright (c) 2015 SRI International
+# Copyright (c) 2018 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -41,34 +41,7 @@
 # if the address is not correctly aligned.
 #
 
-BEGIN_TEST
-		#
-		# Clear the BEV flag
-		#
-
-		jal	bev_clear
-		nop
-
-		#
-		# Set up exception handler
-		#
-
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		#
-		# $a1 will be set non-zero if get an unexpected exception
-		#
-
-		dli	$a1, 0
-
-		#
-		# Count of number of exceptions
-		#
-
-		dli	$a2, 0
-
+BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		#
 		# Make $c1 a capability for the array 'data'.
 		# 'data' is 160=128+32 bytes long so that it's large enough
@@ -87,23 +60,25 @@ BEGIN_TEST
 		dli	$t0, 160
 		csetbounds $c1, $c1, $t0
 
-		#
-		# Try some CP2 instructions
-		#
-
-		#
-		# Loads
-		#
-
 		dli	$t1, 127	# unaligned, probably spans cache line
 		# cllc doesn't take a register offset, so use $c3 not $t1($c1)
 		csetoffset $c3, $c1, $t1
 
+		clear_counting_exception_handler_regs
 		cllc	$c2, $c3  # trap #1
+		save_counting_exception_handler_cause $c4
+		clear_counting_exception_handler_regs
 		cllb	$t0, $c3  # cllb will work at any alignment
-		cllh	$t0, $c3  # trap #2 / no trap with unaligned load
-		cllw	$t0, $c3  # trap #3 / no trap with unaligned load
-		clld	$t0, $c3  # trap #4 / no trap with unaligned load
+		save_counting_exception_handler_cause $c5
+		clear_counting_exception_handler_regs
+		cllh	$t0, $c3  # trap #2 / no trap with unaligned LL/SC load
+		save_counting_exception_handler_cause $c6
+		clear_counting_exception_handler_regs
+		cllw	$t0, $c3  # trap #3 / no trap with unaligned LL/SC load
+		save_counting_exception_handler_cause $c7
+		clear_counting_exception_handler_regs
+		clld	$t0, $c3  # trap #4 / no trap with unaligned LL/SC load
+		save_counting_exception_handler_cause $c8
 
 END_TEST
 

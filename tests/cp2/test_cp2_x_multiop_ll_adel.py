@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2015 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -29,23 +30,40 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 class test_cp2_x_multiop_ll_adel(BaseBERITestCase):
+    @attr('capabilities')
+    @attr('cached')
+    def test_cp2_x_multiop_ll_adel_cllc(self):
+        # This one should always trap:
+        self.assertCompressedTrapInfo(self.MIPS.c4,
+            mips_cause=self.MIPS.Cause.AdEL,
+            trap_count=1, msg="unaligned cllc should fail")
 
     @attr('capabilities')
     @attr('cached')
-    def test_cp2_x_multiop_ll_adel_1(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "Unexpected exceptions raised during test of multiple operations raising AdEL")
+    def test_cp2_x_multiop_ll_adel_cllb(self):
+        # cllb one should never trap:
+        self.assertNullCap(self.MIPS.c5, msg="cllb should work at any alignment")
 
     @attr('capabilities')
     @attr('cached')
-    @attr('trap_unaligned_ld_st')
+    @attr('trap_unaligned_cllsc')
     def test_cp2_x_multiop_ll_adel_unalign_trap(self):
+        self.assertCompressedTrapInfo(self.MIPS.c6,
+            mips_cause=self.MIPS.Cause.AdEL,
+            trap_count=2, msg="unaligned cllh should fail")
+        self.assertCompressedTrapInfo(self.MIPS.c7,
+            mips_cause=self.MIPS.Cause.AdEL,
+            trap_count=3, msg="unaligned cllw should fail")
+        self.assertCompressedTrapInfo(self.MIPS.c8,
+            mips_cause=self.MIPS.Cause.AdEL,
+            trap_count=4, msg="unaligned clld should fail")
         # If we trap on unaligned csd/cld we should get 4 exceptions here
-        self.assertRegisterEqual(self.MIPS.a2, 4, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
+        self.assertRegisterEqual(self.MIPS.v0, 4, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
 
     @attr('capabilities')
     @attr('cached')
-    @attr('allow_unaligned')
+    @attr('allow_unaligned_cllsc')
     def test_cp2_x_multiop_ll_adel_unalign_ok(self):
-        # Otherwise it should only be 1 (clc)
-        self.assertRegisterEqual(self.MIPS.a2, 1, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
+        # Otherwise it should only be 1 (cllc)
+        self.assertRegisterEqual(self.MIPS.v0, 1, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
 
