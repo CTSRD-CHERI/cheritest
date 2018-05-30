@@ -81,7 +81,7 @@ BEGIN_TEST
 
                 # clear caplo16 except c0
                 cclearregs 2, 0xfffe
-                cgetdefault   $c0
+                cmove   $cnull, $cnull
                 cmove   $c1, $c1
                 cmove   $c2, $c2
                 cmove   $c3, $c3
