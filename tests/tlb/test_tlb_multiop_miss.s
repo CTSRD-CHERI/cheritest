@@ -159,11 +159,11 @@ no_fpu:
 		csw	$zero, $zero, 0($ddc)
 		csd	$zero, $zero, 0($ddc)
 
-		cllb	$t0, $c0
-		cllh	$t0, $c0
-		cllw	$t0, $c0
-		clld	$t0, $c0
-		cllc	$c1, $c0
+		cllb	$t0, $ddc
+		cllh	$t0, $ddc
+		cllw	$t0, $ddc
+		clld	$t0, $ddc
+		cllc	$c1, $ddc
 
 no_cp2:
 END_TEST

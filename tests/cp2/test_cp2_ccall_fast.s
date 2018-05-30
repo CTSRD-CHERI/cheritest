@@ -220,7 +220,7 @@ invoke:         .ent invoke
                 #cgetnull	$c1 # code cap to invoke
                 #cgetnull	$c2 # data cap to invoke
                 cgetnull	$c3
-                # cgetnull	$c0  # direct access to $ddc no longer allowed
+                cgetnull	$cnull
                 csetdefault	$c3
                 cgetnull	$c4
                 cgetnull	$c5

@@ -38,13 +38,13 @@
 
 BEGIN_TEST
 		#
-		# Save $c0 so we can restore it later
+		# Save $ddc so we can restore it later
 		#	
 
 		cgetdefault   $c1
 
 		#
-		# Remove Permit_Store permission from $c0
+		# Remove Permit_Store permission from $ddc
 		#
 
 		dli     $t0, 0x1f7
@@ -61,7 +61,7 @@ BEGIN_TEST
 		lb	$a0, 0($t0)
 
 		#
-		# Restore the original $c0
+		# Restore the original $ddc
 		#
 
 		csetdefault $c1

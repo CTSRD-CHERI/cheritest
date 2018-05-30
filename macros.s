@@ -309,9 +309,6 @@ max_thread_count = 32
 	cfromptr	\dest, $c0, \src
 .endm
 
-# Add register aliases for GNU AS
-.set $ddc, $c0
-.set $cnull, $c0
 .endif  # _GNU_AS_
 
 

@@ -144,7 +144,7 @@ exception_handler:
 
                 # Remove sandboxing
                 cgetdefault	$c27
-                csetepcc	$c27       # Move $c0 into $epcc
+                csetepcc	$c27       # Move $ddc into $epcc
                 # Set EPC to continue after exception return
                 dla     $k0, return
                 dmtc0   $k0, $14

@@ -32,7 +32,7 @@
 .set noat
 
 #
-# Test that lb raises an exception if $c0.tag is not set.
+# Test that lb raises an exception if $ddc.tag is not set.
 #
 
 BEGIN_TEST
@@ -64,7 +64,7 @@ BEGIN_TEST
 		cgetdefault   $c2
 
 		#
-		# Clear $c0's tag, so it isn't a valid capability
+		# Clear $ddc's tag, so it isn't a valid capability
 		#
 
 		ccleartag $c3, $c2

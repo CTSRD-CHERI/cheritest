@@ -228,18 +228,18 @@ start:
 		
 		
 		# comparison operators
-		ceq	  $t1, $c0, $c1
-		cne	  $t1, $c0, $c1
-		clt	  $t1, $c0, $c1
-		cle	  $t1, $c0, $c1
-		cltu	  $t1, $c0, $c1
-		cleu	  $t1, $c0, $c1
-		cexeq	  $t1, $c0, $c1
-		cnexeq    $t1, $c0, $c1
+		ceq	  $t1, $cnull, $c1
+		cne	  $t1, $cnull, $c1
+		clt	  $t1, $cnull, $c1
+		cle	  $t1, $cnull, $c1
+		cltu	  $t1, $cnull, $c1
+		cleu	  $t1, $cnull, $c1
+		cexeq	  $t1, $cnull, $c1
+		cnexeq    $t1, $cnull, $c1
 
                 # jumps
 		dla       $t1, l0
-		cjr       $c0
+		cjr       $cnull
 		# branch delay slot
 		nop
 
@@ -247,7 +247,7 @@ l0:
 		dla       $t1, l1
 		cgetdefault $c1
 		csetoffset $c1, $c1, $t1
-		cjalr     $c0, $c24
+		cjalr     $cnull, $c24
 		# branch delay slot
 		nop
 

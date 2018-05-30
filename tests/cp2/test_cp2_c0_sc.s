@@ -31,7 +31,7 @@
 .set noat
 .include "macros.s"
 #
-# Test store conditional when $c0 has an unaligned offset.
+# Test store conditional when $ddc has an unaligned offset.
 #
 
 BEGIN_TEST

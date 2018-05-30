@@ -60,7 +60,7 @@ class test_cp2_clearregs_caphi(BaseBERITestCase):
             capreg_val = getattr(self.MIPS, 'c%d' % reg)
             if reg in (18, 22):
                 # we set a couple of regs to check that 'set after clear' works
-                # $c0 is special so we don't touch it
+                # $ddc is special so we don't touch it
                 self.assertDefaultCap(capreg_val, "$c%d did not retain set value after clear" % reg)
             elif (reg & 1) == 0 and reg >= 16:
                 # the test clears the even numbered registers in gplo16
