@@ -128,11 +128,11 @@ def capabilityFromStrings(t, s, perms, ctype, offset, base, length):
 class ThreadStatus(object):
     '''Data object representing status of a thread (including cp2 registers if present)'''
     def __init__(self):
-        self.reg_vals = [None] * len(MIPS_REG_NUM2NAME)
-        self.pc = None
-        self.cp2 = [None] * 32
-        self.cp2_hwregs = [None] * 32
-        self.pcc = None
+        self.reg_vals = [None] * len(MIPS_REG_NUM2NAME)  # type: typing.List[int]
+        self.pc = None  # type: int
+        self.cp2 = [None] * 32  # type: typing.List[Capability]
+        self.cp2_hwregs = [None] * 32  # type: typing.List[Capability]
+        self.pcc = None  # type: Capability
 
     def __getattr__(self, key):
         '''Return a register value by name'''
@@ -168,6 +168,7 @@ class ThreadStatus(object):
 
     @property
     def ddc(self):
+        # type: (self) -> Capability
         # Should currently be mirrored (0 will be null reg soon)
         if MipsStatus.CHERI_C0_IS_NULL:
             assert self.cp2_hwregs[0] is not None, "CapHWR 0 (DDC) not defined?"
@@ -177,19 +178,23 @@ class ThreadStatus(object):
 
     @property
     def kcc(self):
+        # type: (self) -> Capability
         return self._mirrored_capreg(29, "$kcc")
 
     @property
     def kdc(self):
+        # type: (self) -> Capability
         return self._mirrored_capreg(30, "$kdc")
 
     @property
     def epcc(self):
+        # type: (self) -> Capability
         # Should currently be mirrored (31 could be a GPR again soon)
         return self._mirrored_capreg(31, "$epcc")
 
     # Return a capabilty
     def _mirrored_capreg(self, number, name):
+        # type: (self, int, str) -> Capability
         if self.cp2_hwregs[number]:
             assert self.cp2[number] == self.cp2_hwregs[number], "cap hwr" + name + " not mirrored to $c " + str(number) + "?"
             return self.cp2_hwregs[number]
