@@ -70,10 +70,14 @@ MIPS_CORE_RE=FasterRegex('DEBUG MIPS COREID', r'\s+([0-9]+)$')
 MIPS_REG_RE=FasterRegex('DEBUG MIPS REG', r'\s+([0-9]+)\s+(0x................)$')
 MIPS_PC_RE=FasterRegex('DEBUG MIPS PC', r'\s+(0x................)$')
 CAPMIPS_CORE_RE=FasterRegex('DEBUG CAP COREID', r'\s+([0-9]+)$')
-CAPMIPS_PC_RE = FasterRegex('DEBUG CAP PCC', r'\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
-                            r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
-CAPMIPS_REG_RE = FasterRegex('DEBUG CAP REG', r'\s+([0-9]+)\s+t:([01])\s+[su]:([01]) perms:(0x'+hdigit+'+) ' +
-                            r'type:(0x'+hdigit+'+) offset:(0x'+hdigit+'{16}) base:(0x'+hdigit+'{16}) length:(0x'+hdigit+'{16})$')
+
+CAPREG_DUMP_REGEX = r't:([01])\s+[su]:([01]) perms:(0x' + hdigit + '+) type:(0x' + \
+                     hdigit + '+) offset:(0x' + hdigit + '{16}) base:(0x' + \
+                     hdigit + '{16}) length:(0x' + hdigit + '{16})'
+CAPMIPS_PC_RE = FasterRegex('DEBUG CAP PCC', r'\s+' + CAPREG_DUMP_REGEX + '$')
+CAPMIPS_REG_RE = FasterRegex('DEBUG CAP REG', r'\s+([0-9]+)\s+' + CAPREG_DUMP_REGEX + '$')
+CAPMIPS_HWREG_RE = FasterRegex('DEBUG CAP HWREG', r'\s+(\d+)\s+(\(\w+\))?\s*' + CAPREG_DUMP_REGEX + '$')
+
 
 class MipsException(Exception):
     pass
@@ -113,14 +117,21 @@ def capabilityFromStrings(t, s, perms, ctype, offset, base, length):
 class ThreadStatus(object):
     '''Data object representing status of a thread (including cp2 registers if present)'''
     def __init__(self):
-        self.reg_vals=[None] * len(MIPS_REG_NUM2NAME)
-        self.pc=None
+        self.reg_vals = [None] * len(MIPS_REG_NUM2NAME)
+        self.pc = None
         self.cp2 = [None] * 32
+        self.cp2_hwregs = [None] * 32
         self.pcc = None
 
     def __getattr__(self, key):
         '''Return a register value by name'''
-        if key.startswith("c"):
+        if key.startswith("chwr"):
+            regnum = int(key[4:])
+            val = self.cp2_hwregs[regnum]
+            if val is None:
+                raise MipsException("Attempted to read register not present or undef in log file: ", key)
+            return val
+        elif key.startswith("c"):
             regnum = int(key[1:])
             val = self.cp2[regnum]
             if val is None:
@@ -143,6 +154,31 @@ class ThreadStatus(object):
         if val is None:
             raise MipsException("Attempted to read register not present or undef in log file: ", key)
         return val
+
+    @property
+    def ddc(self):
+        # Should currently be mirrored (0 will be null reg soon)
+        return self._mirrored_capreg(0, "$ddc")
+
+    @property
+    def kcc(self):
+        return self._mirrored_capreg(29, "$kcc")
+
+    @property
+    def kdc(self):
+        return self._mirrored_capreg(30, "$kdc")
+
+    @property
+    def epcc(self):
+        # Should currently be mirrored (31 could be a GPR again soon)
+        return self._mirrored_capreg(31, "$epcc")
+
+    # Return a capabilty
+    def _mirrored_capreg(self, number, name):
+        if self.cp2_hwregs[number]:
+            assert self.cp2[number] == self.cp2_hwregs[number], "cap hwr" + name + " not mirrored to $c " + str(number) + "?"
+            return self.cp2_hwregs[number]
+        return self.cp2[number]
 
     # noinspection PyStringFormat
     def __repr__(self):
@@ -187,42 +223,51 @@ class MipsStatus(object):
             if not line.startswith("DEBUG "):
                 continue
 
-            # We use 'thread' for both thread id and core id.
-            # This will need fixing if we ever have a CPU with both
-            # multiple threads and multiple cores.
-            core_groups = MIPS_CORE_RE.search(line)
-            if core_groups:
-                thread = int(core_groups.group(1))
-                continue
-            cap_core_groups = CAPMIPS_CORE_RE.search(line)
-            if cap_core_groups:
-                thread = int(cap_core_groups.group(1))
-                continue
-            reg_groups = MIPS_REG_RE.search(line)
-            if reg_groups:
-                reg_num = int(reg_groups.group(1))
-                reg_val_hex = reg_groups.group(2)
-                reg_val = int(reg_val_hex, 16)
-                t = self.threads[thread]
-                t.reg_vals[reg_num] = reg_val
-                continue
-            pc_groups = MIPS_PC_RE.search(line)
-            if pc_groups:
-                reg_val = int(pc_groups.group(1), 16)
-                t = self.threads[thread]
-                t.pc = reg_val
-                continue
-            cap_reg_groups = CAPMIPS_REG_RE.search(line)
-            if cap_reg_groups:
-                cap_reg_num = int(cap_reg_groups.group(1))
-                t = self.threads[thread]
-                t.cp2[cap_reg_num] = capabilityFromStrings(*cap_reg_groups.groups()[1:8])
-                continue
-            cap_pc_groups = CAPMIPS_PC_RE.search(line)
-            if cap_pc_groups:
-                t = self.threads[thread]
-                t.pcc = capabilityFromStrings(*cap_pc_groups.groups()[0:7])
-                continue
+            # First check for the MIPS regexes:
+            if line.startswith("DEBUG MIPS"):
+                # We use 'thread' for both thread id and core id.
+                # This will need fixing if we ever have a CPU with both
+                # multiple threads and multiple cores.
+                core_groups = MIPS_CORE_RE.search(line)
+                if core_groups:
+                    thread = int(core_groups.group(1))
+                    continue
+                reg_groups = MIPS_REG_RE.search(line)
+                if reg_groups:
+                    reg_num = int(reg_groups.group(1))
+                    reg_val_hex = reg_groups.group(2)
+                    reg_val = int(reg_val_hex, 16)
+                    t = self.threads[thread]
+                    t.reg_vals[reg_num] = reg_val
+                    continue
+                pc_groups = MIPS_PC_RE.search(line)
+                if pc_groups:
+                    reg_val = int(pc_groups.group(1), 16)
+                    t = self.threads[thread]
+                    t.pc = reg_val
+                    continue
+            elif line.startswith("DEBUG CAP"):
+                cap_core_groups = CAPMIPS_CORE_RE.search(line)
+                if cap_core_groups:
+                    thread = int(cap_core_groups.group(1))
+                    continue
+                cap_reg_groups = CAPMIPS_REG_RE.search(line)
+                if cap_reg_groups:
+                    cap_reg_num = int(cap_reg_groups.group(1))
+                    t = self.threads[thread]
+                    t.cp2[cap_reg_num] = capabilityFromStrings(*cap_reg_groups.groups()[1:8])
+                    continue
+                cap_hwreg_groups = CAPMIPS_HWREG_RE.search(line)
+                if cap_hwreg_groups:
+                    cap_reg_num = int(cap_hwreg_groups.group(1))
+                    t = self.threads[thread]
+                    t.cp2_hwregs[cap_reg_num] = capabilityFromStrings(*cap_hwreg_groups.groups()[2:9])
+                    continue
+                cap_pc_groups = CAPMIPS_PC_RE.search(line)
+                if cap_pc_groups:
+                    t = self.threads[thread]
+                    t.pcc = capabilityFromStrings(*cap_pc_groups.groups()[0:7])
+                    continue
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''
