@@ -34,6 +34,7 @@
 import os
 import re
 from collections import defaultdict
+
 try:
     import typing
 except ImportError:
@@ -85,6 +86,12 @@ CAPMIPS_HWREG_RE = FasterRegex('DEBUG CAP HWREG', r'\s+(\d+)\s+(\(\w+\))?\s*' + 
 
 class MipsException(Exception):
     pass
+
+
+def is_envvar_true(var):
+    '''Return true iff the environment variable specified is defined and
+    not set to "0"'''
+    return os.environ.get(var, "0") != "0"
 
 
 class Capability(object):
@@ -162,7 +169,11 @@ class ThreadStatus(object):
     @property
     def ddc(self):
         # Should currently be mirrored (0 will be null reg soon)
-        return self._mirrored_capreg(0, "$ddc")
+        if MipsStatus.CHERI_C0_IS_NULL:
+            assert self.cp2_hwregs[0] is not None, "CapHWR 0 (DDC) not defined?"
+            return self.cp2_hwregs[0]
+        else:
+            return self._mirrored_capreg(0, "$ddc")
 
     @property
     def kcc(self):
@@ -199,6 +210,8 @@ class ThreadStatus(object):
 
 
 class MipsStatus(object):
+    CHERI_C0_IS_NULL = is_envvar_true("CHERI_C0_IS_NULL")  # type: bool
+
     '''Represents the status of the MIPS CPU registers, populated by parsing
     a log file. If x is a MipsStatus object, registers can be accessed by name
     as x.<REGISTER_NAME> or number as x[<REGISTER_NUMBER>].'''

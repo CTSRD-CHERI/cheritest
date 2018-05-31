@@ -44,11 +44,6 @@ from tools.sim import *
 
 from nose.plugins.attrib import attr
 
-def is_envvar_true(var):
-    '''Return true iff the environment variable specified is defined and
-    not set to "0"'''
-    return os.environ.get(var, "0") != "0"
-
 
 def xfail_if(cond):
     '''
@@ -112,7 +107,7 @@ class BaseBERITestCase(unittest.TestCase):
     MIPS_EXCEPTION = None
     ## Trigger a test failure (for testing the test-cases)
     ALWAYS_FAIL = is_envvar_true("DEBUG_ALWAYS_FAIL")
-    EXPECT_EXCEPTION=None
+    EXPECT_EXCEPTION = None
 
     cached = bool(int(os.environ.get("CACHED", "0")))
     multi = bool(int(os.environ.get("MULTI1", "0")))

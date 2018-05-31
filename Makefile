@@ -118,6 +118,7 @@ NOFUZZ?=1
 NOFUZZR?=1
 TEST_CAPHWR?=1
 CAP_SIZE?=256
+
 # CHECK that CAP_SIZE is a sensible value
 ifneq ($(CAP_SIZE),64)
 ifneq ($(CAP_SIZE),128)
@@ -262,6 +263,12 @@ $(info QEMU built with unliagned support)
 QEMU_UNALIGNED_OKAY=1
 endif
 
+QEMU_C0_IS_NULL_STRING=Built with C0 as NULL register
+ifneq ($(findstring $(QEMU_C0_IS_NULL_STRING),$(QEMU_VERSION)),)
+$(info QEMU built with C0 as null register)
+QEMU_C0_IS_NULL=1
+endif
+
 ifneq ($(findstring Compiled for CHERI256,$(QEMU_VERSION)),)
 $(info QEMU built for CHERI256)
 QEMU_CAP_SIZE=256
@@ -282,6 +289,7 @@ endif
 endif  # ifneq ($(QEMU_ABSPATH),)
 
 QEMU_UNALIGNED_OKAY?=0
+QEMU_C0_IS_NULL?=0
 QEMU_CAP_SIZE?=-1
 QEMU_CAP_PRECISE?=-1
 
@@ -2636,12 +2644,30 @@ NOSETESTS?=python2.7 -m nose
 ifeq ($(USING_LLVM_ASSEMBLER),0)
 NOSETESTS:=TEST_ASSEMBLER=gnu $(NOSETESTS)
 endif
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command -v py.test-3 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command -v pytest-3 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=$(shell command -v pytest 2> /dev/null)
+endif
+ifeq ($(PYTEST),)
+PYTEST:=/pytest/not/found/you/must/set/PYTEST/on/cmdline/or/install/it
+endif
+
 NOSETESTS:=PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) $(NOSETESTS)
+PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
+ifeq ($(CHERI_C0_IS_NULL),1)
+NOSETESTS:=CHERI_C0_IS_NULL=1 $(NOSETESTS)
+endif
 
 SIM_NOSETESTS=		TEST_MACHINE=SIM $(NOSETESTS)
 HWSIM_NOSETESTS=	LOGDIR=$(HWSIM_LOGDIR) TEST_MACHINE=HWSIM $(NOSETESTS)
 L3_NOSETESTS=		LOGDIR=$(L3_LOGDIR) TEST_MACHINE=L3 $(NOSETESTS)
-QEMU_NOSETESTS= 	LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU $(NOSETESTS)
+QEMU_NOSETESTS= 	LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU CHERI_C0_IS_NULL=$(QEMU_C0_IS_NULL) $(NOSETESTS)
+QEMU_PYTEST=		LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU CHERI_C0_IS_NULL=$(QEMU_C0_IS_NULL) $(PYTEST)
 ALTERA_NOSETESTS=	LOGDIR=$(ALTERA_LOGDIR) TEST_MACHINE=ALTERA $(NOSETESTS)
 # For this one we don't set LOGDIR since each target uses a different one
 SAIL_NOSETESTS= 	TEST_MACHINE=SAIL $(NOSETESTS)
@@ -2852,28 +2878,21 @@ qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
 
 qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
 
-ifeq ($(PYTEST),)
-PYTEST:=$(shell command -v py.test-3 2> /dev/null)
-endif
-ifeq ($(PYTEST),)
-PYTEST:=$(shell command -v pytest-3 2> /dev/null)
-endif
-ifeq ($(PYTEST),)
-PYTEST:=$(shell command -v pytest 2> /dev/null)
-endif
-ifeq ($(PYTEST),)
-PYTEST:=/pytest/not/found/you/must/set/PYTEST/on/cmdline/or/install/it
-endif
-PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
-QEMU_PYTEST=TEST_MACHINE=QEMU LOGDIR=$(QEMU_LOGDIR) $(PYTEST)
-
 pytest_qemu_purecap_tests: pytest_qemu_purecap_tests.xml
 pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
 	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v $(PURECAP_TESTDIRS) || true
 
+CP2_TESTS := $(basename $(TEST_CP2_FILES))
+CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
+#CP2_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(CP2_TESTS)))
+#cp2_dumps: $(CP2_DUMPS)
+pytest_qemu_cp2_tests: pytest_qemu_cp2_tests.xml
+pytest_qemu_cp2_tests.xml: $(CP2_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
+	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -q -a "$(QEMU_NOSEPRED)" $(TESTDIR)/cp2 || true
+
 pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
 pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v $(CLANG_TESTDIRS) || true
+	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v -a "$(QEMU_NOSEPRED)" $(CLANG_TESTDIRS) || true
 
 pytest_qemu: pytest_qemu.xml
 pytest_qemu.xml: $(QEMU_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
@@ -2917,6 +2936,7 @@ endif
 	@echo "    QEMU CHERI capability size: $(QEMU_CAP_SIZE)"
 	@echo "    QEMU built with precise capabilities: $(QEMU_CAP_PRECISE)"
 	@echo "    QEMU built with support for unaligned loads: $(QEMU_UNALIGNED_OKAY)"
+	@echo "    QEMU built with C0 == NULL: $(QEMU_C0_IS_NULL)"
 	@echo
 	@echo "Build tools:"
 	@echo "Clang:     $(CLANG_CMD)"

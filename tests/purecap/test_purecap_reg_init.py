@@ -38,14 +38,16 @@ class test_purecap_reg_init(BaseBERITestCase):
                             length=self.max_length, perms=self.max_nostore_perms)
 
     @attr('capabilities')
+    def test_ddc(self):
+        # Default cap without permit_execute
+        self.assertDefaultCap(self.MIPS.ddc, msg="ddc is wrong", perms=self.max_nonexec_perms)
+
+    @attr('capabilities')
     def test_other_capregs(self):
-        for regnum in range(0, 31):
+        for regnum in range(1, 31):
             name = "$c" + str(regnum)
             cap = self.MIPS.cp2[regnum]
-            if regnum == 0:
-                # Default cap without permit_execute
-                self.assertDefaultCap(cap, name + " (DDC)", perms=self.max_nonexec_perms)
-            elif regnum == 11:
+            if regnum == 11:
                 self.assertValidCap(cap, name + " (stack cap)", perms=self.max_nonexec_perms,
                                     offset=self.MIPS.sp, length=self.max_length)
             elif regnum == 12:

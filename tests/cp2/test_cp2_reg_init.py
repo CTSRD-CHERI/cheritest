@@ -30,6 +30,7 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 import itertools
+import os
 
 #
 # Check that a variety of CHERI specification properties are true.
@@ -117,7 +118,21 @@ class test_cp2_reg_init(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_reg_init_ddc(self):
-        self._test_mirrored_hwreg("ddc", 0)
+        '''Check that $ddc is correctly initialized to be the full addrespace'''
+        for t in self.MIPS.threads.values():
+            self.assertDefaultCap(t.ddc, msg="t.ddc should be a default cap")
+            self.assertDefaultCap(t.cp2_hwregs[0], msg="cap_hwr 0 (ddc) should be a default cap")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_c0(self):
+        '''Check that c0 is correctly initialized (either as $ddc or $cnull)'''
+        for t in self.MIPS.threads.values():
+            if self.MIPS.CHERI_C0_IS_NULL:
+                self.assertNullCap(t.cp2[0], msg="C0 should be the null register")
+                self.assertNotEqual(t.cp2[0], t.cp2_hwregs[0], msg="C0 should not be a mirror of caphwr ddc")
+            else:
+                self.assertDefaultCap(t.cp2[0], msg="C0 should be ddc")
+                self.assertCapabilitiesEqual(t.cp2[0], t.cp2_hwregs[0], msg="C0 should be a mirror of mirrored caphwr ddc")
 
     @attr('capabilities')
     def test_cp2_reg_init_usertls_null(self):
