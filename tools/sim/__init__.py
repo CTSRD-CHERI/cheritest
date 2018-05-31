@@ -34,6 +34,10 @@
 import os
 import re
 from collections import defaultdict
+try:
+    import typing
+except ImportError:
+    typing = object()
 
 ## Mapping of register numbers and register names, used internally and by the
 ## predicate itself in generating error messages, etc.
@@ -200,7 +204,7 @@ class MipsStatus(object):
     as x.<REGISTER_NAME> or number as x[<REGISTER_NUMBER>].'''
     def __init__(self, fh):
         self.fh = fh
-        self.threads=defaultdict(ThreadStatus)
+        self.threads = defaultdict(ThreadStatus)  # type: typing.Dict[int, ThreadStatus]
         self.parse_log()
         if not len(self.threads):
             raise MipsException("No reg dump found in %s"%self.fh)
