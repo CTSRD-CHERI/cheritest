@@ -82,9 +82,10 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
             trap_count=4, msg="Accessing invalid reg should fail")
 
     # In user mode none of the registers should be accessible
-
-    def test_usermode_pcc_has_access_sys_regs(self):
+    def test_usermode_pcc_no_access_sys_regs(self):
         self.assertCapPermissions(self.MIPS.c25, self.max_permissions,
+            "$pcc before usermode should have access sys regs")
+        self.assertCapPermissions(self.MIPS.c26, self.max_permissions,
             "$pcc in usermode should have access sys regs")
 
     def test_user_mode_epcc(self):
@@ -126,12 +127,21 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
     def test_final_values(self):
         self.assertDefaultCap(self.MIPS.c29, offset=29)
         self.assertDefaultCap(self.MIPS.c30, offset=30)
-        # EPCC will be somewhere on the first userspace page and won't have access_sys_regs
+        # check that kr1c and kr2c were not updated by the writes to chwr $22 and $23 in kernel mode:
+        self.assertDefaultCap(self.MIPS.c27, offset=27, msg="kr1c should not mirrored to $c27")
+        self.assertDefaultCap(self.MIPS.c28, offset=28, msg="kr2c should not mirrored to $c28")
+        self.assertIntCap(self.MIPS.cp2_hwregs[22], int_value=0xbad1, msg="kr1c should not mirrored to $c27")
+        self.assertIntCap(self.MIPS.cp2_hwregs[23], int_value=0xbad1, msg="kr2c should not mirrored to $c28")
+        # these should not have changed (they are mirrored):
+        self.assertDefaultCap(self.MIPS.cp2_hwregs[29], offset=29)
+        self.assertDefaultCap(self.MIPS.cp2_hwregs[30], offset=30)
+
+    def test_final_eppc(self):
+        # EPCC will be somewhere on the first userspace page and will have access_sys_regs
+        self.assertValidCap(self.MIPS.epcc, offset=(0x0, 0x2000), base=0,
+            length=self.max_length, perms=self.max_permissions)
         self.assertValidCap(self.MIPS.c31, offset=(0x0, 0x2000), base=0,
-            length=self.max_length, perms=self.max_permissions & ~1024)
-        # check that kr1c and kr2c were updated by the writes to chwr $22 and $23 in kernel mode:
-        self.assertIntCap(self.MIPS.c27, int_value=0xbad1)
-        self.assertIntCap(self.MIPS.c28, int_value=0xbad1)
+            length=self.max_length, perms=self.max_permissions)
 
     def test_total_exception_count(self):
         self.assertRegisterEqual(self.MIPS.v0, 10, "Wrong number of exceptions triggered")

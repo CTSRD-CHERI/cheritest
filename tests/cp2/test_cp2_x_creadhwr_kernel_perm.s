@@ -97,7 +97,8 @@ without_access_sys_regs:
 with_access_sys_regs:
 	cgetpcc $c15
 	csetoffset $c14, $c14, $zero	# set offset to 0 to simplify checks
-
+	# Ensure that EPCC has sysregs even if we trapped without access_sysregs
+	csetepcc $c13
 	jump_to_usermode userspace_test
 END_TEST
 
@@ -105,6 +106,8 @@ END_TEST
 .balign 4096
 .ent userspace_test
 userspace_test:
+	cgetpcc $c21
+	csetoffset $c21, $c21, $zero	# set offset to 0 to simplify checks
 
 	# Current trap count should be 4
 	# Last registers used to store exception details was $c7

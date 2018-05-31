@@ -91,9 +91,10 @@ without_access_sys_regs:
 	cjr $c12
 	nop
 with_access_sys_regs:
-	cgetpcc $c15
-	csetoffset $c14, $c14, $zero	# set offset to 0 to simplify checks
-
+	cgetpcc $c25
+	csetoffset $c25, $c25, $zero	# set offset to 0 to simplify checks
+	# Ensure that EPCC has sysregs even if we trapped without access_sysregs
+	csetepcc $c25
 	jump_to_usermode userspace_test
 END_TEST
 
@@ -102,7 +103,10 @@ END_TEST
 .balign 4096
 .ent userspace_test
 userspace_test:
+	# Ensure we have access system registers permission
 	cgetpcc $c26
+	csetoffset $c26, $c26, $zero	# set offset to 0 to simplify checks
+
 
 	# Current trap count should be 4
 	# Last registers used to store exception details was $c7
