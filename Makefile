@@ -1048,6 +1048,7 @@ TEST_CP2_FILES=					\
 		test_cp2_getpccsetoffset.s	\
 		test_cp2_getsetoffset.s		\
 		test_cp2_getunsealed.s		\
+		test_cp2_jump_to_usermode_pcc_perms.s \
 		test_cp2_kcc_base.s		\
 		test_cp2_kcc.s			\
 		test_cp2_kdc.s			\
