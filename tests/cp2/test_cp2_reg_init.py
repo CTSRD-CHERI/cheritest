@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -27,6 +28,8 @@
 
 from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
+
+import itertools
 
 #
 # Check that a variety of CHERI specification properties are true.
@@ -97,3 +100,53 @@ class test_cp2_reg_init(BaseBERITestCase):
         '''Test that CP2 general-purpose register unsealeds are correctly initialised'''
         for i in range(1, 26):
             self.assertRegisterEqual(self.MIPS.cp2[i].s, 0, "CP2 capability register sealed incorrectly initialised")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_unused_hwregs(self):
+        '''Test that all cap hwregs that aren't defined in the spec are None'''
+        for t in self.MIPS.threads.values():
+            for i in itertools.chain(range(2, 8), range(9, 22), range(24, 29)):
+                self.assertIsNone(t.cp2_hwregs[i], msg="Hwreg " + str(i) + " should not exist")
+
+    def _test_mirrored_hwreg(self, name, number):
+        for t in self.MIPS.threads.values():
+            self.assertDefaultCap(getattr(t, name), msg="$" + name + " incorrect")
+            # TODO: this will change once $c0 is $cnull
+            self.assertDefaultCap(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
+            self.assertDefaultCap(t.cp2_hwregs[0], msg="cap_hwr " + str(number) + " != $" + name + "?")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_ddc(self):
+        self._test_mirrored_hwreg("ddc", 0)
+
+    @attr('capabilities')
+    def test_cp2_reg_init_usertls_null(self):
+        for t in self.MIPS.threads.values():
+            self.assertNullCap(t.cp2_hwregs[1], msg="user tls reg should be null on reset")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_privtls_null(self):
+        for t in self.MIPS.threads.values():
+            self.assertNullCap(t.cp2_hwregs[8], msg="privileged tls reg should be null on reset")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_hwreg_kr1c_null(self):
+        for t in self.MIPS.threads.values():
+            self.assertNullCap(t.cp2_hwregs[22], msg="caphwr kr1c should be null on reset")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_hwreg_kr2c_null(self):
+        for t in self.MIPS.threads.values():
+            self.assertNullCap(t.cp2_hwregs[23], msg="caphwr kr1c should be null on reset")
+
+    @attr('capabilities')
+    def test_cp2_reg_init_kcc(self):
+        self._test_mirrored_hwreg("kcc", 29)
+
+    @attr('capabilities')
+    def test_cp2_reg_init_kdc(self):
+        self._test_mirrored_hwreg("kdc", 30)
+
+    @attr('capabilities')
+    def test_cp2_reg_init_epcc(self):
+        self._test_mirrored_hwreg("epcc", 31)
