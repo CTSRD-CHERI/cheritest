@@ -301,6 +301,13 @@ class MipsStatus(object):
         FPE = 15
         COP2 = 18
 
+        @staticmethod
+        def fromint(value):
+            for k, v in vars(MipsStatus.Cause).items():
+                if isinstance(v, int) and value == v:
+                    return "<Cause " + k + " (" + str(value) + ")>"
+            return "<unknown Cause " + str(value) + ">"
+
     # See "Table 4.2: Capability Exception Codes" in the CHERI reference
     class CapCause(object):
         NONE = 0x00
@@ -335,6 +342,13 @@ class MipsStatus(object):
         # reserved = 0x1d
         # reserved = 0x1e
         # reserved = 0x1f
+
+        @staticmethod
+        def fromint(value):
+            for k, v in vars(MipsStatus.CapCause).items():
+                if isinstance(v, int) and value == v:
+                    return "<CapCause " + k + " (" + str(value) + ")>"
+            return "<unknown CapCause " + str(value) + ">"
 
 
 MIPS_ICACHE_TAG_RE=FasterRegex('DEBUG ICACHE TAG ENTRY', r'\s*([0-9]+) Valid=([01]) Tag value=([0-9a-fA-F]+)$')

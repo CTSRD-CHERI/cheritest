@@ -442,13 +442,17 @@ class BaseBERITestCase(unittest.TestCase):
         # See macros.s for the layout of the offset field
         # Extract cause (bits 18-23)
         cause_value = (capreg.offset >> 18) & 0x1f
-        self.assertRegisterEqual(cause_value, mips_cause, msg + ": MIPS cause wrong")
+        if cause_value != mips_cause:
+            self.fail(msg + ": MIPS cause wrong: %s != expected %s" % (
+                MipsStatus.Cause.fromint(cause_value), MipsStatus.Cause.fromint(mips_cause)))
         if cap_reg is not None:
             value = capreg.offset & 0xff  # CapCause.RegNum in Bits 0-7
             self.assertRegisterEqual(value, cap_reg, msg + ": cap reg wrong")
         if cap_cause is not None:
             value = (capreg.offset >> 8) & 0xff  # CapCause.Cause is Bits 8-15
-            self.assertRegisterEqual(value, cap_cause, msg + ": cap cause wrong")
+            if value != cap_cause:
+                self.fail(msg + ": cap cause wrong: %s != expected %s" % (
+                    MipsStatus.CapCause.fromint(value), MipsStatus.CapCause.fromint(cap_cause)))
         if trap_count is not None:
             value = capreg.offset >> 32  # Bits 32-63
             self.assertRegisterEqual(value, trap_count, msg + ": trap count wrong")

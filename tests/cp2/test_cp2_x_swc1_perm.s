@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -36,7 +37,7 @@
 # Permit_Store.
 #
 
-BEGIN_TEST
+BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		#
 		# If the floating point unit is not present, skip the test
 		#
@@ -60,27 +61,6 @@ BEGIN_TEST
                 nop
 
 		#
-		# Clear the BEV flag
-		#
-
-		jal bev_clear
-		nop
-
-		#
-		# Set up exception handler
-		#
-
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, bev0_common_handler_stub
-		dli	$a2, 12	# instruction count
-		dsll	$a2, 2	# convert to byte count
-		jal	memcpy_nocap
-		nop		# branch delay slot	
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
-		#
 		# Save c0
 		#
 
@@ -99,6 +79,9 @@ BEGIN_TEST
 		mtc1	$a0, $f1
 		swc1    $f1, 0($t1) # This should raise a C2E exception
 
+		save_counting_exception_handler_cause $c3
+		# there should be no more traps
+		clear_counting_exception_handler_regs
 		#
 		# Restore c0
 		#
@@ -108,36 +91,14 @@ BEGIN_TEST
 		#
 		# Check that the store didn't happen
 		#
-
-		clw 	$a4, $t1, 0($ddc)
-
+		dli	$t0, -1
+		clw 	$t0, $t1, 0($c2)
+		# No more traps should have happened
+		save_counting_exception_handler_cause $c4
 no_fpu:
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		dli	$a2, 1
-		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
-		.end bev0_handler
-
-		.ent bev0_common_handler_stub
-bev0_common_handler_stub:
-		dla	$k0, bev0_handler
-		jr	$k0
-		nop
-		.end bev0_common_handler_stub
 
 		.data
 		.align	3
 data:		.dword	0x0123456789abcdef
 		.dword  0x0123456789abcdef
-
-

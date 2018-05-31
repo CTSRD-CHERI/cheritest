@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -38,20 +39,25 @@ class test_cp2_x_swc1_perm(BaseBERITestCase):
     @attr('float')
     def test_cp2_x_swc1_perm_1(self):
         '''Test swc1 did not store without Permit_Store permission'''
-        self.assertRegisterEqual(self.MIPS.a4, 0x01234567,
-            "swc1 stored without Permit_Store permission")
+        self.assertRegisterEqual(self.MIPS.t0, 0x01234567, "swc1 stored without Permit_Store permission")
 
     @attr('capabilities')
     @attr('float')
-    def test_cp2_x_swc1_perm_2(self):
+    def test_cp2_x_swc1_perm_exc_count(self):
         '''Test swc1 raises an exception when doesn't have Permit_Store permission'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "swc1 did not raise an exception when didn't have Permit_Store permission")
+        self.assertRegisterEqual(self.MIPS.v0, 1,
+            "should only have one exception: swc1 Permit_Store violation")
 
     @attr('capabilities')
     @attr('float')
-    def test_cp2_x_swc1_perm_3(self):
+    def test_cp2_x_swc1_perm_permit_store(self):
         '''Test capability cause is set correctly when doesn't have Permit_Store permission'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1300,
-            "Capability cause was not set correctly when didn't have Permit_Store permission")
+        self.assertCompressedTrapInfo(self.MIPS.c3, mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Permit_Store_Violation, trap_count=1,
+            msg="unexpected trap during swc1 when didn't have Permit_Store permission")
+
+    @attr('capabilities')
+    @attr('float')
+    def test_cp2_x_swc1_perm_no_more_exceptions(self):
+        self.assertNullCap(self.MIPS.c4, msg='There should not have been any more exceptions')
 

@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -39,23 +40,29 @@ class test_cp2_x_sdc1_perm(BaseBERITestCase):
     @attr('float64')
     def test_cp2_x_sdc1_perm_1(self):
         '''Test sdc1 did not store without Permit_Store permission'''
-        self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef,
+        self.assertRegisterEqual(self.MIPS.t0, 0x0123456789abcdef,
             "sdc1 stored without Permit_Store permission")
 
     @attr('capabilities')
     @attr('float')
     @attr('float64')
-    def test_cp2_x_sdc1_perm_2(self):
+    def test_cp2_x_sdc1_perm_exc_count(self):
         '''Test sdc1 raises an exception when doesn't have Permit_Store permission'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "sdc1 did not raise an exception when didn't have Permit_Store permission")
+        self.assertRegisterEqual(self.MIPS.v0, 1,
+            "should only have one exception: sdc1 Permit_Store violation")
 
     @attr('capabilities')
     @attr('float')
     @attr('float64')
-    def test_cp2_x_sdc1_perm_3(self):
-        '''Test sdc1 sets capability cause correctly when doesn't have Permit_Store permission'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1300,
-            "Capability cause was not set correctly when sdc1 didn't have Permit_Store permission")
+    def test_cp2_x_sdc1_perm_permit_store(self):
+        '''Test capability cause is set correctly when doesn't have Permit_Store permission'''
+        self.assertCompressedTrapInfo(self.MIPS.c3, mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Permit_Store_Violation, trap_count=1,
+            msg="unexpected trap during sdc1 when didn't have Permit_Store permission")
 
+    @attr('capabilities')
+    @attr('float')
+    @attr('float64')
+    def test_cp2_x_sdc1_perm_no_more_exceptions(self):
+        self.assertNullCap(self.MIPS.c4, msg='There should not have been any more exceptions')
 
