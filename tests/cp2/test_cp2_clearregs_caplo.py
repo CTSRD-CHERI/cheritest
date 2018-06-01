@@ -57,7 +57,7 @@ class test_cp2_clearregs_caplo(BaseBERITestCase):
     def test_cap(self):
         '''Test that cap regs have expected values'''
         for reg in range(32):
-            capreg_val = getattr(self.MIPS, 'c%d' % reg)
+            capreg_val = self.MIPS.ddc if reg == 0 else self.MIPS.cp2[reg]
             if reg in (0, 4, 10):
                 # we set a couple of regs to check that 'set after clear' works
                 # $ddc is special so we don't touch it
