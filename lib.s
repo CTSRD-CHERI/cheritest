@@ -101,21 +101,20 @@ memcpy_nocap:
 
 		move	$v0, $a0	# Return initial value of dest.
 
-.Lmemcpy_loop:
 		# Check up front -- length could start out as zero.
 		beq	$a2, $zero, .Lmemcpy_done
 		nop
 
+.Lmemcpy_loop:
 		lb	$t0, 0($a1)
 		sb	$t0, 0($a0)
 
-		# Increment dest and src, decrement len.
+		# Increment dest and src (in branch delay slot), decrement len.
 		daddiu	$a0, 1
-		daddiu	$a1, 1
 		daddiu	$a2, -1
 
-		b .Lmemcpy_loop
-		nop			# branch-delay slot
+		bne	$a2, $zero, .Lmemcpy_loop
+		daddiu	$a1, 1			# branch-delay slot
 
 .Lmemcpy_done:
 
