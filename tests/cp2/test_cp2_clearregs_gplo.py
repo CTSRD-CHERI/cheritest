@@ -48,8 +48,8 @@ class test_cp2_clearregs_gplo(BaseBERITestCase):
         for reg in range(32):
             regval = self.MIPS[reg]
             if reg in special_gp_regs:
-                pass # skip regs which have other purposes in the test framework
-            elif reg in (4,10):
+                pass  # skip regs which have other purposes in the test framework
+            elif reg in (4, 10):
                 # we set a couple of regs to check that 'set after clear' works
                 self.assertRegisterEqual(regval, 1, "reg $%d did not retain set value after clear" % reg)
             elif (reg & 1) == 0 and reg < 16:
@@ -62,6 +62,10 @@ class test_cp2_clearregs_gplo(BaseBERITestCase):
     @attr('capabilities')
     def test_cap(self):
         '''Test that cap regs have expected values'''
-        for reg in range(32):
-            capreg_val = getattr(self.MIPS, 'c%d' % reg)
+        if self.MIPS.CHERI_C0_IS_NULL:
+            self.assertNullCap(self.MIPS.c0, "$cnull was modified unexpectedly")
+        else:
+            self.assertDefaultCap(self.MIPS.c0, "$ddc was modified unexpectedly")
+        for reg in range(1, 32):
+            capreg_val = self.MIPS.cp2[reg]
             self.assertDefaultCap(capreg_val, "c$%d was modified unexpectedly" % reg)

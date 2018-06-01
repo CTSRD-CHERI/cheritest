@@ -62,6 +62,10 @@ class test_cp2_clearregs_gphi(BaseBERITestCase):
     @attr('capabilities')
     def test_cap(self):
         '''Test that cap regs have expected values'''
-        for reg in range(32):
+        if self.MIPS.CHERI_C0_IS_NULL:
+            self.assertNullCap(self.MIPS.c0, "$cnull was modified unexpectedly")
+        else:
+            self.assertDefaultCap(self.MIPS.c0, "$ddc was modified unexpectedly")
+        for reg in range(1, 32):
             capreg_val = getattr(self.MIPS, 'c%d' % reg)
             self.assertDefaultCap(capreg_val, "c$%d was modified unexpectedly" % reg)
