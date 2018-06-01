@@ -71,11 +71,12 @@
 .set pop
 .endm
 
-.macro set_mips_bev0_handler handler
+.macro set_mips_common_bev0_handler handler
 	jal	bev_clear
 	nop
 	dla	$a0, \handler
-	jal	bev0_handler_install
+	dla	$a1, end_of_\handler
+	jal	bev0_set_common_handler_raw
 	nop
 .endm
 
@@ -154,7 +155,9 @@
 	j finish
 	nop
 .end \name
-
+.global end_of_\name
+end_of_\name\():
+	nop
 .ifdef COUNTING_TRAP_HANDLER_STORE_TO_MEM
 .data
 .balign 8
@@ -245,7 +248,7 @@ trap_count:
 
 	BEGIN_TEST
 		# Set up exception handler
-		set_mips_bev0_handler counting_trap_handler
+		set_mips_common_bev0_handler counting_trap_handler
 		# Clear all registers used by the trap handler to ensure they
 		# are zero if the expected exception doesn't trigger
 		clear_counting_exception_handler_regs

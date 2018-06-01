@@ -239,6 +239,22 @@ install_bev0_stubs:
 		daddu	$sp, $sp, 32
 .end install_bev0_stubs
 
+# copy handler (a0) #bytes(a1) to the common handler address to avoid depending on a $ddc load
+.global bev0_set_common_handler_raw
+.ent bev0_set_common_handler_raw
+bev0_set_common_handler_raw:
+	mips_function_entry
+
+	# move arguments to match memcpy:
+	dsubu	$a2, $a1, $a0	# get memcpy length into $a2
+	move	$a1, $a0	# move $a1 to $src parameter
+	dli	$a0, 0xffffffff80000180	# address of handler ($memcpy $dest)
+	jal memcpy_nocap
+	nop
+
+	mips_function_return
+.end bev0_set_common_handler_raw
+
 # As above but for bev1 stubs
 # Arguments: None
 .global install_bev1_stubs
