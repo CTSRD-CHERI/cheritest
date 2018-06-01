@@ -47,6 +47,12 @@ class test_cp2_null_vs_ddc(BaseBERITestCase):
         self.assertCapabilitiesEqual(self.MIPS.c5, self.MIPS.c3, "cfromptr cb == 0 should use $ddc")
 
     @attr('capabilities')
+    def test_ctoptr_0_is_ddc(self):
+        self.assertCapabilitiesEqual(self.MIPS.t1, self.MIPS.c3.offset, "ctoptr cb == 0 should use $ddc")
+        self.assertCapabilitiesEqual(self.MIPS.t1, self.MIPS.t1, "ctoptr cb == 0 should use $ddc")
+        self.assertRegisterNotEqual(self.MIPS.t1, 0, "ctoptr cb == 0 should use $ddc")
+
+    @attr('capabilities')
     def test_cbuildcap_0_is_ddc(self):
         self.assertRegisterEqual(self.MIPS.c6.t, 0, "$c6 should not be tagged")
         self.assertCapabilitiesEqual(self.MIPS.c7, self.MIPS.c3, "cbuildcap cb == 0 should use $ddc")
