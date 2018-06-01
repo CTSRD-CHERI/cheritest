@@ -73,8 +73,11 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 .else
 		# just increment trap count to keep load/store in sync
 		teq $zero, $zero	# trap 6
+		save_counting_exception_handler_cause $c9
 		teq $zero, $zero	# trap 7
+		save_counting_exception_handler_cause $c10
 		teq $zero, $zero	# trap 8
+		save_counting_exception_handler_cause $c11
 .endif
 
 		# finally cap load/store
@@ -110,8 +113,11 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 .else
 		# just increment trap count to keep load/store in sync
 		teq $zero, $zero	# trap 15
+		save_counting_exception_handler_cause $c18
 		teq $zero, $zero	# trap 16
+		save_counting_exception_handler_cause $c19
 		teq $zero, $zero	# trap 17
+		save_counting_exception_handler_cause $c20
 .endif
 
 
