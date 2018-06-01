@@ -152,7 +152,10 @@
 	# dmfc0 	$k1, $8, 1	# Get BadInstr
 	# On exit store total exception count in v0
 	__get_counting_trap_handler_count $v0	# get exception count in $v0
-	j finish
+	# This needs to be a jr with the real address since a branch or j will
+	# jump to unmapped memory just after the trap handler
+	dla	$ra, finish
+	jr	$ra
 	nop
 .end \name
 .global end_of_\name
