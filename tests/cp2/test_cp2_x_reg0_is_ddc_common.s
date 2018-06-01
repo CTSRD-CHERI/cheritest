@@ -100,6 +100,11 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 	save_counting_exception_handler_cause \store_cause_reg
 .endm
 
+.if TESTING_LLSC
+		# MIPS ll/sc only has ll+lld/sc+scd
+		check_mips_load_store , $c14	# byte load/store #trap 11
+		check_mips_load_store d, $c15	# byte load/store #trap 12
+.else
 		check_mips_load_store b, $c14	# byte load/store #trap 11
 		check_mips_load_store h, $c15	# short load/store #trap 12
 		check_mips_load_store w, $c16	# word load/store #trap 13
@@ -119,7 +124,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		teq $zero, $zero	# trap 17
 		save_counting_exception_handler_cause $c20
 .endif
-
+.endif  # TESTING_LLC
 
 .if TESTING_STORE
 		# Check that data is still the same
