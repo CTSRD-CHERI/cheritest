@@ -28,6 +28,7 @@
 # See test_cp2_x_reg0_is_ddc_common.s for the real implementation
 TESTING_LOAD = 0
 TESTING_STORE = 1
+TESTING_LLSC = 0
 
 .macro do_cap_load_store kind, dstreg, srcreg
 	cs\()\kind \dstreg, $zero, 0(\srcreg)

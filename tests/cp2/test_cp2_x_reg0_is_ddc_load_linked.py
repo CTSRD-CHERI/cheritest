@@ -28,52 +28,42 @@ from beritest_tools import BaseBERITestCase
 from nose.plugins.attrib import attr
 
 
-class test_cp2_x_reg0_is_ddc_store(BaseBERITestCase):
+class test_cp2_x_reg0_is_ddc_load_linked(BaseBERITestCase):
     @attr('capabilities')
     def test_num_traps(self):
-        self.assertRegisterEqual(self.MIPS.v0, 17, "Expected 17 traps")
+        self.assertRegisterEqual(self.MIPS.v0, 12, "Expected 12 traps")
 
     @attr('capabilities')
-    def test_null_csdword_tag_violation(self):
+    def test_null_cldword_tag_violation(self):
         self.assertCp2Fault(self.MIPS.c4, self.MIPS.CapCause.Tag_Violation,
                             cap_reg=4, trap_count=1, msg="load of null should give tag violation")
 
     @attr('capabilities')
-    def test_null_cscap_tag_violation(self):
+    def test_null_clcap_tag_violation(self):
         self.assertCp2Fault(self.MIPS.c13, self.MIPS.CapCause.Tag_Violation,
                             cap_reg=13, trap_count=10, msg="load of null should give tag violation")
 
     @attr('capabilities')
-    def test_csc_ddc_store_violation(self):
+    def test_clc_ddc_load_violation(self):
         # the cap data load should use $ddc for reg 0
-        self.assertCp2Fault(self.MIPS.c12, self.MIPS.CapCause.Permit_Store_Violation,
+        self.assertCp2Fault(self.MIPS.c12, self.MIPS.CapCause.Permit_Load_Violation,
                             msg="load of reg0 should use $ddc -> load violation")
 
     @attr('capabilities')
-    def test_csbhwdu_ddc_store_violation(self):
+    def test_clbhwdu_ddc_load_violation(self):
         # $c5 - $c11 contain the MIPS traps
-        for i in range(5, 9):
-            # all the normal data stores should have caused a tag violation
-            self.assertCp2Fault(self.MIPS.cp2[i], self.MIPS.CapCause.Permit_Store_Violation,
+        for i in range(5, 12):
+            # all the normal  data lodas should have caused a tag violation
+            self.assertCp2Fault(self.MIPS.cp2[i], self.MIPS.CapCause.Permit_Load_Violation,
                                 cap_reg=0, trap_count=i - 3,
                                 msg="load of reg0 should use $ddc -> load violation")
-        for i in range(9, 12):
-            self.assertCompressedTrapInfo(self.MIPS.cp2[i], mips_cause=self.MIPS.Cause.TRAP, trap_count=i - 3)
 
     @attr('capabilities')
-    def test_mips_stores_ddc_store_violation(self):
-        # $c14 - $c20 contain the MIPS traps
-        for i in range(14, 18):
-            # all the normal  data lodas should have caused a tag violation
-            self.assertCp2Fault(self.MIPS.cp2[i], self.MIPS.CapCause.Permit_Store_Violation,
-                                cap_reg=0, trap_count=i - 3,
-                                msg="MIPS loads should use $ddc not $cnull -> load violation")
-        for i in range(18, 21):
-            self.assertCompressedTrapInfo(self.MIPS.cp2[i], mips_cause=self.MIPS.Cause.TRAP, trap_count=i - 3)
-
-    @attr('capabilities')
-    def test_values_not_modified(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x0123456789abcdef)
-        self.assertRegisterEqual(self.MIPS.a1, 0x0123456789abcdef)
-        self.assertRegisterEqual(self.MIPS.a2, 0x0123456789abcdef)
-        self.assertRegisterEqual(self.MIPS.a3, 0x0123456789abcdef)
+    def test_mips_loads_ddc_load_violation(self):
+        # $c14 and $c15 contain the MIPS sc values (no byte variants)
+        self.assertCp2Fault(self.MIPS.c14, self.MIPS.CapCause.Permit_Load_Violation,
+                            cap_reg=0, trap_count=11,
+                            msg="MIPS sc should use $ddc not $cnull -> load violation")
+        self.assertCp2Fault(self.MIPS.c15, self.MIPS.CapCause.Permit_Load_Violation,
+                            cap_reg=0, trap_count=12,
+                            msg="MIPS sc should use $ddc not $cnull -> load violation")

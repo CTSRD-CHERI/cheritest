@@ -44,13 +44,13 @@ class test_cp2_x_reg0_is_ddc_store_cond(BaseBERITestCase):
                             cap_reg=13, trap_count=10, msg="load of null should give tag violation")
 
     @attr('capabilities')
-    def test_csc_ddc_load_violation(self):
+    def test_csc_ddc_store_violation(self):
         # the cap data load should use $ddc for reg 0
         self.assertCp2Fault(self.MIPS.c12, self.MIPS.CapCause.Permit_Store_Violation,
                             msg="load of reg0 should use $ddc -> load violation")
 
     @attr('capabilities')
-    def test_csbhwdu_ddc_load_violation(self):
+    def test_csbhwdu_ddc_store_violation(self):
         # $c5 - $c11 contain the MIPS traps
         for i in range(5, 9):
             # all the normal data stores should have caused a tag violation
@@ -61,7 +61,7 @@ class test_cp2_x_reg0_is_ddc_store_cond(BaseBERITestCase):
             self.assertCompressedTrapInfo(self.MIPS.cp2[i], mips_cause=self.MIPS.Cause.TRAP, trap_count=i - 3)
 
     @attr('capabilities')
-    def test_mips_stores_ddc_load_violation(self):
+    def test_mips_stores_ddc_store_violation(self):
         # $c14 and $c15 contain the MIPS sc values (no byte variants)
         self.assertCp2Fault(self.MIPS.c14, self.MIPS.CapCause.Permit_Store_Violation,
                             cap_reg=0, trap_count=11,

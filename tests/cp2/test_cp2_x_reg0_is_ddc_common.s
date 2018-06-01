@@ -66,7 +66,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		check_cap_ddc_relative_ld_st d, $c8	# dword load/store #trap 5
 
 		# Check the unsigned variants:
-.if TESTING_LOAD
+.if TESTING_LOAD >= 1
 		check_cap_ddc_relative_ld_st bu, $c9	# unsigned byte load/store #trap 6
 		check_cap_ddc_relative_ld_st hu, $c10	# unsigned short load/store #trap 7
 		check_cap_ddc_relative_ld_st wu, $c11	# unsigned word load/store #trap 8
@@ -100,7 +100,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 	save_counting_exception_handler_cause \store_cause_reg
 .endm
 
-.if TESTING_LLSC
+.if TESTING_LLSC >= 1
 		# MIPS ll/sc only has ll+lld/sc+scd
 		check_mips_load_store , $c14	# byte load/store #trap 11
 		check_mips_load_store d, $c15	# byte load/store #trap 12
@@ -111,7 +111,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		check_mips_load_store d, $c17	# dword load/store #trap 14
 
 		# Check the unsigned variants:
-.if TESTING_LOAD
+.if TESTING_LOAD >= 1
 		check_mips_load_store bu, $c18	# unsigned byte load/store #trap 15
 		check_mips_load_store hu, $c19	# unsigned short load/store #trap 16
 		check_mips_load_store wu, $c20	# unsigned word load/store #trap 17
@@ -126,7 +126,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 .endif
 .endif  # TESTING_LLC
 
-.if TESTING_STORE
+.if TESTING_STORE >= 1
 		# Check that data is still the same
 		cld	$a0, $zero, 0($c2)
 		cld	$a1, $zero, 8($c2)
