@@ -1187,6 +1187,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_multiop_reg.s	\
 		test_cp2_x_multiop_sealed.s	\
 		test_cp2_x_multiop_tag.s	\
+		test_cp2_x_reg0_is_ddc_load.s	\
 		test_cp2_x_sb_perm.s		\
 		test_cp2_x_sdc1_perm.s		\
 		test_cp2_x_swc1_perm.s
