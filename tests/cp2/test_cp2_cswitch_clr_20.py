@@ -34,31 +34,43 @@ from nose.plugins.attrib import attr
 
 class test_cp2_cswitch_clr_20(BaseBERITestCase):
     @attr('capabilities')
-    def test_unsealed(self):
+    def test_sealed(self):
+        self.assertRegisterEqual(self.MIPS.ddc.s, 0, "sealed bit incorrect after context switch")
         for i in range(0, 28):
-            self.assertRegisterEqual(self.MIPS.cp2[i].s, 0, "c" + str(i) + " s bit incorrect after context switch")
-        self.assertRegisterEqual(self.MIPS.c31.s, 0, "c31 s bit incorrect after context switch")
+            self.assertRegisterEqual(self.MIPS.cp2[i].s, 0, "sealed bit incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.epcc.s, 0, "sealed bit incorrect after context switch")
 
     @attr('capabilities')
     def test_perms(self):
-        for i in range(0, 28):
-            self.assertRegisterAllPermissions(self.MIPS.cp2[i].perms, "c" + str(i) + " perms incorrect after context switch")
-        self.assertRegisterAllPermissions(self.MIPS.c31.perms, "c31 perms incorrect after context switch")
+        self.assertRegisterAllPermissions(self.MIPS.ddc.perms, "perms incorrect after context switch")
+        for i in range(1, 28):
+            self.assertRegisterAllPermissions(self.MIPS.cp2[i].perms, "perms incorrect after context switch")
+        self.assertRegisterAllPermissions(self.MIPS.epcc.perms, "perms incorrect after context switch")
 
     @attr('capabilities')
     def test_base(self):
-        for i in range(0, 28):
-            self.assertRegisterEqual(self.MIPS.cp2[i].base, 0x0, "c" + str(i) + " base incorrect after context switch")
-        self.assertRegisterEqual(self.MIPS.c31.base, 0x0, "c31 base incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.ddc.base, 0x0, "base incorrect after context switch")
+        for i in range(1, 28):
+            self.assertRegisterEqual(self.MIPS.cp2[i].base, 0x0, "base incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.epcc.base, 0x0, "base incorrect after context switch")
 
     @attr('capabilities')
     def test_length(self):
-        for i in range(0, 28):
-            self.assertRegisterEqual(self.MIPS.cp2[i].length, 0xffffffffffffffff, "c" + str(i) + " length incorrect after context switch")
-        self.assertRegisterEqual(self.MIPS.c31.length, 0xffffffffffffffff, "c31 length incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.ddc.length, 0xffffffffffffffff, "length incorrect after context switch")
+        for i in range(1, 28):
+            self.assertRegisterEqual(self.MIPS.cp2[i].length, 0xffffffffffffffff, "length incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.epcc.length, 0xffffffffffffffff, "length incorrect after context switch")
 
     @attr('capabilities')
     def test_offset(self):
+        self.assertRegisterEqual(self.MIPS.ddc.offset, 0x0, "offset incorrect after context switch")
         for i in range(0, 28):
-            self.assertRegisterEqual(self.MIPS.cp2[i].offset, 0x0, "c" + str(i) + " offset incorrect after context switch")
-        self.assertRegisterEqual(self.MIPS.c31.offset, 0x0, "c31 offset incorrect after context switch")
+            self.assertRegisterEqual(self.MIPS.cp2[i].offset, 0x0, "offset incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.epcc.offset, 0x0, "offset incorrect after context switch")
+
+    @attr('capabilities')
+    def test_ctype(self):
+        self.assertRegisterEqual(self.MIPS.ddc.ctype, 0x0, "ctype incorrect after context switch")
+        for i in range(1, 28):
+            self.assertRegisterEqual(self.MIPS.cp2[i].ctype, 0x0, "ctype incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.epcc.ctype, 0x0, "ctype incorrect after context switch")
