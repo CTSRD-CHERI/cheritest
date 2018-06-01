@@ -33,4 +33,8 @@ TESTING_STORE = 0
 	cl\()\kind \dstreg, $zero, 0(\srcreg)
 .endm
 
+.macro do_mips_load_store kind, dstreg, srcreg
+	l\()\kind \dstreg, 0(\srcreg)
+.endm
+
 .include "tests/cp2/test_cp2_x_reg0_is_ddc_common.s"

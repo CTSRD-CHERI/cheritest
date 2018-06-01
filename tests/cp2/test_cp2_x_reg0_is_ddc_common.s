@@ -55,21 +55,26 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		# All these loads/stores should fail with
 		# permit_store/permit_load violations and not tag violations
 
-.macro do_ddc_relative_ld_st width, store_cause_reg
+.macro check_cap_ddc_relative_ld_st width, store_cause_reg
 	clear_counting_exception_handler_regs
 	do_cap_load_store	\width, $t2, $ddc
 	save_counting_exception_handler_cause \store_cause_reg
 .endm
-		do_ddc_relative_ld_st b, $c5	# byte load/store #trap 2
-		do_ddc_relative_ld_st h, $c6	# short load/store #trap 3
-		do_ddc_relative_ld_st w, $c7	# word load/store #trap 4
-		do_ddc_relative_ld_st d, $c8	# dword load/store #trap 5
+		check_cap_ddc_relative_ld_st b, $c5	# byte load/store #trap 2
+		check_cap_ddc_relative_ld_st h, $c6	# short load/store #trap 3
+		check_cap_ddc_relative_ld_st w, $c7	# word load/store #trap 4
+		check_cap_ddc_relative_ld_st d, $c8	# dword load/store #trap 5
 
 		# Check the unsigned variants:
 .if TESTING_LOAD
-		do_ddc_relative_ld_st bu, $c9	# unsigned byte load/store #trap 6
-		do_ddc_relative_ld_st hu, $c10	# unsigned short load/store #trap 7
-		do_ddc_relative_ld_st wu, $c11	# unsigned word load/store #trap 8
+		check_cap_ddc_relative_ld_st bu, $c9	# unsigned byte load/store #trap 6
+		check_cap_ddc_relative_ld_st hu, $c10	# unsigned short load/store #trap 7
+		check_cap_ddc_relative_ld_st wu, $c11	# unsigned word load/store #trap 8
+.else
+		# just increment trap count to keep load/store in sync
+		teq $zero, $zero	# trap 6
+		teq $zero, $zero	# trap 7
+		teq $zero, $zero	# trap 8
 .endif
 
 		# finally cap load/store
@@ -85,6 +90,30 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 
 
 		# Now the MIPS loads/stores (should also use $ddc not $cnull)
+		dla	$t9, data
+.macro check_mips_load_store width, store_cause_reg
+	clear_counting_exception_handler_regs
+	do_mips_load_store	\width, $t2, $t9
+	save_counting_exception_handler_cause \store_cause_reg
+.endm
+
+		check_mips_load_store b, $c14	# byte load/store #trap 11
+		check_mips_load_store h, $c15	# short load/store #trap 12
+		check_mips_load_store w, $c16	# word load/store #trap 13
+		check_mips_load_store d, $c17	# dword load/store #trap 14
+
+		# Check the unsigned variants:
+.if TESTING_LOAD
+		check_mips_load_store bu, $c18	# unsigned byte load/store #trap 15
+		check_mips_load_store hu, $c19	# unsigned short load/store #trap 16
+		check_mips_load_store wu, $c20	# unsigned word load/store #trap 17
+.else
+		# just increment trap count to keep load/store in sync
+		teq $zero, $zero	# trap 15
+		teq $zero, $zero	# trap 16
+		teq $zero, $zero	# trap 17
+.endif
+
 
 .if TESTING_STORE
 		# Check that data is still the same

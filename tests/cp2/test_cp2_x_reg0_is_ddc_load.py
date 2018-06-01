@@ -31,7 +31,7 @@ from nose.plugins.attrib import attr
 class test_cp2_x_reg0_is_ddc_load(BaseBERITestCase):
     @attr('capabilities')
     def test_num_traps(self):
-        self.assertRegisterEqual(self.MIPS.v0, 10, "Expected 10 traps")
+        self.assertRegisterEqual(self.MIPS.v0, 17, "Expected 17 traps")
 
     @attr('capabilities')
     def test_null_cldword_tag_violation(self):
@@ -51,10 +51,18 @@ class test_cp2_x_reg0_is_ddc_load(BaseBERITestCase):
 
     @attr('capabilities')
     def test_clbhwdu_ddc_load_violation(self):
-        # $c13 - $c19 contain the MIPS traps
+        # $c5 - $c11 contain the MIPS traps
         for i in range(5, 12):
             # all the normal  data lodas should have caused a tag violation
             self.assertCp2Fault(self.MIPS.cp2[i], self.MIPS.CapCause.Permit_Load_Violation,
                                 cap_reg=0, trap_count=i - 3,
                                 msg="load of reg0 should use $ddc -> load violation")
 
+    @attr('capabilities')
+    def test_mips_loads_ddc_load_violation(self):
+        # $c14 - $c20 contain the MIPS traps
+        for i in range(14, 21):
+            # all the normal  data lodas should have caused a tag violation
+            self.assertCp2Fault(self.MIPS.cp2[i], self.MIPS.CapCause.Permit_Load_Violation,
+                                cap_reg=0, trap_count=i - 3,
+                                msg="MIPS loads should use $ddc not $cnull -> load violation")
