@@ -40,7 +40,7 @@ class test_cp2_null_vs_ddc(BaseBERITestCase):
         if self.MIPS.CHERI_C0_IS_NULL:
             self.assertNullCap(self.MIPS.c4, "cmove $c4, $cnull should return NULL")
         else:
-            self.assertCapabilitiesEqual(self.MIPS.c4, self.MIPS.ddc, "cmove $c4, $cnull should return $ddc (legacy mode)")
+            self.assertCapabilitiesEqual(self.MIPS.c4, self.MIPS.c3, "cmove $c4, $cnull should return $ddc (legacy mode)")
 
     @attr('capabilities')
     def test_cfromptr_0_is_ddc(self):
@@ -62,21 +62,21 @@ class test_cp2_null_vs_ddc(BaseBERITestCase):
         if self.MIPS.CHERI_C0_IS_NULL:
             self.assertIntCap(self.MIPS.c8, int_value=42, msg="cincoffsetimm $cnull should return NULL")
         else:
-            self.assertDefaultCap(self.MIPS.c8, offset=self.MIPS.ddc.offset + 42, msg="cincoffsetimm $cnull should return $ddc (legacy mode)")
+            self.assertDefaultCap(self.MIPS.c8, offset=self.MIPS.c3.offset + 42, msg="cincoffsetimm $cnull should return $ddc (legacy mode)")
 
     @attr('capabilities')
     def test_cincoffset_reg_0_is_null(self):
         if self.MIPS.CHERI_C0_IS_NULL:
             self.assertIntCap(self.MIPS.c9, int_value=43, msg="cincoffset $cnull should return NULL")
         else:
-            self.assertDefaultCap(self.MIPS.c9, offset=self.MIPS.ddc.offset + 43, msg="cincoffset $cnull should return $ddc (legacy mode)")
+            self.assertDefaultCap(self.MIPS.c9, offset=self.MIPS.c3.offset + 43, msg="cincoffset $cnull should return $ddc (legacy mode)")
 
     @attr('capabilities')
     def test_csetoffset_0_is_null(self):
         if self.MIPS.CHERI_C0_IS_NULL:
             self.assertIntCap(self.MIPS.c10, int_value=44, msg="csetoffset $cnull should return NULL")
         else:
-            self.assertDefaultCap(self.MIPS.c10, offset=self.MIPS.ddc.offset + 44, msg="csetoffset $cnull should return $ddc (legacy mode)")
+            self.assertDefaultCap(self.MIPS.c10, offset=44, msg="csetoffset $cnull should return $ddc (legacy mode)")
 
     @attr('capabilities')
     def test_write_0_noop(self):
