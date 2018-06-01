@@ -36,19 +36,23 @@ class test_cp2_clcr_tag(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_clcr_gettag_L1(self):
         '''Test that clcr loaded the tag correctly'''
+        self.assertCapabilitiesEqual(self.MIPS.c3, self.MIPS.c2)
         self.assertRegisterEqual(self.MIPS.a0, 0x0000000000000001, "clcr load has the correct tag")
         
     @attr('capabilities')
     def test_cp2_clcr_gettag_L2(self):
         '''Test that clcr loaded the tag correctly from L2'''
+        self.assertCapabilitiesEqual(self.MIPS.c4, self.MIPS.c2)
         self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000001, "clcr load from L2 has the correct tag")
         
     @attr('capabilities')
     def test_cp2_clcr_gettag_DRAM(self):
         '''Test that clcr loaded the tag correctly from the tag cache.'''
+        self.assertCapabilitiesEqual(self.MIPS.c5, self.MIPS.c2)
         self.assertRegisterEqual(self.MIPS.a2, 0x0000000000000001, "clcr load from DRAM has the correct tag")
 
     @attr('capabilities')
     def test_cp2_clcr_gettag_DRAM(self):
         '''Test that clcr loaded the tag correctly from DRAM'''
+        self.assertCapabilitiesEqual(self.MIPS.c6, self.MIPS.c2)
         self.assertRegisterEqual(self.MIPS.a3, 0x0000000000000001, "clcr load from DRAM has the correct tag")
