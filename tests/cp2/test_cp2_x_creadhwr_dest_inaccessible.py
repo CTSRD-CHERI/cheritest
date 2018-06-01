@@ -92,7 +92,7 @@ class test_cp2_x_creadhwr_dest_inaccessible(BaseBERITestCase):
 
     def test_no_sysregs_in_kernel_mode_dest_ddc(self):
         self.assertCompressedTrapInfo(self.MIPS.c8, no_trap=True, msg="Accessing DDC should work")
-        self.assertDefaultCap(self.MIPS.c0, offset=0)
+        self.assertDefaultCap(self.MIPS.ddc, offset=0)
 
     def test_total_exception_count(self):
         self.assertRegisterEqual(self.MIPS.v0, 6, "Wrong number of exceptions triggered")
