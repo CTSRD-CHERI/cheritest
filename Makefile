@@ -2645,6 +2645,9 @@ endif
 $(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log
 	$(CHERI_SDK_BINDIR)/symbolize-cheri-trace.py $< "$(OBJDIR)/`basename $< .log`.elf" > $@
 
+clion/$(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log.symbolized
+	clion $(abspath $<)
+
 NOSETESTS?=python2.7 -m nose
 ifeq ($(USING_LLVM_ASSEMBLER),0)
 NOSETESTS:=TEST_ASSEMBLER=gnu $(NOSETESTS)

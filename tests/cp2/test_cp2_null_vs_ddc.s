@@ -51,7 +51,9 @@ BEGIN_TEST
 		# This should be a valid capability even if $c0 is null
 		cfromptr $c5, $ddc, $t0
 		# This should be a valid pointer even if $c0 is null
-		ctoptr	$t1, $ddc, $c3
+		ctoptr	$t1, $c3, $ddc
+		# This should should return NULL and not trap
+		ctoptr	$t2, $cnull, $ddc
 
 		# cbuildcap should also refer to $ddc
 		ccleartag $c6, $c3
