@@ -1505,7 +1505,7 @@ endif
 #              cache semantics.
 # cheri - gxemul is simply not CHERI
 #
-GXEMUL_NOSEFLAGS=-A "   \
+GXEMUL_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "   \
 not allow_unaligned 	\
 and not llsc		\
 and not cache           \
@@ -1669,8 +1669,8 @@ ifeq ($(TEST_CAPHWR),0)
 L3_NOSEPRED+=and not cap_hwregs
 endif
 
-L3_NOSEFLAGS=-A "$(L3_NOSEPRED)"
-L3_NOSEFLAGS_UNCACHED=-A "$(L3_NOSEPRED) and not cached"
+L3_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(L3_NOSEPRED)"
+L3_NOSEFLAGS_UNCACHED=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(L3_NOSEPRED) and not cached"
 
 SAIL_NOSEPRED=\
 not beri \
@@ -1754,9 +1754,9 @@ ifneq ($(CLANG),1)
 SAIL_NOSEPRED+=and not clang
 endif
 
-SAIL_MIPS_NOSEFLAGS=-A "$(SAIL_NOSEPRED) and not capabilities"
-SAIL_CHERI_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
-SAIL_CHERI128_NOSEFLAGS=-A "$(SAIL_NOSEPRED)"
+SAIL_MIPS_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_NOSEPRED) and not capabilities"
+SAIL_CHERI_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_NOSEPRED)"
+SAIL_CHERI128_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_NOSEPRED)"
 
 QEMU_NOSEPRED=\
 not beri \
@@ -1872,7 +1872,7 @@ QEMU_NOSEPRED+=and beri_statcounters != 'icount'
 QEMU_NOSEPRED+=and not allow_unaligned_cllsc
 
 
-QEMU_NOSEFLAGS=-A "$(QEMU_NOSEPRED)"
+QEMU_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(QEMU_NOSEPRED)"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -2017,8 +2017,8 @@ NOSEPRED+=and not nowatch
 endif
 
 ifneq ($(NOSEPRED),)
-NOSEFLAGS?=-A "$(NOSEPRED) and not uncached"
-NOSEFLAGS_UNCACHED?=-A "$(NOSEPRED) and not cached"
+NOSEFLAGS?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) and not uncached"
+NOSEFLAGS_UNCACHED?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) and not cached"
 endif
 
 VPATH=$(TESTDIRS)
@@ -2648,7 +2648,33 @@ $(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log
 clion/$(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log.symbolized
 	clion $(abspath $<)
 
+# TODO: change the default to pytest
+#PYTHON_TESTRUNNER?=pytest
+PYTHON_TESTRUNNER?=nosetests
+ifeq ($(PYTHON_TESTRUNNER),nosetests)
+ifeq ($(I_REALLY_WANT_TO_USE_DEPRECATED_NOSETESTS), 1)
+$(info Running tests with deprecated nosetests)
+else
+$(warning NOSETESTS and Python 2.7 are almost EOL, install pytest+pytest-attrib and then rerun with PYTHON_TESTRUNNER=pytest or run make with I_REALLY_WANT_TO_USE_DEPRECATED_NOSETESTS=1)
+endif
 NOSETESTS?=python2.7 -m nose
+PYTHON_TEST_XUNIT_FLAG=--with-xunit --xunit-file
+PYTHON_TEST_ATTRIB_SELETOR_FLAG=-A
+else
+# TODO: for now also run with python 2.7 but we should update to 3.x soon
+NOSETESTS?=python2.7 -m pytest -q
+_PYTEST_INSTALLED_STR=This is pytest
+PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1)
+ifeq ($(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),)
+$(error pytest not installed? Try running `pip2.7 install --user pytest`)
+endif
+ifeq ($(findstring pytest-attrib,$(PYTEST_VERSION_OUTPUT)),)
+$(error pytest-attrib not installed? Try running `pip2.7 install --user pytest-attrib`)
+endif
+PYTHON_TEST_XUNIT_FLAG=--junit-xml
+PYTHON_TEST_ATTRIB_SELETOR_FLAG=-a
+endif
+
 ifeq ($(USING_LLVM_ASSEMBLER),0)
 NOSETESTS:=TEST_ASSEMBLER=gnu $(NOSETESTS)
 endif
@@ -2700,12 +2726,12 @@ fuzz_generate: $(FUZZ_SCRIPT)
 
 # The rather unpleasant side-effect of snorting too much candy floss...
 nose_fuzz: $(SIM) fuzz_run_tests
-	CACHED=0 $(NOSETESTS) --with-xunit \
-	    --xunit-file=nosetests_fuzz.xml $(NOSEFLAGS_UNCACHED) tests/fuzz || true
+	CACHED=0 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz.xml \
+	    $(NOSEFLAGS_UNCACHED) tests/fuzz || true
 
 nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
-	CACHED=1 $(NOSETESTS) --with-xunit \
-	    --xunit-file=nosetests_fuzz_cached.xml $(NOSEFLAGS) tests/fuzz || true
+	CACHED=1 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz_cached.xml \
+	    $(NOSEFLAGS) tests/fuzz || true
 
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
@@ -2733,19 +2759,19 @@ nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 # file each time.
 
 nosetests_uncached.xml: $(CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
-	CACHED=0 $(SIM_NOSETESTS) --with-xunit --xunit-file=nosetests_uncached.xml \
+	CACHED=0 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_uncached.xml \
 	$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	CACHED=1 $(SIM_NOSETESTS) --with-xunit --xunit-file=nosetests_cached.xml \
+	CACHED=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_cached.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	MULTI1=1 $(SIM_NOSETESTS) --with-xunit --xunit-file=nosetests_multi.xml \
+	MULTI1=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_multi.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_cachedmulti.xml: $(CHERI_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
-	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) --with-xunit --xunit-file=nosetests_cachedmulti.xml \
+	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_cachedmulti.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
 altera-nosetest: all $(ALTERA_TEST_LOGS)
@@ -2767,16 +2793,16 @@ hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 nosetests_gxemul: nosetests_gxemul_uncached.xml
 
 nosetests_gxemul_uncached.xml: $(GXEMUL_TEST_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/gxemul CACHED=0 $(NOSETESTS) --with-xunit \
-	    --xunit-file=nosetests_gxemul_uncached.xml $(GXEMUL_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	PYTHONPATH=tools/gxemul CACHED=0 $(NOSETESTS) \
+	    $(PYTHON_TEST_XUNIT_FLAG)=nosetests_gxemul_uncached.xml \
+	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_gxemul_cached: nosetests_gxemul_cached.xml
 
 nosetests_gxemul_cached.xml: $(GXEMUL_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/gxemul CACHED=1 $(NOSETESTS) --with-xunit \
-	    --xunit-file=nosetests_gxemul_cached.xml $(GXEMUL_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	PYTHONPATH=tools/gxemul CACHED=1 $(NOSETESTS) \
+	    $(PYTHON_TEST_XUNIT_FLAG)=nosetests_gxemul_cached.xml \
+	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS) || true
 
 gxemul-build:
 	rm -f -r $(GXEMUL_BINDIR)
@@ -2793,20 +2819,20 @@ nosetests_l3_multi: nosetests_l3_multi.xml
 nosetests_l3_cachedmulti: nosetests_l3_cachedmulti.xml
 
 nosetests_l3.xml: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
-	$(L3_NOSETESTS) --with-xunit --xunit-file=nosetests_l3.xml \
+	$(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3.xml \
 	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
-	CACHED=1 $(L3_NOSETESTS) --with-xunit --xunit-file=nosetests_l3_cached.xml \
+	CACHED=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cached.xml \
 	$(L3_NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
-	MULTI1=1 $(L3_NOSETESTS) --with-xunit --xunit-file=nosetests_l3_multi.xml \
+	MULTI1=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_multi.xml \
 	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
 nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
-	CACHED=1 MULTI1=1 $(L3_NOSETESTS) --with-xunit \
-	--xunit-file=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
+	CACHED=1 MULTI1=1 $(L3_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail: nosetests_sail.xml
@@ -2817,33 +2843,33 @@ nosetests_sail_cheri128: nosetests_sail_cheri128.xml
 nosetests_sail_cheri128_embed: nosetests_sail_cheri128_embed.xml
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) --with-xunit \
-	--xunit-file=$@ $(SAIL_MIPS_NOSEFLAGS) \
+	LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_embed.xml: $(SAIL_MIPS_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_MIPS_EMBED_LOGDIR) $(SAIL_NOSETESTS) --with-xunit \
-	--xunit-file=$@ $(SAIL_MIPS_NOSEFLAGS) \
+	LOGDIR=$(SAIL_MIPS_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI_LOGDIR) $(SAIL_NOSETESTS) --with-xunit \
-	--xunit-file=$@ $(SAIL_CHERI_NOSEFLAGS) \
+	LOGDIR=$(SAIL_CHERI_LOGDIR) $(SAIL_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_cheri_embed.xml: $(SAIL_CHERI_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI_EMBED_LOGDIR) $(SAIL_NOSETESTS) --with-xunit \
-	--xunit-file=$@ $(SAIL_CHERI_NOSEFLAGS) \
+	LOGDIR=$(SAIL_CHERI_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_cheri128.xml: $(SAIL_CHERI128_TEST_LOGS) $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI128_LOGDIR) $(SAIL_NOSETESTS) --with-xunit \
-	--xunit-file=$@ $(SAIL_CHERI128_NOSEFLAGS) \
+	LOGDIR=$(SAIL_CHERI128_LOGDIR) $(SAIL_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI128_EMBED_LOGDIR) $(SAIL_NOSETESTS) --with-xunit \
-	--xunit-file=$@ $(SAIL_CHERI128_NOSEFLAGS) \
+	LOGDIR=$(SAIL_CHERI128_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
             $(TESTDIRS) || true
 
 nosetests_qemu: nosetests_qemu.xml
@@ -2859,8 +2885,8 @@ endif
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) check_valid_qemu FORCE
 	@echo "Nose flags: $(QEMU_NOSEFLAGS)"
-	LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) --with-xunit \
-	--xunit-file=$@ $(QEMU_NOSEFLAGS) \
+	LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(QEMU_NOSEFLAGS) \
 	$(TESTDIRS) || true
 
 xmlcat: xmlcat.c
@@ -2873,8 +2899,8 @@ QEMU_CLANG_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CLANG_TES
 qemu_clang_tests: qemu_clang_tests.xml
 qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
 	PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
-	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) --with-xunit \
-	--xunit-file=$@ -v $(CLANG_TESTDIRS) || true
+	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(CLANG_TESTDIRS) || true
 
 PURECAP_TESTS := $(basename $(TEST_PURECAP_FILES))
 PURECAP_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
@@ -2882,7 +2908,7 @@ PURECAP_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(PURECAP_TESTS)))
 purecap_dumps: $(PURECAP_DUMPS)
 qemu_purecap_tests: qemu_purecap_tests.xml
 qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
-	$(QEMU_NOSETESTS) --with-xunit --xunit-file=$@ -v $(PURECAP_TESTDIRS) || true
+	$(QEMU_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(PURECAP_TESTDIRS) || true
 
 qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
 
