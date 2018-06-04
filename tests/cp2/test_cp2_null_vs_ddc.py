@@ -53,7 +53,7 @@ class test_cp2_null_vs_ddc(BaseBERITestCase):
         self.assertRegisterNotEqual(self.MIPS.t1, 0, "ctoptr ct == 0 should use $ddc")
         if self.MIPS.CHERI_C0_IS_NULL:
             self.assertRegisterEqual(self.MIPS.t2, 0, "ctoptr cb == 0 should use return 0")
-        else
+        else:
             self.assertRegisterEqual(self.MIPS.t2, self.MIPS.c3.offset, "ctoptr cb == 0 should use return $ddc (legacy)")
 
     @attr('capabilities')
