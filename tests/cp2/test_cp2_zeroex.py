@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 #
 # Test that the unsigned load operations zero-extend the value that is loaded.

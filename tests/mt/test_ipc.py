@@ -22,7 +22,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 @attr('mt')
 class test_ipc(BaseBERITestCase):

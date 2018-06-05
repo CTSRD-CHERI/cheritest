@@ -28,7 +28,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 class test_cp0_cache_user(BaseBERITestCase):
 

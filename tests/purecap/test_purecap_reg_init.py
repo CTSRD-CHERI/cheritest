@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 
 # Check that the registers used in purecap tests are initialized to usable values

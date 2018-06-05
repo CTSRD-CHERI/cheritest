@@ -27,7 +27,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 #
 # Test that CMOVN copies capabilities when rt is non-zero, and doesn't copy

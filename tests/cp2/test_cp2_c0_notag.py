@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 #
 # Test a capability instruction that doesn't use c0, when c0.tag is unset

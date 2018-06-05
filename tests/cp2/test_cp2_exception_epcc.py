@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 #
 # Rather complex test to check that EPCC/PCC swapping in exceptions is being

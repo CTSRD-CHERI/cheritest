@@ -29,7 +29,7 @@
 # Test single-precision truncate to long word when the FPU is in 64 bit mode
 #
 
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 

@@ -39,7 +39,7 @@ def export_test(test_name, options):
     if test_name.find('tlb') != -1:
         attrs=attrs + "@attr('tlb')"
     print("""from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 import os
 import tools.sim
 expected_uncached=[""")

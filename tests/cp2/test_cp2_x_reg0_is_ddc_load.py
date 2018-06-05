@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 
 class test_cp2_x_reg0_is_ddc_load(BaseBERITestCase):

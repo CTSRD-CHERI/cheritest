@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 import copy
 
 

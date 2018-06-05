@@ -31,7 +31,28 @@
 # @BERI_LICENSE_HEADER_END@
 #
 from __future__ import print_function
-import nose
+
+try:
+    import nose
+    from beritest_tools import attr
+except ImportError:
+    def attr(*args, **kwargs):
+        def wrap_ob(ob):
+            for name in args:
+                setattr(ob, name, True)
+            for name, value in kwargs.items():
+                setattr(ob, name, value)
+            return ob
+        return wrap_ob
+
+    class nose(object):
+        class tools(object):
+            @staticmethod
+            def nottest(func):
+                """Decorator to mark a function or method as *not* a test
+                """
+                func.__test__ = False
+                return func
 
 import collections
 import functools
@@ -39,11 +60,12 @@ import unittest
 import os
 import os.path
 import inspect
+import pytest
 
 from tools.sim import *
 
-from nose.plugins.attrib import attr
 
+xfail_if = pytest.mark.xfail
 
 def xfail_if(cond):
     '''
@@ -51,7 +73,7 @@ def xfail_if(cond):
     :return:
     '''
     if cond:
-        return nose_xfail_hack
+        return pytest.mark.xfail(cond)
     return lambda x: x
 
 
@@ -88,7 +110,7 @@ def nose_xfail_hack(test):
         try:
             test(*args, **kwargs)
         except Exception:
-            raise nose.SkipTest
+            pytest.xfail()
         else:
             raise AssertionError('Failure expected')
     return inner

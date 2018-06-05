@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 class test_subu_carry(BaseBERITestCase):
     def test_subu_carry_1(self):

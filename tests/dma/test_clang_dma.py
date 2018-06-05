@@ -29,7 +29,7 @@
 from beritest_tools import TestClangBase
 import os
 import re
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 # Parameters from the environment
 # Cached or uncached mode.

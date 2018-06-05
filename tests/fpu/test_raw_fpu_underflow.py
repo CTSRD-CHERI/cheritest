@@ -29,7 +29,7 @@
 # Test that floating point underflow sets a flag in the FP status register
 #
 
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 

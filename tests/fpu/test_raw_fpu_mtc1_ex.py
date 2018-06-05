@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 

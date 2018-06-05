@@ -32,7 +32,7 @@
 
 
 from beritest_tools import BaseICacheBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 #
 # XXX: our test code saves the CP0 config register in self.MIPS.s1 so that

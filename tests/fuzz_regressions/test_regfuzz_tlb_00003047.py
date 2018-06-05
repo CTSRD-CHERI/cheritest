@@ -1,5 +1,5 @@
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 import os
 import tools.sim
 expected_uncached=[
