@@ -1,6 +1,7 @@
 class JobConfig {
 	String testArgs
 	String qemuSuffix
+	String assembler = 'clang'
 	String name = null
 	static Object gitInfo = null
 
@@ -21,7 +22,9 @@ JobConfig getJobParameters() {
 	if (jobName.endsWith('-TEST-pipeline')) {
 		jobName = jobName.substring(0, jobName.indexOf('-TEST-pipeline'))
 	}
+	boolean usesBinutils = false;
 	if (jobName.endsWith('-gnu-binutils')) {
+		usesBinutils = true
 		jobName = jobName.substring(0, jobName.indexOf('-gnu-binutils'))
 	}
 	echo "Computed base job names as $jobName"
@@ -40,15 +43,17 @@ JobConfig getJobParameters() {
 		error("No configuration found for job ${jobName}! Please add one to the Map above")
 	}
 	result.name = jobName
+	if (usesBinutils)
+		result.assembler = 'gnu-binutils'
 	return result as JobConfig
 }
 
 
-def runTests(JobConfig args, String assembler) {
-	if (assembler == 'gnu-binutils') {
+def runTests(JobConfig args) {
+	if (args.assembler == 'gnu-binutils') {
 		copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
 	} else {
-		if (assembler != 'clang') {
+		if (args.assembler != 'clang') {
 			error("Bad compiler: ${args.compiler}")
 		}
 		copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
@@ -57,7 +62,7 @@ def runTests(JobConfig args, String assembler) {
 
 	def prepareAssembler = ''
 	def assemblerTestFlag = ''
-	if (assembler == 'clang') {
+	if (args.assembler == 'clang') {
 		assemblerTestFlag = 'CLANG=1 CHERI_SDK=\$WORKSPACE/cherisdk'
 		prepareAssembler = """
 mkdir -p cherisdk
@@ -71,7 +76,7 @@ export PATH=\$WORKSPACE/binutils/bin:\$PATH"""
 	}
 	// Also test the FPU
 	String commonTestFlag = "TEST_FPU=1 ${assemblerTestFlag} QEMU=\$WORKSPACE/qemu-linux/bin/qemu-system-${args.qemuSuffix}"
-	stage("Build ELFs (${assembler})") {
+	stage("Build ELFs (${args.assembler})") {
 		sh """#!/bin/bash
 set -xe
 cd \$WORKSPACE
@@ -83,7 +88,7 @@ make clean
 make elfs ${commonTestFlag} ${args.testArgs} elfs -j16
 """
 	}
-	stage("Run tests (${assembler})") {
+	stage("Run tests (${args.assembler})") {
 		dir ("ctsrd/cheritest/trunk") {
 			sh """
 rm -f nose*.xml pytest*.xml
@@ -98,12 +103,8 @@ make PYTHON_TESTRUNNER=pytest ${commonTestFlag} ${args.testArgs} nosetests_qemu 
 }
 
 def doBuild(JobConfig args) {
-	String assembler = 'clang'
-	if ('-gnu-binutils-' in args.name) {
-		assembler = 'gnu-binutils'
-	}
 	timeout(90) {
-		runTests(args, assembler)
+		runTests(args)
 	}
 }
 
