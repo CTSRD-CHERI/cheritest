@@ -2648,9 +2648,7 @@ $(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log
 clion/$(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log.symbolized
 	clion $(abspath $<)
 
-# TODO: change the default to pytest
-#PYTHON_TESTRUNNER?=pytest
-PYTHON_TESTRUNNER?=nosetests
+PYTHON_TESTRUNNER?=pytest
 ifeq ($(PYTHON_TESTRUNNER),nosetests)
 ifeq ($(I_REALLY_WANT_TO_USE_DEPRECATED_NOSETESTS), 1)
 $(info Running tests with deprecated nosetests)
@@ -2662,14 +2660,14 @@ PYTHON_TEST_XUNIT_FLAG=--with-xunit --xunit-file
 PYTHON_TEST_ATTRIB_SELETOR_FLAG=-A
 else
 # TODO: for now also run with python 2.7 but we should update to 3.x soon
-NOSETESTS?=python2.7 -m pytest -q
+NOSETESTS?=python3 -m pytest -q
 _PYTEST_INSTALLED_STR=This is pytest
 PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1)
 ifeq ($(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),)
-$(error pytest not installed? Try running `pip2.7 install --user pytest`)
+$(error pytest not installed? Try running `pip3 install --user pytest`)
 endif
 ifeq ($(findstring pytest-attrib,$(PYTEST_VERSION_OUTPUT)),)
-$(error pytest-attrib not installed? Try running `pip2.7 install --user pytest-attrib`)
+$(error pytest-attrib not installed? Try running `pip3 install --user pytest-attrib`)
 endif
 PYTHON_TEST_XUNIT_FLAG=--junit-xml
 PYTHON_TEST_ATTRIB_SELETOR_FLAG=-a
