@@ -53,7 +53,7 @@ def runTests(JobConfig args, String assembler) {
 		}
 		copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
 	}
-	copyArtifacts filter: 'qemu-linux/**', projectName: 'qemu', selector: lastSuccessful()
+	copyArtifacts filter: 'qemu-linux/**', projectName: 'qemu/qemu-cheri', selector: lastSuccessful()
 
 	def prepareAssembler = ''
 	def assemblerTestFlag = ''
@@ -145,7 +145,7 @@ def cheriHardwareTest() {
 	node('bluespec') {
 		echo "Computing job parameters for ${env.JOB_NAME}"
 		JobConfig args = getJobParameters()
-		echo "Found job config: BUILD_ARGS: '${args.buildArgs}'\nTEST_ARGS: '${args.testArgs}'"
+		echo "Found job config: QEMU: '${args.qemuSuffix}'\nTEST_ARGS: '${args.testArgs}'"
 		stage('Checkout') {
 			// dir('ctsrd/cheritest/trunk') { git url: 'git@github.com:CTSRD-CHERI/cheritest.git', credentialsId: 'cheritest_key', branch: 'master'}
 			dir('ctsrd/cheritest/trunk') {
