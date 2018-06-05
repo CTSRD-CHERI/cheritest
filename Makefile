@@ -1554,7 +1554,7 @@ and not pic		\
 and not mips_overflow 	\
 and not dma		\
 and not dmaclang	\
-and not statcounters	\
+and not beri_statcounters	\
 and not qemu_only	\
 "
 
@@ -1587,7 +1587,7 @@ and not watch \
 and not deterministic_random \
 and not noextendedtlb \
 and not csettype \
-and not statcounters \
+and not beri_statcounters \
 and not tlb_read_uninitialized \
 and not qemu_only
 
@@ -1700,7 +1700,7 @@ and not watch \
 and not deterministic_random \
 and not extendedtlb \
 and not csettype \
-and not statcounters \
+and not beri_statcounters \
 and not float \
 and not pic \
 and not mt \
@@ -1866,6 +1866,8 @@ ifeq ($(PERM_SIZE),15)
 QEMU_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
 endif
 QEMU_NOSEPRED+=and beri_statcounters != 'icount'
+QEMU_NOSEPRED+=and beri_statcounters != 'mem'
+QEMU_NOSEPRED+=and beri_statcounters != 'cache'
 # QEMU_NOSEPRED+=and not beri_statcounters
 
 # TODO: does the hardware allow unaligned cll*/csc*?
@@ -2005,7 +2007,7 @@ ifneq ($(MT),1)
 NOSEPRED+=and not mt
 endif
 ifneq ($(STATCOUNTERS),1)
-NOSEPRED+=and not statcounters
+NOSEPRED+=and not beri_statcounters
 endif
 ifdef CHERI_MICRO
 NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch

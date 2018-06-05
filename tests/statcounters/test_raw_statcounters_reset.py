@@ -30,7 +30,7 @@ from beritest_tools import attr
 
 class test_raw_statcounters_reset(BaseBERITestCase):
 
-    @attr('statcounters')
+    @attr(beri_statcounters='mem')
     def test_raw_statcounters_reset_1(self):
         '''Test that reseting the stat counters actually resets their values'''
         self.assertRegisterMaskEqual(self.MIPS.v0, 0x3fffffffffffff, 0x3fffffffffffff, "stat counters not reset correctly")

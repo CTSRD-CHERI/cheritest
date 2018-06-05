@@ -30,7 +30,7 @@ from beritest_tools import attr
 
 class test_raw_statcounters_dcache(BaseBERITestCase):
 
-    @attr('statcounters')
+    @attr(beri_statcounters='cache')
     def test_raw_statcounters_dcache_1(self):
         '''Test that resetting the stat counters, loading a dword and querying the dcache miss counter returns 1'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "dcache read miss counter corrupted")
