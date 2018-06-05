@@ -69,8 +69,8 @@ tar xjf ${args.binutilsArchiveName}
 export PATH=\$WORKSPACE/binutils/bin:\$PATH"""
 		assemblerTestFlag = 'CLANG=0'
 	}
-
-	String commonTestFlag = "${assemblerTestFlag} QEMU=\$WORKSPACE/qemu-linux/bin/qemu-system-${args.qemuSuffix}"
+	// Also test the FPU
+	String commonTestFlag = "TEST_FPU=1 ${assemblerTestFlag} QEMU=\$WORKSPACE/qemu-linux/bin/qemu-system-${args.qemuSuffix}"
 	stage("Build ELFs (${assembler})") {
 		sh """#!/bin/bash
 set -xe
@@ -87,6 +87,8 @@ make elfs ${commonTestFlag} ${args.testArgs} elfs -j16
 		dir ("ctsrd/cheritest/trunk") {
 			sh """
 rm -f nose*.xml pytest*.xml
+ulimit -f 10485760
+ulimit -c 0
 make PYTHON_TESTRUNNER=pytest ${commonTestFlag} ${args.testArgs} nosetests_qemu -j16
 """
 		}
