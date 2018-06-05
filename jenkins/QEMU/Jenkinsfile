@@ -47,13 +47,13 @@ JobConfig getJobParameters() {
 def runTests(JobConfig args, String assembler) {
 	if (assembler == 'gnu-binutils') {
 		copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
-	} if (assembler != 'clang') {
-		error("Bad compiler: ${args.compiler")
+	} else {
+		if (assembler != 'clang') {
+			error("Bad compiler: ${args.compiler}")
+		}
 		copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
 	}
 	copyArtifacts filter: 'qemu-linux/**', projectName: 'qemu', selector: lastSuccessful()
-	// Select the right QEMU binary
-	if (args.
 
 	def prepareAssembler = ''
 	def assemblerTestFlag = ''
@@ -84,9 +84,12 @@ make elfs ${commonTestFlag} ${args.testArgs} elfs -j16
 """
 	}
 	stage("Run tests (${assembler})") {
+		dir ("ctsrd/cheritest/trunk") {
+			sh """
 rm -f nose*.xml pytest*.xml
 make PYTHON_TESTRUNNER=pytest ${commonTestFlag} ${args.testArgs} nosetests_qemu -j16
 """
+		}
 		// JUnit Results
 		junit 'ctsrd/cheritest/trunk/nosetests_*.xml'
 	}
