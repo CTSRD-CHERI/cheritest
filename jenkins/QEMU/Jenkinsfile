@@ -30,9 +30,9 @@ JobConfig getJobParameters() {
 				  qemuSuffix: 'cheri256'],
 		"QEMU-CHERI128": [testArgs: 'CAP_SIZE=256 CAP_PRECISE=1 PERM_SIZE=31 TEST_CP2=1',
 				  qemuSuffix: 'cheri128'],
-		"QEMU-CHERI128-MAGIC": [testArgs: 'CAP_SIZE=256 CAP_PRECISE=1 PERM_SIZE=31 TEST_CP2=1'],
+		"QEMU-CHERI128-MAGIC": [testArgs: 'CAP_SIZE=256 CAP_PRECISE=1 PERM_SIZE=31 TEST_CP2=1',
 					qemuSuffix: 'cheri128magic'],
-		"QEMU-MIPS64": [testArgs: 'CAP_SIZE=0 CAP_PRECISE=0 PERM_SIZE=0 TEST_CP2=0'],
+		"QEMU-MIPS64": [testArgs: 'CAP_SIZE=0 CAP_PRECISE=0 PERM_SIZE=0 TEST_CP2=0',
 				qemuSuffix: 'mips64'],
 	]
 	Map result = config.get(jobName)
