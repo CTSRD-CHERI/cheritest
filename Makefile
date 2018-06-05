@@ -2924,7 +2924,7 @@ CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
 #cp2_dumps: $(CP2_DUMPS)
 pytest_qemu_cp2_tests: pytest_qemu_cp2_tests.xml
 pytest_qemu_cp2_tests.xml: $(CP2_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -q -a "$(QEMU_NOSEPRED)" $(TESTDIR)/cp2 || true
+	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -a "$(QEMU_NOSEPRED)" $(TESTDIR)/cp2 || true
 
 pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
 pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
@@ -2933,7 +2933,7 @@ pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYT
 pytest_qemu: pytest_qemu.xml
 pytest_qemu.xml: $(QEMU_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
 	@echo "Nose preds: $(QEMU_NOSEPRED)"
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -q -a "$(QEMU_NOSEPRED)" $(TESTDIRS) || true
+	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -a "$(QEMU_NOSEPRED)" $(TESTDIRS) || true
 
 QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
