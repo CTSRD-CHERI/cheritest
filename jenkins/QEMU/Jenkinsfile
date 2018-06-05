@@ -1,0 +1,211 @@
+class JobConfig {
+	String testArgs
+	String qemuSuffix
+	String name = null
+	static Object gitInfo = null
+
+	// TODO: for some reason I can't make these globals, so let's just put them here
+	static String clangArchiveName = 'cheri-multi-master-clang-llvm.tar.xz'
+	static String clangJobName = 'CLANG-LLVM-master/CPU=cheri-multi,label=linux/'
+	static String binutilsArchiveName = 'binutils.tar.bz2'
+	static String binutilsJobName = 'CHERI-binutils/label=linux/'
+
+}
+
+// TODO: instead of this we could also have a Jenkinsfile per config and use JobDSL to generate one job per jenkinsfile
+JobConfig getJobParameters() {
+	String jobName = env.JOB_NAME
+	if (jobName.contains('/')) {
+		jobName = jobName.substring(0, jobName.indexOf('/'))
+	}
+	if (jobName.endsWith('-pipeline')) {
+		jobName = jobName.substring(0, jobName.indexOf('-pipeline'))
+	}
+	if (jobName.endsWith('-gnu-binutils')) {
+		jobName = jobName.substring(0, jobName.indexOf('-gnu-binutils'))
+	}
+"""
+if [[ ${CPU} = "cheri" ]]; then
+    CAP_SIZE=256
+    CAP_PRECISE=1
+    PERM_SIZE=31
+    KCPU=cheri
+elif [[ ${CPU} = "cheri128" ]]; then
+    CAP_SIZE=128
+    CAP_PRECISE=0
+    PERM_SIZE=19
+    KCPU=cheri128
+elif [[ ${CPU} = "cherimagic128" ]]; then
+    CAP_SIZE=128
+    CAP_PRECISE=1
+    PERM_SIZE=19
+    KCPU=cheri128
+elif [[ ${CPU} = "mips64" ]]; then
+    CAP_SIZE=0
+    CAP_PRECISE=0
+    PERM_SIZE=0
+    KCPU=mips64
+    export TEST_CP2=0
+    export QEMU=${WORKSPACE}/qemu-cheri-install/bin/qemu-system-mips64
+fi
+"""
+	echo "Computed base job names as $jobName"
+	Map config = [
+		"QEMU-CHERI256": [testArgs: 'CAP_SIZE=256 CAP_PRECISE=1 PERM_SIZE=31 TEST_CP2=1',
+				  qemuSuffix: 'cheri256'],
+		"QEMU-CHERI128": [testArgs: 'CAP_SIZE=256 CAP_PRECISE=1 PERM_SIZE=31 TEST_CP2=1',
+				  qemuSuffix: 'cheri128'],
+		"QEMU-CHERI128-MAGIC": [testArgs: 'CAP_SIZE=256 CAP_PRECISE=1 PERM_SIZE=31 TEST_CP2=1'],
+					qemuSuffix: 'cheri128magic'],
+		"QEMU-MIPS64": [testArgs: 'CAP_SIZE=0 CAP_PRECISE=0 PERM_SIZE=0 TEST_CP2=0'],
+				qemuSuffix: 'mips64'],
+	]
+	Map result = config.get(jobName)
+	if (!result) {
+		error("No configuration found for job ${jobName}! Please add one to the Map above")
+	}
+	result.name = jobName
+	return result as JobConfig
+}
+
+
+def runTests(JobConfig args, String assembler) {
+	if (assembler == 'gnu-binutils') {
+		copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
+	} if (assembler != 'clang') {
+		error("Bad compiler: ${args.compiler")
+		copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
+	}
+	copyArtifacts filter: 'qemu-linux/**', projectName: 'qemu', selector: lastSuccessful()
+	// Select the right QEMU binary
+	if (args.
+
+	def prepareAssembler = ''
+	def assemblerTestFlag = ''
+	if (assembler == 'clang') {
+		assemblerTestFlag = 'CLANG=1 CHERI_SDK=\$WORKSPACE/cherisdk'
+		prepareAssembler = """
+mkdir -p cherisdk
+tar Jxf ${args.clangArchiveName} --strip-components 1 -C cherisdk
+export CHERI_SDK=\$WORKSPACE/cherisdk"""
+	} else {
+		prepareAssembler = """
+tar xjf ${args.binutilsArchiveName}
+export PATH=\$WORKSPACE/binutils/bin:\$PATH"""
+		assemblerTestFlag = 'CLANG=0'
+	}
+
+	String commonTestFlag = "${assemblerTestFlag} QEMU=\$WORKSPACE/qemu-linux/bin/qemu-system-${args.qemuSuffix}"
+	stage("Build ELFs (${assembler})") {
+		sh """#!/bin/bash
+set -xe
+cd \$WORKSPACE
+${prepareAssembler}
+
+cd \$WORKSPACE/ctsrd/cheritest/trunk
+# always do a full clean in case the linker/compiler has changed
+make clean
+make elfs ${commonTestFlag} ${args.testArgs} elfs -j16
+"""
+	}
+	stage("Run tests (${assembler})") {
+rm -f nose*.xml pytest*.xml
+make PYTHON_TESTRUNNER=pytest ${commonTestFlag} ${args.testArgs} nosetests_qemu -j16
+"""
+		// JUnit Results
+		junit 'ctsrd/cheritest/trunk/nosetests_*.xml'
+	}
+}
+
+def doBuild(JobConfig args) {
+	String assembler = 'clang'
+	if ('-gnu-binutils-' in args.name) {
+		assembler = 'gnu-binutils'
+	}
+	timeout(90) {
+		runTests(args, assembler)
+	}
+}
+
+// FIXME: share more of this code:
+
+
+def setGitHubStatusBasedOnCurrentResult(JobConfig args) {
+	def message = "${env.JOB_NAME}: ${currentBuild.description}"
+	def githubCommitStatusContext = "jenkins/${env.JOB_NAME}"
+	Map githubNotifierOptions = [
+			$class: 'GitHubCommitStatusSetter',
+			errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+			// errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+			contextSource: [$class: "ManuallyEnteredCommitContextSource", context: githubCommitStatusContext],
+			/*statusResultSource: [
+					$class: 'ConditionalStatusResultSource',
+					results: [
+							[$class: 'BetterThanOrEqualBuildResult', result: 'SUCCESS', state: 'SUCCESS', message: message],
+							[$class: 'BetterThanOrEqualBuildResult', result: 'UNSTABLE', state: 'FAILURE', message: message],
+							[$class: 'BetterThanOrEqualBuildResult', result: 'FAILURE', state: 'FAILURE', message: message],
+							[$class: 'AnyBuildResult', message: 'Something went wrong', state: 'ERROR']
+					]
+			]*/
+			// statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: 'SUCCESS']] ]
+	]
+	def gitHubCommitSHA = JobConfig.gitInfo?.GIT_COMMIT
+	def gitHubRepoURL = JobConfig.gitInfo?.GIT_URL
+	if (gitHubCommitSHA)
+		githubNotifierOptions['commitShaSource'] = [$class: "ManuallyEnteredShaSource", sha: gitHubCommitSHA]
+	if (gitHubRepoURL) {
+		if (gitHubRepoURL.endsWith('.git')) {
+			gitHubRepoURL = gitHubRepoURL.substring(0, gitHubRepoURL.indexOf('.git'))
+		}
+		githubNotifierOptions['reposSource'] = [$class: "ManuallyEnteredRepositorySource", url: gitHubRepoURL]
+	}
+	echo("${githubNotifierOptions}")
+	step(githubNotifierOptions)
+}
+
+def cheriHardwareTest() {
+	node('bluespec') {
+		echo "Computing job parameters for ${env.JOB_NAME}"
+		JobConfig args = getJobParameters()
+		echo "Found job config: BUILD_ARGS: '${args.buildArgs}'\nTEST_ARGS: '${args.testArgs}'"
+		stage('Checkout') {
+			// dir('ctsrd/cheritest/trunk') { git url: 'git@github.com:CTSRD-CHERI/cheritest.git', credentialsId: 'cheritest_key', branch: 'master'}
+			dir('ctsrd/cheritest/trunk') {
+				args.gitInfo = checkout scm  // get the sources from git
+			}
+		}
+		try {
+			setGitHubStatusBasedOnCurrentResult(args) // set PENDING status
+			doBuild(args)
+		} finally {
+			echo("result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
+			// it seems like the currentBuild.Result will always be null (PENDING) unless I set it explicitly here
+			if (currentBuild.result == null)
+				currentBuild.result = currentBuild.currentResult
+			echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
+			setGitHubStatusBasedOnCurrentResult(args)
+		}
+	}
+}
+
+try {
+	properties([
+			pipelineTriggers([
+					[$class: "GitHubPushTrigger"]
+			]),
+			disableConcurrentBuilds(),
+			[$class: 'CopyArtifactPermissionProperty', projectNames: '*'],
+	])
+	cheriHardwareTest()
+} catch (e) {
+	error(e.toString())
+	/* emailext body: '$DEFAULT_CONTENT',
+		recipientProviders: [
+			[$class: 'CulpritsRecipientProvider'],
+			[$class: 'DevelopersRecipientProvider'],
+			[$class: 'RequesterRecipientProvider']
+		],
+		replyTo: '$DEFAULT_REPLYTO',
+		subject: '$DEFAULT_SUBJECT',
+		to: '$DEFAULT_RECIPIENTS' */
+}
