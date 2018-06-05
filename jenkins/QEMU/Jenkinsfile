@@ -18,37 +18,12 @@ JobConfig getJobParameters() {
 	if (jobName.contains('/')) {
 		jobName = jobName.substring(0, jobName.indexOf('/'))
 	}
-	if (jobName.endsWith('-pipeline')) {
-		jobName = jobName.substring(0, jobName.indexOf('-pipeline'))
+	if (jobName.endsWith('-TEST-pipeline')) {
+		jobName = jobName.substring(0, jobName.indexOf('-TEST-pipeline'))
 	}
 	if (jobName.endsWith('-gnu-binutils')) {
 		jobName = jobName.substring(0, jobName.indexOf('-gnu-binutils'))
 	}
-"""
-if [[ ${CPU} = "cheri" ]]; then
-    CAP_SIZE=256
-    CAP_PRECISE=1
-    PERM_SIZE=31
-    KCPU=cheri
-elif [[ ${CPU} = "cheri128" ]]; then
-    CAP_SIZE=128
-    CAP_PRECISE=0
-    PERM_SIZE=19
-    KCPU=cheri128
-elif [[ ${CPU} = "cherimagic128" ]]; then
-    CAP_SIZE=128
-    CAP_PRECISE=1
-    PERM_SIZE=19
-    KCPU=cheri128
-elif [[ ${CPU} = "mips64" ]]; then
-    CAP_SIZE=0
-    CAP_PRECISE=0
-    PERM_SIZE=0
-    KCPU=mips64
-    export TEST_CP2=0
-    export QEMU=${WORKSPACE}/qemu-cheri-install/bin/qemu-system-mips64
-fi
-"""
 	echo "Computed base job names as $jobName"
 	Map config = [
 		"QEMU-CHERI256": [testArgs: 'CAP_SIZE=256 CAP_PRECISE=1 PERM_SIZE=31 TEST_CP2=1',
