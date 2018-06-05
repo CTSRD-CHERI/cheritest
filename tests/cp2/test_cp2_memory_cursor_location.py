@@ -28,7 +28,6 @@
 
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
-import nose
 
 #
 # Test that the capability cursor is bytes 8-15 in memory for all implementations.
@@ -110,7 +109,6 @@ class test_cp2_memory_cursor_location(BaseBERITestCase):
     def test_final_raw_bytes_256(self):
         self.__check_in_memory_rep(0x5678, "after cscc", 32, self.MIPS.s4, self.MIPS.s5, self.MIPS.s6, self.MIPS.s7)
 
-    @nose.tools.nottest
     def __check_in_memory_rep(self, cursor, msg_prefix, cheribytes, r1, r2, r3, r4):
         self.assertRegisterEqual(self.MIPS.s0, cheribytes, "bounds of load should be " + str(cheribytes))
         if cheribytes == 8:

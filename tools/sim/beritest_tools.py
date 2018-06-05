@@ -45,15 +45,6 @@ except ImportError:
             return ob
         return wrap_ob
 
-    class nose(object):
-        class tools(object):
-            @staticmethod
-            def nottest(func):
-                """Decorator to mark a function or method as *not* a test
-                """
-                func.__test__ = False
-                return func
-
 import collections
 import functools
 import unittest
@@ -140,7 +131,6 @@ class BaseBERITestCase(unittest.TestCase):
         self.unexpected_exception = False
         self._SETUP_EXCEPTION = None
 
-    @nose.tools.nottest
     def _do_setup(self):
         '''Parse the log file and instantiate MIPS'''
         assert self.cached is not None
@@ -577,7 +567,6 @@ class BaseICacheBERITestCase(BaseBERITestCase):
 
 class TestClangBase(object):
     @staticmethod
-    @nose.tools.nottest
     def _get_exception_message(sim_status, exit_code, test_file):
         line_number = sim_status[4]  # load the assertion line number from $a0
         exception_count = sim_status[26]  # exception count should be in $k0
@@ -615,7 +604,6 @@ class TestClangBase(object):
         return exception_message
 
     @staticmethod
-    @nose.tools.nottest
     def verify_clang_test(sim_log, test_name, test_file):
         sim_status = MipsStatus(sim_log)
         exit_code = sim_status[2]  # load the assertion failure kind from $v0
@@ -625,7 +613,6 @@ class TestClangBase(object):
         assert False, exception_message
 
     @staticmethod
-    @nose.tools.nottest
     def get_line(test_file, line_number):
         with open(os.path.join(test_file)) as src_file:
             return src_file.readlines()[line_number - 1].strip()
