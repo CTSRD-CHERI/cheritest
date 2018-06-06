@@ -1552,7 +1552,6 @@ mt              \
 pic		\
 mips_overflow 	\
 dma		\
-dmaclang	\
 beri_statcounters	\
 "
 
@@ -1599,11 +1598,11 @@ COMMON_UNSUPPORTED_FEATURES+=trap_unaligned_ld_st alignex
 endif
 
 ifneq ($(CLANG),1)
-COMMON_UNSUPPORTED_FEATURES+=clang dmaclang
+COMMON_UNSUPPORTED_FEATURES+=clang
 endif
 
 ifneq ($(DMA),1)
-COMMON_UNSUPPORTED_FEATURES+=dma dmaclang
+COMMON_UNSUPPORTED_FEATURES+=dma
 endif
 
 ifneq ($(MULTI),1)
@@ -1633,7 +1632,6 @@ beriinitial \
 berisyncistep \
 counterdev \
 dma \
-dmaclang \
 dumpicache \
 ignorebadex \
 invalidateL2 \
@@ -1681,7 +1679,6 @@ beriinitial \
 berisyncistep \
 counterdev \
 dma \
-dmaclang \
 dumpicache \
 ignorebadex \
 invalidateL2 \
@@ -1730,7 +1727,6 @@ gxemultlb \
 counterdev \
 deterministic_random \
 dma \
-dmaclang \
 dumpicache \
 extendedtlb \
 floatfirextended \
