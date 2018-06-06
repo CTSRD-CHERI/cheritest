@@ -43,9 +43,6 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 LOG_DIR = pytest.config.option.LOGDIR
 
-
-@attr('clang')
-@attr('capabilities')
 def check_answer(test_name, test_file):
     if MULTI and CACHED:
         suffix = "_cachedmulti"
@@ -73,6 +70,8 @@ def _get_tests_function(test_name):
 
 
 def get_all_tests():
+    if ONLY_TEST:
+        return ONLY_TEST
     return filter(lambda f: TEST_FILE_RE.match(f), os.listdir(TEST_DIR))
 
 # TODO: ids=idfn
