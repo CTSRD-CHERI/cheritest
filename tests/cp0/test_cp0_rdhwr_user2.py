@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import attr, xfail_on
 
 class test_cp0_rdhwr_user2(BaseBERITestCase):
 
@@ -42,7 +42,7 @@ class test_cp0_rdhwr_user2(BaseBERITestCase):
     @attr('tlb')
     @attr('rdhwr')
     @attr('usercount')
-    @attr('qemu_skip')
+    @attr('count_register_is_icount')
     def test_cp0_rdhwr_user2_count(self):
         '''Test that the user count register can be read from user space'''
         self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a3-90, self.MIPS.a3,
@@ -51,7 +51,7 @@ class test_cp0_rdhwr_user2(BaseBERITestCase):
     @attr('tlb')
     @attr('rdhwr')
     @attr('usercount')
-    @attr('qemu_only')
+    @attr('count_register_is_time')
     def test_cp0_rdhwr_user2_count_qemu(self):
         '''Test that the user count register can be read from user space'''
         self.assertRegisterInRange(self.MIPS.a3, self.MIPS.a2, self.MIPS.a2 + 80000,

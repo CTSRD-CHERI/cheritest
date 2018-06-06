@@ -32,19 +32,6 @@
 #
 from __future__ import print_function
 
-try:
-    import nose
-    from beritest_tools import attr
-except ImportError:
-    def attr(*args, **kwargs):
-        def wrap_ob(ob):
-            for name in args:
-                setattr(ob, name, True)
-            for name, value in kwargs.items():
-                setattr(ob, name, value)
-            return ob
-        return wrap_ob
-
 import collections
 import functools
 import unittest
@@ -53,19 +40,12 @@ import os.path
 import inspect
 import pytest
 
+try:
+    import typing
+except ImportError:
+    typing = {}
+
 from tools.sim import *
-
-
-xfail_if = pytest.mark.xfail
-
-def xfail_if(cond):
-    '''
-    :param cond: whether this test is expected to fail
-    :return:
-    '''
-    if cond:
-        return pytest.mark.xfail(cond)
-    return lambda x: x
 
 
 def xfail_on(var):
@@ -75,7 +55,9 @@ def xfail_on(var):
     :param var: the machine where this test is expected to fail (e.g. "qemu"
     :return:
     '''
-    return xfail_if(os.environ.get("TEST_MACHINE", "").lower() == var.lower())
+    return pytest.mark.xfail(pytest.config.option.TEST_MACHINE.lower() == var.lower(),
+                             reason="Not supported on " + pytest.config.option.TEST_MACHINE.lower())
+
 
 def xfail_gnu_binutils(test):
     '''
@@ -87,24 +69,30 @@ def xfail_gnu_binutils(test):
     if isinstance(test, type):
         for k, v in vars(test).items():
             if k.startswith("test_"):
-                setattr(test, k, nose_xfail_hack(test))
+                setattr(test, k, pytest.mark.xfail("Not support with GNU binutils")(v))
         return test
     else:
         assert callable(test)
-        return nose_xfail_hack(test)
+        return pytest.mark.xfail("Not support with GNU binutils")
 
 
-# https://stackoverflow.com/questions/9613932/nose-plugin-for-expected-failures
-def nose_xfail_hack(test):
-    @functools.wraps(test)
-    def inner(*args, **kwargs):
-        try:
-            test(*args, **kwargs)
-        except Exception:
-            pytest.xfail()
-        else:
-            raise AssertionError('Failure expected')
-    return inner
+# TODO: use an enum to ensure only known features are added as @attr
+
+# This contains all the unsupported features (e.g. "capabilies", "float64", etc.)
+
+def attr(*args, **kwargs):
+    def wrap_test_fn(ob):
+        return ob
+
+    # import pprint
+    # pprint.pprint(vars(pytest.config.option))
+    for feature in args:
+        if feature in pytest.config.CHERITEST_UNSUPPORTED_FEATURES:
+            return pytest.mark.skip("Feature '" + feature + "' is not supported!")
+    for feature, value in kwargs.items():
+        if value in pytest.config.CHERITEST_UNSUPPORTED_FEATURE_IF.get(feature, list()):
+            return pytest.mark.skip("Feature '" + feature + "' value '" + value + "' is not supported!")
+    return wrap_test_fn
 
 
 class BaseBERITestCase(unittest.TestCase):
@@ -335,7 +323,7 @@ class BaseBERITestCase(unittest.TestCase):
 
     @property
     def max_permissions(self):
-        perm_size = int(os.environ.get("PERM_SIZE", "31"))
+        perm_size = int(pytest.config.option.PERM_SIZE)
         if perm_size == 31:
             return 0x7fffffff
         elif perm_size == 23:

@@ -116,7 +116,6 @@ FUZZ_DMA_ONLY?=0
 # fuzz tests are currently broken
 NOFUZZ?=1
 NOFUZZR?=1
-TEST_CAPHWR?=1
 CAP_SIZE?=256
 
 # CHECK that CAP_SIZE is a sensible value
@@ -1506,299 +1505,258 @@ endif
 # cheri - gxemul is simply not CHERI
 #
 GXEMUL_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "   \
-not allow_unaligned 	\
-and not llsc		\
-and not cache           \
-and not bev1            \
-and not trapi           \
-and not counterdev      \
-and not watch           \
-and not capabilities    \
-and not clang           \
-and not beri            \
-and not dumpicache	\
-and not einstr		\
-and not jump_unaligned	\
-and not nofloat         \
-and not floatabs2008	\
-and not floatpaired     \
-and not floatindexed    \
-and not floatcmove      \
-and not floatfccr       \
-and not floatfenr       \
-and not floatfexr       \
-and not floatrecip      \
-and not floatrsqrt      \
-and not float64         \
-and not floatexception  \
-and not floatechonan    \
-and not floatmadd	\
-and not smalltlb        \
-and not bigtlb          \
-and not beri1tlb	\
-and not beri2tlb	\
-and not beri1cache	\
-and not beri1oldcache	\
-and not beri2cache	\
-and not extendedtlb	\
-and not enablelargetlb  \
-and not tlbcheck	\
-and not invalidateL2    \
-and not rdhwr           \
-and not config2		\
-and not config3         \
-and not config5		\
-and not userlocal       \
-and not mt              \
-and not pic		\
-and not mips_overflow 	\
-and not dma		\
-and not dmaclang	\
-and not beri_statcounters	\
-and not qemu_only	\
+allow_unaligned 	\
+llsc		\
+cache           \
+bev1            \
+trapi           \
+counterdev      \
+watch           \
+capabilities    \
+clang           \
+beri            \
+dumpicache	\
+einstr		\
+jump_unaligned	\
+nofloat         \
+floatabs2008	\
+floatpaired     \
+floatindexed    \
+floatcmove      \
+floatfccr       \
+floatfenr       \
+floatfexr       \
+floatrecip      \
+floatrsqrt      \
+float64         \
+floatexception  \
+floatechonan    \
+floatmadd	\
+smalltlb        \
+bigtlb          \
+beri1tlb	\
+beri2tlb	\
+beri1cache	\
+beri1oldcache	\
+beri2cache	\
+extendedtlb	\
+enablelargetlb  \
+tlbcheck	\
+invalidateL2    \
+rdhwr           \
+config2		\
+config3         \
+config5		\
+userlocal       \
+mt              \
+pic		\
+mips_overflow 	\
+dma		\
+dmaclang	\
+beri_statcounters	\
 "
 
-L3_NOSEPRED=\
-not newisa \
-and not allow_unaligned \
-and not beri \
-and not beriinitial \
-and not berisyncistep \
-and not counterdev \
-and not dma \
-and not dmaclang \
-and not dumpicache \
-and not ignorebadex \
-and not invalidateL2 \
-and not loadcachetag \
-and not llscnotmatching \
-and not llscspan \
-and not llscnoalias \
-and not llscuncached \
-and not mtc0signex \
-and not mul_hilo_unchanged \
-and not swi \
-and not smalltlb \
-and not beri2tlb \
-and not gxemultlb \
-and not beri2cache \
-and not beri1oldcache \
-and not watch \
-and not deterministic_random \
-and not noextendedtlb \
-and not csettype \
-and not beri_statcounters \
-and not tlb_read_uninitialized \
-and not qemu_only
-
-ifeq ($(TEST_FPU),1)
-L3_NOSEPRED+=\
-and not nofloat \
-and not float32 \
-and not floatpaired \
-and not floatfexr \
-and not floatfenr \
-and not floatflags \
-and not floatrecip \
-and not floatrsqrt \
-and not floatexception \
-and not floatechonan \
-and not float_round_upwards
-else
-L3_NOSEPRED+=and not float
-endif
-
-ifneq ($(TEST_CP2),1)
-L3_NOSEPRED+=and not capabilities and not clang
-else
-L3_NOSEPRED+=and not ccall_hw_1 and not ccall_hw_2
-endif
-
-ifneq ($(CLANG),1)
-L3_NOSEPRED+=and not clang
-endif
-
-ifneq ($(MULTI),1)
-L3_NOSEPRED+=and not multicore
-endif
-
-ifneq ($(MT),1)
-L3_NOSEPRED+=and not mt
-endif
-
+COMMON_UNSUPPORTED_FEATURES?=
 ifneq ($(CAP_SIZE),256)
-L3_NOSEPRED+=and not cap256 and not beri1cache
+COMMON_UNSUPPORTED_FEATURES+=cap256
 ifeq ($(CAP_PRECISE),1)
-L3_NOSEPRED+=and not cap_copy_as_data
+COMMON_UNSUPPORTED_FEATURES+=cap_copy_as_data
 else
-L3_NOSEPRED+=and not cap_null_length
+COMMON_UNSUPPORTED_FEATURES+=cap_null_length
 endif
 endif
 
 ifneq ($(CAP_SIZE),128)
-L3_NOSEPRED+=and not cap128
+COMMON_UNSUPPORTED_FEATURES+=cap128
 endif
 
 ifneq ($(CAP_SIZE),64)
-L3_NOSEPRED+=and not cap64
+COMMON_UNSUPPORTED_FEATURES+=cap64
+endif
+
+ifeq ($(CAP_PRECISE),1)
+COMMON_UNSUPPORTED_FEATURES+=cap_imprecise
+else
+COMMON_UNSUPPORTED_FEATURES+=cap_precise
 endif
 
 ifeq ($(PERM_SIZE),23)
-L3_NOSEPRED+=and not cap_perm_31
+COMMON_UNSUPPORTED_FEATURES+=cap_perm_31
 endif
 
 ifeq ($(PERM_SIZE),19)
-L3_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
+COMMON_UNSUPPORTED_FEATURES+=cap_perm_31 cap_perm_23
 endif
 
 ifeq ($(PERM_SIZE),15)
-L3_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
-endif
-
-ifeq ($(CAP_PRECISE),1)
-L3_NOSEPRED+=and not cap_imprecise
-else
-L3_NOSEPRED+=and not cap_precise
-endif
-
-ifdef CHERI_MICRO
-L3_NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
-endif
-
-ifeq ($(TEST_CAPHWR),0)
-L3_NOSEPRED+=and not cap_hwregs
-endif
-
-L3_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(L3_NOSEPRED)"
-L3_NOSEFLAGS_UNCACHED=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(L3_NOSEPRED) and not cached"
-
-SAIL_NOSEPRED=\
-not beri \
-and not beriinitial \
-and not berisyncistep \
-and not counterdev \
-and not dma \
-and not dmaclang \
-and not dumpicache \
-and not ignorebadex \
-and not invalidateL2 \
-and not loadcachetag \
-and not llscnotmatching \
-and not llscspan \
-and not llscnoalias \
-and not mtc0signex \
-and not mul_hilo_cleared \
-and not swi \
-and not smalltlb \
-and not beri2tlb \
-and not gxemultlb \
-and not beri1tlb   \
-and not beri1cache \
-and not beri2cache \
-and not beri1oldcache \
-and not watch \
-and not deterministic_random \
-and not extendedtlb \
-and not csettype \
-and not beri_statcounters \
-and not float \
-and not pic \
-and not mt \
-and not einstr \
-and not qemu_only \
-and not no_experimental_clc \
-and not experimental_csc
-
-ifneq ($(CAP_SIZE),256)
-SAIL_NOSEPRED+=and not cap256
-ifeq ($(CAP_PRECISE),1)
-SAIL_NOSEPRED+=and not cap_copy_as_data
-else
-SAIL_NOSEPRED+=and not cap_null_length
-endif
-endif
-
-ifneq ($(CAP_SIZE),128)
-SAIL_NOSEPRED+=and not cap128
-endif
-
-ifneq ($(CAP_SIZE),64)
-SAIL_NOSEPRED+=and not cap64
-endif
-
-ifeq ($(CAP_PRECISE),1)
-SAIL_NOSEPRED+=and not cap_imprecise
-else
-SAIL_NOSEPRED+=and not cap_precise
-endif
-
-ifeq ($(PERM_SIZE),23)
-SAIL_NOSEPRED+=and not cap_perm_31
-endif
-
-ifeq ($(PERM_SIZE),19)
-SAIL_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
-endif
-
-ifeq ($(PERM_SIZE),15)
-SAIL_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
+COMMON_UNSUPPORTED_FEATURES+=cap_perm_31 cap_perm_23
 endif
 
 ifeq ($(ALLOW_UNALIGNED),0)
-SAIL_NOSEPRED+=and not allow_unaligned
+COMMON_UNSUPPORTED_FEATURES+=allow_unaligned
 else
-SAIL_NOSEPRED+=and not trap_unaligned_ld_st and not alignex
+COMMON_UNSUPPORTED_FEATURES+=trap_unaligned_ld_st alignex
 endif
 
 ifneq ($(CLANG),1)
-SAIL_NOSEPRED+=and not clang
+COMMON_UNSUPPORTED_FEATURES+=clang dmaclang
 endif
 
-SAIL_MIPS_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_NOSEPRED) and not capabilities"
-SAIL_CHERI_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_NOSEPRED)"
-SAIL_CHERI128_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_NOSEPRED)"
+ifneq ($(DMA),1)
+COMMON_UNSUPPORTED_FEATURES+=dma dmaclang
+endif
 
-QEMU_NOSEPRED=\
-not beri \
-and not beri1cache \
-and not beri1tlb \
-and not beri2cache \
-and not beri2tlb \
-and not bericcres \
-and not berisyncistep \
-and not bev1ram \
-and not countrate \
-and not gxemultlb \
-and not counterdev \
-and not deterministic_random \
-and not dma \
-and not dmaclang \
-and not dumpicache \
-and not extendedtlb \
-and not floatfirextended \
-and not floatlegacyabs \
-and not float_mov_signex \
-and not float_mtc_signex \
-and not floatnan2008 \
-and not floatpaired \
-and not floatrecipflushesdenorm \
-and not ignorebadex \
-and not invalidateL2 \
-and not lladdr \
-and not llscspan \
-and not loadcachetag \
-and not mt \
-and not mul_hilo_cleared \
-and not nofloat \
-and not pic \
-and not swisync \
-and not tlbcheck \
-and not watch \
-and not csettype \
-and not qemu_skip \
-and not mtc0signex \
-and not no_experimental_clc \
-and not no_experimental_csc
+ifneq ($(MULTI),1)
+COMMON_UNSUPPORTED_FEATURES+=multicore
+endif
+
+ifneq ($(MT),1)
+COMMON_UNSUPPORTED_FEATURES+=mt
+endif
+
+ifneq ($(STATCOUNTERS),1)
+COMMON_UNSUPPORTED_FEATURES+=beri_statcounters
+endif
+
+ifeq ($(TEST_FPU),1)
+COMMON_UNSUPPORTED_FEATURES+=nofloat
+else
+COMMON_UNSUPPORTED_FEATURES+=float
+endif
+
+
+L3_UNSUPPORTED_FEATURES=$(COMMON_UNSUPPORTED_FEATURES) \
+newisa \
+allow_unaligned \
+beri \
+beriinitial \
+berisyncistep \
+counterdev \
+dma \
+dmaclang \
+dumpicache \
+ignorebadex \
+invalidateL2 \
+loadcachetag \
+llscnotmatching \
+llscspan \
+llscnoalias \
+llscuncached \
+mtc0signex \
+mul_hilo_unchanged \
+swi \
+smalltlb \
+beri2tlb \
+gxemultlb \
+beri2cache \
+beri1oldcache \
+watch \
+deterministic_random \
+noextendedtlb \
+csettype \
+beri_statcounters \
+tlb_read_uninitialized \
+count_register_is_time
+
+L3_UNSUPPORTED_FEATURES+=\
+float32 \
+floatpaired \
+floatfexr \
+floatfenr \
+floatflags \
+floatrecip \
+floatrsqrt \
+floatexception \
+floatechonan \
+float_round_upwards
+
+L3_UNSUPPORTED_FEATURES+=ccall_hw_1 ccall_hw_2
+
+L3_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(L3_UNSUPPORTED_FEATURES)"
+L3_NOSEFLAGS_UNCACHED=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(L3_UNSUPPORTED_FEATURES) cached"
+
+SAIL_UNSUPPORTED_FEATURES=$(COMMON_UNSUPPORTED_FEATURES)\
+beri \
+beriinitial \
+berisyncistep \
+counterdev \
+dma \
+dmaclang \
+dumpicache \
+ignorebadex \
+invalidateL2 \
+loadcachetag \
+llscnotmatching \
+llscspan \
+llscnoalias \
+mtc0signex \
+mul_hilo_cleared \
+swi \
+smalltlb \
+beri2tlb \
+gxemultlb \
+beri1tlb   \
+beri1cache \
+beri2cache \
+beri1oldcache \
+watch \
+deterministic_random \
+extendedtlb \
+csettype \
+beri_statcounters \
+float \
+pic \
+mt \
+einstr \
+count_register_is_time \
+no_experimental_clc \
+experimental_csc
+
+SAIL_MIPS_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_UNSUPPORTED_FEATURES) capabilities"
+SAIL_CHERI_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_UNSUPPORTED_FEATURES)"
+SAIL_CHERI128_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_UNSUPPORTED_FEATURES)"
+
+QEMU_UNSUPPORTED_FEATURES=$(COMMON_UNSUPPORTED_FEATURES) \
+beri \
+beri1cache \
+beri1tlb \
+beri2cache \
+beri2tlb \
+bericcres \
+berisyncistep \
+bev1ram \
+countrate \
+gxemultlb \
+counterdev \
+deterministic_random \
+dma \
+dmaclang \
+dumpicache \
+extendedtlb \
+floatfirextended \
+floatlegacyabs \
+float_mov_signex \
+float_mtc_signex \
+floatnan2008 \
+floatpaired \
+floatrecipflushesdenorm \
+ignorebadex \
+invalidateL2 \
+lladdr \
+llscspan \
+loadcachetag \
+mt \
+mul_hilo_cleared \
+nofloat \
+pic \
+swisync \
+tlbcheck \
+watch \
+csettype \
+mtc0signex \
+no_experimental_clc \
+no_experimental_csc \
+count_register_is_icount
 
 # XXXAM why settype is disabled?
 # XXXAR: mtc0signex was added here because since upstream QEMU commit d54a299b
@@ -1806,75 +1764,37 @@ and not no_experimental_csc
 
 ifeq ($(QEMU_UNALIGNED_OKAY),0)
 # ifeq ($(ALLOW_UNALIGNED),0)
-QEMU_NOSEPRED+=and not allow_unaligned
+QEMU_UNSUPPORTED_FEATURES+=allow_unaligned
 else
-QEMU_NOSEPRED+=and not trap_unaligned_ld_st and not alignex
+QEMU_UNSUPPORTED_FEATURES+=trap_unaligned_ld_st alignex
 endif
 
 ifdef TEST_QEMU_R4000
-QEMU_NOSEPRED+=\
-and not floatcmove \
-and not floatfccr \
-and not floatfenr \
-and not floatindexed \
-and not floatmadd \
-and not floatrecip \
-and not floatrsqrt \
-and not madd \
-and not movz \
-and not rdhwr
+QEMU_UNSUPPORTED_FEATURES+=\
+floatcmove \
+floatfccr \
+floatfenr \
+floatindexed \
+floatmadd \
+floatrecip \
+floatrsqrt \
+madd \
+movz \
+rdhwr
 else
-QEMU_NOSEPRED+=and not no_dext and not nomthc1 and not nowatch
+QEMU_UNSUPPORTED_FEATURES+=no_dext nomthc1 nowatch
 endif
 
-ifneq ($(TEST_CP2),1)
-QEMU_NOSEPRED+=and not capabilities and not clang
-endif
-
-ifneq ($(CLANG),1)
-QEMU_NOSEPRED+=and not clang
-endif
-
-ifneq ($(CAP_SIZE), 256)
-QEMU_NOSEPRED+=and not cap256
-ifeq ($(CAP_PRECISE),1)
-QEMU_NOSEPRED+=and not cap_copy_as_data
-endif
-endif
-
-ifneq ($(CAP_SIZE), 128)
-QEMU_NOSEPRED+=and not cap128
-endif
-
-ifneq ($(CAP_SIZE), 64)
-QEMU_NOSEPRED+=and not cap64
-endif
-
-ifeq ($(CAP_PRECISE),1)
-QEMU_NOSEPRED+=and not cap_imprecise
-else
-QEMU_NOSEPRED+=and not cap_precise
-endif
-
-ifeq ($(PERM_SIZE),23)
-QEMU_NOSEPRED+=and not cap_perm_31
-endif
-ifeq ($(PERM_SIZE),19)
-QEMU_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
-endif
-ifeq ($(PERM_SIZE),15)
-QEMU_NOSEPRED+=and not cap_perm_31 and not cap_perm_23
-endif
-QEMU_NOSEPRED+=and beri_statcounters != 'icount'
-QEMU_NOSEPRED+=and beri_statcounters != 'mem'
-QEMU_NOSEPRED+=and beri_statcounters != 'cache'
-# QEMU_NOSEPRED+=and not beri_statcounters
+QEMU_UNSUPPORTED_IF+=beri_statcounters=icount
+QEMU_UNSUPPORTED_IF+=beri_statcounters=mem
+QEMU_UNSUPPORTED_IF+=beri_statcounters=cache
+# QEMU_UNSUPPORTED_FEATURES+=beri_statcounters
 
 # TODO: does the hardware allow unaligned cll*/csc*?
-QEMU_NOSEPRED+=and not allow_unaligned_cllsc
+QEMU_UNSUPPORTED_FEATURES+=allow_unaligned_cllsc
 
 
-QEMU_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(QEMU_NOSEPRED)"
+QEMU_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(QEMU_UNSUPPORTED_FEATURES)" --unsupported-feature-if-equal "$(QEMU_UNSUPPORTED_IF)"
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -1915,112 +1835,71 @@ SIM_TRACE_OPTS?=
 endif
 endif
 endif
-NOSEPRED=not false
+NOSEPRED=$(COMMON_UNSUPPORTED_FEATURES)
 ifeq ($(ALLOW_UNALIGNED),0)
-NOSEPRED+=and not allow_unaligned
+NOSEPRED+=allow_unaligned
 endif
-NOSEPRED+=and not csettype
-NOSEPRED+=and not dumpicache
-NOSEPRED+=and not loadcachetag
-NOSEPRED+=and not errorepc
-NOSEPRED+=and not tlbcheck
-NOSEPRED+=and not mul_hilo_cleared
+NOSEPRED+=csettype
+NOSEPRED+=dumpicache
+NOSEPRED+=loadcachetag
+NOSEPRED+=errorepc
+NOSEPRED+=tlbcheck
+NOSEPRED+=mul_hilo_cleared
 ifeq ($(BERI_VER),2)
-NOSEPRED+=and not invalidateL2only
-NOSEPRED+=and not lladdr
-NOSEPRED+=and not extendedtlb
-NOSEPRED+=and not bigtlb
-NOSEPRED+=and not csettype
-NOSEPRED+=and not gxemultlb
-NOSEPRED+=and not beri1tlb
-NOSEPRED+=and not beri1cache
-NOSEPRED+=and not beri1oldcache
+NOSEPRED+=invalidateL2only
+NOSEPRED+=lladdr
+NOSEPRED+=extendedtlb
+NOSEPRED+=bigtlb
+NOSEPRED+=csettype
+NOSEPRED+=gxemultlb
+NOSEPRED+=beri1tlb
+NOSEPRED+=beri1cache
+NOSEPRED+=beri1oldcache
 else
-NOSEPRED+=and not alignex
-NOSEPRED+=and not noextendedtlb
-NOSEPRED+=and not smalltlb
-NOSEPRED+=and not gxemultlb
-NOSEPRED+=and not beri2tlb
-NOSEPRED+=and not beri1oldcache
-NOSEPRED+=and not beri2cache
+NOSEPRED+=alignex
+NOSEPRED+=noextendedtlb
+NOSEPRED+=smalltlb
+NOSEPRED+=gxemultlb
+NOSEPRED+=beri2tlb
+NOSEPRED+=beri1oldcache
+NOSEPRED+=beri2cache
 ifeq ($(GENERIC_L1),1)
-NOSEPRED+=and not beri1cache
+NOSEPRED+=beri1cache
 # The parser for the ICache dump hard-codes the size of the cache,
 # so isn't expected to work if the cache size changes.
-NOSEPRED+=and not dumpicache
+NOSEPRED+=dumpicache
 endif
-NOSEPRED+=and not berisyncistep
+NOSEPRED+=berisyncistep
 endif
 ifeq ($(TEST_FPU),1)
-NOSEPRED+=and not nofloat and not float32 and not floatexception and not floatflags and not floatrecipflushesdenorm and not floatri and not floatmadd and not float_mtc_signex and not float_mov_signex and not floatabs2008 and not float_round_upwards
+NOSEPRED+=float32 floatexception floatflags floatrecipflushesdenorm floatri floatmadd float_mtc_signex float_mov_signex floatabs2008 float_round_upwards
 ifndef TEST_PS
-NOSEPRED+=and not floatpaired
+NOSEPRED+=floatpaired
 endif
 ifdef WONTFIX
-NOSEPRED+=and not float_multiply_rounding and not float_round_maxint
+NOSEPRED+=float_multiply_rounding float_round_maxint
 endif
-else
-NOSEPRED+=and not float
 endif
-ifneq ($(TEST_CP2),1)
-NOSEPRED+=and not capabilities and not clang
-else
-ifneq ($(CAP_SIZE),256)
-NOSEPRED+=and not cap256
-endif
-ifneq ($(CAP_SIZE),128)
-NOSEPRED+=and not cap128
-endif
-ifneq ($(CAP_SIZE),64)
-NOSEPRED+=and not cap64
-endif
-ifeq ($(PERM_SIZE),23)
-NOSEPRED+=and not cap_perm_31
-endif
-ifeq ($(PERM_SIZE),19)
-NOSEPRED+=and not cap_perm_31 and not cap_perm_23
-endif
-ifeq ($(PERM_SIZE),15)
-NOSEPRED+=and not cap_perm_31 and not cap_perm_23
-endif
-ifeq ($(CAP_PRECISE),1)
-NOSEPRED+=and not cap_imprecise
-else
-NOSEPRED+=and not cap_precise
-endif
+
 # CHERI supports experimental CLC since r30617
-NOSEPRED+=and not no_experimental_clc
-NOSEPRED+=and not no_experimental_csc
-endif
-ifneq ($(CLANG),1)
-NOSEPRED+=and not clang and not dmaclang
-endif
-ifneq ($(DMA),1)
-NOSEPRED+=and not dma and not dmaclang
-endif
-ifneq ($(MULTI),1)
-NOSEPRED+=and not multicore
-else
-NOSEPRED+=and not llscnoalias
-endif
-ifneq ($(MT),1)
-NOSEPRED+=and not mt
-endif
-ifneq ($(STATCOUNTERS),1)
-NOSEPRED+=and not beri_statcounters
-endif
+NOSEPRED+=no_experimental_clc
+NOSEPRED+=no_experimental_csc
+# CHERI implements a sensible count register (unlike qemu)
+NOSEPRED+=count_register_is_time
+
+NOSEPRED+=llscnoalias
 ifdef CHERI_MICRO
-NOSEPRED+=and not tlb and not cache and not invalidateL2 and not bigtlb and not watch
+NOSEPRED+=tlb cache invalidateL2 bigtlb watch
 ifdef WONTFIX
-NOSEPRED+=and not jump_unaligned
+NOSEPRED+=jump_unaligned
 endif
 else
-NOSEPRED+=and not nowatch
+NOSEPRED+=nowatch
 endif
 
 ifneq ($(NOSEPRED),)
-NOSEFLAGS?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) and not uncached"
-NOSEFLAGS_UNCACHED?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) and not cached"
+NOSEFLAGS?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) uncached"
+NOSEFLAGS_UNCACHED?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) cached"
 endif
 
 VPATH=$(TESTDIRS)
@@ -2668,41 +2547,29 @@ PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1)
 ifeq ($(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),)
 $(error pytest not installed? Try running `pip3 install --user pytest`)
 endif
-ifeq ($(findstring pytest-attrib,$(PYTEST_VERSION_OUTPUT)),)
-$(error pytest-attrib not installed? Try running `pip3 install --user pytest-attrib`)
-endif
 PYTHON_TEST_XUNIT_FLAG=--junit-xml
-PYTHON_TEST_ATTRIB_SELETOR_FLAG=-a
+PYTHON_TEST_ATTRIB_SELETOR_FLAG=--unsupported-features
 endif
 
 ifeq ($(USING_LLVM_ASSEMBLER),0)
 NOSETESTS:=TEST_ASSEMBLER=gnu $(NOSETESTS)
 endif
 ifeq ($(PYTEST),)
-PYTEST:=$(shell command -v py.test-3 2> /dev/null)
-endif
-ifeq ($(PYTEST),)
-PYTEST:=$(shell command -v pytest-3 2> /dev/null)
-endif
-ifeq ($(PYTEST),)
-PYTEST:=$(shell command -v pytest 2> /dev/null)
-endif
-ifeq ($(PYTEST),)
-PYTEST:=/pytest/not/found/you/must/set/PYTEST/on/cmdline/or/install/it
+PYTEST:=python3 -m pytest
 endif
 
 NOSETESTS:=PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) $(NOSETESTS)
 PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
 # For now allow running tests with c0 == ddc by setting CHERI_C0_IS_NULL=0
 CHERI_C0_IS_NULL?=1
-NOSETESTS:=CHERI_C0_IS_NULL=$(CHERI_C0_IS_NULL) $(NOSETESTS)
-PYTEST:=CHERI_C0_IS_NULL=$(CHERI_C0_IS_NULL) $(PYTEST)
+NOSETESTS:=CHERI_C0_IS_NULL=$(CHERI_C0_IS_NULL) CAP_SIZE=$(CAP_SIZE) $(NOSETESTS)
+PYTEST:=CHERI_C0_IS_NULL=$(CHERI_C0_IS_NULL) CAP_SIZE=$(CAP_SIZE) $(PYTEST)
 
-SIM_NOSETESTS=		TEST_MACHINE=SIM $(NOSETESTS)
+SIM_NOSETESTS=		LOGDIR=$(LOGDIR) TEST_MACHINE=SIM $(NOSETESTS)
 HWSIM_NOSETESTS=	LOGDIR=$(HWSIM_LOGDIR) TEST_MACHINE=HWSIM $(NOSETESTS)
 L3_NOSETESTS=		LOGDIR=$(L3_LOGDIR) TEST_MACHINE=L3 $(NOSETESTS)
-QEMU_NOSETESTS= 	LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU $(NOSETESTS)
-QEMU_PYTEST=		LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU $(PYTEST)
+QEMU_NOSETESTS= 	LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU $(NOSETESTS) $(QEMU_NOSEFLAGS)
+QEMU_PYTEST=		LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU $(PYTEST) $(QEMU_NOSEFLAGS)
 ALTERA_NOSETESTS=	LOGDIR=$(ALTERA_LOGDIR) TEST_MACHINE=ALTERA $(NOSETESTS)
 # For this one we don't set LOGDIR since each target uses a different one
 SAIL_NOSETESTS= 	TEST_MACHINE=SAIL $(NOSETESTS)
@@ -2888,10 +2755,9 @@ endif
 
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) check_valid_qemu FORCE
-	@echo "Nose flags: $(QEMU_NOSEFLAGS)"
+	@echo "Pytest flags: $(QEMU_NOSEFLAGS)"
 	LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) \
-	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(QEMU_NOSEFLAGS) \
-	$(TESTDIRS) || true
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(TESTDIRS) || true
 
 xmlcat: xmlcat.c
 	$(CC) -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
@@ -2902,9 +2768,7 @@ QEMU_CLANG_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CLANG_TES
 
 qemu_clang_tests: qemu_clang_tests.xml
 qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	PERM_SIZE=$(PERM_SIZE) TEST_MACHINE=QEMU \
-	LOGDIR=$(QEMU_LOGDIR) $(NOSETESTS) \
-	$(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(CLANG_TESTDIRS) || true
+	$(QEMU_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(CLANG_TESTDIRS) || true
 
 PURECAP_TESTS := $(basename $(TEST_PURECAP_FILES))
 PURECAP_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
@@ -2926,23 +2790,23 @@ CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
 #cp2_dumps: $(CP2_DUMPS)
 pytest_qemu_cp2_tests: pytest_qemu_cp2_tests.xml
 pytest_qemu_cp2_tests.xml: $(CP2_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -a "$(QEMU_NOSEPRED)" $(TESTDIR)/cp2 || true
+	$(QEMU_PYTEST) --junit-xml=$@ --runxfail $(TESTDIR)/cp2 || true
 
 pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
 pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v -a "$(QEMU_NOSEPRED)" $(CLANG_TESTDIRS) || true
+	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v $(CLANG_TESTDIRS) || true
 
 pytest_qemu: pytest_qemu.xml
 pytest_qemu.xml: $(QEMU_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	@echo "Nose preds: $(QEMU_NOSEPRED)"
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -a "$(QEMU_NOSEPRED)" $(TESTDIRS) || true
+	@echo "pytest selector: $(QEMU_NOSEFLAGS)"
+	$(QEMU_PYTEST) --junit-xml=$@ --runxfail $(TESTDIRS) || true
 
 QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
-	$(QEMU_PYTEST) "--junit-xml=$(basename $@).xml" --runxfail -v -a "$(QEMU_NOSEPRED)" $< || true
+	$(QEMU_PYTEST) "--junit-xml=$(basename $@).xml" --runxfail -v $< || true
 
 
 test_elfs: $(TEST_ELFS)
