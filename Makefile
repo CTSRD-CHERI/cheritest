@@ -1075,7 +1075,6 @@ TEST_CP2_FILES=					\
 		test_cp2_load_pipeline.s	\
 		test_cp2_mem_mod_pipeline.s	\
 		test_cp2_memory_cursor_location.s	\
-		test_cp2_null_vs_ddc.s		\
 		test_cp2_mod_mod_pipeline.s	\
 		test_cp2_reg_init.s		\
 		test_cp2_reg_name.s		\
@@ -1212,7 +1211,8 @@ TEST_CP2_FILES += \
 		test_cp2_x_creadhwr_dest_inaccessible.s \
 		test_cp2_x_cwritehwr_kernel_perm.s \
 		test_cp2_x_cwritehwr_src_inaccessible.s \
-		test_cp2_x_ccall_fast_data_perm.s
+		test_cp2_x_ccall_fast_data_perm.s \
+		test_cp2_null_vs_ddc.s
 endif
 
 endif # TEST_CP2=1
