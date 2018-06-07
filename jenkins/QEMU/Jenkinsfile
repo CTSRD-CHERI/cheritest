@@ -1,3 +1,5 @@
+@Library('ctsrd-jenkins-scripts') _
+
 class JobConfig {
 	String testArgs
 	String qemuSuffix
@@ -74,8 +76,9 @@ tar xjf ${args.binutilsArchiveName}
 export PATH=\$WORKSPACE/binutils/bin:\$PATH"""
 		assemblerTestFlag = 'CLANG=0'
 	}
+	String qemuFullpath = "\$WORKSPACE/qemu-linux/bin/qemu-system-${args.qemuSuffix}"
 	// Also test the FPU
-	String commonTestFlag = "TEST_FPU=1 ${assemblerTestFlag} QEMU=\$WORKSPACE/qemu-linux/bin/qemu-system-${args.qemuSuffix}"
+	String commonTestFlag = "TEST_FPU=1 ${assemblerTestFlag} QEMU=${qemuFullpath}"
 	stage("Build ELFs (${args.assembler})") {
 		sh """#!/bin/bash
 set -xe
@@ -89,6 +92,11 @@ make elfs ${commonTestFlag} ${args.testArgs} elfs -j16
 """
 	}
 	stage("Run tests (${args.assembler})") {
+		sh """
+${qemuFullpath} --version
+echo "QEMU git hash:"
+${qemuFullpath} --version | grep version | perl -pe 's/.*\\(.*\\-g(\\w+)\\).*/\$1/'
+"""
 		dir ("ctsrd/cheritest/trunk") {
 			sh """
 rm -f nose*.xml pytest*.xml
@@ -108,42 +116,6 @@ def doBuild(JobConfig args) {
 	}
 }
 
-// FIXME: share more of this code:
-
-
-def setGitHubStatusBasedOnCurrentResult(JobConfig args) {
-	def message = "${env.JOB_NAME}: ${currentBuild.description}"
-	def githubCommitStatusContext = "jenkins/${env.JOB_NAME}"
-	Map githubNotifierOptions = [
-			$class: 'GitHubCommitStatusSetter',
-			errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-			// errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-			contextSource: [$class: "ManuallyEnteredCommitContextSource", context: githubCommitStatusContext],
-			/*statusResultSource: [
-					$class: 'ConditionalStatusResultSource',
-					results: [
-							[$class: 'BetterThanOrEqualBuildResult', result: 'SUCCESS', state: 'SUCCESS', message: message],
-							[$class: 'BetterThanOrEqualBuildResult', result: 'UNSTABLE', state: 'FAILURE', message: message],
-							[$class: 'BetterThanOrEqualBuildResult', result: 'FAILURE', state: 'FAILURE', message: message],
-							[$class: 'AnyBuildResult', message: 'Something went wrong', state: 'ERROR']
-					]
-			]*/
-			// statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: 'SUCCESS']] ]
-	]
-	def gitHubCommitSHA = JobConfig.gitInfo?.GIT_COMMIT
-	def gitHubRepoURL = JobConfig.gitInfo?.GIT_URL
-	if (gitHubCommitSHA)
-		githubNotifierOptions['commitShaSource'] = [$class: "ManuallyEnteredShaSource", sha: gitHubCommitSHA]
-	if (gitHubRepoURL) {
-		if (gitHubRepoURL.endsWith('.git')) {
-			gitHubRepoURL = gitHubRepoURL.substring(0, gitHubRepoURL.indexOf('.git'))
-		}
-		githubNotifierOptions['reposSource'] = [$class: "ManuallyEnteredRepositorySource", url: gitHubRepoURL]
-	}
-	echo("${githubNotifierOptions}")
-	step(githubNotifierOptions)
-}
-
 def cheriHardwareTest() {
 	node('bluespec') {
 		echo "Computing job parameters for ${env.JOB_NAME}"
@@ -156,7 +128,7 @@ def cheriHardwareTest() {
 			}
 		}
 		try {
-			setGitHubStatusBasedOnCurrentResult(args) // set PENDING status
+			setGitHubStatus(args.gitInfo) // set PENDING status
 			doBuild(args)
 		} finally {
 			echo("result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
@@ -164,7 +136,7 @@ def cheriHardwareTest() {
 			if (currentBuild.result == null)
 				currentBuild.result = currentBuild.currentResult
 			echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
-			setGitHubStatusBasedOnCurrentResult(args)
+			setGitHubStatus(args.gitInfo)
 		}
 	}
 }
