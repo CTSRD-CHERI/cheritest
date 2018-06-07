@@ -144,7 +144,8 @@ def cheriHardwareTest() {
 try {
 	properties([
 			pipelineTriggers([
-					[$class: "GitHubPushTrigger"]
+					[$class: "GitHubPushTrigger"],
+					pollSCM('@daily')
 			]),
 			disableConcurrentBuilds(),
 			[$class: 'CopyArtifactPermissionProperty', projectNames: '*'],
