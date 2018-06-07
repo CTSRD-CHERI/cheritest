@@ -1883,6 +1883,7 @@ NOSEPRED+=no_experimental_csc
 NOSEPRED+=count_register_is_time
 
 NOSEPRED+=llscnoalias
+NOSEPRED+=allow_unaligned_cllsc
 ifdef CHERI_MICRO
 NOSEPRED+=tlb cache invalidateL2 bigtlb watch
 ifdef WONTFIX
