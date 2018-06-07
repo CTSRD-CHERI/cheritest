@@ -37,7 +37,7 @@ JobConfig getJobParameters() {
                                      sailModel: 'cheri',
                                      testArgs : 'TEST_CP2=1 CAP_SIZE=256'],
                   "sail2-CHERI128": [testTarget: 'nosetests_sail_cheri128',
-                                     sailModel: 'cheri',
+                                     sailModel: 'cheri128',
                                      testArgs : 'TEST_CP2=1 CAP_SIZE=128'],
                   "sail2-MIPS"    : [testTarget: 'nosetests_sail',
                                      sailModel: 'mips',
@@ -149,7 +149,7 @@ esac
 
 make $MODEL
 '''
-            // archiveArtifacts allowEmptyArchive: false, artifacts: 'ctsrd/cheri/trunk/sim, ctsrd/cheri/trunk/sim.so, ctsrd/cheri/trunk/sim.dtb, ctsrd/cheri/trunk/build_*_sim/sim, ctsrd/cheri/trunk/build_*_sim/sim.so, ctsrd/cheri/trunk/build_*_sim/sim.dtb, ctsrd/cherilibs/trunk/peripherals/*.so, ctsrd/cherilibs/trunk/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
+            archiveArtifacts allowEmptyArchive: false, artifacts: 'sail/mips/mips, sail/cheri/cheri, sail/cheri/cheri128', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
         }
         timeout(90) {
             runTests(args)
