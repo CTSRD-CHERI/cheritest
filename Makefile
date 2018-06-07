@@ -1561,6 +1561,7 @@ and not qemu_only	\
 L3_NOSEPRED=\
 not newisa \
 and not allow_unaligned \
+and not allow_unaligned_cllsc \
 and not beri \
 and not beriinitial \
 and not berisyncistep \
