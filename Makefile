@@ -1341,7 +1341,7 @@ endif
 TEST_CLANG_C_SRCS:=$(wildcard tests/c/test_*.c)
 TEST_CLANG_CXX_SRCS:=$(wildcard tests/c/test_*.cpp)
 TEST_CLANG_ASM_SRCS:=
-TEST_CLANG_FILES:= $(notdir $(TEST_PURECAP_C_SRCS) $(TEST_PURECAP_ASM_SRCS) $(TEST_PURECAP_CXX_SRCS))
+TEST_CLANG_FILES:= $(notdir $(TEST_CLANG_C_SRCS) $(TEST_CLANG_CXX_SRCS) $(TEST_CLANG_ASM_SRCS))
 else
 TEST_CLANG_FILES=
 endif
@@ -1968,20 +1968,6 @@ TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/mt/,$(basename $(TEST_MT_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/statcounters/,$(basename $(RAW_STATCOUNTERS_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/multicore/,$(basename $(TEST_MULTICORE_FILES))))
-
-ifeq ($(CLANG), 1)
-TEST_PYTHON +=	tests/c/test_clang.py
-# dummy target to make the pytest/qemu/target work
-$(QEMU_LOGDIR)/test_clang.log: tests/c/test_clang.py
-	echo "DUMMY" > $@
-endif
-ifeq ($(PURECAP), 1)
-TEST_PYTHON +=	tests/purecap/test_purecap.py
-TEST_PYTHON +=	tests/purecap/test_purecap_reg_init.py
-# dummy target to make the pytest/qemu/target work
-$(QEMU_LOGDIR)/test_purecap.log: tests/purecap/test_purecap.py
-	echo "DUMMY" > $@
-endif
 
 # XXXAR: shouldn't this also include test/c/clang_test.py, etc.?
 
@@ -2758,8 +2744,23 @@ xmlcat: xmlcat.c
 	$(CC) -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
 
 
-CLANG_TESTS := $(basename $(TEST_CLANG_FILES) $(TEST_PURECAP_FILES) $(C_FRAMEWORK_FILES))
-QEMU_CLANG_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CLANG_TESTS)))
+CLANG_TESTS = $(basename $(TEST_CLANG_FILES) $(TEST_PURECAP_FILES) $(C_FRAMEWORK_FILES))
+FILES_TO_QEMU_LOGFILES = $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(basename $(1))))
+QEMU_CLANG_TEST_LOGS = $(call FILES_TO_QEMU_LOGFILES, $(TEST_CLANG_FILES) $(TEST_PURECAP_FILES) $(C_FRAMEWORK_FILES))
+
+ifeq ($(CLANG), 1)
+TEST_PYTHON +=	tests/c/test_clang.py
+# dummy target to make the pytest/qemu/target work
+$(QEMU_LOGDIR)/test_clang.log: tests/c/test_clang.py $(call FILES_TO_QEMU_LOGFILES, $(TEST_CLANG_FILES))
+	echo "DUMMY" > $@
+endif
+ifeq ($(PURECAP), 1)
+TEST_PYTHON +=	tests/purecap/test_purecap.py
+TEST_PYTHON +=	tests/purecap/test_purecap_reg_init.py
+# dummy target to make the pytest/qemu/target work
+$(QEMU_LOGDIR)/test_purecap.log: tests/purecap/test_purecap.py $(call FILES_TO_QEMU_LOGFILES, $(TEST_PURECAP_FILES))
+	echo "DUMMY" > $@
+endif
 
 qemu_clang_tests: qemu_clang_tests.xml
 qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
