@@ -1550,6 +1550,11 @@ beri_statcounters	\
 "
 
 COMMON_UNSUPPORTED_FEATURES?=
+
+ifneq ($(TEST_CP2),1)
+COMMON_UNSUPPORTED_FEATURES+=capabilities
+endif
+
 ifneq ($(CAP_SIZE),256)
 COMMON_UNSUPPORTED_FEATURES+=cap256
 ifeq ($(CAP_PRECISE),1)
