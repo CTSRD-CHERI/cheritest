@@ -1338,26 +1338,20 @@ TEST_PURECAP_ASM_SRCS:=tests/purecap/test_purecap_reg_init.s
 TEST_PURECAP_FILES:= $(notdir $(TEST_PURECAP_C_SRCS) $(TEST_PURECAP_ASM_SRCS) $(TEST_PURECAP_CXX_SRCS))
 endif
 
-TEST_CLANG_FILES=				\
-		test_clang_cast.c		\
-		test_clang_cursor.c		\
-		test_clang_cursor_trivial.c	\
-		test_clang_toy.c		\
-		test_clang_memcpy.c		\
-		test_clang_memmove.c		\
-		test_clang_bcopy.c		\
-		test_clang_load_data.c		\
-		test_clang_store_data.c		\
-		test_clang_struct.c		\
-		test_clang_opaque.c		\
-		test_clang_load_float.c		\
-		test_clang_load_double.c	\
-		test_clang_pack.c		\
-		test_clang_sub.c		\
-		test_clang_intcap.c
+TEST_CLANG_C_SRCS:=$(wildcard tests/c/test_*.c)
+TEST_CLANG_CXX_SRCS:=$(wildcard tests/c/test_*.cpp)
+TEST_CLANG_ASM_SRCS:=
+TEST_CLANG_FILES:= $(notdir $(TEST_PURECAP_C_SRCS) $(TEST_PURECAP_ASM_SRCS) $(TEST_PURECAP_CXX_SRCS))
 else
 TEST_CLANG_FILES=
 endif
+
+ifeq ($(TEST_CP2), 0)
+# The clang and purecap tests depend on CHERI:
+TEST_CLANG_FILES:=
+TEST_PURECAP_FILES:=
+endif
+
 
 ifeq ($(MULTI),1)
 TEST_MULTICORE_FILES=				\
