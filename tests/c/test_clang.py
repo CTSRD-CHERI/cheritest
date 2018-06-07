@@ -39,7 +39,7 @@ MULTI = bool(int(os.environ.get("MULTI1", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-TEST_FILE_RE = re.compile('test_[\w_]*clang_\w+\.c')
+TEST_FILE_RE = re.compile('test_[\w_]*clang_.+\.(c|cpp)')
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 LOG_DIR = pytest.config.option.LOGDIR
@@ -80,7 +80,7 @@ def get_all_tests():
 @pytest.mark.parametrize("test", get_all_tests())
 @attr('clang')
 @attr('capabilities')
-def test_clang_dma(test):
+def test_clang(test):
     test_name = os.path.splitext(os.path.basename(test))[0]
     test_file = os.path.join(TEST_DIR, test)
     test_func = _get_tests_function(test_name)
