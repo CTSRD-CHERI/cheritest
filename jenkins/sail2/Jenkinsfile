@@ -114,9 +114,8 @@ def doBuild(JobConfig args) {
     timeout(240) {
         //copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
         //copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
-        stage('Build sail') {
-            env.MODEL = args.sailModel
-            sh '''
+
+        String setupBuildEnv = '''
 eval `opam config env`
 opam list
 ulimit -s unlimited
@@ -126,7 +125,10 @@ ulimit -s unlimited
 export PATH=${WORKSPACE}/ott/bin:${WORKSPACE}/lem/bin:${PATH}
 export OCAMLPATH=${WORKSPACE}/lem/ocaml-lib/local:${WORKSPACE}/linksem/src/local
 export LEMLIB=${WORKSPACE}/lem/library
+'''
 
+        stage('Build sail dependencies') {
+            sh setupBuildEnv + '''
 cd ${WORKSPACE}/ott
 make
 
@@ -137,7 +139,11 @@ make -C ocaml-lib local-install
 cd ${WORKSPACE}/linksem
 make USE_OCAMLBUILD=false
 make -C src USE_OCAMLBUILD=false local-install
-
+'''
+        }
+        stage('Build sail') {
+            env.MODEL = args.sailModel
+            sh setupBuildEnv + '''
 cd ${WORKSPACE}/sail
 make
 
