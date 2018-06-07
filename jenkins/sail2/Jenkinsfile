@@ -112,8 +112,8 @@ def doBuild(JobConfig args) {
         }
     }
     timeout(240) {
-        copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
-        copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
+        //copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
+        //copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
         stage('Build sail') {
             env.MODEL = args.sailModel
             sh '''
