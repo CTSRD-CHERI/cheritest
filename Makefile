@@ -2453,8 +2453,7 @@ else
 L3_MULTI=
 endif
 
-$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles
-	mkdir -p $(L3_LOGDIR)
+$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles $(L3_LOGDIR)/.dir-created
 ifdef TRACE
 	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --ignore TLB --trace 2 $(L3_MULTI) $< 2> $@.err > $@ || true
 else
@@ -2467,32 +2466,33 @@ ifdef PROFILE
 endif
 endif
 
-$(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles
-	mkdir -p $(SAIL_MIPS_LOGDIR)
+$(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles $(SAIL_MIPS_LOGDIR)/.dir-created
 	-timeout 2m $(SAIL_MIPS_SIM) $< > $@ 2>&1
 
-$(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
-	mkdir -p $(SAIL_MIPS_EMBED_LOGDIR)
+$(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_MIPS_EMBED_LOGDIR)/.dir-created
 	-$(SAIL_EMBED) --model mips --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
-$(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles
-	mkdir -p $(SAIL_CHERI_LOGDIR)
+$(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles $(SAIL_CHERI_LOGDIR)/.dir-created
 	-timeout 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
 
-$(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
-	mkdir -p $(SAIL_CHERI_EMBED_LOGDIR)
+$(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_CHERI_EMBED_LOGDIR)/.dir-created
 	-$(SAIL_EMBED) --model cheri --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
-$(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles
-	mkdir -p $(SAIL_CHERI128_LOGDIR)
+$(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles $(SAIL_CHERI128_LOGDIR)/.dir-created
 	-timeout 2m $(SAIL_CHERI128_SIM) $< > $@ 2>&1
 
-$(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles
-	mkdir -p $(SAIL_CHERI128_EMBED_LOGDIR)
+$(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_CHERI128_EMBED_LOGDIR)/.dir-created
 	-$(SAIL_EMBED) --model cheri128 --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
-$(QEMU_LOGDIR)/.dir-created:
-	mkdir -p $(QEMU_LOGDIR)
+ALL_LOGDIRS=$(L3_LOGDIR) $(QEMU_LOGDIR) $(LOGDIR) \
+	$(SAIL_MIPS_LOGDIR) $(SAIL_MIPS_EMBED_LOGDIR) \
+	$(SAIL_CHERI_LOGDIR) $(SAIL_CHERI_EMBED_LOGDIR) \
+	$(SAIL_CHERI128_LOGDIR) $(SAIL_CHERI128_EMBED_LOGDIR) \
+
+DIR_CREATED_TARGETS=$(addsuffix /.dir-created, $(ALL_LOGDIRS))
+# $(error $(DIR_CREATED_TARGETS))
+$(DIR_CREATED_TARGETS):
+	mkdir -p "$(dir $@)"
 	touch "$@"
 
 QEMU_FLAGS=-D "$@" -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
