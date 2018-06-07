@@ -121,9 +121,9 @@ eval `opam config env`
 opam list
 ulimit -s unlimited
 
-tar xjf binutils.tar.bz2
-tar xJf cheri-multi-master-clang-llvm.tar.xz
-export PATH=${WORKSPACE}/binutils/bin:${WORKSPACE}/ott/bin:${WORKSPACE}/lem/bin:${PATH}
+#tar xjf binutils.tar.bz2
+#tar xJf cheri-multi-master-clang-llvm.tar.xz
+export PATH=${WORKSPACE}/ott/bin:${WORKSPACE}/lem/bin:${PATH}
 export OCAMLPATH=${WORKSPACE}/lem/ocaml-lib/local:${WORKSPACE}/linksem/src/local
 export LEMLIB=${WORKSPACE}/lem/library
 
