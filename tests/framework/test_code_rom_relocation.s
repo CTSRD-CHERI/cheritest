@@ -29,11 +29,14 @@
 
 #
 # This tests that we can relocate code to the exception handler address in
-# RAM, jump to it manually, and jump back.  This must work for our later
+# ROM, jump to it manually, and jump back.  This must work for our later
 # exception handling tests to work.
 #
 
 BEGIN_TEST
+		# This code writes to ROM, which is not supported on QEMU:
+		branch_if_is_qemu return
+
 		#
 		# Set up 'handler' as the ROM exception handler.
 		#

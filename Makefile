@@ -134,6 +134,13 @@ endif
 ifeq ($(CAP_SIZE),128)
 PERM_SIZE?=15
 endif
+
+ifeq ($(CAP_SIZE),256)
+CAP_PRECISE?=1
+else
+CAP_PRECISE?=0
+endif
+
 L3_SIM?=l3mips
 SAIL_DIR?=~/bitbucket/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
@@ -195,8 +202,14 @@ else
 MIPS_LD=$(CHERI_SDK_BINDIR)/ld.bfd --fatal-warnings
 endif
 ifneq ($(wildcard $(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)),)
+ifneq ($(CAP_SIZE),256)
+ifeq ($(CAP_PRECISE),1)
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)magic
+else
+endif # CAP_SIZE
+endif # CAP_PRECISE
 QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)
-endif
+endif # wildcard
 QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri
 
 else
@@ -225,12 +238,6 @@ ifeq ($(OBJCOPY),)
 ifeq ($(shell uname -s),Darwin)
 OBJCOPY:=/usr/local/bin/gobjcopy
 endif
-endif
-
-ifeq ($(CAP_SIZE),256)
-CAP_PRECISE?=1
-else
-CAP_PRECISE?=0
 endif
 
 CLANG_CMD?=clang
@@ -1899,7 +1906,13 @@ NOSEFLAGS_UNCACHED?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) cached"
 endif
 
 VPATH=$(TESTDIRS)
-OBJDIR=obj
+# The binaries for 128 and 256 are incompatible -> use separate objdirs
+OBJDIR=obj/$(CAP_SIZE)
+
+$(OBJDIR)/.dir-created:
+	mkdir -p $(OBJDIR)
+	touch "$@"
+
 SELECT_INIT:=$(OBJDIR)/select_init
 LOGDIR=log
 ALTERA_LOGDIR=altera_log
@@ -1920,7 +1933,14 @@ SAIL_CHERI_LOGDIR=sail_cheri_log
 SAIL_CHERI_EMBED_LOGDIR=sail_cheri_embed_log
 SAIL_CHERI128_LOGDIR=sail_cheri128_log
 SAIL_CHERI128_EMBED_LOGDIR=sail_cheri128_embed_log
-QEMU_LOGDIR=qemu_log
+# Use different logdirs for 128/256
+QEMU_LOGDIR=qemu_log/$(CAP_SIZE)
+ifneq ($(CAP_SIZE),256)
+ifeq ($(CAP_PRECISE), 1)
+QEMU_LOGDIR:=$(QEMU_LOGDIR)_magic
+endif
+endif
+
 
 RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
@@ -2134,10 +2154,10 @@ clean: cleantest
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
-.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) \
-	$(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS) $(TEST_MEMS) \
-	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
-	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
+#.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) \
+#	$(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS) $(TEST_MEMS) \
+#	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
+#	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
 
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	$(MAKE) -C $(TOOLS_DIR_ABS)/debug/ cherictl
@@ -2189,13 +2209,13 @@ PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
 		$(OBJDIR)/purecap_lib.o \
 		$(OBJDIR)/purecap_crt_init_globals.o
 PURECAP_INIT_CACHED_OBJS=$(OBJDIR)/purecap_init_cached.o $(PURECAP_INIT_OBJS)
-$(OBJDIR)/purecap_init.o: init.s
+$(OBJDIR)/purecap_init.o: init.s $(OBJDIR)/.dir-created
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
-$(OBJDIR)/purecap_init_cached.o: init_cached.s
+$(OBJDIR)/purecap_init_cached.o: init_cached.s $(OBJDIR)/.dir-created
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
-$(OBJDIR)/purecap_lib.o: lib.s
+$(OBJDIR)/purecap_lib.o: lib.s $(OBJDIR)/.dir-created
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
-$(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c
+$(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c $(OBJDIR)/.dir-created
 	$(CLANG_CC) $(PURECAP_CFLAGS) -fno-builtin $(CWARNFLAGS) -c -o $@ $<
 
 ifdef VERBOSE
@@ -2208,17 +2228,17 @@ TEST_PURECAP_C_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_C_SRCS))
 TEST_PURECAP_CXX_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_CXX_SRCS))
 TEST_PURECAP_ASM_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_ASM_SRCS))
 # Use static pattern rules here (less fragile than the implicit pattern ones)
-$(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c
+$(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c $(OBJDIR)/.dir-created
 	@echo PURECAP_CC $@
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-$(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp
+$(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp $(OBJDIR)/.dir-created
 	@echo PURECAP_CXX $@
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-$(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s
+$(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s $(OBJDIR)/.dir-created
 	@echo PURECAP_AS $@
 	$(_V)$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 
-$(OBJDIR)/tmp_purecap_test_switch.o: tests/purecap/test_purecap_switch.c
+$(OBJDIR)/tmp_purecap_test_switch.o: tests/purecap/test_purecap_switch.c $(OBJDIR)/.dir-created
 	@echo PURECAP_CC $@
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $< -DCOMPILE_SWITCH_FN=1
 # HACK to get a test with multiple sources working
@@ -2263,17 +2283,17 @@ $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP
 # Once the assembler works, we can try this version too:
 #$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 
-$(OBJDIR)/test_clang%.o : test_clang%.c
+$(OBJDIR)/test_clang%.o : test_clang%.c $(OBJDIR)/.dir-created
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-$(OBJDIR)/test_%.o : test_%.s macros.s
+$(OBJDIR)/test_%.o : test_%.s macros.s $(OBJDIR)/.dir-created
 	$(MIPS_AS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
-$(OBJDIR)/test_%.o : test_%.c
+$(OBJDIR)/test_%.o : test_%.c $(OBJDIR)/.dir-created
 	$(CLANG_CC) $(CWARNFLAGS) -c $(HYBRID_CFLAGS) -o $@ $<
 
-$(OBJDIR)/%.o: %.s
+$(OBJDIR)/%.o: %.s macros.s $(OBJDIR)/.dir-created
 	$(MIPS_AS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
-$(SELECT_INIT): select_init.c
+$(SELECT_INIT): select_init.c $(OBJDIR)/.dir-created
 	$(CC) -o $@ $<
 
 #
@@ -2482,7 +2502,7 @@ $(DIR_CREATED_TARGETS):
 	touch "$@"
 
 QEMU_FLAGS=-D "$@" -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
-           -kernel "$<" -serial stdio -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
+           -kernel "$<" -serial none -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
 ifeq ($(MULTI),1)
 QEMU_FLAGS+=-smp 2 -M malta
 else
@@ -2493,7 +2513,7 @@ $(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU_LOGDIR
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
-	$(QEMU) $(QEMU_FLAGS) -d instr || true
+	$(QEMU) $(QEMU_FLAGS) -d instr > /dev/null || true
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
@@ -2501,7 +2521,7 @@ $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR)/.dir-created $(Q
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
-	$(QEMU) $(QEMU_FLAGS) || true
+	$(QEMU) $(QEMU_FLAGS) > /dev/null || true
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
@@ -2856,6 +2876,7 @@ endif
 
 	@echo Building test suite for $(CAP_SIZE)-bit capabilities
 	@echo Permission size is $(PERM_SIZE)
+	@echo OBJDIR is $(OBJDIR)
 	@echo "Detected QEMU binary: $(QEMU)"
 	@echo "    QEMU CHERI capability size: $(QEMU_CAP_SIZE)"
 	@echo "    QEMU built with precise capabilities: $(QEMU_CAP_PRECISE)"

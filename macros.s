@@ -360,7 +360,9 @@ max_thread_count = 32
 	.set pop
 .endm
 
-.macro branch_if_is_qemu target_label, tmpreg
+.macro branch_if_is_qemu target_label, tmpreg=$at
+	.set push
+	.set noat
 	# Check for QEMU: https://github.com/CTSRD-CHERI/qemu/issues/56
 	mfc0 \tmpreg, $15		# PrId
 	andi \tmpreg, \tmpreg, 0xffff
@@ -369,6 +371,7 @@ max_thread_count = 32
 	xor \tmpreg, 0x0401
 	beqz \tmpreg, \target_label
 	nop
+	.set pop
 .endm
 
 
