@@ -60,16 +60,17 @@ def pytest_configure(config):
     if config.option.help:
         return
 
-    config.CHERITEST_UNSUPPORTED_FEATURES = []  # type: typing.List[str]
+    config.CHERITEST_UNSUPPORTED_FEATURES = dict()  # type: typing.Dict[str, typing.List[str]]
     for i in config.getoption("unsupported_features"):
-        config.CHERITEST_UNSUPPORTED_FEATURES.extend(shlex.split(i))
-    config.CHERITEST_UNSUPPORTED_FEATURE_IF = dict()  # type: typing.Dict[str, typing.List[str]]
+        for feature in shlex.split(i):
+            if not config.CHERITEST_UNSUPPORTED_FEATURES.get(feature):
+                config.CHERITEST_UNSUPPORTED_FEATURES[feature] = ["ALWAYS"]
     for i in config.getoption("unsupported_feature_if_equal"):
         for pair in shlex.split(i):
             key, value = pair.split("=", maxsplit=1)
-            if not config.CHERITEST_UNSUPPORTED_FEATURE_IF.get(key):
-                config.CHERITEST_UNSUPPORTED_FEATURE_IF[key] = list()
-            config.CHERITEST_UNSUPPORTED_FEATURE_IF[key].append(value)
+            if not config.CHERITEST_UNSUPPORTED_FEATURES.get(key):
+                config.CHERITEST_UNSUPPORTED_FEATURES[key] = list()
+            config.CHERITEST_UNSUPPORTED_FEATURES[key].append(value)
 
     # Infer values based on CAP_SIZE
     # if config.option.

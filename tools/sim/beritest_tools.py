@@ -90,8 +90,13 @@ def attr(*args, **kwargs):
         if feature in pytest.config.CHERITEST_UNSUPPORTED_FEATURES:
             return pytest.mark.skip("Feature '" + feature + "' is not supported!")
     for feature, value in kwargs.items():
-        if value in pytest.config.CHERITEST_UNSUPPORTED_FEATURE_IF.get(feature, list()):
+        is_unsupported_list = pytest.config.CHERITEST_UNSUPPORTED_FEATURES.get(feature, list())
+        if value in is_unsupported_list:
             return pytest.mark.skip("Feature '" + feature + "' value '" + value + "' is not supported!")
+        if "ALWAYS" in is_unsupported_list:
+            return pytest.mark.skip("Feature '" + feature + "' value '" + value +
+                                    "' is not supported (feature is completely unsupported)!")
+
     return wrap_test_fn
 
 
