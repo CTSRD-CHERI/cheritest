@@ -31,7 +31,7 @@ TESTING_STORE = 1
 TESTING_LLSC = 1
 
 .macro do_cap_load_store kind, dstreg, srcreg
-	csc\()\kind \dstreg, $zero, \srcreg
+	csc\()\kind $zero, \dstreg, \srcreg
 .endm
 
 .macro do_mips_load_store kind, dstreg, srcreg
