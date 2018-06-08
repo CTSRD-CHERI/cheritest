@@ -118,6 +118,7 @@ def doBuild(JobConfig args) {
 
 def cheriHardwareTest() {
 	node('bluespec') {
+		deleteDir()
 		echo "Computing job parameters for ${env.JOB_NAME}"
 		JobConfig args = getJobParameters()
 		echo "Found job config: QEMU: '${args.qemuSuffix}'\nTEST_ARGS: '${args.testArgs}'"
