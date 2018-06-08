@@ -207,9 +207,9 @@ ifneq ($(CAP_SIZE),256)
 ifeq ($(CAP_PRECISE),1)
 QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)magic
 else
-QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)
 endif # CAP_SIZE
 endif # CAP_PRECISE
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)
 endif # wildcard
 QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri
 
