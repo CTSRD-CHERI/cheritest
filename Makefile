@@ -1901,13 +1901,7 @@ NOSEFLAGS_UNCACHED?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) cached"
 endif
 
 VPATH=$(TESTDIRS)
-# The binaries for 128 and 256 are incompatible -> use separate objdirs
-OBJDIR=obj/$(CAP_SIZE)
-
-$(OBJDIR)/.dir-created:
-	mkdir -p $(OBJDIR)
-	touch "$@"
-
+OBJDIR=obj
 SELECT_INIT:=$(OBJDIR)/select_init
 LOGDIR=log
 ALTERA_LOGDIR=altera_log
@@ -2204,13 +2198,13 @@ PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
 		$(OBJDIR)/purecap_lib.o \
 		$(OBJDIR)/purecap_crt_init_globals.o
 PURECAP_INIT_CACHED_OBJS=$(OBJDIR)/purecap_init_cached.o $(PURECAP_INIT_OBJS)
-$(OBJDIR)/purecap_init.o: init.s $(OBJDIR)/.dir-created
+$(OBJDIR)/purecap_init.o: init.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
-$(OBJDIR)/purecap_init_cached.o: init_cached.s $(OBJDIR)/.dir-created
+$(OBJDIR)/purecap_init_cached.o: init_cached.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
-$(OBJDIR)/purecap_lib.o: lib.s $(OBJDIR)/.dir-created
+$(OBJDIR)/purecap_lib.o: lib.s
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
-$(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c $(OBJDIR)/.dir-created
+$(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c
 	$(CLANG_CC) $(PURECAP_CFLAGS) -fno-builtin $(CWARNFLAGS) -c -o $@ $<
 
 ifdef VERBOSE
@@ -2223,17 +2217,17 @@ TEST_PURECAP_C_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_C_SRCS))
 TEST_PURECAP_CXX_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_CXX_SRCS))
 TEST_PURECAP_ASM_OBJS=$(call srcs_to_objs,$(TEST_PURECAP_ASM_SRCS))
 # Use static pattern rules here (less fragile than the implicit pattern ones)
-$(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c $(OBJDIR)/.dir-created
+$(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c
 	@echo PURECAP_CC $@
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-$(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp $(OBJDIR)/.dir-created
+$(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp
 	@echo PURECAP_CXX $@
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-$(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s $(OBJDIR)/.dir-created
+$(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s
 	@echo PURECAP_AS $@
 	$(_V)$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 
-$(OBJDIR)/tmp_purecap_test_switch.o: tests/purecap/test_purecap_switch.c $(OBJDIR)/.dir-created
+$(OBJDIR)/tmp_purecap_test_switch.o: tests/purecap/test_purecap_switch.c
 	@echo PURECAP_CC $@
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $< -DCOMPILE_SWITCH_FN=1
 # HACK to get a test with multiple sources working
@@ -2278,17 +2272,17 @@ $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP
 # Once the assembler works, we can try this version too:
 #$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
 
-$(OBJDIR)/test_clang%.o : test_clang%.c $(OBJDIR)/.dir-created
+$(OBJDIR)/test_clang%.o : test_clang%.c
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
-$(OBJDIR)/test_%.o : test_%.s macros.s $(OBJDIR)/.dir-created
+$(OBJDIR)/test_%.o : test_%.s macros.s
 	$(MIPS_AS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
-$(OBJDIR)/test_%.o : test_%.c $(OBJDIR)/.dir-created
+$(OBJDIR)/test_%.o : test_%.c
 	$(CLANG_CC) $(CWARNFLAGS) -c $(HYBRID_CFLAGS) -o $@ $<
 
-$(OBJDIR)/%.o: %.s macros.s $(OBJDIR)/.dir-created
+$(OBJDIR)/%.o: %.s
 	$(MIPS_AS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
-$(SELECT_INIT): select_init.c $(OBJDIR)/.dir-created
+$(SELECT_INIT): select_init.c
 	$(CC) -o $@ $<
 
 #
@@ -2871,7 +2865,6 @@ endif
 
 	@echo Building test suite for $(CAP_SIZE)-bit capabilities
 	@echo Permission size is $(PERM_SIZE)
-	@echo OBJDIR is $(OBJDIR)
 	@echo "Detected QEMU binary: $(QEMU)"
 	@echo "    QEMU CHERI capability size: $(QEMU_CAP_SIZE)"
 	@echo "    QEMU built with precise capabilities: $(QEMU_CAP_PRECISE)"
