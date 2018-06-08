@@ -48,7 +48,7 @@ int build;
 
   if (argc < 2)
   {
-    fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
+    fprintf(stderr, "Usage: %s <filename> [objdir]\n", argv[0]);
     return -1;
   }
 
