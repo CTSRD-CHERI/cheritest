@@ -1792,10 +1792,6 @@ QEMU_UNSUPPORTED_IF+=beri_statcounters=mem
 QEMU_UNSUPPORTED_IF+=beri_statcounters=cache
 # QEMU_UNSUPPORTED_FEATURES+=beri_statcounters
 
-# TODO: does the hardware allow unaligned cll*/csc*?
-QEMU_UNSUPPORTED_FEATURES+=allow_unaligned_cllsc
-
-
 QEMU_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(QEMU_UNSUPPORTED_FEATURES)" --unsupported-feature-if-equal "$(QEMU_UNSUPPORTED_IF)"
 
 #
@@ -1890,7 +1886,6 @@ NOSEPRED+=no_experimental_csc
 NOSEPRED+=count_register_is_time
 
 NOSEPRED+=llscnoalias
-NOSEPRED+=allow_unaligned_cllsc
 ifdef CHERI_MICRO
 NOSEPRED+=tlb cache invalidateL2 bigtlb watch
 ifdef WONTFIX
