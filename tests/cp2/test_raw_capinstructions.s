@@ -275,6 +275,10 @@ l3:
 		ccseal   $c3, $c1, $c1
 		ctestsubset $a0, $c1, $c2
 
+		# read/write special registers
+		creadhwr $c1, $31
+		cwritehwr $c1, $31
+
 		# Dump registers in the simulator
 		mtc0 $v0, $26
 		nop
