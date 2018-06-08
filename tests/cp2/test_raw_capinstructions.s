@@ -71,6 +71,8 @@ start:
 		csetcause $a1
 		cgetdefault $c1
 		csetdefault $c1
+		cgetepcc $c1
+		csetepcc $c1
 
 		#
 		# Clear registers
