@@ -2683,7 +2683,7 @@ nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
 nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
 	CACHED=1 MULTI1=1 $(L3_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
-            $(TESTDIRS) || true
+	    $(TESTDIRS) || true
 
 nosetests_sail: nosetests_sail.xml
 nosetests_sail_embed: nosetests_sail_embed.xml
@@ -2695,32 +2695,32 @@ nosetests_sail_cheri128_embed: nosetests_sail_cheri128_embed.xml
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
-            $(TESTDIRS) || true
+	     $(TESTDIRS) || true
 
 nosetests_sail_embed.xml: $(SAIL_MIPS_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_MIPS_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
-            $(TESTDIRS) || true
+	    $(TESTDIRS) || true
 
 nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_CHERI_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
-            $(TESTDIRS) || true
+	     $(TESTDIRS) || true
 
 nosetests_sail_cheri_embed.xml: $(SAIL_CHERI_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_CHERI_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
-            $(TESTDIRS) || true
+	    $(TESTDIRS) || true
 
 nosetests_sail_cheri128.xml: $(SAIL_CHERI128_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_CHERI128_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
-            $(TESTDIRS) || true
+	   $(TESTDIRS) || true
 
 nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_CHERI128_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
-            $(TESTDIRS) || true
+	    $(TESTDIRS) || true
 
 nosetests_qemu: nosetests_qemu.xml
 
@@ -2805,6 +2805,26 @@ $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
 	$(QEMU_PYTEST) "--junit-xml=$(basename $@).xml" --runxfail -v $< || true
 
+# TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
+pytest/sim_uncached/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
+	CACHED=0 $(SIM_NOSETESTS) $(NOSEFLAGS_UNCACHED) -v $< || true
+
+pytest/sim_cached/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
+	CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $< || true
+
+pytest/sim_multi/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
+	CACHED=0 MULTI1=1 $(SIM_NOSETESTS) $(NOSEFLAGS_UNCACHED) -v $< || true
+
+pytest/sim_cachedmulti/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
+	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $< || true
 
 test_elfs: $(TEST_ELFS)
 	@echo "Build all test .elf files"
