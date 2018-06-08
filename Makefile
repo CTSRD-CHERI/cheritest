@@ -2057,7 +2057,14 @@ SAIL_CHERI_LOGDIR=sail_cheri_log
 SAIL_CHERI_EMBED_LOGDIR=sail_cheri_embed_log
 SAIL_CHERI128_LOGDIR=sail_cheri128_log
 SAIL_CHERI128_EMBED_LOGDIR=sail_cheri128_embed_log
-QEMU_LOGDIR=qemu_log
+# Use different logdirs for 128/256
+QEMU_LOGDIR=qemu_log/$(CAP_SIZE)
+ifneq ($(CAP_SIZE),256)
+ifeq ($(CAP_PRECISE), 1)
+QEMU_LOGDIR:=$(QEMU_LOGDIR)_magic
+endif
+endif
+
 
 RAW_LDSCRIPT=raw.ld
 RAW_CACHED_LDSCRIPT=raw_cached.ld
@@ -2285,10 +2292,10 @@ clean: cleantest
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
-.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) \
-	$(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS) $(TEST_MEMS) \
-	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
-	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
+#.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) \
+#	$(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS) $(TEST_MEMS) \
+#	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
+#	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
 
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	$(MAKE) -C $(TOOLS_DIR_ABS)/debug/ cherictl
