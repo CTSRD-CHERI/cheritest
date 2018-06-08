@@ -135,6 +135,13 @@ endif
 ifeq ($(CAP_SIZE),128)
 PERM_SIZE?=15
 endif
+
+ifeq ($(CAP_SIZE),256)
+CAP_PRECISE?=1
+else
+CAP_PRECISE?=0
+endif
+
 L3_SIM?=l3mips
 SAIL_DIR?=~/bitbucket/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
@@ -196,8 +203,14 @@ else
 MIPS_LD=$(CHERI_SDK_BINDIR)/ld.bfd --fatal-warnings
 endif
 ifneq ($(wildcard $(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)),)
+ifneq ($(CAP_SIZE),256)
+ifeq ($(CAP_PRECISE),1)
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)magic
+else
 QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)
-endif
+endif # CAP_SIZE
+endif # CAP_PRECISE
+endif # wildcard
 QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri
 
 else
@@ -226,12 +239,6 @@ ifeq ($(OBJCOPY),)
 ifeq ($(shell uname -s),Darwin)
 OBJCOPY:=/usr/local/bin/gobjcopy
 endif
-endif
-
-ifeq ($(CAP_SIZE),256)
-CAP_PRECISE?=1
-else
-CAP_PRECISE?=0
 endif
 
 CLANG_CMD?=clang
