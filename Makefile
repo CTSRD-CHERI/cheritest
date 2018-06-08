@@ -2527,7 +2527,12 @@ NOSETESTS?=python3 -m pytest -q
 _PYTEST_INSTALLED_STR=This is pytest
 PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1)
 ifeq ($(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),)
+$(info "Error running pytest --version: $(PYTEST_VERSION_OUTPUT)")
+ifneq ($(findstring requires pytest-,$(PYTEST_VERSION_OUTPUT)),)
+$(error pytest version is too old. Try running `pip3 install --upgrade --user pytest`)
+else
 $(error pytest not installed? Try running `pip3 install --user pytest`)
+endif
 endif
 PYTHON_TEST_XUNIT_FLAG=--junit-xml
 PYTHON_TEST_ATTRIB_SELETOR_FLAG=--unsupported-features
