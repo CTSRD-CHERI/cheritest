@@ -2640,7 +2640,7 @@ $(QEMU_LOGDIR)/.dir-created:
 	touch "$@"
 
 QEMU_FLAGS=-D "$@" -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
-           -kernel "$<" -serial stdio -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
+           -kernel "$<" -serial none -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
 ifeq ($(MULTI),1)
 QEMU_FLAGS+=-smp 2 -M malta
 else
@@ -2651,7 +2651,7 @@ $(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU_LOGDIR
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
-	$(QEMU) $(QEMU_FLAGS) -d instr || true
+	$(QEMU) $(QEMU_FLAGS) -d instr > /dev/null || true
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
@@ -2659,7 +2659,7 @@ $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR)/.dir-created $(Q
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
-	$(QEMU) $(QEMU_FLAGS) || true
+	$(QEMU) $(QEMU_FLAGS) > /dev/null || true
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
