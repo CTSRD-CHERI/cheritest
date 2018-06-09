@@ -145,10 +145,12 @@ L3_SIM?=l3mips
 
 # Guess path to sail:
 ifneq ($(wildcard ~/cheri/sail),)
-SAIL_DIR?=~/cheri/sail  # default path if built with cheribuild
+# default path if built with cheribuild
+SAIL_DIR?=~/cheri/sail
 else
 ifneq ($(wildcard ~/bitbucket/sail),)
-SAIL_DIR?=~/bitbucket/sail  # previous default
+# previous default
+SAIL_DIR?=~/bitbucket/sail
 else
 SAIL_DIR?=/path/to/sail/must/be/set/on/cmdline/using/SAIL_DIR/var
 endif
@@ -157,6 +159,17 @@ SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
 SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
 SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
 SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
+ifeq ($(TIMEOUT),)
+TIMEOUT:=$(shell command -v timeout 2> /dev/null)
+endif
+ifeq ($(TIMEOUT),)
+TIMEOUT:=$(shell command -v gtimeout 2> /dev/null)
+endif
+ifeq ($(TIMEOUT),)
+TIMEOUT:=$(error timeout/gtimeout command not found)
+endif
+
+
 CC?=gcc
 
 CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension-token -Wno-error=unused -Wno-error=pedantic
@@ -2153,10 +2166,10 @@ clean: cleantest
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
-#.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) \
-#	$(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS) $(TEST_MEMS) \
-#	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
-#	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
+.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) \
+	$(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS) $(TEST_MEMS) \
+	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
+	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
 
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	$(MAKE) -C $(TOOLS_DIR_ABS)/debug/ cherictl
@@ -2472,19 +2485,22 @@ endif
 endif
 
 $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles $(SAIL_MIPS_LOGDIR)/.dir-created
-	-timeout 2m $(SAIL_MIPS_SIM) $< > $@ 2>&1
+	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< > $@ 2>&1
 
 $(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_MIPS_EMBED_LOGDIR)/.dir-created
 	-$(SAIL_EMBED) --model mips --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
+$(SAIL_CHERI_LOGDIR)/test_raw_template.log: $(OBJDIR)/test_raw_template.elf $(SAIL_CHERI_SIM) max_cycles $(SAIL_CHERI_LOGDIR)/.dir-created
+	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
+
 $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles $(SAIL_CHERI_LOGDIR)/.dir-created
-	-timeout 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
+	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
 
 $(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_CHERI_EMBED_LOGDIR)/.dir-created
 	-$(SAIL_EMBED) --model cheri --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
 $(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles $(SAIL_CHERI128_LOGDIR)/.dir-created
-	-timeout 2m $(SAIL_CHERI128_SIM) $< > $@ 2>&1
+	-$(TIMEOUT) 2m $(SAIL_CHERI128_SIM) $< > $@ 2>&1
 
 $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_CHERI128_EMBED_LOGDIR)/.dir-created
 	-$(SAIL_EMBED) --model cheri128 --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
@@ -2494,6 +2510,7 @@ ALL_LOGDIRS=$(L3_LOGDIR) $(QEMU_LOGDIR) $(LOGDIR) \
 	$(SAIL_CHERI_LOGDIR) $(SAIL_CHERI_EMBED_LOGDIR) \
 	$(SAIL_CHERI128_LOGDIR) $(SAIL_CHERI128_EMBED_LOGDIR) \
 
+# TODO: use this instead: ﻿https://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html#Prerequisite-Types
 DIR_CREATED_TARGETS=$(addsuffix /.dir-created, $(ALL_LOGDIRS))
 # $(error $(DIR_CREATED_TARGETS))
 $(DIR_CREATED_TARGETS):
@@ -2709,12 +2726,35 @@ nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
 	$(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-nosetests_sail: nosetests_sail.xml
-nosetests_sail_embed: nosetests_sail_embed.xml
-nosetests_sail_cheri: nosetests_sail_cheri.xml
-nosetests_sail_cheri_embed: nosetests_sail_cheri_embed.xml
-nosetests_sail_cheri128: nosetests_sail_cheri128.xml
-nosetests_sail_cheri128_embed: nosetests_sail_cheri128_embed.xml
+_CHECK_FILE_EXIST=$(if $(wildcard $(shell command -v $(1) 2>/dev/null)),$(info SAIL_MIPS_SIM=$(1)),$(error $(2) not found in expected path: "$(1)"))
+check_sail_deps: FORCE
+	@echo Checking if timeout command exists:
+	@command -v $(TIMEOUT)
+
+nosetests_sail: check_sail_deps FORCE
+	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_SIM), sail MIPS)
+	$(MAKE) $(MFLAGS) nosetests_sail.xml
+nosetests_sail_embed: check_sail_deps FORCE
+	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_SIM), sail MIPS)
+	$(MAKE) $(MFLAGS) nosetests_sail_embed.xml
+nosetests_sail_cheri: check_sail_deps FORCE
+	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI_SIM), sail CHERI256)
+	$(MAKE) $(MFLAGS) nosetests_sail_cheri.xml
+nosetests_sail_cheri_embed: check_sail_deps FORCE
+	$(call _CHECK_FILE_EXIST, $(SAIL_EMBED), sail embed)
+	$(MAKE) $(MFLAGS) nosetests_sail_cheri_embed.xml
+nosetests_sail_cheri128: check_sail_deps FORCE
+	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI128_SIM), sail CHERI128)
+	$(MAKE) $(MFLAGS) nosetests_sail_cheri128.xml
+nosetests_sail_cheri128_embed: check_sail_deps FORCE
+	$(call _CHECK_FILE_EXIST, $(SAIL_EMBED), sail embed)
+	$(MAKE) $(MFLAGS) nosetests_sail_cheri128_embed.xml
+
+# SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
+# SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
+# SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
+# SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
+
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
@@ -2746,7 +2786,9 @@ nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHO
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-nosetests_qemu: nosetests_qemu.xml
+nosetests_qemu: FORCE
+	$(call _CHECK_FILE_EXIST, $(QEMU), QEMU)
+	$(MAKE) $(MFLAGS) nosetests_qemu.xml
 
 check_valid_qemu: FORCE
 ifneq ($(CAP_PRECISE), $(QEMU_CAP_PRECISE))
@@ -2881,6 +2923,11 @@ endif
 	@echo "    QEMU built with support for unaligned loads: $(QEMU_UNALIGNED_OKAY)"
 	@echo "    QEMU built with C0 == NULL: $(QEMU_C0_IS_NULL)"
 	@echo
+	@echo "Sail MIPS: $(SAIL_MIPS_SIM)"
+	@echo "Sail CHERI256: $(SAIL_CHERI_SIM)"
+	@echo "Sail CHERI128: $(SAIL_CHERI128_SIM)"
+	@echo
+
 	@echo "Build tools:"
 	@echo "Clang:     $(CLANG_CMD)"
 	@echo "Assembler: $(MIPS_AS)"
