@@ -142,7 +142,17 @@ CAP_PRECISE?=0
 endif
 
 L3_SIM?=l3mips
-SAIL_DIR?=~/bitbucket/sail
+
+# Guess path to sail:
+ifneq ($(wildcard ~/cheri/sail),)
+SAIL_DIR?=~/cheri/sail  # default path if built with cheribuild
+else
+ifneq ($(wildcard ~/bitbucket/sail),)
+SAIL_DIR?=~/bitbucket/sail  # previous default
+else
+SAIL_DIR?=/path/to/sail/must/be/set/on/cmdline/using/SAIL_DIR/var
+endif
+endif
 SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
 SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
 SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
