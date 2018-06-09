@@ -2471,7 +2471,7 @@ else
 L3_MULTI=
 endif
 
-$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles $(L3_LOGDIR)/.dir-created
+$(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles | $(L3_LOGDIR)
 ifdef TRACE
 	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --ignore TLB --trace 2 $(L3_MULTI) $< 2> $@.err > $@ || true
 else
@@ -2484,25 +2484,25 @@ ifdef PROFILE
 endif
 endif
 
-$(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles $(SAIL_MIPS_LOGDIR)/.dir-created
+$(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles | $(SAIL_MIPS_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< > $@ 2>&1
 
-$(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_MIPS_EMBED_LOGDIR)/.dir-created
+$(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles | $(SAIL_MIPS_EMBED_LOGDIR)
 	-$(SAIL_EMBED) --model mips --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
-$(SAIL_CHERI_LOGDIR)/test_raw_template.log: $(OBJDIR)/test_raw_template.elf $(SAIL_CHERI_SIM) max_cycles $(SAIL_CHERI_LOGDIR)/.dir-created
+$(SAIL_CHERI_LOGDIR)/test_raw_template.log: $(OBJDIR)/test_raw_template.elf $(SAIL_CHERI_SIM) max_cycles | $(SAIL_CHERI_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
 
-$(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles $(SAIL_CHERI_LOGDIR)/.dir-created
+$(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles | $(SAIL_CHERI_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
 
-$(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_CHERI_EMBED_LOGDIR)/.dir-created
+$(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles | $(SAIL_CHERI_EMBED_LOGDIR)
 	-$(SAIL_EMBED) --model cheri --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
-$(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles $(SAIL_CHERI128_LOGDIR)/.dir-created
+$(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles | $(SAIL_CHERI128_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_CHERI128_SIM) $< > $@ 2>&1
 
-$(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles $(SAIL_CHERI128_EMBED_LOGDIR)/.dir-created
+$(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles | $(SAIL_CHERI128_EMBED_LOGDIR)
 	-$(SAIL_EMBED) --model cheri128 --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
 ALL_LOGDIRS=$(L3_LOGDIR) $(QEMU_LOGDIR) $(LOGDIR) \
@@ -2510,12 +2510,9 @@ ALL_LOGDIRS=$(L3_LOGDIR) $(QEMU_LOGDIR) $(LOGDIR) \
 	$(SAIL_CHERI_LOGDIR) $(SAIL_CHERI_EMBED_LOGDIR) \
 	$(SAIL_CHERI128_LOGDIR) $(SAIL_CHERI128_EMBED_LOGDIR) \
 
-# TODO: use this instead: ﻿https://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html#Prerequisite-Types
-DIR_CREATED_TARGETS=$(addsuffix /.dir-created, $(ALL_LOGDIRS))
-# $(error $(DIR_CREATED_TARGETS))
-$(DIR_CREATED_TARGETS):
-	mkdir -p "$(dir $@)"
-	touch "$@"
+# See ﻿https://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html#Prerequisite-Types (dep has to be after a '|')
+$(ALL_LOGDIRS) $(OBJDIR):
+	mkdir -p "$@"
 
 QEMU_FLAGS=-D "$@" -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
            -kernel "$<" -serial none -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
@@ -2525,7 +2522,7 @@ else
 QEMU_FLAGS+=-M mipssim
 endif
 # raw tests need to be started with tracing in, for the others we can start it in init.s
-$(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU_LOGDIR)/.dir-created $(QEMU)
+$(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU) | $(QEMU_LOGDIR)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
@@ -2533,7 +2530,7 @@ endif
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
-$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU_LOGDIR)/.dir-created $(QEMU)
+$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU) | $(QEMU_LOGDIR)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
