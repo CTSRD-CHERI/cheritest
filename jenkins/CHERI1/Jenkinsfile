@@ -139,7 +139,14 @@ rm -f sim sim.so
 			archiveArtifacts allowEmptyArchive: false, artifacts: 'ctsrd/cheri/trunk/sim, ctsrd/cheri/trunk/sim.so, ctsrd/cheri/trunk/sim.dtb, ctsrd/cheri/trunk/build_*_sim/sim, ctsrd/cheri/trunk/build_*_sim/sim.so, ctsrd/cheri/trunk/build_*_sim/sim.dtb, ctsrd/cherilibs/trunk/peripherals/*.so, ctsrd/cherilibs/trunk/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
 		}
 		timeout(90) {
-			runTests(args, "binutils")
+			try {
+				// don't fail the job if binutils fails to compile the tests
+				runTests(args, "binutils")
+			} catch (error) {
+				echo "Binutils failed to compile tests ${error}"
+				currentBuild.currentResult = 'UNSTABLE'
+				// TODO: send email about this? emailext attachLog: false, body: "Binutils failed to compile tests: (see ${env.BUILD_URL}): ${error}", subject: "[JENKINS] ${env.JOB_NAME} failed", to: 'someone@example.com'
+			}
 		}
 		timeout(90) {
 			runTests(args, "clang")
