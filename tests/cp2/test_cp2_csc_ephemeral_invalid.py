@@ -27,7 +27,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 #
 # Test that csc does NOT raise an exception when storing an invalid, ephemeral

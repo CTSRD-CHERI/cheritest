@@ -2,11 +2,13 @@
 *.pyc
 /.cache
 /nosetests_*.xml
+/.pytest_cache
 /pytest_qemu*.xml
 /qemu_*_tests.xml
 select_init
 max_cycles
 qemu_log/
+sail_*_log/
 obj/
 pytest/qemu
 out\.txt

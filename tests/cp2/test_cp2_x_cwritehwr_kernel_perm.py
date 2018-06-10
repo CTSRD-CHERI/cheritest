@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 import copy
 
 
@@ -36,7 +36,6 @@ import copy
 #
 @attr('capabilities')
 @attr('cap_hwregs')
-@xfail_gnu_binutils
 class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
     def test_pcc_has_no_access_sys_regs(self):
         self.assertCapPermissions(self.MIPS.c14, self.max_permissions & ~1024,
@@ -128,8 +127,8 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
         self.assertDefaultCap(self.MIPS.c29, offset=29)
         self.assertDefaultCap(self.MIPS.c30, offset=30)
         # check that kr1c and kr2c were not updated by the writes to chwr $22 and $23 in kernel mode:
-        self.assertDefaultCap(self.MIPS.c27, offset=27, msg="kr1c should not mirrored to $c27")
-        self.assertDefaultCap(self.MIPS.c28, offset=28, msg="kr2c should not mirrored to $c28")
+        self.assertNullCap(self.MIPS.c27, msg="kr1c should not mirrored to $c27")
+        self.assertNullCap(self.MIPS.c28, msg="kr2c should not mirrored to $c28")
         self.assertIntCap(self.MIPS.cp2_hwregs[22], int_value=0xbad1, msg="kr1c should not mirrored to $c27")
         self.assertIntCap(self.MIPS.cp2_hwregs[23], int_value=0xbad1, msg="kr2c should not mirrored to $c28")
         # these should not have changed (they are mirrored):

@@ -31,7 +31,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 #
 # Test that the unsigned load linked operations zero-extend the value that is

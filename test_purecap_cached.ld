@@ -39,9 +39,9 @@ SECTIONS
 	. = 0x9800000040000000;
 
 	.text ALIGN(0x8): {
-		obj/purecap_init_cached.o(.text)
-		obj/purecap_init.o(.text)
-		*(EXCLUDE_FILE (obj/purecap_init*.o) .text)
+		*/purecap_init_cached.o(.text)
+		*/purecap_init.o(.text)
+		*(EXCLUDE_FILE (purecap_init*.o) .text)
 	}
 	.bss ALIGN(0x8): { *(.bss) }
 	.data ALIGN(0x8): { *(.data)}

@@ -31,7 +31,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 from __future__ import print_function
-import nose
 
 import collections
 import functools
@@ -39,20 +38,14 @@ import unittest
 import os
 import os.path
 import inspect
+import pytest
+
+try:
+    import typing
+except ImportError:
+    typing = {}
 
 from tools.sim import *
-
-from nose.plugins.attrib import attr
-
-
-def xfail_if(cond):
-    '''
-    :param cond: whether this test is expected to fail
-    :return:
-    '''
-    if cond:
-        return nose_xfail_hack
-    return lambda x: x
 
 
 def xfail_on(var):
@@ -62,7 +55,9 @@ def xfail_on(var):
     :param var: the machine where this test is expected to fail (e.g. "qemu"
     :return:
     '''
-    return xfail_if(os.environ.get("TEST_MACHINE", "").lower() == var.lower())
+    return pytest.mark.xfail(pytest.config.option.TEST_MACHINE.lower() == var.lower(),
+                             reason="Not supported on " + pytest.config.option.TEST_MACHINE.lower())
+
 
 def xfail_gnu_binutils(test):
     '''
@@ -74,24 +69,35 @@ def xfail_gnu_binutils(test):
     if isinstance(test, type):
         for k, v in vars(test).items():
             if k.startswith("test_"):
-                setattr(test, k, nose_xfail_hack(test))
+                setattr(test, k, pytest.mark.xfail(reason="Not support with GNU binutils")(v))
         return test
     else:
         assert callable(test)
-        return nose_xfail_hack(test)
+        return pytest.mark.xfail(reason="Not support with GNU binutils")
 
 
-# https://stackoverflow.com/questions/9613932/nose-plugin-for-expected-failures
-def nose_xfail_hack(test):
-    @functools.wraps(test)
-    def inner(*args, **kwargs):
-        try:
-            test(*args, **kwargs)
-        except Exception:
-            raise nose.SkipTest
-        else:
-            raise AssertionError('Failure expected')
-    return inner
+# TODO: use an enum to ensure only known features are added as @attr
+
+# This contains all the unsupported features (e.g. "capabilies", "float64", etc.)
+
+def attr(*args, **kwargs):
+    def wrap_test_fn(ob):
+        return ob
+
+    # import pprint
+    # pprint.pprint(vars(pytest.config.option))
+    for feature in args:
+        if feature in pytest.config.CHERITEST_UNSUPPORTED_FEATURES:
+            return pytest.mark.skip("Feature '" + feature + "' is not supported!")
+    for feature, value in kwargs.items():
+        is_unsupported_list = pytest.config.CHERITEST_UNSUPPORTED_FEATURES.get(feature, list())
+        if value in is_unsupported_list:
+            return pytest.mark.skip("Feature '" + feature + "' value '" + value + "' is not supported!")
+        if "ALWAYS" in is_unsupported_list:
+            return pytest.mark.skip("Feature '" + feature + "' value '" + value +
+                                    "' is not supported (feature is completely unsupported)!")
+
+    return wrap_test_fn
 
 
 class BaseBERITestCase(unittest.TestCase):
@@ -118,7 +124,6 @@ class BaseBERITestCase(unittest.TestCase):
         self.unexpected_exception = False
         self._SETUP_EXCEPTION = None
 
-    @nose.tools.nottest
     def _do_setup(self):
         '''Parse the log file and instantiate MIPS'''
         assert self.cached is not None
@@ -323,7 +328,7 @@ class BaseBERITestCase(unittest.TestCase):
 
     @property
     def max_permissions(self):
-        perm_size = int(os.environ.get("PERM_SIZE", "31"))
+        perm_size = int(pytest.config.option.PERM_SIZE)
         if perm_size == 31:
             return 0x7fffffff
         elif perm_size == 23:
@@ -555,7 +560,6 @@ class BaseICacheBERITestCase(BaseBERITestCase):
 
 class TestClangBase(object):
     @staticmethod
-    @nose.tools.nottest
     def _get_exception_message(sim_status, exit_code, test_file):
         line_number = sim_status[4]  # load the assertion line number from $a0
         exception_count = sim_status[26]  # exception count should be in $k0
@@ -593,7 +597,6 @@ class TestClangBase(object):
         return exception_message
 
     @staticmethod
-    @nose.tools.nottest
     def verify_clang_test(sim_log, test_name, test_file):
         sim_status = MipsStatus(sim_log)
         exit_code = sim_status[2]  # load the assertion failure kind from $v0
@@ -603,7 +606,6 @@ class TestClangBase(object):
         assert False, exception_message
 
     @staticmethod
-    @nose.tools.nottest
     def get_line(test_file, line_number):
         with open(os.path.join(test_file)) as src_file:
             return src_file.readlines()[line_number - 1].strip()

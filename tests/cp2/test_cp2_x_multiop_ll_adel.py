@@ -27,7 +27,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 class test_cp2_x_multiop_ll_adel(BaseBERITestCase):
     @attr('capabilities')
@@ -46,7 +46,6 @@ class test_cp2_x_multiop_ll_adel(BaseBERITestCase):
 
     @attr('capabilities')
     @attr('cached')
-    @attr('trap_unaligned_cllsc')
     def test_cp2_x_multiop_ll_adel_unalign_trap(self):
         self.assertCompressedTrapInfo(self.MIPS.c6,
             mips_cause=self.MIPS.Cause.AdEL,
@@ -59,11 +58,4 @@ class test_cp2_x_multiop_ll_adel(BaseBERITestCase):
             trap_count=4, msg="unaligned clld should fail")
         # If we trap on unaligned csd/cld we should get 4 exceptions here
         self.assertRegisterEqual(self.MIPS.v0, 4, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
-
-    @attr('capabilities')
-    @attr('cached')
-    @attr('allow_unaligned_cllsc')
-    def test_cp2_x_multiop_ll_adel_unalign_ok(self):
-        # Otherwise it should only be 1 (cllc)
-        self.assertRegisterEqual(self.MIPS.v0, 1, "Unexpected number of exceptions raised during test of multiple operations raising AdEL")
 

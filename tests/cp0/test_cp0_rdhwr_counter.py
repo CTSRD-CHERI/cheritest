@@ -28,7 +28,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 # Test that rdhwr counter register is not accessible from user mode when the coprocessor
 # enable bit is not set.

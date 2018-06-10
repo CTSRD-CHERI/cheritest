@@ -29,7 +29,7 @@
 # Test that comparing an IEEE 'not a number' value raises an exception
 #
 
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 

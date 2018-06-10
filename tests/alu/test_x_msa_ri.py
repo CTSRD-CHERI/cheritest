@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase, xfail_on
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 @xfail_on("L3")
 class test_x_msa_ri(BaseBERITestCase):

@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr, xfail_on
 
 #
 # Test that the RDHWR instruction can be used to read the cycle counter.
@@ -37,14 +37,14 @@ from nose.plugins.attrib import attr
 class test_cp0_counter(BaseBERITestCase):
 
     @attr('rdhwr')
-    @attr('qemu_skip')
+    @attr('count_register_is_icount')
     def test_cp0_counter_1(self):
         '''Test that the count register gives almost the same value when it is read two different ways'''
         self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a1, self.MIPS.a1 + 100,
             "rdhwr and mfc0 did not give nearly the same value for the count register")
 
     @attr('rdhwr')
-    @attr('qemu_only')
+    @attr('count_register_is_time')
     def test_cp0_counter_qemu_1(self):
         '''Test that the count register gives almost the same value when it is read two different ways'''
         self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a1, self.MIPS.a1 + 80000,

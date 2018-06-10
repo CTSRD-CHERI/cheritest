@@ -27,7 +27,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 class test_add_overflow_wrong_sign(BaseBERITestCase):
 

@@ -26,12 +26,12 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 class test_raw_statcounters_l2cachemaster(BaseBERITestCase):
 
     @attr('cached')
-    @attr('statcounters')
+    @attr(beri_statcounters='cache')
     def test_raw_statcounters_l2cachemaster_1(self):
         '''Test that resetting the stat counters, loading a dword and querying the l2cachemaster read request counter returns 1'''
         self.assertRegisterEqual(self.MIPS.a2, 268, "l2cachemaster read req counter corrupted")

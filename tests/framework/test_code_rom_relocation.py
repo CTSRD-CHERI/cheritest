@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 @attr('bev1ram')
 class test_code_rom_relocation(BaseBERITestCase):

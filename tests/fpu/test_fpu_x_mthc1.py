@@ -28,7 +28,7 @@
 #
 #
 
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 

@@ -315,16 +315,23 @@ max_thread_count = 32
 	cfromptr	\dest, $c0, \src
 .endm
 
+# compat with LLVM
+.set $chwr_ddc, $0
+.set $chwr_kr1c, $22
+.set $chwr_kr2c, $23
+.set $chwr_kcc, $29
+.set $chwr_kdc, $30
+.set $chwr_epcc, $31
 .endif  # _GNU_AS_
 
 
 # Does a CSetOffset with an immediate value on a special capability register
-# E.g. `SetSpecialRegOffset Default, 0x123` or `SetSpecialRegOffset EPCC, 0x123`
-.macro SetSpecialRegOffset reg, imm
-	CGet\reg	$c1
+# E.g. `SetCapHwrOffset ddc, 0x123` or `SetCapHwrOffset epcc, 0x123`
+.macro SetCapHwrOffset reg, imm
+	CReadHwr	$c1, $chwr_\()\reg
 	dli		$at, \imm
 	CSetOffset	$c1, $c1, $at
-	CSet\reg	$c1
+	CWriteHwr	$c1, $chwr_\()\reg
 .endm
 
 .macro jump_to_usermode function

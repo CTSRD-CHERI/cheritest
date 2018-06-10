@@ -1,3 +1,5 @@
+@Library('ctsrd-jenkins-scripts') _
+
 class JobConfig {
 	String buildArgs
 	String testArgs
@@ -137,7 +139,14 @@ rm -f sim sim.so
 			archiveArtifacts allowEmptyArchive: false, artifacts: 'ctsrd/cheri/trunk/sim, ctsrd/cheri/trunk/sim.so, ctsrd/cheri/trunk/sim.dtb, ctsrd/cheri/trunk/build_*_sim/sim, ctsrd/cheri/trunk/build_*_sim/sim.so, ctsrd/cheri/trunk/build_*_sim/sim.dtb, ctsrd/cherilibs/trunk/peripherals/*.so, ctsrd/cherilibs/trunk/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
 		}
 		timeout(90) {
-			runTests(args, "binutils")
+			try {
+				// don't fail the job if binutils fails to compile the tests
+				runTests(args, "binutils")
+			} catch (error) {
+				echo "Binutils failed to compile tests ${error}"
+				currentBuild.currentResult = 'UNSTABLE'
+				// TODO: send email about this? emailext attachLog: false, body: "Binutils failed to compile tests: (see ${env.BUILD_URL}): ${error}", subject: "[JENKINS] ${env.JOB_NAME} failed", to: 'someone@example.com'
+			}
 		}
 		timeout(90) {
 			runTests(args, "clang")
@@ -145,39 +154,6 @@ rm -f sim sim.so
 		warnings canComputeNew: false, canResolveRelativePaths: false, consoleParsers: [[parserName: 'Clang (LLVM based)']]
 		step([$class: 'AnalysisPublisher', canComputeNew: false])
 	}
-}
-
-def setGitHubStatusBasedOnCurrentResult(JobConfig args) {
-	def message = "${env.JOB_NAME}: ${currentBuild.description}"
-	def githubCommitStatusContext = "jenkins/${env.JOB_NAME}"
-	Map githubNotifierOptions = [
-			$class: 'GitHubCommitStatusSetter',
-			errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-			// errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-			contextSource: [$class: "ManuallyEnteredCommitContextSource", context: githubCommitStatusContext],
-			/*statusResultSource: [
-					$class: 'ConditionalStatusResultSource',
-					results: [
-							[$class: 'BetterThanOrEqualBuildResult', result: 'SUCCESS', state: 'SUCCESS', message: message],
-							[$class: 'BetterThanOrEqualBuildResult', result: 'UNSTABLE', state: 'FAILURE', message: message],
-							[$class: 'BetterThanOrEqualBuildResult', result: 'FAILURE', state: 'FAILURE', message: message],
-							[$class: 'AnyBuildResult', message: 'Something went wrong', state: 'ERROR']
-					]
-			]*/
-			// statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: 'SUCCESS']] ]
-	]
-	def gitHubCommitSHA = JobConfig.gitInfo?.GIT_COMMIT
-	def gitHubRepoURL = JobConfig.gitInfo?.GIT_URL
-	if (gitHubCommitSHA)
-		githubNotifierOptions['commitShaSource'] = [$class: "ManuallyEnteredShaSource", sha: gitHubCommitSHA]
-	if (gitHubRepoURL) {
-		if (gitHubRepoURL.endsWith('.git')) {
-			gitHubRepoURL = gitHubRepoURL.substring(0, gitHubRepoURL.indexOf('.git'))
-		}
-		githubNotifierOptions['reposSource'] = [$class: "ManuallyEnteredRepositorySource", url: gitHubRepoURL]
-	}
-	echo("${githubNotifierOptions}")
-	step(githubNotifierOptions)
 }
 
 def cheriHardwareTest() {
@@ -204,7 +180,7 @@ def cheriHardwareTest() {
 					workspaceUpdater: [$class: 'UpdateUpdater']])
 		}
 		try {
-			setGitHubStatusBasedOnCurrentResult(args) // set PENDING status
+			setGitHubStatus(args.gitInfo) // set PENDING status
 			doBuild(args)
 		} finally {
 			echo("result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
@@ -212,7 +188,7 @@ def cheriHardwareTest() {
 			if (currentBuild.result == null)
 				currentBuild.result = currentBuild.currentResult
 			echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
-			setGitHubStatusBasedOnCurrentResult(args)
+			setGitHubStatus(args.gitInfo)
 		}
 	}
 }
@@ -220,7 +196,8 @@ def cheriHardwareTest() {
 try {
 	properties([
 			pipelineTriggers([
-					[$class: "GitHubPushTrigger"]
+					[$class: "GitHubPushTrigger"],
+					pollSCM('@daily')
 			]),
 			disableConcurrentBuilds(),
 			[$class: 'CopyArtifactPermissionProperty', projectNames: '*'],

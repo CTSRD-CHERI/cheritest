@@ -29,7 +29,7 @@
 # Test abs.s of "Quiet Not a Number" (QNaN)
 #
 
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 

@@ -26,9 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
-import unittest
-import nose
+from beritest_tools import attr
 
 class test_cp0_reg_init(BaseBERITestCase):
     def test_context_reg(self):

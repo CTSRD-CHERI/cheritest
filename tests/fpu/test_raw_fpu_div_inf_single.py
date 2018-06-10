@@ -29,7 +29,7 @@
 # Test IEEE 747 infinity values in single-precision arithmetic
 #
 
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 

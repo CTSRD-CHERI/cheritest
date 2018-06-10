@@ -26,14 +26,13 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
-
+from beritest_tools import attr
 
 # Check that the registers used in purecap tests are initialized to usable values
 class test_purecap_reg_init(BaseBERITestCase):
     @attr('capabilities')
     def test_pcc(self):
-        self.MIPS.pcc.offset = (self.MIPS.pcc.offset & 0x00FFFFFFFFFFFFFF);
+        self.MIPS.pcc.offset = (self.MIPS.pcc.offset & 0x00FFFFFFFFFFFFFF)
         self.assertValidCap(self.MIPS.pcc, "$pcc", offset=(0x00000040000000, 0x000000400fffff),
                             length=self.max_length, perms=self.max_nostore_perms)
 

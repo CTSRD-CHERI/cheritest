@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 import copy
 
 
@@ -36,7 +36,6 @@ import copy
 #
 @attr('capabilities')
 @attr('cap_hwregs')
-@xfail_gnu_binutils
 class test_cp2_x_cwritehwr_src_inaccessible(BaseBERITestCase):
     def test_pcc_has_no_access_sys_regs(self):
         self.assertCapPermissions(self.MIPS.c14, self.max_permissions & ~1024,
@@ -76,14 +75,16 @@ class test_cp2_x_cwritehwr_src_inaccessible(BaseBERITestCase):
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
             cap_reg=28, trap_count=4, msg="Accessing KR2C should fail")
-        self.assertDefaultCap(self.MIPS.c28, offset=28, msg="Should still hold initial value")
+        self.assertIntCap(self.MIPS.cp2_hwregs[23], int_value=23, msg="Should still hold initial value")
+        self.assertNullCap(self.MIPS.c28, msg="kr2c should not be mirrrored to $c28")
 
     def test_no_sysregs_in_kernel_mode_kr1c(self):
         self.assertCompressedTrapInfo(self.MIPS.c6,
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
             cap_reg=27, trap_count=5, msg="Accessing KR2C should fail")
-        self.assertDefaultCap(self.MIPS.c27, offset=27, msg="Should still hold initial value")
+        self.assertIntCap(self.MIPS.cp2_hwregs[22], int_value=22, msg="Should still hold initial value")
+        self.assertNullCap(self.MIPS.c27, msg="kr1c should not be mirrrored to $c27")
 
     def test_no_sysregs_in_kernel_mode_dest_idc(self):
         self.assertCompressedTrapInfo(self.MIPS.c7, no_trap=True, msg="Accessing IDC should work")

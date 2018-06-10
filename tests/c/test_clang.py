@@ -28,8 +28,9 @@
 
 from beritest_tools import TestClangBase
 import os
+import pytest
 import re
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 # Parameters from the environment
 # Cached or uncached mode.
@@ -38,14 +39,12 @@ MULTI = bool(int(os.environ.get("MULTI1", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-TEST_FILE_RE = re.compile('test_[\w_]*clang_\w+\.c')
+TEST_FILE_RE = re.compile('test_[\w_]*clang_.+\.(c|cpp)')
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
-LOG_DIR = os.environ.get("LOGDIR", "log")
+LOG_DIR = pytest.config.option.LOGDIR
 
 
-@attr('clang')
-@attr('capabilities')
 def check_answer(test_name, test_file):
     if MULTI and CACHED:
         suffix = "_cachedmulti"
@@ -60,16 +59,29 @@ def check_answer(test_name, test_file):
         TestClangBase.verify_clang_test(sim_log, test_name, test_file)
 
 
-# Not derived from unittest.testcase because we wish test_clang to
-# return a generator.
-class TestClang(object):
-    @attr('clang')
-    @attr('capabilities')
-    def test_clang(self):
-        if ONLY_TEST:
-            yield (check_answer, ONLY_TEST)
-        else:
-            for test in filter(lambda f: TEST_FILE_RE.match(f),
-                               os.listdir(TEST_DIR)):
-                test_name = os.path.splitext(os.path.basename(test))[0]
-                yield (check_answer, test_name, os.path.join(TEST_DIR, test))
+def _is_xfail(test_name):
+    # L3 doesn't implement the statcounters instructions
+    if os.getenv("TEST_MACHINE", "").lower() in ("l3", "sail"):
+        if test_name in ("test_purecap_statcounters",):
+            return True
+    return False
+
+
+def _get_tests_function(test_name):
+    return pytest.mark.xfail(_is_xfail(test_name))(check_answer)
+
+
+def get_all_tests():
+    if ONLY_TEST:
+        return ONLY_TEST
+    return filter(lambda f: TEST_FILE_RE.match(f), os.listdir(TEST_DIR))
+
+
+@pytest.mark.parametrize("test", get_all_tests())
+@attr('clang')
+@attr('capabilities')
+def test_clang(test):
+    test_name = os.path.splitext(os.path.basename(test))[0]
+    test_file = os.path.join(TEST_DIR, test)
+    test_func = _get_tests_function(test_name)
+    test_func(test_name, test_file)

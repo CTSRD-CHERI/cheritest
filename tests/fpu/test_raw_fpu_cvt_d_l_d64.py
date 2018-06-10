@@ -29,7 +29,7 @@
 # Test conversion from a 64-bit int to a double-precision floating point value
 #
 
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 

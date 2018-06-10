@@ -27,7 +27,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from nose.plugins.attrib import attr
+from beritest_tools import attr
 
 @attr('capabilities')
 class test_cp2_exception_exl(BaseBERITestCase):
@@ -44,6 +44,9 @@ class test_cp2_exception_exl(BaseBERITestCase):
     @attr('cap_null_length')
     def test_cp2_exception_exl_epcc_length(self):
         self.assertRegisterEqual(self.MIPS.c1.length, 0xffffffffffffffff, "An exception with EXL=1 set EPCC.length when it should not have done.")
+
+    def test_cp2_exception_exl_epcc_null(self):
+        self.assertNullCap(self.MIPS.c1, "An exception with EXL=1 set EPCC when it should not have done.")
 
     def test_cp2_exception_exl_epcc(self):
         self.assertRegisterEqual(self.MIPS.c1.t, 0, "An exception with EXL=1 set EPCC when it should not have done.")
