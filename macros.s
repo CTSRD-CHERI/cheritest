@@ -319,12 +319,12 @@ max_thread_count = 32
 
 
 # Does a CSetOffset with an immediate value on a special capability register
-# E.g. `SetSpecialRegOffset Default, 0x123` or `SetSpecialRegOffset EPCC, 0x123`
-.macro SetSpecialRegOffset reg, imm
-	CGet\reg	$c1
+# E.g. `SetCapHwrOffset ddc, 0x123` or `SetCapHwrOffset epcc, 0x123`
+.macro SetCapHwrOffset reg, imm
+	CReadHwr	$c1, $chwr_\()\reg
 	dli		$at, \imm
 	CSetOffset	$c1, $c1, $at
-	CSet\reg	$c1
+	CWriteHwr	$c1, $chwr_\()\reg
 .endm
 
 .macro jump_to_usermode function

@@ -44,11 +44,13 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 	# they didn't change
 	# Note: we can't just clear them, since KCC is needed in the exception
 	# handler to derive PCC
-	SetSpecialRegOffset KR1C, 27
-	SetSpecialRegOffset KR2C, 28
-	SetSpecialRegOffset KCC, 29
-	SetSpecialRegOffset KDC, 30
-	SetSpecialRegOffset EPCC, 31
+	SetCapHwrOffset kr1c, 22
+	SetCapHwrOffset kr2c, 23
+	SetCapHwrOffset kcc, 29
+	SetCapHwrOffset kdc, 30
+	SetCapHwrOffset epcc, 31
+	cgetnull $c27	# clear $c27 to check that it is not mirrored to hwr 22
+	cgetnull $c28	# clear $c28 to check that it is not mirrored to hwr 23
 
 	# In kernel mode reading all the values should work:
 	CReadHwr $c22, $31

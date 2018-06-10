@@ -128,8 +128,8 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
         self.assertDefaultCap(self.MIPS.c29, offset=29)
         self.assertDefaultCap(self.MIPS.c30, offset=30)
         # check that kr1c and kr2c were not updated by the writes to chwr $22 and $23 in kernel mode:
-        self.assertDefaultCap(self.MIPS.c27, offset=27, msg="kr1c should not mirrored to $c27")
-        self.assertDefaultCap(self.MIPS.c28, offset=28, msg="kr2c should not mirrored to $c28")
+        self.assertNullCap(self.MIPS.c27, msg="kr1c should not mirrored to $c27")
+        self.assertNullCap(self.MIPS.c28, msg="kr2c should not mirrored to $c28")
         self.assertIntCap(self.MIPS.cp2_hwregs[22], int_value=0xbad1, msg="kr1c should not mirrored to $c27")
         self.assertIntCap(self.MIPS.cp2_hwregs[23], int_value=0xbad1, msg="kr2c should not mirrored to $c28")
         # these should not have changed (they are mirrored):
