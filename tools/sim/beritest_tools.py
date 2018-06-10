@@ -69,11 +69,11 @@ def xfail_gnu_binutils(test):
     if isinstance(test, type):
         for k, v in vars(test).items():
             if k.startswith("test_"):
-                setattr(test, k, pytest.mark.xfail("Not support with GNU binutils")(v))
+                setattr(test, k, pytest.mark.xfail(reason="Not support with GNU binutils")(v))
         return test
     else:
         assert callable(test)
-        return pytest.mark.xfail("Not support with GNU binutils")
+        return pytest.mark.xfail(reason="Not support with GNU binutils")
 
 
 # TODO: use an enum to ensure only known features are added as @attr
