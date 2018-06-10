@@ -316,13 +316,12 @@ max_thread_count = 32
 .endm
 
 # compat with LLVM
-.set chwr_ddc, 0
-.set chwr_kr1c, 22
-.set chwr_kr2c, 23
-.set chwr_kcc, 29
-.set chwr_kdc, 30
-.set chwr_epccc, 31
-
+.set $chwr_ddc, $0
+.set $chwr_kr1c, $22
+.set $chwr_kr2c, $23
+.set $chwr_kcc, $29
+.set $chwr_kdc, $30
+.set $chwr_epcc, $31
 .endif  # _GNU_AS_
 
 

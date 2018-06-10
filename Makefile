@@ -1162,6 +1162,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cld_priority.s	\
 		test_cp2_x_clearreg_unimp.s	\
 		test_cp2_x_cllc_tlb.s		\
+		test_cp2_x_creadhwr_kernel_perm.s \
+		test_cp2_x_creadhwr_dest_inaccessible.s \
 		test_cp2_x_csb_perm.s		\
 		test_cp2_x_csc_align.s		\
 		test_cp2_x_csc_bigimm.s		\
@@ -1193,6 +1195,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cunseal_perm.s	\
 		test_cp2_x_cunseal_sealed.s	\
 		test_cp2_x_cunseal_unsealed.s	\
+		test_cp2_x_cwritehwr_kernel_perm.s \
+		test_cp2_x_cwritehwr_src_inaccessible.s \
 		test_cp2_x_exl_pcc.s		\
 		test_cp2_x_fetch.s		\
 		test_cp2_x_jr_imprecise.s	\
@@ -1225,15 +1229,10 @@ TEST_CP2_FILES=					\
 		test_cp2_x_swc1_perm.s
 ifeq ($(USING_LLVM_ASSEMBLER),1)
 # FIXME: gas does not yet implement ccall fast
-# FIXME: it also doesn't handle creadhwr/cwritehw
 TEST_CP2_FILES += \
 		test_cp2_ccall_fast.s		\
 		test_cp2_x_ccall_fast_delay.s	\
 		test_cp2_x_ccall_fast_code_perm.s	\
-		test_cp2_x_creadhwr_kernel_perm.s \
-		test_cp2_x_creadhwr_dest_inaccessible.s \
-		test_cp2_x_cwritehwr_kernel_perm.s \
-		test_cp2_x_cwritehwr_src_inaccessible.s \
 		test_cp2_x_ccall_fast_data_perm.s
 endif
 
