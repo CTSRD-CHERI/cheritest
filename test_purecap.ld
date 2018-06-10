@@ -40,9 +40,9 @@ SECTIONS
 	. = 0x9000000040000000;
 
 	.text . : AT(0x40000000) {
-                . = ALIGN(8);
-		obj/purecap_init.o(.text)
-		*(EXCLUDE_FILE (obj/purecap_init.o) .text .text.*)
+		. = ALIGN(8);
+		*/purecap_init.o(.text)
+		*(EXCLUDE_FILE (purecap_init.o) .text .text.*)
 	}
 	.data . : { . = ALIGN(8); *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*); }
 	.got  . : {

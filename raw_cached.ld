@@ -39,8 +39,8 @@ SECTIONS
 	. = 0x9800000040000000;
 
 	.text ALIGN(0x8): {
-		obj/init_cached.o(.text)
-		*(EXCLUDE_FILE (obj/init_cached.o) .text)
+		*/init_cached.o(.text)
+		*(EXCLUDE_FILE (init_cached.o) .text)
 	}
 	.bss ALIGN(0x8): { *(.bss) }
 	.data ALIGN(0x8): { *(.data)}
