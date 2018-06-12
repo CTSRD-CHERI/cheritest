@@ -58,7 +58,7 @@ BEGIN_TEST
 		#
 
 		cgetdefault $c2
-		candperm $c2, $c1, $zero
+		candperm $c2, $c2, $zero
 
 		#
 		# Do a CJR to address L1, with an exception in the

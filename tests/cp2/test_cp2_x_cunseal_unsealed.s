@@ -67,7 +67,7 @@ BEGIN_TEST
 		# Put a recognizable value in $a0 so we can tell if the
 		# test never makes it back from the exception handler.
 		dli     $a0, 2
-
+		cgetdefault	$c2
 		cunseal $c1, $c2, $c3 # This should raise an exception
 
 		# The exception handler should return to here, and

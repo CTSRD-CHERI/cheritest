@@ -47,6 +47,9 @@ sandbox:
 		nop
 
 BEGIN_TEST
+		# load a full permissions cap into $kdc
+		cgetdefault	$c1
+		csetkdc	$c1
 		#
 		# Set up exception handler
 		#
@@ -154,9 +157,8 @@ bev0_ccall_handler:
 		# Load a capability for the trusted system stack into
 		# kernel reserved capability register 2 ($c28)
 		#
-		# $c27 should already be a capability for the kernel's
-		# data segment
-		#
+
+		cgetkdc	$c27	# Get capability for the kernel data segment
 
 		dla     $k0, tsscap
 		clc 	$c28, $k0, 0($c27)
