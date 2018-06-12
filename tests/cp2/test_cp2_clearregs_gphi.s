@@ -63,6 +63,12 @@ BEGIN_TEST
                 cgetdefault		$c24
                 cgetdefault		$c25
                 cgetdefault		$c26
+                cgetdefault		$c27
+                cgetdefault		$c28
+                cgetdefault		$c29
+                cgetdefault		$c30
+                # TODO: cgetdefault		$c31
+                csetepcc		$c30
 
                 # clear gphi16
 		clearhi		0x5555

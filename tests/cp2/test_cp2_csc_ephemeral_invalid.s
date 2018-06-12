@@ -57,6 +57,7 @@ BEGIN_TEST
 		#
 
 		dli       $t0, 0x7e
+		cgetdefault $c1
 		candperm  $c1, $c1, $t0
 		ccleartag $c1, $c1
 

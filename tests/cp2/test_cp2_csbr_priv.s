@@ -36,7 +36,7 @@
 # capability.
 #
 BEGIN_TEST
-
+		cgetdefault $c1
 		dla	$t0, data
 		dli	$t2, 0x01
 		csb 	$t2, $t0, 0($c1)

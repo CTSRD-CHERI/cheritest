@@ -44,19 +44,19 @@ class test_cp2_exception_pipeline(BaseBERITestCase):
     def test_csetbounds(self):
         '''Test that a syscall flushed CSetBounds from the pipeline.'''
         # Should be unchanged from default
-        self.assertRegisterEqual(self.MIPS.c2.length, 0xffffffffffffffff, "CSetBounds instruction was not properly flushed from pipeline")
+        self.assertDefaultCap(self.MIPS.c2, msg="CSetBounds instruction was not properly flushed from pipeline")
 
     @attr('capabilities')
     def test_candperms(self):
         '''Test that a syscall flushed CAndPerms from the pipeline.'''
         # Should be unchanged from default
-        self.assertRegisterAllPermissions(self.MIPS.c4.perms, "CAndPerms instruction was not properly flushed from pipeline")
+        self.assertDefaultCap(self.MIPS.c4, msg="CAndPerms instruction was not properly flushed from pipeline")
 
     @attr('capabilities')
     def test_csetoffset(self):
         '''Test that a syscall flushed CSetOffset from the pipeline.'''
         # Should be unchanged from default
-        self.assertRegisterEqual(self.MIPS.c5.offset, 0x0, "CSetOffset instruction was not properly flushed from pipeline")
+        self.assertDefaultCap(self.MIPS.c5, msg="CSetOffset instruction was not properly flushed from pipeline")
 
     @attr('capabilities')
     def test_cscr(self):
@@ -71,8 +71,4 @@ class test_cp2_exception_pipeline(BaseBERITestCase):
     def test_clcr(self):
         '''Test that a syscall flushed CLCR from the pipeline.'''
         # The c7 register should be unchanged from its default value
-        self.assertRegisterEqual(self.MIPS.c7.ctype, 0, "CLCR instruction was not properly flushed from pipeline")
-        self.assertRegisterAllPermissions(self.MIPS.c7.perms, "CLCR instruction was not properly flushed from pipeline")
-        self.assertRegisterEqual(self.MIPS.c7.offset, 0, "CLCR instruction was not properly flushed from pipeline")
-        self.assertRegisterEqual(self.MIPS.c7.base, 0, "CLCR instruction was not properly flushed from pipeline")
-        self.assertRegisterEqual(self.MIPS.c7.length, 0xffffffffffffffff, "CLCR instruction was not properly flushed from pipeline")
+        self.assertDefaultCap(self.MIPS.c7, msg="CLCR instruction was not properly flushed from pipeline")

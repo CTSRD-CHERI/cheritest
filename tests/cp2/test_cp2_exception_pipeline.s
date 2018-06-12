@@ -42,7 +42,12 @@
 # state is not updated, even though capability modification instruction will
 # have entered the pipeline.
 BEGIN_TEST
-	
+		cgetdefault	$c2
+		cgetdefault	$c3
+		cgetdefault	$c4
+		cgetdefault	$c5
+		cgetdefault	$c6
+		cgetdefault	$c7
 		#
 		# Set up exception handler.
 		#

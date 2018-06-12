@@ -38,7 +38,7 @@
 
 BEGIN_TEST
 		dla	$t0, data
-
+		cgetdefault	$c1
 		cld	$a0, $t0, 0($c1)		# 64-bit aligned
 
 END_TEST

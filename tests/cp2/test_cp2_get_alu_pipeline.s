@@ -38,6 +38,7 @@
 
 BEGIN_TEST
 		# Test cgetbase
+		cgetdefault	$c2
 		dli	$t0, 100
 		cgetbase	$t0, $c2	# should return 0x0
 		or	$t0, $t0, 0
