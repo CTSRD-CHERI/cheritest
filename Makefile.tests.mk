@@ -750,6 +750,7 @@ $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	$(QEMU_PYTEST) "--junit-xml=$(basename $@).xml" --runxfail -v $< || true
 
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
+
 pytest/sim_uncached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
@@ -769,3 +770,24 @@ pytest/sim_cachedmulti/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
 	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $< || true
+
+# Single L3 tests:
+pytest/l3_uncached/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
+	CACHED=0 $(L3_NOSETESTS) $(L3_NOSEFLAGS_UNCACHED) -v $< || true
+
+pytest/l3_cached/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
+	CACHED=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS) -v $< || true
+
+pytest/l3_multi/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
+	CACHED=0 MULTI1=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS_UNCACHED) -v $< || true
+
+pytest/l3_cachedmulti/%.py: %.py FORCE
+	# echo "DEPS: $^ "
+	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
+	MULTI1=1 CACHED=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS) -v $< || true
