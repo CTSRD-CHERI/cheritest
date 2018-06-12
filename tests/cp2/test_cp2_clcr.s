@@ -42,6 +42,7 @@ BEGIN_TEST
 		# and base are in the right order.
 		#
 		dli	$t2, 0x1
+		cgetdefault $c2
 		csetoffset	$c2, $c2, $t2
 
 		#

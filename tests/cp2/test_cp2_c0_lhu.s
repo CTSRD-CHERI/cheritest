@@ -36,6 +36,7 @@
 #
 
 BEGIN_TEST
+		cgetdefault $c2		# save $ddc
 		#
 		# Set up $c1 to point at data.
 		# We want $c1.length to be 8.
@@ -59,7 +60,7 @@ BEGIN_TEST
 		#
 		# Restore privileged c0 for test termination.
 		#
-		csetdefault $c30
+		csetdefault $c2
 
 END_TEST
 

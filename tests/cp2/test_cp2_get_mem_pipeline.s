@@ -37,6 +37,7 @@
 #
 
 BEGIN_TEST
+		cgetdefault $c2
 		dla	$s0, data
 
 		# Test cgetbase

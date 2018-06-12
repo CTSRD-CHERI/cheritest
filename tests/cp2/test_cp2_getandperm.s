@@ -40,7 +40,7 @@ BEGIN_TEST
 		dli	$t0, 0xff
 		dli	$a0, 1
 		dli	$a1, 2
-
+		cgetdefault	$c2
 		cgetperm	$a0, $c2
 		candperm	$c2, $c2, $t0
 		cgetperm	$a1, $c2

@@ -40,6 +40,7 @@ BEGIN_TEST
 		dla	$t0, data
 		daddiu	$t1, $t0, 4
 
+		cgetdefault $c1
 		clwu 	$a0, $t0, 0($c1)		# 64-bit aligned
 		clwu 	$a1, $t1, 0($c1)		# 32-bit aligned
 

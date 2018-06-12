@@ -41,6 +41,7 @@ BEGIN_TEST
 		daddiu	$t1, $t0, 4
 		daddiu	$t2, $t0, 6
 
+		cgetdefault $c1
 		clhu	$a0, $t0, 0($c1)		# 64-bit aligned
 		clhu	$a1, $t1, 0($c1)		# 32-bit aligned
 		clhu	$a2, $t2, 0($c1)		# 16-bit aligned

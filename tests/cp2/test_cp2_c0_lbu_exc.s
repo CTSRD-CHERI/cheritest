@@ -35,6 +35,8 @@
 # Test lbu (load byte unsigned) indirected via a constrained c0.
 #
 BEGIN_TEST
+		# FIXME: this test isn't actually run
+		cgetdefault $c2		# save $ddc
 		li	$s2, 0
 
 		#
@@ -75,7 +77,7 @@ BEGIN_TEST
 		# Restore privileged c0 for test termination.
 		#
 
-		csetdefault $c30
+		csetdefault $c2
 
 END_TEST
 

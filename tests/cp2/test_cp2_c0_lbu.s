@@ -36,6 +36,7 @@
 #
 
 BEGIN_TEST
+		cgetdefault $c2		# save $ddc
 		#
 		# Set up $c1 to point at data.
 		# We want $c1.length to be 8.
@@ -57,10 +58,8 @@ BEGIN_TEST
 		lbu	$a2, 6($t0)		# 16-bit aligned
 		lbu	$a3, 7($t0)		# 8-bit aligned
 
-		#
-		# Restore privileged c0 for test termination.
-		#
-		csetdefault $c30
+		# Restore privileged ddc for test termination.
+		csetdefault $c2
 
 END_TEST
 

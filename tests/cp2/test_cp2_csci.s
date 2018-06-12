@@ -42,6 +42,7 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0x5
+		cgetdefault $c2
 		csetoffset $c2, $c2, $t0
 
 		#

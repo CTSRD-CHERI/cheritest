@@ -47,24 +47,28 @@ BEGIN_TEST
 		# Test cincoffset
 		dli	$t0, 0
 		ld	$t0, 0($s0)
+		cgetdefault	$c2
 		cincoffset	$c2, $c2, $t0
 		cgetoffset	$a0, $c2
 
 		# Test csetbounds
 		dli	$t1, 0
 		ld	$t1, 0($s0)
+		cgetdefault	$c3
 		csetbounds	$c3, $c3, $t1
 		cgetlen	$a1, $c3
 
 		# Test candperm
 		dli	$t2, 0
 		ld	$t2, 0($s0)
+		cgetdefault	$c4
 		candperm	$c4, $c4, $t2
 		cgetperm	$a2, $c4
 
 		# Test csetoffset
 		dli	$t3, 0
 		ld	$t3, 0($s0)
+		cgetdefault	$c5
 		csetoffset	$c5, $c5, $t3
 		cgetoffset	$a3, $c5
 

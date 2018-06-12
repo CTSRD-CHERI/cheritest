@@ -46,6 +46,7 @@ BEGIN_TEST
 
 		# Clear RCC. so that we can tell when PCC has been saved there
 		dli      $t0, 4
+		cgetdefault $c24
 		cincoffset $c24, $c24, $t0
 		csetbounds  $c24, $c24, $t0
 		csetoffset $c24, $c24, $t0
