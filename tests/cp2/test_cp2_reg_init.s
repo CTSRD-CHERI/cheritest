@@ -39,4 +39,6 @@
 #
 
 BEGIN_TEST
+	cgetoffset $a1, $c12	# get offset value for $c12
+	cgetoffset $a2, $c17	# get offset value for $c17
 END_TEST

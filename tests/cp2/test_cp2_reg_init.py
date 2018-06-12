@@ -73,28 +73,16 @@ class test_cp2_reg_init(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.pcc.s, 0, "CP2 PCC sealed incorrectly initialised")
 
     @attr('capabilities')
-    def test_cp2_reg_init_rest_base(self):
-        '''Test that CP2 general-purpose register bases are correctly initialised'''
-        for i in range(1, 26):
-            self.assertRegisterEqual(self.MIPS.cp2[i].base, 0x0, "CP2 capability register bases incorrectly initialised")
-
-    @attr('capabilities')
-    def test_cp2_reg_init_rest_length(self):
-        '''Test that CP2 general-purpose register lengths are correctly initialised'''
-        for i in range(1, 26):
-            self.assertRegisterEqual(self.MIPS.cp2[i].length, 0xffffffffffffffff, "CP2 capability register lengths incorrectly initialised")
-
-    @attr('capabilities')
-    def test_cp2_reg_init_rest_ctype(self):
-        '''Test that CP2 general-purpose register ctypes are correctly initialised'''
-        for i in range(1, 26):
-            self.assertRegisterEqual(self.MIPS.cp2[i].ctype, 0x0, "CP2 capability register ctypes incorrectly initialised")
-
-    @attr('capabilities')
-    def test_cp2_reg_init_rest_perms(self):
+    def test_cp2_reg_init_rest(self):
         '''Test that CP2 general-purpose register perms are correctly initialised'''
         for i in range(1, 26):
-            self.assertRegisterAllPermissions(self.MIPS.cp2[i].perms, "CP2 capability register perms incorrectly initialised")
+            # c12 will be set up to point to the start of the test and $c17 will be the return value
+            if i == 12:
+                self.assertDefaultCap(self.MIPS.cp2[i], offset=self.MIPS.a1, msg="$c12 should point to start of test fn")
+            elif i == 17:
+                self.assertDefaultCap(self.MIPS.cp2[i], offset=self.MIPS.a2, msg="$c17 should point to return addr")
+            else:
+                self.assertNullCap(self.MIPS.cp2[i], "CP2 capability register $c" + str(i) + " incorrectly initialised")
 
     @attr('capabilities')
     def test_cp2_reg_init_rest_unsealed(self):
@@ -109,12 +97,13 @@ class test_cp2_reg_init(BaseBERITestCase):
             for i in itertools.chain(range(2, 8), range(9, 22), range(24, 29)):
                 self.assertIsNone(t.cp2_hwregs[i], msg="Hwreg " + str(i) + " should not exist")
 
-    def _test_mirrored_hwreg(self, name, number):
+    def _test_mirrored_hwreg(self, name, number, is_null=False):
         for t in self.MIPS.threads.values():
-            self.assertDefaultCap(getattr(t, name), msg="$" + name + " incorrect")
-            # TODO: this will change once $c0 is $cnull
-            self.assertDefaultCap(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
-            self.assertDefaultCap(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?")
+            func = self.assertNullCap if is_null else self.assertDefaultCap
+            func(getattr(t, name), msg="$" + name + " incorrect")
+            func(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
+            func(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?")
+
 
     @attr('capabilities')
     def test_cp2_reg_init_ddc(self):
@@ -160,7 +149,7 @@ class test_cp2_reg_init(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_reg_init_kdc(self):
-        self._test_mirrored_hwreg("kdc", 30)
+        self._test_mirrored_hwreg("kdc", 30, is_null=True)
 
     @attr('capabilities')
     def test_cp2_reg_init_epcc(self):

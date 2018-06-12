@@ -34,12 +34,12 @@ from beritest_tools import BaseBERITestCase, attr
 class test_raw_cp2_reg_init(BaseBERITestCase):
     def test_gpr_state(self):
         for i in range(1, 32):
-            if i == 29:
-                 # (kcc is initialized to a full-addrspace value)
-                 # TODO: this should change eventually
+            if i in (29, 31):
+                 # TODO: this should change eventually (only in special regs)
+                 # kcc + epcc are initialized to a full-addrspace value
                 self.assertDefaultCap(self.MIPS.cp2[i])
-                continue
-            self.assertNullCap(self.MIPS.cp2[i])
+            else:
+                self.assertNullCap(self.MIPS.cp2[i])
 
     def test_cp2_reg_init_c0(self):
         '''Check that c0 is correctly initialized (either as $ddc or $cnull)'''
@@ -94,4 +94,4 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
         self._test_mirrored_hwreg("kdc", 30, is_null=True)
 
     def test_cp2_reg_init_epcc(self):
-        self._test_mirrored_hwreg("epcc", 31, is_null=True)
+        self._test_mirrored_hwreg("epcc", 31)

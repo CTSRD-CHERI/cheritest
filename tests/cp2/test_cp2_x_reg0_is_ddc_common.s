@@ -33,8 +33,7 @@
 
 BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		# Save c0
-		cgetdefault   $c1
-
+		cgetdefault	$c1
 		# Make $ddc a capability pointing to data without load/store
 		dla	$t0, data
 		csetoffset $c2, $c1, $t0	# $c2 = data

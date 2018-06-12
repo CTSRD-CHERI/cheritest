@@ -134,7 +134,7 @@ class test_cp2_x_creadhwr_kernel_perm(BaseBERITestCase):
         self.assertIntCap(self.MIPS.cp2_hwregs[23], int_value=23)
 
     def test_kernel_mode_read_ok(self):
-        self.assertIntCap(self.MIPS.c22, int_value=31, msg="c22 should contain initial EPCC")
+        self.assertDefaultCap(self.MIPS.c22, offset=31, msg="c22 should contain initial EPCC")
         self.assertIntCap(self.MIPS.c23, int_value=30, msg="c23 should contain initial KDC")
         self.assertDefaultCap(self.MIPS.c24, offset=29, msg="c24 should contain initial KCC")
         # kr1c and kr2c are untagged
