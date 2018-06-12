@@ -24,7 +24,9 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-
+#ifdef __linux__
+#define _GNU_SOURCE /* for asprintf() */
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
