@@ -50,8 +50,8 @@ BEGIN_TEST
 		nop
 		dla	$a0, bev0_handler
 		jal	bev0_handler_install
-                nop
-	
+		nop
+
 		# Test csetbounds
 		dli	$t0, 0x100
 		syscall	0
@@ -73,7 +73,7 @@ BEGIN_TEST
 		dla		$t0, data
 		cgetdefault $c6
 		csetoffset $c6, $c6, $t0
-		dli     	$t0, 32
+		dli		$t0, 32
 		csetbounds	$c6, $c6, $t0
 		dli		$t0, 0x1ff
 		candperm	$c6, $c6, $t0
@@ -82,10 +82,10 @@ BEGIN_TEST
 		
 		# Test cscr
 		dla	$t0, data
-	        syscall 0
+		syscall 0
 		csc 	$c6, $t0, 0($ddc) # not executed
 		# If cscr was properly squashed these loads will load the
-	        # test values below, otherwise they will get the stored capability
+		# test values below, otherwise they will get the stored capability
 		ld	$a0, ($t0)
 		ld	$a1, 8($t0)
 		ld	$a2, 16($t0)
@@ -95,7 +95,7 @@ BEGIN_TEST
 		csc 	$c6, $t0, 0($ddc)
 	
 		# Test clcr
- 		syscall 0
+		syscall 0
 		clc 	$c7, $t0, 0($ddc) # not executed
 
 END_TEST
