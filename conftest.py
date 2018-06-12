@@ -56,7 +56,7 @@ def pytest_configure(config):
     #assert isinstance(config, _pytest.config.Config)
     # TODO: add the available features to the config object
     #  if LOGDIR/CAP_SIZE/CHERI_C0_IS_NULL/TEST_MACHINE are not set, set sensible default values (QEMU)
-    print(config.getoption(CheritestOptions.TEST_MACHINE.name))
+    print("TEST_MACHINE:", config.getoption(CheritestOptions.TEST_MACHINE.name))
     if config.option.help:
         return
 
@@ -79,3 +79,19 @@ def pytest_configure(config):
         # TODO: infer default values
         if not value:
             raise pytest.UsageError("env var $" + option.name + " or option " + option.cmdline_flag + " must be set!")
+
+
+def pytest_ignore_collect(path, config):
+    skip_paths = {
+        "fuzz_test": "/tests/fuzz",
+        "fuzz_test_regression": "/tests/fuzz_regressions",
+        "multicore": "/tests/multicore",
+        "float": "/tests/fpu",
+        "trace_tests": "/tests/trace",
+    }
+
+    for opt, skip_path in skip_paths.items():
+        if str(path).endswith(skip_path) and config.CHERITEST_UNSUPPORTED_FEATURES.get(opt):
+            print("Ignoring test dir", skip_path, "since attr", opt, "is unsupported.")
+            return True
+    return False

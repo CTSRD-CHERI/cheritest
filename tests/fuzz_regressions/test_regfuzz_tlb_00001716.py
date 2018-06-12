@@ -70,6 +70,7 @@ expected_cached=[
     0x9800000000008000,
     0x98000000400003ac,
   ]
+@attr('fuzz_test_regression')
 class test_regfuzz_tlb_00001716(BaseBERITestCase):
   @attr('tlb')
   def test_registers_expected(self):

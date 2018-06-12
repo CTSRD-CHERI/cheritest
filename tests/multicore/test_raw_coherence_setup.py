@@ -29,7 +29,7 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
-
+@attr('multicore')
 class test_raw_coherence_setup(BaseBERITestCase):
 #    def test_coreid_register(self):
 #        self.assertRegisterEqual(self.MIPS.a0, 1, "Initial read of coreID register failed")

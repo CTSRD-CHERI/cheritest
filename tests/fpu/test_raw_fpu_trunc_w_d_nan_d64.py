@@ -29,7 +29,7 @@ from beritest_tools import attr
 
 from beritest_tools import BaseBERITestCase
 
-
+@attr('float')
 class test_raw_fpu_trunc_w_d_nan_d64(BaseBERITestCase):
 
     @attr('float64')

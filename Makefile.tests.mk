@@ -747,7 +747,7 @@ QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
-	$(QEMU_PYTEST) "--junit-xml=$(basename $@).xml" --runxfail -v $< || true
+	$(QEMU_PYTEST) --runxfail -v $< || true
 
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 

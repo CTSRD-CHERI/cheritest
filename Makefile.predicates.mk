@@ -137,7 +137,21 @@ endif
 ifeq ($(TEST_FPU),1)
 COMMON_UNSUPPORTED_FEATURES+=nofloat
 else
-COMMON_UNSUPPORTED_FEATURES+=float
+COMMON_UNSUPPORTED_FEATURES+=float float64
+endif
+
+
+ifndef TEST_TRACE
+ifndef TEST_TRACE_ONLY
+COMMON_UNSUPPORTED_FEATURES+=	trace_tests
+endif
+endif
+
+ifeq ($(NOFUZZ),1)
+COMMON_UNSUPPORTED_FEATURES+=	fuzz_test
+endif
+ifeq ($(NOFUZZR),1)
+COMMON_UNSUPPORTED_FEATURES+=	fuzz_test_regression
 endif
 
 

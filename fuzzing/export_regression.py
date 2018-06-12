@@ -50,6 +50,8 @@ expected_cached=[""")
     for reg in range(len(tools.gxemul.MIPS_REG_NUM2NAME)):
         print("    0x%x," % cached_gxemul_status[reg])
     print("""  ]
+    
+@attr('fuzz_test_regression')
 class %(testname)s(BaseBERITestCase):
   %(attrs)s
   def test_registers_expected(self):

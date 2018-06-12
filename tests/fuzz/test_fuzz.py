@@ -32,6 +32,7 @@
 
 import tools.gxemul, tools.sim
 import os, re, itertools
+from tools.sim.beritest_tools import attr
 
 # Parameters from the environment
 # Cached or uncached mode.
@@ -44,6 +45,7 @@ TEST_DIR ='tests/fuzz'
 
 #Not derived from unittest.testcase because we wish test_fuzz to
 #return a generator.
+@attr('fuzz_test')
 class TestFuzz(object):
     def test_fuzz(self):
         if ONLY_TEST:
@@ -52,7 +54,8 @@ class TestFuzz(object):
             for test in filter(lambda f: TEST_FILE_RE.match(f) ,os.listdir(TEST_DIR)):
                 test_name=os.path.splitext(os.path.basename(test))[0]
                 yield ('check_answer', test_name)
-                
+
+    @attr('fuzz_test')
     def check_answer(self, test_name):
         if CACHED:
             cached="_cached"
