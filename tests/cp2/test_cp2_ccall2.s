@@ -43,6 +43,9 @@ sandbox:
 		nop	# branch delay slot
 
 BEGIN_TEST
+		# load a full permissions cap into $kdc
+		cgetdefault	$c1
+		csetkdc	$c1
 		#
 		# Set up exception handler
 		#
@@ -151,8 +154,8 @@ L1:
 		# Clear $ddc so that the sandbox doesn't have access to it
 		#
 
-		cgetnull $c27
-		csetdefault $c27
+		cgetnull $c3
+		csetdefault $c3
 
 		#
 		# Invoke the sandbox
@@ -211,10 +214,7 @@ do_ccall:
 		# Load a capability for the trusted system stack into
 		# kernel reserved capability register 2 ($c28)
 		#
-		# $c27 should already be a capability for the kernel's
-		# data segment
-		#
-
+		cgetkdc	$c27
 		dla     $k0, tsscap
 		clc     $c28, $k0, 0($c27)
 
@@ -328,9 +328,7 @@ do_creturn:
 		# Load a capability for the trusted system stack into
 		# kernel reserved capability register 2 ($c28)
 		#
-		# $c27 should already be a capability for the kernel's
-		# data segment
-		#
+		cgetkdc	$c27	# Get capability for the kernel data segment
 
 		dla     $k0, tsscap
 		clc     $c28, $k0, 0($c27)
