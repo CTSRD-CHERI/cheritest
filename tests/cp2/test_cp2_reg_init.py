@@ -114,7 +114,7 @@ class test_cp2_reg_init(BaseBERITestCase):
             self.assertDefaultCap(getattr(t, name), msg="$" + name + " incorrect")
             # TODO: this will change once $c0 is $cnull
             self.assertDefaultCap(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
-            self.assertDefaultCap(t.cp2_hwregs[0], msg="cap_hwr " + str(number) + " != $" + name + "?")
+            self.assertDefaultCap(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?")
 
     @attr('capabilities')
     def test_cp2_reg_init_ddc(self):

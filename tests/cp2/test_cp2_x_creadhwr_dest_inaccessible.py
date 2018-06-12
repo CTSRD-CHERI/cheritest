@@ -62,14 +62,14 @@ class test_cp2_x_creadhwr_dest_inaccessible(BaseBERITestCase):
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
             cap_reg=30, trap_count=2, msg="Accessing KDC should fail")
-        self.assertDefaultCap(self.MIPS.c30, offset=30, msg="Should still hold initial value")
+        self.assertIntCap(self.MIPS.kdc, int_value=30, msg="Should still hold initial value")
 
     def test_no_sysregs_in_kernel_mode_kcc(self):
         self.assertCompressedTrapInfo(self.MIPS.c4,
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
             cap_reg=29, trap_count=3, msg="Accessing KCC should fail")
-        self.assertDefaultCap(self.MIPS.c29, offset=29, msg="Should still hold initial value")
+        self.assertDefaultCap(self.MIPS.kcc, offset=29, msg="Should still hold initial value")
 
     def test_no_sysregs_in_kernel_mode_kr2c(self):
         self.assertCompressedTrapInfo(self.MIPS.c5,

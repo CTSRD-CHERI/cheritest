@@ -36,7 +36,7 @@
 # privileged capability.
 #
 BEGIN_TEST
-
+		cgetdefault	$c1
 		dla	$t0, data
 		dli	$t2, 0x0123456789abcdef
 		csd 	$t2, $t0, 0($c1)

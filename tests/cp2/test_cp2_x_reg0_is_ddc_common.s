@@ -37,7 +37,7 @@ BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 
 		# Make $ddc a capability pointing to data without load/store
 		dla	$t0, data
-		csetoffset $c2, $c2, $t0	# $c2 = data
+		csetoffset $c2, $c1, $t0	# $c2 = data
 		dli	$t1, ~CHERI_PERM_STORE
 		candperm $c3, $c2, $t1
 		dli	$t1, ~CHERI_PERM_LOAD

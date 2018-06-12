@@ -43,32 +43,39 @@
 BEGIN_TEST
 
 		# Ensure all capability registers are set to the default.
-    cgetdefault		$c1
-    cgetdefault		$c2
-    cgetdefault		$c3
-    cgetdefault		$c4
-    cgetdefault		$c5
-    cgetdefault		$c6
-    cgetdefault		$c7
-    cgetdefault		$c8
-    cgetdefault		$c9
-    cgetdefault		$c10
-    cgetdefault		$c11
-    cgetdefault		$c12
-    cgetdefault		$c13
-    cgetdefault		$c14
-    cgetdefault		$c15
-    cgetdefault		$c16
-    cgetdefault		$c17
-    cgetdefault		$c18
-    cgetdefault		$c19
-    cgetdefault		$c20
-    cgetdefault		$c21
-    cgetdefault		$c22
-    cgetdefault		$c23
-    cgetdefault		$c24
-    cgetdefault		$c25
-    cgetdefault		$c26
+		cgetdefault		$c1
+		cgetdefault		$c2
+		cgetdefault		$c3
+		cgetdefault		$c4
+		cgetdefault		$c5
+		cgetdefault		$c6
+		cgetdefault		$c7
+		cgetdefault		$c8
+		cgetdefault		$c9
+		cgetdefault		$c10
+		cgetdefault		$c11
+		cgetdefault		$c12
+		cgetdefault		$c13
+		cgetdefault		$c14
+		cgetdefault		$c15
+		cgetdefault		$c16
+		cgetdefault		$c17
+		cgetdefault		$c18
+		cgetdefault		$c19
+		cgetdefault		$c20
+		cgetdefault		$c21
+		cgetdefault		$c22
+		cgetdefault		$c23
+		cgetdefault		$c24
+		cgetdefault		$c25
+		cgetdefault		$c26
+		cgetdefault		$c27
+		cgetdefault		$c28
+		cgetdefault		$c29
+		cgetdefault		$c30
+		# make EPCC a full address space cap to keep this test working
+		cgetdefault	$c1
+		csetepcc	$c1
 
 		#
 		# Save out all capability registers but $kcc and $kdc.
@@ -159,7 +166,7 @@ BEGIN_TEST
 		daddiu	$t0, $t0, 32
 		csc 	$c27, $t0, 0($c30)
 
-		# Store epcc before c27 so we have a tempreg
+		# Store epcc after c27 so we have a tempreg when loading
 		daddiu	$t0, $t0, 32
 		cgetepcc $c27
 		csc 	$c27, $t0, 0($c30)
@@ -287,17 +294,11 @@ BEGIN_TEST
 		candperm	$c26, $c26, $t1
 
 		csetoffset	$c27, $c27, $t2
-		cincbase	$c27, $c27, $t0
-		candperm	$c27, $c27, $t1
 
 		csetoffset	$c28, $c28, $t2
-		cincbase	$c28, $c28, $t0
-		candperm	$c28, $c28, $t1
 
 		cgetepcc	$c28
 		csetoffset	$c28, $c28, $t2
-		cincbase	$c28, $c28, $t0
-		candperm	$c28, $c28, $t1
 		csetepcc	$c28
 
 		#

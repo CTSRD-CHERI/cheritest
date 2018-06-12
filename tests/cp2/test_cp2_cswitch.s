@@ -38,7 +38,40 @@
 # order to ensure that an OS would work!
 #
 BEGIN_TEST
-
+		# make $c30/kdc a full address-space capability (will be null on CPU reset)
+		cgetdefault $c30
+		# Ensure all capability registers are set to the default.
+		cgetdefault		$c1
+		cgetdefault		$c2
+		cgetdefault		$c3
+		cgetdefault		$c4
+		cgetdefault		$c5
+		cgetdefault		$c6
+		cgetdefault		$c7
+		cgetdefault		$c8
+		cgetdefault		$c9
+		cgetdefault		$c10
+		cgetdefault		$c11
+		cgetdefault		$c12
+		cgetdefault		$c13
+		cgetdefault		$c14
+		cgetdefault		$c15
+		cgetdefault		$c16
+		cgetdefault		$c17
+		cgetdefault		$c18
+		cgetdefault		$c19
+		cgetdefault		$c20
+		cgetdefault		$c21
+		cgetdefault		$c22
+		cgetdefault		$c23
+		cgetdefault		$c24
+		cgetdefault		$c25
+		cgetdefault		$c26
+		cgetdefault		$c27
+		cgetdefault		$c28
+		cgetdefault		$c29
+		# make EPCC full addr space too:
+		csetepcc		$c29
 		#
 		# Save out all capability registers but $kcc and $kdc.
 		#

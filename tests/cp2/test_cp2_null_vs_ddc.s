@@ -42,7 +42,7 @@ BEGIN_TEST
 
 		# Make $ddc a full-perms capability pointing to data
 		dla	$t0, data
-		csetoffset $c3, $c3, $t0
+		csetoffset $c3, $c2, $t0
 		csetdefault $c3
 
 		# cmove should use NULL (or $ddc on older simulators)

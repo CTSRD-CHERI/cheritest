@@ -124,25 +124,24 @@ class test_cp2_x_creadhwr_kernel_perm(BaseBERITestCase):
             trap_count=10, msg="Accessing invalid reg should fail")
 
     def test_final_values(self):
-        self.assertDefaultCap(self.MIPS.c29, offset=29)
+        # these should not have changed (they are mirrored):
+        self.assertDefaultCap(self.MIPS.kcc, offset=29)
         self.assertDefaultCap(self.MIPS.cp2_hwregs[29], offset=29)
-        self.assertDefaultCap(self.MIPS.cp2_hwregs[30], offset=30)
+        self.assertIntCap(self.MIPS.kdc, int_value=30)
+        self.assertIntCap(self.MIPS.cp2_hwregs[30], int_value=30)
         # KR1C and KR2C are NULL on startup -> untagged
         self.assertIntCap(self.MIPS.cp2_hwregs[22], int_value=22)
         self.assertIntCap(self.MIPS.cp2_hwregs[23], int_value=23)
 
     def test_kernel_mode_read_ok(self):
-        self.assertDefaultCap(self.MIPS.c22, offset=31, msg="c22 should contain initial EPCC")
-        self.assertDefaultCap(self.MIPS.c23, offset=30, msg="c23 should contain initial KDC")
+        self.assertIntCap(self.MIPS.c22, int_value=31, msg="c22 should contain initial EPCC")
+        self.assertIntCap(self.MIPS.c23, int_value=30, msg="c23 should contain initial KDC")
         self.assertDefaultCap(self.MIPS.c24, offset=29, msg="c24 should contain initial KCC")
         # kr1c and kr2c are untagged
         self.assertIntCap(self.MIPS.c25, int_value=22, msg="c25 should contain initial KR1C")
         self.assertIntCap(self.MIPS.c26, int_value=23, msg="c26 should contain initial KR2C")
         self.assertNullCap(self.MIPS.c27, msg="KR1C should not be mirrored to caphwregs")
         self.assertNullCap(self.MIPS.c28, msg="K21C should not be mirrored to caphwregs")
-        # these should not have changed (they are mirrored to c29/c30):
-        self.assertDefaultCap(self.MIPS.cp2_hwregs[29], offset=29)
-        self.assertDefaultCap(self.MIPS.cp2_hwregs[30], offset=30)
 
     def test_total_exception_count(self):
         self.assertRegisterEqual(self.MIPS.v0, 10, "Wrong number of exceptions triggered")

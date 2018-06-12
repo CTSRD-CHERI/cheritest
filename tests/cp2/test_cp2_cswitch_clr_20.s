@@ -71,6 +71,13 @@ BEGIN_TEST
     cgetdefault		$c24
     cgetdefault		$c25
     cgetdefault		$c26
+    cgetdefault		$c27
+    cgetdefault		$c28
+    cgetdefault		$c29
+    cgetdefault		$c30
+		# make EPCC a full address space cap to keep this test working
+		cgetdefault	$c1
+		csetepcc	$c1
 
 		dli	$t3, 20
 loop:
