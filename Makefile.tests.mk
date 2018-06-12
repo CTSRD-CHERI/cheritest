@@ -758,17 +758,17 @@ pytest/sim_uncached/%.py: %.py FORCE
 
 pytest/sim_cached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
+	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cached.log
 	CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $< || true
 
 pytest/sim_multi/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
+	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_multi.log
 	CACHED=0 MULTI1=1 $(SIM_NOSETESTS) $(NOSEFLAGS_UNCACHED) -v $< || true
 
 pytest/sim_cachedmulti/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
+	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cachedmulti.log
 	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $< || true
 
 # Single L3 tests:
@@ -779,15 +779,15 @@ pytest/l3_uncached/%.py: %.py FORCE
 
 pytest/l3_cached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
+	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_cached.log
 	CACHED=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS) -v $< || true
 
 pytest/l3_multi/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
+	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_multi.log
 	CACHED=0 MULTI1=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS_UNCACHED) -v $< || true
 
 pytest/l3_cachedmulti/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
+	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_cachedmulti.log
 	MULTI1=1 CACHED=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS) -v $< || true
