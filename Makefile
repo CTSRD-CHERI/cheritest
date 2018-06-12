@@ -335,19 +335,6 @@ OBJDIR=obj/$(CAP_SIZE)
 include Makefile.build.mk
 
 
-ifeq ($(wildcard $(TOOLS_DIR_ABS)),)
-MEMCONV=$(error Cannot find find memConv.py, set CHERILIBS to the cherilibs/trunk directory )
-else
-MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
-endif
-
-ifeq ($(wildcard $(CHERIROOT_ABS)),)
-CHERI_SW_MEM_BIN=$(error Cannot find find CHERIROOT/sw/mem.bin, set CHERIROOT to the cheri/trunk directory )
-else
-CHERI_SW_MEM_BIN=${CHERIROOT_ABS}/sw/mem.bin
-endif
-
-
 ### Include the test rules:
 include Makefile.tests.mk
 
