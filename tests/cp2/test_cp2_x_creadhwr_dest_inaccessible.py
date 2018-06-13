@@ -54,7 +54,7 @@ class test_cp2_x_creadhwr_dest_inaccessible(BaseBERITestCase):
         self.assertCompressedTrapInfo(self.MIPS.c2,
             mips_cause=self.MIPS.Cause.TRAP,
             trap_count=1, msg="Accessing EPCC should fail")
-        self.assertDefaultCap(self.MIPS.c31, offset=self.MIPS.a7,
+        self.assertDefaultCap(self.MIPS.epcc, offset=self.MIPS.a7,
             perms=self.max_permissions & ~1024, msg="EPCC should be at last trap")
 
     def test_no_sysregs_in_kernel_mode_kdc(self):

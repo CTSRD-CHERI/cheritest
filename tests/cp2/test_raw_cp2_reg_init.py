@@ -34,9 +34,8 @@ from beritest_tools import BaseBERITestCase, attr
 class test_raw_cp2_reg_init(BaseBERITestCase):
     def test_gpr_state(self):
         for i in range(1, 32):
-            if i in (29, 31):
-                 # TODO: this should change eventually (only in special regs)
-                 # kcc + epcc are initialized to a full-addrspace value
+            if self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED and i in (29, 31):
+                # kcc + epcc are initialized to a full-addrspace value (and may still be mirrored to the cap register file
                 self.assertDefaultCap(self.MIPS.cp2[i])
             else:
                 self.assertNullCap(self.MIPS.cp2[i])
@@ -58,12 +57,14 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
             for i in itertools.chain(range(2, 8), range(9, 22), range(24, 29)):
                 self.assertIsNone(t.cp2_hwregs[i], msg="Hwreg " + str(i) + " should not exist")
 
-    def _test_mirrored_hwreg(self, name, number, is_null=False):
+    def _test_special_hwreg(self, name, number, is_null=False):
         for t in self.MIPS.threads.values():
             func = self.assertNullCap if is_null else self.assertDefaultCap
             func(getattr(t, name), msg="$" + name + " incorrect")
-            func(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
             func(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?")
+            if self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED:
+                # also check that it was mirrored into the general-purepose register file
+                func(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
 
     def test_cp2_reg_init_ddc(self):
         '''Check that $ddc is correctly initialized to be the full addrespace'''
@@ -88,10 +89,10 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
             self.assertNullCap(t.cp2_hwregs[23], msg="caphwr kr1c should be null on reset")
 
     def test_cp2_reg_init_kcc(self):
-        self._test_mirrored_hwreg("kcc", 29)
+        self._test_special_hwreg("kcc", 29)
 
     def test_cp2_reg_init_kdc(self):
-        self._test_mirrored_hwreg("kdc", 30, is_null=True)
+        self._test_special_hwreg("kdc", 30, is_null=True)
 
     def test_cp2_reg_init_epcc(self):
-        self._test_mirrored_hwreg("epcc", 31)
+        self._test_special_hwreg("epcc", 31)

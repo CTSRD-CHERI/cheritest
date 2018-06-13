@@ -169,36 +169,36 @@ class ThreadStatus(object):
     @property
     def ddc(self):
         # type: (self) -> Capability
-        # Should currently be mirrored (0 will be null reg soon)
-        if MipsStatus.CHERI_C0_IS_NULL:
-            assert self.cp2_hwregs[0] is not None, "CapHWR 0 (DDC) not defined?"
-            return self.cp2_hwregs[0]
-        else:
-            return self._mirrored_capreg(0, "$ddc")
+        return self._special_capreg(0, "$ddc")
 
     @property
     def kcc(self):
         # type: (self) -> Capability
-        return self._mirrored_capreg(29, "$kcc")
+        return self._special_capreg(29, "$kcc")
 
     @property
     def kdc(self):
         # type: (self) -> Capability
-        return self._mirrored_capreg(30, "$kdc")
+        return self._special_capreg(30, "$kdc")
 
     @property
     def epcc(self):
         # type: (self) -> Capability
         # Should currently be mirrored (31 could be a GPR again soon)
-        return self._mirrored_capreg(31, "$epcc")
+        return self._special_capreg(31, "$epcc")
 
     # Return a capabilty
-    def _mirrored_capreg(self, number, name):
+    def _special_capreg(self, number, name):
         # type: (self, int, str) -> Capability
-        if self.cp2_hwregs[number]:
-            assert self.cp2[number] == self.cp2_hwregs[number], "cap hwr" + name + " not mirrored to $c " + str(number) + "?"
+        if MipsStatus.CHERI_C0_IS_NULL:
+            assert self.cp2_hwregs[number] is not None, "CapHWR {} ({}) not defined?".format(number, name)
             return self.cp2_hwregs[number]
-        return self.cp2[number]
+        else:
+            # legacy behaviour: it is just a numbered GPR:
+            if self.cp2_hwregs[number]:
+                assert self.cp2[number] == self.cp2_hwregs[number], "cap hwr {} not mirrored to $c{}?".format(name, number)
+                return self.cp2_hwregs[number]
+            return self.cp2[number]
 
     # noinspection PyStringFormat
     def __repr__(self):
@@ -216,6 +216,11 @@ class ThreadStatus(object):
 
 class MipsStatus(object):
     CHERI_C0_IS_NULL = is_envvar_true("CHERI_C0_IS_NULL")  # type: bool
+
+    @property
+    def ARE_SPECIAL_CAPREGS_MIRRORED(self):
+        # Just reuse the CHERI_C0_IS_NULL flag for this
+        return not self.CHERI_C0_IS_NULL
 
     '''Represents the status of the MIPS CPU registers, populated by parsing
     a log file. If x is a MipsStatus object, registers can be accessed by name

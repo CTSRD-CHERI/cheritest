@@ -52,7 +52,7 @@ class test_cp2_x_cwritehwr_src_inaccessible(BaseBERITestCase):
         self.assertCompressedTrapInfo(self.MIPS.c2,
             mips_cause=self.MIPS.Cause.TRAP,
             trap_count=1, msg="Accessing EPCC should fail")
-        self.assertDefaultCap(self.MIPS.c31, offset=self.MIPS.a7,
+        self.assertDefaultCap(self.MIPS.epcc, offset=self.MIPS.a7,
             perms=self.max_permissions & ~1024, msg="EPCC should be at last trap")
 
     # Writing KDC and KCC should fail

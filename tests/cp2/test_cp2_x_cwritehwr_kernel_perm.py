@@ -139,8 +139,6 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
         # EPCC will be somewhere on the first userspace page and will have access_sys_regs
         self.assertValidCap(self.MIPS.epcc, offset=(0x0, 0x2000), base=0,
             length=self.max_length, perms=self.max_permissions)
-        self.assertValidCap(self.MIPS.c31, offset=(0x0, 0x2000), base=0,
-            length=self.max_length, perms=self.max_permissions)
 
     def test_total_exception_count(self):
         self.assertRegisterEqual(self.MIPS.v0, 10, "Wrong number of exceptions triggered")

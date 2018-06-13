@@ -99,27 +99,27 @@ class test_cp2_exception_epcc(BaseBERITestCase):
     #
     @attr('capabilities')
     def test_presandbox_epcc_unsealed(self):
-        self.assertRegisterEqual(self.MIPS.cp2[31].s, 0, "pre-sandbox EPCC unsealed incorrect")
+        self.assertRegisterEqual(self.MIPS.epcc.s, 0, "pre-sandbox EPCC unsealed incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_perms(self):
-        self.assertRegisterAllPermissions(self.MIPS.cp2[31].perms, "pre-sandbox EPCC perms incorrect")
+        self.assertRegisterAllPermissions(self.MIPS.epcc.perms, "pre-sandbox EPCC perms incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_ctype(self):
-        self.assertRegisterEqual(self.MIPS.cp2[31].ctype, 0x0, "pre-sandbox EPCC ctype incorrect")
+        self.assertRegisterEqual(self.MIPS.epcc.ctype, 0x0, "pre-sandbox EPCC ctype incorrect")
         
     @attr('capabilities')
     def test_presandbox_epcc_offset(self):
-        self.assertRegisterEqual(self.MIPS.cp2[31].offset, 0x0, "pre-sandbox EPCC offset incorrect")
+        self.assertRegisterEqual(self.MIPS.epcc.offset, 0x0, "pre-sandbox EPCC offset incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_base(self):
-        self.assertRegisterEqual(self.MIPS.cp2[31].base, 0x0, "pre-sandbox EPCC base incorrect")
+        self.assertRegisterEqual(self.MIPS.epcc.base, 0x0, "pre-sandbox EPCC base incorrect")
 
     @attr('capabilities')
     def test_presandbox_epcc_length(self):
-        self.assertRegisterEqual(self.MIPS.cp2[31].length, 0xffffffffffffffff, "pre-sandbox EPCC length incorrect")
+        self.assertRegisterEqual(self.MIPS.epcc.length, 0xffffffffffffffff, "pre-sandbox EPCC length incorrect")
 
     #
     # Check that the post-sandbox EPCC is as expected: sandboxed.

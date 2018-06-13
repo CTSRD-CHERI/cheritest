@@ -75,7 +75,10 @@ class test_cp2_reg_init(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_reg_init_rest(self):
         '''Test that CP2 general-purpose register perms are correctly initialised'''
-        for i in range(1, 26):
+        for i in range(1, 32):
+            # if we are still mirroring into GPRs skip 29 to 31
+            if self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED and i >= 29:
+                continue
             # c12 will be set up to point to the start of the test and $c17 will be the return value
             if i == 12:
                 self.assertDefaultCap(self.MIPS.cp2[i], offset=self.MIPS.a1, msg="$c12 should point to start of test fn")
@@ -83,6 +86,7 @@ class test_cp2_reg_init(BaseBERITestCase):
                 self.assertDefaultCap(self.MIPS.cp2[i], offset=self.MIPS.a2, msg="$c17 should point to return addr")
             else:
                 self.assertNullCap(self.MIPS.cp2[i], "CP2 capability register $c" + str(i) + " incorrectly initialised")
+
 
     @attr('capabilities')
     def test_cp2_reg_init_rest_unsealed(self):
@@ -97,12 +101,14 @@ class test_cp2_reg_init(BaseBERITestCase):
             for i in itertools.chain(range(2, 8), range(9, 22), range(24, 29)):
                 self.assertIsNone(t.cp2_hwregs[i], msg="Hwreg " + str(i) + " should not exist")
 
-    def _test_mirrored_hwreg(self, name, number, is_null=False):
+    def _test_special_hwreg(self, name, number, is_null=False):
         for t in self.MIPS.threads.values():
             func = self.assertNullCap if is_null else self.assertDefaultCap
             func(getattr(t, name), msg="$" + name + " incorrect")
-            func(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
             func(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?")
+            if self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED:
+                # also check that it was mirrored into the general-purepose register file
+                func(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
 
 
     @attr('capabilities')
@@ -145,12 +151,12 @@ class test_cp2_reg_init(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_reg_init_kcc(self):
-        self._test_mirrored_hwreg("kcc", 29)
+        self._test_special_hwreg("kcc", 29)
 
     @attr('capabilities')
     def test_cp2_reg_init_kdc(self):
-        self._test_mirrored_hwreg("kdc", 30, is_null=True)
+        self._test_special_hwreg("kdc", 30, is_null=True)
 
     @attr('capabilities')
     def test_cp2_reg_init_epcc(self):
-        self._test_mirrored_hwreg("epcc", 31)
+        self._test_special_hwreg("epcc", 31)

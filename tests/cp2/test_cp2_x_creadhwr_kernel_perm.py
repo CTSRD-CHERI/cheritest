@@ -150,5 +150,3 @@ class test_cp2_x_creadhwr_kernel_perm(BaseBERITestCase):
         # EPCC will be somewhere on the first userspace page and will have access_sys_regs
         self.assertValidCap(self.MIPS.epcc, offset=(0x0, 0x2000), base=0,
             length=self.max_length, perms=self.max_permissions)
-        self.assertValidCap(self.MIPS.c31, offset=(0x0, 0x2000), base=0,
-            length=self.max_length, perms=self.max_permissions)
