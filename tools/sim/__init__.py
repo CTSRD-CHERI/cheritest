@@ -312,13 +312,17 @@ class MipsStatus(object):
         return "\n".join(v)
 
     class Cause(object):
+        TLB_Mod = 1
+        TLB_Load = 2
+        TLB_Store = 3
         AdEL = 4
         AdES = 5
         IBUS = 6
         DBUS = 7
         SYSCALL = 8
-        BREAK = 8
+        BREAK = 9
         ReservedInstruction = 10
+        COP_Unusable = 11
         OVERFLOW = 12
         TRAP = 13
         FPE = 15
