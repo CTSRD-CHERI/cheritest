@@ -144,8 +144,8 @@ rm -f sim sim.so
 				runTests(args, "binutils")
 			} catch (error) {
 				echo "Binutils failed to compile tests ${error}"
-				currentBuild.currentResult = 'UNSTABLE'
-				// TODO: send email about this? emailext attachLog: false, body: "Binutils failed to compile tests: (see ${env.BUILD_URL}): ${error}", subject: "[JENKINS] ${env.JOB_NAME} failed", to: 'someone@example.com'
+				currentBuild.result = 'UNSTABLE'
+				emailext attachLog: false, body: "Binutils failed to compile tests: (see ${env.BUILD_URL}): ${error}", subject: "[JENKINS] ${env.JOB_NAME} (binutils) failed", to: 'Michael.Roe@cl.cam.ac.uk'
 			}
 		}
 		timeout(90) {
