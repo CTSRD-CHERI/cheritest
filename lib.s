@@ -244,14 +244,25 @@ install_bev0_stubs:
 .ent bev0_set_common_handler_raw
 bev0_set_common_handler_raw:
 	mips_function_entry
-
 	# move arguments to match memcpy:
 	dsubu	$a2, $a1, $a0	# get memcpy length into $a2
 	move	$a1, $a0	# move $a1 to $src parameter
 	dli	$a0, 0xffffffff80000180	# address of handler ($memcpy $dest)
+	# TODO: don't copy the handler, just add a branch
 	jal memcpy_nocap
 	nop
 
+	# Make the other handlers jump to the general one at 0x180
+	dli	$a0, 0xffffffff80000000	# address of base handler
+	dli 	$a1, 0x1000005f		# b 0x17c
+	sw	$a1, 0($a0)		# store a branch to 0x180 to the tlb handler
+	sw	$zero, 4($a0)		# add a nop for the branch delay slot
+	dli	$a1, 0x1000003f		# b 0xfc
+	sw	$a1, 0x80($a0)		# store a branch to 0x180 to the xtlb handler
+	sw	$zero, 0x84($a0)	# add a nop for the branch delay slot
+	dli	$a1, 0x1000001f		# b 0x7c
+	sw	$a1, 0x100($a0)		# store a branch to 0x180 to the cache handler
+	sw	$zero, 0x104($a0)	# add a nop for the branch delay slot
 	mips_function_return
 .end bev0_set_common_handler_raw
 
