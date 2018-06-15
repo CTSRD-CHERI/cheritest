@@ -46,6 +46,13 @@ start:
 	# Enable CP1 and CP2
 	dli	$t1, 3 << 29
 	or	$at, $at, $t1
+	mtc0	$at, $12
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
 
 	# TODO: this should be macro in macros.s
 
