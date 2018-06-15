@@ -3,6 +3,7 @@
 # Copyright (c) 2016-2017 Hongyan Xia
 # Copyright (c) 2013-2014 Alan A. Mujumdar
 # Copyright (c) 2015-2017 Alexandre Joannou
+# Copyright (c) 2018 Alex Richardson
 # Copyright (c) 2014 SRI International
 # Copyright (c) 2012 Benjamin Thorner
 # Copyright (c) 2013-2015 Colin Rothwell
