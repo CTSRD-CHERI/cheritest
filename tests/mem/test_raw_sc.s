@@ -93,11 +93,12 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		sc	$s0, -4($gp)
 		lw	$s1, -4($gp)
 		
+		dla	$gp, dword # Back to 
 		# Initialize link register to a different address.
-		ll 	$k0, 0($gp)
+		ll 	$k0, 0($gp)			# @dword
 		# Fail to store and load a word into word storage
 		dli	$s2, 0x01234567
-		sc	$s2, -20($gp)			# @dword
+		sc	$s2, -20($gp)			# @nops
 		lwu	$s3, -20($gp)
 
 		# Dump registers in the simulator
@@ -110,8 +111,12 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 end:
 		b end
 		nop
-
+		nop
+		nop
+		nop
+		
 		.data
+		.align 7 # Cache-line aligned
 dword:		.dword	0x0000000000000000
 positive:	.word	0x00000000
 negative:	.word	0x00000000

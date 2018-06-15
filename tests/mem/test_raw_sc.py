@@ -89,4 +89,4 @@ class test_raw_sc(BaseBERITestCase):
     @attr('llscnotmatching')
     def test_load_load_linked_not_matching(self):
         '''Load after store conditional which failed due to unmatching load linked address'''
-        self.assertRegisterEqual(self.MIPS.s3, 0xfedcba98, "Store conditional with an unmatching load linked address stored to memory")
+        self.assertRegisterEqual(self.MIPS.s3, 0x0, "Store conditional with an unmatching load linked address stored to memory")
