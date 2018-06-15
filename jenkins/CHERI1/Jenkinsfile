@@ -182,6 +182,9 @@ def cheriHardwareTest() {
 		try {
 			setGitHubStatus(args.gitInfo) // set PENDING status
 			doBuild(args)
+		} catch(error) {
+			echo("Failure detected: ${error}")
+			currentBuild.result == 'FAILURE'
 		} finally {
 			echo("result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
 			// it seems like the currentBuild.Result will always be null (PENDING) unless I set it explicitly here
