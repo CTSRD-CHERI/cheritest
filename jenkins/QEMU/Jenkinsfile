@@ -156,13 +156,6 @@ try {
 	cheriHardwareTest()
 } catch (e) {
 	error(e.toString())
-	/* emailext body: '$DEFAULT_CONTENT',
-		recipientProviders: [
-			[$class: 'CulpritsRecipientProvider'],
-			[$class: 'DevelopersRecipientProvider'],
-			[$class: 'RequesterRecipientProvider']
-		],
-		replyTo: '$DEFAULT_REPLYTO',
-		subject: '$DEFAULT_SUBJECT',
-		to: '$DEFAULT_RECIPIENTS' */
+} finally {
+	emailext body: '$DEFAULT_CONTENT', recipientProviders: [culprits(), brokenBuildSuspects(), brokenTestsSuspects(), requestor()], subject: '$DEFAULT_SUBJECT'
 }
