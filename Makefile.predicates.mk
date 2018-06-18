@@ -96,16 +96,12 @@ else
 COMMON_UNSUPPORTED_FEATURES+=cap_precise
 endif
 
-ifeq ($(PERM_SIZE),23)
-COMMON_UNSUPPORTED_FEATURES+=cap_perm_31
-endif
-
-ifeq ($(PERM_SIZE),19)
-COMMON_UNSUPPORTED_FEATURES+=cap_perm_31 cap_perm_23
+ifeq ($(PERM_SIZE),31)
+COMMON_UNSUPPORTED_FEATURES+=cap_perm_15
 endif
 
 ifeq ($(PERM_SIZE),15)
-COMMON_UNSUPPORTED_FEATURES+=cap_perm_31 cap_perm_23
+COMMON_UNSUPPORTED_FEATURES+=cap_perm_31
 endif
 
 ifeq ($(ALLOW_UNALIGNED),0)

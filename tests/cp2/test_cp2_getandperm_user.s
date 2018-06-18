@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
 # Copyright (c) 2014-2015 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -61,4 +62,10 @@ BEGIN_TEST
 		candperm $c2, $c2, $t0
 		cgetperm $a3, $c2
 
+		# clear all hardware perms and check that user perms start at bit 15
+		.set ALL_HW_PERMS, (2 * CHERI_PERM_SYSTEM_REGS) - 1
+		dli $t0, ~ALL_HW_PERMS
+		cgetdefault $c3
+		candperm $c3, $c3, $t0
+		cgetperm $a4, $c3
 END_TEST

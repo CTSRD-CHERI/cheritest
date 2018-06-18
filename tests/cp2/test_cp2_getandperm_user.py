@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -32,27 +33,40 @@ from beritest_tools import attr
 # Check basic behaviour of cgetperm and candperm.
 #
 
+@attr('capabilities')
 class test_cp2_getandperm_user(BaseBERITestCase):
 
-    @attr('capabilities')
-    def test_cp2_getperm_1(self):
+    hw_perm_mask = (1 << 15) - 1
+
+    def test_cp2_getperm_initial(self):
         '''Test that CGetPerm returns correct initial value'''
         self.assertRegisterAllPermissions(self.MIPS.a0, "CGetPerm returns incorrect initial value")
 
-    @attr('capabilities')
     @attr('cap_perm_31')
-    def test_cp2_getperm_2(self):
+    def test_cp2_getperm_31(self):
         '''Test that CGetPerm returns correct value after CAndPerm'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x40000001, "CGetPerm returns incorrect value after CAndPerm")
+        self.assertRegisterEqual(self.MIPS.a1, 0x40000001, "CGetPerm returns incorrect value after CAndPerm (higher bits)")
 
-    @attr('capabilities')
-    @attr('cap_perm_23')
-    def test_cp2_getperm_3(self):
-        '''Test that CGetPerm returns correct value after CAndPerm'''
-        self.assertRegisterEqual(self.MIPS.a2, 0x400001, "CGetPerm returns incorrect value after CAndPerm")
-
-    @attr('capabilities')
-    def test_cp2_getperm_4(self):
-        '''Test that CGetperm returns correct value after CAndperm'''
+    def test_cp2_getperm_15(self):
+        '''Test that CGetperm returns correct value after CAndperm (lower bits (15-18))'''
         self.assertRegisterEqual(self.MIPS.a3, 0x40001, "CGetperm returns incorrect value after CAndperm")
+
+    def test_uperms_start_at_bit_15(self):
+        self.assertRegisterMaskEqual(self.MIPS.a4, (1 << 15), (1 << 15), "Software perms should start at bit 15")
+
+    def test_hwperms_not_sign_extended(self):
+        self.assertRegisterMaskEqual(self.MIPS.a4, self.hw_perm_mask, 0, "HW perms should not be sign-extended in cgetperm")
+
+    @attr('cap_perm_31')
+    def test_all_uperms_31(self):
+        max_software_perms = ((1 << 31) - 1) & ~self.hw_perm_mask
+        self.assertRegisterEqual(self.MIPS.a4, max_software_perms, "Software perms should be bits 15-30")
+
+    @attr('cap_perm_15')
+    def test_all_uperms_15(self):
+        max_software_perms = ((1 << 19) - 1) & ~self.hw_perm_mask
+        self.assertRegisterEqual(self.MIPS.a4, max_software_perms, "Software perms should be bits 15-18")
+
+
+
 

@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Robert N. M. Watson
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -32,14 +33,19 @@ from beritest_tools import attr
 # Check basic behaviour of cgetperm and candperm.
 #
 
+@attr('capabilities')
 class test_cp2_getandperm(BaseBERITestCase):
 
-    @attr('capabilities')
-    def test_cp2_getperm1(self):
+    def test_cp2_getperm_full(self):
         '''Test that cgetperm returns correct initial value'''
         self.assertRegisterAllPermissions(self.MIPS.a0, "cgetperm returns incorrect initial value")
 
-    @attr('capabilities')
-    def test_cp2_getperm2(self):
+    # TODO: this is probably incorrect for CHERI64
+    def test_cp2_getperm_without_user_perms(self):
+        '''Test that cgetperm returns correct value after candperm'''
+        self.assertRegisterMaskEqual(self.MIPS.a0, (1 << 15) - 1, (1 << 11) - 1,
+                                     "There are only 11 HW permissions (should not be extended to fill all 15 bits)")
+
+    def test_cp2_getperm_after_mask(self):
         '''Test that cgetperm returns correct value after candperm'''
         self.assertRegisterEqual(self.MIPS.a1, 0xff, "cgetperm returns incorrect value after candperm")
