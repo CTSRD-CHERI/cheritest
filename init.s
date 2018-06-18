@@ -53,7 +53,7 @@ start:
 
 	        mfc0    $t0, $16
        		ori     $t0, $t0, 7
-      	 	xori    $t0, $t0, 5
+		xori    $t0, $t0, 4 # Set to Cached.
         	mtc0    $t0, $16
 
                 jal     get_corethread_id   # v0 = core ID * num threads + thread ID
