@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2017 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -47,6 +48,17 @@ BEGIN_TEST
 
 		ld	$a0, 0($t0)
 
+		# Check that we don't mask any bits when loading/storing untagged values:
+		dla	$t0, cap3
+		clc	$c3, $t0, 0($ddc)
+		csc	$c3, $t0, 0($ddc)
+		clc	$c4, $t0, 0($ddc)
+		# Load the raw bits:
+		cld	$a2, $t0, 0($ddc)
+		cld	$a3, $t0, 8($ddc)
+		cld	$a4, $t0, 16($ddc)
+		cld	$a5, $t0, 24($ddc)
+
 END_TEST
 
 		.data
@@ -59,3 +71,7 @@ cap2:		.dword 0
 		.dword 0
 		.dword 0
 		.dword 0
+cap3:		.dword 0xffffffffffffffff
+		.dword 0xffffffffffffffff
+		.dword 0xffffffffffffffff
+		.dword 0xffffffffffffffff

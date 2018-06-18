@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2017 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -28,8 +29,16 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('capabilities')
 class test_cp2_clc_perm(BaseBERITestCase):
-
-    @attr('capabilities')
     def test_cp2_clc_perm_1(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x123456789abcdef0, "CLC did not load a capability when cb.perms.Permit_Load_Capability was not set")
+
+    def test_cp2_clc_load_store_untagged(self):
+        self.assertCapabilitiesEqual(self.MIPS.c4, self.MIPS.c3, "CLC did not load back the same untagged value that was stored")
+
+    def test_cp2_clc_untagged_memory_bits_unchanged(self):
+        self.assertRegisterEqual(self.MIPS.a2, 0xffffffffffffffff, "CSC changed the in-memory bits")
+        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "CSC changed the in-memory bits")
+        self.assertRegisterEqual(self.MIPS.a4, 0xffffffffffffffff, "CSC changed the in-memory bits")
+        self.assertRegisterEqual(self.MIPS.a5, 0xffffffffffffffff, "CSC changed the in-memory bits")
