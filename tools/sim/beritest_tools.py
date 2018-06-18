@@ -330,9 +330,9 @@ class BaseBERITestCase(unittest.TestCase):
     def max_permissions(self):
         perm_size = int(pytest.config.option.PERM_SIZE)
         if perm_size == 31:
-            return 0x7fffffff
+            return 0x7fff87ff
         elif perm_size == 23:
-            return 0x7fffff
+            return 0x7f87ff
         elif perm_size == 19:
             return 0x7ffff
         elif perm_size == 15:
