@@ -404,7 +404,7 @@ endif
 	@env UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
 	    if [ "$(dollar)exit_code" -ne 255 ]; then \
-	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; false; \
+	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
 	    fi
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
@@ -417,7 +417,7 @@ endif
 	@env UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
 	    if [ "$(dollar)exit_code" -ne 255 ]; then \
-	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; false; \
+	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
 	    fi
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
