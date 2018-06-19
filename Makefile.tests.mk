@@ -733,7 +733,7 @@ qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOG
 
 pytest_qemu_purecap_tests: pytest_qemu_purecap_tests.xml
 pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v $(PURECAP_TESTDIRS) || true
+	$(QEMU_PYTEST) --junit-xml=$@ -v $(PURECAP_TESTDIRS) || true
 
 CP2_TESTS := $(basename $(TEST_CP2_FILES))
 CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
@@ -741,23 +741,23 @@ CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
 #cp2_dumps: $(CP2_DUMPS)
 pytest_qemu_cp2_tests: pytest_qemu_cp2_tests.xml
 pytest_qemu_cp2_tests.xml: $(CP2_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail $(TESTDIR)/cp2 || true
+	$(QEMU_PYTEST) --junit-xml=$@ $(TESTDIR)/cp2 || true
 
 pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
 pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail -v $(CLANG_TESTDIRS) || true
+	$(QEMU_PYTEST) --junit-xml=$@ -v $(CLANG_TESTDIRS) || true
 
 pytest_qemu: pytest_qemu.xml
 pytest_qemu.xml: $(QEMU_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
 	@echo "pytest selector: $(QEMU_NOSEFLAGS)"
-	$(QEMU_PYTEST) --junit-xml=$@ --runxfail $(TESTDIRS) || true
+	$(QEMU_PYTEST) --junit-xml=$@ $(TESTDIRS) || true
 
 QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
-	$(QEMU_PYTEST) --runxfail -v $< || true
+	$(QEMU_PYTEST) -v $< || true
 
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 
