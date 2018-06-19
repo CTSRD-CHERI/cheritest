@@ -25,8 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, is_feature_supported, attr
 
 class test_cp2_fast_rep_check(BaseBERITestCase):
     @attr('capabilities')
@@ -57,7 +56,10 @@ class test_cp2_fast_rep_check(BaseBERITestCase):
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_fast_rep_check_tag_neginc_lower_imprecise(self):
-                self.assertRegisterEqual(self.MIPS.a4, 0x0, "Tag unexpectedly NOT cleared by cincoffset with negative increment near lower representable boundary using imprecise capabilities")
+        if is_feature_supported('improved_cheri_cc'):
+            self.assertRegisterEqual(self.MIPS.a4, 0x1, "Tag unexpectedly cleared by cincoffset with negative increment near lower representable boundary using imprecise capabilities")
+        else:
+            self.assertRegisterEqual(self.MIPS.a4, 0x0, "Tag unexpectedly NOT cleared by cincoffset with negative increment near lower representable boundary using imprecise capabilities")
 
     @attr('capabilities')
     @attr('cap_precise')
@@ -72,19 +74,25 @@ class test_cp2_fast_rep_check(BaseBERITestCase):
     @attr('capabilities')
     @attr('cap_precise')
     def test_cp2_fast_rep_check_neginc_upper_precise(self):
-                self.assertRegisterEqual(self.MIPS.s2, 0x1, "Tag unexpectedly cleared by cincoffset with negative increment near upper representable boundary using precise capabilities")
+        self.assertRegisterEqual(self.MIPS.s2, 0x1, "Tag unexpectedly cleared by cincoffset with negative increment near upper representable boundary using precise capabilities")
 
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_fast_rep_check_posinc_upper_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a6, 0x0, "Tag unexpectedly NOT cleared by cincoffset with positive increment near upper representable boundary using imprecise capabilities")
+        if is_feature_supported('improved_cheri_cc'):
+            self.assertRegisterEqual(self.MIPS.a6, 0x1, "Tag unexpectedly cleared by cincoffset with positive increment near upper representable boundary using imprecise capabilities")
+        else:
+            self.assertRegisterEqual(self.MIPS.a6, 0x0, "Tag unexpectedly NOT cleared by cincoffset with positive increment near upper representable boundary using imprecise capabilities")
 
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_fast_rep_check_zeroinc_upper_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.s0, 0x0, "Tag unexpectedly NOT cleared by cincoffset with zero increment near upper representable boundary using imprecise capabilities")
+        if is_feature_supported('improved_cheri_cc'):
+            self.assertRegisterEqual(self.MIPS.s0, 0x1, "Tag unexpectedly cleared by cincoffset with zero increment near upper representable boundary using imprecise capabilities")
+        else:
+            self.assertRegisterEqual(self.MIPS.s0, 0x0, "Tag unexpectedly NOT cleared by cincoffset with zero increment near upper representable boundary using imprecise capabilities")
 
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_fast_rep_check_neginc_upper_imprecise(self):
-                self.assertRegisterEqual(self.MIPS.s2, 0x1, "Tag unexpectedly cleared by cincoffset with negative increment near upper representable boundary using imprecise capabilities")
+        self.assertRegisterEqual(self.MIPS.s2, 0x1, "Tag unexpectedly cleared by cincoffset with negative increment near upper representable boundary using imprecise capabilities")

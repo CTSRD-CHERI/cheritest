@@ -48,15 +48,18 @@ except ImportError:
 from tools.sim import *
 
 
-def xfail_on(var):
+def xfail_on(var, reason=""):
     '''
     If the env var TEST_MACHINE matches var the test will be marked as xfail
     Useful if certain features have not been implemented yet
     :param var: the machine where this test is expected to fail (e.g. "qemu"
     :return:
     '''
+    reason_str = "Not supported on " + pytest.config.option.TEST_MACHINE.lower() + ": "
+    if reason:
+        reason_str += ": " + reason
     return pytest.mark.xfail(pytest.config.option.TEST_MACHINE.lower() == var.lower(),
-                             reason="Not supported on " + pytest.config.option.TEST_MACHINE.lower())
+                             reason=reason_str)
 
 
 def xfail_gnu_binutils(test):
@@ -80,6 +83,26 @@ def xfail_gnu_binutils(test):
 
 # This contains all the unsupported features (e.g. "capabilies", "float64", etc.)
 
+def is_feature_supported(feature, value=None):
+    if value is None:
+        return not _is_feature_any_value_unsupported(feature)
+    else:
+        return not _is_feature_value_unsupported(feature, value)
+
+
+def _is_feature_any_value_unsupported(feature):
+    return feature in pytest.config.CHERITEST_UNSUPPORTED_FEATURES
+
+
+def _is_feature_value_unsupported(feature, value) -> int:
+    is_unsupported_list = pytest.config.CHERITEST_UNSUPPORTED_FEATURES.get(feature, list())
+    if value in is_unsupported_list:
+        return 1
+    elif "ALWAYS" in is_unsupported_list:
+        return 2
+    return 0
+
+
 def attr(*args, **kwargs):
     def wrap_test_fn(ob):
         return ob
@@ -87,16 +110,15 @@ def attr(*args, **kwargs):
     # import pprint
     # pprint.pprint(vars(pytest.config.option))
     for feature in args:
-        if feature in pytest.config.CHERITEST_UNSUPPORTED_FEATURES:
+        if _is_feature_any_value_unsupported(feature):
             return pytest.mark.skip("Feature '" + feature + "' is not supported!")
     for feature, value in kwargs.items():
-        is_unsupported_list = pytest.config.CHERITEST_UNSUPPORTED_FEATURES.get(feature, list())
-        if value in is_unsupported_list:
+        unsupported_kind = _is_feature_value_unsupported(feature, value)
+        if unsupported_kind == 1:
             return pytest.mark.skip("Feature '" + feature + "' value '" + value + "' is not supported!")
-        if "ALWAYS" in is_unsupported_list:
+        if unsupported_kind == 2:
             return pytest.mark.skip("Feature '" + feature + "' value '" + value +
                                     "' is not supported (feature is completely unsupported)!")
-
     return wrap_test_fn
 
 

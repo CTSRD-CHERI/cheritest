@@ -105,7 +105,7 @@ class Capability(object):
         self.length = length
 
     def __repr__(self):
-        return 't:%x s:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x'%(
+        return '<t:%x s:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x>'%(
             self.t, self.s, self.perms, self.ctype, self.offset, self.base, self.length)
 
     def __eq__(self, other):
@@ -305,11 +305,12 @@ class MipsStatus(object):
         return self.threads[0][key]
 
     def __repr__(self):
-        v = []
-        for i, t in self.threads.items():
-            v.append("======  Thread %3d  ======" % i)
-            v.append(t.__repr__())
-        return "\n".join(v)
+        return "<MipsStatus from " + repr(self.fh) + ">"
+        # v = []
+        # for i, t in self.threads.items():
+        #     v.append("======  Thread %3d  ======" % i)
+        #     v.append(t.__repr__())
+        # return "\n".join(v)
 
     class Cause(object):
         TLB_Mod = 1

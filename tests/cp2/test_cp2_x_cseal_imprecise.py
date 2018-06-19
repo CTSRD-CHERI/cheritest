@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2016 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -25,23 +26,30 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, is_feature_supported
 from beritest_tools import attr
 
+
+@attr('capabilities')
+@attr('cap_imprecise')
 class test_cp2_x_cseal_imprecise(BaseBERITestCase):
 
-    @attr('capabilities')
-    @attr('cap_imprecise')
-    def test_cp2_x_cseal_imprecise_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x0, "CSeal wrote to destination register when it should have raised an exception.")
+    def test_maybe_unrep(self):
+        # New QEMU implementation can actuall represent this:
+        if is_feature_supported('improved_cheri_cc'):
+            self.assertNullCap(self.MIPS.c4, "Should not have caused a trap")
+            assert self.MIPS.c3.ctype == 0x11
+            assert self.MIPS.c3.base == 0x101
+            assert self.MIPS.c3.length == 0x101
+            assert self.MIPS.c3.offset == 0
+            assert self.MIPS.c3.t
+            assert self.MIPS.c3.s
+        else:
+            self.assertNullCap(self.MIPS.c3, "Should not have changed capreg")
+            self.assertCp2Fault(self.MIPS.c4, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=1)
 
-    @attr('capabilities')
-    @attr('cap_imprecise')
-    def test_cp2_x_cseal_imprecise_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "CSeal did not raise an exception when bounds could not be represented exactly.")
-
-    @attr('capabilities')
-    @attr('cap_imprecise')
-    def test_cp2_x_cseal_imprecise_3(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0x0a01, "CSeal did not set capability cause correctly when bounds could not be represented exactly.")
+    def test_definitely_unrepresenatable(self):
+        trap_count = 1 if is_feature_supported('improved_cheri_cc') else 2
+        self.assertCp2Fault(self.MIPS.c7, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=trap_count)
+        self.assertNullCap(self.MIPS.c6, "Should not have changed capreg")
 

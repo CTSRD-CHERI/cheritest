@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013-2016 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -40,31 +41,7 @@
 # bounds exactly.
 #
 
-BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		#
-		# $a2 will be set to 1 if the exception handler is called
-		#
-
-		dli	$a2, 0
-
-		#
-		# $a3 will be set to the capability cause if there is an
-		# exception.
-		#
-
-		dli	$a3, 0
-
-
+BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
 		cgetdefault $c1
 		# cseal allows a precision of at most 8 bits for sealed capabilities,
 		# so try to seal with a base and length that requires more.
@@ -76,29 +53,25 @@ BEGIN_TEST
 		cgetdefault $c2
 		csetoffset $c2, $c2, $t0
 
-		cgetdefault $c3
+		cgetnull $c3
 
+		clear_counting_exception_handler_regs
 		cseal $c3, $c1, $c2	# Should raise an exception
+		save_counting_exception_handler_cause $c4
 
-		cgetbase $a0, $c3
+		# Now try a value that's always unrepresentable
+		dli $t0, 0x77777
+		cgetdefault $c1
+		csetoffset $c1, $c1, $t0
+		csetbounds $c1, $c1, $t0
+
+		dli	$t0, 0x12
+		cgetdefault $c2
+		csetoffset $c2, $c2, $t0
+
+		cgetnull $c6
+		clear_counting_exception_handler_regs
+		cseal $c6, $c1, $c2	# Should raise an exception
+		save_counting_exception_handler_cause $c7
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
-		.end bev0_handler
-
-
-		.data
-		.align 12
-data:		.dword 0

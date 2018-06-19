@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2015, 2016 Michael Roe
 # Copyright (c) 2017 Robert M. Norton
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -27,7 +28,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import attr, is_feature_supported
 
 @attr('capabilities')
 class test_cp2_csetoffset_fastcheck(BaseBERITestCase):
@@ -44,16 +45,16 @@ class test_cp2_csetoffset_fastcheck(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a2, 0x10000000200000, "Incorrect base when offset set into upper representable hazard zone")
 
     @attr('cap_imprecise')
-    def test_upper_tag_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x0, "Tag unexpectedly NOT cleared by csetoffset into upper representable hazard zone")
-
-    @attr('cap_imprecise')
-    def test_upper_offset_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0x100000011efff0, "Incorrect offset when set into upper representable hazard zone")
-
-    @attr('cap_imprecise')
-    def test_upper_base_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0x0, "Incorrect base when offset set into upper representable hazard zone")
+    def test_upper_imprecise(self):
+        # Should either have cleared the tag and have wrong value or tag and correct value:
+        if is_feature_supported("improved_cheri_cc"):
+            assert self.MIPS.threads[0].c2.t
+            assert self.MIPS.threads[0].c2.offset == 0xFEFFF0, "Incorrect offset when set into upper representable hazard zone"
+            assert self.MIPS.threads[0].c2.base == 0x10000000200000, "Incorrect base when set into upper representable hazard zone"
+        else:
+            self.assertRegisterEqual(self.MIPS.a0, 0x0, "Tag unexpectedly NOT cleared by csetoffset into upper representable hazard zone")
+            self.assertRegisterEqual(self.MIPS.a1, 0x100000011efff0, "Incorrect offset when set into upper representable hazard zone")
+            self.assertRegisterEqual(self.MIPS.a2, 0x0, "Incorrect base when offset set into upper representable hazard zone")
 
 ###############################################################
 # This one is expected to be the same for precise and imprecise
@@ -95,13 +96,13 @@ class test_cp2_csetoffset_fastcheck(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.s3, 0x10000000200000, "Incorrect base when offset set into lower representable hazard zone")
 
     @attr('cap_imprecise')
-    def test_lower_tag_imprecise3(self):
-        self.assertRegisterEqual(self.MIPS.s1, 0x0, "Tag unexpectedly NOT cleared by csetoffset into lower representable hazard zone")
-
-    @attr('cap_imprecise')
-    def test_lower_offset_imprecise3(self):
-        self.assertRegisterEqual(self.MIPS.s2, 0x00100000001f0001, "Incorrect offset when set into lower representable hazard zone")
-
-    @attr('cap_imprecise')
-    def test_lower_base_imprecise3(self):
-        self.assertRegisterEqual(self.MIPS.s3, 0x0, "Incorrect base when offset set into lower representable hazard zone")
+    def test_lower_imprecise(self):
+        # Should either have cleared the tag and have wrong value or tag and correct value:
+        if is_feature_supported("improved_cheri_cc"):
+            assert self.MIPS.c5.t, "Tag should not be cleared"
+            assert self.MIPS.c5.offset == 0xffffffffffff0001, "Incorrect offset when set into lower representable hazard zone"
+            assert self.MIPS.c5.base == 0x10000000200000, "Incorrect base when set into upper representable hazard zone"
+        else:
+            self.assertRegisterEqual(self.MIPS.s1, 0x0, "Tag unexpectedly NOT cleared by csetoffset into upper representable hazard zone")
+            self.assertRegisterEqual(self.MIPS.s2, 0x00100000001f0001, "Incorrect offset when set into lower representable hazard zone")
+            self.assertRegisterEqual(self.MIPS.s3, 0x0, "Incorrect base when offset set into lower representable hazard zone")
