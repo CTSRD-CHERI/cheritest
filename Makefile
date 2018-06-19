@@ -157,6 +157,7 @@ SAIL_DIR?=/path/to/sail/must/be/set/on/cmdline/using/SAIL_DIR/var
 endif
 endif
 SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
+SAIL_MIPS_C_SIM=$(SAIL_DIR)/mips/mips_c
 SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
 SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
 SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
@@ -375,7 +376,7 @@ cleantest:
 	rm -f $(ALTERA_LOGDIR)/*.log
 	rm -f $(L3_LOGDIR)/*.log
 	rm -f $(SAIL_MIPS_LOGDIR)/*.log
-	rm -f $(SAIL_MIPS_EMBED_LOGDIR)/*.log
+	rm -f $(SAIL_MIPS_C_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI_EMBED_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI128_LOGDIR)/*.log
@@ -393,10 +394,10 @@ clean: cleantest
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
-.SECONDARY: $(TEST_OBJS) $(TEST_ELFS) $(TEST_CACHED_ELFS) \
-	$(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS) $(TEST_MEMS) \
-	$(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
-	$(TEST_INIT_MULTI_OBJECT) $(TEST_LIB_OBJECT)
+
+# Completely disable behaviour where make deletes intermediate
+# files. It is not useful and prints huge output line at end.
+.SECONDARY:
 
 $(TOOLS_DIR_ABS)/debug/cherictl: $(TOOLS_DIR_ABS)/debug/cherictl.c $(TOOLS_DIR_ABS)/debug/cheri_debug.c
 	$(MAKE) -C $(TOOLS_DIR_ABS)/debug/ cherictl
