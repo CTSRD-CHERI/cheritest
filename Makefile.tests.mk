@@ -437,32 +437,22 @@ clion/$(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log.symbolized
 
 ### Configure pytest invocation:
 
-PYTHON_TESTRUNNER?=pytest
-ifeq ($(PYTHON_TESTRUNNER),nosetests)
-ifeq ($(I_REALLY_WANT_TO_USE_DEPRECATED_NOSETESTS), 1)
-$(info Running tests with deprecated nosetests)
-else
-$(warning NOSETESTS and Python 2.7 are almost EOL, install pytest+pytest-attrib and then rerun with PYTHON_TESTRUNNER=pytest or run make with I_REALLY_WANT_TO_USE_DEPRECATED_NOSETESTS=1)
-endif
-NOSETESTS?=python2.7 -m nose
-PYTHON_TEST_XUNIT_FLAG=--with-xunit --xunit-file
-PYTHON_TEST_ATTRIB_SELETOR_FLAG=-A
-else
 # TODO: for now also run with python 2.7 but we should update to 3.x soon
 NOSETESTS?=python3 -m pytest -q
 _PYTEST_INSTALLED_STR=This is pytest
-PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1)
-ifeq ($(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),)
-$(info "Error running pytest --version: $(PYTEST_VERSION_OUTPUT)")
-ifneq ($(findstring requires pytest-,$(PYTEST_VERSION_OUTPUT)),)
-$(error pytest version is too old. Try running `pip3 install --upgrade --user pytest`)
-else
-$(error pytest not installed? Try running `pip3 install --user pytest`)
-endif
-endif
+PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1; echo FOO >&2)
+PYTEST_CHECK1=$(if $(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),@echo pytest is installed,$(error pytest not installed? Try running `pip3 install --user pytest`. Got error running $(NOSETESTS) --version: $(PYTEST_VERSION_OUTPUT)"))
+PYTEST_CHECK2=$(if $(findstring requires pytest-,$(PYTEST_VERSION_OUTPUT)),$(error pytest version is too old. Try running `pip3 install --upgrade --user pytest`),@echo pytest version is not too old)
+
+
+check_pytest_version:
+	@echo "Checking if pytest is valid:"
+	$(PYTEST_CHECK1)
+	$(PYTEST_CHECK2)
+
+
 PYTHON_TEST_XUNIT_FLAG=--junit-xml
 PYTHON_TEST_ATTRIB_SELETOR_FLAG=--unsupported-features
-endif
 
 ifeq ($(USING_LLVM_ASSEMBLER),0)
 NOSETESTS:=TEST_ASSEMBLER=gnu $(NOSETESTS)
@@ -486,7 +476,6 @@ QEMU_PYTEST=		LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU $(PYTEST) $(QEMU_NOSEFLAGS
 ALTERA_NOSETESTS=	LOGDIR=$(ALTERA_LOGDIR) TEST_MACHINE=ALTERA $(NOSETESTS)
 # For this one we don't set LOGDIR since each target uses a different one
 SAIL_NOSETESTS= 	TEST_MACHINE=SAIL $(NOSETESTS)
-
 
 
 
@@ -537,19 +526,19 @@ nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 # This is done because Jenkins will complain if it doens't get a fresh XML
 # file each time.
 
-nosetests_uncached.xml: $(CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_uncached.xml: $(CHERI_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	CACHED=0 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_uncached.xml \
 	$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
-nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
+nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	CACHED=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_cached.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
-nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
+nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	MULTI1=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_multi.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
-nosetests_cachedmulti.xml: $(CHERI_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
+nosetests_cachedmulti.xml: $(CHERI_TEST_CACHEDMULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_cachedmulti.xml \
 	$(NOSEFLAGS) $(TESTDIRS) || true
 
@@ -571,14 +560,14 @@ hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 
 nosetests_gxemul: nosetests_gxemul_uncached.xml
 
-nosetests_gxemul_uncached.xml: $(GXEMUL_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_gxemul_uncached.xml: $(GXEMUL_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/gxemul CACHED=0 $(NOSETESTS) \
 	    $(PYTHON_TEST_XUNIT_FLAG)=nosetests_gxemul_uncached.xml \
 	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS) || true
 
 nosetests_gxemul_cached: nosetests_gxemul_cached.xml
 
-nosetests_gxemul_cached.xml: $(GXEMUL_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
+nosetests_gxemul_cached.xml: $(GXEMUL_TEST_CACHED_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	PYTHONPATH=tools/gxemul CACHED=1 $(NOSETESTS) \
 	    $(PYTHON_TEST_XUNIT_FLAG)=nosetests_gxemul_cached.xml \
 	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS) || true
@@ -597,19 +586,19 @@ nosetests_l3_multi: nosetests_l3_multi.xml
 
 nosetests_l3_cachedmulti: nosetests_l3_cachedmulti.xml
 
-nosetests_l3.xml: $(L3_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_l3.xml: $(L3_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	$(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3.xml \
 	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
-nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) $(TEST_PYTHON) FORCE
+nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	CACHED=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cached.xml \
 	$(L3_NOSEFLAGS) $(TESTDIRS) || true
 
-nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) $(TEST_PYTHON) FORCE
+nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	MULTI1=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_multi.xml \
 	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
 
-nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) $(TEST_PYTHON) FORCE
+nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	CACHED=1 MULTI1=1 $(L3_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
 	    $(TESTDIRS) || true
@@ -644,32 +633,32 @@ nosetests_sail_cheri128_embed: check_sail_deps FORCE
 # SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 
 
-nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
 	     $(TESTDIRS) || true
 
-nosetests_sail_embed.xml: $(SAIL_MIPS_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_sail_embed.xml: $(SAIL_MIPS_EMBED_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_MIPS_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_CHERI_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
 	     $(TESTDIRS) || true
 
-nosetests_sail_cheri_embed.xml: $(SAIL_CHERI_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_sail_cheri_embed.xml: $(SAIL_CHERI_EMBED_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_CHERI_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
-nosetests_sail_cheri128.xml: $(SAIL_CHERI128_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_sail_cheri128.xml: $(SAIL_CHERI128_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_CHERI128_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
 	   $(TESTDIRS) || true
 
-nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) $(TEST_PYTHON) FORCE
+nosetests_sail_cheri128_embed.xml: $(SAIL_CHERI128_EMBED_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	LOGDIR=$(SAIL_CHERI128_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
 	    $(TESTDIRS) || true
@@ -699,7 +688,7 @@ check_valid_qemu: FORCE
 
 
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
-nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) check_valid_qemu FORCE
+nosetests_qemu.xml: $(QEMU_TEST_LOGS) check_pytest_version $(TEST_PYTHON) check_valid_qemu FORCE
 	@echo "Pytest flags: $(QEMU_NOSEFLAGS)"
 	LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(TESTDIRS) || true
@@ -727,7 +716,7 @@ TEST_PYTHON +=	tests/purecap/test_purecap_reg_init.py
 endif
 
 qemu_clang_tests: qemu_clang_tests.xml
-qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
+qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
 	$(QEMU_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(CLANG_TESTDIRS) || true
 
 PURECAP_TESTS := $(basename $(TEST_PURECAP_FILES))
@@ -735,13 +724,13 @@ PURECAP_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TEST
 PURECAP_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(PURECAP_TESTS)))
 purecap_dumps: $(PURECAP_DUMPS)
 qemu_purecap_tests: qemu_purecap_tests.xml
-qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) $(TEST_PYTHON) FORCE
+qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	$(QEMU_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(PURECAP_TESTDIRS) || true
 
 qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
 
 pytest_qemu_purecap_tests: pytest_qemu_purecap_tests.xml
-pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
+pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
 	$(QEMU_PYTEST) --junit-xml=$@ -v $(PURECAP_TESTDIRS) || true
 
 CP2_TESTS := $(basename $(TEST_CP2_FILES))
@@ -749,15 +738,15 @@ CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
 #CP2_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(CP2_TESTS)))
 #cp2_dumps: $(CP2_DUMPS)
 pytest_qemu_cp2_tests: pytest_qemu_cp2_tests.xml
-pytest_qemu_cp2_tests.xml: $(CP2_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
+pytest_qemu_cp2_tests.xml: $(CP2_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
 	$(QEMU_PYTEST) --junit-xml=$@ $(TESTDIR)/cp2 || true
 
 pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
-pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
+pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
 	$(QEMU_PYTEST) --junit-xml=$@ -v $(CLANG_TESTDIRS) || true
 
 pytest_qemu: pytest_qemu.xml
-pytest_qemu.xml: $(QEMU_TEST_LOGS) check_valid_qemu $(TEST_PYTHON) FORCE
+pytest_qemu.xml: $(QEMU_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
 	@echo "pytest selector: $(QEMU_NOSEFLAGS)"
 	$(QEMU_PYTEST) --junit-xml=$@ $(TESTDIRS) || true
 
