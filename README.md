@@ -10,4 +10,4 @@ cheritest is a comprehensive framework for testing the BERI and CHERI MIPS proce
 * Run the following to test BERI: `TEST_CP2=0 CLANG=0 GENERIC_L1=1 NOFUZZR=1 BERI=1 TRACE=0 CHERI_SDK=<path_to_sdk> CHERIROOT=<path_to_ctsrd_svn>/cheri/trunk/ CHERILIBS=<path_to_ctsrd_svn>/cherilibs/trunk/ make nosetest_cached`
 
 ## Running individual tests
-To run individual test simply remove the corresponding log file from the log directory and run `make log/<test_to_run>.log
+To run individual test simply remove the corresponding log file from the log directory and run `make log/<test_to_run>.log`
