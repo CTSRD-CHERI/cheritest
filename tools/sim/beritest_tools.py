@@ -355,8 +355,6 @@ class BaseBERITestCase(unittest.TestCase):
             return 0x7fff87ff
         elif perm_size == 23:
             return 0x7f87ff
-        elif perm_size == 19:
-            return 0x7ffff
         elif perm_size == 15:
             return 0x787ff
         assert False, "Invalid perm size %d" % perm_size
