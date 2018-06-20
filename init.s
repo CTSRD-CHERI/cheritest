@@ -80,7 +80,7 @@ start:
                 nop
 
                 # Thread 0 Code
-        
+		# FIXME: we don't always want this handler
 		#
 		# Install BEV0 exception handlers
 		#
@@ -250,7 +250,7 @@ no_float:
 .global finish
 .ent finish
 finish:
-		j continue_finish
+		b continue_finish
 		mtc2 $k0, $0, 6
 
 skip_cp2_setup:
