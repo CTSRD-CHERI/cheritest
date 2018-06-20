@@ -679,15 +679,24 @@ nosetests_qemu: FORCE
 	$(MAKE) $(MFLAGS) nosetests_qemu.xml
 
 check_valid_qemu: FORCE
-ifneq ($(CAP_PRECISE), $(QEMU_CAP_PRECISE))
-	$(error CAP_PRECISE set to '$(CAP_PRECISE)' but QEMU precise capabilities=$(QEMU_CAP_PRECISE). Change CAP_PRECISE or select a different $(dollar)QEMU)
-endif
-ifneq ($(CAP_SIZE), $(QEMU_CAP_SIZE))
-	$(error CAP_SIZE set to '$(CAP_SIZE)' but QEMU capability size=$(QEMU_CAP_SIZE). Change CAP_SIZE or select a different $(dollar)QEMU)
-endif
-ifneq ($(QEMU_C0_IS_NULL), $(CHERI_C0_IS_NULL))
-	$(error CHERI_C0_IS_NULL set to '$(CHERI_C0_IS_NULL)' but QEMU $c0 == $cnull is $(QEMU_C0_IS_NULL). Change CHERI_C0_IS_NULL or select a different $(dollar)QEMU)
-endif
+	@echo "Checking if QEMU $(QEMU_ABSPATH) is valid for this configuration:"
+	@echo "CAP_PRECISE='$(CAP_PRECISE)', QEMU_CAP_PRECISE='$(QEMU_CAP_PRECISE)'"
+	@echo "CAP_SIZE='$(CAP_SIZE)', QEMU_CAP_SIZE='$(QEMU_CAP_SIZE)'"
+	@echo "CHERI_C0_IS_NULL='$(CHERI_C0_IS_NULL)', QEMU_C0_IS_NULL='$(QEMU_C0_IS_NULL)'"
+	@if [ "$(CAP_PRECISE)" != "$(QEMU_CAP_PRECISE)" ]; then \
+		echo "CAP_PRECISE set to '$(CAP_PRECISE)' but QEMU precise capabilities=$(QEMU_CAP_PRECISE). Change CAP_PRECISE or select a different $(dollar)QEMU"; \
+		exit 1; \
+	fi
+	@if [ "$(CAP_SIZE)" != "$(QEMU_CAP_SIZE)" ]; then \
+		echo "CAP_SIZE set to '$(CAP_SIZE)' but QEMU capability size='$(QEMU_CAP_SIZE)'. Change CAP_SIZE or select a different $(dollar)QEMU"; \
+		exit 1; \
+	fi
+	@if [ "$(CHERI_C0_IS_NULL)" != "$(QEMU_C0_IS_NULL)" ]; then \
+		echo "CHERI_C0_IS_NULL set to '$(CHERI_C0_IS_NULL)' but QEMU $c0 == $cnull is '$(QEMU_C0_IS_NULL)'. Change CHERI_C0_IS_NULL or select a different $(dollar)QEMU"; \
+		exit 1; \
+	fi
+	@echo "Success. Can run tests with $(QEMU_ABSPATH)"
+
 
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) $(TEST_PYTHON) check_valid_qemu FORCE

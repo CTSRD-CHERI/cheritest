@@ -290,35 +290,29 @@ endif
 QEMU_ABSPATH:=$(shell command -v $(QEMU) 2>/dev/null)
 ifneq ($(QEMU_ABSPATH),)
 QEMU_VERSION:=$(shell $(QEMU_ABSPATH) --version)
+
+# Use the weird $(if) syntax to avoid parsing all these values during tab completion
 QEMU_UNALIGNED_OKAY_STRING=Built with support for unaligned loads/stores
-ifneq ($(findstring $(QEMU_UNALIGNED_OKAY_STRING),$(QEMU_VERSION)),)
-$(info QEMU built with unliagned support)
-QEMU_UNALIGNED_OKAY=1
-endif
+QEMU_UNALIGNED_OKAY=$(if $(findstring $(QEMU_UNALIGNED_OKAY_STRING),$(QEMU_VERSION)),1,0)
 
 QEMU_C0_IS_NULL_STRING=Built with C0 as NULL register
-ifneq ($(findstring $(QEMU_C0_IS_NULL_STRING),$(QEMU_VERSION)),)
-$(info QEMU built with C0 as null register)
-QEMU_C0_IS_NULL=1
-endif
+QEMU_C0_IS_NULL=$(if $(findstring $(QEMU_C0_IS_NULL_STRING),$(QEMU_VERSION)),1,0)
 
-ifneq ($(findstring Compiled for CHERI256,$(QEMU_VERSION)),)
-$(info QEMU built for CHERI256)
-QEMU_CAP_SIZE=256
-QEMU_CAP_PRECISE=1
-endif
+QEMU_CAP_SIZE=$(strip $(if \
+    $(findstring Compiled for CHERI256,$(QEMU_VERSION)), 256, \
+    $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), 128, \
+    $(error could not infer QEMU_CAP_SIZE from $(QEMU_ABSPATH): $(QEMU_VERSION)) )))
 
-ifneq ($(findstring Compiled for CHERI128,$(QEMU_VERSION)),)
-QEMU_CAP_SIZE=128
-ifneq ($(findstring Compiled for CHERI128 (magic),$(QEMU_VERSION)),)
-$(info QEMU built for magic CHERI128)
-QEMU_CAP_PRECISE=1
-else
-$(info QEMU built for CHERI128)
-QEMU_CAP_PRECISE=0
-endif
-endif
+QEMU_CAP_PRECISE=$(strip $(if \
+    $(findstring Compiled for CHERI256,$(QEMU_VERSION)), 1, \
+    $(if $(findstring Compiled for CHERI128 (magic),$(QEMU_VERSION)), 1, \
+    $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), 0, \
+    $(error could not infer QEMU_CAP_PRECISE from $(QEMU_ABSPATH): $(QEMU_VERSION)) ))))
 
+#$(info QEMU built with QEMU_CAP_SIZE=$(QEMU_CAP_SIZE))
+#$(info QEMU built with QEMU_CAP_PRECISE=$(QEMU_CAP_PRECISE))
+#$(info QEMU built with QEMU_UNALIGNED_OKAY=$(QEMU_UNALIGNED_OKAY))
+#$(info QEMU built with QEMU_C0_IS_NULL=$(QEMU_C0_IS_NULL))
 endif  # ifneq ($(QEMU_ABSPATH),)
 
 QEMU_UNALIGNED_OKAY?=0
@@ -392,6 +386,11 @@ clean: cleantest
 	rm -f $(OBJDIR)/*.dump
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
+
+distclean:
+	$(MAKE) $(MFLAGS) CAP_SIZE=256 clean
+	$(MAKE) $(MFLAGS) CAP_SIZE=128 clean
+	$(MAKE) $(MFLAGS) CAP_SIZE=64 clean
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
 
