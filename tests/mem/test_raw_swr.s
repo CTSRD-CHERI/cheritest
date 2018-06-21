@@ -63,11 +63,10 @@ start:
 		nop
 		nop
 
-		# Terminate the simulator
-		mtc0	$v0, $23
 end:
 		b	end
-		nop
+		# Terminate the simulator
+		mtc0	$v0, $23
 
 		.data
 dword:		.dword 0x0000000000000000
