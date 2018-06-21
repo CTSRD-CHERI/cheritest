@@ -35,8 +35,7 @@
 # -10 to 10.  We just test that the final results are correct.
 #
 
-		.global test
-test:		.ent test
+BEGIN_TEST
 		li	$s2, 1
 		li	$s1, -10
 		li	$s6, 1
@@ -58,7 +57,4 @@ skip_div:
 		slti	$v0, $s1, 10
 		bnez	$v0, loop
 		lw	$s2, 0($sp)
-
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

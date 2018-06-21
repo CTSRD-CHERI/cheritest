@@ -24,7 +24,7 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-
+#include "../c/cheri_c_test.h"
 /*
  * Check that C can perform simple, bounded recursion as part of the test
  * suite.  Primarily, this is a check that the test suite properly constructs
@@ -41,9 +41,6 @@ recurse(int i)
 	return (recurse(i) + 1);
 }
 
-int
-test(void)
-{
-
-	return (recurse(5));
-}
+BEGIN_TEST(crecurse)
+	int result = recurse(5);
+END_TEST2(result)

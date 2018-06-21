@@ -24,12 +24,9 @@
 # Simple TLB test which configures a TLB entry for the lowest virtual
 # page in the xuseg segment and attempts a store via it.
 
-.set mips64
-.set noreorder
-.set nobopt
+.include "macros.s"
 
-.global test
-test:   .ent    test
+BEGIN_TEST
  		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
 		dmtc0	$zero, $0		# TLB index 
 		dmtc0	$zero, $10		# TLB HI address
@@ -49,9 +46,7 @@ test:   .ent    test
 
 		ld      $a5, 0($a4)             # Load what we just stored.
 
-		jr      $ra
-		nop
-.end    test
+END_TEST
 	
 	.data
 	.align 5

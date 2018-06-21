@@ -24,6 +24,7 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
+#include "../c/cheri_c_test.h"
 
 /*
  * Simple test using a global variable in C.  This is primarily to establish
@@ -33,9 +34,7 @@
 static int i;		/* Initialise to zero using BSS. */
 static int j = 4;	/* Preinitialised data. */
 
-int
-test(void)
-{
+BEGIN_TEST(cglobals)
+	int result = (i + j);
+END_TEST2(result)
 
-	return (i + j);
-}

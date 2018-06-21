@@ -26,10 +26,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+
 .include "macros.s"
 #
 # Test beq (branch on equal) preceeded by two loads. This case arose
@@ -37,8 +34,7 @@
 # Cheri2.
 #
 
-                .global test
-test:
+BEGIN_TEST
                 li      $a0, 0
                 li      $a1, 0
                 li      $a2, 0
@@ -52,8 +48,7 @@ test:
                 li      $a2, 3          # branched over
 branch_target:
                 li      $a3, 4          # should run
-                jr      $ra
-                nop
+END_TEST
 
 .section        .data
 testdata:

@@ -37,9 +37,7 @@
 #
 
 
-.global test
-test:
-.ent test
+BEGIN_TEST
 		dli       $a0, 0
 		dli       $a1, 0
 
@@ -68,9 +66,8 @@ cont4:
 		# By this point, a0 and a1 should both be 0b111 (7).  Each of the delay
 		# slots will set one of the low bits and each of the branch targets will
 		# set one of the next bits, but only one of the targets should be reached.
+END_TEST
 
-		jr        $ra
-		nop  # branch-delay slot
 clear1:
 		b         cont1
 		daddi     $a0, $a0, 4 # in delay slot
@@ -84,4 +81,3 @@ clear3:
 clear4:
 		b         cont4
 		daddi     $a1, $a1, 8 # in delay slot
-.end	test

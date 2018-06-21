@@ -25,12 +25,9 @@
 # page in xuseg with two different ASIDs and attempts to load via
 # both of them.
 
-.set mips64
-.set noreorder
-.set nobopt
-        
-.global test
-test:   .ent    test
+.include "macros.s"
+
+BEGIN_TEST
 		dli     $k0, 0x0
  		dmtc0	$k0, $5                 # Write 0 to page mask i.e. 4k pages
 		dla     $a0, testdata1		# Load address of testdata in bram
@@ -79,9 +76,7 @@ test:   .ent    test
     nop
 		ld      $a5, 0($0)		# Test read from virtual address.
 	
-		jr      $ra
-		nop
-.end    test
+END_TEST
 	
 	.data
 	.align 13 # Align to the start of an even page for easy access

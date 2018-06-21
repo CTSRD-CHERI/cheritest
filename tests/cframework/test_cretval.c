@@ -24,15 +24,12 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-
+#include "../c/cheri_c_test.h"
 /*
  * Check that if we return an integer from our C function, it arrives at the
  * right register in the calling context.
  */
 
-int
-test(void)
-{
-
-	return (100);
-}
+BEGIN_TEST(cretval)
+	int retval = 100;
+END_TEST2(retval)

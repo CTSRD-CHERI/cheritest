@@ -20,16 +20,13 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
+.include "macros.s"
 
 # Simple TLB test which configures a TLB entry for the lowest virtual
 # page in the xuseg and attempts a load via it.
 
-.set mips64
-.set noreorder
-.set nobopt
 
-.global test
-test:   .ent    test
+BEGIN_TEST
  		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
 		dmtc0	$zero, $0		# TLB index 
 		dmtc0	$zero, $10		# TLB HI address
@@ -48,11 +45,8 @@ test:   .ent    test
 		nop
 		and     $a4, $a0, 0xfff		# Get offset of testdata within page.
 		ld      $a5, 0($a4)		# Load from virtual address
+END_TEST
 
-		jr      $ra
-		nop
-.end    test
-	
 	.data
 	.align 5
 testdata:

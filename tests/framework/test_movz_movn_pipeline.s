@@ -24,6 +24,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
+.include "macros.s"
 
 #
 # This test exercises movz and movn in true and false cases for each.  They
@@ -32,9 +33,7 @@
 # pipeline forwarding.
 #
 
-		.global test
-test:		.ent test
-
+BEGIN_TEST
 		#
 		# This case was found in freeBSD and failed
 		#
@@ -86,7 +85,4 @@ movn_true:
 		movn	$v1, $a0, $v1
 		sw	$v1, 0($sp)
 		lw	$s3, 0($sp)
-
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST

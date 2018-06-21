@@ -30,11 +30,7 @@
 
 .include "macros.s"
 
-.global test
-.ent    test
-test:
-		mips_function_entry
-
+BEGIN_TEST
 		jal     bev_clear
 		nop
 		
@@ -71,7 +67,7 @@ usermode:
 		nop
 		.set pop
 the_end:
-		mips_function_return
+END_TEST
 
 
 

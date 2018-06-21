@@ -21,6 +21,11 @@ extern volatile __int64_t continue_after_exception;
 	assert_eq(exception_count, TEST_EXPECTED_FAULTS);	\
 	return 0;						\
 }
+#define END_TEST2(retval)					\
+	assert_eq(exception_count, TEST_EXPECTED_FAULTS);	\
+	return (retval);					\
+}
+
 /* Allow some of the tests to continue after an exception: */
 
 

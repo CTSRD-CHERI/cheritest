@@ -29,12 +29,9 @@
 # Simple TLB test which configures a TLB entry for the lowest virtual
 # page in the xuseg and attempts a load via it.
 
-.set mips64
-.set noreorder
-.set nobopt
+.include "macros.s"
 
-.global test
-test:   .ent    test
+BEGIN_TEST
 		# TLB write of index 6	
  		dmtc0	$zero, $5       	# Write 0 to page mask i.e. 4k pages
  		li	$a0, 0x6
@@ -84,9 +81,7 @@ test:   .ent    test
 		dmfc0	$a3, $2       	# 0 EntryLo0
 		dmfc0	$a4, $3       	# 0 EntryLo1
 
-		jr      $ra
-		nop
-.end    test
+END_TEST
 	
 	.data
 	.align 5

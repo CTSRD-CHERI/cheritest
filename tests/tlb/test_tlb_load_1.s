@@ -25,17 +25,12 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
+.include "macros.s"
 
 # Simple TLB test which configures a TLB entry for the lowest virtual
 # page in the xuseg and attempts a load via it.
 
-.set mips64
-.set noreorder
-.set nobopt
-
-
-.global test
-test:   .ent    test
+BEGIN_TEST
 		dadd    $s0, $zero, $ra          # Don't save existing s0, init.s doesn't expect it to be preserved
 
 		addi    $a0, $zero, 0            # TLB entry 0

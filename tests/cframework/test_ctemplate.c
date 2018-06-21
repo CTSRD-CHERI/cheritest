@@ -1,5 +1,6 @@
 /*-
  * Copyright (c) 2011 Robert N. M. Watson
+ * Copyright (c) 2018 Alex Richardson
  * All rights reserved.
  *
  * This software was developed by SRI International and the University of
@@ -24,17 +25,16 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-
+#include "../c/cheri_c_test.h"
 /*
  * Short block comment describing the test: what instruction/behaviour are we
  * investigating; what properties are we testing, what properties are deferred
  * to other tests?  What might we want to test as well in the future?
  */
 
-int
-test(void)
-{
+BEGIN_TEST(ctemplate)
 
 	/* Test goes here. */
-	return (0);
-}
+
+END_TEST /* or if you have a return value to test END_TEST2(result) */
+

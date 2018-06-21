@@ -24,12 +24,9 @@
 # Simple TLB test which configures a TLB entry for the highest virtual
 # page in xkseg/kseg3 and attempts a load via it.
 
-.set mips64
-.set noreorder
-.set nobopt
+.include "macros.s"
 
-.global test
-test:   .ent    test
+BEGIN_TEST
 		dli     $k0, 0x0
  		dmtc0	$k0, $5                 # Write 0 to page mask i.e. 4k pages
 		dla     $a0, testdata		# Load address of testdata in bram
@@ -53,11 +50,9 @@ test:   .ent    test
 		nop
 
 		ld      $a5, 0($k0)			# Test read from virtual address.
+END_TEST
 
-		jr      $ra
-		nop
-.end    test
-	
+
 	.data
 	.align 5
 testdata:

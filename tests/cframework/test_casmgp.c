@@ -24,16 +24,12 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-
+#include "../c/cheri_c_test.h"
 /*
  * Make sure that if we assign a register value in a C test function, that
  * the register assignment is visible.  We use $gp since we've asked C not to
  * use the global pointer, so it should be preserved over return().
  */
-int
-test(void)
-{
-
+BEGIN_TEST(casmgp)
 	__asm__("dli $gp, 0x00000000e51a6b98");
-	return (0);
-}
+END_TEST

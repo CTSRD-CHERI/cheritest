@@ -29,12 +29,9 @@
 # Simple TLB test which configures a TLB entry for the lowest virtual
 # page in the xuseg and attempts a load via it.
 
-.set mips64
-.set noreorder
-.set nobopt
+.include "macros.s"
 
-.global test
-test:   .ent    test
+BEGIN_TEST
 		li	$t0, 1			# Load counter so that we execute the following test twice,
 						# to check for tlb probe speed.
 		# Fill in a tlb entry and write it
@@ -129,9 +126,7 @@ probe_test_start:
 		bnez	$t0, probe_test_start
 		daddi	$t0, -1
 
-		jr      $ra
-		nop
-.end    test
+END_TEST
 	
 	.data
 	.align 5

@@ -25,10 +25,6 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
 .include "macros.s"
 #
 # Load an immediate into $t1, then move to $t2.  In MIPS, move is actually a
@@ -36,15 +32,7 @@
 # assembler, but it is key to the correctness of many programs, so we test it
 # explicitly.
 #
-
-		.global	test
-test:		.ent	test
-		daddu 	$sp, $sp, -32
-
+BEGIN_TEST
 		dli	$t1, 0xfedcba9876543210
 		move	$t2, $t1
-
-		daddu	$sp, $sp, 32
-		jr	$ra
-		nop			# branch-delay slot
-		.end	test
+END_TEST
