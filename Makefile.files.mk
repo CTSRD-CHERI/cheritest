@@ -875,6 +875,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cunseal_unsealed.s	\
 		test_cp2_x_cwritehwr_kernel_perm.s \
 		test_cp2_x_cwritehwr_src_inaccessible.s \
+		test_cp2_x_disable_cp2_trap_handler_okay.s \
 		test_cp2_x_exl_pcc.s		\
 		test_cp2_x_fetch.s		\
 		test_cp2_x_jr_imprecise.s	\
