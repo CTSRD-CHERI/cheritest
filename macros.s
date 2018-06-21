@@ -203,7 +203,6 @@ trap_count:
 
 
 .macro clear_counting_exception_handler_regs
-	dli $v0, 0
 	dli $k0, 0
 	dli $k1, 0
 .endm
