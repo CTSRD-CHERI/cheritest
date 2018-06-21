@@ -31,7 +31,7 @@
 # Test that jumping to usermode doesn't clear Access_System_Registers permission
 #
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 	# Clear the registers set by the counting trap handler
 	clear_counting_exception_handler_regs
 

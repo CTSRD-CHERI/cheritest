@@ -39,7 +39,7 @@
 	save_counting_exception_handler_cause \cause_capreg
 .endm
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 	# Set the offset field in the special registers so that we can verify
 	# they didn't change
 	# Note: we can't just clear them, since KCC is needed in the exception

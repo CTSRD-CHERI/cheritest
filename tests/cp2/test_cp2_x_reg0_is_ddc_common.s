@@ -31,7 +31,7 @@
 #  macros defined: do_load_store kind, srcreg
 
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 		# Save c0
 		cgetdefault	$c1
 		# Make $ddc a capability pointing to data without load/store

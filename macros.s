@@ -118,6 +118,7 @@
 # This handler also allows exiting from usermode by treating sycall as a request to exit
 .macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler
 .text
+.global \name
 .ent \name
 \name:
 	.set push
@@ -235,7 +236,7 @@ trap_count:
 
 # Define the test function. Optional argument 1 can be used to declare
 # extra stack space used by the function.
-.macro BEGIN_TEST extra_stack_space=0
+.macro BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER extra_stack_space=0
 	__SET_DEFAULT_TEST_ASM_OPTS
 	.text
 	.global test
@@ -255,21 +256,14 @@ trap_count:
 # Start a test that installs the default counting trap handler
 # See DEFINE_COUNTING_CHERI_TRAP_HANDLER for the registers it sets on traps
 # Using the macro save_counting_exception_handler_cause can shorten the test even more
-.macro BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+#
+# Optional argument 1 can be used to declare extra stack space used by the function.
+.macro BEGIN_TEST extra_stack_space=0
 .text
 	__SET_DEFAULT_TEST_ASM_OPTS
-	DEFINE_COUNTING_CHERI_TRAP_HANDLER counting_trap_handler
+	DEFINE_COUNTING_CHERI_TRAP_HANDLER default_trap_handler
 
-	BEGIN_TEST
-		# Set up exception handler
-		set_mips_common_bev0_handler counting_trap_handler
-		# Clear all registers used by the trap handler to ensure they
-		# are zero if the expected exception doesn't trigger
-		clear_counting_exception_handler_regs
-		# Ensure that the exception count is zero
-		# UserLocal should already be initialized to zero but better to be safe
-		__set_counting_trap_handler_count $zero
-		# ready to run test code:
+	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
 .endm
 
 

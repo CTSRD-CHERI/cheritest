@@ -31,7 +31,7 @@
 # Test that the default trap handler is okay with CP2 being disabled (and doesn't use cgetcause in that case)
 #
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 	cgetcause $t0	# Should not trap
 	nop
 	nop

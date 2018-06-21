@@ -31,7 +31,7 @@
 # Test that CReadHwr raises an exception if the destination register is not accessible.
 #
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 
 	# Set the offset field in the special registers so that we can verify
 	# they didn't change

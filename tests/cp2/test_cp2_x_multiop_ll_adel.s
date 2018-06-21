@@ -41,7 +41,7 @@
 # if the address is not correctly aligned.
 #
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 		#
 		# Make $c1 a capability for the array 'data'.
 		# 'data' is 160=128+32 bytes long so that it's large enough

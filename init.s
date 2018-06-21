@@ -85,9 +85,15 @@ start:
 		# Install BEV0 exception handlers
 		#
 
-		dla	$a0, exception_count_handler
-		jal 	bev0_handler_install
-		nop
+		# XXXAR: this is the old handler which is not great (but unlike the new one it clears timer interrupts)
+		# dla	$a0, exception_count_handler
+		# jal 	bev0_handler_install
+		# nop
+
+		# Install the new exception count handler:
+		set_mips_common_bev0_handler jump_to_real_trap_handler
+		__set_counting_trap_handler_count $zero
+
 
 		#
 		# Enable the BEV0 handlers
@@ -364,6 +370,24 @@ die_on_exception:
 		nop
 .end die_on_exception
 
+
+# This stub handler is copied to 0xfffffffffff00000000180 and just jumps to the real handler
+.global jump_to_real_trap_handler
+.ent jump_to_real_trap_handler
+jump_to_real_trap_handler:
+		.set push
+		.set noat
+		.global default_trap_handler
+		dla	$k0, default_trap_handler
+		jalr	$k0
+		nop
+end_of_jump_to_real_trap_handler:
+		nop
+		.set pop
+.end jump_to_real_trap_handler
+
+
+		.global exception_count_handler
 		.ent exception_count_handler
 exception_count_handler:
 		daddu	$sp, $sp, -32
@@ -417,6 +441,9 @@ skip_increment:
 		nop			# required here?
 		nop
 		eret
+end_of_exception_count_handler:
+		nop
+		nop
 .end exception_count_handler
 
 

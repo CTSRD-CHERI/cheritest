@@ -13,9 +13,21 @@ typedef __SIZE_TYPE__ size_t;
 
 extern volatile __int64_t continue_after_exception;
 
+// Add a dummy reference to default_trap_handler here to define the alias
+#define SET_TRAP_HANDLER \
+	__asm__(".text\n\t" \
+		".global default_trap_handler\n\t" \
+		".ent default_trap_handler\n\t" \
+		"default_trap_handler:\n\t" \
+		"b exception_count_handler\n\t" \
+		"nop\n\t" \
+		".end default_trap_handler\n\t"); \
 
-#define BEGIN_TEST(name) int test(void) {			\
-	continue_after_exception = TEST_EXPECTED_FAULTS;
+
+#define BEGIN_TEST(name)					\
+	SET_TRAP_HANDLER					\
+	int test(void) {					\
+		continue_after_exception = TEST_EXPECTED_FAULTS;
 
 #define END_TEST 						\
 	assert_eq(exception_count, TEST_EXPECTED_FAULTS);	\

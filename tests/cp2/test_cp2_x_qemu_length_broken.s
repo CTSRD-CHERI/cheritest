@@ -42,7 +42,7 @@
 # we do an incoffset by 7. for 0x1000000 it is up to the last 3 bytes
 #
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 	cgetdefault $c1
 	cincoffset $c2, $c1, 3
 	dli $a0, 0x1000000

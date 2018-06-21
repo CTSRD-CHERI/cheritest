@@ -41,7 +41,7 @@
 # bounds exactly.
 #
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 		cgetdefault $c1
 		# cseal allows a precision of at most 8 bits for sealed capabilities,
 		# so try to seal with a base and length that requires more.

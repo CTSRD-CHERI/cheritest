@@ -94,44 +94,47 @@ $(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s | $(OBJDIR)
 	@echo PURECAP_AS $@
 	$(_V)$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 
+# The purecap tests still use the old exception_count_handler
+PURECAP_LDFLAGS=-m elf64btsmip_cheri_fbsd --defsym=default_trap_handler=exception_count_handler
+
 $(OBJDIR)/tmp_purecap_test_switch.o: tests/purecap/test_purecap_switch.c | $(OBJDIR)
 	@echo PURECAP_CC $@
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $< -DCOMPILE_SWITCH_FN=1
 # HACK to get a test with multiple sources working
 $(OBJDIR)/test_purecap_switch.elf: $(OBJDIR)/test_purecap_switch.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK $@"
-	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 $(OBJDIR)/test_purecap_switch_cached.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK cached $@"
-	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 $(OBJDIR)/test_purecap_switch_multi.elf: $(OBJDIR)/test_purecap_switch.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK multi $@"
-	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 $(OBJDIR)/test_purecap_switch_cachedmulti.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK cached multi$@"
-	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap_%_cached.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap_cached.ld \
 	    $(PURECAP_INIT_CACHED_OBJS) $(SELECT_INIT)
 	@echo "PURECAP_LD cached $@"
-	$(_V)$(RUN_MIPS_LD) --fatal-warnings $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(RUN_MIPS_LD) --fatal-warnings $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))` $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap_%_multi.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap.ld \
 	    $(PURECAP_INIT_OBJS) $(SELECT_INIT)
 	@echo "PURECAP_LD multi $@"
-	$(_V)$(RUN_MIPS_LD) --fatal-warnings $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(RUN_MIPS_LD) --fatal-warnings $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))` $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap_%_cachedmulti.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap_cached.ld \
 	    $(PURECAP_INIT_CACHED_OBJS) $(SELECT_INIT)
 	@echo "PURECAP_LD cached multi $@"
-	$(_V)$(RUN_MIPS_LD) --fatal-warnings $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(RUN_MIPS_LD) --fatal-warnings $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))` $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 
 $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP_INIT_OBJS) $(SELECT_INIT)
 	@echo "PURECAP_LD $@"
-	$(_V)$(RUN_MIPS_LD) --fatal-warnings $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))` $< -o $@ -m elf64btsmip_cheri_fbsd && $(call CAPSIZEFIX,$@)
+	$(_V)$(RUN_MIPS_LD) --fatal-warnings $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))` $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 
 
 ### END RULES FOR PURECAP TESTS

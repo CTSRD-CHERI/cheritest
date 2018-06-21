@@ -37,7 +37,7 @@
 # Permit_Store.
 #
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 		#
 		# If the floating point unit is not present, skip the test
 		#

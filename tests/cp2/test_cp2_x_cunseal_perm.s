@@ -38,7 +38,7 @@
 sandbox:
 		creturn
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 		#
 		# Make $c1 a data capability for 'data'
 		#

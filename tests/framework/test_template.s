@@ -45,7 +45,7 @@ END_TEST
 # If the test needs a trap handler use the code inside the ifdef instead:
 .ifdef THIS_TEST_NEEDS_A_TRAP_HANDLER
 
-BEGIN_TEST_WITH_COUNTING_TRAP_HANDLER
+BEGIN_TEST
 	# Test itself goes here
 	nop
 
