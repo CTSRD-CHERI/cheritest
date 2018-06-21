@@ -108,40 +108,67 @@
 
 
 # define a trap handler function that sets the following:
-# a1 = Trap count
-# a2 = Cause (mfc0 $a2, $13)
-# a3 = capcause (cgetcause $a3)
-# a4 = BadVAddr
-# a5 = EPC
-# a6 = Status
+# v0 = number of traps that have been handled
+# k0 = BadVaddr
+# k1 = compressed trap info:
+#    Bits 0-7 are capcause.reg, 8-15 are capcause.cause
+#    Bits 16-31 are the low 16 bits of CP0_Cause (i.e. the cause is bits 18-22)
+#    Bits 32-63 are the exception count
 # On return it just jumps to EPC+4 (i.e. it doesn't handle traps in branches/jumps)
 # This handler also allows exiting from usermode by treating sycall as a request to exit
 .macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler
 .text
 .ent \name
 \name:
+	.set push
+	.set noat
 	# Check if this is a syscall and exit if it is
 	dmfc0 	$k0, $13		# k0 = Cause
 	andi	$k1, $k0, (0x1f << 2)	# Extract the cause bits
 	daddiu	$k1, -(8 << 2)		# Syscall is cause 8
 	beqz	$k1, .Lsyscall
 	nop
-	# increment trap_count and keep result in a1
-	__get_counting_trap_handler_count $a1	# get old exception count
-	daddiu $a1, $a1, 1			# a1 = new exception count
-	__set_counting_trap_handler_count $a1	# save exception count value
-	move 	$a2, $k0			# a2 = Cause
+
+	# Clear the high 48 bits of $k0 (CPO_Cause) into $k1 and shift by 16
+	andi	$k1, $k0, 0xffff
+	dsll	$k1, 16			# Bits 16-31 set
+# Only do a cgetcause if we are testing CP2
+.if(TEST_CP2 == 1)
+	# Check if CP2 is enabled
+	mfc0	$k0, $12	# Get status
+	dli	$v0, (1 << 30)	# CP2 enabled bit
+	and	$k0, $k0, $v0	# check if zero
+	beqz	$k0, .Lcp2_disabled_skip_capcause
+	nop
+.Lset_capcause:
 	# FIXME: this should only be done if CP2 is enabled!
-	cgetcause $a3				# a3 = CapCause
-	dmfc0	$a4, $8				# a4 = BadVaddr
-	dmfc0   $a6, $12			# a6 = status
+	# Set bits 0-16 of k1 to CapCause
+	cgetcause $v0
+	andi	$v0, $v0, 0xffff	# Ensure the high bits of capcause are empty (they should be anyway)
+	or	$k1, $k1, $v0		# Add capcause in bits 0-16
+.Lcp2_disabled_skip_capcause:
+.endif
+	# TODO: (save STATUS)?
+	# dmfc0   $v1, $12			# a6 = status
+
+	# increment trap_count and keep result in v0
+	__get_counting_trap_handler_count $v0	# get old exception count
+	daddiu $v0, $v0, 1			# a1 = new exception count
+	__set_counting_trap_handler_count $v0	# save exception count value
+
+	# Shift exception count to the high 32 bits
+	# Strictly speaking might modify $v0 but more than 2^31 exceptions are impossible
+	dsll	$v0, $v0, 32
+	or	$k1, $k1, $v0		# Add count in bits 31-63
+	dsrl	$v0, $v0, 32		# restore expection count $a1
+
+
 .Lnot_syscall:
 	# Otherwise skip the instruction and return from the handler
-	dmfc0	$a5, $14		# a5 = EPC
-	daddiu	$k0, $a5, 4		# EPC += 4 to bump PC forward on ERET
+	dmfc0	$k0, $14		# a5 = EPC
+	daddiu	$k0, $k0, 4		# EPC += 4 to bump PC forward on ERET
 	dmtc0	$k0, $14
-	# move exception count to $v0 to simplify tests that don't use user mode
-	move	$v0, $a1	# instead of ssnop
+	dmfc0	$k0, $8				# k0 = BadVaddr
 	ssnop
 	ssnop
 	ssnop
@@ -157,6 +184,7 @@
 	dla	$ra, finish
 	jr	$ra
 	nop
+	.set pop
 .end \name
 .global end_of_\name
 end_of_\name\():
@@ -174,11 +202,9 @@ trap_count:
 
 
 .macro clear_counting_exception_handler_regs
-	dli $a1, 0
-	dli $a2, 0
-	dli $a3, 0
-	dli $a4, 0
-	dli $a5, 0
+	dli $v0, 0
+	dli $k0, 0
+	dli $k1, 0
 .endm
 
 # Store CP0 Cause and capcause and the exception count as an integer value in
@@ -186,25 +212,10 @@ trap_count:
 # Bits 0-7 are capcause.reg, 8-15 are capcause.cause
 # Bits 16-31 are the low 16 bits of CP0_Cause (i.e. the cause is bits 18-22)
 # Bits 32-63 are the exception count
-# This assumes Exception count is in a1, CPO_Cause is in a2 and Capcause in a3
+# This assumes the value has been set by the trap handler:
 # See DEFINE_COUNTING_CHERI_TRAP_HANDLER
-# This does not change the values of $a1, $a2 or $a3
 .macro save_counting_exception_handler_cause capreg
-	.set push
-	.set noat
-	# Clear the high 48 bits of $a2 (CPO_Cause) into $at and shift by 16
-	andi	$at, $a2, 0xffff
-	dsll	$at, 16			# Bits 16-31 set
-	# Ensure the high bits of capcause are empty (they should be anyway)
-	andi	$a3, $a3, 0xffff
-	or	$at, $at, $a3		# Add capcause in bits 0-16
-	# Shift exception count to the high 32 bits
-	# Strictly speaking this modifies $a1 but it should never use more than 32 bits
-	dsll	$a1, $a1, 32
-	or	$at, $at, $a1		# Add count in bits 31-63
-	dsra	$a1, $a1, 32		# restore $a1
-	CFromInt	\capreg, $at	# store result in capreg
-	.set pop
+	CFromInt	\capreg, $k1	# store result in capreg
 .endm
 
 # Invokes the special syscall trap that will instruct the
