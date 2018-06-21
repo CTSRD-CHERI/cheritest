@@ -788,6 +788,7 @@ TEST_CP2_FILES=					\
 		test_cp2_tlb_instruction_miss.s \
 		test_cp2_zeroex.s		\
 		test_cp2_x_bounds.s		\
+		test_cp2_x_lwr.s		\
 		test_cp2_x_c0_multiop_perm.s	\
 		test_cp2_x_candperm_tag.s	\
 		test_cp2_x_cbts_length.s	\
