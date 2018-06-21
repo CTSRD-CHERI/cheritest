@@ -25,17 +25,11 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
 .include "macros.s"
 
 BEGIN_TEST
                 # save ddc
 		cgetdefault $c2
-                # install exception handler
-                set_mips_common_bev0_handler bev0_handler
                 # prepare new restricted ddc
 		cgetdefault $c1
 		dla	$t0, data
@@ -48,52 +42,36 @@ BEGIN_TEST
 
 		daddiu	$a4, $t1, 0
                 lb      $a4, 0($zero)
+
+                # expected to work
+                move    $k1, $zero
 		daddiu	$a0, $t1, 0
-check0:
 		lwr	$a0, 0($zero)
+                move    $s0, $k1
 
+                # expected to work
+                move    $k1, $zero
 		daddiu	$a1, $t1, 0
-check1:
 		lwr	$a1, 1($zero)
+                move    $s1, $k1
 
+                # expected to throw a length exception
+                move    $k1, $zero
 		daddiu	$a2, $t1, 0
-check2:
 		lwr	$a2, 2($zero)
+                move    $s2, $k1
 
+                # expected to throw a length exception
+                move    $k1, $zero
 		daddiu	$a3, $t1, 0
-check3:
 		lwr	$a3, 3($zero)
+                move    $s3, $k1
 
                 # restore ddc
 		csetdefault $c2
 END_TEST
 
-		.ent bev0_handler
-bev0_handler:
-		dmfc0	$t1, $14	# EPC
-do_check2:
-                dla     $t0, check2
-                bne     $t0, $t1, do_check3
-                nop
-                dla     $a2, 0xdeadbeefdeadbeef
-                dla     $t0, check3
-		dmtc0	$t0, $14
-                j end_checks
-                nop
-do_check3:
-                dla     $t0, check3
-                bne     $t0, $t1, end_checks
-                nop
-                dla     $a3, 0xbeefbeefdeaddead
-                dla     $t0, check3+4
-		dmtc0	$t0, $14
-end_checks:
-		dli	$t1, -1
-                eret
-end_of_bev0_handler:
-		.end bev0_handler
 
 		.data
 		.align 3
 data:		.word 0x01020304
-		.word 0x01020304

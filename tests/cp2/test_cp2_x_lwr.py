@@ -28,17 +28,28 @@
 from beritest_tools import BaseBERITestCase, xfail_on
 from beritest_tools import attr
 
-@xfail_on("qemu", reason="Not implemented in QEMU but won't fix until this tests is understandable")
+@attr("capabilities")
 class test_cp2_x_lwr(BaseBERITestCase):
 
     def test_lwr_0(self):
         self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffff01, "LWR at offset 0 gave unexpected result")
+    def test_lwr_0_s0(self):
+        self.assertCompressedTrapInfo(self.MIPS.s0, no_trap=True)
 
     def test_lwr_1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffff0102, "LWR at offset 1 gave unexpected result")
+    def test_lwr_1_s1(self):
+        self.assertCompressedTrapInfo(self.MIPS.s1, no_trap=True)
 
     def test_x_lwr_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0xdeadbeefdeadbeef, "LWR at offset 2 gave unexpected result")
+        self.assertRegisterEqual(self.MIPS.a2, 0xffffffffffffffff, "LWR at offset 2 gave unexpected result")
+    def test_lwr_2_s2(self):
+        self.assertCp2Fault(self.MIPS.s2, cap_cause=self.MIPS.CapCause.Length_Violation, cap_reg=0, trap_count=1)
 
     def test_x_lwr_3(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0xbeefbeefdeaddead, "LWR at offset 3 gave unexpected result")
+        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "LWR at offset 3 gave unexpected result")
+    def test_lwr_3_s3(self):
+        self.assertCp2Fault(self.MIPS.s3, cap_cause=self.MIPS.CapCause.Length_Violation, cap_reg=0, trap_count=2)
+
+    def test_trap_count(self):
+        self.assertRegisterEqual(self.MIPS.v0, 2, "Expected 2 traps")
