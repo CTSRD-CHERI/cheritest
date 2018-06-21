@@ -403,7 +403,7 @@ endif
 	@echo "$(QEMU) $(QEMU_FLAGS) -d instr > /dev/null"
 	@env UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
-	    if [ "$(dollar)exit_code" -ne 255 ]; then \
+	    if [ "$(dollar)exit_code" -ne 255 ] && [ "$(dollar)exit_code" -ne 0 ]; then \
 	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
 	    fi
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
@@ -416,7 +416,7 @@ endif
 	@echo "$(QEMU) $(QEMU_FLAGS) > /dev/null"
 	@env UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
-	    if [ "$(dollar)exit_code" -ne 255 ]; then \
+	    if [ "$(dollar)exit_code" -ne 255 ] && [ "$(dollar)exit_code" -ne 0 ]; then \
 	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
 	    fi
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
