@@ -25,9 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_on
 from beritest_tools import attr
 
+@xfail_on("qemu", reason="Not implemented in QEMU but won't fix until this tests is understandable")
 class test_cp2_x_lwr(BaseBERITestCase):
 
     def test_lwr_0(self):
