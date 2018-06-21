@@ -26,7 +26,7 @@
 # page in the xuseg and attempts a load via it.
 
 
-BEGIN_TEST
+BEGIN_TEST_WITH_OLD_EXCEPTION_HANDLER
  		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
 		dmtc0	$zero, $0		# TLB index 
 		dmtc0	$zero, $10		# TLB HI address

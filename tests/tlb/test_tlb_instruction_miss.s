@@ -31,7 +31,7 @@
 #
 # Test that a very simple TLB handler using the automatically filled EntryHi will work as expected.
 #
-BEGIN_TEST
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		jal		bev_clear
 		nop
 
@@ -43,9 +43,9 @@ BEGIN_TEST
 		# will go to xtlb miss.
 		#
 		dla	$a0, bev0_handler
-		jal	set_bev0_common_handler
+		jal	bev0_handler_install
 		nop
-
+		# Also set the xtlb handler
 		dla	$a0, bev0_handler
 		jal	set_bev0_xtlb_handler
 		nop
@@ -80,7 +80,9 @@ END_TEST
 # generated EntryHi value to write the TLB.  This is the fast-path, and the general scheme
 # used in FreeBSD.
 #
+.global default_trap_handler
 		.ent bev0_handler
+default_trap_handler:
 bev0_handler:
 		li	$a2, 1
 tlb_stuff:

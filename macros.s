@@ -266,6 +266,23 @@ trap_count:
 	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
 .endm
 
+# Optional argument 1 can be used to declare extra stack space used by the function.
+.macro BEGIN_TEST_WITH_OLD_EXCEPTION_HANDLER extra_stack_space=0
+.text
+	__SET_DEFAULT_TEST_ASM_OPTS
+	# Set the old exception_count_handler as the default handler until the
+	# tests are updated to check different registers
+	.global default_trap_handler
+	.ent default_trap_handler
+	default_trap_handler:
+		dla $k0, exception_count_handler
+		jalr $k0
+		nop
+	.end default_trap_handler
+
+	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
+.endm
+
 
         
 # The maximum number of hw threads (threads*cores) we expect for

@@ -26,18 +26,11 @@
 # Simple TLB test which configures a read only TLB entry for the
 # lowest virtual page in the xuseg segment and attempts a store via it.
 
-BEGIN_TEST
-
-		# Install exception handler
-		dla	$a0, exception_handler
-		jal 	bev0_handler_install
-		nop		
-
-	
- 		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
+		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
 		dmtc0	$zero, $0		# TLB index 
 		dmtc0	$zero, $10		# TLB HI address
-	
+
 		dla     $a0, testdata		# Load address of testdata in bram
 		and     $a1, $a0, 0xffffffe000	# Get physical page (PFN) of testdata (40 bits less 13 low order bits)
 		dsrl    $a2, $a1, 6		# Put PFN in correct position for EntryLow
@@ -59,7 +52,9 @@ illegal_store:  sd      $t0, 0($a4)		# Store to write protected virtual address
 
 END_TEST
 
-exception_handler:
+.global default_trap_handler
+.ent default_trap_handler
+default_trap_handler:
 		dmfc0   $a6, $13		# Cause
 		dmfc0   $a7, $14		# EPC
 		daddu   $t0, $a7, 4		# Increment EPC
@@ -70,7 +65,8 @@ exception_handler:
 		xor     $s0, $a4		# Test that BadVAddr has correct value
 		eret
 		nop
-	
+.end default_trap_handler
+
 	.data
 	.align 5
 testdata:

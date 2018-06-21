@@ -40,7 +40,6 @@ class test_cp2_x_cunseal_perm(BaseBERITestCase):
             "cunseal unsealed when did not have permission")
 
     def test_cp2_x_cunseal_capcause(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0x1b02)
         self.assertCp2Fault(self.MIPS.c5, cap_reg=2, trap_count=1,
                             cap_cause=self.MIPS.CapCause.Permit_Unseal_Violation,
                             msg="Capability cause was not set correcly when cunseal did not have permission")

@@ -42,27 +42,7 @@
 .set nobopt
 .include "macros.s"
 
-BEGIN_TEST
-		#
-		# Set up 'handler' as the RAM exception handler.
-		#
-		jal	bev_clear
-		nop
-
-		dla	$a0, bev0_handler
-		jal	set_bev0_common_handler
-		nop
-
-		#
-		# We expect an Address Error exception to be raised, which
-		# should go through the common handler. Install a handler
-		# for TLB miss as well, in case we get a TLB miss instead
-		# (this is what happens under GXEMUL).
-		#
-		dla	$a0, bev0_handler
-		jal	set_bev0_xtlb_handler
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		dli	$s0, 0
 		dli	$s1, 0
 		dli	$s2, 0
@@ -91,13 +71,14 @@ END_TEST
 #
 # Exception handler.  
 #
-		.ent bev0_handler
-bev0_handler:
+		.ent default_trap_handler
+		.global default_trap_handler
+default_trap_handler:
 		dmfc0   $s0, $14      		# EPC
 		daddu   $t0, $s0, 4		# Increment EPC
 		dmtc0   $t0, $14		# and store it back
 		dmfc0	$s1, $8			# BadVAddr
 		dmfc0	$s2, $13		# Cause
 		eret
-		.end bev0_handler
+		.end default_trap_handler
 

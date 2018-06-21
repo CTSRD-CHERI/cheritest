@@ -58,7 +58,7 @@ BEGIN_TEST
 		# will go to xtlb miss.
 		#
 		dla	$a0, bev0_handler
-		jal	set_bev0_common_handler
+		jal	bev0_handler_install
 		nop
 
 		dla	$a0, bev0_handler

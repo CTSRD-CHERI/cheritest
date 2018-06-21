@@ -26,7 +26,7 @@
 
 .include "macros.s"
 
-BEGIN_TEST
+BEGIN_TEST_WITH_OLD_EXCEPTION_HANDLER
 		dli     $k0, 0x0
  		dmtc0	$k0, $5                 # Write 0 to page mask i.e. 4k pages
 		dla     $a0, testdata		# Load address of testdata in bram
@@ -46,10 +46,11 @@ BEGIN_TEST
 
 		and     $k0, $a0, 0xfff		# Get offset of testdata within page.
 		daddu   $k0, $k0, $a1		# Construct an address in kernel user space.
-		nop							# Delay for tlb update to take effect
+		nop				# Delay for tlb update to take effect
 		nop
 
 		ld      $a5, 0($k0)			# Test read from virtual address.
+
 END_TEST
 
 
