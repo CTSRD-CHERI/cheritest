@@ -63,7 +63,9 @@ def runTests(JobConfig args) {
     }
     def prepareAssembler = ''
     def assemblerTestFlag = ''
-    def llvmSymbolizerPath = '/usr/bin/llvm-symbolizer-4.0'
+    // llvm-symbolizer must not have a suffix otherwise asan complains:
+    // https://stackoverflow.com/questions/38079761/why-does-asan-symbolizer-path-no-longer-work-with-version-adorned-binaries
+    def llvmSymbolizerPath = '/usr/lib/llvm-4.0/bin/llvm-symbolizer'
     sh """
 echo "Checking for llvm-symbolizer at ${llvmSymbolizerPath}"
 stat "${llvmSymbolizerPath}" > /dev/null || exit 1
