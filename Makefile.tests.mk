@@ -617,9 +617,9 @@ check_sail_deps: FORCE
 nosetests_sail: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_SIM), sail MIPS)
 	$(MAKE) $(MFLAGS) nosetests_sail.xml
-nosetests_sail_embed: check_sail_deps FORCE
-	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_SIM), sail MIPS)
-	$(MAKE) $(MFLAGS) nosetests_sail_embed.xml
+nosetests_sail_mips_c: check_sail_deps FORCE
+	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_C_SIM), sail MIPS)
+	$(MAKE) $(MFLAGS) nosetests_sail_mips_c.xml
 nosetests_sail_cheri: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI_SIM), sail CHERI256)
 	$(MAKE) $(MFLAGS) nosetests_sail_cheri.xml
