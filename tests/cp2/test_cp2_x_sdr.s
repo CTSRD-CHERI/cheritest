@@ -72,7 +72,7 @@ BEGIN_TEST
 		# expected to throw a length exception
 		move	$k1, $zero
 		sdr	$a5, 5($zero)
-		move	$s3, $k1
+		move	$s5, $k1
 
 
 		# expected to throw a length exception
