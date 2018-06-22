@@ -39,6 +39,10 @@ ifeq ($(STATCOUNTERS),1)
 TESTDIRS+= $(TESTDIR)/statcounters
 endif
 
+ifeq ($(VIRTDEV),1)
+TESTDIRS+= $(TESTDIR)/virtdev
+endif
+
 ifneq ($(NOFUZZ),1)
 TESTDIRS+= $(TESTDIR)/fuzz
 endif
@@ -1100,6 +1104,13 @@ else
 RAW_STATCOUNTERS_FILES=
 endif
 
+ifeq ($(VIRTDEV),1)
+TEST_VIRTDEV_FILES= test_mc_virtdev_read.s
+else
+TEST_VIRTDEV_FILES=
+endif
+
+
 ifeq ($(TEST_RMA), 1)
 TEST_RMA_FILES = test_raw_rma_read.s
 else
@@ -1143,6 +1154,7 @@ TEST_FILES=					\
 		$(RAW_DMA_FILES)		\
 		$(RAW_STATCOUNTERS_FILES)	\
 		$(RAW_RMA_FILES)		\
+		$(TEST_VIRTDEV_FILES)		\
 		$(TEST_FRAMEWORK_FILES)		\
 		$(TEST_ALU_FILES)		\
 		$(TEST_BRANCH_FILES)		\

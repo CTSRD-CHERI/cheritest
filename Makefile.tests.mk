@@ -120,6 +120,7 @@ TEST_PYTHON := \
 	$(addsuffix .py,$(addprefix tests/tlb/,$(basename $(TEST_TLB_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/mt/,$(basename $(TEST_MT_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/statcounters/,$(basename $(RAW_STATCOUNTERS_FILES)))) \
+	$(addsuffix .py,$(addprefix tests/virtdev/,$(basename $(TEST_VIRTDEV_FILES)))) \
 	$(addsuffix .py,$(addprefix tests/multicore/,$(basename $(TEST_MULTICORE_FILES))))
 
 # XXXAR: shouldn't this also include test/c/clang_test.py, etc.?
