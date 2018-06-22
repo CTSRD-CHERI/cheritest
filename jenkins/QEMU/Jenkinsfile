@@ -63,6 +63,13 @@ def runTests(JobConfig args) {
     }
     def prepareAssembler = ''
     def assemblerTestFlag = ''
+    def llvmSymbolizerPath = '/usr/bin/llvm-symbolizer-4.0'
+    sh """
+echo "Checking for llvm-symbolizer at ${llvmSymbolizerPath}"
+stat "${llvmSymbolizerPath}" > /dev/null || exit 1
+"""
+    env.ASAN_SYMBOLIZER_PATH = llvmSymbolizerPath
+    env.UBSAN_SYMBOLIZER_PATH = llvmSymbolizerPath
     if (args.assembler == 'clang') {
         assemblerTestFlag = 'CLANG=1 CHERI_SDK=\$WORKSPACE/cherisdk'
         prepareAssembler = """
