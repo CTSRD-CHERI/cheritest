@@ -37,34 +37,34 @@ BEGIN_TEST
 		dli	$t1, 2
 		csetbounds $c1, $c1, $t1
 		csetdefault $c1
-		# perform lwr operations
+		# perform swr operations
 		dli	$t1, -1
 
 		daddiu	$a4, $t1, 0
-		lb	$a4, 0($zero)
+		lb      $a4, 0($zero)
 
 		# expected to work
 		move	$k1, $zero
 		daddiu	$a0, $t1, 0
-		lwr	$a0, 0($zero)
+		swr	$a0, 0($zero)
 		move	$s0, $k1
 
 		# expected to work
 		move	$k1, $zero
 		daddiu	$a1, $t1, 0
-		lwr	$a1, 1($zero)
+		swr	$a1, 1($zero)
 		move	$s1, $k1
 
 		# expected to throw a length exception
 		move	$k1, $zero
 		daddiu	$a2, $t1, 0
-		lwr	$a2, 2($zero)
+		swr	$a2, 2($zero)
 		move	$s2, $k1
 
 		# expected to throw a length exception
 		move	$k1, $zero
 		daddiu	$a3, $t1, 0
-		lwr	$a3, 3($zero)
+		swr	$a3, 3($zero)
 		move	$s3, $k1
 
 		# restore ddc
@@ -73,5 +73,6 @@ END_TEST
 
 
 		.data
-		.align 3
+		.balign 16
 data:		.word 0x01020304
+		.word 0x01020304

@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2015 Michael Roe
+# Copyright (c) 2018 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -25,22 +25,22 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
+from beritest_tools import BaseBERITestCase, xfail_on
 from beritest_tools import attr
 
-class test_lwr(BaseBERITestCase):
+@attr("capabilities")
+class test_cp2_x_swr(BaseBERITestCase):
+    def test_offset_0(self):
+        self.assertCompressedTrapInfo(self.MIPS.s0, no_trap=True, msg="First swr should succeed")
 
-    def test_lwr_0(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffff01, "LWR at offset 0 gave unexpected result")
+    def test_offset_1(self):
+        self.assertCompressedTrapInfo(self.MIPS.s1, no_trap=True, msg="Second swr should succeed")
 
-    def test_lwr_1(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffff0102, "LWR at offset 1 gave unexpected result")
+    def test_offset_2(self):
+        self.assertCp2Fault(self.MIPS.s2, cap_cause=self.MIPS.CapCause.Length_Violation, cap_reg=0, trap_count=1)
 
-    def test_lwr_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0xffffffffff010203, "LWR at offset 2 gave unexpected result")
+    def test_offset_3(self):
+        self.assertCp2Fault(self.MIPS.s3, cap_cause=self.MIPS.CapCause.Length_Violation, cap_reg=0, trap_count=2)
 
-    def test_lwr_3(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0x0000000001020304, "LWR at offset 3 gave unexpected result")
-
-    def test_lwr_4(self):
-        self.assertRegisterEqual(self.MIPS.a5, 0, "LWR at offset increased by 4 gave a different result")
+    def test_trap_count(self):
+        self.assertRegisterEqual(self.MIPS.v0, 2, "Expected 2 traps")
