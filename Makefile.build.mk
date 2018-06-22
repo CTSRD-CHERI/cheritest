@@ -23,7 +23,7 @@ TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 # uncached and cached runs of the suite, so we just build them once.
 #
 
-$(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s
+$(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s | $(OBJDIR)
 	$(MIPS_AS) -I $(TESTDIR)/statcounters -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
 
 # Put DMA model makefile into its own file. This one is already ludicrously
@@ -36,14 +36,14 @@ include dmamodel.mk
 
 DMA_LIB_OBJS=$(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
 
-$(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o
+$(OBJDIR)/test_clang_dma%.o: test_clang_dma%.c $(OBJDIR)/DMAAsm.o $(OBJDIR)/DMAControl.o | $(OBJDIR)
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -Ifuzz_dma -I$(DMADIR) -g -c -o $@ $< -fno-builtin
 
 # For some reasons, these need to be explicit, not implicit
-$(OBJDIR)/DMAAsm.o: DMAAsm.c
+$(OBJDIR)/DMAAsm.o: DMAAsm.c | $(OBJDIR)
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -I$(DMADIR) -c -o $@ $<
 
-$(OBJDIR)/DMAControl.o: DMAControl.c
+$(OBJDIR)/DMAControl.o: DMAControl.c | $(OBJDIR)
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -I$(DMADIR) -c -o $@ $<
 endif
 
