@@ -87,7 +87,7 @@ ${prepareAssembler}
 
 cd \$WORKSPACE/ctsrd/cheritest/trunk
 # always do a full clean in case the linker/compiler has changed
-make clean
+make distclean
 make elfs ${commonTestFlag} ${args.testArgs} elfs -j16
 """
 	}
