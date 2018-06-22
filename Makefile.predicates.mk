@@ -234,6 +234,7 @@ deterministic_random \
 extendedtlb \
 csettype \
 beri_statcounters \
+statcounters \
 float \
 pic \
 mt \
