@@ -36,6 +36,7 @@
 
 		.text
 		.global start
+		.ent start
 start:
 		# Load address of DMA config register into t0
 		dla	$t0, dma_addr # Load address of address of DMA
@@ -78,6 +79,7 @@ poll:
 
 		# Terminate the simulator
 		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

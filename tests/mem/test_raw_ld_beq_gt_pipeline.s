@@ -36,6 +36,7 @@
 #
 
 		.global start
+		.ent start
 start:
 
 		dla	$t0, data

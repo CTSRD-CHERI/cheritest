@@ -31,7 +31,8 @@
 .set noat
 .include "macros.s"
 
-.global start
+		.global start
+		.ent start
 start:
 		dla	$a0, dword
 
@@ -77,7 +78,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

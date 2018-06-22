@@ -44,7 +44,8 @@ WORD_TIMES  = 222
 DWORD_TIMES = 144
 CAP_TIMES   = 24
 
-.global start
+		.global start
+		.ent start
 start:
     # get status reg
     mfc0    $at, $12

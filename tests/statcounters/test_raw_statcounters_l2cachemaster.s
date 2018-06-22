@@ -40,7 +40,8 @@ DELAY_TIME = 1000
 
 READ_REQ_TIMES = 268
 
-.global start
+		.global start
+		.ent start
 start:
 
     # dword address in v0

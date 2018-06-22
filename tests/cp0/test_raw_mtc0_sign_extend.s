@@ -31,7 +31,8 @@
 .set noat
 .include "macros.s"
 
-.global start
+		.global start
+		.ent start
 start:
 		li	$a0, 0xffff
 		dsll	$a0, $a0, 16
@@ -65,7 +66,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

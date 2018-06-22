@@ -36,6 +36,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		# Get the total number of cores
 		mfc0    $t0, $15, 6

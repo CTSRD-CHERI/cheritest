@@ -36,7 +36,8 @@
 #
 
 		.global start
-start:   
+		.ent start
+start:
     li	$a0, 0xdead				# Clear register
     li	$a3, 0xdead				# Clear register
     li	$a4, 0xdead				# Clear register

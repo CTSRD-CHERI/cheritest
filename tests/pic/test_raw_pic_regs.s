@@ -30,6 +30,7 @@
 .set nobopt
 	
 		.global start
+		.ent start
 start:
     # Load PIC base address
 		dli   $a0, 0x900000007f804000

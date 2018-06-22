@@ -36,6 +36,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		li	$t0, 0x76543210
 		srl	$a0, $t0, 0
@@ -55,7 +56,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

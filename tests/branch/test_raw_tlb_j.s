@@ -38,6 +38,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		#
 		# Set cache coherency algorithm for kseg0

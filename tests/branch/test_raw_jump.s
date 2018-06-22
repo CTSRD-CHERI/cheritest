@@ -36,6 +36,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		li	$a0, 1
 		j	jump_target

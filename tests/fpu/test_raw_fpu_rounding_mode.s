@@ -36,6 +36,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		mfc0 $t0, $12
 		li $t1, 1 << 29			# Enable CP1
@@ -73,7 +74,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

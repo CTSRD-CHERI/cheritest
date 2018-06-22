@@ -35,6 +35,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		mfc0	$t0, $12
 		ori	$t0, $t0, 0x4
@@ -65,7 +66,8 @@ dump_regs:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

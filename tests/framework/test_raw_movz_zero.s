@@ -38,6 +38,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		dli $t0, 0
 		dli $t1, 1
@@ -55,7 +56,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

@@ -31,8 +31,9 @@
 .set noat
 .include "macros.s"
 
-.global start
-start:		.ent start
+		.global start
+		.ent start
+start:
 		move $a0, $0                    # a0 = 0
 		move $a1, $0                    # a1 = 0
 		addi $a0, $a0, -10              # a0 = -10
@@ -104,7 +105,7 @@ start:		.ent start
 
 		# Terminate the simulator
 		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop
-		.end	start

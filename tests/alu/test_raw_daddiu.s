@@ -37,6 +37,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		#
 		# add with independent input and output; preserve input for
@@ -71,7 +72,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

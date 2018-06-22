@@ -40,6 +40,7 @@
 
 		.text
 		.global start
+		.ent start
 start:
 		# No NOP
 		dla	$a0, load0
@@ -103,7 +104,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

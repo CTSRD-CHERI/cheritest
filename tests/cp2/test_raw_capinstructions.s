@@ -288,6 +288,7 @@ l3:
 
 		# Terminate the simulator
 		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

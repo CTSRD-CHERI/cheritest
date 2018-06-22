@@ -36,6 +36,7 @@
 #
 		.text
 		.global start
+		.ent start
 start:
 		dli	$a0, 0xfedcba98
 		dla	$t0, dword

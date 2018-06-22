@@ -37,6 +37,7 @@
 # be skipped, and $t3 at the branch target.
 
 		.global start
+		.ent start
 start:
 		li	$a0, 0
 		li	$a1, 0

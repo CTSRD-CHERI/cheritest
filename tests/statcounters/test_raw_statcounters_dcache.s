@@ -36,7 +36,8 @@
 # Test the counters for the dcache
 #
 
-.global start
+		.global start
+		.ent start
 start:
 
     # dword address in v0

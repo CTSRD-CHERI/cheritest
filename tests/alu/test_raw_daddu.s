@@ -37,6 +37,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		#
 		# daddu with independent inputs and outputs; preserve inputs
@@ -82,7 +83,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

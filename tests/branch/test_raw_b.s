@@ -36,6 +36,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		li	$t0, 0
 		li	$t1, 0

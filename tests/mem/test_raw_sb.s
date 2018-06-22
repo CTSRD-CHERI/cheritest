@@ -35,6 +35,7 @@
 #
 		.text
 		.global start
+		.ent start
 start:
 		# Store and load a byte into double word storage
 		dli	$a0, 0xfe
@@ -81,7 +82,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

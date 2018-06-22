@@ -43,7 +43,8 @@
 #
 
 		.global start
-start:		
+		.ent start
+start:
 		#
 		# Check total number of cores
 		#

@@ -37,6 +37,7 @@
 #
 
 		.global start
+		.ent start
 start:
 		dli	$a0, 0x1111111111111111
 		dla	$t0, cached_start

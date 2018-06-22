@@ -36,6 +36,7 @@
 #
 		.text
 		.global start
+		.ent start
 start:
 		# Store a series of bytes to a double word.  We do it twice to make sure
 		# that the instructions are cached and thus packed together as much as possible.
@@ -86,7 +87,8 @@ againL1:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

@@ -31,7 +31,8 @@
 .set noat
 .include "macros.s"
 
-.global start
+		.global start
+		.ent start
 start:
 		# Test here
 		li	$a3, 0xdead		# Clear register
@@ -63,7 +64,8 @@ epc_target:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

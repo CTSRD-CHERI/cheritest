@@ -45,7 +45,8 @@ THRESHOLD = 100
 .set nobopt
 .set noat
 
-.global start
+		.global start
+		.ent start
 start:
 
     resetstatcounters  # reset stat counters

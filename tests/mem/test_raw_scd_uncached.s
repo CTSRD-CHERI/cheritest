@@ -38,6 +38,7 @@
 
 		.text
 		.global start
+		.ent start
 start:
                 # Avoid a race in multithreaded mode by only continuing
                 # with a single thread
@@ -67,7 +68,8 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop

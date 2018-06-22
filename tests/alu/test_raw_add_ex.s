@@ -37,6 +37,7 @@
 # bits.
 
 		.global start
+		.ent start
 start:
 
 		dli	$t0, 0x0010000000000000		# top 32b -> 0's
@@ -53,7 +54,8 @@ start:
 		nop
 
 		# Terminate the simulator
-	        mtc0 $v0, $23
+		mtc0 $v0, $23
+		.end start
 end:
 		b end
 		nop
