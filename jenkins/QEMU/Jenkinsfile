@@ -158,10 +158,13 @@ def cheriHardwareTest() {
             // it seems like the currentBuild.Result will always be null (PENDING) unless I set it explicitly here
             if (currentBuild.result == null)
                 currentBuild.result = currentBuild.currentResult
-            echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
-            setGitHubStatus(args.gitInfo)
-            // Also set the status on the QEMU repo
-            setGitHubStatus(args.QEMUgitInfo)
+            // Avoid setting an error flag on github commits just because binutils is still broken
+            if (args.assembler != 'gnu-binutils') {
+                echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
+                setGitHubStatus(args.gitInfo)
+                // Also set the status on the QEMU repo
+                setGitHubStatus(args.QEMUgitInfo)
+            }
         }
     }
 }
