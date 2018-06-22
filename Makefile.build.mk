@@ -104,13 +104,13 @@ $(OBJDIR)/tmp_purecap_test_switch.o: tests/purecap/test_purecap_switch.c | $(OBJ
 $(OBJDIR)/test_purecap_switch.elf: $(OBJDIR)/test_purecap_switch.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK $@"
 	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
-$(OBJDIR)/test_purecap_switch_cached.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
+$(OBJDIR)/test_purecap_switch_cached.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK cached $@"
 	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 $(OBJDIR)/test_purecap_switch_multi.elf: $(OBJDIR)/test_purecap_switch.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK multi $@"
 	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
-$(OBJDIR)/test_purecap_switch_cachedmulti.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
+$(OBJDIR)/test_purecap_switch_cachedmulti.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK cached multi$@"
 	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
 
