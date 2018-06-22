@@ -16,7 +16,7 @@ GXEMUL_LOG_FILTER=cat
 endif
 L3_LOGDIR=l3_log
 SAIL_MIPS_LOGDIR=sail_mips_log
-SAIL_MIPS_EMBED_LOGDIR=sail_mips_embed_log
+SAIL_MIPS_C_LOGDIR=sail_mips_c_log
 SAIL_CHERI_LOGDIR=sail_cheri_log
 SAIL_CHERI_EMBED_LOGDIR=sail_cheri_embed_log
 SAIL_CHERI128_LOGDIR=sail_cheri128_log
@@ -153,8 +153,8 @@ L3_TEST_CACHEDMULTI_LOGS := $(addsuffix _cachedmulti.log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
 SAIL_MIPS_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_MIPS_LOGDIR)/,$(TESTS)))
-SAIL_MIPS_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
-	$(SAIL_MIPS_EMBED_LOGDIR)/,$(TESTS)))
+SAIL_MIPS_C_TEST_LOGS := $(addsuffix .log,$(addprefix \
+	$(SAIL_MIPS_C_LOGDIR)/,$(TESTS)))
 SAIL_CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_CHERI_LOGDIR)/,$(TESTS)))
 SAIL_CHERI_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
@@ -364,8 +364,11 @@ endif
 $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles | $(SAIL_MIPS_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< > $@ 2>&1
 
-$(SAIL_MIPS_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles | $(SAIL_MIPS_EMBED_LOGDIR)
-	-$(SAIL_EMBED) --model mips --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
+$(OBJDIR)/%.sailbin: $(OBJDIR)/%.elf $(SAIL_DIR)/sail
+	$(SAIL_DIR)/sail -elf $< -o $@
+
+$(SAIL_MIPS_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_MIPS_C_SIM) max_cycles | $(SAIL_MIPS_C_LOGDIR)
+	-$(TIMEOUT) 2m $(SAIL_MIPS_C_SIM) $< > $@ 2>&1
 
 $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles | $(SAIL_CHERI_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
@@ -380,7 +383,7 @@ $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles | 
 	-$(SAIL_EMBED) --model cheri128 --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
 
 ALL_LOGDIRS=$(L3_LOGDIR) $(QEMU_LOGDIR) $(LOGDIR) \
-	$(SAIL_MIPS_LOGDIR) $(SAIL_MIPS_EMBED_LOGDIR) \
+	$(SAIL_MIPS_LOGDIR) $(SAIL_MIPS_C_LOGDIR) \
 	$(SAIL_CHERI_LOGDIR) $(SAIL_CHERI_EMBED_LOGDIR) \
 	$(SAIL_CHERI128_LOGDIR) $(SAIL_CHERI128_EMBED_LOGDIR) \
 
@@ -641,8 +644,8 @@ nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) check_pytest_version $(TEST_PYTHON) F
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
 	     $(TESTDIRS) || true
 
-nosetests_sail_embed.xml: $(SAIL_MIPS_EMBED_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_MIPS_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
+nosetests_sail_mips_c.xml: $(SAIL_MIPS_C_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
+	LOGDIR=$(SAIL_MIPS_C_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 
