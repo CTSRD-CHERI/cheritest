@@ -395,13 +395,16 @@ QEMU_FLAGS+=-smp 2 -M malta
 else
 QEMU_FLAGS+=-M mipssim
 endif
+
+SANITIZER_ENV=UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 LSAN_OPTIONS=suppressions=QEMU_LEAKS.supp
+
 # raw tests need to be started with tracing in, for the others we can start it in init.s
 $(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU) | $(QEMU_LOGDIR)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
-	@echo "$(QEMU) $(QEMU_FLAGS) -d instr > /dev/null"
-	@env UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
+	@echo "$(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) -d instr > /dev/null"
+	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
 	    if [ "$(dollar)exit_code" -ne 255 ] && [ "$(dollar)exit_code" -ne 0 ]; then \
 	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
@@ -413,8 +416,8 @@ $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU) | $(QEMU_LOGDIR)
 ifeq ($(wildcard $(QEMU_ABSPATH)),)
 	$(error QEMU ($(QEMU)) is missing, could not execute it)
 endif
-	@echo "$(QEMU) $(QEMU_FLAGS) > /dev/null"
-	@env UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 $(QEMU) $(QEMU_FLAGS) 2>&1 >/dev/null; \
+	@echo "$(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) > /dev/null"
+	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
 	    if [ "$(dollar)exit_code" -ne 255 ] && [ "$(dollar)exit_code" -ne 0 ]; then \
 	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
