@@ -24,7 +24,7 @@ TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 #
 
 $(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s | $(OBJDIR)
-	$(MIPS_AS) -I $(TESTDIR)/statcounters -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(MIPS_AS) -I $(TESTDIR)/statcounters $(MIPS_ASFLAGS) -o $@ $<
 
 # Put DMA model makefile into its own file. This one is already ludicrously
 # large.
@@ -139,14 +139,11 @@ $(OBJDIR)/test_purecap%.elf: $(OBJDIR)/test_purecap%.o test_purecap.ld $(PURECAP
 
 ### END RULES FOR PURECAP TESTS
 
-# Once the assembler works, we can try this version too:
-#$(CLANG_CC)  -S -fno-pic -target cheri-unknown-freebsd -o - $<  | $(MIPS_AS) -EB -march=mips64 -mabi=64 -G0 -ggdb -o $@ -
-
 $(OBJDIR)/test_clang%.o : test_clang%.c | $(OBJDIR)
 	$(CLANG_CC) $(HYBRID_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 
 $(OBJDIR)/test_%.o : test_%.s macros.s | $(OBJDIR)
-	$(MIPS_AS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(MIPS_AS) $(MIPS_ASFLAGS) -o $@ $<
 # Add dependencies on the common.s for test_reg0_is_ddc files:
 $(OBJDIR)/test_cp2_x_reg0_is_ddc_load.o: tests/cp2/test_cp2_x_reg0_is_ddc_common.s
 $(OBJDIR)/test_cp2_x_reg0_is_ddc_load_linked.o: tests/cp2/test_cp2_x_reg0_is_ddc_common.s
@@ -157,7 +154,7 @@ $(OBJDIR)/test_%.o : test_%.c | $(OBJDIR)
 	$(CLANG_CC) $(CWARNFLAGS) -c $(HYBRID_CFLAGS) -o $@ $<
 
 $(OBJDIR)/%.o: %.s macros.s | $(OBJDIR)
-	$(MIPS_AS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE) -o $@ $<
+	$(MIPS_AS) $(MIPS_ASFLAGS) -o $@ $<
 
 $(SELECT_INIT): select_init.c | $(OBJDIR)
 	$(CC) -o $@ $<
