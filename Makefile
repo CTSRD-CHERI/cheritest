@@ -159,6 +159,7 @@ endif
 SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
 SAIL_MIPS_C_SIM=$(SAIL_DIR)/mips/mips_c
 SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
+SAIL_CHERI_C_SIM=$(SAIL_DIR)/cheri/cheri_c
 SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
 SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 ifeq ($(TIMEOUT),)
@@ -372,7 +373,7 @@ cleantest:
 	rm -f $(SAIL_MIPS_LOGDIR)/*.log
 	rm -f $(SAIL_MIPS_C_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI_LOGDIR)/*.log
-	rm -f $(SAIL_CHERI_EMBED_LOGDIR)/*.log
+	rm -f $(SAIL_CHERI_C_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI128_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI128_EMBED_LOGDIR)/*.log
 	rm -f $(QEMU_LOGDIR)/*.log
