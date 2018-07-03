@@ -57,31 +57,25 @@ def check_answer(test_name, test_file):
         TestClangBase.verify_clang_test(sim_log, test_name, test_file)
 
 
-def _check_xfail(test_name):
-    # L3 doesn't implement the statcounters instructions
-    if os.getenv("TEST_MACHINE", "").lower() in ("l3", "sail"):
-        if test_name in ("test_purecap_statcounters",):
-            pytest.xfail("Not expected to work on " + os.getenv("TEST_MACHINE"))
-    return True
-
-
-def _get_tests_function(test_name):
-    if _check_xfail(test_name):
-        return lambda test_name, test_file: None
-    return check_answer
-
-
 def get_all_tests():
     if ONLY_TEST:
-        return ONLY_TEST
-    return filter(lambda f: TEST_FILE_RE.match(f), os.listdir(TEST_DIR))
+        test_files = ONLY_TEST
+    else:
+        test_files = filter(lambda f: TEST_FILE_RE.match(f), os.listdir(TEST_DIR))
+    for test in test_files:
+        test_name = os.path.splitext(os.path.basename(test))[0]
+        test_file = os.path.join(TEST_DIR, test)
+        # Mark some tests as xfail for certain targets:
+        param_kwargs = {"id":test}
+        if test_name == "test_purecap_statcounters":
+            # L3/SAIL don't implement the statcounters instructions
+            if os.getenv("TEST_MACHINE", "").lower() in ("l3", "sail"):
+                param_kwargs["marks"] = pytest.mark.xfail(reason="Statcounters rdhw not supported on " + os.getenv("TEST_MACHINE", ""))
+        yield pytest.param(test_name, test_file, **param_kwargs)
 
 # TODO: ids=idfn
-@pytest.mark.parametrize("test", get_all_tests())
+@pytest.mark.parametrize(("test_name", "test_file"), get_all_tests())
 @attr('clang')
 @attr('capabilities')
-def test_purecap(test):
-    test_name = os.path.splitext(os.path.basename(test))[0]
-    test_file = os.path.join(TEST_DIR, test)
-    test_func = _get_tests_function(test_name)
-    test_func(test_name, test_file)
+def test_purecap(test_name, test_file):
+    check_answer(test_name, test_file)
