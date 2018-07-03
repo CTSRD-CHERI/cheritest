@@ -57,6 +57,13 @@ def check_answer(test_name, test_file):
         TestClangBase.verify_clang_test(sim_log, test_name, test_file)
 
 
+def _get_xfail_reason(test_name):
+    if test_name == "test_purecap_statcounters":
+        # L3/SAIL don't implement the statcounters instructions
+        if os.getenv("TEST_MACHINE", "").lower() in ("l3", "sail"):
+            return "Statcounters rdhwr not supported on " + os.getenv("TEST_MACHINE", "")
+    return None
+
 def get_all_tests():
     if ONLY_TEST:
         test_files = ONLY_TEST
@@ -67,10 +74,9 @@ def get_all_tests():
         test_file = os.path.join(TEST_DIR, test)
         # Mark some tests as xfail for certain targets:
         param_kwargs = {"id":test}
-        if test_name == "test_purecap_statcounters":
-            # L3/SAIL don't implement the statcounters instructions
-            if os.getenv("TEST_MACHINE", "").lower() in ("l3", "sail"):
-                param_kwargs["marks"] = pytest.mark.xfail(reason="Statcounters rdhw not supported on " + os.getenv("TEST_MACHINE", ""))
+        xfail_reason = _get_xfail_reason(test_name)
+        if xfail_reason:
+            param_kwargs["marks"] = pytest.mark.xfail(reason=xfail_reason)
         yield pytest.param(test_name, test_file, **param_kwargs)
 
 # TODO: ids=idfn
