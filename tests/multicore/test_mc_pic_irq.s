@@ -52,7 +52,7 @@ BEGIN_TEST
 		dmfc0	$t0, $15, 6		# Core Id ...
 		andi	$t0, $t0, 0xffff	# ... in bottom 16 bits
 		dli	$t1, 1
-		beq	$t0, $t1, core1		# If we're core onr
+		beq	$t0, $t1, core1		# If we're core one
 		nop				# Branch delay slot
 		bnez	$t0, end		# If we're not core zero
 		nop				# Branch delay slot
