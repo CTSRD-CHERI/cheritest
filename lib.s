@@ -693,10 +693,6 @@ global_func cheri_trace_str
 #  Returns: The value of the counter (i.e. the number of times the barrier has been called so far)
 #  Clobbers: t0,t1,t2,t3,v0,v1        
 #
-#  Multicore BERI1 and multithreaded BERI2 have sequentially consistent
-#  memory, so don't need "sync" memory barrier instruction. We include the
-#  sync in case the test library is run against formal models with a more
-#  relaxed memory model.
 
         .ent thread_barrier
         .global thread_barrier
