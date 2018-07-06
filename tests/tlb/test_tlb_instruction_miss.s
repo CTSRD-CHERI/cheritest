@@ -50,6 +50,10 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		jal	set_bev0_xtlb_handler
 		nop
 
+		dli     $t0, 0xfeedfacedeadbeef
+		dmtc0   $t0, $4  # write context register PTEBase
+		dli     $t0, 0xafadedcafefacade
+		dmtc0   $t0, $20 # wrte xcontext register PTEBase
 		#
 		# Clear registers we'll use when testing results later.
 		#
@@ -58,6 +62,8 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		and		$a4, $a2, $a4
 		dli		$a3, 0
 		dli		$a5, 0
+		dli		$s0, 0
+		dli		$s1, 0
 		jalr	$a4
 		dli		$a6, 0
 		dla		$a1, return
@@ -96,6 +102,8 @@ tlb_stuff:
 		dmtc0   $a2, $2					# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
 		ori	$a2, 0x1000				# Set the 13th bit for to insert the upper physical address
 		dmtc0   $a2, $3					# TLB EntryLow1 = a2 (Upper half of TLB entry for even virtual $
+		dmfc0   $s0, $4   # get tlb context register
+		dmfc0   $s1, $20  # get tlb xcontext register
 		nop
 		nop
 		nop
