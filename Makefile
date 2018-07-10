@@ -159,6 +159,7 @@ endif
 SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
 SAIL_MIPS_C_SIM=$(SAIL_DIR)/mips/mips_c
 SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
+SAIL_CHERI_C_SIM=$(SAIL_DIR)/cheri/cheri_c
 SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
 SAIL_EMBED=$(SAIL_DIR)/src/run_embed.native
 ifeq ($(TIMEOUT),)
@@ -173,9 +174,14 @@ endif
 
 
 CC?=gcc
-
+ifeq ($(CHERI_SDK_USE_GNU_AS),1)
+MIPS_AS_ABICALLS=
+else
+MIPS_AS_ABICALLS=-mno-abicalls
+endif
+MIPS_ASFLAGS=$(MIPS_AS_ABICALLS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE)
 CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension-token -Wno-error=unused -Wno-error=pedantic
-HYBRID_CFLAGS?=-ffreestanding -g -fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections -nostdlibinc
+HYBRID_CFLAGS?=-ffreestanding -g -mno-abicalls -fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections -nostdlibinc
 PURECAP_CFLAGS?=-ffreestanding -g -fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections -nostdlibinc -Itests/purecap
 
 ifneq ($(CHERI$(CAP_SIZE)_SDK),)
@@ -372,7 +378,7 @@ cleantest:
 	rm -f $(SAIL_MIPS_LOGDIR)/*.log
 	rm -f $(SAIL_MIPS_C_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI_LOGDIR)/*.log
-	rm -f $(SAIL_CHERI_EMBED_LOGDIR)/*.log
+	rm -f $(SAIL_CHERI_C_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI128_LOGDIR)/*.log
 	rm -f $(SAIL_CHERI128_EMBED_LOGDIR)/*.log
 	rm -f $(QEMU_LOGDIR)/*.log

@@ -792,7 +792,6 @@ TEST_CP2_FILES=					\
 		test_cp2_tlb_instruction_miss.s \
 		test_cp2_zeroex.s		\
 		test_cp2_x_bounds.s		\
-		test_cp2_x_lwr.s		\
 		test_cp2_x_c0_multiop_perm.s	\
 		test_cp2_x_candperm_tag.s	\
 		test_cp2_x_cbts_length.s	\
@@ -889,8 +888,10 @@ TEST_CP2_FILES=					\
 		test_cp2_x_ld_align.s		\
 		test_cp2_x_ldc1_perm.s		\
 		test_cp2_x_ld_len.s		\
+		test_cp2_x_ldr.s		\
 		test_cp2_x_ldxc1_perm.s		\
 		test_cp2_x_lwc1_perm.s		\
+		test_cp2_x_lwr.s		\
 		test_cp2_x_lwxc1_perm.s		\
 		test_cp2_x_multiop_adel.s	\
 		test_cp2_x_multiop_ades.s	\
@@ -910,7 +911,9 @@ TEST_CP2_FILES=					\
 		test_cp2_x_reg0_is_ddc_store_cond.s	\
 		test_cp2_x_sb_perm.s		\
 		test_cp2_x_sdc1_perm.s		\
+		test_cp2_x_sdr.s		\
 		test_cp2_x_swc1_perm.s		\
+		test_cp2_x_swr.s		\
 		test_raw_cp2_reg_init.s
 ifeq ($(USING_LLVM_ASSEMBLER),1)
 # FIXME: gas does not yet implement ccall fast

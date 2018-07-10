@@ -18,7 +18,7 @@ L3_LOGDIR=l3_log
 SAIL_MIPS_LOGDIR=sail_mips_log
 SAIL_MIPS_C_LOGDIR=sail_mips_c_log
 SAIL_CHERI_LOGDIR=sail_cheri_log
-SAIL_CHERI_EMBED_LOGDIR=sail_cheri_embed_log
+SAIL_CHERI_C_LOGDIR=sail_cheri_c_log
 SAIL_CHERI128_LOGDIR=sail_cheri128_log
 SAIL_CHERI128_EMBED_LOGDIR=sail_cheri128_embed_log
 # Use different logdirs for 128/256
@@ -158,8 +158,8 @@ SAIL_MIPS_C_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_MIPS_C_LOGDIR)/,$(TESTS)))
 SAIL_CHERI_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_CHERI_LOGDIR)/,$(TESTS)))
-SAIL_CHERI_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
-	$(SAIL_CHERI_EMBED_LOGDIR)/,$(TESTS)))
+SAIL_CHERI_C_TEST_LOGS := $(addsuffix .log,$(addprefix \
+	$(SAIL_CHERI_C_LOGDIR)/,$(TESTS)))
 SAIL_CHERI128_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(SAIL_CHERI128_LOGDIR)/,$(TESTS)))
 SAIL_CHERI128_EMBED_TEST_LOGS := $(addsuffix .log,$(addprefix \
@@ -374,8 +374,8 @@ $(SAIL_MIPS_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_MIPS_C_SIM) max_cycles |
 $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles | $(SAIL_CHERI_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< > $@ 2>&1
 
-$(SAIL_CHERI_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles | $(SAIL_CHERI_EMBED_LOGDIR)
-	-$(SAIL_EMBED) --model cheri --quiet --max_instruction `./max_cycles $@ 20000 300000` $(<)@0x40000000 > $@ 2>&1
+$(SAIL_CHERI_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_CHERI_C_SIM) max_cycles | $(SAIL_CHERI_C_LOGDIR)
+	-$(SAIL_CHERI_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< > $@ 2>&1
 
 $(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles | $(SAIL_CHERI128_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_CHERI128_SIM) $< > $@ 2>&1
@@ -385,7 +385,7 @@ $(SAIL_CHERI128_EMBED_LOGDIR)/%.log: $(OBJDIR)/%.mem $(SAIL_EMBED) max_cycles | 
 
 ALL_LOGDIRS=$(L3_LOGDIR) $(QEMU_LOGDIR) $(LOGDIR) \
 	$(SAIL_MIPS_LOGDIR) $(SAIL_MIPS_C_LOGDIR) \
-	$(SAIL_CHERI_LOGDIR) $(SAIL_CHERI_EMBED_LOGDIR) \
+	$(SAIL_CHERI_LOGDIR) $(SAIL_CHERI_C_LOGDIR) \
 	$(SAIL_CHERI128_LOGDIR) $(SAIL_CHERI128_EMBED_LOGDIR) \
 
 # See ﻿https://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html#Prerequisite-Types (dep has to be after a '|')
@@ -619,14 +619,14 @@ nosetests_sail: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_SIM), sail MIPS)
 	$(MAKE) $(MFLAGS) nosetests_sail.xml
 nosetests_sail_mips_c: check_sail_deps FORCE
-	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_C_SIM), sail MIPS)
+	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_C_SIM), sail MIPS_C)
 	$(MAKE) $(MFLAGS) nosetests_sail_mips_c.xml
 nosetests_sail_cheri: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI_SIM), sail CHERI256)
 	$(MAKE) $(MFLAGS) nosetests_sail_cheri.xml
-nosetests_sail_cheri_embed: check_sail_deps FORCE
-	$(call _CHECK_FILE_EXIST, $(SAIL_EMBED), sail embed)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri_embed.xml
+nosetests_sail_cheri_c: check_sail_deps FORCE
+	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI_C_SIM), sail CHERI_C)
+	$(MAKE) $(MFLAGS) nosetests_sail_cheri_c.xml
 nosetests_sail_cheri128: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI128_SIM), sail CHERI128)
 	$(MAKE) $(MFLAGS) nosetests_sail_cheri128.xml
@@ -655,8 +655,8 @@ nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) check_pytest_version $(TEST_PY
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
 	     $(TESTDIRS) || true
 
-nosetests_sail_cheri_embed.xml: $(SAIL_CHERI_EMBED_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI_EMBED_LOGDIR) $(SAIL_NOSETESTS) \
+nosetests_sail_cheri_c.xml: $(SAIL_CHERI_C_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
+	LOGDIR=$(SAIL_CHERI_C_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
 	    $(TESTDIRS) || true
 

@@ -28,6 +28,7 @@
 
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
+import pytest
 
 #
 # Test to ensure that EPCC is set correctly when a branch occurs to an
@@ -75,6 +76,7 @@ class test_cp2_exception_epcc_unrep(BaseBERITestCase):
     #
     @attr('capabilities')
     @attr('cap_imprecise')
+    @pytest.mark.xfail(reason="This test is wrong and needs updating according to latest spec")
     def test_capcause_imprecise(self):
         self.assertRegisterEqual(self.MIPS.s2, 0x1ff, "incorrect capcause")
 
@@ -139,7 +141,8 @@ class test_cp2_exception_epcc_unrep(BaseBERITestCase):
 
     @attr('capabilities')
     @attr('cap_imprecise')
-    def test_sandbox_epcc_perms_precise(self):
+    @pytest.mark.xfail(reason="This test is wrong and needs updating according to latest spec")
+    def test_sandbox_epcc_perms_imprecise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0, "sandbox EPCC perms incorrect")
 
     @attr('capabilities')
