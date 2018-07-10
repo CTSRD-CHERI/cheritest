@@ -46,8 +46,6 @@
 # Service a read request from core 0 on core 1.
 #
 BEGIN_TEST
-		jal	other_threads_go
-		nop
 		dmfc0	$t0, $15, 7		# Thread Id ...
 		andi	$t0, $t0, 0xffff	# ... in bottom 16 bits
 		bnez	$t0, end		# If we're not thread zero
@@ -64,6 +62,8 @@ BEGIN_TEST
 		#
 		# Core 0 does this bit
 		#
+		jal	other_threads_go
+		nop
 		dli	$t0, 0x900000007fb00000	# Load address of virt. device
 		ld	$a0, 0($t0)		# Should return as not enabled
 		dli	$t1, 0x900000007ff00000	# Load address of reg interface
