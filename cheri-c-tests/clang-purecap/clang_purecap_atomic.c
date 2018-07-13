@@ -46,7 +46,7 @@ _Atomic(int) *wp = &w;
 _Atomic(long long) *dp = &d;
 _Atomic(int*) *pp = &p;
 
-BEGIN_TEST(atomic)
+BEGIN_TEST(clang_purecap_atomic)
 	assert_eq(__builtin_cheri_length_get(cp), sizeof(c));
 	assert_eq(__builtin_cheri_length_get(hp), sizeof(h));
 	assert_eq(__builtin_cheri_length_get(wp), sizeof(w));
