@@ -25,6 +25,8 @@ TEST_LIB_OBJECT=$(OBJDIR)/lib.o
 
 $(OBJDIR)/test_raw_statcounters_%.o : test_raw_statcounters_%.s | $(OBJDIR)
 	$(MIPS_AS) -I $(TESTDIR)/statcounters $(MIPS_ASFLAGS) -o $@ $<
+$(OBJDIR)/test_statcounters_%.o : test_statcounters_%.s | $(OBJDIR)
+	$(MIPS_AS) -I $(TESTDIR)/statcounters $(MIPS_ASFLAGS) -o $@ $<
 
 # Put DMA model makefile into its own file. This one is already ludicrously
 # large.

@@ -1102,7 +1102,8 @@ RAW_STATCOUNTERS_FILES=                \
 		test_raw_statcounters_reset.s   \
 		test_raw_statcounters_dcache.s  \
 		test_raw_statcounters_l2cachemaster.s  \
-		test_raw_statcounters_mipsmem.s
+		test_raw_statcounters_mipsmem.s \
+		test_statcounters_no_trap_in_user_mode.s
 else
 RAW_STATCOUNTERS_FILES=
 endif
