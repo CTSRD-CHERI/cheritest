@@ -36,7 +36,10 @@ extern "C" {
 
 #define TO_CAP(x) ((__cheri_tocap void * __capability)(void*)(x))
 
-typedef __attribute__((memory_address)) long vaddr_t;
+#ifndef _VADDR_T_DECLARED
+typedef __attribute((memory_address)) __UINT64_TYPE__ vaddr_t;
+#define _VADDR_T_DECLARED
+#endif
 
 
 __attribute__((noreturn)) int __assert_fail(int);
