@@ -73,6 +73,8 @@ $(OBJDIR)/purecap_lib.o: lib.s | $(OBJDIR)
 	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 $(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c | $(OBJDIR)
 	$(CLANG_CC) $(PURECAP_CFLAGS) -fno-builtin $(CWARNFLAGS) -c -o $@ $<
+$(OBJDIR)/purecap_atomic_runtime.o: tests/purecap/atomic.c | $(OBJDIR)
+	$(CLANG_CC) $(PURECAP_CFLAGS) -fno-builtin $(CWARNFLAGS) -c -o $@ $<
 
 ifdef VERBOSE
 _V=
@@ -113,6 +115,21 @@ $(OBJDIR)/test_purecap_switch_multi.elf: $(OBJDIR)/test_purecap_switch.o test_pu
 $(OBJDIR)/test_purecap_switch_cachedmulti.elf: $(OBJDIR)/test_purecap_switch.o test_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o
 	@echo "MULTIOBJ LINKING HACK cached multi$@"
 	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/tmp_purecap_test_switch.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
+
+# Rules for test_purecap_atomic
+$(OBJDIR)/test_purecap_atomic.elf: $(OBJDIR)/test_purecap_atomic.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/purecap_atomic_runtime.o
+	@echo "MULTIOBJ LINKING HACK $@"
+	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/purecap_atomic_runtime.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_atomic_cached.elf: $(OBJDIR)/test_purecap_atomic.o test_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/purecap_atomic_runtime.o
+	@echo "MULTIOBJ LINKING HACK cached $@"
+	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/purecap_atomic_runtime.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_atomic_multi.elf: $(OBJDIR)/test_purecap_atomic.o test_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/purecap_atomic_runtime.o
+	@echo "MULTIOBJ LINKING HACK multi $@"
+	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap.ld $(PURECAP_INIT_OBJS) $(OBJDIR)/purecap_atomic_runtime.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
+$(OBJDIR)/test_purecap_atomic_cachedmulti.elf: $(OBJDIR)/test_purecap_atomic.o test_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/purecap_atomic_runtime.o
+	@echo "MULTIOBJ LINKING HACK cached multi$@"
+	$(_V)$(RUN_MIPS_LD) $(MIPS_LDFLAGS) -Ttest_purecap_cached.ld $(PURECAP_INIT_CACHED_OBJS) $(OBJDIR)/purecap_atomic_runtime.o $< -o $@ $(PURECAP_LDFLAGS) && $(call CAPSIZEFIX,$@)
+
 
 $(OBJDIR)/test_purecap_%_cached.elf : $(OBJDIR)/test_purecap_%.o \
 	    test_purecap_cached.ld \
