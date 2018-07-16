@@ -1,5 +1,5 @@
-#
-# Copyright (c) 2013 Michael Roe
+#-
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -25,34 +25,47 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
-
+.include "macros.s"
 #
-# Test the CP0 config3 register
+# Check that the badinstr register is implemented
 #
-@attr('config3')
-class test_cp0_config3(BaseBERITestCase):
 
-    def test_cp0_config3_exists(self):
-        '''Test CP0.Config3 exists'''
-        self.assertRegisterEqual(self.MIPS.a4, 3,
-            "CP0 does not have config register 3")
+BEGIN_TEST
+		#
+		# Set up exception handler.
+		#
+		jal	bev_clear
+		nop
+		dla	$a0, bev0_handler
+		jal	bev0_handler_install
+		nop
 
-    @attr('userlocal')
-    def test_cp0_config3_ulri(self):
-        '''Test CP0.Config3.ulri is set'''
-        self.assertRegisterEqual((self.MIPS.a3 >> 13) & 1, 1,
-        "CP0.config3.ulri is not set")
+		#
+		# Clear registers we'll use when testing results later.
+		#
+		dli	$a1, -1
+		dli	$s1, -2
 
 
-    def test_cp0_config3_badinstr(self):
-        '''Test CP0.Config3.BadInstr is set'''
-        self.assertRegisterEqual((self.MIPS.a3 >> 26) & 1, 1,
-        "CP0.config3.ulri is not set")
+		teq	$zero, $zero
+		move	$s1, $a1
 
-    @attr("badinstr_p")
-    def test_cp0_config3_badinstr_p(self):
-        '''Test CP0.Config3.BadInstr is set'''
-        self.assertRegisterEqual((self.MIPS.a3 >> 27) & 1, 1,
-        "CP0.config3.ulri is not set")
+		# load config3 register
+		dmfc0	$a3, $16, 3
+
+return:
+END_TEST
+
+.ent bev0_handler
+bev0_handler:
+		li	$v1, 42
+		dmfc0	$a5, $14	# EPC
+		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+		dmfc0	$a1, $8, 1	# BadInstr register
+		ssnop			# NOPs to avoid hazard with ERET
+		ssnop			# XXXRW: How many are actually
+		ssnop			# required here?
+		ssnop
+		eret
+.end bev0_handler

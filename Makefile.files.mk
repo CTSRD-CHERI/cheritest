@@ -515,6 +515,8 @@ TEST_CACHE_FILES=				\
 
 TEST_CP0_FILES=					\
 		test_break.s			\
+		test_cp0_badinstr.s		\
+		test_cp0_badinstr_p.s		\
 		test_cp0_cache_user.s		\
 		test_cp0_ccres.s		\
 		test_cp0_compare.s		\

@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -29,30 +29,19 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
 #
-# Test the CP0 config3 register
+# Test that the BadInstr register is implemented
 #
-@attr('config3')
-class test_cp0_config3(BaseBERITestCase):
-
-    def test_cp0_config3_exists(self):
-        '''Test CP0.Config3 exists'''
-        self.assertRegisterEqual(self.MIPS.a4, 3,
-            "CP0 does not have config register 3")
-
-    @attr('userlocal')
-    def test_cp0_config3_ulri(self):
-        '''Test CP0.Config3.ulri is set'''
-        self.assertRegisterEqual((self.MIPS.a3 >> 13) & 1, 1,
-        "CP0.config3.ulri is not set")
-
-
-    def test_cp0_config3_badinstr(self):
-        '''Test CP0.Config3.BadInstr is set'''
-        self.assertRegisterEqual((self.MIPS.a3 >> 26) & 1, 1,
-        "CP0.config3.ulri is not set")
+class test_cp0_badinstr_p(BaseBERITestCase):
+    def test_trap_handler_ran(self):
+        assert self.MIPS.v1 == 42, "trap handler didn't run"
 
     @attr("badinstr_p")
-    def test_cp0_config3_badinstr_p(self):
-        '''Test CP0.Config3.BadInstr is set'''
-        self.assertRegisterEqual((self.MIPS.a3 >> 27) & 1, 1,
-        "CP0.config3.ulri is not set")
+    def test_badinstr_supported(self):
+        assert ((self.MIPS.a3 >> 27) & 1) == 1, "CP0.config3.BadInstr is not set"
+
+    def test_badinstr_value(self):
+        assert self.MIPS.a1 == 0x00000034, "expected teq $zero, $zero in BadInstr"
+
+    @attr("badinstr_p")
+    def test_badinstr_p_value(self):
+        assert self.MIPS.a2 == 0x10000003, "expected b 16 in BadInstrP"
