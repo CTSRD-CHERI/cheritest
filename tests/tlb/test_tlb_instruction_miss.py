@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import attr, xfail_on
 
 class test_tlb_instruction_miss(BaseBERITestCase):
 
@@ -49,6 +49,7 @@ class test_tlb_instruction_miss(BaseBERITestCase):
         self.assertRegisterMaskEqual(self.MIPS.s0, 0xf, 0, "tlb context 3..0 incorrect")
         
     @attr('tlb')
+    @xfail_on('qemu')
     def test_xcontext_ptebase(self):
         self.assertRegisterMaskEqual(self.MIPS.s1, 0xfffffffe00000000, 0xafadedca00000000, "tlb xcontext ptebase incorrect")
         self.assertRegisterMaskEqual(self.MIPS.s1, 0x1fffffff0, (self.MIPS.a4 >> 9) & 0x7ffff0, "tlb xcontext r/ vpn2 incorrect")
