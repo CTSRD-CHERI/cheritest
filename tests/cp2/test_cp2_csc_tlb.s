@@ -33,15 +33,7 @@
 # bit is set in the TLB entry for the page but the tag bit on data is unset.
 #
 
-BEGIN_TEST
-		#
-		# Install exception handler
-		#
-
-		dla	$a0, exception_handler
-		jal 	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
                 # To test user code we must set up a TLB entry.
 		#
@@ -148,7 +140,8 @@ testcode:
 		syscall	0
 		nop
 
-exception_handler:
+.global default_trap_handler
+default_trap_handler:
                 mfc0    $a7, $13                # Read cause.
 
 		dla	$t0, the_end
