@@ -130,10 +130,9 @@
 	beqz	$k1, .Lsyscall
 	nop
 
-	# Clear the high 32 bits of $k0 (CPO_Cause) into $k1 and shift by 16
-	dsll	$k0, $k0, 32
-	dsrl	$k1, $k0, 16			# Bits 16-47 set
-	# Move the bdelay
+	# Clear the high 48 bits of $k0 (CPO_Cause) into $k1 and shift by 16
+	andi	$k1, $k0, 0xffff
+	dsll	$k1, 16			# Bits 16-31 set
 # Only do a cgetcause if we are testing CP2
 .if(TEST_CP2 == 1)
 	# Check if CP2 is enabled
@@ -158,37 +157,19 @@
 	daddiu $v0, $v0, 1			# a1 = new exception count
 	__set_counting_trap_handler_count $v0	# save exception count value
 
-	# Shift exception count to the high 16 bits
-	# Strictly speaking might modify $v0 but more than 2^16 exceptions should
-	# be impossible in any of the tests
-	dsll	$v0, $v0, 48
+	# Shift exception count to the high 32 bits
+	# Strictly speaking might modify $v0 but more than 2^31 exceptions are impossible
+	dsll	$v0, $v0, 32
 	or	$k1, $k1, $v0		# Add count in bits 31-63
-	dsrl	$v0, $v0, 48		# restore expection count $v0
+	dsrl	$v0, $v0, 32		# restore expection count $a1
 
 
 .Lnot_syscall:
 	# Otherwise skip the instruction and return from the handler
-	# Check for bdelay flag:
-	dsrl	$k0, $k1, 47
-	andi	$k0, $k0, 1
-	# This needs to be done by branching and duplicating code since we don't have a spare register
-	bne	$k0, $zero, .Lskip_branch_and_delay_slot
-	nop
-.Lskip_one_instr:
 	dmfc0	$k0, $14		# a5 = EPC
 	daddiu	$k0, $k0, 4		# EPC += 4 to bump PC forward on ERET
 	dmtc0	$k0, $14
-	dmfc0	$k0, $8			# k0 = BadVaddr
-	ssnop
-	ssnop
-	ssnop
-	eret
-
-.Lskip_branch_and_delay_slot:
-	dmfc0	$k0, $14		# a5 = EPC
-	daddiu	$k0, $k0, 8		# EPC += 8 to bump PC forward on ERET (over the delay slot)
-	dmtc0	$k0, $14
-	dmfc0	$k0, $8			# k0 = BadVaddr
+	dmfc0	$k0, $8				# k0 = BadVaddr
 	ssnop
 	ssnop
 	ssnop

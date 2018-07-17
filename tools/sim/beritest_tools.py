@@ -442,8 +442,7 @@ class BaseBERITestCase(unittest.TestCase):
             self.assertCapPermissions(cap.perms, perms, msg + "has wrong permissions")
 
     def assertCompressedTrapInfo(self, capreg, mips_cause=-1, cap_cause=None,
-                                 cap_reg=None, trap_count=None, no_trap=False,
-                                 bdelay=False, msg=""):
+                                 cap_reg=None, trap_count=None, no_trap=False, msg=""):
         # type: (BaseBERITestCase, Capability, int, int, int, int, bool, str) -> None
         '''
         :param capreg: The register containing the compressed exception info
@@ -454,7 +453,6 @@ class BaseBERITestCase(unittest.TestCase):
         :param trap_count: The expected number of traps so far or None if it doesn't matter
         :param no_trap: If true then we expect the exception handler to not have been triggered
                         (Note: The test should invoke clear_counting_exception_handler_regs)
-        :param bdelay: whether the cause register should have the branchdelay flag set or None if it doesn't matter
         :param msg: Additional message to print on failure
         :return:
         '''
@@ -472,11 +470,6 @@ class BaseBERITestCase(unittest.TestCase):
         if cause_value != mips_cause:
             self.fail(msg + ": MIPS cause wrong: %s != expected %s" % (
                 MipsStatus.Cause.fromint(cause_value), MipsStatus.Cause.fromint(mips_cause)))
-        if bdelay is not None:
-            bdelay_value = bool((compressed_value >> 47) & 1)
-            self.assertEqual(bdelay_value, bdelay, msg + ": BDELAY CAUSE flag wrong: expected trap" +
-                             ("" if bdelay else " NOT ") + " in delay slot")
-
         if cap_reg is not None:
             value = compressed_value & 0xff  # CapCause.RegNum in Bits 0-7
             self.assertRegisterEqual(value, cap_reg, msg + ": cap reg wrong")
@@ -486,17 +479,17 @@ class BaseBERITestCase(unittest.TestCase):
                 self.fail(msg + ": cap cause wrong: %s != expected %s" % (
                     MipsStatus.CapCause.fromint(value), MipsStatus.CapCause.fromint(cap_cause)))
         if trap_count is not None:
-            value = compressed_value >> 48  # Bits 48-63
+            value = compressed_value >> 32  # Bits 32-63
             self.assertRegisterEqual(value, trap_count, msg + ": trap count wrong")
 
-    def assertCp2Fault(self, capreg, cap_cause, cap_reg=None, trap_count=None, bdelay=False, msg=""):
+    def assertCp2Fault(self, capreg, cap_cause, cap_reg=None, trap_count=None, msg=""):
         # type: (BaseBERITestCase, Capability, int, int, int, str) -> None
         """
             Check that capreg holds compressed trap info
         """
         self.assertCompressedTrapInfo(capreg, mips_cause=MipsStatus.Cause.COP2,
                                       cap_cause=cap_cause, cap_reg=cap_reg,
-                                      trap_count=trap_count, bdelay=bdelay, msg=msg)
+                                      trap_count=trap_count, msg=msg)
 
 
 
