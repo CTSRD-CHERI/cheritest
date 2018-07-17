@@ -33,17 +33,9 @@
 # 'disable capability store' bit is set in the TLB entry for the page.
 #
 
-BEGIN_TEST
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
-		# Install exception handler
-		#
-
-		dla	$a0, exception_handler
-		jal 	bev0_handler_install
-		nop
-
-		#
-                # To test user code we must set up a TLB entry.
+		# To test user code we must set up a TLB entry.
 		#
 .set at
 		#
@@ -136,7 +128,10 @@ testcode:
 		syscall	0
 		nop
 
-exception_handler:
+
+.global default_trap_handler
+.ent default_trap_handler
+default_trap_handler:
 
                 dmfc0   $a6, $12                # Read status
                 mfc0    $a7, $13                # Read cause
@@ -154,6 +149,7 @@ exception_handler:
 		dla	$t0, the_end
 		jr	$t0
 		nop
+.end default_trap_handler
 
 		.data
 		.align 5

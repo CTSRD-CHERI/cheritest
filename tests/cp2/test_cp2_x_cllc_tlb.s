@@ -35,12 +35,12 @@
 # copying data using clc/csc in no-cap regions.
 #
 
-BEGIN_TEST
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Install exception handler
 		#
 
-		dla	$a0, exception_handler
+		dla	$a0, default_trap_handler
 		jal 	bev0_handler_install
 		nop
 
@@ -154,7 +154,9 @@ testcode:
 		syscall	0
 		nop
 
-exception_handler:
+.global default_trap_handler
+.ent default_trap_handler
+default_trap_handler:
 		#
 		# Check to see if the capability load succeeded
 		# exception handler should not be called for clc,
@@ -166,6 +168,7 @@ exception_handler:
 		dla	$t0, the_end
 		jr	$t0
 		nop
+.end default_trap_handler
 
 		.data
 		.align 5
