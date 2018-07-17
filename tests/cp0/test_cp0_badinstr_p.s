@@ -47,28 +47,44 @@ BEGIN_TEST
 		dli	$s1, -2
 		dli	$a2, -1
 		dli	$s2, -2
+		dli	$a3, -1
+		dli	$s3, -2
 
 
 
+		# First branch not taken:
+		li	$a1, 1
+		beq	$zero, $a1, btarget # branch not taken:
+		teq	$zero, $zero # trap in branch delay slot
+		nop
+		nop
+		nop
+btarget:
+		move	$s1, $a1
+		move	$s2, $a2
+		move	$s3, $a3
+
+
+		# Now try with branch taken
 		beq	$zero, $zero, return # branch taken:
 		teq	$zero, $zero # trap in branch delay slot
 		nop
 		nop
 return:
-		move	$s1, $a1
-		move	$s2, $a2
+
 		# load config3 register
-		dmfc0	$a3, $16, 3
+		dmfc0	$a4, $16, 3
 END_TEST
 
 .ent bev0_handler
 bev0_handler:
 		li	$v1, 42
 		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 8 to bump PC forward on ERET (into the nop)
+		daddiu	$k0, $a5, 8	# EPC += 8 to bump PC forward on ERET (into the nop)
 		dmtc0	$k0, $14
 		dmfc0	$a1, $8, 1	# BadInstr register
 		dmfc0	$a2, $8, 2	# BadInstrP register
+		dmfc0	$a3, $13	# Cause register
 		ssnop			# NOPs to avoid hazard with ERET
 		ssnop			# XXXRW: How many are actually
 		ssnop			# required here?

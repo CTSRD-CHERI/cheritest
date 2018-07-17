@@ -36,8 +36,8 @@ class test_cp0_badinstr_p(BaseBERITestCase):
         assert self.MIPS.v1 == 42, "trap handler didn't run"
 
     @attr("badinstr_p")
-    def test_badinstr_supported(self):
-        assert ((self.MIPS.a3 >> 27) & 1) == 1, "CP0.config3.BadInstr is not set"
+    def test_badinstr_p_supported(self):
+        assert ((self.MIPS.a4 >> 27) & 1) == 1, "CP0.config3.BadInstrP is not set"
 
     def test_badinstr_value(self):
         assert self.MIPS.a1 == 0x00000034, "expected teq $zero, $zero in BadInstr"
@@ -45,3 +45,17 @@ class test_cp0_badinstr_p(BaseBERITestCase):
     @attr("badinstr_p")
     def test_badinstr_p_value(self):
         assert self.MIPS.a2 == 0x10000003, "expected b 16 in BadInstrP"
+
+    def test_cause_bdelay(self):
+        assert ((self.MIPS.a3 >> 31) & 1) == 0x1, "expected BDELAY flag in Cause"
+
+
+    def test_not_taken_badinstr_value(self):
+        assert self.MIPS.s1 == 0x00000034, "expected teq $zero, $zero in BadInstr"
+
+    @attr("badinstr_p")
+    def test_not_taken_badinstr_p_value(self):
+        assert self.MIPS.s2 == 0x10050004, "beq $zero, $5, 20 in BadInstrP"
+
+    def test_not_taken_cause_bdelay(self):
+        assert ((self.MIPS.s3 >> 31) & 1) == 0x1, "expected BDELAY flag in Cause"
