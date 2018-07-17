@@ -598,6 +598,8 @@ TEST_FPU_FILES=					\
 ifeq ($(TEST_CP2),1)
 TEST_CP2_FILES=					\
 		test_cp2_alu_mod_pipeline.s	\
+		test_cp2_badinstr.s		\
+		test_cp2_badinstr_p.s		\
 		test_cp2_branchtag.s		\
 		test_cp2_c0_lbu.s		\
 		test_cp2_c0_ld.s		\

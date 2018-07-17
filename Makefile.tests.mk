@@ -401,6 +401,8 @@ else
 QEMU_FLAGS+=-M mipssim
 endif
 
+# There is a use-after free due to undetermined pthread shutdown order, ignore that too:
+# TODO: ASAN_OPTIONS=suppressions=QEMU_ASAN.supp
 SANITIZER_ENV=UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 LSAN_OPTIONS=suppressions=QEMU_LEAKS.supp
 
 # raw tests need to be started with tracing in, for the others we can start it in init.s
