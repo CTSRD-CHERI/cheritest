@@ -59,7 +59,9 @@ def runTests(JobConfig args) {
         if (args.assembler != 'clang') {
             error("Bad compiler: ${args.compiler}")
         }
-        copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
+        // Use lastCompleted() here to also pull yellow builds
+        copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName, selector: lastCompleted()
+
     }
     def prepareAssembler = ''
     def assemblerTestFlag = ''

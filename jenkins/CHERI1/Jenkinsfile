@@ -119,7 +119,8 @@ def doBuild(JobConfig args) {
 	}
 	timeout(240) {
 		copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
-		copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
+		// Use lastCompleted() here to also pull yellow builds
+		copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName, selector: lastCompleted()
 		stage('Build Simulator') {
 			// NOPRINTS=1 might to be required for successful builds? At least for CACHECORE
 			// This should speed up running the tests:
