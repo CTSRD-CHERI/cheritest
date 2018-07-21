@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #-
 # Copyright (c) 2011 Steven J. Murdoch
 # Copyright (c) 2013 Alexandre Joannou
@@ -139,6 +139,10 @@ class BaseBERITestCase(unittest.TestCase):
 
     cached = bool(int(os.environ.get("CACHED", "0")))
     multi = bool(int(os.environ.get("MULTI1", "0")))
+
+    @property
+    def TEST_MACHINE(self):
+        return pytest.config.option.TEST_MACHINE.lower()
 
     def __init__(self, *args, **kwargs):
         super(BaseBERITestCase, self).__init__(*args, **kwargs)

@@ -120,9 +120,24 @@ class test_cp0_reg_init(BaseBERITestCase):
  
     ## It doesn't really matter what vendor we report as, but we should indicate
     ## that we are R4400ish
-    @attr('beri')
     def test_prid_imp_reg(self):
         '''Test that the PRId register indicates a R4400ish vendor'''
+        self.assertRegisterMaskEqual(self.MIPS.a5, 0xff << 8, 0x04 << 8, "Unexpected CP0 vendor value on reset")
+
+    def test_processor_id(self):
+        # See Table 9.60 PRId Register Field Descriptions in MIPS Architecture For Programmers Volume III: MIPS64 / microMIPS64 Privileged Resource Architecture
+        revision_id = self.MIPS.a5 & 0xff
+        company_id = (self.MIPS.a5 >> 16) & 0xff
+        processor_id = (self.MIPS.a5 >> 8) & 0xff
+        if self.TEST_MACHINE == "qemu":
+            # QEMU uses company id = 0x0f, processor id = 0x04, revision = 2+
+            assert company_id == 0x0f, "Unexpected QEMU CP0_PRID[23..16]"
+            assert processor_id == 0x04, "Unexpected QEMU CP0_PRID[15..8]"
+            assert revision_id >= 2, "Expected at least rev 2 (which includes the NULL register) for QEMU CP0_PRID[7..0]"
+        else:
+            self.fail("Expected processor ID value not implemented for TEST_MACHINE={tm} (PRID was {prid_val}: company={cid},"
+                      " processor={pid}, revision={rev})".format(tm=self.TEST_MACHINE, prid_val=hex(self.MIPS.a5), cid=hex(company_id),
+                                                                pid=hex(processor_id), rev=hex(revision_id)))
         self.assertRegisterMaskEqual(self.MIPS.a5, 0xff << 8, 0x04 << 8, "Unexpected CP0 vendor value on reset")
 
     @attr('beri')

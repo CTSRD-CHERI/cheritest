@@ -412,10 +412,11 @@ max_thread_count = 32
 	.set noat
 	# Check for QEMU: https://github.com/CTSRD-CHERI/qemu/issues/56
 	mfc0 \tmpreg, $15		# PrId
+	dslr \tmpreg, \tmpreg, 8	# PrId >> 8
 	andi \tmpreg, \tmpreg, 0xffff
 	# QEMU ID from https://github.com/CTSRD-CHERI/qemu/commit/12b39eaa9a3c17c7b0438b1536d8b6b9849cc1fc
-	# only check the lower 16 bits to avoid using another register
-	xor \tmpreg, 0x0401
+	# 0x0f05XX with the lower 8 bits being the version@
+	xor \tmpreg, 0x0f04
 	beqz \tmpreg, \target_label
 	nop
 	.set pop
