@@ -763,47 +763,64 @@ QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
-	$(QEMU_PYTEST) -v $< || true
+	$(QEMU_PYTEST) -v $<
 
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 
 pytest/sim_uncached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
-	CACHED=0 $(SIM_NOSETESTS) $(NOSEFLAGS_UNCACHED) -v $< || true
+	CACHED=0 $(SIM_NOSETESTS) $(NOSEFLAGS_UNCACHED) -v $<
 
 pytest/sim_cached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cached.log
-	CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $< || true
+	CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $<
 
 pytest/sim_multi/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_multi.log
-	CACHED=0 MULTI1=1 $(SIM_NOSETESTS) $(NOSEFLAGS_UNCACHED) -v $< || true
+	CACHED=0 MULTI1=1 $(SIM_NOSETESTS) $(NOSEFLAGS_UNCACHED) -v $<
 
 pytest/sim_cachedmulti/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cachedmulti.log
-	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $< || true
+	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(NOSEFLAGS) -v $<
 
 # Single L3 tests:
 pytest/l3_uncached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
-	CACHED=0 $(L3_NOSETESTS) $(L3_NOSEFLAGS_UNCACHED) -v $< || true
+	CACHED=0 $(L3_NOSETESTS) $(L3_NOSEFLAGS_UNCACHED) -v $<
 
 pytest/l3_cached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_cached.log
-	CACHED=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS) -v $< || true
+	CACHED=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS) -v $<
 
 pytest/l3_multi/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_multi.log
-	CACHED=0 MULTI1=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS_UNCACHED) -v $< || true
+	CACHED=0 MULTI1=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS_UNCACHED) -v $<
 
 pytest/l3_cachedmulti/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_cachedmulti.log
-	MULTI1=1 CACHED=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS) -v $< || true
+	MULTI1=1 CACHED=1 $(L3_NOSETESTS) $(L3_NOSEFLAGS) -v $<
+
+
+# run single sail test:
+_RUN_SINGLE_SAIL_TEST=$(MAKE) $(MFLAGS) $(1)/$(notdir $(basename $@)).log; LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) $(2) -v $<
+
+pytest/sail_mips/%.py: %.py FORCE
+	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_MIPS_LOGDIR), $(SAIL_MIPS_NOSEFLAGS))
+pytest/sail_mips_c/%.py: %.py FORCE
+	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_MIPS_LOGDIR), $(SAIL_MIPS_NOSEFLAGS))
+pytest/sail_cheri/%.py: %.py FORCE
+	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_CHERI_LOGDIR), $(SAIL_CHERI_NOSEFLAGS))
+pytest/sail_cheri_c/%.py: %.py FORCE
+	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_CHERI_C_LOGDIR), $(SAIL_CHERI_NOSEFLAGS))
+pytest/sail_cheri128/%.py: %.py FORCE
+	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_CHERI128_LOGDIR), $(SAIL_CHERI128_NOSEFLAGS))
+pytest/sail_cheri128_c/%.py: %.py FORCE
+	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_CHERI128_C_LOGDIR), $(SAIL_CHERI128_NOSEFLAGS))
