@@ -52,12 +52,6 @@ BEGIN_TEST
 		# Set up exception handler
 		#
 
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
 		#
 		# $a0 will be set to 1 if sandbox is called
 		#
@@ -65,10 +59,10 @@ BEGIN_TEST
 		dli     $a0, 0
 
 		#
-		# $a2 will be set to 1 if the exception handler is called
+		# $v0 will be set to 1 if the exception handler is called
 		#
 
-		dli	$a2, 0
+		dli	$v0, 0
 
 
 		#
@@ -93,20 +87,6 @@ BEGIN_TEST
 		nop			# Branch delay slot
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
-		.end bev0_handler
 
 		.data
 		.align	3

@@ -30,20 +30,19 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
 .include "macros.s"
 #
-# Test that (some) CP2 instructions raise an exception if one of the operands
-# is a reserved register and PCC does not grant permission to access it.
+# Test that CP2 instructions no longer raise an exception if one of the operands
+# is a previously reserved register and PCC does not grant permission to access it.
 #
 
 sandbox:
 		#
 		# Try some CP2 instructions
 		#
+		cgetdefault $c29
+		cgetdefault $c1
+		cgetdefault $c2
 
 		candperm $c2, $c29, $zero
 		candperm $c29, $c1, $zero
@@ -53,6 +52,7 @@ sandbox:
 		ccleartag $c2, $c29
 		ccleartag $c29, $c1
 		dli $t0, 1
+		cgetdefault $c29
 		cfromptr $c2, $c29, $t0
 		cfromptr $c29, $c1, $t0
 		cgetbase $t0, $c29
@@ -67,6 +67,7 @@ sandbox:
 		cseal $c2, $c1, $c29
 		cseal $c2, $c29, $c1
 		cseal $c29, $c1, $c1
+		cgetdefault $c29
 		csetbounds $c2, $c29, $zero
 		csetbounds $c29, $c1, $zero
 		csetboundsexact $c2, $c29, $zero
@@ -116,10 +117,13 @@ sandbox:
 		#
 
 		dla	$t1, data
+		cgetdefault $c29
 		clc 	$c2, $t1, 0($c29)
 		clc 	$c29, $t1, 0($c1)
+		cgetdefault $c29
 		csc 	$c2, $t1, 0($c29)
 		csc 	$c29, $t1, 0($c1)
+		cgetdefault $c29
 		clb 	$t0, $t1, 0($c29)
 		csb 	$t0, $t1, 0($c29)
 		clh 	$t0, $t1, 0($c29)
@@ -155,34 +159,7 @@ L4:
 		nop		# Branch delay slot
 
 BEGIN_TEST
-		#
-		# Clear the BEV flag
-		#
-
-		jal	bev_clear
-		nop
-
-		#
-		# Set up exception handler
-		#
-
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		#
-		# $a1 will be set non-zero if get an unexpected exception
-		#
-
-		dli	$a1, 0
-
-		#
-		# Count of number of exceptions
-		#
-
-		dli	$a2, 0
-
-		cgetdefault $c1
+		li	$v0, 0	# No exceptions yet
 
 		#
 		# Run sandbox with restricted permissions
@@ -197,49 +174,6 @@ BEGIN_TEST
 		nop			# Branch delay slot
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		daddiu	$a2, $a2, 1
-
-		mfc0	$k0, $13	# Cause register
-		srl	$k0, $k0, 2
-		andi	$k0, $k0, 0x1f
-		addi	$k0, $k0, -18	# Coprocessor 2 exception
-		beqz	$k0, expected_exception
-		nop			# Branch delay slot
-
-		#
-		# If we get an exception we didn't expected, mark the
-		# test as failed by setting $a1
-		#
-
-		dli	$a1, 1
-
-expected_exception:
-		cgetcause $k0
-		xori	$k0, $k0, 0x181d
-		beqz	$k0, expected_cause
-		nop
-
-		#
-		# If we get a cause code we didn't expect, mark the test
-		# as failed by setting $a1
-		#
-
-		dli	$a1, 1
-
-expected_cause:
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
-		.end bev0_handler
-
 
 		.data
 		.align	5

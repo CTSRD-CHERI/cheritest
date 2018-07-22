@@ -33,17 +33,18 @@ from beritest_tools import attr
 # of the reserved registers, and the corresponding bit in PCC is not set.
 #
 
+@attr('capabilities')
 class test_cp2_x_cbts_reg(BaseBERITestCase):
+    def test_trap_count(self):
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertRegisterEqual(self.MIPS.v0, 1, "cbts did not raise an exception when register was reserved")
+        else:
+            assert self.MIPS.v0 == 0, "c27-c31 are no longer special in the latest ISA"
 
-    @attr('capabilities')
-    def test_cp2_x_cbts_reg_1(self):
-        '''Test cbts raised a C2E exception when register was reserved'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "cbts did not raise an exception when register was reserved")
-
-    @attr('capabilities')
-    def test_cp2_x_cbts_reg_2(self):
+    def test_exception_details(self):
         '''Test capability cause is set correctly when register was reserved'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
-            "Capability cause was not set correctly when register was reserved")
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertCp2Fault(self.MIPS.c8, cap_reg=27, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=1)
+        else:
+            self.assertCompressedTrapInfo(self.MIPS.c8, no_trap=True, msg="c27-c31 are no longer special in the latest ISA")
 

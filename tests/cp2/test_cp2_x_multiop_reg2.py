@@ -28,13 +28,11 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('capabilities')
 class test_cp2_x_multiop_reg2(BaseBERITestCase):
-
-    @attr('capabilities')
-    def test_cp2_x_multiop_reg2_1(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "An unexpected exception was raised during the test of capability operations on a reserved register without the required permission in PCC")
-
-    @attr('capabilities')
-    def test_cp2_x_multiop_reg2_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 12, "An unexpected number of exceptions was raised during the test of capability operations on a reserved register without the required permission in PCC")
+    def test_cp2_x_multiop_reg(self):
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            assert self.MIPS.v0 == 12, "An unexpected number of exceptions was raised during the test of capability operations on a reserved register without the required permission in PCC"
+        else:
+            assert self.MIPS.v0 == 0, "Registers c27-c31 are no longer special and should be accessible"
 

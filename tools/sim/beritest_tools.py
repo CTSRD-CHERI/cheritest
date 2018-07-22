@@ -493,12 +493,12 @@ class BaseBERITestCase(unittest.TestCase):
             value = compressed_value >> 48  # Bits 48-63
             self.assertRegisterEqual(value, trap_count, msg + ": trap count wrong")
 
-    def assertCp2Fault(self, capreg, cap_cause, cap_reg=None, trap_count=None, bdelay=False, msg=""):
+    def assertCp2Fault(self, info, cap_cause, cap_reg=None, trap_count=None, bdelay=False, msg=""):
         # type: (BaseBERITestCase, Capability, int, int, int, str) -> None
         """
             Check that capreg holds compressed trap info
         """
-        self.assertCompressedTrapInfo(capreg, mips_cause=MipsStatus.Cause.COP2,
+        self.assertCompressedTrapInfo(info, mips_cause=MipsStatus.Cause.COP2,
                                       cap_cause=cap_cause, cap_reg=cap_reg,
                                       trap_count=trap_count, bdelay=bdelay, msg=msg)
 

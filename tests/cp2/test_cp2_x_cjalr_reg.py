@@ -33,23 +33,20 @@ from beritest_tools import attr
 # reserved register.
 #
 
+@attr('capabilities')
 class test_cp2_x_cjalr_reg(BaseBERITestCase):
 
-    @attr('capabilities')
     def test_cp2_x_cjalr_reg_1(self):
-        '''Test CJALR did not jump when did not have permission for register'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "CJALR jumped when did not have permission for register")
+        '''Test CJALR did jump when using a reserved register'''
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertRegisterEqual(self.MIPS.a0, 0, "CJALR jumped when did not have permission for register")
+        else:
+            assert self.MIPS.a0 == 1, "Jump should have succeeded since c27-c31 are no longer special"
 
-    @attr('capabilities')
     def test_cp2_x_cjalr_reg_2(self):
-        '''Test CJALR raised an exception did not have permission for register'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "CJALR did not raise an exception when did not permission for register")
-
-    @attr('capabilities')
-    def test_cp2_x_cjalr_reg_3(self):
-        '''Test CJALR set capability cause when did not have permission for register'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
-            "CJALR did not set capability cause correctly when did not have permission for register")
+        '''Test CJALR did not raise an exception'''
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertRegisterEqual(self.MIPS.v0, 1, "CJALR did not raise an exception when did not permission for register")
+        else:
+            assert self.MIPS.v0 == 0, "Jump should not have caused exception succeeded since c27-c31 are no longer special"
 

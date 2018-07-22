@@ -43,7 +43,6 @@
 sandbox:
 		cllc	$c2, $c29
 		cscc	$t0, $c1, $c29
-		cllc	$c29, $c1
 		cscc	$t0, $c29, $c1
 		cllb	$t0, $c29
 		cscb	$t0, $t2, $c29
@@ -54,37 +53,17 @@ sandbox:
 		clld	$t0, $c29
 		cscd	$t0, $t2, $c29
 
+		# Do this one last since it clobbers c29
+		cllc	$c29, $c1
 
 		cjr	$c24
 		nop		# Branch delay slot
 
 BEGIN_TEST
 		#
-		# Clear the BEV flag
+		# v0 will be set non-zero if get an unexpected exception
 		#
-
-		jal	bev_clear
-		nop
-
-		#
-		# Set up exception handler
-		#
-
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		#
-		# $a1 will be set non-zero if get an unexpected exception
-		#
-
-		dli	$a1, 0
-
-		#
-		# Count of number of exceptions
-		#
-
-		dli	$a2, 0
+		dli	$v0, 0
 
 		#
 		# Set the offsets of $c1 and $c29 to point at the array 'data'.
@@ -111,49 +90,6 @@ BEGIN_TEST
 		nop			# Branch delay slot
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		daddiu	$a2, $a2, 1
-
-		mfc0	$k0, $13	# Cause register
-		srl	$k0, $k0, 2
-		andi	$k0, $k0, 0x1f
-		addi	$k0, $k0, -18	# Coprocessor 2 exception
-		beqz	$k0, expected_exception
-		nop			# Branch delay slot
-
-		#
-		# If we get an exception we didn't expected, mark the
-		# test as failed by setting $a1
-		#
-
-		dli	$a1, 1
-
-expected_exception:
-		cgetcause $k0
-		xori	$k0, $k0, 0x181d
-		beqz	$k0, expected_cause
-		nop
-
-		#
-		# If we get a cause code we didn't expect, mark the test
-		# as failed by setting $a1
-		#
-
-		dli	$a1, 1
-
-expected_cause:
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
-		.end bev0_handler
-
 
 		.data
 		.align	5
