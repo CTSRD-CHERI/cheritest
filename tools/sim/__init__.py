@@ -218,7 +218,7 @@ class MipsStatus(object):
     # TODO: remove these two once we have released V7
     CHERI_C0_IS_NULL = is_envvar_true("CHERI_C0_IS_NULL")  # type: bool
     # Reuse CHERI_C0_IS_NULL for this check
-    CHERI_C27_TO_31_INACESSIBLE = not is_envvar_true("CHERI_C0_IS_NULL")  # type: bool
+    CHERI_C27_TO_31_INACESSIBLE = is_envvar_true("CHERI_C27_TO_C31_PROTECTED") or not is_envvar_true("CHERI_C0_IS_NULL")  # type: bool
 
     @property
     def ARE_SPECIAL_CAPREGS_MIRRORED(self):

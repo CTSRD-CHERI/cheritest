@@ -49,6 +49,7 @@ sandbox:
 		nop
 		nop
 L1:
+		save_counting_exception_handler_cause $c8
 		dli	$a0, 2
 		cjr	$c24
 		nop

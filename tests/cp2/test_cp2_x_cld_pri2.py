@@ -29,14 +29,15 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
 #
-# Test exception priority: C2E/Register Inaccessible has higher priority
-# than a length violation.
+# Test exception priority: C2E/Permit_Load has higher priority than a length violation.
 #
 
+@attr('capabilities')
 class test_cp2_x_cld_pri2(BaseBERITestCase):
-    @attr('capabilities')
-    def test_cp2_x_cld_pri2_1(self):
-        '''Test cld set cause code to Access System Registers Violation'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
-            "cld did not set cause code to Access System Registers Violation")
+    def test_trap_details(self):
+        '''Test cld set cause code to Permit_Load_Violation Violation'''
+        self.assertCp2Fault(self.MIPS.c8, cap_reg=3, cap_cause=self.MIPS.CapCause.Permit_Load_Violation, trap_count=1)
+
+    def test_trap_count(self):
+        assert self.MIPS.v0 == 1, "Expected one trap"
 

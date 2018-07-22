@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012, 2015 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,23 +34,26 @@ from beritest_tools import attr
 # reserved register.
 #
 
+@attr('capabilities')
 class test_cp2_x_cjr_reg(BaseBERITestCase):
+    instruction = "cjr"
 
-    @attr('capabilities')
-    def test_cp2_x_cjr_reg_1(self):
-        '''Test CJR did not jump when did not have permission for register'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "CJR jumped when did not have permission for register")
+    def test_value(self):
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertRegisterEqual(self.MIPS.a0, 0, self.instruction + " read a reserved register")
+        else:
+            assert self.MIPS.a0 == 1, "c27-c31 are no longer special - " + self.instruction + " should succeed"
 
-    @attr('capabilities')
-    def test_cp2_x_cjr_reg_2(self):
-        '''Test CJR raised an exception did not have permission for register'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "CJR did not raise an exception when did not permission for register")
+    def test_trap_count(self):
+        '''Test cgetbase did not raise a C2E exception when register was reserved'''
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertRegisterEqual(self.MIPS.v0, 1, self.instruction + " did not raise an exception when register was reserved")
+        else:
+            assert self.MIPS.v0 == 0, "c27-c31 are no longer special - " + self.instruction + " should succeed"
 
-    @attr('capabilities')
-    def test_cp2_x_cjr_reg_3(self):
-        '''Test CJR set capability cause when did not have permission for register'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
-            "CJR did not set capability cause correctly when did not have permission for register")
+    def test_trap_info(self):
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertCp2Fault(self.MIPS.c8, cap_reg=27, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=1)
+        else:
+            self.assertCompressedTrapInfo(self.MIPS.c8, no_trap=True, msg="c27-c31 are no longer special in the latest ISA")
 

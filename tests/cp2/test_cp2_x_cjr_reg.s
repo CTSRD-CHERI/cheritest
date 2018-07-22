@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012, 2015 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -44,32 +45,20 @@ sandbox2:
 sandbox1:
 		cjr	$c27		# Should raise an exception
 		nop			# Branch delay slot
+		save_counting_exception_handler_cause $c8
 		cjr	$c24		# Return from subroutine
 		nop			# Branch delay slot
 
 BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
+		# $v0 will be set to 1 if the exception handler is called
+		dli	$v0, 0
+		clear_counting_exception_handler_regs
 
 		#
 		# $a0 will be set to 1 if sandbox is called
 		#
 
 		dli     $a0, 0
-
-		#
-		# $a2 will be set to 1 if the exception handler is called
-		#
-
-		dli	$a2, 0
-
 
 		#
 		# Make $c27 an executable capability for sandbox2
@@ -93,20 +82,6 @@ BEGIN_TEST
 		nop			# Branch delay slot
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
-		.end bev0_handler
 
 		.data
 		.align	3

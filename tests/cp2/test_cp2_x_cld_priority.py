@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,10 +34,11 @@ from beritest_tools import attr
 # than an address error.
 #
 
+@attr('capabilities')
 class test_cp2_x_cld_priority(BaseBERITestCase):
-    @attr('capabilities')
-    def test_cp2_x_cld_priority_1(self):
-        '''Test cld set cause code to Access System Registers Violation'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
-            "cld did not set cause code to Access System Registers Violation")
+    def test_trap_details(self):
+        '''Test cld set cause code to Permit_Load_Violation Violation'''
+        self.assertCp2Fault(self.MIPS.c8, cap_reg=3, cap_cause=self.MIPS.CapCause.Length_Violation, trap_count=1)
 
+    def test_trap_count(self):
+        assert self.MIPS.v0 == 1, "Expected one trap"

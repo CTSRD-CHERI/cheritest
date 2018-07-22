@@ -46,12 +46,14 @@ sandbox:
 		cbtu	$c27, L1 # This should raise a C2E exception
 		nop		# Branch delay slot
 L1:
+		save_counting_exception_handler_cause $c8
 		cjr     $c24
 		nop		# branch delay slot
 
 BEGIN_TEST
 		# $v0 will be set to 1 if the exception handler is called
 		dli	$v0, 0
+		clear_counting_exception_handler_regs
 
 		#
 		# Make $c1 a data capability for the array 'data'

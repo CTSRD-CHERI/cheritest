@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -32,7 +33,7 @@
 .set noat
 
 #
-# Test exception priority: C2£/Register Inaccessible should have higher
+# Test exception priority: C2£/Permit_Load should have higher
 # priority than a length violation.
 #
 
@@ -41,25 +42,19 @@ sandbox:
 		# $c27 is KR1C, a reserved register
 		#
 		dli     $a0, 0
-		cld     $a0, $zero, 0($c27) # This should raise a C2E exception
+		dli	$t1, ~CHERI_PERM_LOAD
+		candperm $c3, $c1, $t1
+		cld     $a0, $zero, 0($c3) # This should raise a C2E exception
+		save_counting_exception_handler_cause $c8
 
 		cjr     $c24
 		# branch delay slot
 		nop
 
 BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
+		# $v0 will be set to 1 if the exception handler is called
+		dli	$v0, 0
+		clear_counting_exception_handler_regs
 
 		#
 		# Make $c1 a data capability for the array 'data'
@@ -69,16 +64,10 @@ BEGIN_TEST
 		dla     $t0, data
 		csetoffset $c1, $c1, $t0
 		dli     $t0, 7
-                csetbounds $c1, $c1, $t0
+		csetbounds $c1, $c1, $t0
 		dli     $t0, 0x7
 		candperm $c1, $c1, $t0
 
-		#
-		# Move $c2 into KR1C
-		#
-
-		cmove 	$c27, $c1
-		
 		# Run sandbox with restricted permissions
 		dli     $t0, 0x1ff
 		cgetdefault $c2

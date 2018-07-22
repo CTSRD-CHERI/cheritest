@@ -449,10 +449,9 @@ class BaseBERITestCase(unittest.TestCase):
         else:
             self.assertCapPermissions(cap.perms, perms, msg + "has wrong permissions")
 
-    def assertCompressedTrapInfo(self, capreg, mips_cause=-1, cap_cause=None,
-                                 cap_reg=None, trap_count=None, no_trap=False,
-                                 bdelay=False, msg=""):
-        # type: (BaseBERITestCase, Capability, int, int, int, int, bool, str) -> None
+    def assertCompressedTrapInfo(self, capreg, mips_cause=-1, cap_cause: MipsStatus.CapCause=None,
+                                 cap_reg: int=None, trap_count: int=None, no_trap: bool=False,
+                                 bdelay: bool=False, msg=""):
         '''
         :param capreg: The register containing the compressed exception info
                        (see save_counting_exception_handler_cause in macros.s)
@@ -497,11 +496,8 @@ class BaseBERITestCase(unittest.TestCase):
             value = compressed_value >> 48  # Bits 48-63
             self.assertRegisterEqual(value, trap_count, msg + ": trap count wrong")
 
-    def assertCp2Fault(self, info, cap_cause, cap_reg=None, trap_count=None, bdelay=False, msg=""):
-        # type: (BaseBERITestCase, Capability, int, int, int, str) -> None
-        """
-            Check that capreg holds compressed trap info
-        """
+    def assertCp2Fault(self, info: Capability, cap_cause: MipsStatus.CapCause, cap_reg: int=None, trap_count:int =None, bdelay: bool=False, msg="") -> None:
+        """Check that capreg holds compressed trap info"""
         self.assertCompressedTrapInfo(info, mips_cause=MipsStatus.Cause.COP2,
                                       cap_cause=cap_cause, cap_reg=cap_reg,
                                       trap_count=trap_count, bdelay=bdelay, msg=msg)
