@@ -849,7 +849,6 @@ TEST_CP2_FILES=					\
 		test_cp2_x_clearreg_unimp.s	\
 		test_cp2_x_cllc_tlb.s		\
 		test_cp2_x_creadhwr_kernel_perm.s \
-		test_cp2_x_creadhwr_dest_inaccessible.s \
 		test_cp2_x_csb_perm.s		\
 		test_cp2_x_csc_align.s		\
 		test_cp2_x_csc_bigimm.s		\
@@ -861,7 +860,6 @@ TEST_CP2_FILES=					\
 		test_cp2_x_csc_underflow.s	\
 		test_cp2_x_csc_vaddr.s		\
 		test_cp2_x_csealdata_perm.s	\
-		test_cp2_x_csealdata_reg.s	\
 		test_cp2_x_csealdata_tag.s	\
 		test_cp2_x_cseal_imprecise.s	\
 		test_cp2_x_cseal_length.s	\
@@ -882,7 +880,6 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cunseal_sealed.s	\
 		test_cp2_x_cunseal_unsealed.s	\
 		test_cp2_x_cwritehwr_kernel_perm.s \
-		test_cp2_x_cwritehwr_src_inaccessible.s \
 		test_cp2_x_disable_cp2_trap_handler_okay.s \
 		test_cp2_x_exl_pcc.s		\
 		test_cp2_x_fetch.s		\
