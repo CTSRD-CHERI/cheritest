@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2017 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -28,9 +29,19 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('capabilities')
 class test_cp2_x_cclearreg_reg(BaseBERITestCase):
 
-    @attr('capabilities')
-    def test_cp2_x_cclearreg_reg_1(self):
-        '''Test that CClearRegs does not clear any registers if it raises an exception'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x1234, "CClearReg cleared a register even though it raised an exception")
+    def test_after_clear(self):
+        # 0x18ff mask -> 27,28 + 16-23
+        for i in range(16, 29):
+            if i not in (16, 17, 18, 19, 20, 21, 22, 23, 27, 28):
+                assert self.MIPS.cp2[i].t, "c" + str(i) + " register should not have changed"
+                continue
+            # now the changed ones:
+            if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+                assert self.MIPS.cp2[i].t, "c" + str(i) + " register should not have changed"
+                assert self.MIPS.cp2[i].offset == 0x1234, "c" + str(i) + " register should not have changed"
+            else:
+                self.assertNullCap(self.MIPS.cp2[i], msg="c" + str(i))
+

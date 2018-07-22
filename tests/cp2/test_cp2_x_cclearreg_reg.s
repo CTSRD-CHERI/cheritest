@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2017 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -32,14 +33,13 @@
 .set noat
 
 #
-# Test that CClearReg does not clear any registers if raises an exception
-# due to not having Access_System_Registers permission.
+# Test that CClearReg no longer raises an exception for c27-c31 due to not having Access_System_Registers permission.
 #
 
 sandbox:
-		cclearhi 0x8ff	# This should raise a C2E exception
+		cclearhi 0x18ff	# This used to raise a C2E exception but should no longer!
 
-		cjr     $c24
+		cjr     $c9
 		nop			# branch delay slot
 
 BEGIN_TEST
@@ -69,7 +69,7 @@ BEGIN_TEST
 		cmove	$c23, $c1
 		cmove	$c24, $c1
 		cmove	$c25, $c1
-		cmove	$c26, $c1	
+		cmove	$c26, $c1
 
 		# Run sandbox with restricted permissions
 		dli     $t0, 0x1ff
@@ -77,7 +77,7 @@ BEGIN_TEST
 		candperm $c2, $c2, $t0
 		dla     $t0, sandbox
 		csetoffset $c2, $c2, $t0
-		cjalr   $c2, $c24
+		cjalr   $c2, $c9
 		nop			# Branch delay slot
 
 		dli	$t0, 0x1234

@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,29 +34,29 @@ from beritest_tools import attr
 # is one of the reserved registers, and the corresponding bit in PCC is not set.
 #
 
+@attr('capabilities')
 class test_cp2_x_cgetpccsetoffset_reg(BaseBERITestCase):
+    instruction = "cgetpccsetoffset"
 
-    @attr('capabilities')
-    def test_cp2_x_cgetpccsetoffset_reg_1(self):
-        '''Test cgetpccsetoffset did not write to a reserved register'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "cgetpccsetoffset wrote to a reserved register")
+    def test_value(self):
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertRegisterEqual(self.MIPS.a1, 8, self.instruction + " wrote a reserved register")
+        else:
+            assert self.MIPS.a0 == 0x123, "c27-c31 are no longer special - " + self.instruction + " should succeed"
+            assert self.MIPS.c27.offset == 0x123, "c27-c31 are no longer special - " + self.instruction + " should succeed"
+            assert self.MIPS.a1 == self.max_length, "c27-c31 are no longer special - " + self.instruction + " should succeed"
+            assert self.MIPS.c27.length == self.max_length, "c27-c31 are no longer special - " + self.instruction + " should succeed"
 
-    @attr('capabilities')
-    def test_cp2_x_cgetpccsetoffset_reg_2(self):
-        '''Test cgetpccsetoffset did not write to a reserved register'''
-        self.assertRegisterEqual(self.MIPS.a1, 8,
-            "cgetpccsetoffset wrote to a reserved register")
+    def test_trap_count(self):
+        '''Test cgetbase did not raise a C2E exception when register was reserved'''
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertRegisterEqual(self.MIPS.v0, 1, self.instruction + " did not raise an exception when register was reserved")
+        else:
+            assert self.MIPS.v0 == 0, "c27-c31 are no longer special - " + self.instruction + " should succeed"
 
-    @attr('capabilities')
-    def test_cp2_x_cgetpccsetoffset_reg_3(self):
-        '''Test cgetpccsetoffset raised a C2E exception when register was reserved'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "cgetpccsetoffset did not raise an exception when register was reserved")
-
-    @attr('capabilities')
-    def test_cp2_x_cgetpccsetoffset_reg_4(self):
-        '''Test capability cause was set correctly when register was reserved'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x181b,
-            "Capability cause was not set correctly when register was reserved")
+    def test_trap_info(self):
+        if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
+            self.assertCp2Fault(self.MIPS.c8, cap_reg=27, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=1)
+        else:
+            self.assertCompressedTrapInfo(self.MIPS.c8, no_trap=True, msg="c27-c31 are no longer special in the latest ISA")
 

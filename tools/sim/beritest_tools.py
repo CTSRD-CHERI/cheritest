@@ -376,6 +376,10 @@ class BaseBERITestCase(unittest.TestCase):
     def max_length(self):
         return 0xffffffffffffffff
 
+    @property
+    def minus_one_as_u64(self):
+        return 0xffffffffffffffff
+
     def assertRegisterAllPermissions(self, reg_val, msg=None):
         self.assertCapPermissions(reg_val, self.max_permissions, msg)
 
