@@ -642,6 +642,7 @@ TEST_CP2_FILES=					\
 		test_cp2_cincoffset.s		\
 		test_cp2_cincoffset_zero.s	\
 		test_cp2_cjalr_delay.s		\
+		test_cp2_cjalr_delay_2.s	\
 		test_cp2_cjalr_loop.s		\
 		test_cp2_cjalr_pcc.s		\
 		test_cp2_cjalr_rcc.s		\
