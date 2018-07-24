@@ -202,6 +202,7 @@ try {
 					[$class: "GitHubPushTrigger"],
 					pollSCM('@daily')
 			]),
+			[$class: 'JobPropertyImpl', throttle: [count: 2, durationName: 'day', userBoost: true]]
 			disableConcurrentBuilds(),
 			[$class: 'CopyArtifactPermissionProperty', projectNames: '*'],
 	])

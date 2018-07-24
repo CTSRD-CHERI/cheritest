@@ -187,6 +187,7 @@ try {
                     pollSCM('@daily')
             ]),
             disableConcurrentBuilds(),
+            [$class: 'JobPropertyImpl', throttle: [count: 1, durationName: 'hour', userBoost: true]]
             [$class: 'CopyArtifactPermissionProperty', projectNames: '*'],
     ])
     cheriHardwareTest()
