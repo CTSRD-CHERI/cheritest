@@ -449,7 +449,7 @@ class BaseBERITestCase(unittest.TestCase):
         else:
             self.assertCapPermissions(cap.perms, perms, msg + "has wrong permissions")
 
-    def assertCompressedTrapInfo(self, capreg, mips_cause=-1, cap_cause: MipsStatus.CapCause=None,
+    def assertCompressedTrapInfo(self, capreg, mips_cause: MipsStatus.Cause=-1, cap_cause: MipsStatus.CapCause=None,
                                  cap_reg: int=None, trap_count: int=None, no_trap: bool=False,
                                  bdelay: bool=False, msg=""):
         '''
@@ -476,7 +476,7 @@ class BaseBERITestCase(unittest.TestCase):
         # See macros.s for the layout of the offset field
         # Extract cause (bits 18-23)
         cause_value = (compressed_value >> 18) & 0x1f
-        if cause_value != mips_cause:
+        if cause_value != mips_cause.value:
             self.fail(msg + ": MIPS cause wrong: %s != expected %s" % (
                 MipsStatus.Cause.fromint(cause_value), MipsStatus.Cause.fromint(mips_cause)))
         if bdelay is not None:
@@ -489,7 +489,7 @@ class BaseBERITestCase(unittest.TestCase):
             self.assertRegisterEqual(value, cap_reg, msg + ": cap reg wrong")
         if cap_cause is not None:
             value = (compressed_value >> 8) & 0xff  # CapCause.Cause is Bits 8-15
-            if value != cap_cause:
+            if value != cap_cause.value:
                 self.fail(msg + ": cap cause wrong: %s != expected %s" % (
                     MipsStatus.CapCause.fromint(value), MipsStatus.CapCause.fromint(cap_cause)))
         if trap_count is not None:

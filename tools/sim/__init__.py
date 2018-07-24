@@ -34,6 +34,7 @@
 import os
 import re
 from collections import defaultdict
+from enum import Enum
 
 try:
     import typing
@@ -315,7 +316,7 @@ class MipsStatus(object):
         #     v.append(t.__repr__())
         # return "\n".join(v)
 
-    class Cause(object):
+    class Cause(Enum):
         TLB_Mod = 1
         TLB_Load = 2
         TLB_Store = 3
@@ -334,13 +335,15 @@ class MipsStatus(object):
 
         @staticmethod
         def fromint(value):
-            for k, v in vars(MipsStatus.Cause).items():
-                if isinstance(v, int) and value == v:
-                    return "<Cause " + k + " (" + str(value) + ")>"
+            if isinstance(value, MipsStatus.Cause):
+                return "<Cause " + value.name + " (" + str(value.value) + ")>"
+            for e in MipsStatus.Cause:
+                if value == e.value:
+                    return "<Cause " + e.name + " (" + str(value) + ")>"
             return "<unknown Cause " + str(value) + ">"
 
     # See "Table 4.2: Capability Exception Codes" in the CHERI reference
-    class CapCause(object):
+    class CapCause(Enum):
         NONE = 0x00
         Length_Violation = 0x01
         Tag_Violation = 0x02
@@ -376,9 +379,11 @@ class MipsStatus(object):
 
         @staticmethod
         def fromint(value):
-            for k, v in vars(MipsStatus.CapCause).items():
-                if isinstance(v, int) and value == v:
-                    return "<CapCause " + k + " (" + str(value) + ")>"
+            if isinstance(value, MipsStatus.CapCause):
+                return "<CapCause " + value.name + " (" + str(value.value) + ")>"
+            for e in MipsStatus.CapCause:
+                if value == e.value:
+                    return "<CapCause " + e.name + " (" + str(value) + ")>"
             return "<unknown CapCause " + str(value) + ">"
 
 
