@@ -810,7 +810,7 @@ pytest/l3_cachedmulti/%.py: %.py FORCE
 
 
 # run single sail test:
-_RUN_SINGLE_SAIL_TEST=$(MAKE) $(MFLAGS) $(1)/$(notdir $(basename $@)).log; env "LOGDIR=$(strip $(1))" $(SAIL_NOSETESTS) $(2) -v $<
+_RUN_SINGLE_SAIL_TEST=$(MAKE) $(MFLAGS) $(strip $(1))/$(notdir $(basename $@)).log; env "LOGDIR=$(strip $(1))" $(filter-out -q,$(SAIL_NOSETESTS)) $(2) -v $<
 
 pytest/sail_mips/%.py: %.py FORCE
 	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_MIPS_LOGDIR), $(SAIL_MIPS_NOSEFLAGS))
