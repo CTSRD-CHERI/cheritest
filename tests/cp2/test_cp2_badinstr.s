@@ -33,15 +33,6 @@
 #
 BEGIN_TEST
 		#
-		# Set up exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		#
 		# Clear registers we'll use when testing results later.
 		#
 		dli	$a1, -1
@@ -65,31 +56,39 @@ BEGIN_TEST
 		cld     $4, $1, 0($c21)		# This should succeed
 		csd     $4, $1, 0($c19)		# This should trap
 		nop
+		save_counting_exception_handler_cause $c2
+		dmfc0	$s1, $8, 1	# BadInstr register
+		mfc0	$s2, $8, 1	# BadInstr register (with mfc instead of dmfc)
 		nop
 		# load back the value to verify that it wasn't stored
 		cld	$s0, $zero, 0($c21)
 		# load config3 register
 		dmfc0	$s3, $16, 3
+
+
+		# Get BadInstr for csc+clc:
+		cgetnull	$c3
+		csc	$c3, $zero, 0($c3)
+		save_counting_exception_handler_cause $c4
+		dmfc0	$s4, $8, 1	# BadInstr register
+
+		cmove	$c1, $c19
+		clc	$c3, $zero, 0($c1)
+		save_counting_exception_handler_cause $c5
+		dmfc0	$s5, $8, 1	# BadInstr register
+
+		# unaligned cap load
+		li	$at, 1
+		clc	$c3, $at, 0($c21)
+		save_counting_exception_handler_cause $c6
+		dmfc0	$s6, $8, 1	# BadInstr register
+
 return:
 END_TEST
-
-.ent bev0_handler
-bev0_handler:
-		li	$v1, 42
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		dmfc0	$s1, $8, 1	# BadInstr register
-		cgetcause $s2
-		mfc0	$s4, $8, 1	# BadInstr register (with mfc instead of dmfc)
-		ssnop			# NOPs to avoid hazard with ERET
-		ssnop			# XXXRW: How many are actually
-		ssnop			# required here?
-		ssnop
-		eret
-.end bev0_handler
 
 .data
 data:
 	.8byte 0x123456
 	.8byte 0x2
+	.8byte 0x0
+	.8byte 0x0
