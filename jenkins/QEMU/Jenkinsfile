@@ -108,6 +108,8 @@ make elfs ${commonTestFlag} ${args.testArgs} elfs -j16
 ${qemuFullpath} --version
 echo "QEMU git hash:"
 ${qemuFullpath} --version | grep version | perl -pe 's/.*\\(.*\\-g(\\w+)\\).*/\$1/'
+rm -rf xunit_xml/${args.name}/
+mkdir -p xunit_xml/${args.name}/
 """
         dir ("ctsrd/cheritest/trunk") {
             sh """
@@ -115,10 +117,11 @@ rm -f nose*.xml pytest*.xml
 ulimit -f 10485760
 ulimit -c 0
 make PYTHON_TESTRUNNER=pytest ${commonTestFlag} ${args.testArgs} nosetests_qemu -j16
+mv nosetests_*.xml \$WORKSPACE/xunit_xml/${args.name}/
 """
         }
         // JUnit Results
-        junit 'ctsrd/cheritest/trunk/nosetests_*.xml'
+        junit "xunit_xml/${args.name}/nosetests_*.xml"
     }
 }
 
@@ -164,6 +167,8 @@ def cheriHardwareTest() {
                 echo "Computing job parameters for ${env.JOB_NAME}"
                 argsList = [getJobParameters()]
             }
+            if ('-gnu-binutils' in env.JOB_NAME)
+                JobConfig.assembler = 'gnu-binutils'
             setGitHubStatus(JobConfig.gitInfo) // set PENDING status
             buildQEMU()
             echo "DONE BUILDING QEMU"
