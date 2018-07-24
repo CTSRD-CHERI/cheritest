@@ -3,10 +3,11 @@
 class JobConfig {
     String testArgs
     String qemuSuffix
-    String assembler = 'clang'
     String name = null
+
     static Object gitInfo = null
     static Object QEMUgitInfo = null
+    static String assembler = 'clang'
 
     // TODO: for some reason I can't make these globals, so let's just put them here
     static String clangArchiveName = 'cheri-multi-master-clang-llvm.tar.xz'
@@ -17,8 +18,9 @@ class JobConfig {
 }
 
 // TODO: instead of this we could also have a Jenkinsfile per config and use JobDSL to generate one job per jenkinsfile
-JobConfig getJobParameters() {
-    String jobName = env.JOB_NAME
+JobConfig getJobParameters(String jobName) {
+    if (jobName == null)
+        jobName = env.JOB_NAME
     if (jobName.contains('/')) {
         jobName = jobName.substring(0, jobName.indexOf('/'))
     }
@@ -89,7 +91,7 @@ export PATH=\$WORKSPACE/binutils/bin:\$PATH"""
     String qemuFullpath = "\$WORKSPACE/qemu-linux/bin/qemu-system-${args.qemuSuffix}"
     // Also test the FPU
     String commonTestFlag = "TEST_FPU=1 ${assemblerTestFlag} QEMU=${qemuFullpath}"
-    stage("Build ELFs (${args.assembler})") {
+    stage("Build ELFs (${args.name} ${args.assembler})") {
         sh """#!/bin/bash
 set -xe
 cd \$WORKSPACE
@@ -101,7 +103,7 @@ make distclean
 make elfs ${commonTestFlag} ${args.testArgs} elfs -j16
 """
     }
-    stage("Run tests (${args.assembler})") {
+    stage("Run tests (${args.name} ${args.assembler})") {
         sh """
 ${qemuFullpath} --version
 echo "QEMU git hash:"
@@ -120,7 +122,7 @@ make PYTHON_TESTRUNNER=pytest ${commonTestFlag} ${args.testArgs} nosetests_qemu 
     }
 }
 
-def doBuild(JobConfig args) {
+def buildQEMU() {
     def qemuGitOptions = [ changelog: true, poll: true,
                     scm: [$class: 'GitSCM',
                           doGenerateSubmoduleConfigurations: false,
@@ -141,26 +143,36 @@ def doBuild(JobConfig args) {
     if (!JobConfig.QEMUgitInfo || JobConfig.QEMUgitInfo.isEmpty())
         JobConfig.QEMUgitInfo = proj.gitInfo  // save the qemu git info for setting commit status
     echo("QEMU git info: ${JobConfig.QEMUgitInfo}")
-    timeout(90) {
-        runTests(args)
-    }
 }
 
 def cheriHardwareTest() {
     node('linux') {
         deleteDir()
-        echo "Computing job parameters for ${env.JOB_NAME}"
-        JobConfig args = getJobParameters()
-        echo "Found job config: QEMU: '${args.qemuSuffix}'\nTEST_ARGS: '${args.testArgs}'"
         stage('Checkout') {
             // dir('ctsrd/cheritest/trunk') { git url: 'git@github.com:CTSRD-CHERI/cheritest.git', credentialsId: 'cheritest_key', branch: 'master'}
             dir('ctsrd/cheritest/trunk') {
-                args.gitInfo = checkout scm  // get the sources from git
+                JobConfig.gitInfo = checkout scm  // get the sources from git
             }
         }
         try {
-            setGitHubStatus(args.gitInfo) // set PENDING status
-            doBuild(args)
+            def argsList = null;
+            if (env.JOB_NAME.startsWith("QEMU-TEST-pipeline")) {
+                echo "BUILDING ALL TEST CONFIGURATIONS"
+                argsList = [getJobParameters("QEMU-CHERI256"), getJobParameters("QEMU-CHERI128"), getJobParameters("QEMU-CHERI128-MAGIC")]
+
+            } else {
+                echo "Computing job parameters for ${env.JOB_NAME}"
+                argsList = [getJobParameters()]
+            }
+            setGitHubStatus(JobConfig.gitInfo) // set PENDING status
+            buildQEMU()
+            echo "DONE BUILDING QEMU"
+            for (a in argsList) {
+                echo "Running test config: QEMU: '${a.qemuSuffix}'\nTEST_ARGS: '${a.testArgs}'"
+                timeout(90) {
+                    runTests((JobConfig)a)
+                }
+            }
         } catch (e) {
             currentBuild.result = 'FAILURE'
             error("Failure detected: ${e}")
@@ -170,11 +182,13 @@ def cheriHardwareTest() {
             if (currentBuild.result == null)
                 currentBuild.result = currentBuild.currentResult
             // Avoid setting an error flag on github commits just because binutils is still broken
-            if (args.assembler != 'gnu-binutils') {
+            if (JobConfig.assembler != 'gnu-binutils') {
                 echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
-                setGitHubStatus(args.gitInfo)
+                if (JobConfig.gitInfo != null)
+                    setGitHubStatus(JobConfig.gitInfo)
                 // Also set the status on the QEMU repo
-                setGitHubStatus(args.QEMUgitInfo)
+                if (JobConfig.QEMUgitInfo != null)
+                    setGitHubStatus(JobConfig.QEMUgitInfo)
             }
         }
     }
@@ -187,7 +201,7 @@ try {
                     pollSCM('@daily')
             ]),
             disableConcurrentBuilds(),
-            [$class: 'JobPropertyImpl', throttle: [count: 1, durationName: 'hour', userBoost: true]]
+            [$class: 'JobPropertyImpl', throttle: [count: 1, durationName: 'hour', userBoost: true]],
             [$class: 'CopyArtifactPermissionProperty', projectNames: '*'],
     ])
     cheriHardwareTest()
