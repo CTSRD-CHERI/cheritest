@@ -366,7 +366,7 @@ $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles | $(SAIL_
 	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< 2>&1 > $@
 
 $(OBJDIR)/%.sailbin: $(OBJDIR)/%.elf $(SAIL)
-	$(SAIL_DIR)/sail -elf $< -o $@ 2>/dev/null >/dev/null
+	$(SAIL) -elf $< -o $@ 2>/dev/null >/dev/null
 
 $(SAIL_MIPS_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_MIPS_C_SIM) max_cycles | $(SAIL_MIPS_C_LOGDIR)
 	-$(SAIL_MIPS_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< 2>&1 > $@

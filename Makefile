@@ -156,6 +156,7 @@ else
 SAIL_DIR?=/path/to/sail/must/be/set/on/cmdline/using/SAIL_DIR/var
 endif
 endif
+
 SAIL?=$(SAIL_DIR)/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
 SAIL_MIPS_C_SIM=$(SAIL_DIR)/mips/mips_c
