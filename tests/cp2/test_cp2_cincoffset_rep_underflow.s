@@ -40,6 +40,8 @@
 BEGIN_TEST
 	
 		cgetdefault $c1
+		cgetdefault $c18
+		dla $a1, cap
 		dli $t0, 0x130000000
 		csetbounds $c1, $c1, $t0
 		li $t0, 0x1000
@@ -48,12 +50,21 @@ BEGIN_TEST
 		csetoffset $c3, $c1, $t0
 		dli	$t0, 16
 		cincoffset $c2, $c1, $t0
+		csc	$c2, $a1, 0($c18)
+		csc	$c3, $a1, 32($c18)
 		cexeq $a0, $c2, $c3
 	
 		li $t0, 0xff0
 		csetoffset $c3, $c1, $t0
 		dli	$t0, -16
 		cincoffset $c2, $c1, $t0
+		csc	$c2, $a1, 64($c18)
+		csc	$c3, $a1, 96($c18)
 		cexeq $a1, $c2, $c3
 	
 END_TEST
+
+
+.data
+cap:
+	.space 128
