@@ -156,6 +156,7 @@ else
 SAIL_DIR?=/path/to/sail/must/be/set/on/cmdline/using/SAIL_DIR/var
 endif
 endif
+SAIL?=$(SAIL_DIR)/sail
 SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
 SAIL_MIPS_C_SIM=$(SAIL_DIR)/mips/mips_c
 SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
@@ -165,9 +166,9 @@ SAIL_CHERI128_C_SIM=$(SAIL_DIR)/cheri/cheri128_c
 
 # There might be matching .c files in the sail directory. Ensure that we don't attempt
 # to compile them to generate the SAIL_CHERI_SIM / SAIL_MIPS_SIM
-.PHONY: $(SAIL_MIPS_SIM) $(SAIL_CHERI_SIM) $(SAIL_CHERI128_SIM)  $(SAIL_MIPS_C_SIM) $(SAIL_CHERI_C_SIM) $(SAIL_CHERI128_C_SIM) $(SAIL_DIR)/sail
+.PHONY: $(SAIL_MIPS_SIM) $(SAIL_CHERI_SIM) $(SAIL_CHERI128_SIM)  $(SAIL_MIPS_C_SIM) $(SAIL_CHERI_C_SIM) $(SAIL_CHERI128_C_SIM) $(SAIL)
 
-$(SAIL_MIPS_SIM) $(SAIL_CHERI_SIM) $(SAIL_CHERI128_SIM)  $(SAIL_MIPS_C_SIM) $(SAIL_CHERI_C_SIM) $(SAIL_CHERI128_C_SIM) $(SAIL_DIR)/sail:
+$(SAIL_MIPS_SIM) $(SAIL_CHERI_SIM) $(SAIL_CHERI128_SIM)  $(SAIL_MIPS_C_SIM) $(SAIL_CHERI_C_SIM) $(SAIL_CHERI128_C_SIM) $(SAIL):
 	@if [ ! -e "$@" ]; then \
 	    echo 'ERROR: sail binary $@ missing. Run `cheribuild.py -d sail` to build it.'; \
 	    false; \

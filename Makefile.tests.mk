@@ -365,7 +365,7 @@ endif
 $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles | $(SAIL_MIPS_LOGDIR)
 	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< 2>&1 > $@
 
-$(OBJDIR)/%.sailbin: $(OBJDIR)/%.elf $(SAIL_DIR)/sail
+$(OBJDIR)/%.sailbin: $(OBJDIR)/%.elf $(SAIL)
 	$(SAIL_DIR)/sail -elf $< -o $@ 2>/dev/null >/dev/null
 
 $(SAIL_MIPS_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_MIPS_C_SIM) max_cycles | $(SAIL_MIPS_C_LOGDIR)
