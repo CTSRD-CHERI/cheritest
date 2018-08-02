@@ -917,7 +917,8 @@ TEST_CP2_FILES=					\
 		test_cp2_x_sdr.s		\
 		test_cp2_x_swc1_perm.s		\
 		test_cp2_x_swr.s		\
-		test_raw_cp2_reg_init.s
+		test_raw_cp2_reg_init.s		\
+		test_raw_cp2_exceptions.s
 ifeq ($(USING_LLVM_ASSEMBLER),1)
 # FIXME: gas does not yet implement ccall fast
 TEST_CP2_FILES += \
