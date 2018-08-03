@@ -883,6 +883,7 @@ TEST_CP2_FILES=					\
 		test_cp2_x_cwritehwr_kernel_perm.s \
 		test_cp2_x_disable_cp2_trap_handler_okay.s \
 		test_cp2_x_exl_pcc.s		\
+		test_cp2_x_idc_speculative.s		\
 		test_cp2_x_fetch.s		\
 		test_cp2_x_jr_imprecise.s	\
 		test_cp2_x_lb_perm.s		\
