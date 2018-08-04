@@ -43,11 +43,11 @@ class test_cp2_badinstr(BaseBERITestCase):
 
     def test_badinstr_value_dmfc0(self):
         # dmfc0 should not sign extend the BadInstr value
-        assert self.MIPS.s1 == 0xe8930803, "expected csd  $4, $1, 0($c19) in BadInstr"
+        self.assertRegisterEqual(self.MIPS.s1, 0xe8930803, "expected csd  $4, $1, 0($c19) in BadInstr")
 
     def test_badinstr_value_mfc0(self):
         # mfc0 should not sign extend the BadInstr value
-        assert self.MIPS.s2 == 0xe8930803, "expected csd  $4, $1, 0($c19) in BadInstr"
+        self.assertRegisterEqual(self.MIPS.s2, 0xe8930803, "expected csd  $4, $1, 0($c19) in BadInstr (not sign extended)")
 
     def test_value_not_written(self):
         assert self.MIPS.s0 == 0x123456
