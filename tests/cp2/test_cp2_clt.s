@@ -29,4 +29,4 @@
 		clt \dest, \cA, \cB
 .endm
 	
-.include "tests/cp2/test_cp2_ptrcmp_template.s"
+.include "tests/cp2/common_code_ptrcmp.s"

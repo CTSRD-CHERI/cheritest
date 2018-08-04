@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-# See test_cp2_x_reg0_is_ddc_common.s for the real implementation
+# See common_code_reg0_is_ddc.s for the real implementation
 TESTING_LOAD = 0
 TESTING_STORE = 1
 TESTING_LLSC = 0
@@ -38,4 +38,4 @@ TESTING_LLSC = 0
 	s\()\kind \dstreg, 0(\srcreg)
 .endm
 
-.include "tests/cp2/test_cp2_x_reg0_is_ddc_common.s"
+.include "tests/cp2/common_code_reg0_is_ddc.s"

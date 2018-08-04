@@ -164,10 +164,10 @@ $(OBJDIR)/test_clang%.o : test_clang%.c | $(OBJDIR)
 $(OBJDIR)/test_%.o : test_%.s macros.s | $(OBJDIR)
 	$(MIPS_AS) $(MIPS_ASFLAGS) -o $@ $<
 # Add dependencies on the common.s for test_reg0_is_ddc files:
-$(OBJDIR)/test_cp2_x_reg0_is_ddc_load.o: tests/cp2/test_cp2_x_reg0_is_ddc_common.s
-$(OBJDIR)/test_cp2_x_reg0_is_ddc_load_linked.o: tests/cp2/test_cp2_x_reg0_is_ddc_common.s
-$(OBJDIR)/test_cp2_x_reg0_is_ddc_store.o: tests/cp2/test_cp2_x_reg0_is_ddc_common.s
-$(OBJDIR)/test_cp2_x_reg0_is_ddc_store_cond.o: tests/cp2/test_cp2_x_reg0_is_ddc_common.s
+$(OBJDIR)/test_cp2_x_reg0_is_ddc_load.o: tests/cp2/common_code_reg0_is_ddc.s
+$(OBJDIR)/test_cp2_x_reg0_is_ddc_load_linked.o: tests/cp2/common_code_reg0_is_ddc.s
+$(OBJDIR)/test_cp2_x_reg0_is_ddc_store.o: tests/cp2/common_code_reg0_is_ddc.s
+$(OBJDIR)/test_cp2_x_reg0_is_ddc_store_cond.o: tests/cp2/common_code_reg0_is_ddc.s
 
 $(OBJDIR)/test_%.o : test_%.c | $(OBJDIR)
 	$(CLANG_CC) $(CWARNFLAGS) -c $(HYBRID_CFLAGS) -o $@ $<
