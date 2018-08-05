@@ -39,6 +39,8 @@ sandbox:
   nop
   nop
   nop
+  # This ccall should be the last instruction in a mispredicted sequence.
+  # Note a change in the number of pipeline stages might also change this.
   ccall           $c6, $c4, 1
   nop
   
@@ -58,7 +60,7 @@ BEGIN_TEST
   cgetpcc         $c3
   dli             $t0, 0x12
   csetoffset      $c5, $c4, $t0
-  dla             $t0, sandbox
+  dla             $t0, continue
   csetoffset      $c3, $c3, $t0
   dla             $t0, the_loop
   csetoffset      $c6, $c3, $t0
@@ -66,13 +68,16 @@ BEGIN_TEST
   cseal           $c4, $c4, $c5
   cseal           $c6, $c6, $c5
 
-  dli             $t1, 8 # Train the branch predictor 7 times.
+  dli             $t1, 8 # Train the branch predictor 8 times.
 the_loop:
   bnez            $t1, sandbox
   daddiu          $t1, $t1, -1
   
   # This ccall should be preceded by a speculative mispredicted ccall.
   ccall           $c3, $c4, 1
+  nop
+
+continue:
   nop
 
 END_TEST
