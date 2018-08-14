@@ -58,11 +58,14 @@ def check_answer(test_name, test_file):
 
 
 def _get_xfail_reason(test_name):
+    if test_name == "test_purecap_union_struct":
+        return "This is failing due to a clang bug!"
     if test_name == "test_purecap_statcounters":
         # L3/SAIL don't implement the statcounters instructions
         if os.getenv("TEST_MACHINE", "").lower() in ("l3", "sail"):
             return "Statcounters rdhwr not supported on " + os.getenv("TEST_MACHINE", "")
     return None
+
 
 def get_all_tests():
     if ONLY_TEST:
