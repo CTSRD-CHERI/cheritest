@@ -28,15 +28,17 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
-# Check that we get sensible EPCC and EPC values if we get a CHERI violation with a non-zero $pcc base
+#
+# Test that EPC and EPCC are still in sync after a jump to a bad instruction
+#
 
 @attr('capabilities')
-class test_cp2_x_jump_invalid_addr_bounds_nonzero_pcc(BaseBERITestCase):
+class test_cp2_x_jump_invalid_addr_bounds_unrep(BaseBERITestCase):
     def test_epc(self):
-        self.assertRegisterEqual(self.MIPS.a4, 0x3e8, "epc is wrong")
+        self.assertRegisterEqual(self.MIPS.a4, 0x80, "epc is wrong (should be address of the jr)")
 
     def test_epcc(self):
-        self.assertValidCap(self.MIPS.c1, base=0x10, length=0x300, offset=0x3e8, perms=self.max_permissions, msg="EPCC is wrong")
+        self.assertValidCap(self.MIPS.c1, base=0, length=0x300, offset=0x80, perms=self.max_permissions, msg="EPCC is wrong (should be address of the jr)")
 
     def test_cause(self):
         self.assertRegisterMaskEqual(self.MIPS.a3, 1 << 31, 0, "BD bit should not be set")

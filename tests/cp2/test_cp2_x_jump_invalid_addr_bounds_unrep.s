@@ -25,21 +25,13 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+# Setup $pcc to be out of bounds and unrepresentable
+BAD_ADDR = 0x12345678		# Should be large enough to be unrepresentable
+.macro invalid_address_pcc_setup creg
+	cgetpcc $c2	# address zero
+	dli	$t0, 0x300
+	# restrict $pcc
+	csetbounds \creg, $c2, $t0
+.endm
 
-# Check that we get sensible EPCC and EPC values if we get a CHERI violation with a non-zero $pcc base
-
-@attr('capabilities')
-class test_cp2_x_jump_invalid_addr_bounds_nonzero_pcc(BaseBERITestCase):
-    def test_epc(self):
-        self.assertRegisterEqual(self.MIPS.a4, 0x3e8, "epc is wrong")
-
-    def test_epcc(self):
-        self.assertValidCap(self.MIPS.c1, base=0x10, length=0x300, offset=0x3e8, perms=self.max_permissions, msg="EPCC is wrong")
-
-    def test_cause(self):
-        self.assertRegisterMaskEqual(self.MIPS.a3, 1 << 31, 0, "BD bit should not be set")
-
-    def test_capcause(self):
-        self.assertRegisterMaskEqual(self.MIPS.a5, 0xff, 0xff, "register should be 0xff")
+.include "tests/cp2/common_code_jump_invalid_addr.s"

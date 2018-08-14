@@ -42,6 +42,9 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		dli	$a3, -1
 		dli	$a4, -1
 		cgetnull $c1
+		cgetpcc $c25	# save full permissions cap for returning
+		dla	$k0, return
+		csetoffset	$c25, $c25, $k0
 
 		jump_to_usermode testcode
 		nop
@@ -79,6 +82,8 @@ testcode:
 		# jump here:
 .Lprepare_jump:
 		dli	$t9, BAD_ADDR
+
+.balign 0x80	# ensure that the jr is at address 0x80 (will be padded with nops)
 		jr	$t9
 		cgetpcc $c3
 		syscall # in case we didn't trap
@@ -95,9 +100,7 @@ default_trap_handler:
 		dmfc0	$a3, $13	# Cause register
 		cgetcause	$a5
 
-		dla	$k0, return
-		csetoffset	$c3, $c2, $k0	# EPCC = return
-		cjr	$c3	# jump to end of test
+		cjr	$c25	# jump to end of test
 
 
 .end default_trap_handler

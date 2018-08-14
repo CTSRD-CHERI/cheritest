@@ -28,8 +28,8 @@
 # Setup $pcc to be only the first few instructions (and have a nonzero base) and the BAD address to be the end of the first page:
 BAD_ADDR = 0x3e8
 .macro invalid_address_pcc_setup creg
+	cgetpcc $c2	# address 0
 	dli	$t0, 0x300
-	cgetpcc $c2
 	cincoffset $c2, $c2, 0x10
 	# restrict $pcc
 	csetbounds \creg, $c2, $t0
