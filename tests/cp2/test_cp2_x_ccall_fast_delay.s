@@ -91,22 +91,21 @@ BEGIN_TEST
 
         li          $t1, 0      # clear $t1, a change in $t1 means failure.
 
+	cgetnull	$c25
+	li	$a1, 0	# will be set to nonzero on a trap
         # do the ccallfast and access IDC in the delay slot
 	ccall	    $c1, $c2, 1
         cmove       $c25, $c26
 
 restored_ra:
-		ld	$fp, 16($sp)
-		ld	$ra, 24($sp)
-		jr	$ra
-		daddiu  $sp, $sp, 32	# branch-delay slot
-		.end	test
+END_TEST
 
         .ent sandbox
 sandbox:
         dla     $t0, restored_ra
         jr      $t0
         li      $t1, 0xbeef     # this sandbox should not be entered
+        b restored_ra
         .end sandbox
 
 
@@ -116,6 +115,7 @@ sandbox:
 #
 		.ent exception_handler
 exception_handler:
+	li	$a1, 42
 	cgetcause $t3		# grab the cause in t3
         dmfc0   $k0, $14
         daddiu  $k0, $k0, 8 	# advance the EPC by two instructions

@@ -38,14 +38,12 @@ class test_cp2_x_ccall_fast_delay(BaseBERITestCase):
     @attr('capabilities')
     @attr('ccall_hw_2')
     def test_cp2_x_ccall_fast_delay_1(self):
-        '''Test that the delay slot of ccall_fast cannot access IDC'''
-        self.assertRegisterEqual(self.MIPS.t1, 0x0,
-                                 "the delay slot of ccallfast accesses IDC without raising an exception")
+        self.assertRegisterEqual(self.MIPS.t1, 0xbeef, "Sandbox was not entered?")
 
     @attr('capabilities')
     @attr('ccall_hw_2')
     def test_cp2_x_ccall_fast_delay_2(self):
-        '''Test that accessing IDC in the delay slot raises a Access_CCall_IDC exception'''
-        self.assertRegisterEqual(self.MIPS.t3, 0x1a1a,
-                                 "the delay slot of ccallfast accesses IDC raised wrong exception")
+        '''Test that accessing IDC in the delay does not raises a Access_CCall_IDC exception'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x0,
+                                 "Since there is no more delay slot there should be no exception!")
 
