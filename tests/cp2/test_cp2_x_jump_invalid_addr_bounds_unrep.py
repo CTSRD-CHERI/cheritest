@@ -34,14 +34,30 @@ from beritest_tools import attr
 
 @attr('capabilities')
 class test_cp2_x_jump_invalid_addr_bounds_unrep(BaseBERITestCase):
-    def test_epc(self):
-        self.assertRegisterEqual(self.MIPS.a4, 0x80, "epc is wrong (should be address of the jr)")
+    @attr('cap_precise')
+    def test_epc_precise(self):
+        self.assertRegisterEqual(self.MIPS.a4, 0x12345678, "epc is wrong (should be address of the jr)")
 
-    def test_epcc(self):
+    @attr('cap_precise')
+    def test_epcc_precise(self):
+        self.assertValidCap(self.MIPS.c1, base=0, length=0x300, offset=0x12345678, perms=self.max_permissions, msg="EPCC is wrong (should be address of the jr)")
+
+    @attr('cap_precise')
+    def test_cause_precise(self):
+        # Should get a tlb miss
+        self.assertRegisterMaskEqual(self.MIPS.a3, 1 << 31, 0, "BD bit should not be set")
+        self.assertRegisterMaskEqual(self.MIPS.a3 >> 2, 0x1f, self.MIPS.Cause.TLB_Load.value, "expected a TLB fault")
+        self.assertRegisterEqual(self.MIPS.a5, 0, "CapCause should be 0x0")
+
+    @attr('cap_imprecise')
+    def test_epcc_imprecise(self):
         self.assertValidCap(self.MIPS.c1, base=0, length=0x300, offset=0x80, perms=self.max_permissions, msg="EPCC is wrong (should be address of the jr)")
 
-    def test_cause(self):
-        self.assertRegisterMaskEqual(self.MIPS.a3, 1 << 31, 0, "BD bit should not be set")
+    @attr('cap_imprecise')
+    def test_epc_imprecise(self):
+        self.assertRegisterEqual(self.MIPS.a4, 0x80, "epc is wrong (should be address of the jr)")
 
-    def test_capcause(self):
+    @attr('cap_imprecise')
+    def test_cause_imprecise(self):
+        self.assertRegisterMaskEqual(self.MIPS.a3, 1 << 31, 0, "BD bit should not be set")
         self.assertRegisterMaskEqual(self.MIPS.a5, 0xff, 0xff, "register should be 0xff")
