@@ -28,9 +28,9 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
-class test_cp2_x_idc_speculative(BaseBERITestCase):
+class test_cp2_x_ccall_fast_nodelay(BaseBERITestCase):
 
     @attr('capabilities')
-    def test_cp2_x_idc_speculative(self):
-        '''Test that CCallFast in the mispredicted speculative path does not affect architectural state'''
-        self.assertRegisterEqual(self.MIPS.t2, 0x44, "CCallFast in mispredicted speculative path affects architectural state!")
+    def test_cp2_x_ccall_fast_nodelay(self):
+        '''Test that CCallFast should not have a delay slot'''
+        self.assertRegisterEqual(self.MIPS.t2, 0x44, "CCallFast has a delay slot!")

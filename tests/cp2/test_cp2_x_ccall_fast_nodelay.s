@@ -30,20 +30,13 @@
 .set nobopt
 .set noat
 .include "macros.s"
-#
-# Test that instructions in the branch delay slot of cjalr use the permissions
-# of PCC before the branch, not after the branch.
-#
 
-sandbox:
-  nop
-  nop
-  nop
-  # This ccall should be the last instruction in a mispredicted sequence.
-  # Note a change in the number of pipeline stages might also change this.
-  ccall           $c6, $c4, 1
-  nop
-  
+# With the removal of CCallFast delay slot, the instruction after CCallFast
+# should not be run and should not trigger any exceptions (including ITLB, CP2
+# PCC len and interrupts).
+
+# This test checks if DTLB or CP2 PCC len will fire. If the architecture still
+# has a delay slot, one of the exceptions will fire.
 
 BEGIN_TEST
 
@@ -56,29 +49,35 @@ BEGIN_TEST
   # Initialise $t2. The test fails if $t2 is 0x33.
   dli             $t2, 0x44
 
-  cgetdefault     $c4
   cgetpcc         $c3
+  cgetdefault     $c4
   dli             $t0, 0x12
   csetoffset      $c5, $c4, $t0
   dla             $t0, continue
   csetoffset      $c3, $c3, $t0
-  dla             $t0, the_loop
-  csetoffset      $c6, $c3, $t0
   cseal           $c3, $c3, $c5
   cseal           $c4, $c4, $c5
-  cseal           $c6, $c6, $c5
 
-  dli             $t1, 8 # Train the branch predictor 8 times.
-the_loop:
-  bnez            $t1, sandbox
-  daddiu          $t1, $t1, -1
-  
-  # This ccall should be preceded by a speculative mispredicted ccall.
+  # Construct a PCC that does not include the delay slot of CCallFast
+  cgetpcc         $c6
+  csetoffset      $c6, $c6, $zero
+  dla             $t0, test_slot
+  csetbounds      $c6, $c6, $t0
+  dla             $t0, test_body
+  csetoffset      $c6, $c6, $t0
+  cjr             $c6
+  nop
+
+test_body:
   ccall           $c3, $c4, 1
+test_slot:
+  # This instruction should not fire any exceptions.
+  lw              $t0, 0x123($zero)
+  nop
   nop
 
 continue:
-  nop
+  add             $t0, $zero, $zero
 
 END_TEST
 
