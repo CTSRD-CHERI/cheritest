@@ -98,7 +98,7 @@ BEGIN_TEST
 		# 2 if the ccall trap handler is called.
 		dli	$a2, 0
 
-		ccall   $c4, $c3
+		ccall   $c4, $c3, 0
 		nop
 
 END_TEST

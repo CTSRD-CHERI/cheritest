@@ -161,7 +161,7 @@ L1:
 		# Invoke the sandbox
 		#
 
-		ccall   $c1, $c2
+		ccall   $c1, $c2, 0
 		nop			# branch delay slot
 
 		#

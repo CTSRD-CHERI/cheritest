@@ -266,7 +266,8 @@ l2:
 
 l3:
                 # crossing protection domains
-		ccall    $c1,  $c2
+		ccall    $c1,  $c2, 0
+		ccall    $c1,  $c2, 1
 		creturn
 
 		cfromptr $c3, $c1, $zero
