@@ -179,7 +179,7 @@ def cheriHardwareTest() {
             }
             // Get the other sources:
             dir('sail') {
-                git branch: 'sail2', url: 'https://github.com/rems-project/sail', changelog: true, poll: true
+                git branch: 'sail2', url: 'https://github.com/CTSRD-CHERI/sail', changelog: true, poll: true
             }
             dir('lem') {
                 git branch: 'master', url: 'https://github.com/rems-project/lem', changelog: true, poll: false
