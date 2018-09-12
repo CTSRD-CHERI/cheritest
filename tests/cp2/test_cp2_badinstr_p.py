@@ -31,6 +31,8 @@ from beritest_tools import attr
 #
 # Test that the BadInstr register is implemented
 #
+
+@attr('capabilities')
 class test_cp2_badinstr_p(BaseBERITestCase):
     def test_trap_handler_ran(self):
         assert self.MIPS.v1 == 42, "trap handler didn't run"
