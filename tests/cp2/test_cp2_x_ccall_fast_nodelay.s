@@ -56,6 +56,8 @@ BEGIN_TEST
   dla             $t0, continue
   csetoffset      $c3, $c3, $t0
   cseal           $c3, $c3, $c5
+  dli             $t0, -3      # clear perm execute in data cap
+  candperm        $c4, $c4, $t0
   cseal           $c4, $c4, $c5
 
   # Construct a PCC that does not include the delay slot of CCallFast
