@@ -363,25 +363,25 @@ endif
 endif
 
 $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles | $(SAIL_MIPS_LOGDIR)
-	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< 2>&1 > $@
+	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< >$@ 2>&1
 
 $(OBJDIR)/%.sailbin: $(OBJDIR)/%.elf $(SAIL)
 	$(SAIL) -elf $< -o $@ 2>/dev/null >/dev/null
 
 $(SAIL_MIPS_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_MIPS_C_SIM) max_cycles | $(SAIL_MIPS_C_LOGDIR)
-	-$(SAIL_MIPS_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< 2>&1 > $@
+	-$(SAIL_MIPS_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< >$@ 2>&1
 
 $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles | $(SAIL_CHERI_LOGDIR)
-	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< 2>&1 > $@
+	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< >$@ 2>&1
 
 $(SAIL_CHERI_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_CHERI_C_SIM) max_cycles | $(SAIL_CHERI_C_LOGDIR)
-	-$(SAIL_CHERI_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< 2>&1 > $@
+	-$(SAIL_CHERI_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< >$@ 2>&1
 
 $(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles | $(SAIL_CHERI128_LOGDIR)
-	-$(TIMEOUT) 2m $(SAIL_CHERI128_SIM) $< 2>&1 > $@
+	-$(TIMEOUT) 2m $(SAIL_CHERI128_SIM) $< >$@ 2>&1
 
 $(SAIL_CHERI128_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_CHERI128_C_SIM) max_cycles | $(SAIL_CHERI128_C_LOGDIR)
-	-$(SAIL_CHERI128_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< 2>&1 > $@
+	-$(SAIL_CHERI128_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< >$@ 2>&1
 
 ALL_LOGDIRS=$(L3_LOGDIR) $(QEMU_LOGDIR) $(LOGDIR) \
 	$(SAIL_MIPS_LOGDIR) $(SAIL_MIPS_C_LOGDIR) \
