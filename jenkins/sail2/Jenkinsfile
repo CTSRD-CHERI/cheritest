@@ -78,7 +78,7 @@ export PATH=\$WORKSPACE/binutils/bin:\$PATH"""
         assemblerTestFlag = 'CLANG=0'
     }
     // Don't test the FPU
-    String commonTestFlag = "SAIL_DIR=\${WORKSPACE}/sail TEST_FPU=0 ${assemblerTestFlag}"
+    String commonTestFlag = "SAIL_DIR=\${WORKSPACE}/sail SAIL_CHERI_MIPS_DIR=${WORKSPACE}/sail-cheri-mips TEST_FPU=0 ${assemblerTestFlag}"
     stage("Build ELFs (${args.assembler})") {
         sh """#!/bin/bash
 set -xe
@@ -148,13 +148,15 @@ make -C src USE_OCAMLBUILD=false local-install
 cd ${WORKSPACE}/sail
 make
 
+cd ${WORKSPACE}/sail-cheri-mips
+
 case $MODEL in
 mips) cd mips ;;
 cheri) cd cheri ;;
 cheri128) cd cheri ;;
 esac
 
-make $MODEL
+make SAIL_DIR=${WORKSPACE}/sail $MODEL
 '''
             archiveArtifacts allowEmptyArchive: false, artifacts: 'sail/mips/mips, sail/cheri/cheri, sail/cheri/cheri128', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
         }
@@ -179,7 +181,10 @@ def cheriHardwareTest() {
             }
             // Get the other sources:
             dir('sail') {
-                git branch: 'sail2', url: 'https://github.com/CTSRD-CHERI/sail', changelog: true, poll: true
+                git branch: 'sail2', url: 'https://github.com/rems-project/sail', changelog: true, poll: true
+            }
+            dir('sail-cheri-mips') {
+                git branch: 'master', url: 'https://github.com/CTSRD-CHERI/sail-cheri-mips', changelog: true, poll: true
             }
             dir('lem') {
                 git branch: 'master', url: 'https://github.com/rems-project/lem', changelog: true, poll: false
