@@ -117,6 +117,9 @@ def doBuild(JobConfig args) {
         //copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName
 
         String setupBuildEnv = '''
+export OPAMLOCKRETRIES=0
+opam switch 4.06.0
+opam install zarith menhir num
 eval `opam config env`
 opam list
 ulimit -s unlimited
