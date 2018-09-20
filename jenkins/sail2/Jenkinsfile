@@ -161,7 +161,7 @@ esac
 
 make SAIL_DIR=${WORKSPACE}/sail $MODEL
 '''
-            archiveArtifacts allowEmptyArchive: false, artifacts: 'sail/mips/mips, sail/cheri/cheri, sail/cheri/cheri128', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
+            archiveArtifacts allowEmptyArchive: false, artifacts: 'sail-cheri-mips/mips/mips, sail-cheri-mips/cheri/cheri, sail-cheri-mips/cheri/cheri128', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
         }
         timeout(90) {
             runTests(args)
