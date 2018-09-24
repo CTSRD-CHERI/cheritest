@@ -33,10 +33,10 @@ from beritest_tools import attr
 @attr('capabilities')
 class test_cp2_x_jump_invalid_addr_bounds_nonzero_pcc(BaseBERITestCase):
     def test_epc(self):
-        self.assertRegisterEqual(self.MIPS.a4, 0x3e8, "epc is wrong")
+        self.assertRegisterEqual(self.MIPS.a4, 0x70, "epc is wrong")
 
     def test_epcc(self):
-        self.assertValidCap(self.MIPS.c1, base=0x10, length=0x300, offset=0x3e8, perms=self.max_permissions, msg="EPCC is wrong")
+        self.assertValidCap(self.MIPS.c1, base=0x10, length=0x300, offset=0x70, perms=self.max_permissions, msg="EPCC is wrong")
 
     def test_cause(self):
         self.assertRegisterMaskEqual(self.MIPS.a3, 1 << 31, 0, "BD bit should not be set")
