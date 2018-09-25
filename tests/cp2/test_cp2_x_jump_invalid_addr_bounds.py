@@ -35,11 +35,11 @@ from beritest_tools import attr
 @attr('capabilities')
 class test_cp2_x_jump_invalid_addr_bounds(BaseBERITestCase):
     def test_epc(self):
-        self.assertRegisterEqual(self.MIPS.a4, 0x3f8, "epc is wrong")
+        self.assertRegisterEqual(self.MIPS.a4, 0x80, "epc is wrong")
 
     def test_epcc(self):
         # This was broken in QEMU since it would produce an EPCC with base == 4
-        self.assertValidCap(self.MIPS.c1, base=0, length=0x300, offset=0x3f8, perms=self.max_permissions, msg="EPCC is wrong")
+        self.assertValidCap(self.MIPS.c1, base=0, length=0x300, offset=0x80, perms=self.max_permissions, msg="EPCC is wrong")
 
     def test_cause(self):
         self.assertRegisterMaskEqual(self.MIPS.a3, 1 << 31, 0, "BD bit should not be set")
