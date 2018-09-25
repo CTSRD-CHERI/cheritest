@@ -32,8 +32,7 @@
 .include "macros.s"
 #
 # Test that an exception is raised if a jump register instruction goes
-# outside the range of PCC, and (in the 128-bit capability case) this causes
-# PCC to lose precision.
+# outside the range of PCC.
 #
 
 sandbox:
@@ -68,8 +67,7 @@ BEGIN_TEST
 		csetbounds $c1, $c1, $t2
 
 		#
-		# Make $a0 so far outside the sandbox that it will cause
-		# PCC to lose precision with 128-bit capabilities.
+		# Make $a0 outside the sandbox
 		#
 
 		dli	$a0, 1
@@ -78,9 +76,6 @@ BEGIN_TEST
 		cjalr   $c1, $c24
 		nop			# Branch delay slot
 finally:
-
-		dla	$t0, sandbox
-		dsubu	$a0, $a1, $t0
 
 END_TEST
 

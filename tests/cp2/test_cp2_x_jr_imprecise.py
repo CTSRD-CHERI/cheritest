@@ -31,16 +31,9 @@ from beritest_tools import attr
 class test_cp2_x_jr_imprecise(BaseBERITestCase):
 
     @attr('capabilities')
-    @attr('cap_imprecise')
-    def test_cp2_x_jr_imprecise_offset_imprecise(self):
-        '''Test that EPCC.offset is set to the vaddr of the branch target'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x100000000, "EPCC.offset was not set to the expected value after JR out of range of PCC")
-
-    @attr('capabilities')
-    @attr('cap_precise')
-    def test_cp2_x_jr_imprecise_offset_precise(self):
-        '''Test that EPCC.offset is set to branch target when JR out of range'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x100000000, "EPCC.offset was not set to the expected value after JR out of range of PCC")
+    def test_cp2_x_jr_imprecise_offset(self):
+        '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
+        self.assertRegisterEqual(self.MIPS.a1, 0x0, "EPCC.offset was not set to the expected value after attempting JR out of range of PCC")
 
     @attr('capabilities')
     def test_cp2_x_jr_imprecise_exception(self):
@@ -48,13 +41,6 @@ class test_cp2_x_jr_imprecise(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a2, 1, "An exception was not raised after JR out of range of PCC")
 
     @attr('capabilities')
-    @attr('cap_precise')
     def test_cp2_x_jr_imprecise_tag_precise(self):
-        '''Test that EPCC.tag is set (precise capabilities'''
+        '''Test that EPCC.tag is set'''
         self.assertRegisterEqual(self.MIPS.a4, 1, "EPCC.tag was not set to true after jr out of range of PCC")
-
-    @attr('capabilities')
-    @attr('cap_imprecise')
-    def test_cp2_x_jr_imprecise_tag_imprecise(self):
-        '''Test that EPCC.tag is cleared when EPCC loses precision''' 
-        self.assertRegisterEqual(self.MIPS.a4, 0, "EPCC.tag was not cleared after jr out of range of PCC causes PCC to lose precision")
