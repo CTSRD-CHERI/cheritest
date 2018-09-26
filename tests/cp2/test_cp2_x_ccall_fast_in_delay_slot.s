@@ -67,10 +67,6 @@ BEGIN_TEST
 	cgetpcc		$c3
 	dla		$t0, restored_ra
 	csetoffset	$c3, $c3, $t0
-	# do the ccallfast and write $c4 in the instruction after. This instruction
-	# should no longer be executed since
-	# If CCall still has a branch delay slot this should read NULL, this
-	# should read an untagged 0x0de1a1 (which will be set by the sandbox)
 	dli	$a1, 0x1234	# should have this value!
 	b restored_ra
 	ccall		$c1, $c2, 1	# This should trap (since it's in the delay slot)
