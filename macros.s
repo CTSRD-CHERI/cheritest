@@ -393,7 +393,7 @@ max_thread_count = 32
 
 		dli	$a5, 0			# Initialise test flag
 
-		and	$k0, $a0, 0xfff		# Get offset of testcode within page.
+		and	$k0, $a0, 0x1fff		# Get offset of testcode within page.
 		dmtc0	$k0, $14		# Put EPC
 		dmfc0	$t2, $12		# Read status
 		ori	$t2, 0x12		# Set user mode, exl
