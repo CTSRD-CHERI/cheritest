@@ -177,12 +177,12 @@ exception_handler:
 		# Save old EPCC
 		cgetepcc	$c3
 
+		# Save sandbox EPC for later inspection
+		dmfc0	$s2, $14
+
 		# Remove sandboxing
 		cgetdefault	$c4
 		csetepcc	$c4	# Move $ddc into $epcc
-
-		# Save sandbox EPC for later inspection
-		dmfc0	$s2, $14
 
 		# Set EPC to continue after exception return
 		dla	$k0, sandbox_end
