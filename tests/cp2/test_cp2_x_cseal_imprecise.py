@@ -35,7 +35,7 @@ from beritest_tools import attr
 class test_cp2_x_cseal_imprecise(BaseBERITestCase):
 
     def test_maybe_unrep(self):
-        # New QEMU implementation can actuall represent this:
+        # New QEMU implementation can actually represent this:
         if is_feature_supported('improved_cheri_cc'):
             self.assertNullCap(self.MIPS.c4, "Should not have caused a trap")
             assert self.MIPS.c3.ctype == 0x11
