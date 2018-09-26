@@ -80,6 +80,23 @@ BEGIN_TEST
 		cjalr   $c2, $c9
 		nop			# Branch delay slot
 
+		cmove	$c16, $c16
+		cmove	$c17, $c17
+		cmove	$c18, $c18
+		cmove	$c19, $c19
+		cmove	$c20, $c20
+		cmove	$c21, $c21
+		cmove	$c22, $c22
+		cmove	$c23, $c23
+		cmove	$c24, $c24
+		cmove	$c25, $c25
+		cmove	$c26, $c26
+		cmove	$c27, $c27
+		cmove	$c28, $c28
+		cmove	$c29, $c29
+		cmove	$c30, $c30
+		cmove	$c31, $c31
+		
 		dli	$t0, 0x1234
 		cgetoffset $a0, $c16
 		bne	$a0, $t0, fail
