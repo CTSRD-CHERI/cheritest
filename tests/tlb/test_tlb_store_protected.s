@@ -41,7 +41,7 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		tlbwi				# Write Indexed TLB Entry
 
 		dli     $t0, 0x0123456789abcdef # Test data to store
-		and     $a4, $a0, 0xfff		# Get offset of testdata within page.
+		and     $a4, $a0, 0x1fff	# Get offset of testdata within page.
 
 		dli     $a7, -1			# Initalise a7 to non-zero value
 		dli     $s0, -1			# Initalise s0 to non-zero value
