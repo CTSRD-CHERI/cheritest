@@ -38,7 +38,8 @@
 #
 
 sandbox:
-		dli	$a0, 1
+	        dli	$a0, 1
+expected_epc:
 		cbtu	$c2, L1
 		nop			# Branch delay slot
 		cjr     $c24
@@ -91,7 +92,7 @@ BEGIN_TEST
 		# an exception into $a1
 		#
 
-		dla	$a1, L1
+		dla	$a1, expected_epc
 		dla	$t0, sandbox
 		dsubu	$a1, $a1, $t0
 
