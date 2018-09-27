@@ -134,11 +134,11 @@ class test_cp0_reg_init(BaseBERITestCase):
             assert company_id == 0x0f, "Unexpected QEMU CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected QEMU CP0_PRID[15..8]"
             assert revision_id >= 2, "Expected at least rev 2 (which includes the NULL register) for QEMU CP0_PRID[7..0]"
-        if self.TEST_MACHINE == "sail":
+        elif self.TEST_MACHINE == "sail":
             assert company_id == 0, "Unexpected CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected CP0_PRID[15..8]"
             assert revision_id == 0, "Expected at least rev 0"
-        if self.TEST_MACHINE == "sim":
+        elif self.TEST_MACHINE == "sim":
             # CHERI Bluespec implementation, company id = 0x00, processor id = 0x04, revision = 2+
             assert company_id == 0x00, "Unexpected BERI CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected BERI CP0_PRID[15..8]"
