@@ -75,7 +75,7 @@ L1:
 
 		dli	$a5, 4			# Initialise test flag
 	
-		and     $k0, $a0, 0xfff		# Get offset of testdata within page.
+		and     $k0, $a0, 0x1fff	# Get offset of testdata within page.
 		jr 	$k0			# Jump to virtual address
 		nop
 
