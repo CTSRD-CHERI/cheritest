@@ -33,8 +33,8 @@
 .set noat
 
 #
-# Test to check that EPCC is set to something sensible when a jump occurs to
-# a location which is so far out of the bounds of PCC that EPCC is not
+# Test to check that EPCC is set to something sensible when EPC is set to
+# a location which is so far out of the bounds of EPCC that it is not
 # representable with compressed capabilities. It's important to get this
 # correct otherwise it could break the monotonicity of capabilities.
 #
@@ -57,10 +57,10 @@ this_test:
                 #
 
                 cgetdefault $c1
-                dla        $a7, this_test
-                csetoffset $c1, $c1, $a7
-                csetbounds $c1, $c1, 20
-                cgetlen $s0, $c1
+                dla         $a7, this_test
+                csetoffset  $c1, $c1, $a7
+                csetbounds  $c1, $c1, 20
+                cgetlen     $s0, $c1
 
                 #
                 # Restrict to Non_Ephemeral, Permit_Execute
@@ -69,14 +69,14 @@ this_test:
 
                 dli      $t0, 0x0007
                 candperm $c1, $c1, $t0
-								
-								# Write the sandbox capability into EPCC
-								csetepcc $c1 
-								
-								# Create an unrepresentable offset to place in EPC, which should
-								# set the offset of EPCC to an unrepresentable value.
-								dli     $t0, 0x10000000
-								dmtc0		$t0, $14
+
+                # Write the sandbox capability into EPCC
+                csetepcc $c1 
+                
+                # Create an unrepresentable offset to place in EPC, which should
+                # set the offset of EPCC to an unrepresentable value.
+                dli     $t0, 0x10000000
+                dmtc0   $t0, $14
                 
                 # Let CP0 settle out...
                 nop
@@ -87,8 +87,8 @@ this_test:
                 nop
                 
                 # Pull out EPC for inspection
-                dmfc0   $s3, $14
+                dmfc0    $s3, $14
                 # Observe EPCC
-                cgetepcc   $c3
+                cgetepcc $c3
 
 END_TEST

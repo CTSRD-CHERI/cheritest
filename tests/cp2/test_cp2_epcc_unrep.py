@@ -36,69 +36,64 @@ import pytest
 # be representable when capability compression is used.
 #
 
+@attr('capabilities')
 class test_cp2_epcc_unrep(BaseBERITestCase):
 
     #
     # Check that sandbox was configured roughly as expected
     #
     @attr('capabilities')
-    def test_sandbox_length(self):
+    def test_length(self):
         self.assertRegisterEqual(self.MIPS.s0, 20, "sandbox length not 20")
 
     #
     # Check that EPC is as expected
     #
-    @attr('capabilities')
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.s3, 0x10000000, "sandbox EPC unexpected")
 
     #
     # Check that the post-unrepresentable EPCC is as expected: unrepresentable.
     #
-    @attr('capabilities')
     @attr('cap_precise')
-    def test_sandbox_epcc_tag_precise(self):
+    def test_epcc_tag_precise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].t, 1, "sandbox EPCC tag incorrect")
 
-    @attr('capabilities')
     @attr('cap_imprecise')
-    def test_sandbox_epcc_tag_imprecise(self):
+    def test_epcc_tag_imprecise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].t, 0, "sandbox EPCC tag incorrect")
 
-    @attr('capabilities')
-    def test_sandbox_epcc_unsealed(self):
+    def test_epcc_unsealed(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].s, 0, "sandbox EPCC unsealed incorrect")
 
-    @attr('capabilities')
     @attr('cap_precise')
-    def test_sandbox_epcc_perms_precise(self):
+    def test_epcc_perms_precise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0007, "sandbox EPCC perms incorrect")
 
-    @attr('capabilities')
     @attr('cap_imprecise')
-    def test_sandbox_epcc_perms_imprecise(self):
+    def test_epcc_perms_imprecise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0, "sandbox EPCC perms incorrect")
 
-    @attr('capabilities')
-    def test_sandbox_epcc_ctype(self):
+    def test_epcc_ctype(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].ctype, 0, "sandbox EPCC ctype incorrect")
         
-    @attr('capabilities')
-    def test_sandbox_epcc_offset(self):
+    def test_epcc_offset(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].base + self.MIPS.cp2[3].offset, self.MIPS.a7 + 0x10000000, "sandbox EPCC offset incorrect")
 
-    @attr('capabilities')
-    def test_sandbox_epcc_base(self):
+    @attr('cap_imprecise')
+    def test_epcc_base_imprecise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].base, 0, "sandbox EPCC base incorrect")
 
-    @attr('capabilities')
     @attr('cap_precise')
-    def test_sandbox_epcc_length_precise(self):
+    def test_epcc_base_precise(self):
+        self.assertRegisterEqual(self.MIPS.cp2[3].base, self.MIPS.a7, "sandbox EPCC base incorrect")
+        
+    @attr('cap_precise')
+    def test_epcc_length_precise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].length, 20, "sandbox EPCC length incorrect")
 
-    @attr('capabilities')
     @attr('cap_imprecise')
     @attr('cap_null_length')
-    def test_sandbox_epcc_length_imprecise(self):
+    def test_epcc_length_imprecise(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].length, 0xffffffffffffffff,
                                  "sandbox EPCC length incorrect")
