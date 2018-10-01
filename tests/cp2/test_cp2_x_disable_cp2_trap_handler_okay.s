@@ -44,12 +44,6 @@ BEGIN_TEST
 	dli	$t0, 12345678
 	clear_counting_exception_handler_regs
 	cgetcause $t0
-	move	$s1, $k1	# Store compressed info in $k1 (this is where the trap handler stores it)
+	move	$s1, $k1	# Store compressed info in $k1 (this is where the trap handler stores is)
 	nop
-	
-	# Reenable CP2 so that any CP2 instructions in the rest of the infrastructure don't fail.
-	mfc0	$t2, $12
-	dli	$t3, (1 << 30)
-	or	$t2, $t2, $t3
-	mtc0	$t2, $12
 END_TEST
