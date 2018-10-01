@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2015 Michael Roe
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by the University of Cambridge Computer
@@ -37,6 +38,10 @@ class test_cp2_x_jr_imprecise(BaseBERITestCase):
     def test_exception(self):
         '''Test that an exception is raised when JR outside the range of PCC'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "An exception was not raised after JR out of range of PCC")
+
+    def test_delay_slot_not_executed(self):
+        '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
+        assert self.MIPS.a5 == 0x1, "Delay slot of out-of-bounds branch should not be taken"
 
     def test_epcc_tag(self):
         '''Test that EPCC.tag is set (EPCC should contain branch PCC not the invalid target pcc)'''

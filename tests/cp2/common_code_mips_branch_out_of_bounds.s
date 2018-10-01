@@ -24,11 +24,74 @@
 # specific language governing permissions and limitations under the License.
 #
 # @BERI_LICENSE_HEADER_END@
+#
 
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
+.include "macros.s"
+#
 # Test that an exception is raised if a jump register instruction goes
-# outside the range of PCC (before the delay slot).
-.macro branch_out_of_bounds bad_addr_gpr
-	jr \bad_addr_gpr
-.endm
+# outside the range of PCC.
+#
 
-.include "tests/cp2/common_code_mips_branch_out_of_bounds.s"
+sandbox:
+		branch_out_of_bounds	$a0
+		ori	$a5, $zero, 0xbad	# delay slot should not execute
+		nop
+		cjr	$c24
+		nop
+		nop
+limit:
+		nop
+out_of_bounds:
+		nop
+
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
+
+# 		ori $0, $0, 0xdead	# stop tracing on QEMU
+
+		# $a2 will be set to 1 if the exception handler is called
+		dli	$a2, 0
+		# $a5 will be set to 0xbad if the branch delay slot executes
+		dli	$a5, 1
+
+		cgetdefault $c1
+		dla     $t0, sandbox
+		cincoffset $c1, $c1, $t0
+		dla     $t2, limit - sandbox
+		csetbounds $c1, $c1, $t2
+
+		#
+		# Make $a0 outside the sandbox
+		#
+
+		dli	$a0, 1
+		dsll	$a0, $a0, 32
+
+		cjalr	$c1, $c24
+		nop			# Branch delay slot
+finally:
+
+END_TEST
+
+.global default_trap_handler
+.ent default_trap_handler
+default_trap_handler:
+		li	$a2, 1
+		cgetepcc $c25
+		cgetoffset $a1, $c25
+		cgettag $a4, $c25
+		cgetcause $a3
+		dla	$k0, finally
+		cgetdefault $c27
+		csetoffset $c27, $c27, $k0
+		csetepcc $c27
+		dmtc0	$k0, $14
+		ssnop
+		ssnop
+		ssnop
+		ssnop
+		eret
+.end default_trap_handler
