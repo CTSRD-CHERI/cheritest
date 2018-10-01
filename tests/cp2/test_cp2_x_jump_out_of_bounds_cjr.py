@@ -2,9 +2,9 @@
 # Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
-# This software was developed by the University of Cambridge Computer
-# Laboratory as part of the Rigorous Engineering of Mainstream Systems (REMS)
-# project, funded by EPSRC grant EP/K008528/1.
+# This software was developed by SRI International and the University of
+# Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-10-C-0237
+# ("CTSRD"), as part of the DARPA CRASH research programme.
 #
 # @BERI_LICENSE_HEADER_START@
 #
@@ -30,21 +30,20 @@ from beritest_tools import attr
 
 @attr('capabilities')
 class test_cp2_x_jump_out_of_bounds_cjr(BaseBERITestCase):
+    msg = " CJR with out of bounds cap"
+
     def test_epcc_offset(self):
         '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-        assert self.MIPS.c25.offset == 0x8, "EPCC.offset was not set to the expected value after attempting JR out of range of PCC"
+        assert self.MIPS.c25.offset == 0x8, "EPCC.offset was not set to the expected value after" + self.msg
 
     def test_exception(self):
-        '''Test that an exception is raised when JR outside the range of PCC'''
-        self.assertRegisterEqual(self.MIPS.a2, 1, "An exception was not raised after JR out of range of PCC")
+        assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg
 
     def test_delay_slot_not_executed(self):
-        '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-        assert self.MIPS.a5 == 0x1, "Delay slot of out-of-bounds branch should not be taken"
+        assert self.MIPS.a5 == 0x1, "Delay slot of out-of-bounds branch should not be taken after" + self.msg
 
     def test_epcc_tag(self):
-        '''Test that EPCC.tag is set (EPCC should contain branch PCC not the invalid target pcc)'''
-        assert self.MIPS.c25.t, "EPCC.tag was not set to true after jr out of range of PCC"
+        assert self.MIPS.c25.t, "EPCC.tag was not set to true after" + self.msg
 
     def test_epcc_length(self):
-        assert self.MIPS.c25.length == 0x20, "EPCC.length was not set to the expected value after attempting JR out of range of PCC"
+        assert self.MIPS.c25.length == 0x20, "EPCC.length was not set to the expected value after" + self.msg

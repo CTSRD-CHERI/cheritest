@@ -29,12 +29,12 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
 @attr('capabilities')
-class test_cp2_x_jump_out_of_bounds_jalr(BaseBERITestCase):
-    msg = " JALR out of range of PCC"
+class test_cp2_x_jump_out_of_bounds_cjalr(BaseBERITestCase):
+    msg = " CJALR with out of bounds cap"
 
     def test_epcc_offset(self):
         '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-        assert self.MIPS.c25.offset == 0x0, "EPCC.offset was not set to the expected value after" + self.msg
+        assert self.MIPS.c25.offset == 0xc, "EPCC.offset was not set to the expected value after" + self.msg
 
     def test_exception(self):
         assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg
@@ -46,4 +46,8 @@ class test_cp2_x_jump_out_of_bounds_jalr(BaseBERITestCase):
         assert self.MIPS.c25.t, "EPCC.tag was not set to true after" + self.msg
 
     def test_epcc_length(self):
-        assert self.MIPS.c25.length == 0x18, "EPCC.length was not set to the expected value after" + self.msg
+        assert self.MIPS.c25.length == 0x24, "EPCC.length was not set to the expected value after" + self.msg
+
+    def test_link_cap_unchanged(self):
+        # CJALR should not change the return register if the jump fails
+        self.assertIntCap(self.MIPS.c18, int_value=0x100000000, msg="should not set the return register if the jump fails due to" + self.msg)
