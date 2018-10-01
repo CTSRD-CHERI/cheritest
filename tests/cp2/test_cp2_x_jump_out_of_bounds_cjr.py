@@ -29,10 +29,10 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
 @attr('capabilities')
-class test_cp2_x_jump_out_of_bounds_jalr(BaseBERITestCase):
+class test_cp2_x_jump_out_of_bounds_cjr(BaseBERITestCase):
     def test_epcc_offset(self):
         '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-        assert self.MIPS.c25.offset == 0x0, "EPCC.offset was not set to the expected value after attempting JR out of range of PCC"
+        assert self.MIPS.c25.offset == 0x8, "EPCC.offset was not set to the expected value after attempting JR out of range of PCC"
 
     def test_exception(self):
         '''Test that an exception is raised when JR outside the range of PCC'''
@@ -47,4 +47,4 @@ class test_cp2_x_jump_out_of_bounds_jalr(BaseBERITestCase):
         assert self.MIPS.c25.t, "EPCC.tag was not set to true after jr out of range of PCC"
 
     def test_epcc_length(self):
-        assert self.MIPS.c25.length == 0x18, "EPCC.length was not set to the expected value after attempting JR out of range of PCC"
+        assert self.MIPS.c25.length == 0x20, "EPCC.length was not set to the expected value after attempting JR out of range of PCC"
