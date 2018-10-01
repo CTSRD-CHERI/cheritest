@@ -387,7 +387,7 @@ jump_to_real_trap_handler:
 		.set noat
 		.global default_trap_handler
 		dla	$k0, default_trap_handler
-		jalr	$k0
+		jr	$k0
 		nop
 end_of_jump_to_real_trap_handler:
 		nop

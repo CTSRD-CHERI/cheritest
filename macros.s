@@ -294,7 +294,7 @@ trap_count:
 	.ent default_trap_handler
 	default_trap_handler:
 		dla $k0, exception_count_handler
-		jalr $k0
+		jr $k0
 		nop
 	.end default_trap_handler
 
