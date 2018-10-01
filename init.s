@@ -248,27 +248,35 @@ no_float:
 		cgetpccsetoffset $c12, $t9
 		jalr $25
 		cgetpccsetoffset $c17, $ra			# return address
-
-.end start
-
-		# Dump capability registers in the simulator
-		#
-.global finish
-.ent finish
-finish:
-		b continue_finish
-		mtc2 $k0, $0, 6
-
+		# on return go to finish to dump registers
+		b finish
+		nop
 skip_cp2_setup:
 		jalr $25
 		nop
+		# on return go to finish to dump registers
+		b finish
+		nop
+.end start
+
+# Dump registers in the simulator
+#
+.global finish
+.ent finish
+finish:
 		#
 		# Check to see if coprocessor 2 (capability unit) is present,
 		# and dump out its registers if it is.
 		#
-
-		
-continue_finish:		
+		mfc0 $k0, $16, 1	# config1 register
+		andi $k0, $k0, 0x40	# CP2 available bit
+		# If cp2 isn't available skip the mtc2 to avoid a trap
+		beqz $k0, .Lcontinue_finish
+		nop
+.Ldump_cp2_regs:
+		# NOTE: the mtc2 works whether cp2 is enabled or not (as long as it is available)
+		mtc2 $k0, $0, 6
+.Lcontinue_finish:
 		#
 		# On multithreaded/multicore, only core/thread 0 halts 
 		# the simulation.
