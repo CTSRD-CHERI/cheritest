@@ -45,25 +45,14 @@ sandbox:
 limit:
 		nop
 
-BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
 
 		cgetdefault $c1
-		dla     $t0, sandbox 
+		dla     $t0, sandbox
 		cincoffset $c1, $c1, $t0
-		dla     $t1, limit
-		dsubu	$t2, $t1, $t0
+		dla     $t2, limit - sandbox
 		csetbounds $c1, $c1, $t2
 
 		#
@@ -73,30 +62,31 @@ BEGIN_TEST
 		dli	$a0, 1
 		dsll	$a0, $a0, 32
 
-		cjalr   $c1, $c24
+		cjalr	$c1, $c24
 		nop			# Branch delay slot
 finally:
 
 END_TEST
 
-		.ent bev0_handler
-bev0_handler:
+.global default_trap_handler
+.ent default_trap_handler
+default_trap_handler:
 		li	$a2, 1
-		cgetepcc $c27
-		cgetoffset $a1, $c27
-		cgettag $a4, $c27
+		cgetepcc $c25
+		cgetoffset $a1, $c25
+		cgettag $a4, $c25
 		cgetcause $a3
 		dla	$k0, finally
 		cgetdefault $c27
 		csetoffset $c27, $c27, $k0
 		csetepcc $c27
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
+		ssnop
+		ssnop
+		ssnop
+		ssnop
 		eret
-		.end bev0_handler
+.end default_trap_handler
 
 		.data
 
