@@ -30,7 +30,7 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
 @attr('capabilities')
-class test_cp2_x_jr_imprecise(BaseBERITestCase):
+class test_cp2_x_jump_out_of_bounds_jr(BaseBERITestCase):
     def test_epcc_offset(self):
         '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
         assert self.MIPS.c25.offset == 0x0, "EPCC.offset was not set to the expected value after attempting JR out of range of PCC"
