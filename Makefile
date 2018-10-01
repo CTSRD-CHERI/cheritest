@@ -144,39 +144,6 @@ endif
 
 L3_SIM?=l3mips
 
-# Guess path to sail:
-ifneq ($(wildcard ~/cheri/sail),)
-# default path if built with cheribuild
-SAIL_DIR?=~/cheri/sail
-else
-ifneq ($(wildcard ~/bitbucket/sail),)
-# previous default
-SAIL_DIR?=~/bitbucket/sail
-else
-SAIL_DIR?=/path/to/sail/must/be/set/on/cmdline/using/SAIL_DIR/var
-endif
-endif
-
-SAIL_CHERI_MIPS_DIR?=/please/set/path/to/sail-cheri-mips/repo
-
-SAIL?=$(SAIL_DIR)/sail
-SAIL_MIPS_SIM=$(SAIL_CHERI_MIPS_DIR)/mips/mips
-SAIL_MIPS_C_SIM=$(SAIL_CHERI_MIPS_DIR)/mips/mips_c
-SAIL_CHERI_SIM=$(SAIL_CHERI_MIPS_DIR)/cheri/cheri
-SAIL_CHERI_C_SIM=$(SAIL_CHERI_MIPS_DIR)/cheri/cheri_c
-SAIL_CHERI128_SIM=$(SAIL_CHERI_MIPS_DIR)/cheri/cheri128
-SAIL_CHERI128_C_SIM=$(SAIL_CHEI_MIPS_DIR)/cheri/cheri128_c
-
-# There might be matching .c files in the sail directory. Ensure that we don't attempt
-# to compile them to generate the SAIL_CHERI_SIM / SAIL_MIPS_SIM
-.PHONY: $(SAIL_MIPS_SIM) $(SAIL_CHERI_SIM) $(SAIL_CHERI128_SIM)  $(SAIL_MIPS_C_SIM) $(SAIL_CHERI_C_SIM) $(SAIL_CHERI128_C_SIM) $(SAIL)
-
-$(SAIL_MIPS_SIM) $(SAIL_CHERI_SIM) $(SAIL_CHERI128_SIM)  $(SAIL_MIPS_C_SIM) $(SAIL_CHERI_C_SIM) $(SAIL_CHERI128_C_SIM) $(SAIL):
-	@if [ ! -e "$@" ]; then \
-	    echo 'ERROR: sail binary $@ missing. Run `cheribuild.py -d sail` to build it.'; \
-	    false; \
-	fi
-
 ifeq ($(TIMEOUT),)
 TIMEOUT:=$(shell command -v timeout 2> /dev/null)
 endif
@@ -262,6 +229,54 @@ else
 # TODO: make this an error soon
 $(info CHERI SDK not found, will try to infer tool defaults)
 endif # neq(CHERI_SDK_BINDIR,)
+
+
+# Guess path to sail:
+ifneq ($(wildcard $(CHERI_SDK_BINDIR)/sail),)
+# default path if built with cheribuild
+SAIL_DIR?=$(CHERI_SDK_BINDIR)
+else
+ifneq ($(wildcard ~/cheri/sail),)
+# default path if built with cheribuild
+SAIL_DIR?=~/cheri/sail
+else
+ifneq ($(wildcard ~/bitbucket/sail),)
+# previous default
+SAIL_DIR?=~/bitbucket/sail
+else
+SAIL_DIR?=/path/to/sail/must/be/set/on/cmdline/using/SAIL_DIR/var/
+endif
+endif
+endif
+
+SAIL_CHERI_MIPS_DIR?=/path/to/sail-cheri-mips/must/be/set/on/cmdline/using/SAIL_CHERI_MIPS_DIR/var/
+
+SAIL?=$(SAIL_DIR)/sail
+$(info SAIL=$(SAIL))
+ifneq ($(wildcard $(CHERI_SDK_BINDIR)/sail-mips),)
+SAIL_MIPS_SIM_PREFIX?=$(CHERI_SDK_BINDIR)/sail-
+SAIL_CHERI_SIM_PREFIX?=$(CHERI_SDK_BINDIR)/sail-
+else
+SAIL_MIPS_SIM_PREFIX?=$(SAIL_CHERI_MIPS_DIR)/mips/
+SAIL_CHERI_SIM_PREFIX?=$(SAIL_CHERI_MIPS_DIR)/cheri/
+endif
+
+SAIL_MIPS_SIM=$(SAIL_MIPS_SIM_PREFIX)mips
+SAIL_MIPS_C_SIM=$(SAIL_MIPS_SIM_PREFIX)mips_c
+SAIL_CHERI_SIM=$(SAIL_CHERI_SIM_PREFIX)cheri
+SAIL_CHERI_C_SIM=$(SAIL_CHERI_SIM_PREFIX)cheri_c
+SAIL_CHERI128_SIM=$(SAIL_CHERI_SIM_PREFIX)cheri128
+SAIL_CHERI128_C_SIM=$(SAIL_CHERI_SIM_PREFIX)cheri128_c
+
+# There might be matching .c files in the sail directory. Ensure that we don't attempt
+# to compile them to generate the SAIL_CHERI_SIM / SAIL_MIPS_SIM
+.PHONY: $(SAIL_MIPS_SIM) $(SAIL_CHERI_SIM) $(SAIL_CHERI128_SIM)  $(SAIL_MIPS_C_SIM) $(SAIL_CHERI_C_SIM) $(SAIL_CHERI128_C_SIM) $(SAIL)
+
+$(SAIL_MIPS_SIM) $(SAIL_CHERI_SIM) $(SAIL_CHERI128_SIM)  $(SAIL_MIPS_C_SIM) $(SAIL_CHERI_C_SIM) $(SAIL_CHERI128_C_SIM) $(SAIL):
+	@if [ ! -e "$@" ]; then \
+	    echo 'ERROR: sail binary $@ missing. Run `cheribuild.py -d sail` to build it.'; \
+	    false; \
+	fi
 
 # Use the default names from the ubuntu mips64-binutils if CHERI_SDK is not set
 MIPS_AS?=mips64-as
