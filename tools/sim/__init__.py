@@ -215,6 +215,19 @@ class ThreadStatus(object):
         return "\n".join(v)
 
 
+class CheriPermissionBits(Enum):
+    Global = 1 << 0
+    Execute = 1 << 1
+    Load = 1 << 2
+    Store = 1 << 3
+    LoadCap = 1 << 4
+    StoreCap = 1 << 5
+    StoreLocalCap = 1 << 6
+    Seal = 1 << 7
+    CCall = 1 << 8
+    Unseal = 1 << 9
+    AccessSystemRegs = 1 << 10
+
 class MipsStatus(object):
     # TODO: remove these two once we have released V7
     CHERI_C0_IS_NULL = is_envvar_true("CHERI_C0_IS_NULL")  # type: bool

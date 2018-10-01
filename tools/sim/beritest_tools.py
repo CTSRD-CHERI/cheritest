@@ -371,10 +371,13 @@ class BaseBERITestCase(unittest.TestCase):
     def max_nostore_perms(self):
         return self.max_permissions & ~(8 | 32)
 
-
     @property
     def max_length(self):
         return 0xffffffffffffffff
+
+    @property
+    def permission_bits(self):
+        return CheriPermissionBits
 
     @property
     def minus_one_as_u64(self):
