@@ -35,7 +35,7 @@ class test_cp2_x_jump_out_of_bounds_jr(BaseBERITestCase):
 
     def test_epcc_offset(self):
         '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-        assert self.MIPS.c25.offset == 0x0, "EPCC.offset was not set to the expected value after" + self.msg
+        assert self.MIPS.c25.offset == 0x8, "EPCC.offset was not set to the expected value after" + self.msg
 
     def test_exception(self):
         assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg
@@ -47,4 +47,4 @@ class test_cp2_x_jump_out_of_bounds_jr(BaseBERITestCase):
         assert self.MIPS.c25.t, "EPCC.tag was not set to true after" + self.msg
 
     def test_epcc_length(self):
-        assert self.MIPS.c25.length == 0x18, "EPCC.length was not set to the expected value after" + self.msg
+        assert self.MIPS.c25.length == 0x20, "EPCC.length was not set to the expected value after" + self.msg

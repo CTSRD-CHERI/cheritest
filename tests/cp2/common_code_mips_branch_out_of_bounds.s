@@ -26,17 +26,18 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
 .set noreorder
-.set nobopt
-.set noat
 .include "macros.s"
 #
 # Test that an exception is raised if a jump register instruction goes
 # outside the range of PCC.
 #
 
+.ent sandbox
 sandbox:
+		# add some nops to ensure epcc.offset doesn't happen to be correct by chance
+		nop
+		nop
 		branch_out_of_bounds	$a0
 		ori	$a5, $zero, 0xbad	# delay slot should not execute
 		nop
@@ -47,6 +48,7 @@ limit:
 		nop
 out_of_bounds:
 		nop
+.end sandbox
 
 BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 

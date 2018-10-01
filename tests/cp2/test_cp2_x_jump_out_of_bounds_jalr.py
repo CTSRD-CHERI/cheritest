@@ -34,7 +34,7 @@ class test_cp2_x_jump_out_of_bounds_jalr(BaseBERITestCase):
 
     def test_epcc_offset(self):
         '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-        assert self.MIPS.c25.offset == 0x4, "EPCC.offset was not set to the expected value after" + self.msg
+        assert self.MIPS.c25.offset == 0xc, "EPCC.offset was not set to the expected value after" + self.msg
 
     def test_exception(self):
         assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg
@@ -46,7 +46,7 @@ class test_cp2_x_jump_out_of_bounds_jalr(BaseBERITestCase):
         assert self.MIPS.c25.t, "EPCC.tag was not set to true after" + self.msg
 
     def test_epcc_length(self):
-        assert self.MIPS.c25.length == 0x1c, "EPCC.length was not set to the expected value after" + self.msg
+        assert self.MIPS.c25.length == 0x24, "EPCC.length was not set to the expected value after" + self.msg
 
     def test_link_register_unchanged(self):
         # JALR should not change the return register if the jump fails
