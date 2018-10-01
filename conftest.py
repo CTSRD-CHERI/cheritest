@@ -95,3 +95,12 @@ def pytest_ignore_collect(path, config):
             print("Ignoring test dir", skip_path, "since attr", opt, "is unsupported.")
             return True
     return False
+
+
+# https://docs.pytest.org/en/latest/assert.html#defining-your-own-assertion-comparison
+# print integer comparison failures as hex:
+# This can be uncommented to force all integer comparisons to be printed as hex
+# Note: the where clauses will then no longer be printed
+#def pytest_assertrepr_compare(config, op, left, right):
+#    if isinstance(left, int) and isinstance(right, int):
+#        return ['0x%x %s 0x%x' % (left, op, right)]

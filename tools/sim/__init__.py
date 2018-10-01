@@ -95,15 +95,21 @@ def is_envvar_true(var):
     return os.environ.get(var, "0") != "0"
 
 
+# Ensures that assertion messages print this as hex (e.g. capability length, etc)
+class HexInt(int):
+    def __repr__(self):
+        return hex(self)
+
+
 class Capability(object):
     def __init__(self, t, s, perms, ctype, offset, base, length):
         self.t      = t
         self.s      = s
         self.ctype  = ctype
-        self.perms  = perms
-        self.offset = offset
-        self.base   = base
-        self.length = length
+        self.perms  = HexInt(perms)
+        self.offset = HexInt(offset)
+        self.base   = HexInt(base)
+        self.length = HexInt(length)
 
     def __repr__(self):
         return '<t:%x s:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x>'%(
@@ -282,13 +288,13 @@ class MipsStatus(object):
                     reg_val_hex = reg_groups.group(2)
                     reg_val = int(reg_val_hex, 16)
                     t = self.threads[thread]
-                    t.reg_vals[reg_num] = reg_val
+                    t.reg_vals[reg_num] = HexInt(reg_val)
                     continue
                 pc_groups = MIPS_PC_RE.search(line)
                 if pc_groups:
                     reg_val = int(pc_groups.group(1), 16)
                     t = self.threads[thread]
-                    t.pc = reg_val
+                    t.pc = HexInt(reg_val)
                     continue
             elif line.startswith("DEBUG CAP"):
                 cap_core_groups = CAPMIPS_CORE_RE.search(line)
@@ -398,7 +404,6 @@ class MipsStatus(object):
                 if value == e.value:
                     return "<CapCause " + e.name + " (" + str(value) + ")>"
             return "<unknown CapCause " + str(value) + ">"
-
 
 MIPS_ICACHE_TAG_RE=FasterRegex('DEBUG ICACHE TAG ENTRY', r'\s*([0-9]+) Valid=([01]) Tag value=([0-9a-fA-F]+)$')
 
