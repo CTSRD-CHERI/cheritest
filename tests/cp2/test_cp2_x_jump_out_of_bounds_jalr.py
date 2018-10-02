@@ -39,6 +39,9 @@ class test_cp2_x_jump_out_of_bounds_jalr(BaseBERITestCase):
     def test_exception(self):
         assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg
 
+    def test_trap_info(self):
+        self.assertCp2Fault(self.MIPS.a4, cap_cause=self.MIPS.CapCause.Length_Violation, trap_count=1, msg="wrong trap info for " + self.msg)
+
     def test_delay_slot_not_executed(self):
         assert self.MIPS.a5 == 0x1, "Delay slot of out-of-bounds branch should not be taken after" + self.msg
 

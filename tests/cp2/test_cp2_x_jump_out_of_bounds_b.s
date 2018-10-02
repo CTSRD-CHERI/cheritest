@@ -24,7 +24,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 
-# Test that an exception is raised if a jump register instruction goes
+# Test that an exception is raised if an unconditional branch goes
 # outside the range of PCC (before the delay slot).
 .macro branch_out_of_bounds bad_addr_gpr
 	b	out_of_bounds

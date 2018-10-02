@@ -81,11 +81,19 @@ END_TEST
 .global default_trap_handler
 .ent default_trap_handler
 default_trap_handler:
-		li	$a2, 1
 		cgetepcc $c25
-		cgetoffset $a1, $c25
-		cgettag $a4, $c25
-		cgetcause $a3
+		# FIXME: fetch status and cause
+		cgetcause $a1		# a1 = CapCause
+		daddiu	$a2, $a2, 1	# a2 = trap count
+		dmfc0 	$a3, $13	# a3 = Cause
+		# create compressed info for testing purposes in $a4
+		# Clear the high 32 bits of $k0 (CPO_Cause) into $k1 and shift by 16
+		dsll	$a4, $a3, 32
+		dsrl	$a4, $a4, 16		# Bits 16-47 set
+		andi	$a1, $a1, 0xffff	# Ensure the high bits of capcause are empty (they should be anyway)
+		or	$a4, $a4, $a1		# Add capcause in bits 0-16
+		dsll	$k0, $a2, 48
+		or	$a4, $a4, $k0		# Add count in bits 31-63
 		dla	$k0, finally
 		cgetdefault $c27
 		csetoffset $c27, $c27, $k0
