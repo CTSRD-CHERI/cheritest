@@ -36,31 +36,26 @@ from beritest_tools import attr
 # which we try to check here.
 #
 
+@attr("capabilities")
 class test_cp2_exception_epcc(BaseBERITestCase):
-
     #
     # Check that various stages of the test did actually run.
     #
-    @attr('capabilities')
     def test_exception_counter(self):
         self.assertRegisterEqual(self.MIPS.a0, 2, "CP2 exception counter not 2")
 
-    @attr('capabilities')
     def test_presandbox(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "pre-sandbox not recorded")
 
-    @attr('capabilities')
     def test_insandbox(self):
         self.assertRegisterEqual(self.MIPS.a2, 1, "sandbox not recorded")
 
-    @attr('capabilities')
     def test_postsandbox(self):
         self.assertRegisterEqual(self.MIPS.a4, 1, "post-sandbox not recorded")
 
     #
     # Check that sandbox was configured roughly as expected
     #
-    @attr('capabilities')
     def test_sandbox_length(self):
         self.assertRegisterEqual(self.MIPS.s0, 24, "sandbox length not 24")
 
@@ -68,7 +63,6 @@ class test_cp2_exception_epcc(BaseBERITestCase):
     # Check that we only entered the last exception because of an explicit
     # software trap.
     #
-    @attr('capabilities')
     def test_trap_excode(self):
         self.assertRegisterMaskEqual(self.MIPS.s1, 0x1f << 2, 13 << 2, "last exception not a trap")
 
@@ -76,74 +70,50 @@ class test_cp2_exception_epcc(BaseBERITestCase):
     # Check that the exception handler is returning PCC-relative PCs rather
     # than absolute virtual PCs.
     #
-    @attr('capabilities')
     def test_trap_epc(self):
         self.assertRegisterEqual(self.MIPS.s2, 0x14, "incorrect EPC for last trap")
 
     #
     # Check that in-sandbox $pc is roughly as expected
     #
-    @attr('capabilities')
     def test_sandbox_pc(self):
         self.assertRegisterEqual(self.MIPS.a3, 0x10, "sandbox PC unexpected")
 
     #
     # Check that post-sandbox, $pc is roughly as expected
     #
-    @attr('capabilities')
     def test_postsandbox_pc(self):
         self.assertRegisterEqual(self.MIPS.a5, self.MIPS.a6, "post-sandbox PC unexpected")
 
     #
     # Check that the pre-sandbox EPCC is as expected: default on reset.
     #
-    @attr('capabilities')
-    def test_presandbox_epcc_unsealed(self):
-        self.assertRegisterEqual(self.MIPS.epcc.s, 0, "pre-sandbox EPCC unsealed incorrect")
+    def test_presandbox_epcc(self):
+        self.assertDefaultCap(self.MIPS.epcc, offset=self.MIPS.s6, msg="pre-sandbox EPCC offset incorrect")
 
-    @attr('capabilities')
-    def test_presandbox_epcc_perms(self):
-        self.assertRegisterAllPermissions(self.MIPS.epcc.perms, "pre-sandbox EPCC perms incorrect")
+    def test_presandbox_epcc_saved(self):
+        self.assertDefaultCap(self.MIPS.c5, offset=self.MIPS.s6, msg="pre-sandbox EPCC offset incorrect")
 
-    @attr('capabilities')
-    def test_presandbox_epcc_ctype(self):
-        self.assertRegisterEqual(self.MIPS.epcc.ctype, 0x0, "pre-sandbox EPCC ctype incorrect")
-        
-    @attr('capabilities')
-    def test_presandbox_epcc_offset(self):
-        self.assertRegisterEqual(self.MIPS.epcc.offset, 0x0, "pre-sandbox EPCC offset incorrect")
-
-    @attr('capabilities')
-    def test_presandbox_epcc_base(self):
-        self.assertRegisterEqual(self.MIPS.epcc.base, 0x0, "pre-sandbox EPCC base incorrect")
-
-    @attr('capabilities')
-    def test_presandbox_epcc_length(self):
-        self.assertRegisterEqual(self.MIPS.epcc.length, 0xffffffffffffffff, "pre-sandbox EPCC length incorrect")
+    def test_presandbox_epc(self):
+        assert self.MIPS.s7 == self.MIPS.s6, "final EPC should point to last trap address"
 
     #
     # Check that the post-sandbox EPCC is as expected: sandboxed.
     #
-    @attr('capabilities')
     def test_sandbox_epcc_unsealed(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].s, 0, "sandbox EPCC unsealed incorrect")
 
-    @attr('capabilities')
     def test_sandbox_epcc_perms(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0007, "sandbox EPCC perms incorrect")
 
-    @attr('capabilities')
     def test_sandbox_epcc_ctype(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].ctype, 0, "sandbox EPCC ctype incorrect")
         
-    @attr('capabilities')
     def test_sandbox_epcc_offset(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].offset, 0x14, "sandbox EPCC offset incorrect")
 
-    @attr('capabilities')
     def test_sandbox_epcc_base(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].base, self.MIPS.a7, "sandbox EPCC base incorrect")
 
-    @attr('capabilities')
     def test_sandbox_epcc_length(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].length, self.MIPS.s0, "sandbox EPCC length incorrect")

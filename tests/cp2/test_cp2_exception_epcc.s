@@ -152,7 +152,10 @@ sandbox_end:
 		nop
 restored_ra:
 		move	$a6, $ra
-
+		# get the final EPC and EPCC
+		cgetepcc $c5
+		dmfc0	$s7, $14
+		dla	$s6, sandbox_end
 END_TEST
 
 
