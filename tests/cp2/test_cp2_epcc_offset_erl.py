@@ -25,18 +25,28 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.include "macros.s"
+from beritest_tools import BaseBERITestCase, attr
 
-# Test that EPCC.offset is EPC when CP0.Status.ERL is not set
 
-BEGIN_TEST
-		dli	$t0, 0xE8808E9C
-		dmtc0	$t0, $30	# ErrorEPC = 0xDEAD
-		dla	$t0, 0xE9C
-		dmtc0	$t0, $14	# EPC = 0xFOOD
+@attr('capabilities')
+class test_cp2_epcc_offset_erl(BaseBERITestCase):
+    def test_epc(self):
+        assert self.MIPS.s0 == 0xE9C, "Wrong EPC from dmfc0"
 
-		dmfc0	$s0, $14	# s0 = EPC
-		dmfc0	$s1, $30	# s1 = ErrorEPC
+    def test_error_epc(self):
+        assert self.MIPS.s1 == 0xE8808E9C, "Wrong ErrorEPC from dmfc0"
 
-		cgetepcc	$c1	# epcc without ERL should return EPC
-END_TEST	# When dumping registers epcc.offset should now print EPC
+    def test_cgetepcc_initial_off(self):
+        self.assertDefaultCap(self.MIPS.c1, offset=0xE9C, msg="cgetepcc offset without ERL should be EPC")
+
+    def test_cgetepcc_on(self):
+        self.assertDefaultCap(self.MIPS.c2, offset=0xE8808E9C, msg="cgetepcc offset with ERL should be ErrorEPC")
+
+    def test_cgetepcc_off_again(self):
+        self.assertDefaultCap(self.MIPS.c3, offset=0xE9C, msg="cgetepcc offset without ERL should be EPC")
+
+    def test_cgetepcc_on_again(self):
+        self.assertDefaultCap(self.MIPS.c4, offset=0xE8808E9C, msg="cgetepcc offset with ERL should be ErrorEPC")
+
+    def test_finalepcc(self):
+        self.assertDefaultCap(self.MIPS.epcc, offset=0xE8808E9C, msg="dumped EPCC offset should be EPC if ERL is not set")

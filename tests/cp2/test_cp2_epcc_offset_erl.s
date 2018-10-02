@@ -25,18 +25,42 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+# Check that
+
 .include "macros.s"
 
-# Test that EPCC.offset is EPC when CP0.Status.ERL is not set
+#
+# Test that ERET returns to ErrorEPC (not EPC) if CP0.Status.ERL is set
+#
 
 BEGIN_TEST
 		dli	$t0, 0xE8808E9C
-		dmtc0	$t0, $30	# ErrorEPC = 0xDEAD
+		dmtc0	$t0, $30	# ErrorEPC
 		dla	$t0, 0xE9C
-		dmtc0	$t0, $14	# EPC = 0xFOOD
+		dmtc0	$t0, $14	# EPC
 
 		dmfc0	$s0, $14	# s0 = EPC
 		dmfc0	$s1, $30	# s1 = ErrorEPC
 
+
 		cgetepcc	$c1	# epcc without ERL should return EPC
-END_TEST	# When dumping registers epcc.offset should now print EPC
+
+		mfc0	$t0, $12
+		ori	$t0, $t0, 0x4
+		mtc0	$t0, $12
+
+		cgetepcc	$c2	# getepcc with ERL should return ErrorEPC
+
+		# Turn off ERL bit and fetch again:
+		mfc0	$t0, $12
+		dli	$t1, ~0x4
+		and	$t0, $t0, $t1
+		mtc0	$t0, $12
+		cgetepcc	$c3	# ERL off again -> should return EPC
+
+		# finally turn it on again to check that the register dump contains ErrorEPC
+		mfc0	$t0, $12
+		ori	$t0, $t0, 0x4
+		mtc0	$t0, $12
+		cgetepcc	$c4	# ERL on again -> should return ErrorEPC
+END_TEST	# When dumping registers epcc.offset should now print ErrorEPC

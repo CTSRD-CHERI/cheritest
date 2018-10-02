@@ -31,13 +31,13 @@ from beritest_tools import BaseBERITestCase, attr
 @attr('capabilities')
 class test_cp2_epcc_offset_no_erl(BaseBERITestCase):
     def test_epc(self):
-        assert self.MIPS.s0 == 0xF00D, "Wrong EPC from dmfc0"
+        assert self.MIPS.s0 == 0xE9C, "Wrong EPC from dmfc0"
 
     def test_error_epc(self):
-        assert self.MIPS.s1 == 0xDEAD, "Wrong ErrorEPC from dmfc0"
+        assert self.MIPS.s1 == 0xE8808E9C, "Wrong ErrorEPC from dmfc0"
 
     def test_cgetepcc(self):
-        self.assertDefaultCap(self.MIPS.c1, offset=0xF00D, msg="cgetepcc offset should be EPC if ERL is not set")
+        self.assertDefaultCap(self.MIPS.c1, offset=0xE9C, msg="cgetepcc offset should be EPC if ERL is not set")
 
     def test_finalepcc(self):
-        self.assertDefaultCap(self.MIPS.c1, offset=0xF00D, msg="dumped EPCC offset should be EPC if ERL is not set")
+        self.assertDefaultCap(self.MIPS.epcc, offset=0xE9C, msg="dumped EPCC offset should be EPC if ERL is not set")
