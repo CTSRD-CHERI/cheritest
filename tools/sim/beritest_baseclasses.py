@@ -114,7 +114,8 @@ class BERITestBaseClasses:
 
         def test_epcc_offset(self):
             '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-            assert self.MIPS.c25.offset == (self.branch_offset + 8), "EPCC.offset was not set to the expected value after" + self.msg
+            expected = self.branch_offset + 8
+            assert self.MIPS.c25.offset == expected, "EPCC.offset was not set to the expected value after" + self.msg
 
         def test_exception(self):
             assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg
@@ -130,4 +131,5 @@ class BERITestBaseClasses:
             assert self.MIPS.c25.t, "EPCC.tag was not set to true after" + self.msg
 
         def test_epcc_length(self):
-            assert self.MIPS.c25.length == (0x20 + self.branch_offset), "EPCC.length was not set to the expected value after" + self.msg
+            expected_len = 0x20 + self.branch_offset
+            assert self.MIPS.c25.length == expected_len, "EPCC.length was not set to the expected value after" + self.msg
