@@ -35,8 +35,12 @@ BEGIN_TEST
 		cgetpcc $c1
 		dli	$t0, 0x12345
 		csetoffset $c2, $c1, $t0
+
+
+		dmfc0	$a0, $12	# Get initial status
 		csetepcc	$c2
 		# Load EPCC and EPC for inspection
 		cgetepcc	$c3
-		dmfc0	$a1, $14
+		dmfc0	$s0, $14	# s0 = EPC
+		dmfc0	$s1, $30	# s1 = ErrorEPC
 END_TEST

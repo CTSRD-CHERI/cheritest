@@ -31,10 +31,13 @@ from beritest_tools import BaseBERITestCase, attr
 @attr('capabilities')
 class test_cp2_epcc_changes_epc(BaseBERITestCase):
     def test_epc(self):
-        assert self.MIPS.a1 == 0x12345, "writing $epcc did not change CP0_EPC"
+        assert self.MIPS.s0 == 0x12345, "writing $epcc did not change CP0_EPC"
 
     def test_epcc(self):
-        assert self.MIPS.epcc.offset == 0x12345, "EPCC offset wrong"
+        assert self.MIPS.c3.offset == 0x12345, "EPCC offset wrong"
 
     def test_epcc_2(self):
         assert self.MIPS.epcc == self.MIPS.c3, "EPCC not read correctly"
+
+    def test_initial_erl_status(self):
+        self.assertRegisterMaskEqual(self.MIPS.a0, 0x4, 0, "ERL should not be set")

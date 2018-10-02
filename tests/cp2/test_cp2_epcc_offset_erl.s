@@ -45,22 +45,22 @@ BEGIN_TEST
 
 		cgetepcc	$c1	# epcc without ERL should return EPC
 
-		mfc0	$t0, $12
+		dmfc0	$t0, $12
 		ori	$t0, $t0, 0x4
-		mtc0	$t0, $12
+		dmtc0	$t0, $12
 
 		cgetepcc	$c2	# getepcc with ERL should return ErrorEPC
 
 		# Turn off ERL bit and fetch again:
-		mfc0	$t0, $12
+		dmfc0	$t0, $12
 		dli	$t1, ~0x4
 		and	$t0, $t0, $t1
-		mtc0	$t0, $12
+		dmtc0	$t0, $12
 		cgetepcc	$c3	# ERL off again -> should return EPC
 
 		# finally turn it on again to check that the register dump contains ErrorEPC
-		mfc0	$t0, $12
+		dmfc0	$t0, $12
 		ori	$t0, $t0, 0x4
-		mtc0	$t0, $12
+		dmtc0	$t0, $12
 		cgetepcc	$c4	# ERL on again -> should return ErrorEPC
 END_TEST	# When dumping registers epcc.offset should now print ErrorEPC
