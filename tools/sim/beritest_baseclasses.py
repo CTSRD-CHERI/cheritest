@@ -29,7 +29,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from tools.sim.beritest_tools import BaseBERITestCase, attr
+from tools.sim.beritest_tools import BaseBERITestCase, attr, MipsStatus
 
 # Various subclasses of BaseBERITestCase that can be used for very similar tests
 # such as the branch-out-of bounds or unaligned load/store tests
@@ -47,7 +47,7 @@ class BERITestBaseClasses:
                           "Class variable is_load_or_store must be 'load' or 'store'")
             if self.is_load_or_store == "load":
                 self.assertIsNotNone(self.expected_load_value, "Must define class variable expected_load_value")
-            super(BERITestBaseClasses.UnalignedLoadStoreTestCase, self)._do_setup()
+            super()._do_setup()
 
         def test_returned(self):
             self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by " + self.is_load_or_store + " instruction")
@@ -102,3 +102,32 @@ class BERITestBaseClasses:
             # TODO: should we really be testing this?
             self.assertRegisterEqual(self.MIPS.a6, 0x640080e1, "Wrong status value")
 
+    @attr('capabilities')
+    class BranchOutOfBoundsTestCase(BaseBERITestCase):
+        msg = None
+        branch_offset = 0x0
+        expected_cap_cause = MipsStatus.CapCause.Length_Violation
+
+        def _do_setup(self):
+            assert self.msg is not None, "Must define class variable msg"
+            super()._do_setup()
+
+        def test_epcc_offset(self):
+            '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
+            assert self.MIPS.c25.offset == (self.branch_offset + 8), "EPCC.offset was not set to the expected value after" + self.msg
+
+        def test_exception(self):
+            assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg
+
+        def test_trap_info(self):
+            self.assertCp2Fault(self.MIPS.a4, cap_cause=self.expected_cap_cause,
+                                trap_count=1, msg="wrong trap info for " + self.msg)
+
+        def test_delay_slot_not_executed(self):
+            assert self.MIPS.a5 == 0x1, "Delay slot of out-of-bounds branch should not be taken after" + self.msg
+
+        def test_epcc_tag(self):
+            assert self.MIPS.c25.t, "EPCC.tag was not set to true after" + self.msg
+
+        def test_epcc_length(self):
+            assert self.MIPS.c25.length == (0x20 + self.branch_offset), "EPCC.length was not set to the expected value after" + self.msg

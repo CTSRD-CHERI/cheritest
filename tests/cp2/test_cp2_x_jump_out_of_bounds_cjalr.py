@@ -25,31 +25,12 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_baseclasses import BERITestBaseClasses
 
-@attr('capabilities')
-class test_cp2_x_jump_out_of_bounds_cjalr(BaseBERITestCase):
+
+class test_cp2_x_jump_out_of_bounds_cjalr(BERITestBaseClasses.BranchOutOfBoundsTestCase):
     msg = " CJALR with out of bounds cap"
-
-    def test_epcc_offset(self):
-        '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-        assert self.MIPS.c25.offset == 0x14, "EPCC.offset was not set to the expected value after" + self.msg
-
-    def test_exception(self):
-        assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg
-
-    def test_trap_info(self):
-        self.assertCp2Fault(self.MIPS.a4, cap_cause=self.MIPS.CapCause.Length_Violation, trap_count=1, msg="wrong trap info for " + self.msg)
-
-    def test_delay_slot_not_executed(self):
-        assert self.MIPS.a5 == 0x1, "Delay slot of out-of-bounds branch should not be taken after" + self.msg
-
-    def test_epcc_tag(self):
-        assert self.MIPS.c25.t, "EPCC.tag was not set to true after" + self.msg
-
-    def test_epcc_length(self):
-        assert self.MIPS.c25.length == 0x2c, "EPCC.length was not set to the expected value after" + self.msg
+    branch_offset = 12  # 3 instructions to setup jump cap
 
     def test_link_cap_unchanged(self):
         # CJALR should not change the return register if the jump fails
