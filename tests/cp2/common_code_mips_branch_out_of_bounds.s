@@ -55,7 +55,10 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 # 		ori $0, $0, 0xdead	# stop tracing on QEMU
 
 		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
+		dli	$a1, 0	# used by trap handler
+		dli	$a2, 0	# used by trap handler
+		dli	$a3, 0	# used by trap handler
+		dli	$a4, 0 	# compressed trap info
 		# $a5 will be set to 0xbad if the branch delay slot executes
 		dli	$a5, 1
 
