@@ -26,7 +26,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BERITestBaseClasses
+from beritest_baseclasses import BERITestBaseClasses
 
 
 class test_lh_unalign(BERITestBaseClasses.UnalignedLoadStoreTestCase):

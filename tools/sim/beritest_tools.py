@@ -2,6 +2,7 @@
 #-
 # Copyright (c) 2011 Steven J. Murdoch
 # Copyright (c) 2013 Alexandre Joannou
+# Copyright (c) 2018 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -46,7 +47,6 @@ except ImportError:
     typing = {}
 
 from tools.sim import *
-
 
 def xfail_on(var, reason=""):
     '''
@@ -648,76 +648,6 @@ class TestClangBase(object):
     def get_line(test_file, line_number):
         with open(os.path.join(test_file)) as src_file:
             return src_file.readlines()[line_number - 1].strip()
-
-
-# Wrap the test base classes inside another class to avoid running them
-# See https://stackoverflow.com/a/25695512/894271
-class BERITestBaseClasses:
-    class UnalignedLoadStoreTestCase(BaseBERITestCase):
-        is_load_or_store = None
-        expected_load_value = None
-
-        def _do_setup(self):
-            self.assertIsNotNone(self.is_load_or_store, "Must define class variable is_load_or_store")
-            self.assertIn(self.is_load_or_store, ("load", "store"),
-                          "Class variable is_load_or_store must be 'load' or 'store'")
-            if self.is_load_or_store == "load":
-                self.assertIsNotNone(self.expected_load_value, "Must define class variable expected_load_value")
-            super(BERITestBaseClasses.UnalignedLoadStoreTestCase, self)._do_setup()
-
-        def test_returned(self):
-            self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by " + self.is_load_or_store + " instruction")
-
-        @attr('trap_unaligned_ld_st')
-        def test_epc(self):
-            self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
-
-        @attr('trap_unaligned_ld_st')
-        def test_handled(self):
-            self.assertRegisterEqual(self.MIPS.a2, 1, "sd exception handler not run")
-
-        @attr('trap_unaligned_ld_st')
-        def test_exl_in_handler(self):
-            self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
-
-        @attr('trap_unaligned_ld_st')
-        def test_cause_bd(self):
-            self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")
-
-        @attr('trap_unaligned_ld_st')
-        def test_cause_code(self):
-            if self.is_load_or_store == "load":
-                kind = "AdEL"
-                code = 4
-            elif self.is_load_or_store == "store":
-                kind = "AdES"
-                code = 5
-            else:
-                self.fail("not initialized correctly")
-            self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, code, "Code not set to " + kind)
-
-        @attr('trap_unaligned_ld_st')
-        def test_not_exl_after_handler(self):
-            self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
-
-        @attr('trap_unaligned_ld_st')
-        def test_badvaddr(self):
-            self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s0, "BadVAddr equal to Unaligned Address")
-
-        @attr('allow_unaligned')
-        def test_unaligned_loads_ok(self):
-            if self.is_load_or_store == "load":
-                self.assertRegisterEqual(self.MIPS.a7, self.expected_load_value, "Loaded value is wrong!")
-            else:
-                self.assertRegisterEqual(self.MIPS.a7, 42, "BadVAddr should not have been set")
-            # Check that a2 - a6 haven't changed
-            self.assertRegisterEqual(self.MIPS.a2, 0, "exception should not have been triggered")
-            self.assertRegisterEqual(self.MIPS.a3, 0, "exception should not have been triggered")
-            self.assertRegisterEqual(self.MIPS.a4, 0, "exception should not have been triggered")
-            self.assertRegisterEqual(self.MIPS.a5, 0, "exception should not have been triggered")
-            # TODO: should we really be testing this?
-            self.assertRegisterEqual(self.MIPS.a6, 0x640080e1, "Wrong status value")
-
 
 def main():
     import sys
