@@ -31,8 +31,9 @@ from beritest_tools import attr
 #
 # Test capability jump register
 #
+@attr('capabilities')
 class test_cp2_cjr_overwrite_target_in_delay_slot(BaseBERITestCase):
-    @attr('capabilities')
+
     def test_no_exceptions(self):
         assert self.MIPS.v0 == 0, "Wrong number of exceptions"
 
