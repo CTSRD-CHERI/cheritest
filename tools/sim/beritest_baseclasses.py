@@ -29,7 +29,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from tools.sim.beritest_tools import BaseBERITestCase, attr, MipsStatus
+from tools.sim.beritest_tools import BaseBERITestCase, attr, MipsStatus, HexInt
 
 # Various subclasses of BaseBERITestCase that can be used for very similar tests
 # such as the branch-out-of bounds or unaligned load/store tests
@@ -114,8 +114,12 @@ class BERITestBaseClasses:
 
         def test_epcc_offset(self):
             '''Test that EPCC.offset is set to the offset of the branch in the sandbox'''
-            expected = self.branch_offset + 8
+            expected = HexInt(self.branch_offset + 8)
             assert self.MIPS.c25.offset == expected, "EPCC.offset was not set to the expected value after" + self.msg
+
+        def test_epcc_address(self):
+            expected_addr = HexInt(self.MIPS.s1 + self.branch_offset + 8)
+            assert self.MIPS.c25.offset + self.MIPS.c25.base == expected_addr, "EPCC.address was not set to the expected value after" + self.msg
 
         def test_exception(self):
             assert self.MIPS.a2 == 1, "An exception was not raised after" + self.msg

@@ -79,6 +79,7 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		nop			# Branch delay slot
 finally:
 		move	$s0, $ra	# save $ra (to check that jalr didn't change it)
+		dla	$s1, sandbox	# to check the trap address
 END_TEST
 
 .global default_trap_handler
