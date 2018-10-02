@@ -28,8 +28,9 @@
 # Test that an exception is raised if a jump and link register instruction goes
 # outside the range of PCC (before the delay slot).
 .macro branch_out_of_bounds bad_addr_gpr
+	ori	$t0, $zero, %lo(out_of_bounds - .)
 	cgetpcc	$c8
-	csetoffset	$c9, $c8, \bad_addr_gpr
+	cincoffset	$c9, $c8, $t0	# just past the end
 	cincoffset $c18, $cnull, \bad_addr_gpr
 	cjalr	$c9, $c18
 .endm

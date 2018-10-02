@@ -30,4 +30,4 @@ from beritest_baseclasses import BERITestBaseClasses
 
 class test_cp2_x_jump_out_of_bounds_cjr(BERITestBaseClasses.BranchOutOfBoundsTestCase):
     msg = " CJR with out of bounds cap"
-    branch_offset = 8  # 2 instructions to setup jump cap
+    branch_offset = 4 * 4

@@ -30,7 +30,7 @@ from beritest_baseclasses import BERITestBaseClasses
 
 class test_cp2_x_jump_out_of_bounds_cjalr(BERITestBaseClasses.BranchOutOfBoundsTestCase):
     msg = " CJALR with out of bounds cap"
-    branch_offset = 12  # 3 instructions to setup jump cap
+    branch_offset = 4 * 4  # 4 instructions to setup jump cap
 
     def test_link_cap_unchanged(self):
         # CJALR should not change the return register if the jump fails
