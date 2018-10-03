@@ -129,9 +129,7 @@ testcode:
 		nop
 
 
-.global default_trap_handler
-.ent default_trap_handler
-default_trap_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 
                 dmfc0   $a6, $12                # Read status
                 mfc0    $a7, $13                # Read cause
@@ -149,8 +147,7 @@ default_trap_handler:
 		dla	$t0, the_end
 		jr	$t0
 		nop
-.end default_trap_handler
-
+END_CUSTOM_TRAP_HANDLER
 		.data
 		.align 5
 cap:

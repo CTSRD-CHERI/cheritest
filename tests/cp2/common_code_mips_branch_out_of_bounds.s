@@ -82,9 +82,7 @@ finally:
 		dla	$s1, sandbox	# to check the trap address
 END_TEST
 
-.global default_trap_handler
-.ent default_trap_handler
-default_trap_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		cgetepcc $c25
 		# FIXME: fetch status and cause
 		cgetcause $a1		# a1 = CapCause
@@ -102,4 +100,4 @@ default_trap_handler:
 		ssnop
 		ssnop
 		eret
-.end default_trap_handler
+END_CUSTOM_TRAP_HANDLER

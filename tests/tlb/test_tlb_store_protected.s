@@ -52,9 +52,7 @@ illegal_store:  sd      $t0, 0($a4)		# Store to write protected virtual address
 
 END_TEST
 
-.global default_trap_handler
-.ent default_trap_handler
-default_trap_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		dmfc0   $a6, $13		# Cause
 		dmfc0   $a7, $14		# EPC
 		daddu   $t0, $a7, 4		# Increment EPC
@@ -65,8 +63,7 @@ default_trap_handler:
 		xor     $s0, $a4		# Test that BadVAddr has correct value
 		eret
 		nop
-.end default_trap_handler
-
+END_CUSTOM_TRAP_HANDLER
 	.data
 	.align 5
 testdata:

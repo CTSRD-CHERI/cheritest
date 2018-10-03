@@ -273,6 +273,17 @@ trap_count:
 		mips_function_entry \extra_stack_space
 .endm
 
+.macro BEGIN_CUSTOM_TRAP_HANDLER
+	.global default_trap_handler
+	.ent default_trap_handler
+	default_trap_handler:
+.endm
+
+.macro END_CUSTOM_TRAP_HANDLER
+	.end default_trap_handler
+.endm
+
+
 # End of the test function. Optional argument 1 can be used to declare
 # extra stack space used by the function (must match BEGIN_TEST value).
 .macro END_TEST extra_stack_space=0

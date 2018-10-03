@@ -88,9 +88,7 @@ testcode:
 		cgetpcc $c3
 		syscall # in case we didn't trap
 
-.global default_trap_handler
-.ent default_trap_handler
-default_trap_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		li	$v1, 42
 		dmfc0	$a4, $14	# EPC
 		cgetepcc	$c1
@@ -103,4 +101,4 @@ default_trap_handler:
 		cjr	$c25	# jump to end of test
 
 
-.end default_trap_handler
+END_CUSTOM_TRAP_HANDLER

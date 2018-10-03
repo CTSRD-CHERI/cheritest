@@ -71,14 +71,11 @@ END_TEST
 #
 # Exception handler.  
 #
-		.ent default_trap_handler
-		.global default_trap_handler
-default_trap_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		dmfc0   $s0, $14      		# EPC
 		daddu   $t0, $s0, 4		# Increment EPC
 		dmtc0   $t0, $14		# and store it back
 		dmfc0	$s1, $8			# BadVAddr
 		dmfc0	$s2, $13		# Cause
 		eret
-		.end default_trap_handler
-
+END_CUSTOM_TRAP_HANDLER

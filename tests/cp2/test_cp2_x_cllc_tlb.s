@@ -37,15 +37,7 @@
 
 BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
-		# Install exception handler
-		#
-
-		dla	$a0, default_trap_handler
-		jal 	bev0_handler_install
-		nop
-
-		#
-                # To test user code we must set up a TLB entry.
+		# To test user code we must set up a TLB entry.
 		#
 .set at
 		#
@@ -154,9 +146,7 @@ testcode:
 		syscall	0
 		nop
 
-.global default_trap_handler
-.ent default_trap_handler
-default_trap_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		#
 		# Check to see if the capability load succeeded
 		# exception handler should not be called for clc,
@@ -168,8 +158,7 @@ default_trap_handler:
 		dla	$t0, the_end
 		jr	$t0
 		nop
-.end default_trap_handler
-
+END_CUSTOM_TRAP_HANDLER
 		.data
 		.align 5
 cap:
