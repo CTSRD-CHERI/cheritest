@@ -77,8 +77,6 @@ ifneq ($(CAP_SIZE),256)
 COMMON_UNSUPPORTED_FEATURES+=cap256
 ifeq ($(CAP_PRECISE),1)
 COMMON_UNSUPPORTED_FEATURES+=cap_copy_as_data
-else
-COMMON_UNSUPPORTED_FEATURES+=cap_null_length
 endif
 endif
 

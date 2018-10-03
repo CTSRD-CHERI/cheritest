@@ -41,7 +41,6 @@ class test_cp2_exception_exl(BaseBERITestCase):
     def test_cp2_exception_exl_epcc_base(self):
         self.assertRegisterEqual(self.MIPS.c1.base, 0, "An exception with EXL=1 set EPCC.base when it should not have done.")
 
-    @attr('cap_null_length')
     def test_cp2_exception_exl_epcc_length(self):
         self.assertRegisterEqual(self.MIPS.c1.length, 0xffffffffffffffff, "An exception with EXL=1 set EPCC.length when it should not have done.")
 
