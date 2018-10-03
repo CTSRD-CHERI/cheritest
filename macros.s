@@ -282,6 +282,7 @@ trap_count:
 	DEFINE_COUNTING_CHERI_TRAP_HANDLER default_trap_handler
 
 	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
+	dli $v0, 0	# trap handler sets $v0 to exception count on error
 .endm
 
 # Optional argument 1 can be used to declare extra stack space used by the function.

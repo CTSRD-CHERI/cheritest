@@ -35,6 +35,8 @@
 # Test cclear regs instruction
 #
 BEGIN_TEST
+		# We want the inital $v0 value here and not the trap count
+		dli	$v0, 0x0202020202020202 # revert the change to $v0 done by BEGIN_TEST
                 
                 # Ensure all capability registers are set to the default.
                 cgetdefault		$c1
