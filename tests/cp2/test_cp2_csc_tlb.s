@@ -33,9 +33,9 @@
 # bit is set in the TLB entry for the page but the tag bit on data is unset.
 #
 
-BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
+BEGIN_TEST
 		#
-                # To test user code we must set up a TLB entry.
+		# To test user code we must set up a TLB entry.
 		#
 .set at
 		#
@@ -91,6 +91,7 @@ the_end:
 END_TEST
 
 .balign 4096
+.ent testcode
 testcode:
 		clear_counting_exception_handler_regs
 		nop
@@ -136,20 +137,15 @@ testcode:
 		cgettag  $a6, $c2
 	
 		#
-		# Return to kernel mode
+		# Return to kernel mode and exit the test
 		#
+
+		# save the last trap cause (should be zero)
+		save_counting_exception_handler_cause $c8
 
 		syscall	0
 		nop
-
-.global default_trap_handler
-default_trap_handler:
-		mfc0	$a7, $13                # Read cause.
-		collect_compressed_trap_info
-
-		dla	$t0, the_end
-		jr	$t0
-		nop
+.end testcode
 
 
 		.data

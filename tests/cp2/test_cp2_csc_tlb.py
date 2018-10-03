@@ -32,8 +32,6 @@ from beritest_tools import attr
 @attr('capabilities')
 @attr('tlb')
 class test_cp2_csc_tlb(BaseBERITestCase):
-    EXPECTED_EXCEPTIONS = 1
-
     def test_cp2_csc_tlb_progress(self):
         '''Test that test finishes at the end of stage 4'''
         self.assertRegisterEqual(self.MIPS.a5, 4, "Test did not finish at the end of stage 4")
@@ -50,9 +48,5 @@ class test_cp2_csc_tlb(BaseBERITestCase):
         '''Test csc stored tag when nostorecap set but cap invalid'''
         self.assertRegisterEqual(self.MIPS.a6, 0, "csc did not store tag when nostorecap set but cap invalid")
 
-    def test_cp2_csc_tlb_cause(self):
-        '''Test that CP0 cause register is set correctly'''
-        self.assertRegisterMaskEqual(self.MIPS.a7, 0x1f << 2, 8 << 2, "CP0.Cause.ExcCode was not set correctly when capability store w inhibited in the TLB entry")
-
-    def test_no_trap(self):
-        self.assertCompressedTrapInfo(self.MIPS.k1, trap_count=1, mips_cause=self.MIPS.Cause.SYSCALL, msg="test should be terminated by syscall")
+    def test_no_trap_at_end(self):
+        self.assertTrapInfoNoTrap(self.MIPS.c8, msg="test should be terminated by syscall (and not a cp2 fault!)")
