@@ -489,28 +489,30 @@ class BaseBERITestCase(unittest.TestCase):
         :return:
         '''
         trap_info = self.CompressedTrapInfo(capreg)
+        if msg:
+            msg += ": "
         if no_trap:
             if isinstance(capreg, Capability):
-                self.assertNullCap(capreg, msg=msg + ": didn't expect a trap here but got " + repr(trap_info))
+                self.assertNullCap(capreg, msg=msg + "didn't expect a trap here but got " + repr(trap_info))
             else:
-                self.assertRegisterEqual(capreg, 0, msg=msg + ": didn't expect a trap here but got " + repr(trap_info))
+                self.assertRegisterEqual(capreg, 0, msg=msg + "didn't expect a trap here but got " + repr(trap_info))
             return
 
-        assert trap_info.cause == mips_cause.value, msg + ": MIPS cause wrong: %s != expected %s" % (
+        assert trap_info.cause == mips_cause.value, msg + "MIPS cause wrong: %s != expected %s" % (
                 MipsStatus.Cause.fromint(trap_info.cause), MipsStatus.Cause.fromint(mips_cause))
 
         if cap_cause is not None:
-            assert trap_info.capcause == cap_cause.value, ": cap cause wrong: %s != expected %s" % (
+            assert trap_info.capcause == cap_cause.value, msg + "cap cause wrong: %s != expected %s" % (
                 MipsStatus.CapCause.fromint(trap_info.capcause), MipsStatus.CapCause.fromint(cap_cause))
 
         if cap_reg is not None:
-            assert trap_info.capreg == cap_reg, msg + ": cap reg wrong"
+            assert trap_info.capreg == cap_reg, msg + "cap reg wrong"
 
         if trap_count is not None:
-            assert trap_info.trap_count == trap_count, msg + ": trap count wrong"
+            assert trap_info.trap_count == trap_count, msg + "trap count wrong"
 
         if bdelay is not None:
-            assert trap_info.bdelay == bdelay, (msg + ": BDELAY flag wrong: expected trap" +
+            assert trap_info.bdelay == bdelay, (msg + "BDELAY flag wrong: expected trap" +
                                                 ("" if bdelay else " NOT ") + " in delay slot")
 
     def assertCp2Fault(self, info: Capability, cap_cause: MipsStatus.CapCause, cap_reg: int=None, trap_count:int =None, bdelay: bool=False, msg="") -> None:
