@@ -39,15 +39,10 @@
 # has a delay slot, one of the exceptions will fire.
 
 BEGIN_TEST
+  # Initialise $t2. The test fails if $v0 is not 0x44 (i.e. exception triggered).
+  dli             $v0, 0x44
+  clear_counting_exception_handler_regs	# This test should not trigger an exception
 
-  jal             bev_clear
-  nop
-  dla             $a0, bev0_handler
-  jal             bev0_handler_install
-  nop
-
-  # Initialise $t2. The test fails if $t2 is 0x33.
-  dli             $t2, 0x44
 
   cgetpcc         $c3
   cgetdefault     $c4
@@ -79,19 +74,7 @@ test_slot:
   nop
 
 continue:
+	save_counting_exception_handler_cause $c9
   add             $t0, $zero, $zero
 
 END_TEST
-
-  # Entering this exception handler means failure.
-  .ent bev0_handler
-bev0_handler:
-  dmfc0           $k0, $14 # EPC
-  daddiu          $k0, $k0, 8 # EPC += 8 to bump PC forward on ERET N.B. 8 because we wish to skip instruction after svc!
-  dmtc0           $k0, $14
-  nop # NOPs to avoid hazard with ERET
-  nop # XXXRW: How many are actually
-  nop # required here?
-  dli             $t2, 0x33
-  eret
-  .end bev0_handler
