@@ -25,10 +25,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
-
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
-import pytest
+from beritest_tools import BaseBERITestCase, attr, HexInt
 
 #
 # Test to ensure that EPCC is set correctly when a branch occurs to an
@@ -44,56 +41,62 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
     #
     @attr('capabilities')
     def test_length(self):
-        self.assertRegisterEqual(self.MIPS.s0, 20, "sandbox length not 20")
+        assert self.MIPS.s0 ==  20, "sandbox length not 20"
 
     #
     # Check that EPC is as expected
     #
     def test_epc(self):
-        self.assertRegisterEqual(self.MIPS.s3, 0x10000000, "sandbox EPC unexpected")
+        assert self.MIPS.s3 == 0x10000000, "sandbox EPC unexpected"
 
     #
     # Check that the post-unrepresentable EPCC is as expected: unrepresentable.
     #
     @attr('cap_precise')
     def test_epcc_tag_precise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].t, 1, "sandbox EPCC tag incorrect")
+        assert self.MIPS.cp2[3].t == 1, "sandbox EPCC tag incorrect"
 
     @attr('cap_imprecise')
     def test_epcc_tag_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].t, 0, "sandbox EPCC tag incorrect")
+        assert self.MIPS.cp2[3].t == 0, "sandbox EPCC tag incorrect"
 
     def test_epcc_unsealed(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].s, 0, "sandbox EPCC unsealed incorrect")
+        assert self.MIPS.cp2[3].s == 0, "sandbox EPCC unsealed incorrect"
 
     @attr('cap_precise')
     def test_epcc_perms_precise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0007, "sandbox EPCC perms incorrect")
+        assert self.MIPS.cp2[3].perms == 0x0007, "sandbox EPCC perms incorrect"
 
     @attr('cap_imprecise')
     def test_epcc_perms_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0, "sandbox EPCC perms incorrect")
+        assert self.MIPS.cp2[3].perms == 0x0, "sandbox EPCC perms incorrect"
+        assert self.MIPS.epcc.perms == 0x0, "sandbox EPCC perms incorrect (final dump value)"
 
     def test_epcc_ctype(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].ctype, 0, "sandbox EPCC ctype incorrect")
-        
+        assert self.MIPS.cp2[3].ctype == 0, "sandbox EPCC ctype incorrect"
+        assert self.MIPS.epcc.ctype == 0, "sandbox EPCC ctype incorrect (final dump value)"
+
     def test_epcc_offset(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].base + self.MIPS.cp2[3].offset, self.MIPS.a7 + 0x10000000, "sandbox EPCC offset incorrect")
+        assert self.MIPS.cp2[3].base + self.MIPS.cp2[3].offset == self.MIPS.a7 + 0x10000000, "sandbox EPCC offset incorrect"
+        assert self.MIPS.epcc.base + self.MIPS.epcc.offset == self.MIPS.a7 + 0x10000000, "sandbox EPCC offset incorrect (final dump value)"
 
     @attr('cap_imprecise')
     def test_epcc_base_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].base, 0, "sandbox EPCC base incorrect")
+        assert self.MIPS.cp2[3].base == 0, "sandbox EPCC base incorrect"
+        assert self.MIPS.epcc.base == 0, "sandbox EPCC base incorrect (final dump value)"
 
     @attr('cap_precise')
     def test_epcc_base_precise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].base, self.MIPS.a7, "sandbox EPCC base incorrect")
-        
+        assert self.MIPS.cp2[3].base == self.MIPS.a7, "sandbox EPCC base incorrect"
+        assert self.MIPS.epcc.base == self.MIPS.a7, "sandbox EPCC base incorrect  (final dump value)"
+
     @attr('cap_precise')
     def test_epcc_length_precise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].length, 20, "sandbox EPCC length incorrect")
+        assert self.MIPS.cp2[3].length == 20, "sandbox EPCC length incorrect"
+        assert self.MIPS.epcc.length == 20, "sandbox EPCC length incorrect (final dump value)"
 
     @attr('cap_imprecise')
     @attr('cap_null_length')
     def test_epcc_length_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].length, 0xffffffffffffffff,
-                                 "sandbox EPCC length incorrect")
+        assert self.MIPS.cp2[3].length == HexInt(0xffffffffffffffff), "sandbox EPCC length incorrect"
+        assert self.MIPS.epcc.length == HexInt(0xffffffffffffffff), "sandbox EPCC length incorrect (final dump value)"
