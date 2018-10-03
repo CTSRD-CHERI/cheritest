@@ -121,7 +121,6 @@ def attr(*args, **kwargs):
                                     "' is not supported (feature is completely unsupported)!")
     return wrap_test_fn
 
-
 class BaseBERITestCase(unittest.TestCase):
     '''Abstract base class for test cases for the BERI CPU running under BSIM.
     Concrete subclasses may override class variables LOG_DIR (for the location
@@ -135,7 +134,7 @@ class BaseBERITestCase(unittest.TestCase):
     MIPS_EXCEPTION = None
     ## Trigger a test failure (for testing the test-cases)
     ALWAYS_FAIL = is_envvar_true("DEBUG_ALWAYS_FAIL")
-    EXPECT_EXCEPTION = None
+    EXPECTED_EXCEPTIONS = None
 
     cached = bool(int(os.environ.get("CACHED", "0")))
     multi = bool(int(os.environ.get("MULTI1", "0")))
@@ -149,6 +148,33 @@ class BaseBERITestCase(unittest.TestCase):
         self._MIPS = None  # type: MipsStatus
         self.unexpected_exception = False
         self._SETUP_EXCEPTION = None
+        if self.EXPECTED_EXCEPTIONS is None:
+            class_name = self.__class__.__name__
+            # raw tests don't have the default exception handler so don't check for exceptions
+            if not ('raw' in class_name or "_x_" in class_name):
+                self.EXPECTED_EXCEPTIONS = 0
+                # TODO: assert that EXPECTED_EXEPTIONS is always set!
+
+    def test_exception_count(self):
+        if self.__class__.__name__ in ("BaseBERITestCase", "BaseICacheBERITestCase"):
+            # pytest.skip("This test only makes sense for subclasses")
+            return      # only run this test for subclasses
+        # The test framework has a default exception handler which
+        # increments k0 and returns to the instruction after the
+        # exception. We assert that k0 is zero here to check there
+        # weren't any unexpected exceptions. The EXPECT_EXCEPTION
+        # class variable can be overridden in subclasses (set to
+        # True or False), but actually all tests which expect
+        # exceptions have custom handlers so none of them need to.
+        if self.EXPECTED_EXCEPTIONS is not None:
+            # Don;t fail if the logile cannot be found. It will also cause
+            # the other tests to fail and causes failures even if all other tests
+            # in a class are disable with @attr():
+            if self._MIPS is None:
+                self._do_setup()
+                if self._SETUP_EXCEPTION is not None:
+                    return
+            assert self.MIPS.k0 == self.EXPECTED_EXCEPTIONS, self.__class__.__name__ + " threw " + str(self._MIPS.k0) + " exception(s) unexpectedly"
 
     def _do_setup(self):
         '''Parse the log file and instantiate MIPS'''
@@ -177,30 +203,13 @@ class BaseBERITestCase(unittest.TestCase):
                 self.LOG_FN = self.__class__.__name__ + ".log"
         assert self._MIPS is None
         try:
-            if self.EXPECT_EXCEPTION is not None:
-                expect_exception = self.EXPECT_EXCEPTION
-            else:
-                # raw tests don't have the default exception handler so don't check for exceptions
-                expect_exception = 'raw' in class_name or "_x_" in class_name
-            self.parseLog(os.path.join(self.LOG_DIR, self.LOG_FN), expect_exception)
+            self.parseLog(os.path.join(self.LOG_DIR, self.LOG_FN))
         except Exception as e:
             self._SETUP_EXCEPTION = e
 
-    def parseLog(self, filename, expect_exception=False):
+    def parseLog(self, filename):
         with open(filename, "rt") as fh:
             self._MIPS = MipsStatus(fh)
-            # The test framework has a default exception handler which
-            # increments k0 and returns to the instruction after the
-            # exception. We assert that k0 is zero here to check there
-            # weren't any unexpected exceptions. The EXPECT_EXCEPTION
-            # class variable can be overridden in subclasses (set to
-            # True or False), but actually all tests which expect
-            # exceptions have custom handlers so none of them need to.
-            if self._MIPS.k0 != 0 and not expect_exception:
-                self.MIPS_EXCEPTION = Exception(self.__class__.__name__ + " threw " +
-                                                str(self._MIPS.k0) + " exception(s) unexpectedly")
-                self.unexpected_exception = True
-                raise self.MIPS_EXCEPTION
 
     @property
     def MIPS(self):
@@ -533,8 +542,7 @@ class BaseICacheBERITestCase(BaseBERITestCase):
     ## Trigger a test failure (for testing the test-cases)
     ALWAYS_FAIL = is_envvar_true("DEBUG_ALWAYS_FAIL")
 
-    @classmethod
-    def setUpClass(self):
+    def _do_setup(self):
         '''Parse the log file and instantiate MIPS'''
         super(BaseBERITestCase, self).setUpClass()
         self.cached = bool(int(os.environ.get("CACHED", "0")))
