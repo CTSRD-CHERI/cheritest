@@ -752,10 +752,20 @@ pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
 pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
 	$(QEMU_PYTEST) --junit-xml=$@ -v $(CLANG_TESTDIRS) || true
 
-pytest_qemu: pytest_qemu.xml
-pytest_qemu.xml: $(QEMU_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
-	@echo "pytest selector: $(QEMU_NOSEFLAGS)"
-	$(QEMU_PYTEST) --junit-xml=$@ $(TESTDIRS) || true
+pytest_qemu256:
+	$(MAKE) CAP_SIZE=256 CAP_PRECISE=1 nosetests_qemu
+pytest_qemu128:
+	$(MAKE) CAP_SIZE=128 CAP_PRECISE=0 nosetests_qemu
+pytest_qemu128magic:
+	$(MAKE) CAP_SIZE=128 CAP_PRECISE=1 nosetests_qemu
+
+pytest_qemu_all:
+	# first build all the binaries (to make use of parallelism)
+	$(MAKE) elfs128 elfs256
+	# But these steps should run sequentially:
+	$(MAKE) pytest_qemu256
+	$(MAKE) pytest_qemu128
+	$(MAKE) pytest_qemu128magic
 
 # pytest -rxXs  # show extra info on xfailed, xpassed, and skipped tests
 SINGLE_TEST_VERBOSE=-rxXs

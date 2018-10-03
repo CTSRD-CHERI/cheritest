@@ -371,6 +371,12 @@ all: sanity-check-makefile $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST
 
 elfs: $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS)
 
+elfs128:
+	$(MAKE) CAP_SIZE=128 elfs
+elfs256:
+	$(MAKE) CAP_SIZE=256 elfs
+
+
 dumps: $(TEST_DUMPS) $(TEST_CACHED_DUMPS) $(TEST_MULTI_DUMPS)
 
 test: nosetest nosetest_cached
