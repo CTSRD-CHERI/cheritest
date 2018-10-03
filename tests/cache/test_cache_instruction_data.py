@@ -36,44 +36,36 @@ from beritest_tools import attr
 # present, which might cause it not to incorrectly fire for gxemul.
 #
 
+@attr('cache')
 class test_cache_instruction_data(BaseBERITestCase):
-
-    @attr('cache')
     @attr('counterdev')
     def test_initial_uncached_read(self):
         self.assertRegisterEqual(self.MIPS.a0, 0, "Initial read of count register is incorrect")
         
-    @attr('cache')
     @attr('counterdev')
     def test_initial_cached_read(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "Initial cached read failure")
         
-    @attr('cache')
     @attr('counterdev')
     def test_second_cached_read(self):
         self.assertRegisterEqual(self.MIPS.a2, 1, "Second cached read failure")
         
-    @attr('cache')
     @attr('counterdev')
     def test_after_L1_writeback_cached_read(self):
         self.assertRegisterEqual(self.MIPS.a3, 1, "Cached read after data L1 writeback is incorrect")
         
-    @attr('cache')
     @attr('counterdev')
     def test_after_L1_writeback_invalidate_cached_read(self):
         self.assertRegisterEqual(self.MIPS.a4, 1, "Cached read after data L1 writeback/invalidate is incorrect")
         
-    @attr('cache')
     @attr('counterdev')
     def test_after_L1_invalidate_cached_read(self):
         self.assertRegisterEqual(self.MIPS.a5, 1, "Cached read after data L1 invalidate is incorrect")
          
-    @attr('cache')
     @attr('counterdev')
     def test_after_L1_and_L2_invalidate_cached_read(self):
         self.assertRegisterEqual(self.MIPS.a6, 1, "Cached read after data and L2 invalidate is incorrect")       
 
-    @attr('cache')
     @attr('loadcachetag')
     @attr('beri1cache')
     def test_index_load_tag_dcache(self):

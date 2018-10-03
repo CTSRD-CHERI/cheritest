@@ -36,11 +36,10 @@ from beritest_tools import attr
 # present, which might cause it not to incorrectly fire for gxemul.
 #
 
+@attr('cache')
 class test_hardware_mapping_cached_read(BaseBERITestCase):
-    @attr('cache')
     def test_uncached_read0(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x0123456789abcdef, "Initial uncached read failure")
 
-    @attr('cache')
     def test_cached_read1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x0123456789abcdef, "Initial cached read failure")

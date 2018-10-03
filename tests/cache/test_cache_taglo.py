@@ -28,15 +28,15 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+
+@attr('cache')
 class test_cache_taglo(BaseBERITestCase):
 
-    @attr('cache')
     @attr('loadcachetag')
     def test_cache_taglo_1(self):
         '''Test that we can read CP0.TagLo'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "Read of CP0 TagLo did not complete")
 
-    @attr('cache')
     @attr('loadcachetag')
     # In the old BERI1-like cache/TLB configuration. DCache line size is
     # 32 bytes
@@ -45,7 +45,6 @@ class test_cache_taglo(BaseBERITestCase):
         '''Test that L1 data cache line size has the expected value'''
         self.assertRegisterEqual(self.MIPS.a3, 32, "L1 data cache line size had an unexpected value")
 
-    @attr('cache')
     @attr('loadcachetag')
     # In a BERI1-like cache/TLB configuration. DCache line size is 128 bytes
     @attr('beri1cache')
@@ -53,7 +52,6 @@ class test_cache_taglo(BaseBERITestCase):
         '''Test that L1 data cache line size has the expected value'''
         self.assertRegisterEqual(self.MIPS.a3, 128, "L1 data cache line size had an unexpected value")
 
-    @attr('cache')
     @attr('loadcachetag')
     # In a BERI1-like cache/TLB configuration. L2 cache line size is 128 bytes
     @attr('beri1cache')

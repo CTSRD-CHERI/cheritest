@@ -28,9 +28,9 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('cache')
 class test_id_coherence(BaseBERITestCase):
 
-    @attr('cache')
     @attr('cached')
     def test_id_coherence_1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0x78, "Self-modifying code did not compute sum correctly")
