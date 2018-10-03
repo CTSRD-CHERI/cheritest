@@ -9,6 +9,7 @@ class JobConfig {
     String sailModel = null
     String name = null
     static Object gitInfo = null
+    static Object sailCheriMipsGitInfo = null
 
     // TODO: for some reason I can't make these globals, so let's just put them here
     static String clangArchiveName = 'cheri-multi-master-clang-llvm.tar.xz'
@@ -187,7 +188,7 @@ def cheriHardwareTest() {
                 git branch: 'sail2', url: 'https://github.com/rems-project/sail', changelog: true, poll: true
             }
             dir('sail-cheri-mips') {
-                git branch: 'master', url: 'https://github.com/CTSRD-CHERI/sail-cheri-mips', changelog: true, poll: true
+                JobConfig.sailCheriMipsGitInfo = git branch: 'master', url: 'https://github.com/CTSRD-CHERI/sail-cheri-mips', changelog: true, poll: true
             }
             dir('lem') {
                 git branch: 'master', url: 'https://github.com/rems-project/lem', changelog: true, poll: false
@@ -211,6 +212,9 @@ def cheriHardwareTest() {
                 currentBuild.result = currentBuild.currentResult
             echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
             setGitHubStatus(args.gitInfo)
+            // Also set the status on the QEMU repo
+            if (JobConfig.sailCheriMipsGitInfo != null)
+                setGitHubStatus(JobConfig.sailCheriMipsGitInfo)
         }
     }
 }
