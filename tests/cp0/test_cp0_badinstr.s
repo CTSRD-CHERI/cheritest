@@ -30,25 +30,16 @@
 # Check that the badinstr register is implemented
 #
 
-BEGIN_TEST
-		#
-		# Set up exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Clear registers we'll use when testing results later.
-		#
 		dli	$a1, -1
 		dli	$s1, -2
 
 
 		teq	$zero, $zero
 		move	$s1, $a1
+		move	$s2, $a2
 
 		# load config3 register
 		dmfc0	$a3, $16, 3
@@ -56,16 +47,13 @@ BEGIN_TEST
 return:
 END_TEST
 
-.ent bev0_handler
-bev0_handler:
-		li	$v1, 42
+BEGIN_CUSTOM_TRAP_HANDLER
+		dmfc0	$a1, $8, 1	# BadInstr register
+		collect_compressed_trap_info $a2
+
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
-		dmfc0	$a1, $8, 1	# BadInstr register
-		ssnop			# NOPs to avoid hazard with ERET
-		ssnop			# XXXRW: How many are actually
-		ssnop			# required here?
-		ssnop
-		eret
-.end bev0_handler
+		DO_ERET
+END_CUSTOM_TRAP_HANDLER
+
