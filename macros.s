@@ -303,7 +303,9 @@ trap_count:
 	DEFINE_COUNTING_CHERI_TRAP_HANDLER default_trap_handler
 
 	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
-	dli $v0, 0	# trap handler sets $v0 to exception count on error
+		dli $v0, 0	# trap handler sets $v0 to exception count on error
+		dli $k1, 0	# trap handler sets $k1 to trap info on error (which will be preserved until exit)
+
 .endm
 
 # Optional argument 1 can be used to declare extra stack space used by the function.
@@ -312,13 +314,11 @@ trap_count:
 	__SET_DEFAULT_TEST_ASM_OPTS
 	# Set the old exception_count_handler as the default handler until the
 	# tests are updated to check different registers
-	.global default_trap_handler
-	.ent default_trap_handler
-	default_trap_handler:
+	BEGIN_CUSTOM_TRAP_HANDLER
 		dla $k0, exception_count_handler
 		jr $k0
 		nop
-	.end default_trap_handler
+	END_CUSTOM_TRAP_HANDLER
 
 	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
 .endm
