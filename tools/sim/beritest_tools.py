@@ -452,6 +452,9 @@ class BaseBERITestCase(unittest.TestCase):
         else:
             self.assertCapPermissions(cap.perms, perms, msg + "has wrong permissions")
 
+    def assertTrapInfoNoTrap(self, reg, msg):
+        self.assertCompressedTrapInfo(reg, no_trap=True, msg=msg)
+
     def assertCompressedTrapInfo(self, capreg, mips_cause: MipsStatus.Cause=-1, cap_cause: MipsStatus.CapCause=None,
                                  cap_reg: int=None, trap_count: int=None, no_trap: bool=False,
                                  bdelay: bool=False, msg=""):

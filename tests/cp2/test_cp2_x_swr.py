@@ -31,10 +31,10 @@ from beritest_tools import attr
 @attr("capabilities")
 class test_cp2_x_swr(BaseBERITestCase):
     def test_offset_0(self):
-        self.assertCompressedTrapInfo(self.MIPS.s0, no_trap=True, msg="First swr should succeed")
+        self.assertTrapInfoNoTrap(self.MIPS.s0, msg="First swr should succeed")
 
     def test_offset_1(self):
-        self.assertCompressedTrapInfo(self.MIPS.s1, no_trap=True, msg="Second swr should succeed")
+        self.assertTrapInfoNoTrap(self.MIPS.s1, msg="Second swr should succeed")
 
     def test_offset_2(self):
         self.assertCp2Fault(self.MIPS.s2, cap_cause=self.MIPS.CapCause.Length_Violation, cap_reg=0, trap_count=1)

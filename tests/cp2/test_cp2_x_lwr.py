@@ -34,12 +34,12 @@ class test_cp2_x_lwr(BaseBERITestCase):
     def test_lwr_0(self):
         self.assertRegisterEqual(self.MIPS.a0, 0xffffffffffffff01, "LWR at offset 0 gave unexpected result")
     def test_lwr_0_s0(self):
-        self.assertCompressedTrapInfo(self.MIPS.s0, no_trap=True)
+        self.assertTrapInfoNoTrap(self.MIPS.s0)
 
     def test_lwr_1(self):
         self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffff0102, "LWR at offset 1 gave unexpected result")
     def test_lwr_1_s1(self):
-        self.assertCompressedTrapInfo(self.MIPS.s1, no_trap=True)
+        self.assertTrapInfoNoTrap(self.MIPS.s1)
 
     def test_x_lwr_2(self):
         self.assertRegisterEqual(self.MIPS.a2, 0xffffffffffffffff, "LWR at offset 2 gave unexpected result")

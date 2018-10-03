@@ -54,5 +54,5 @@ class test_cp2_x_clbu_reg(BaseBERITestCase):
         if self.MIPS.CHERI_C27_TO_31_INACESSIBLE:
             self.assertCp2Fault(self.MIPS.c8, cap_reg=27, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=1)
         else:
-            self.assertCompressedTrapInfo(self.MIPS.c8, no_trap=True, msg="c27-c31 are no longer special in the latest ISA")
+            self.assertTrapInfoNoTrap(self.MIPS.c8, msg="c27-c31 are no longer special in the latest ISA")
 

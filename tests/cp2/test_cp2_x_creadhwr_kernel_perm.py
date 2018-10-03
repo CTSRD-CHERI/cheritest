@@ -70,10 +70,10 @@ class test_cp2_x_creadhwr_kernel_perm(BaseBERITestCase):
 
     # But KR1C and KR2C should be fine
     def test_no_sysregs_in_kernel_mode_kr1c(self):
-        self.assertCompressedTrapInfo(self.MIPS.c5, no_trap=True, msg="Accessing KR1C should work")
+        self.assertTrapInfoNoTrap(self.MIPS.c5, msg="Accessing KR1C should work")
 
     def test_no_sysregs_in_kernel_mode_kr2c(self):
-        self.assertCompressedTrapInfo(self.MIPS.c6, no_trap=True, msg="Accessing KR1C should work")
+        self.assertTrapInfoNoTrap(self.MIPS.c6, msg="Accessing KR1C should work")
 
     def test_no_sysregs_in_kernel_mode_invalid_reg(self):
         # CapHWR 28 doesn't exist so this should raise reserved instr
