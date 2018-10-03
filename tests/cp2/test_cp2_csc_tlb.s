@@ -89,8 +89,10 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 
 the_end:	
 END_TEST
-	
+
+.balign 4096
 testcode:
+		clear_counting_exception_handler_regs
 		nop
 		# Set the test flags
 		li      $a3, 0
@@ -142,11 +144,13 @@ testcode:
 
 .global default_trap_handler
 default_trap_handler:
-                mfc0    $a7, $13                # Read cause.
+		mfc0	$a7, $13                # Read cause.
+		collect_compressed_trap_info
 
 		dla	$t0, the_end
 		jr	$t0
 		nop
+
 
 		.data
 		.align 5
