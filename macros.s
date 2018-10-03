@@ -107,6 +107,50 @@
 .endm
 
 
+# Collect information on the last trap and store it as follows:
+# arg1: compressed_info_reg (should be set to $k1 so that save_counting_exception_handler_cause)
+# is the compressed trap info:
+#    Bits 0-7 are capcause.reg, 8-15 are capcause.cause
+#    Bits 16-31 are the low 16 bits of CP0_Cause (i.e. the cause is bits 18-22)
+#    Bits 32-63 are the exception count
+# arg2: tmp_reg (default=$k0)
+# arg3: trap_count_reg (default=$v0) will be set to number of traps that have been handled
+.macro collect_compressed_trap_info compressed_info_reg=$k1, tmp_reg=$k0, trap_count_reg=$v0
+	dmfc0	\tmp_reg, $13		# k0 = Cause
+	# Clear the high 32 bits of \tmp_reg (CPO_Cause) into \compressed_info_reg and shift by 16
+	dsll	\tmp_reg, \tmp_reg, 32
+	dsrl	\compressed_info_reg, \tmp_reg, 16			# Bits 16-47 set
+	# Move the bdelay
+
+	# Check if CP2 is enabled
+	mfc0	\tmp_reg, $12	# Get status
+	dli	$v0, (1 << 30)	# CP2 enabled bit
+	and	\tmp_reg, \tmp_reg, $v0	# check if zero
+	beqz	\tmp_reg, .Lcp2_disabled_skip_capcause
+	nop
+.Lset_capcause:
+	# Set bits 0-16 of k1 to CapCause
+	cgetcause $v0
+	andi	$v0, $v0, 0xffff	# Ensure the high bits of capcause are empty (they should be anyway)
+	or	\compressed_info_reg, \compressed_info_reg, $v0		# Add capcause in bits 0-16
+.Lcp2_disabled_skip_capcause:
+	# TODO: (save STATUS)?
+	# dmfc0   $v1, $12			# a6 = status
+
+	# increment trap_count and keep result in v0
+	__get_counting_trap_handler_count $v0	# get old exception count
+	daddiu $v0, $v0, 1			# a1 = new exception count
+	__set_counting_trap_handler_count $v0	# save exception count value
+
+	# Shift exception count to the high 16 bits
+	# Strictly speaking might modify $v0 but more than 2^16 exceptions should
+	# be impossible in any of the tests
+	dsll	$v0, $v0, 48
+	or	\compressed_info_reg, \compressed_info_reg, $v0		# Add count in bits 31-63
+	dsrl	$v0, $v0, 48		# restore expection count $v0
+.endm
+
+
 # define a trap handler function that sets the following:
 # v0 = number of traps that have been handled
 # k0 = BadVaddr
@@ -123,71 +167,37 @@
 \name:
 	.set push
 	.set noat
-	# Check if this is a syscall and exit if it is
+	# Check if this is a syscall and exit if it is (don't update trap count!)
 	dmfc0 	$k0, $13		# k0 = Cause
 	andi	$k1, $k0, (0x1f << 2)	# Extract the cause bits
 	daddiu	$k1, -(8 << 2)		# Syscall is cause 8
 	beqz	$k1, .Lsyscall
 	nop
-
-	# Clear the high 32 bits of $k0 (CPO_Cause) into $k1 and shift by 16
-	dsll	$k0, $k0, 32
-	dsrl	$k1, $k0, 16			# Bits 16-47 set
-	# Move the bdelay
-# Only do a cgetcause if we are testing CP2
-.if(TEST_CP2 == 1)
-	# Check if CP2 is enabled
-	mfc0	$k0, $12	# Get status
-	dli	$v0, (1 << 30)	# CP2 enabled bit
-	and	$k0, $k0, $v0	# check if zero
-	beqz	$k0, .Lcp2_disabled_skip_capcause
-	nop
-.Lset_capcause:
-	# FIXME: this should only be done if CP2 is enabled!
-	# Set bits 0-16 of k1 to CapCause
-	cgetcause $v0
-	andi	$v0, $v0, 0xffff	# Ensure the high bits of capcause are empty (they should be anyway)
-	or	$k1, $k1, $v0		# Add capcause in bits 0-16
-.Lcp2_disabled_skip_capcause:
-.endif
-	# TODO: (save STATUS)?
-	# dmfc0   $v1, $12			# a6 = status
-
-	# increment trap_count and keep result in v0
-	__get_counting_trap_handler_count $v0	# get old exception count
-	daddiu $v0, $v0, 1			# a1 = new exception count
-	__set_counting_trap_handler_count $v0	# save exception count value
-
-	# Shift exception count to the high 16 bits
-	# Strictly speaking might modify $v0 but more than 2^16 exceptions should
-	# be impossible in any of the tests
-	dsll	$v0, $v0, 48
-	or	$k1, $k1, $v0		# Add count in bits 31-63
-	dsrl	$v0, $v0, 48		# restore expection count $v0
-
-
-.Lnot_syscall:
 	# Otherwise skip the instruction and return from the handler
-	# Check for bdelay flag:
+.Lnot_syscall:
+	# save the trap info in $k1+$v0, using $k0 as the scratch reg
+	collect_compressed_trap_info
+
+	# Check for bdelay flag (bit 47 of compressed trap info:
 	dsrl	$k0, $k1, 47
 	andi	$k0, $k0, 1
-	# This needs to be done by branching and duplicating code since we don't have a spare register
+	# incrementing by 4 or 8 needs to be done by branching and duplicating
+	# code since we don't have a spare register
 	bne	$k0, $zero, .Lskip_branch_and_delay_slot
 	nop
 .Lskip_one_instr:
-	dmfc0	$k0, $14		# a5 = EPC
+	dmfc0	$k0, $14		# load EPC
 	daddiu	$k0, $k0, 4		# EPC += 4 to bump PC forward on ERET
 	dmtc0	$k0, $14
-	dmfc0	$k0, $8			# k0 = BadVaddr
-	ssnop
-	ssnop
-	ssnop
-	eret
+	b .Ldo_eret
+	nop
 
 .Lskip_branch_and_delay_slot:
-	dmfc0	$k0, $14		# a5 = EPC
+	dmfc0	$k0, $14		# load EPC
 	daddiu	$k0, $k0, 8		# EPC += 8 to bump PC forward on ERET (over the delay slot)
 	dmtc0	$k0, $14
+
+.Ldo_eret:
 	dmfc0	$k0, $8			# k0 = BadVaddr
 	ssnop
 	ssnop

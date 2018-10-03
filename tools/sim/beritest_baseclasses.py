@@ -137,3 +137,6 @@ class BERITestBaseClasses:
         def test_epcc_length(self):
             expected_len = 0x20 + self.branch_offset
             assert self.MIPS.c25.length == expected_len, "EPCC.length was not set to the expected value after" + self.msg
+
+        def test_trap_count(self):
+            assert self.MIPS.v0 == 1, "should only trap once!"
