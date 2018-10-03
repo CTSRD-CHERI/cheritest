@@ -33,6 +33,13 @@ endif
 ### Include add the _UNSUPPORTED_FEATURES variables
 include Makefile.predicates.mk
 
+FAIL_MAKE_ON_TEST_ERRORS?=0
+ifneq ($(FAIL_MAKE_ON_TEST_ERRORS),0)
+MAYBE_IGNORE_EXIT_CODE=-
+else
+MAYBE_IGNORE_EXIT_CODE=
+endif
+
 
 #
 # We unconditionally terminate the simulator after TEST_CYCLE_LIMIT
@@ -328,14 +335,12 @@ $(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.mem $(TOOLS_DIR_ABS)/debug/cherictl
 #
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
-	    $(GXEMUL_LOG_FILTER) >$@ || true
+	-$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | $(GXEMUL_LOG_FILTER) >$@
 
 
 $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
-	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | \
-	    $(GXEMUL_LOG_FILTER) >$@ || true
+	-$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | $(GXEMUL_LOG_FILTER) >$@
 
 max_cycles: max_cycles.c
 	$(CC) -o max_cycles max_cycles.c
@@ -351,12 +356,12 @@ endif
 
 $(L3_LOGDIR)/%.log: $(OBJDIR)/%.hex l3tosim max_cycles | $(L3_LOGDIR)
 ifdef TRACE
-	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --ignore TLB --trace 2 $(L3_MULTI) $< 2> $@.err > $@ || true
+	-$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --ignore TLB --trace 2 $(L3_MULTI) $< 2> $@.err > $@
 else
 ifdef PROFILE
 	rm -f mlmon.out
 endif
-	$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --ignore TLB $(L3_MULTI) $< 2> $@.err > $@ || true
+	-$(L3_SIM) --cycles `./max_cycles $@ 20000 300000` --uart-delay 0 --ignore HI --ignore LO --ignore TLB $(L3_MULTI) $< 2> $@.err > $@
 ifdef PROFILE
 	mlprof -raw true -show-line true `which $(L3_SIM)` mlmon.out > $(L3_LOGDIR)/$*.cover
 endif
@@ -449,7 +454,7 @@ clion/$(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log.symbolized
 # TODO: for now also run with python 2.7 but we should update to 3.x soon
 NOSETESTS?=python3 -m pytest -q
 _PYTEST_INSTALLED_STR=This is pytest
-PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1; echo FOO >&2)
+PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1)
 PYTEST_CHECK1=$(if $(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),@echo pytest is installed,$(error pytest not installed? Try running `pip3 install --user pytest`. Got error running $(NOSETESTS) --version: $(PYTEST_VERSION_OUTPUT)"))
 PYTEST_CHECK2=$(if $(findstring requires pytest-,$(PYTEST_VERSION_OUTPUT)),$(error pytest version is too old. Try running `pip3 install --upgrade --user pytest`),@echo pytest version is not too old)
 
@@ -503,12 +508,12 @@ fuzz_generate: $(FUZZ_SCRIPT)
 
 # The rather unpleasant side-effect of snorting too much candy floss...
 nose_fuzz: $(SIM) fuzz_run_tests
-	CACHED=0 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz.xml \
-	    $(NOSEFLAGS_UNCACHED) tests/fuzz || true
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=0 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz.xml \
+	    $(NOSEFLAGS_UNCACHED) tests/fuzz
 
 nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
-	CACHED=1 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz_cached.xml \
-	    $(NOSEFLAGS) tests/fuzz || true
+	$(MAYBE_IGNORE_EXIT_CODE) env CACHED=1 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz_cached.xml \
+	    $(NOSEFLAGS) tests/fuzz
 
 
 # Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
@@ -536,50 +541,50 @@ nosetests_combined.xml: nosetests_uncached.xml nosetests_cached.xml xmlcat
 # file each time.
 
 nosetests_uncached.xml: $(CHERI_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	CACHED=0 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_uncached.xml \
-	$(NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=0 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_uncached.xml \
+	$(NOSEFLAGS_UNCACHED) $(TESTDIRS)
 
 nosetests_cached.xml: $(CHERI_TEST_CACHED_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	CACHED=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_cached.xml \
-	$(NOSEFLAGS) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_cached.xml \
+	$(NOSEFLAGS) $(TESTDIRS)
 
 nosetests_multi.xml: $(CHERI_TEST_MULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	MULTI1=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_multi.xml \
-	$(NOSEFLAGS) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env MULTI1=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_multi.xml \
+	$(NOSEFLAGS) $(TESTDIRS)
 
 nosetests_cachedmulti.xml: $(CHERI_TEST_CACHEDMULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_cachedmulti.xml \
-	$(NOSEFLAGS) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_cachedmulti.xml \
+	$(NOSEFLAGS) $(TESTDIRS)
 
 altera-nosetest: all $(ALTERA_TEST_LOGS)
-	CACHED=0 $(ALTERA_NOSETESTS) \
-	    $(NOSEFLAGS_UNCACHED) $(ALTERA_NOSEFLAGS) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=0 $(ALTERA_NOSETESTS) \
+	    $(NOSEFLAGS_UNCACHED) $(ALTERA_NOSEFLAGS) $(TESTDIRS)
 
 altera-nosetest_cached: all $(ALTERA_TEST_CACHED_LOGS)
-	CACHED=1 $(ALTERA_NOSETESTS) \
-	    $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=1 $(ALTERA_NOSETESTS) \
+	    $(NOSEFLAGS) $(ALTERA_NOSEFLAGS) $(TESTDIRS)
 
 hwsim-nosetest: $(CHERISOCKET) all $(HWSIM_TEST_LOGS)
-	CACHED=0 $(HWSIM_NOSETESTS) \
-	$(NOSEFLAGS_UNCACHED) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=0 $(HWSIM_NOSETESTS) \
+	$(NOSEFLAGS_UNCACHED) $(HWSIM_NOSEFLAGS) $(TESTDIRS)
 
 hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
-	CACHED=1 $(HWSIM_NOSETESTS) \
-	    $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=1 $(HWSIM_NOSETESTS) \
+	    $(NOSEFLAGS) $(HWSIM_NOSEFLAGS) $(TESTDIRS)
 
 nosetests_gxemul: nosetests_gxemul_uncached.xml
 
 nosetests_gxemul_uncached.xml: $(GXEMUL_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/gxemul CACHED=0 $(NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env PYTHONPATH=tools/gxemul CACHED=0 $(NOSETESTS) \
 	    $(PYTHON_TEST_XUNIT_FLAG)=nosetests_gxemul_uncached.xml \
-	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS) || true
+	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS)
 
 nosetests_gxemul_cached: nosetests_gxemul_cached.xml
 
 nosetests_gxemul_cached.xml: $(GXEMUL_TEST_CACHED_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	PYTHONPATH=tools/gxemul CACHED=1 $(NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env PYTHONPATH=tools/gxemul CACHED=1 $(NOSETESTS) \
 	    $(PYTHON_TEST_XUNIT_FLAG)=nosetests_gxemul_cached.xml \
-	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS) || true
+	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS)
 
 gxemul-build:
 	rm -f -r $(GXEMUL_BINDIR)
@@ -596,21 +601,21 @@ nosetests_l3_multi: nosetests_l3_multi.xml
 nosetests_l3_cachedmulti: nosetests_l3_cachedmulti.xml
 
 nosetests_l3.xml: $(L3_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3.xml \
-	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)$(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3.xml \
+	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS)
 
 nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	CACHED=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cached.xml \
-	$(L3_NOSEFLAGS) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cached.xml \
+	$(L3_NOSEFLAGS) $(TESTDIRS)
 
 nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	MULTI1=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_multi.xml \
-	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE) env MULTI1=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_multi.xml \
+	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS)
 
 nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	CACHED=1 MULTI1=1 $(L3_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE) env CACHED=1 MULTI1=1 $(L3_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	    $(TESTDIRS)
 
 _CHECK_FILE_EXIST=$(if $(wildcard $(shell command -v $(1) 2>/dev/null)),$(info SAIL_MIPS_SIM=$(1)),$(error $(2) not found in expected path: "$(1)"))
 check_sail_deps: FORCE
@@ -641,34 +646,34 @@ nosetests_sail_cheri128_c: check_sail_deps FORCE
 # SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
-	     $(TESTDIRS) || true
+	     $(TESTDIRS)
 
 nosetests_sail_mips_c.xml: $(SAIL_MIPS_C_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_MIPS_C_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_MIPS_C_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	    $(TESTDIRS)
 
 nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_CHERI_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
-	     $(TESTDIRS) || true
+	     $(TESTDIRS)
 
 nosetests_sail_cheri_c.xml: $(SAIL_CHERI_C_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI_C_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_CHERI_C_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	    $(TESTDIRS)
 
 nosetests_sail_cheri128.xml: $(SAIL_CHERI128_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI128_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_CHERI128_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
-	   $(TESTDIRS) || true
+	   $(TESTDIRS)
 
 nosetests_sail_cheri128_c.xml: $(SAIL_CHERI128_C_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	LOGDIR=$(SAIL_CHERI128_C_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_CHERI128_C_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
-	    $(TESTDIRS) || true
+	    $(TESTDIRS)
 
 nosetests_qemu: FORCE
 	$(call _CHECK_FILE_EXIST, $(QEMU), QEMU)
@@ -697,8 +702,8 @@ check_valid_qemu: FORCE
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) check_pytest_version $(TEST_PYTHON) check_valid_qemu FORCE
 	@echo "Pytest flags: $(QEMU_NOSEFLAGS)"
-	LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) \
-	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) \
+	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(TESTDIRS)
 
 xmlcat: xmlcat.c
 	$(CC) -o xmlcat xmlcat.c -I/usr/include/libxml2 -lxml2 -lz -lm
@@ -724,7 +729,7 @@ endif
 
 qemu_clang_tests: qemu_clang_tests.xml
 qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
-	$(QEMU_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(CLANG_TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)$(QEMU_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(CLANG_TESTDIRS)
 
 PURECAP_TESTS := $(basename $(TEST_PURECAP_FILES))
 PURECAP_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
@@ -732,13 +737,13 @@ PURECAP_DUMPS := $(addsuffix .dump,$(addprefix $(OBJDIR)/,$(PURECAP_TESTS)))
 purecap_dumps: $(PURECAP_DUMPS)
 qemu_purecap_tests: qemu_purecap_tests.xml
 qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(QEMU_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(PURECAP_TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)$(QEMU_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=$@ -v $(PURECAP_TESTDIRS)
 
 qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOGDIR)/,$(PURECAP_TESTS)))
 
 pytest_qemu_purecap_tests: pytest_qemu_purecap_tests.xml
 pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ -v $(PURECAP_TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)(QEMU_PYTEST) --junit-xml=$@ -v $(PURECAP_TESTDIRS)
 
 CP2_TESTS := $(basename $(TEST_CP2_FILES))
 CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
@@ -746,11 +751,19 @@ CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
 #cp2_dumps: $(CP2_DUMPS)
 pytest_qemu_cp2_tests: pytest_qemu_cp2_tests.xml
 pytest_qemu_cp2_tests.xml: $(CP2_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ $(TESTDIR)/cp2 || true
+	$(MAYBE_IGNORE_EXIT_CODE)$(QEMU_PYTEST) --junit-xml=$@ $(TESTDIR)/cp2
 
 pytest_qemu_clang_tests: pytest_qemu_clang_tests.xml
 pytest_qemu_clang_tests.xml: $(QEMU_CLANG_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
-	$(QEMU_PYTEST) --junit-xml=$@ -v $(CLANG_TESTDIRS) || true
+	$(MAYBE_IGNORE_EXIT_CODE)$(QEMU_PYTEST) --junit-xml=$@ -v $(CLANG_TESTDIRS)
+
+qemu_logs: $(QEMU_TEST_LOGS)
+qemu_logs256:
+	$(MAKE) CAP_SIZE=256 CAP_PRECISE=1 qemu_logs
+qemu_logs128:
+	$(MAKE) CAP_SIZE=128 CAP_PRECISE=0 qemu_logs
+qemu_logs128magic:
+	$(MAKE) CAP_SIZE=128 CAP_PRECISE=1 qemu_logs
 
 pytest_qemu256:
 	$(MAKE) CAP_SIZE=256 CAP_PRECISE=1 nosetests_qemu
@@ -760,65 +773,67 @@ pytest_qemu128magic:
 	$(MAKE) CAP_SIZE=128 CAP_PRECISE=1 nosetests_qemu
 
 pytest_qemu_all:
-	# first build all the binaries (to make use of parallelism)
-	$(MAKE) elfs128 elfs256
+	# first build all the binaries to check for assembler errors (and to make use of parallelism)
+	@$(MAKE) elfs128 elfs256
+	# Also generate the QEMU lots in parallel:
+	@$(MAKE) qemu_logs256 qemu_logs128 qemu_logs128magic
 	# But these steps should run sequentially:
-	$(MAKE) pytest_qemu256
-	$(MAKE) pytest_qemu128
-	$(MAKE) pytest_qemu128magic
+	$(MAKE) FAIL_MAKE_ON_TEST_ERRORS=1 pytest_qemu256
+	$(MAKE) FAIL_MAKE_ON_TEST_ERRORS=1 pytest_qemu128
+	$(MAKE) FAIL_MAKE_ON_TEST_ERRORS=1 pytest_qemu128magic
 
 # pytest -rxXs  # show extra info on xfailed, xpassed, and skipped tests
-SINGLE_TEST_VERBOSE=-rxXs
+SINGLE_TEST_VERBOSE=-v -rxXs
 
 QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
-	$(QEMU_PYTEST) $(SINGLE_TEST_VERBOSE) -v $<
+	$(QEMU_PYTEST) $(SINGLE_TEST_VERBOSE) $<
 
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 
 pytest/sim_uncached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
-	CACHED=0 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS_UNCACHED) -v $<
+	CACHED=0 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS_UNCACHED) $<
 
 pytest/sim_cached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cached.log
-	CACHED=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS) -v $<
+	CACHED=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS) $<
 
 pytest/sim_multi/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_multi.log
-	CACHED=0 MULTI1=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS_UNCACHED) -v $<
+	CACHED=0 MULTI1=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS_UNCACHED) $<
 
 pytest/sim_cachedmulti/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cachedmulti.log
-	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS) -v $<
+	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS) $<
 
 # Single L3 tests:
 pytest/l3_uncached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@)).log
-	CACHED=0 $(L3_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(L3_NOSEFLAGS_UNCACHED) -v $<
+	CACHED=0 $(L3_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(L3_NOSEFLAGS_UNCACHED) $<
 
 pytest/l3_cached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_cached.log
-	CACHED=1 $(L3_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(L3_NOSEFLAGS) -v $<
+	CACHED=1 $(L3_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(L3_NOSEFLAGS) $<
 
 pytest/l3_multi/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_multi.log
-	CACHED=0 MULTI1=1 $(L3_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(L3_NOSEFLAGS_UNCACHED) -v $<
+	CACHED=0 MULTI1=1 $(L3_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(L3_NOSEFLAGS_UNCACHED) $<
 
 pytest/l3_cachedmulti/%.py: %.py FORCE
 	# echo "DEPS: $^ "
 	$(MAKE) $(MFLAGS) $(L3_LOGDIR)/$(notdir $(basename $@))_cachedmulti.log
-	MULTI1=1 CACHED=1 $(L3_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(L3_NOSEFLAGS) -v $<
+	MULTI1=1 CACHED=1 $(L3_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(L3_NOSEFLAGS) $<
 
 
 # run single sail test:
