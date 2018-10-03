@@ -455,6 +455,23 @@ class BaseBERITestCase(unittest.TestCase):
     def assertTrapInfoNoTrap(self, reg, msg):
         self.assertCompressedTrapInfo(reg, no_trap=True, msg=msg)
 
+    class CompressedTrapInfo(object):
+        def __init__(self, reg):
+            compressed_value = reg.offset if isinstance(reg, Capability) else reg
+            assert isinstance(compressed_value, int)
+            # See macros.s for the layout
+            self.capreg = compressed_value & 0xff  # CapCause.RegNum in Bits 0-7
+            self.capcause = (compressed_value >> 8) & 0xff  # CapCause.Cause is Bits 8-15
+            self.cause = (compressed_value >> 18) & 0x1f    # Extract cause (bits 18-23)
+            self.bdelay = bool((compressed_value >> 47) & 1)  # STATUS.BD is bit 47
+            self.trap_count = compressed_value >> 48  # number of traps = Bits 48-63
+
+        def __repr__(self):
+            return "<TrapInfo #{trap_count}: cause={cause} capcause={capcause}, bdelay={bdelay}, capreg={capreg}>".format(
+                trap_count=self.trap_count, cause=MipsStatus.Cause.fromint(self.cause),
+                capcause=MipsStatus.CapCause.fromint(self.capcause), bdelay=self.bdelay, capreg=self.capreg)
+
+
     def assertCompressedTrapInfo(self, capreg, mips_cause: MipsStatus.Cause=-1, cap_cause: MipsStatus.CapCause=None,
                                  cap_reg: int=None, trap_count: int=None, no_trap: bool=False,
                                  bdelay: bool=False, msg=""):
@@ -471,36 +488,30 @@ class BaseBERITestCase(unittest.TestCase):
         :param msg: Additional message to print on failure
         :return:
         '''
+        trap_info = self.CompressedTrapInfo(capreg)
         if no_trap:
             if isinstance(capreg, Capability):
-                self.assertNullCap(capreg, msg=msg + " (didn't expect a trap here)")
+                self.assertNullCap(capreg, msg=msg + ": didn't expect a trap here but got " + repr(trap_info))
             else:
-                self.assertRegisterEqual(capreg, 0, msg=msg + " (didn't expect a trap here)")
+                self.assertRegisterEqual(capreg, 0, msg=msg + ": didn't expect a trap here but got " + repr(trap_info))
             return
 
-        compressed_value = capreg.offset if isinstance(capreg, Capability) else capreg
-        # See macros.s for the layout of the offset field
-        # Extract cause (bits 18-23)
-        cause_value = (compressed_value >> 18) & 0x1f
-        if cause_value != mips_cause.value:
-            self.fail(msg + ": MIPS cause wrong: %s != expected %s" % (
-                MipsStatus.Cause.fromint(cause_value), MipsStatus.Cause.fromint(mips_cause)))
-        if bdelay is not None:
-            bdelay_value = bool((compressed_value >> 47) & 1)
-            self.assertEqual(bdelay_value, bdelay, msg + ": BDELAY CAUSE flag wrong: expected trap" +
-                             ("" if bdelay else " NOT ") + " in delay slot")
+        assert trap_info.cause == mips_cause.value, msg + ": MIPS cause wrong: %s != expected %s" % (
+                MipsStatus.Cause.fromint(trap_info.cause), MipsStatus.Cause.fromint(mips_cause))
+
+        if cap_cause is not None:
+            assert trap_info.capcause == cap_cause.value, ": cap cause wrong: %s != expected %s" % (
+                MipsStatus.CapCause.fromint(trap_info.capcause), MipsStatus.CapCause.fromint(cap_cause))
 
         if cap_reg is not None:
-            value = compressed_value & 0xff  # CapCause.RegNum in Bits 0-7
-            self.assertRegisterEqual(value, cap_reg, msg + ": cap reg wrong")
-        if cap_cause is not None:
-            value = (compressed_value >> 8) & 0xff  # CapCause.Cause is Bits 8-15
-            if value != cap_cause.value:
-                self.fail(msg + ": cap cause wrong: %s != expected %s" % (
-                    MipsStatus.CapCause.fromint(value), MipsStatus.CapCause.fromint(cap_cause)))
+            assert trap_info.capreg == cap_reg, msg + ": cap reg wrong"
+
         if trap_count is not None:
-            value = compressed_value >> 48  # Bits 48-63
-            self.assertRegisterEqual(value, trap_count, msg + ": trap count wrong")
+            assert trap_info.trap_count == trap_count, msg + ": trap count wrong"
+
+        if bdelay is not None:
+            assert trap_info.bdelay == bdelay, (msg + ": BDELAY flag wrong: expected trap" +
+                                                ("" if bdelay else " NOT ") + " in delay slot")
 
     def assertCp2Fault(self, info: Capability, cap_cause: MipsStatus.CapCause, cap_reg: int=None, trap_count:int =None, bdelay: bool=False, msg="") -> None:
         """Check that capreg holds compressed trap info"""
