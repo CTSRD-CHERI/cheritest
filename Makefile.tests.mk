@@ -34,7 +34,7 @@ endif
 include Makefile.predicates.mk
 
 FAIL_MAKE_ON_TEST_ERRORS?=0
-ifneq ($(FAIL_MAKE_ON_TEST_ERRORS),0)
+ifeq ($(FAIL_MAKE_ON_TEST_ERRORS),0)
 MAYBE_IGNORE_EXIT_CODE=-
 else
 MAYBE_IGNORE_EXIT_CODE=
@@ -512,7 +512,7 @@ nose_fuzz: $(SIM) fuzz_run_tests
 	    $(NOSEFLAGS_UNCACHED) tests/fuzz
 
 nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
-	$(MAYBE_IGNORE_EXIT_CODE) env CACHED=1 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz_cached.xml \
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=1 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz_cached.xml \
 	    $(NOSEFLAGS) tests/fuzz
 
 
@@ -609,11 +609,11 @@ nosetests_l3_cached.xml: $(L3_TEST_CACHED_LOGS) check_pytest_version $(TEST_PYTH
 	$(L3_NOSEFLAGS) $(TESTDIRS)
 
 nosetests_l3_multi.xml: $(L3_TEST_MULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE) env MULTI1=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_multi.xml \
+	$(MAYBE_IGNORE_EXIT_CODE)env MULTI1=1 $(L3_NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_multi.xml \
 	$(L3_NOSEFLAGS_UNCACHED) $(TESTDIRS)
 
 nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE) env CACHED=1 MULTI1=1 $(L3_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=1 MULTI1=1 $(L3_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=nosetests_l3_cachedmulti.xml $(L3_NOSEFLAGS) \
 	    $(TESTDIRS)
 
@@ -646,32 +646,32 @@ nosetests_sail_cheri128_c: check_sail_deps FORCE
 # SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
 	     $(TESTDIRS)
 
 nosetests_sail_mips_c.xml: $(SAIL_MIPS_C_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_MIPS_C_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_MIPS_C_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
 	    $(TESTDIRS)
 
 nosetests_sail_cheri.xml: $(SAIL_CHERI_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_CHERI_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_CHERI_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
 	     $(TESTDIRS)
 
 nosetests_sail_cheri_c.xml: $(SAIL_CHERI_C_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_CHERI_C_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_CHERI_C_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI_NOSEFLAGS) \
 	    $(TESTDIRS)
 
 nosetests_sail_cheri128.xml: $(SAIL_CHERI128_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_CHERI128_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_CHERI128_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
 	   $(TESTDIRS)
 
 nosetests_sail_cheri128_c.xml: $(SAIL_CHERI128_C_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(SAIL_CHERI128_C_LOGDIR) $(SAIL_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_CHERI128_C_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
 	    $(TESTDIRS)
 
@@ -702,7 +702,7 @@ check_valid_qemu: FORCE
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
 nosetests_qemu.xml: $(QEMU_TEST_LOGS) check_pytest_version $(TEST_PYTHON) check_valid_qemu FORCE
 	@echo "Pytest flags: $(QEMU_NOSEFLAGS)"
-	$(MAYBE_IGNORE_EXIT_CODE) env LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(TESTDIRS)
 
 xmlcat: xmlcat.c
