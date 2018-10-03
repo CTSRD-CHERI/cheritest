@@ -174,7 +174,11 @@ class BaseBERITestCase(unittest.TestCase):
                 self._do_setup()
                 if self._SETUP_EXCEPTION is not None:
                     return
-            assert self.MIPS.k0 == self.EXPECTED_EXCEPTIONS, self.__class__.__name__ + " threw " + str(self._MIPS.k0) + " exception(s) unexpectedly"
+            assert self.MIPS.k0 == self.EXPECTED_EXCEPTIONS, \
+                self.__class__.__name__ + " threw " + str(self._MIPS.k0) + " exception(s) unexpectedly\n" + \
+                "Possible trap info (unless $k1 was clobbered): " + repr(self.CompressedTrapInfo(self.MIPS.k1))
+
+
 
     def _do_setup(self):
         '''Parse the log file and instantiate MIPS'''
