@@ -106,6 +106,17 @@
 .endif
 .endm
 
+.macro DO_ERET
+	# Ensure there are enough nops before the eret to update CP0 state.
+	# XXXRW: How many are actually required here?
+	# XXXAR: 4 seems to be enough (?)
+	ssnop
+	ssnop
+	ssnop
+	ssnop
+	eret
+.endm
+
 
 # Collect information on the last trap and store it as follows:
 # arg1: compressed_info_reg (should be set to $k1 so that save_counting_exception_handler_cause)
