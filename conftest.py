@@ -88,6 +88,7 @@ def pytest_ignore_collect(path, config):
         "multicore": "/tests/multicore",
         "float": "/tests/fpu",
         "trace_tests": "/tests/trace",
+        "beri_statcounters": "/tests/statcounters",
     }
 
     for opt, skip_path in skip_paths.items():

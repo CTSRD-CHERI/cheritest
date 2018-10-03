@@ -28,7 +28,7 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr(beri_statcounters="any")
 class test_statcounters_no_trap_in_user_mode(BaseBERITestCase):
-    @attr(beri_statcounters="any")
     def test_no_trap(self):
         self.assertRegisterEqual(self.MIPS.v0, 0, "Should not have trapped")
