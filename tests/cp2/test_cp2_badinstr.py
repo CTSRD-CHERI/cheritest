@@ -34,8 +34,7 @@ from beritest_tools import attr
 
 @attr('capabilities')
 class test_cp2_badinstr(BaseBERITestCase):
-    def test_trap_handler_ran(self):
-        assert self.MIPS.v0 == 4, "trap handler didn't run 4 times"
+    EXPECTED_EXCEPTIONS = 4
 
     def test_badinstr_supported(self):
         assert ((self.MIPS.s3 >> 26) & 1) == 1, "CP0.config3.BadInstr is not set"

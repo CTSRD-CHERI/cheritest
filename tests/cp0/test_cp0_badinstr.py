@@ -32,6 +32,8 @@ from beritest_tools import attr
 # Test that the BadInstr register is implemented
 #
 class test_cp0_badinstr(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
+
     def test_badinstr_supported(self):
         assert ((self.MIPS.a3 >> 26) & 1) == 1, "CP0.config3.BadInstr is not set"
 

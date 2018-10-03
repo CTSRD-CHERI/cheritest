@@ -36,10 +36,9 @@ from beritest_tools import attr
 # expected to work on CPUs that don't implement user local.
 #
 
+@attr('rdhwr')
+@attr('userlocal')
 class test_cp0_userlocal(BaseBERITestCase):
-
-    @attr('rdhwr')
-    @attr('userlocal')
     def test_cp0_userlocal_1(self):
         '''Test that the user local register can be written as CP0 reg 4 sel 2 and read as hardware register 29'''
         self.assertRegisterEqual(self.MIPS.a0, 0x123456789abcdef0, "rdhwr did not read back the expected value from the user local register")

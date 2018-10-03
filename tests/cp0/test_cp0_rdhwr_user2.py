@@ -28,19 +28,17 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr, xfail_on
 
+@attr('tlb')
+@attr('rdhwr')
 class test_cp0_rdhwr_user2(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('tlb')
-    @attr('rdhwr')
     @attr('userlocal')
     def test_cp0_rdhwr_user2_1(self):
         '''Test that the user local register can be read from user space'''
         self.assertRegisterEqual(self.MIPS.a1, 0x123456789abcdef0,
                                  "rdhwr did not read back the expected value from the user local register")
 
-
-    @attr('tlb')
-    @attr('rdhwr')
     @attr('usercount')
     @attr('count_register_is_icount')
     def test_cp0_rdhwr_user2_count(self):
@@ -48,8 +46,6 @@ class test_cp0_rdhwr_user2(BaseBERITestCase):
         self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a3-90, self.MIPS.a3,
                                    "rdhwr counter did not approximately match cp0 count ")
 
-    @attr('tlb')
-    @attr('rdhwr')
     @attr('usercount')
     @attr('count_register_is_time')
     def test_cp0_rdhwr_user2_count_qemu(self):

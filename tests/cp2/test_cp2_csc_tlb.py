@@ -32,6 +32,8 @@ from beritest_tools import attr
 @attr('capabilities')
 @attr('tlb')
 class test_cp2_csc_tlb(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
+
     def test_cp2_csc_tlb_progress(self):
         '''Test that test finishes at the end of stage 4'''
         self.assertRegisterEqual(self.MIPS.a5, 4, "Test did not finish at the end of stage 4")

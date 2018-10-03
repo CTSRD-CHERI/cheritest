@@ -150,7 +150,7 @@
 
 	# increment trap_count and keep result in v0
 	__get_counting_trap_handler_count $v0	# get old exception count
-	daddiu $v0, $v0, 1			# a1 = new exception count
+	daddiu $v0, $v0, 1			# v0 = new exception count
 	__set_counting_trap_handler_count $v0	# save exception count value
 
 	# Shift exception count to the high 16 bits

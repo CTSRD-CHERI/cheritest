@@ -25,10 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
-.set noreorder
-.set nobopt
-.set noat
+
+# The trap handler uses the userlocal register to store the trap count by default
+# This would conflict with this test. Store to memory instead.
+COUNTING_TRAP_HANDLER_STORE_TO_MEM = 1
 .include "macros.s"
 #
 # Test that the rdhwr instruction can be used to read the user local register.
@@ -60,4 +60,6 @@ BEGIN_TEST
 		rdhwr	$a0, $29
 		.set pop
 
+		__get_counting_trap_handler_count $v0
+		dmtc0	$v0, $4, 2
 END_TEST

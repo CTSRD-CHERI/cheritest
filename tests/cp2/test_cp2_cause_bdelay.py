@@ -31,8 +31,7 @@ from beritest_tools import attr
 # Check that CP0_Cause.BD is set correctly for CHERI instructions
 @attr('capabilities')
 class test_cp2_cause_bdelay(BaseBERITestCase):
-    def test_trap_handler_ran(self):
-        assert self.MIPS.v0 == 8, "Expected 7 traps"
+    EXPECTED_EXCEPTIONS = 8
 
     def test_mips_trap_not_bdelay(self):
         self.assertCompressedTrapInfo(self.MIPS.c4, mips_cause=self.MIPS.Cause.TRAP, trap_count=1, bdelay=False)

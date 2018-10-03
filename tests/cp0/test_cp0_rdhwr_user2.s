@@ -31,15 +31,7 @@
 # Test that the rdhwr instruction can be used in userspace when the right
 # bit in CP0.HWREna is set.
 
-BEGIN_TEST
-		#
-		# Install exception handler
-		#
-
-		dla	$a0, exception_handler
-		jal 	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Set CP0.HWREna.userlocal, enabling access to the userlocal
 		# register from userspace.
@@ -88,11 +80,14 @@ testcode:
 		.set pop
 		syscall 0			# Return to kernel mode
 
-exception_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		# fetch CP0 count for comparison
 		dmfc0   $a3, $9
-                dmfc0   $a6, $12                # Read status
-                dmfc0   $a7, $13                # Read cause
+		dmfc0   $a6, $12                # Read status
+		dmfc0   $a7, $13                # Read cause
+		__set_counting_trap_handler_count $zero
+		collect_compressed_trap_info $a0
 		dla	$t0, the_end
 		jr	$t0
 		nop
+END_CUSTOM_TRAP_HANDLER

@@ -42,10 +42,9 @@ from beritest_tools import attr
 # present, which might cause it not to incorrectly fire for gxemul.
 #
 
+@attr('cache')
+@attr('dumpicache')
 class test_cache_instruction_instruction(BaseICacheBERITestCase):
-
-    @attr('cache')
-    @attr('dumpicache')
     def test_completion(self):
         self.assertTagInvalid ( 10  , "icache line index 10  was not invalidated" )
         self.assertTagValid   ( 20  , "icache line index 20  was not fetched"     )

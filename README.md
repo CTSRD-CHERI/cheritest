@@ -52,6 +52,8 @@ from beritest_tools import BaseBERITestCase, attr, HexInt
 
 @attr("capabilities")
 class test_foo(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 4 # this tests expects the trap handler to be invoked 4 times (default is 0)
+
     def test_trap_info(self):
         # Use python asserts instead of self.assertRegisterEqual() since pytest gives much more detailed
         # output on failures if you use them
@@ -59,11 +61,6 @@ class test_foo(BaseBERITestCase):
         assert self.MIPS.c1.offset == HexInt(0x12345)
         # Note: unlike self.assertRegisterEqual() the assertion above will also print the full value of
         # $c1 which is very useful for debugging tests
-
-    # TODO: this should be part of BaseBERITestCase!
-    def test_trap_count(self):
-        assert self.MIPS.v0 == 0, "This test should not have trapped"
-        self.assertTrapInfoNoTrap(self.MIPS.k1, "This test should not have trapped")
 ```
 
 ### Writing tests with custom trap handlers

@@ -310,8 +310,7 @@ dump_core0:
 		# Load the exception count into k0 so that it is visible 
 		# in register dump
 		#
-		dla			$k0, exception_count
-		ld      $k0, 0($k0)
+		__get_counting_trap_handler_count $k0
 
 		#
 		# Dump registers on the simulator (gxemul dumps regs on exit)
@@ -342,9 +341,7 @@ end:
 dump_not_thread0:
 dump_not_core0:
 
-		dla	$k0, exception_count
-		ld	$k0, 0($k0)
-
+		__get_counting_trap_handler_count $k0
 		#
 		# Dump registers even though core/thread not zero, so we
 		# can see all cores in the trace.
@@ -419,10 +416,11 @@ exception_count_handler:
 
 
 		# Increment exception counter
-		dla     $ra, exception_count
-		ld      $k0, ($ra)
-		addi    $k0, $k0, 1
-		sd      $k0, ($ra)
+		__get_counting_trap_handler_count $k0	# get old exception count
+		daddiu $k0, $k0, 1			# $k0 = new exception count
+		__set_counting_trap_handler_count $k0	# save exception count value
+		dla	$ra, exception_count
+		sd	$k0, 0($ra)
 
 		# If this is a timer interrupt, then return to the current instruction
 		dmfc0	$k0, $13
