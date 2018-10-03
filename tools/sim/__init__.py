@@ -328,7 +328,7 @@ class MipsStatus(object):
         return self.threads[0][key]
 
     def __repr__(self):
-        return "<MipsStatus from " + repr(self.fh) + ">"
+        return "<MipsStatus from " + repr(self.fh.name) + ">"
         # v = []
         # for i, t in self.threads.items():
         #     v.append("======  Thread %3d  ======" % i)
