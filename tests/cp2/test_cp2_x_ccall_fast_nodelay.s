@@ -57,11 +57,10 @@ BEGIN_TEST
 
   # Construct a PCC that does not include the delay slot of CCallFast
   cgetpcc         $c6
-  csetoffset      $c6, $c6, $zero
-  dla             $t0, test_slot
-  csetbounds      $c6, $c6, $t0
   dla             $t0, test_body
   csetoffset      $c6, $c6, $t0
+  dla             $t0, test_slot - test_body
+  csetbounds      $c6, $c6, $t0
   cjr             $c6
   nop
 
