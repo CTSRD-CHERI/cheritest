@@ -140,3 +140,34 @@ class BERITestBaseClasses:
 
         def test_trap_count(self):
             assert self.MIPS.v0 == 1, "should only trap once!"
+
+    @attr('capabilities')
+    class EPCCInvalidERETTestCase(BaseBERITestCase):
+        msg = None
+        expected_epcc_tag = 1
+        expected_epcc_sealed = 0
+        expected_epcc_executable = 1
+
+        def _do_setup(self):
+            assert self.msg is not None, "Must define class variable msg"
+            super()._do_setup()
+    
+        def test_trap_info(self):
+            self.assertCp2Fault(self.MIPS.s1, cap_cause=self.expected_cap_cause, cap_reg=0xff,
+                                    trap_count=1, msg="wrong trap info")
+    
+        def test_epc(self):
+            assert self.MIPS.s0 == self.MIPS.s2, "epc not set to expected_epc for " + self.msg
+    
+        def test_epcc_tag(self):
+            assert self.MIPS.c2.t == self.expected_epcc_tag, "EPCC.tag was not expected value for "  + self.msg
+    
+        def test_epcc_sealed(self):
+            assert self.MIPS.c2.s == self.expected_epcc_sealed, "EPCC.sealed was not the expected value for "  + self.msg
+    
+        def test_epcc_perms(self):
+            if self.expected_epcc_executable:
+                perms = self.max_permissions
+            else:
+                perms = self.max_nonexec_perms
+            assert self.MIPS.c2.perms == perms, "EPCC permissions was not the expected value after " + self.msg
