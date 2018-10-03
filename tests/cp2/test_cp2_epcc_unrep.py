@@ -67,8 +67,18 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
     def test_epcc_perms_precise(self):
         assert self.MIPS.cp2[3].perms == 0x0007, "sandbox EPCC perms incorrect"
 
+
+    # See https://github.com/CTSRD-CHERI/cheri-isa/issues/19
     @attr('cap_imprecise')
-    def test_epcc_perms_imprecise(self):
+    @attr('cap_unrep_retains_info')
+    def test_epcc_perms_imprecise_retains_perms(self):
+        # QEMU doesn't clear the permissions fields on unrep (to help debugging)
+        assert self.MIPS.cp2[3].perms == 0x7, "sandbox EPCC perms should not change on unrep"
+        assert self.MIPS.epcc.perms == 0x7, "sandbox EPCC perms should not change on unrep (final dump value)"
+
+    @attr('cap_imprecise')
+    @attr('cap_unrep_clears_all_info')
+    def test_epcc_perms_imprecise_clears_perms(self):
         assert self.MIPS.cp2[3].perms == 0x0, "sandbox EPCC perms incorrect"
         assert self.MIPS.epcc.perms == 0x0, "sandbox EPCC perms incorrect (final dump value)"
 
@@ -76,9 +86,9 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
         assert self.MIPS.cp2[3].ctype == 0, "sandbox EPCC ctype incorrect"
         assert self.MIPS.epcc.ctype == 0, "sandbox EPCC ctype incorrect (final dump value)"
 
-    def test_epcc_offset(self):
-        assert self.MIPS.cp2[3].base + self.MIPS.cp2[3].offset == self.MIPS.a7 + 0x10000000, "sandbox EPCC offset incorrect"
-        assert self.MIPS.epcc.base + self.MIPS.epcc.offset == self.MIPS.a7 + 0x10000000, "sandbox EPCC offset incorrect (final dump value)"
+    def test_epcc_addr(self):
+        assert self.MIPS.cp2[3].base + self.MIPS.cp2[3].offset == self.MIPS.a7 + HexInt(0x10000000), "sandbox EPCC offset incorrect"
+        assert self.MIPS.epcc.base + self.MIPS.epcc.offset == self.MIPS.a7 + HexInt(0x10000000), "sandbox EPCC offset incorrect (final dump value)"
 
     @attr('cap_imprecise')
     def test_epcc_base_imprecise(self):

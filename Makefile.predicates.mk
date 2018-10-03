@@ -148,6 +148,9 @@ ifeq ($(NOFUZZR),1)
 COMMON_UNSUPPORTED_FEATURES+=	fuzz_test_regression
 endif
 
+# TODO: remove once https://github.com/CTSRD-CHERI/cheri-isa/issues/19 is resolved
+COMMON_UNSUPPORTED_FEATURES+=	cap_unrep_retains_info
+
 
 ####### L3 predicates #######
 
@@ -320,9 +323,14 @@ endif
 QEMU_UNSUPPORTED_IF+=beri_statcounters=icount
 QEMU_UNSUPPORTED_IF+=beri_statcounters=mem
 QEMU_UNSUPPORTED_IF+=beri_statcounters=cache
+
+# TODO: remove once https://github.com/CTSRD-CHERI/cheri-isa/issues/19 is resolved
+QEMU_UNSUPPORTED_FEATURES+=cap_unrep_clears_all_info
+QEMU_UNSUPPORTED_FEATURES_FINAL=$(filter-out cap_unrep_retains_info,$(QEMU_UNSUPPORTED_FEATURES))
+
 # QEMU_UNSUPPORTED_FEATURES+=beri_statcounters
 
-QEMU_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(QEMU_UNSUPPORTED_FEATURES)" --unsupported-feature-if-equal "$(QEMU_UNSUPPORTED_IF)"
+QEMU_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(QEMU_UNSUPPORTED_FEATURES_FINAL)" --unsupported-feature-if-equal "$(QEMU_UNSUPPORTED_IF)"
 
 
 
