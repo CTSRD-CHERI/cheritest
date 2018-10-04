@@ -121,9 +121,5 @@ bev0_handler:
 		#dmfc0   $a6, $8, $1     
 		#assembler doesn't support this yet so use manual assembly...
 		.word   0x402a4001
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler

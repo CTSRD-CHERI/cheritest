@@ -143,9 +143,5 @@ skip_new_entry:
 		tlbwi							# Write Indexed to ensure a fill on every miss
 #		mtc0 $at, $25           # On BERI this is magic instruction to dump TLB contents
 		nop
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler

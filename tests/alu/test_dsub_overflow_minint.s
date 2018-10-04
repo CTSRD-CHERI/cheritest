@@ -99,9 +99,5 @@ bev0_handler:
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler

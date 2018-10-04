@@ -114,9 +114,5 @@ bev0_handler:
 		dmtc0	$k0, $14
 		mflo	$s0
 		mfhi	$s1
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler

@@ -442,11 +442,7 @@ skip_increment:
 		ld	$fp, 16($sp)
 	        ld      $k0,  8($sp)
 		daddu	$sp, $sp, 32
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
+		DO_ERET
 end_of_exception_count_handler:
 		nop
 		nop

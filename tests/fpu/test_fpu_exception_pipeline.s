@@ -109,9 +109,5 @@ bev0_handler:
 		dmfc0	$k0, $14	# EPC
 		daddiu	$k0, $k0, 8 	# EPC += 8 to bump PC forward on ERET N.B. 8 because we wish to skip instruction after svc!
 		dmtc0	$k0, $14
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler

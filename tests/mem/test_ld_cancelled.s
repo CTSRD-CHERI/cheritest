@@ -98,9 +98,5 @@ bev0_handler:
 		dli	$a0, 0x900000007f800000
 		dli	$a0, 0x900000007f800000
 		ld $a1, 0($a0)
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler

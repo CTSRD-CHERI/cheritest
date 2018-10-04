@@ -125,9 +125,5 @@ bev0_handler:
 		nop
 		nop
 		mfc0	$s0, $13	# Cause register
-		nop			# NOPs to avoid hazard with ERET
-		nop			# XXXRW: How many are actually
-		nop			# required here?
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
