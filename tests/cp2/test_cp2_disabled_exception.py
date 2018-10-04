@@ -34,19 +34,21 @@ from beritest_tools import attr
 # unusable exception.
 #
 
+@attr('capabilities')
 class test_cp2_disabled_exception(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('capabilities')
     def test_exception_counter(self):
-        self.assertRegisterEqual(self.MIPS.a0, 1, "CP2 exception counter not 2")
+        self.assertRegisterEqual(self.MIPS.v0, 1, "CP2 exception counter not 1")
 
-    @attr('capabilities')
     def test_cause(self):
         cpUnusable = (self.MIPS.a1 >> 28) & 3
         ex = (self.MIPS.a1 >> 2) & 0x1f
         self.assertEqual(cpUnusable, 2, "cp unusable not 2")
         self.assertEqual(ex, 11, "exception cause not 11 (cp unusable)")
 
-    @attr('capabilities')
+    def test_trap_info(self):
+        self.assertCompressedTrapInfo(self.MIPS.a4, mips_cause=self.MIPS.Cause.COP_Unusable)
+
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a2, self.MIPS.a3, "expected epc did not match")

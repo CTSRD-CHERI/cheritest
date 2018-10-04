@@ -43,21 +43,8 @@
 # $a2 - EPC register from last trap (should be 0x10)
 #
 
-BEGIN_TEST
-		#
-		# Set up 'handler' as the RAM exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, exception_handler
-		jal	bev0_handler_install
-		nop
-
-		#
-		# Initialise trap counter.
-		#
-		dli	$a0, 0
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
+		dli	$v0, 0
 	        # Disable CP2 in status register 
 	        mfc0    $t0, $12
                 li	$t1, 1 << 30
@@ -85,21 +72,18 @@ return:
                 # Save expected epc for later comparison
                 # with a2
                 dla     $a3, expected_epc
-        
 END_TEST
 
 
 #
 # Exception handler. This code assumes that the trap was not in a branch delay slot.
 #
-		.ent exception_handler
-exception_handler:
-		daddiu	$a0, $a0, 1	# Increment trap counter        
+BEGIN_CUSTOM_TRAP_HANDLER
 		mfc0	$a1, $13	# Get cause register
 		dmfc0	$a2, $14        # get EPC
-
+		collect_compressed_trap_info $a4
 		# Set EPC to continue after exception return
 		dla	$k0, return
 		dmtc0	$k0, $14
-		eret
-		.end exception_handler
+		DO_ERET
+END_CUSTOM_TRAP_HANDLER

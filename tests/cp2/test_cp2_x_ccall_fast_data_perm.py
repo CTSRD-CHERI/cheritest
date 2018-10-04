@@ -41,7 +41,7 @@ class test_cp2_x_ccall_fast_data_perm(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.t1, 0x0,
                                  "sandbox entered without Permit_CCall on sealed data capability.")
 
-    def test_cp2_x_ccall_fast_data_perm_2(self):
+    def test_cp2_x_ccall_fast_code_perm_2(self):
         '''Test that the exception raised has the correct cause'''
-        self.assertRegisterEqual(self.MIPS.t3, 0x1902,
-                                 "Permit_CCall violation raised with invalid cause.")
+        self.assertCp2Fault(self.MIPS.k1, cap_reg=2, cap_cause=self.MIPS.CapCause.Permit_CCall_Violation,
+                            trap_count=1, msg="expected a Permit_CCall violation")

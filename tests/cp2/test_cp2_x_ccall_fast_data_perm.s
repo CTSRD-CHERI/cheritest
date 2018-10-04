@@ -38,16 +38,6 @@
 # t1 must be set to 0x0: sandbox not entered.
 # t3 must be set to 0x1902: permit ccall violation on register $c2
 BEGIN_TEST
-
-	#
-	# Set up 'handler' as the RAM exception handler.
-	#
-	jal	bev_clear
-	nop
-	dla	$a0, exception_handler
-	jal	bev0_handler_install
-	nop
-
         #
         # Make $c4 a template capability for user-defined type
         # number 0x1234.
@@ -98,11 +88,7 @@ BEGIN_TEST
 	nop
 
 restored_ra:
-	ld	$fp, 16($sp)
-	ld	$ra, 24($sp)
-	jr	$ra
-	daddiu  $sp, $sp, 32	# branch-delay slot
-	.end	test
+END_TEST
 
         .ent sandbox
 sandbox:
@@ -110,22 +96,6 @@ sandbox:
         jr      $t0
         li      $t1, 0xbeef     # this sandbox should not be entered
         .end sandbox
-
-
-#
-# Exception handler, which relies on the installation of KCC into PCC in order
-# to run.
-#
-	.ent exception_handler
-exception_handler:
-        dmfc0   $k0, $14
-        daddiu  $k0, $k0, 8 # advance the EPC by two instructions
-        		    # and return to restored_ra
-	cgetcause $t3	# store exception cause to t3 for the test suite to check.
-        dmtc0   $k0, $14
-	DO_ERET
-	.end exception_handler
-
 
         .data
         .align  12
