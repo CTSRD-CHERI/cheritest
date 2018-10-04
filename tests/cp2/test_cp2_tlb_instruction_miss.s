@@ -113,10 +113,5 @@ tlb_stuff:
 	nop
 	nop
 	tlbwr				# Write Random
-
-	nop				# NOPs to avoid hazard with ERET
-	nop				# XXXRW: How many are actually
-	nop				# required here?
-	nop
-	eret
+	DO_ERET
 	.end bev0_handler

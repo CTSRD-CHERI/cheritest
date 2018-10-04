@@ -149,12 +149,5 @@ exception_handler:
                 dla     $k0, return
                 dmtc0   $k0, $14
 exception_done:
-                nop                     # Avoid CP0 hazards with ERET
-                nop                     # XXXRW: How many are actually
-                nop                     # required here?
-                nop
-                nop
-                nop
-                nop
-                eret
+                DO_ERET
                 .end exception_handler

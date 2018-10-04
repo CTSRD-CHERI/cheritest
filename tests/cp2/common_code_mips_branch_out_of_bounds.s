@@ -95,9 +95,5 @@ BEGIN_CUSTOM_TRAP_HANDLER
 		csetoffset $c27, $c27, $k0
 		csetepcc $c27
 		dmtc0	$k0, $14
-		ssnop
-		ssnop
-		ssnop
-		ssnop
-		eret
+		DO_ERET
 END_CUSTOM_TRAP_HANDLER

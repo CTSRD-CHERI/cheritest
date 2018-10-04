@@ -132,11 +132,7 @@ test:   .ent    test
                 daddu $s2, $s1, 8                     # Compute address to jump to
                 dmtc0 $s2, $14                        # Set EPC
                 mtc0  $t0, $12                        # Set status reg
-                nop
-                nop
-                nop
-                nop
-                eret                                    # Use eret to (possibly) enter user mode.
+                DO_ERET                               # Use eret to (possibly) enter user mode.
 		
 after_test:
 .if 0
