@@ -128,12 +128,8 @@ TEST_CP2?=1
 CLANG?=1
 PURECAP?=1
 # CHECK that CAP_SIZE is a sensible value
-ifneq ($(CAP_SIZE),64)
-ifneq ($(CAP_SIZE),128)
-ifneq ($(CAP_SIZE),256)
+ifneq ($(CAP_SIZE),$(filter $(CAP_SIZE),64 128 256))
 $(error "Invalid value for CAP_SIZE: $(CAP_SIZE))
-endif
-endif
 endif
 
 endif  # CAP_SIZE != 0
