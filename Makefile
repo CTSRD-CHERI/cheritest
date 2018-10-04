@@ -195,10 +195,6 @@ CLANG_CMD?=$(CHERI_SDK_BINDIR)/clang -integrated-as
 OBJDUMP?=$(CHERI_SDK_BINDIR)/llvm-objdump
 OBJCOPY?=$(CHERI_SDK_BINDIR)/llvm-objcopy
 
-# For now force using the GNU AS since clang doesn't quite work (5 tests broken)
-# CHERI_SDK_USE_GNU_AS?=1
-# But LLD seems to work fine
-# CHERI_SDK_USE_GNU_BINUTILS?=1
 
 ifneq ($(CHERI_SDK_USE_GNU_BINUTILS),)
 CHERI_SDK_USE_GNU_AS:=1
