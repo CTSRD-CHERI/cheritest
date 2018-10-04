@@ -28,6 +28,7 @@
 .set noreorder
 .set nobopt
 .set noat
+.include "macros.s"
 
 .set CAP_SIZE, 32
 .set ex_vector, 0x9800000000000180
