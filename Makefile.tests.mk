@@ -413,11 +413,20 @@ endif
 # TODO: ASAN_OPTIONS=suppressions=QEMU_ASAN.supp
 SANITIZER_ENV=UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 LSAN_OPTIONS=suppressions=QEMU_LEAKS.supp
 
+# We can't have the logfile targets depend on $(QEMU) since that gives the
+# following useless error if $(QEMU) doesn't exist:
+# make: *** No rule to make target 'qemu_log/mips/test_raw_template.log', needed by 'qemu_logs'. Stop.
+# By indirecting through an existing target the wildcard rule will be created and
+# if we create an output file here all logfiles are recreated if QEMU changes
+# TODO: do the same for sail,sim, etc!
+CHECK_QEMU_EXISTS=$(QEMU_LOGDIR)/.qemu_exists
+$(CHECK_QEMU_EXISTS): $(QEMU) | $(QEMU_LOGDIR) check_valid_qemu
+	$(QEMU) --version > "$@"
+	@echo "CHECKED"
+
+
 # raw tests need to be started with tracing in, for the others we can start it in init.s
-$(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(QEMU) | $(QEMU_LOGDIR)
-ifeq ($(wildcard $(QEMU_ABSPATH)),)
-	$(error QEMU ($(QEMU)) is missing, could not execute it)
-endif
+$(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(CHECK_QEMU_EXISTS) | $(QEMU_LOGDIR)
 	@echo "$(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) -d instr > /dev/null"
 	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
@@ -427,10 +436,7 @@ endif
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
-$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(QEMU) | $(QEMU_LOGDIR)
-ifeq ($(wildcard $(QEMU_ABSPATH)),)
-	$(error QEMU ($(QEMU)) is missing, could not execute it)
-endif
+$(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(CHECK_QEMU_EXISTS) | $(QEMU_LOGDIR)
 	@echo "$(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) > /dev/null"
 	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
@@ -679,12 +685,15 @@ nosetests_sail_cheri128_c.xml: $(SAIL_CHERI128_C_TEST_LOGS) check_pytest_version
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
 	    $(TESTDIRS)
 
-nosetests_qemu: FORCE
+.PHONY: nosetests_qemu check_valid_qemu
+
+nosetests_qemu:
 	$(call _CHECK_FILE_EXIST, $(QEMU), QEMU)
 	$(MAKE) $(MFLAGS) nosetests_qemu.xml
 
-check_valid_qemu: FORCE
+check_valid_qemu:
 	@echo "Checking if QEMU $(QEMU_ABSPATH) is valid for this configuration:"
+	$(QEMU) --version
 	@echo "CAP_PRECISE='$(CAP_PRECISE)', QEMU_CAP_PRECISE='$(QEMU_CAP_PRECISE)'"
 	@echo "CAP_SIZE='$(CAP_SIZE)', QEMU_CAP_SIZE='$(QEMU_CAP_SIZE)'"
 	@echo "CHERI_C0_IS_NULL='$(CHERI_C0_IS_NULL)', QEMU_C0_IS_NULL='$(QEMU_C0_IS_NULL)'"
