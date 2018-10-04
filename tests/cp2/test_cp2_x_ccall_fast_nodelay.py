@@ -28,9 +28,8 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('capabilities')
 class test_cp2_x_ccall_fast_nodelay(BaseBERITestCase):
-
-    @attr('capabilities')
     def test_cp2_x_ccall_fast_nodelay_no_trap(self):
         '''Test that CCallFast should not have a delay slot'''
         self.assertRegisterEqual(self.MIPS.v0, 0x44, "CCallFast has a delay slot!")
