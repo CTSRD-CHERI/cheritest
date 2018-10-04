@@ -124,6 +124,7 @@ CLANG:=0
 PURECAP:=0
 OBJDIR=obj/mips
 MIPS_ONLY:=1
+PERM_SIZE:=0
 else   # CAP_SIZE != 0
 TEST_CP2?=1
 CLANG?=1
@@ -363,9 +364,16 @@ QEMU_CAP_PRECISE=$(strip $(if \
 endif  # ifneq ($(QEMU_ABSPATH),)
 
 QEMU_UNALIGNED_OKAY?=0
+ifdef MIPS_ONLY
+QEMU_CAP_SIZE=0
+QEMU_C0_IS_NULL=MIPS-ONLY
+QEMU_CAP_PRECISE=MIPS-ONLY
+QEMU_CAP_SIZE=MIPS-ONLY
+else
 QEMU_C0_IS_NULL?=0
 QEMU_CAP_SIZE?=-1
 QEMU_CAP_PRECISE?=-1
+endif
 
 ### Include all the TEST_*_FILES variables etc
 include Makefile.files.mk
@@ -442,6 +450,7 @@ distclean:
 	$(MAKE) $(MFLAGS) CAP_SIZE=256 clean
 	$(MAKE) $(MFLAGS) CAP_SIZE=128 clean
 	$(MAKE) $(MFLAGS) CAP_SIZE=64 clean
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 clean
 
 .PHONY: all clean cleantest clean_fuzz test nosetest nosetest_cached failnosetest
 

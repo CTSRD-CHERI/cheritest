@@ -401,12 +401,23 @@ ALL_LOGDIRS=$(L3_LOGDIR) $(QEMU_LOGDIR) $(LOGDIR) \
 $(ALL_LOGDIRS) $(OBJDIR):
 	mkdir -p "$@"
 
-QEMU_FLAGS=-D "$@" -cpu 5Kf -bc `./max_cycles $@ 20000 300000` \
+
+# TODO: make BERI the default once everyone has updated
+ifdef MIPS_ONLY
+QEMU_CPU_MODEL?=BERI
+else
+QEMU_CPU_MODEL?=5Kf
+endif
+
+QEMU_FLAGS=-D "$@" -cpu $(QEMU_CPU_MODEL) -bc `./max_cycles $@ 20000 300000` \
            -kernel "$<" -serial none -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
+
+QEMU_MACHINE_MODEL?=mipssim
+# QEMU_MACHINE_MODEL?=mipssim
 ifeq ($(MULTI),1)
 QEMU_FLAGS+=-smp 2 -M malta
 else
-QEMU_FLAGS+=-M mipssim
+QEMU_FLAGS+=-M $(QEMU_MACHINE_MODEL)
 endif
 
 # There is a use-after free due to undetermined pthread shutdown order, ignore that too:
@@ -444,7 +455,11 @@ $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(CHECK_QEMU_EXISTS) | $(QEMU_L
 	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
 	    fi
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
+
+ifndef MIPS_ONLY
+	# ensure that the logfile contains some output
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
+endif
 
 $(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log
 	$(CHERI_SDK_BINDIR)/symbolize-cheri-trace.py $< "$(OBJDIR)/`basename $< .log`.elf" > $@
@@ -694,6 +709,7 @@ nosetests_qemu:
 check_valid_qemu:
 	@echo "Checking if QEMU $(QEMU_ABSPATH) is valid for this configuration:"
 	$(QEMU) --version
+ifndef MIPS_ONLY
 	@echo "CAP_PRECISE='$(CAP_PRECISE)', QEMU_CAP_PRECISE='$(QEMU_CAP_PRECISE)'"
 	@echo "CAP_SIZE='$(CAP_SIZE)', QEMU_CAP_SIZE='$(QEMU_CAP_SIZE)'"
 	@echo "CHERI_C0_IS_NULL='$(CHERI_C0_IS_NULL)', QEMU_C0_IS_NULL='$(QEMU_C0_IS_NULL)'"
@@ -709,6 +725,7 @@ check_valid_qemu:
 		echo "CHERI_C0_IS_NULL set to '$(CHERI_C0_IS_NULL)' but QEMU $c0 == $cnull is '$(QEMU_C0_IS_NULL)'. Change CHERI_C0_IS_NULL or select a different $(dollar)QEMU"; \
 		exit 1; \
 	fi
+endif
 	@echo "Success. Can run tests with $(QEMU_ABSPATH)"
 
 
@@ -778,6 +795,9 @@ qemu_logs128:
 qemu_logs128magic:
 	$(MAKE) CAP_SIZE=128 CAP_PRECISE=1 qemu_logs
 
+
+pytest_qemu_mips:
+	$(MAKE) CAP_SIZE=0 nosetests_qemu
 pytest_qemu256:
 	$(MAKE) CAP_SIZE=256 CAP_PRECISE=1 nosetests_qemu
 pytest_qemu128:

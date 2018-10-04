@@ -24,7 +24,7 @@ def infer_logdir(config):
 class CheritestOptions(Enum):
     TEST_MACHINE = ("--cheri-test-machine", {})
     LOGDIR = ("--cheri-logdir", {})
-    CAP_SIZE = ("--cheri-cap-size", {"choices": [64, 128, 256], "type": int})
+    CAP_SIZE = ("--cheri-cap-size", {"choices": [0, 64, 128, 256], "type": int})
     PERM_SIZE = ("--cheri-perm-size", {"type": int})
 
     def __init__(self, cmdline_flag, argparse_args):
@@ -77,7 +77,7 @@ def pytest_configure(config):
     for option in CheritestOptions:
         value = config.getoption(option.name)
         # TODO: infer default values
-        if not value:
+        if value is None:
             raise pytest.UsageError("env var $" + option.name + " or option " + option.cmdline_flag + " must be set!")
 
 
