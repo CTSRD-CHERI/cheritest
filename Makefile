@@ -122,11 +122,14 @@ $(info "Building tests without CHERI support")
 TEST_CP2:=0
 CLANG:=0
 PURECAP:=0
+OBJDIR=obj/mips
 MIPS_ONLY:=1
 else   # CAP_SIZE != 0
 TEST_CP2?=1
 CLANG?=1
 PURECAP?=1
+# The binaries for 128 and 256 are incompatible -> use separate objdirs
+OBJDIR=obj/$(CAP_SIZE)
 # CHECK that CAP_SIZE is a sensible value
 ifneq ($(CAP_SIZE),$(filter $(CAP_SIZE),64 128 256))
 $(error "Invalid value for CAP_SIZE: $(CAP_SIZE))
@@ -367,8 +370,6 @@ QEMU_CAP_PRECISE?=-1
 include Makefile.files.mk
 
 VPATH=$(TESTDIRS)
-# The binaries for 128 and 256 are incompatible -> use separate objdirs
-OBJDIR=obj/$(CAP_SIZE)
 
 # Include the rules to build all the *.elf files now
 include Makefile.build.mk
