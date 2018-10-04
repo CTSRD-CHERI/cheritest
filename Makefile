@@ -223,6 +223,11 @@ CAPSIZEFIX = :
 else
 MIPS_LD=$(CHERI_SDK_BINDIR)/ld.bfd --fatal-warnings
 endif
+
+# detect QEMU binary:
+ifdef MIPS_ONLY
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-mips64
+else
 ifneq ($(wildcard $(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)),)
 ifneq ($(CAP_SIZE),256)
 ifeq ($(CAP_PRECISE),1)
@@ -233,6 +238,7 @@ endif # CAP_PRECISE
 QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)
 endif # wildcard
 QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri
+endif # MIPS_ONLY
 
 else
 # TODO: make this an error soon
