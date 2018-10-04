@@ -34,6 +34,8 @@ from beritest_tools import BaseBERITestCase, attr
 #
 @attr('capabilities')
 class test_cp2_x_ccall_fast_code_perm(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
+
     def test_cp2_x_ccall_fast_code_perm_1(self):
         '''Test that the ccall does not enter the sandbox'''
         self.assertRegisterEqual(self.MIPS.t1, 0x0,
@@ -41,5 +43,5 @@ class test_cp2_x_ccall_fast_code_perm(BaseBERITestCase):
 
     def test_cp2_x_ccall_fast_code_perm_2(self):
         '''Test that the exception raised has the correct cause'''
-        self.assertRegisterEqual(self.MIPS.t3, 0x1901,
-                                 "Permit_CCall violation raised with invalid cause.")
+        self.assertCp2Fault(self.MIPS.k1, cap_reg=1, cap_cause=self.MIPS.CapCause.Permit_CCall_Violation,
+                            trap_count=1, msg="expected a Permit_CCall violation")
