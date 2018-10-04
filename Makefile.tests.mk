@@ -21,11 +21,15 @@ SAIL_CHERI_LOGDIR=sail_cheri_log
 SAIL_CHERI_C_LOGDIR=sail_cheri_c_log
 SAIL_CHERI128_LOGDIR=sail_cheri128_log
 SAIL_CHERI128_C_LOGDIR=sail_cheri128_c_log
-# Use different logdirs for 128/256
+# Use different logdirs for mips/128/256
+ifdef MIPS_ONLY
+QEMU_LOGDIR=qemu_log/mips
+else
 QEMU_LOGDIR=qemu_log/$(CAP_SIZE)
 ifneq ($(CAP_SIZE),256)
 ifeq ($(CAP_PRECISE), 1)
 QEMU_LOGDIR:=$(QEMU_LOGDIR)_magic
+endif
 endif
 endif
 
