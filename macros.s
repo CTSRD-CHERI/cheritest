@@ -92,7 +92,7 @@
 .else
 	# In case we can't use the UserLocal register store to memory instead
 	dla $k0, trap_count
-	cld \dest, $k0, 0($ddc)
+	ld \dest, 0($k0)
 .endif
 .endm
 
@@ -102,7 +102,7 @@
 .else
 	# In case we can't use the UserLocal register store to memory instead
 	dla $k0, trap_count
-	csd \src, $k0, 0($ddc)
+	sd \src, 0($k0)
 .endif
 .endm
 
