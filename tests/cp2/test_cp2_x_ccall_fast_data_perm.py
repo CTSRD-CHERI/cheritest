@@ -33,18 +33,14 @@ from beritest_tools import attr
 #
 # Test a ccall_fast
 #
-@xfail_gnu_binutils
+@attr('capabilities')
 class test_cp2_x_ccall_fast_data_perm(BaseBERITestCase):
 
-    @attr('capabilities')
-    @attr('ccall_hw_2')
     def test_cp2_x_ccall_fast_data_perm_1(self):
         '''Test that the ccall does not enter the sandbox'''
         self.assertRegisterEqual(self.MIPS.t1, 0x0,
                                  "sandbox entered without Permit_CCall on sealed data capability.")
 
-    @attr('capabilities')
-    @attr('ccall_hw_2')
     def test_cp2_x_ccall_fast_data_perm_2(self):
         '''Test that the exception raised has the correct cause'''
         self.assertRegisterEqual(self.MIPS.t3, 0x1902,

@@ -27,24 +27,18 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase, xfail_gnu_binutils
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr
 
 #
 # Test a ccall_fast
 #
-@xfail_gnu_binutils
+@attr('capabilities')
 class test_cp2_x_ccall_fast_code_perm(BaseBERITestCase):
-
-    @attr('capabilities')
-    @attr('ccall_hw_2')
     def test_cp2_x_ccall_fast_code_perm_1(self):
         '''Test that the ccall does not enter the sandbox'''
         self.assertRegisterEqual(self.MIPS.t1, 0x0,
                                  "sandbox entered without Permit_CCall on sealed code capability.")
 
-    @attr('capabilities')
-    @attr('ccall_hw_2')
     def test_cp2_x_ccall_fast_code_perm_2(self):
         '''Test that the exception raised has the correct cause'''
         self.assertRegisterEqual(self.MIPS.t3, 0x1901,

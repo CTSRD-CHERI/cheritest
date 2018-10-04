@@ -30,7 +30,6 @@ from beritest_tools import BaseBERITestCase, attr
 # Test a ccall_fast
 #
 @attr('capabilities')
-@attr('ccall_hw_2')
 class test_cp2_ccall_fast_no_bdelay(BaseBERITestCase):
     def test_no_exceptions(self):
         self.assertRegisterEqual(self.MIPS.v0, 0, "Should not have trapped!")

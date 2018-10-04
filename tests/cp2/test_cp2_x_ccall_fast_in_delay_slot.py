@@ -30,7 +30,6 @@ from beritest_tools import BaseBERITestCase, attr
 # Test a that CCallFast can't go in a branch delay slot
 #
 @attr('capabilities')
-@attr('ccall_hw_2')
 class test_cp2_x_ccall_fast_in_delay_slot(BaseBERITestCase):
     def test_no_exceptions(self):
         self.assertRegisterEqual(self.MIPS.v0, 1, "Should have trapped!")
