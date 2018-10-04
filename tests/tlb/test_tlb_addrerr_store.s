@@ -72,10 +72,10 @@ END_TEST
 # Exception handler.  
 #
 BEGIN_CUSTOM_TRAP_HANDLER
-		dmfc0   $s0, $14      		# EPC
+		dmfc0   $s0, $14		# EPC
 		daddu   $t0, $s0, 4		# Increment EPC
 		dmtc0   $t0, $14		# and store it back
 		dmfc0	$s1, $8			# BadVAddr
 		dmfc0	$s2, $13		# Cause
-		eret
+		DO_ERET
 END_CUSTOM_TRAP_HANDLER

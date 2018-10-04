@@ -92,9 +92,5 @@ bev0_handler:
 		dmfc0	$a3, $8, 2	# BadInstrP register
 		mfc0	$a4, $8, 2	# BadInstrP register (mfc)
 		dmfc0	$a5, $13	# Cause register
-		ssnop			# NOPs to avoid hazard with ERET
-		ssnop			# XXXRW: How many are actually
-		ssnop			# required here?
-		ssnop
-		eret
+		DO_ERET
 .end bev0_handler

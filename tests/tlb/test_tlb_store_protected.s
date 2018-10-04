@@ -61,7 +61,7 @@ BEGIN_CUSTOM_TRAP_HANDLER
 		xor	$a7, $t0		# Test that EPC has the correct value
 		dmfc0   $s0, $8			# BadVAddr
 		xor     $s0, $a4		# Test that BadVAddr has correct value
-		eret
+		DO_ERET
 		nop
 END_CUSTOM_TRAP_HANDLER
 	.data

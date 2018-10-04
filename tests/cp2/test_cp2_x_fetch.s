@@ -85,11 +85,7 @@ bev0_handler:
 		csetepcc $c27
 		dla	$k0, finally
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
 		.data

@@ -96,9 +96,5 @@ bev0_handler:
 		nop
 		nop
 		nop
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler

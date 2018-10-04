@@ -221,12 +221,7 @@ bev0_handler:
 
 	dla	$t0, the_end
 	dmtc0	$t0, $14	# EPC
-	nop
-	nop
-	nop
-	nop
-	nop
-	eret
+	DO_ERET
 	nop
 	.end bev0_handler
         
@@ -248,11 +243,7 @@ bev1_handler:
 
 	dla	$t0, after_interrupt_t1
 	dmtc0	$t0, $14	# EPC
-	nop
-	nop
-	nop
-	nop
-	eret
+	DO_ERET
 	nop
 	.end bev1_handler
 

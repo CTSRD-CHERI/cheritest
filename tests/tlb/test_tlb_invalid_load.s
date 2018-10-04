@@ -102,7 +102,7 @@ bev0_handler:
 		dmfc0	$s3, $10		# EntryHi
 		dmfc0   $s4, $12	      	# Status
 		dmfc0	$s5, $13		# Cause
-		eret
+		DO_ERET
 		.end bev0_handler
 	
 	.data

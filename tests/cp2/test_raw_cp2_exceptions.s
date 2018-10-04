@@ -124,7 +124,7 @@ handle_exception:
     bnez        $a0, 1f         # only one exception
     li          $a0, 1
     csetepcc    $c6             # try setting epcc for eret but not epc
-    eret
+    DO_ERET
     nop
 
 1:  # Fail

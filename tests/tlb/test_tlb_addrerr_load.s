@@ -91,6 +91,6 @@ bev0_handler:
 		dmtc0   $t0, $14		# and store it back
 		dmfc0	$s1, $8			# BadVAddr
 		dmfc0	$s2, $13		# Cause
-		eret
+		DO_ERET
 		.end bev0_handler
 

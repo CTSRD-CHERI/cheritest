@@ -114,11 +114,7 @@ bev0_handler:
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
 		.ent bev0_ccall_handler
@@ -128,11 +124,7 @@ bev0_ccall_handler:
 		dmfc0   $a5, $14
 		daddiu  $k0, $a5, 4 # Bump EPC forward one instruction
 		dmtc0   $k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_ccall_handler
 
 		.ent bev0_ccall_handler_stub

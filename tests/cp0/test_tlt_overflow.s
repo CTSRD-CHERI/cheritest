@@ -60,10 +60,6 @@ END_TEST
 bev0_handler:
 		dla	$k0, finally
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 

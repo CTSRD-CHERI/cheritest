@@ -87,11 +87,7 @@ bev0_handler:
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
                 dmfc0   $a6, $8         # read badvaddr
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
 		.data

@@ -113,11 +113,7 @@ bev0_handler:
 		#
 		dla     $k0, L1
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
 		.data

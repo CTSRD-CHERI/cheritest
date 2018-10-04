@@ -210,10 +210,7 @@
 
 .Ldo_eret:
 	dmfc0	$k0, $8			# k0 = BadVaddr
-	ssnop
-	ssnop
-	ssnop
-	eret
+	DO_ERET
 .Lsyscall:
 	# For now just exit the test on any syscall trap
 	# TODO: should we check for code == 42?
@@ -432,10 +429,7 @@ max_thread_count = 32
 		ori	$t2, 0x12		# Set user mode, exl
 		and	$t2, 0xffffffffefffffff	# Clear cu0 bit
 		dmtc0	$t2, $12		# Write status
-		nop
-		nop
-		nop
-		eret				# Jump to test code
+		DO_ERET				# Jump to test code
 		nop
 	.set pop
 .endm

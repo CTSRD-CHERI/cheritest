@@ -66,11 +66,7 @@ bev0_handler:
 		dmfc0	$a5, $14	# EPC
 		dla	$k0, exit
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
 		.ent subroutine

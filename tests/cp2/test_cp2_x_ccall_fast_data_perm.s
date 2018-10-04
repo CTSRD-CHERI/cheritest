@@ -123,9 +123,7 @@ exception_handler:
         		    # and return to restored_ra
 	cgetcause $t3	# store exception cause to t3 for the test suite to check.
         dmtc0   $k0, $14
-        nop
-        nop
-	eret
+	DO_ERET
 	.end exception_handler
 
 

@@ -84,10 +84,7 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
                 ori     $t2, 0x12               # Set user mode, exl
                 and     $t2, 0xffffffffefffffff # Clear cu0 bit
                 dmtc0   $t2, $12                # Write status
-                nop
-		nop
-                nop
-	        eret                            # Jump to test code
+                DO_ERET                            # Jump to test code
                 nop
                 nop
 

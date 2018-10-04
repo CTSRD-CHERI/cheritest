@@ -77,9 +77,5 @@ exception_handler:
 		daddiu	$k0, $k0, 4
 		dmtc0	$k0, $14
 		nop
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end exception_handler

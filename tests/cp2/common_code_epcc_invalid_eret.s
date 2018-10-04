@@ -48,13 +48,7 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 
     csetepcc   $c1
     # some nops for good measure since above should write CP0 EPC
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    eret
+    DO_ERET
     nop
 expected_epc:
     nop

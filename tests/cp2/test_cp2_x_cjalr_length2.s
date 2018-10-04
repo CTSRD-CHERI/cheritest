@@ -112,11 +112,7 @@ bev0_handler:
 		csetoffset $c27, $c27, $k0
 		csetepcc $c27
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
 		.data

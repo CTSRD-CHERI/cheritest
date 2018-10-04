@@ -104,11 +104,7 @@ bev0_handler:
 		mfc0	$a3, $13	# CP0.Cause
 		dla	$k0, on_error
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
 		.ent bev0_common_handler_stub

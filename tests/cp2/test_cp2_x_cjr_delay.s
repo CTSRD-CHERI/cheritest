@@ -85,11 +85,7 @@ bev0_handler:
 		dmfc0	$a5, $14	# EPC
 		dla	$k0, L1
 		dmtc0	$k0, $14
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
 		.data

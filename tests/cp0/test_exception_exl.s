@@ -82,10 +82,6 @@ bev0_handler:
 		dla	$k0, exit
 		dmtc0	$k0, $14	# EPC
 		nop
-		nop
-		nop
-		nop
-		nop
-		eret
+		DO_ERET
 		.end bev0_handler
 
