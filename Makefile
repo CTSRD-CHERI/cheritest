@@ -101,9 +101,6 @@
 #
 dollar = $$
 TEST_FPU?=0
-TEST_CP2?=1
-CLANG?=1
-PURECAP?=1
 MULTI?=0
 MT?=0
 STATCOUNTERS?=1
@@ -119,6 +116,17 @@ NOFUZZ?=1
 NOFUZZR?=1
 CAP_SIZE?=256
 
+
+ifeq ($(CAP_SIZE),0)
+$(info "Building tests without CHERI support")
+TEST_CP2:=0
+CLANG:=0
+PURECAP:=0
+MIPS_ONLY:=1
+else   # CAP_SIZE != 0
+TEST_CP2?=1
+CLANG?=1
+PURECAP?=1
 # CHECK that CAP_SIZE is a sensible value
 ifneq ($(CAP_SIZE),64)
 ifneq ($(CAP_SIZE),128)
@@ -127,6 +135,8 @@ $(error "Invalid value for CAP_SIZE: $(CAP_SIZE))
 endif
 endif
 endif
+
+endif  # CAP_SIZE != 0
 
 USE_CAP_TABLE?=1
 ifeq ($(CAP_SIZE),256)
@@ -299,7 +309,11 @@ endif
 endif
 
 CLANG_CMD?=clang
+ifdef MIPS_ONLY
+CLANG_CC?=$(CLANG_CMD) -target mips64-unknown-freebsd -mcpu=mips4
+else
 CLANG_CC?=$(CLANG_CMD) -target cheri-unknown-freebsd -mcpu=mips4 -cheri=$(CAP_SIZE)
+endif
 CLANG_AS=$(CLANG_CC) -fno-pic -c -Wno-unused-command-line-argument -mno-abicalls
 
 RUN_MIPS_LD?=$(MIPS_LD) --fatal-warnings -EB -G0 -L $(CURDIR)
