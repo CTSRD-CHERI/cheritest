@@ -211,6 +211,7 @@ SAIL_UNSUPPORTED_FEATURES=$(COMMON_UNSUPPORTED_FEATURES) \
 beri \
 beriinitial \
 berisyncistep \
+cache \
 counterdev \
 dma \
 dumpicache \
