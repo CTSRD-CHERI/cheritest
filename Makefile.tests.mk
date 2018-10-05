@@ -286,7 +286,7 @@ $(LOGDIR)/test_raw_trace_cached.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace_
 # We fork the test, and use cherictl
 # test_raw_trac, because % must be non-empty...
 #
-$(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.mem $(SIM) $(CHERICTL)
+$(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.mem $(CHECK_SIM_EXISTS) $(CHERICTL)
 ifeq ($(wildcard $(CHERICTL)),)
 	$(error CHERICTL not found, set CHERILIBS variable correctly!)
 endif
@@ -304,13 +304,13 @@ endif
 # Target to execute a Bluespec simulation of the test suite; memConv.py needs
 # fixing so that it accepts explicit sources and destinations but for now we
 # can use a temporary directory so that parallel builds work.
-$(LOGDIR)/test_clang_dma%.log: $(OBJDIR)/startdramtest.mem $(OBJDIR)/test_clang_dma%.mem $(SIM)
+$(LOGDIR)/test_clang_dma%.log: $(OBJDIR)/startdramtest.mem $(OBJDIR)/test_clang_dma%.mem $(CHECK_SIM_EXISTS)
 	$(call PREPARE_TEST,$<) && \
 		cp $(PWD)/$(word 2, $^) . && \
 		$(call REPEAT_5, CHERI_KERNEL=$(notdir $(word 2, $^)) $(RUN_TEST_COMMAND)); \
 		$(CLEAN_TEST)
 
-$(LOGDIR)/%.log : $(OBJDIR)/%.mem $(SIM)
+$(LOGDIR)/%.log : $(OBJDIR)/%.mem $(CHECK_SIM_EXISTS)
 	$(call PREPARE_TEST,$<) && $(call RUN_TEST,$*); $(CLEAN_TEST)
 
 # The test won't be run, but attempting to build with the standard rules fails
@@ -441,7 +441,12 @@ SANITIZER_ENV=UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 LSAN_OPTIONS=supp
 CHECK_QEMU_EXISTS=$(QEMU_LOGDIR)/.qemu_exists
 $(CHECK_QEMU_EXISTS): $(QEMU) | $(QEMU_LOGDIR) check_valid_qemu
 	$(QEMU) --version > "$@"
-	@echo "CHECKED"
+	@echo "CHECKED $(QEMU)"
+
+CHECK_SIM_EXISTS=$(LOGDIR)/.qemu_exists
+$(CHECK_SIM_EXISTS): $(SIM) | $(LOGDIR)
+	$(SIM) --version > "$@"
+	@echo "CHECKED $(SIM)"
 
 
 # raw tests need to be started with tracing in, for the others we can start it in init.s
@@ -540,11 +545,11 @@ fuzz_generate: $(FUZZ_SCRIPT)
 	python $(FUZZ_SCRIPT) $(FUZZ_SCRIPT_OPTS) -d $(FUZZ_TEST_DIR)
 
 # The rather unpleasant side-effect of snorting too much candy floss...
-nose_fuzz: $(SIM) fuzz_run_tests
+nose_fuzz: $(CHECK_SIM_EXISTS) fuzz_run_tests
 	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=0 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz.xml \
 	    $(NOSEFLAGS_UNCACHED) tests/fuzz
 
-nose_fuzz_cached: $(SIM) fuzz_run_tests_cached
+nose_fuzz_cached: $(CHECK_SIM_EXISTS) fuzz_run_tests_cached
 	$(MAYBE_IGNORE_EXIT_CODE)env CACHED=1 $(NOSETESTS) $(PYTHON_TEST_XUNIT_FLAG)=nosetests_fuzz_cached.xml \
 	    $(NOSEFLAGS) tests/fuzz
 
