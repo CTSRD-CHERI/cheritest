@@ -27,6 +27,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
+
+# We are running baremetal so the registers 27-31 are not reserved by the kernel.
+.set cheri_sysregs_accessible
+
 # Macro for declaring an exported function. Just saves some typing.
 .macro global_func name
         .ent \name
