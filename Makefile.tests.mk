@@ -244,13 +244,13 @@ WAIT_FOR_SOCKET = while ! test -e $(1); do sleep 0.1; done
 # or hardware.
 #
 $(OBJDIR)/%.mem : $(OBJDIR)/%.elf
-	$(OBJCOPY) -S -O binary $< $@
+	$(OBJCOPY) --strip-all -O binary $< $@
 
 # I instantiate this specifically so that it gets used to when test_clang_dma%
 # is used to build a test directly.
 
 $(OBJDIR)/startdramtest.mem: $(OBJDIR)/startdramtest.elf
-	$(OBJCOPY) -S -O binary $< $@
+	$(OBJCOPY) --strip-all -O binary $< $@
 
 #
 # Convert ELF images to raw memory images that can be loaded into simulators
