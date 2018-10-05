@@ -99,11 +99,13 @@ CHERI_SW_MEM_BIN=${CHERIROOT_ABS}/sw/mem.bin
 endif
 
 ifeq ($(wildcard $(MEMCONF)),)
-MEMCONF:=$(error Cannot find find $(CHERIROOT_ABS)/memoryconfig, set CHERIROOT to the cheri/trunk directory or set CHERI_SVN_ROOT to the SVN root )
+MEMCONF=$(error Cannot find find $(CHERIROOT_ABS)/memoryconfig, set CHERIROOT to the cheri/trunk directory or set CHERI_SVN_ROOT to the SVN root )
 endif
 
 ifeq ($(wildcard $(SIM)),)
-SIM:=$(error Cannot find find $(SIM), set CHERIROOT to the cheri/trunk directory )
+SIM_ABS=$(error Cannot find find $(SIM), set CHERIROOT to the cheri/trunk directory )
+else
+SIM_ABS:=$(realpath $(SIM))
 endif
 
 
@@ -214,7 +216,7 @@ RUN_TEST_COMMAND = \
     PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	CHERI_DTB=$(DTB_FILE) \
-	BERI_DEBUG_SOCKET_0=$(CHERISOCKET)  $(SIM) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+	BERI_DEBUG_SOCKET_0=$(CHERISOCKET)  $(SIM_ABS) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@; \
 
 REPEAT_5 = \
@@ -233,7 +235,7 @@ RUN_TEST = $(call REPEAT_5,$(RUN_TEST_COMMAND))
 #	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 #	PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 #	CHERI_CONFIG=$$TMPDIR/simconfig \
-#	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM) -V $(HOME)/$(1).vcd -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+#	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM_ABS) -V $(HOME)/$(1).vcd -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 #	    $(PWD)/$@; \
 #	then break; else false; fi; done
 
@@ -446,8 +448,8 @@ $(CHECK_QEMU_EXISTS): $(QEMU) | $(QEMU_LOGDIR) check_valid_qemu
 
 CHECK_SIM_EXISTS=$(LOGDIR)/.qemu_exists
 $(CHECK_SIM_EXISTS): $(SIM) | $(LOGDIR)
-	$(SIM) --version > "$@"
-	@echo "CHECKED $(SIM)"
+	$(SIM_ABS) --version > "$@"
+	@echo "CHECKED $(SIM_ABS)"
 
 
 # raw tests need to be started with tracing in, for the others we can start it in init.s
@@ -555,15 +557,23 @@ nose_fuzz_cached: $(CHECK_SIM_EXISTS) fuzz_run_tests_cached
 	    $(NOSEFLAGS) tests/fuzz
 
 
-# Run unit tests using nose (http://somethingaboutorange.com/mrl/projects/nose/)
+ifndef BLUESPECDIR
+_SIM_MAKE=source $(CHERIROOT_ABS)/setup.sh && $(MAKE)
+else
+_SIM_MAKE=$(MAKE)
+endif
 
-nosetest: nosetests_uncached.xml
+nosetest:
+	$(_SIM_MAKE) nosetests_uncached.xml
 
-nosetest_cached: nosetests_cached.xml
+nosetest_cached:
+	$(_SIM_MAKE) nosetests_cached.xml
 
-nosetests_multi: nosetests_multi.xml
+nosetests_multi:
+	$(_SIM_MAKE) nosetests_multi.xml
 
-nosetests_cachedmulti: nosetests_cachedmulti.xml
+nosetests_cachedmulti:
+	$(_SIM_MAKE) nosetests_cachedmulti.xml
 
 #
 # Merge resuls of cached and uncached tests
@@ -840,12 +850,6 @@ $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	$(QEMU_PYTEST) $(SINGLE_TEST_VERBOSE) $<
 
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
-
-ifndef BLUESPECDIR
-_SIM_MAKE=source $(CHERIROOT_ABS)/setup.sh && $(MAKE)
-else
-_SIM_MAKE=$(MAKE)
-endif
 
 pytest/sim_uncached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
