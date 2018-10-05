@@ -209,6 +209,7 @@ PREPARE_TEST = \
 # is fixed.
 
 RUN_TEST_COMMAND = \
+	if [ -z "$(dollar)BLUESPECDIR" ]; then echo "BLUESPECDIR not set, source the setup.sh script first!"; exit 1; fi; \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
     PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
