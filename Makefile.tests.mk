@@ -841,24 +841,30 @@ $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 
+ifndef BLUESPECDIR
+_SIM_MAKE=source $(CHERIROOT_ABS)/setup.sh && $(MAKE)
+else
+_SIM_MAKE=$(MAKE)
+endif
+
 pytest/sim_uncached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
+	$(_SIM_MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@)).log
 	CACHED=0 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS_UNCACHED) $<
 
 pytest/sim_cached/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cached.log
+	$(_SIM_MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cached.log
 	CACHED=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS) $<
 
 pytest/sim_multi/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_multi.log
+	$(_SIM_MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_multi.log
 	CACHED=0 MULTI1=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS_UNCACHED) $<
 
 pytest/sim_cachedmulti/%.py: %.py FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cachedmulti.log
+	$(_SIM_MAKE) $(MFLAGS) $(LOGDIR)/$(notdir $(basename $@))_cachedmulti.log
 	MULTI1=1 CACHED=1 $(SIM_NOSETESTS) $(SINGLE_TEST_VERBOSE) $(NOSEFLAGS) $<
 
 # Single L3 tests:
