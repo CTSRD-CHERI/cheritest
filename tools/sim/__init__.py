@@ -194,6 +194,10 @@ class ThreadStatus(object):
         # Should currently be mirrored (31 could be a GPR again soon)
         return self._special_capreg(31, "$epcc")
 
+    @property
+    def idc(self):
+        return self.cp2[26]
+
     # Return a capabilty
     def _special_capreg(self, number, name):
         # type: (self, int, str) -> Capability
@@ -324,6 +328,83 @@ class MipsStatus(object):
                     t = self.threads[thread]
                     t.pcc = capabilityFromStrings(*cap_pc_groups.groups()[0:7])
                     continue
+
+
+    # For code completion
+    @property
+    def c1(self) -> Capability: return self.threads[0].cp2[1]
+    @property
+    def c2(self) -> Capability: return self.threads[0].cp2[2]
+    @property
+    def c3(self) -> Capability: return self.threads[0].cp2[3]
+    @property
+    def c4(self) -> Capability: return self.threads[0].cp2[4]
+    @property
+    def c5(self) -> Capability: return self.threads[0].cp2[5]
+    @property
+    def c6(self) -> Capability: return self.threads[0].cp2[6]
+    @property
+    def c7(self) -> Capability: return self.threads[0].cp2[7]
+    @property
+    def c8(self) -> Capability: return self.threads[0].cp2[8]
+    @property
+    def c9(self) -> Capability: return self.threads[0].cp2[9]
+    @property
+    def c10(self) -> Capability: return self.threads[0].cp2[10]
+    @property
+    def c11(self) -> Capability: return self.threads[0].cp2[11]
+    @property
+    def c12(self) -> Capability: return self.threads[0].cp2[12]
+    @property
+    def c13(self) -> Capability: return self.threads[0].cp2[13]
+    @property
+    def c14(self) -> Capability: return self.threads[0].cp2[14]
+    @property
+    def c15(self) -> Capability: return self.threads[0].cp2[15]
+    @property
+    def c16(self) -> Capability: return self.threads[0].cp2[16]
+    @property
+    def c17(self) -> Capability: return self.threads[0].cp2[17]
+    @property
+    def c18(self) -> Capability: return self.threads[0].cp2[18]
+    @property
+    def c19(self) -> Capability: return self.threads[0].cp2[19]
+    @property
+    def c20(self) -> Capability: return self.threads[0].cp2[20]
+    @property
+    def c21(self) -> Capability: return self.threads[0].cp2[21]
+    @property
+    def c22(self) -> Capability: return self.threads[0].cp2[22]
+    @property
+    def c23(self) -> Capability: return self.threads[0].cp2[23]
+    @property
+    def c24(self) -> Capability: return self.threads[0].cp2[24]
+    @property
+    def c25(self) -> Capability: return self.threads[0].cp2[25]
+    @property
+    def c26(self) -> Capability: return self.threads[0].cp2[26]
+    @property
+    def c27(self) -> Capability: return self.threads[0].cp2[27]
+    @property
+    def c28(self) -> Capability: return self.threads[0].cp2[28]
+    @property
+    def c29(self) -> Capability: return self.threads[0].cp2[29]
+    @property
+    def c30(self) -> Capability: return self.threads[0].cp2[30]
+    @property
+    def c31(self) -> Capability: return self.threads[0].cp2[31]
+
+    # Named registers:
+    @property
+    def idc(self) -> Capability: return self.threads[0].idc
+    @property
+    def ddc(self) -> Capability: return self.threads[0].ddc
+    @property
+    def kcc(self) -> Capability: return self.threads[0].kcc
+    @property
+    def kdc(self) -> Capability: return self.threads[0].kdc
+    @property
+    def epcc(self) -> Capability: return self.threads[0].epcc
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''
