@@ -234,6 +234,12 @@ class CheriPermissionBits(Enum):
     Unseal = 1 << 9
     AccessSystemRegs = 1 << 10
 
+    def __or__(self, other) -> int:
+        if isinstance(other, CheriPermissionBits):
+            return self.value | other.value
+        return self.value | other
+
+
 class MipsStatus(object):
     # TODO: remove these two once we have released V7
     CHERI_C0_IS_NULL = is_envvar_true("CHERI_C0_IS_NULL")  # type: bool
