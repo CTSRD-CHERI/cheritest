@@ -86,7 +86,7 @@ BEGIN_CUSTOM_TRAP_HANDLER
 		dmfc0   $a6, $12                # Read status
 		dmfc0   $a7, $13                # Read cause
 		__set_counting_trap_handler_count $zero
-		collect_compressed_trap_info $a0
+		collect_compressed_trap_info compressed_info_reg=$a0
 		dla	$t0, the_end
 		jr	$t0
 		nop

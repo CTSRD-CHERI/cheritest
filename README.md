@@ -44,6 +44,16 @@ BEGIN_TEST
 	# On exit the register $v0 will contain the number of traps that happenend
 	# And register $k1 will contain information about the last trap (unless the test modified it
 	# it should be zero if no exceptions were triggered)
+
+	# The following two macros can be used to simplify testing for exceptions:
+
+	# check_instruction_traps: The exception details will be saved in arg1 ($s0),
+	# the remaining arguments are the test code.
+	# This can be checked in the python code using using self.assertCompressedTrapInfo()
+	check_instruction_traps $s0, teq $zero, $zero	# or any other code that causes a trap
+	# If you don't have enough gprs available for this test you can also store the
+	# trap info in a capability register with check_instruction_traps_info_in_creg:
+	check_instruction_traps_info_in_creg $c9, csetbounds $c1, $cnull, 10	# or any other code that causes a trap
 END_TEST
 ```
 
@@ -54,13 +64,20 @@ from beritest_tools import BaseBERITestCase, attr, HexInt
 class test_foo(BaseBERITestCase):
     EXPECTED_EXCEPTIONS = 4 # this tests expects the trap handler to be invoked 4 times (default is 0)
 
-    def test_trap_info(self):
+    def test_foo(self):
         # Use python asserts instead of self.assertRegisterEqual() since pytest gives much more detailed
         # output on failures if you use them
         # By default pytest will print int values as decimal. To avoid this use HexInt() from beritest_tools
         assert self.MIPS.c1.offset == HexInt(0x12345)
         # Note: unlike self.assertRegisterEqual() the assertion above will also print the full value of
         # $c1 which is very useful for debugging tests
+
+    def test_first_trap(self):
+        self.assertCompressedTrapInfo(self.MIPS.s0, mips_cause=self.MIPS.Cause.TRAP, trap_count=1)
+
+    def test_second_trap(self):
+        self.assertCp2Fault(self.MIPS.c9, cap_cause=self.MIPS.CapCause.Tag_Violation,
+                            trap_count=2, cap_reg=0)
 ```
 
 ### Writing tests with custom trap handlers
@@ -83,7 +100,7 @@ BEGIN_CUSTOM_TRAP_HANDLER
 	# Recommended: save the information on the trap handler in a register
 	# so that python code can test it (see below)
 	# Note: this will also set the number of times that the trap handler has been invoked in $v0
-	collect_compressed_trap_info $a4
+	collect_compressed_trap_info compressed_info_reg=$a4
 
 	#
 	# More trap handler logic

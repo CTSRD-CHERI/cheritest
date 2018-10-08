@@ -165,7 +165,6 @@
 	dsrl	$v0, $v0, 48		# restore expection count $v0
 .endm
 
-
 # define a trap handler function that sets the following:
 # v0 = number of traps that have been handled
 # k0 = BadVaddr
@@ -257,6 +256,22 @@ trap_count:
 # See DEFINE_COUNTING_CHERI_TRAP_HANDLER
 .macro save_counting_exception_handler_cause capreg
 	CFromInt	\capreg, $k1	# store result in capreg
+.endm
+
+.macro check_instruction_traps compressed_info, insn:vararg
+	move \compressed_info, $zero
+	clear_counting_exception_handler_regs
+	\insn
+	move \compressed_info, $k1
+	clear_counting_exception_handler_regs
+.endm
+
+.macro check_instruction_traps_info_in_creg compressed_info, insn:vararg
+	cgetnull \compressed_info
+	clear_counting_exception_handler_regs
+	\insn
+	CFromInt	\compressed_info, $k1
+	clear_counting_exception_handler_regs
 .endm
 
 # Invokes the special syscall trap that will instruct the

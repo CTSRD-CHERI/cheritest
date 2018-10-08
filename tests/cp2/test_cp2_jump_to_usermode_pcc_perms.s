@@ -32,9 +32,6 @@
 #
 
 BEGIN_TEST
-	# Clear the registers set by the counting trap handler
-	clear_counting_exception_handler_regs
-
 	# remove Access_System_Registers
 	dla $t9, without_access_sys_regs
 	cgetpccsetoffset $c12, $t9

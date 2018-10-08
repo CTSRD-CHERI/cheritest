@@ -55,9 +55,7 @@ BEGIN_TEST
 
 		cgetnull $c3
 
-		clear_counting_exception_handler_regs
-		cseal $c3, $c1, $c2	# Should raise an exception
-		save_counting_exception_handler_cause $c4
+		check_instruction_traps $s0, cseal $c3, $c1, $c2	# Should raise an exception
 
 		# Now try a value that's always unrepresentable
 		dli $t0, 0x77777
@@ -70,8 +68,6 @@ BEGIN_TEST
 		csetoffset $c2, $c2, $t0
 
 		cgetnull $c6
-		clear_counting_exception_handler_regs
-		cseal $c6, $c1, $c2	# Should raise an exception
-		save_counting_exception_handler_cause $c7
+		check_instruction_traps $s1, cseal $c6, $c1, $c2	# Should raise an exception
 
 END_TEST

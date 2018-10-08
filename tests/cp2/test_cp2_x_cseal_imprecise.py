@@ -46,10 +46,10 @@ class test_cp2_x_cseal_imprecise(BaseBERITestCase):
             assert self.MIPS.c3.s
         else:
             self.assertNullCap(self.MIPS.c3, "Should not have changed capreg")
-            self.assertCp2Fault(self.MIPS.c4, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=1)
+            self.assertCp2Fault(self.MIPS.s0, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=1)
 
     def test_definitely_unrepresenatable(self):
         trap_count = 1 if is_feature_supported('improved_cheri_cc') else 2
-        self.assertCp2Fault(self.MIPS.c7, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=trap_count)
+        self.assertCp2Fault(self.MIPS.s1, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=trap_count)
         self.assertNullCap(self.MIPS.c6, "Should not have changed capreg")
 

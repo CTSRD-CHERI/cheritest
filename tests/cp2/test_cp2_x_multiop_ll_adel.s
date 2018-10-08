@@ -64,21 +64,15 @@ BEGIN_TEST
 		# cllc doesn't take a register offset, so use $c3 not $t1($c1)
 		csetoffset $c3, $c1, $t1
 
-		clear_counting_exception_handler_regs
-		cllc	$c2, $c3  # trap #1
-		save_counting_exception_handler_cause $c4
-		clear_counting_exception_handler_regs
-		cllb	$t0, $c3  # cllb will work at any alignment
-		save_counting_exception_handler_cause $c5
-		clear_counting_exception_handler_regs
-		cllh	$t0, $c3  # trap #2 / no trap with unaligned LL/SC load
-		save_counting_exception_handler_cause $c6
-		clear_counting_exception_handler_regs
-		cllw	$t0, $c3  # trap #3 / no trap with unaligned LL/SC load
-		save_counting_exception_handler_cause $c7
-		clear_counting_exception_handler_regs
-		clld	$t0, $c3  # trap #4 / no trap with unaligned LL/SC load
-		save_counting_exception_handler_cause $c8
+		check_instruction_traps $s0, cllc	$c2, $c3  # trap #1
+
+		check_instruction_traps $s1, cllb	$t0, $c3  # cllb will work at any alignment
+
+		check_instruction_traps $s2, cllh	$t0, $c3  # trap #2 / no trap with unaligned LL/SC load
+
+		check_instruction_traps $s3, cllw	$t0, $c3  # trap #3 / no trap with unaligned LL/SC load
+
+		check_instruction_traps $s4, clld	$t0, $c3  # trap #4 / no trap with unaligned LL/SC load
 
 END_TEST
 

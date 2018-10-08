@@ -77,11 +77,9 @@ BEGIN_TEST
 		dla	$t1, data
 		dli     $a0, 0
 		mtc1	$a0, $f1
-		swc1    $f1, 0($t1) # This should raise a C2E exception
+		check_instruction_traps $s0, swc1    $f1, 0($t1) # This should raise a C2E exception
 
-		save_counting_exception_handler_cause $c3
 		# there should be no more traps
-		clear_counting_exception_handler_regs
 		#
 		# Restore c0
 		#

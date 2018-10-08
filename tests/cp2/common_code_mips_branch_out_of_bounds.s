@@ -89,7 +89,7 @@ BEGIN_CUSTOM_TRAP_HANDLER
 		daddiu	$a2, $a2, 1	# a2 = trap count
 		dmfc0 	$a3, $13	# a3 = Cause
 		# create compressed info for testing purposes in $a4+$v0 (clobbering $k0)
-		collect_compressed_trap_info $a4
+		collect_compressed_trap_info compressed_info_reg=$a4
 		dla	$k0, finally
 		cgetdefault $c27
 		csetoffset $c27, $c27, $k0

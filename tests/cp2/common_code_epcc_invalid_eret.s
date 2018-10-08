@@ -57,7 +57,7 @@ END_TEST
 
 .global default_trap_handler
 default_trap_handler:
-    collect_compressed_trap_info $s1
+    collect_compressed_trap_info compressed_info_reg=$s1
     dmfc0	$s2, $14        # Get EPC
     cgetepcc	$c2             # ...and EPCC
 

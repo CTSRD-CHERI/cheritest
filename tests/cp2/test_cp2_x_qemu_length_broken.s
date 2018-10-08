@@ -49,21 +49,15 @@ BEGIN_TEST
 	csetbounds $c2, $c2, $a0
 	# All of these should generate a TLB exception but on QEMU128 it used to
 	# generate a length violation instead
-	clear_counting_exception_handler_regs
-	clb $t1, $zero, 0($c2)			# TLB trap #1
-	save_counting_exception_handler_cause $c5
-	clear_counting_exception_handler_regs
-	clb $t1, $a0, -1($c2)			# TLB trap #2
-	save_counting_exception_handler_cause $c6
-	clear_counting_exception_handler_regs
-	clb $t1, $a0, -2($c2)			# TLB trap #3
-	save_counting_exception_handler_cause $c7
-	clear_counting_exception_handler_regs
-	clb $t1, $a0, -3($c2)			# TLB trap #4
-	save_counting_exception_handler_cause $c8
-	clear_counting_exception_handler_regs
-	clb $t1, $a0, -4($c2)			# TLB trap #5
-	save_counting_exception_handler_cause $c9
+	check_instruction_traps_info_in_creg $c5, clb $t1, $zero, 0($c2)	# TLB trap #1
+
+	check_instruction_traps_info_in_creg $c6, clb $t1, $a0, -1($c2)		# TLB trap #2
+
+	check_instruction_traps_info_in_creg $c7, clb $t1, $a0, -2($c2)		# TLB trap #3
+
+	check_instruction_traps_info_in_creg $c8, clb $t1, $a0, -3($c2)		# TLB trap #4
+
+	check_instruction_traps_info_in_creg $c9, clb $t1, $a0, -4($c2)		# TLB trap #5
 
 	# If use bounds 0x10000000 and we inc by 7 we use to no longer be able
 	# to access the last 7 entries:
@@ -72,14 +66,11 @@ BEGIN_TEST
 	csetbounds $c3, $c3, $a0
 	#clb $a1, $zero, 0($c2)
 	# clb $a3, $a0, -1($c2)
-	clear_counting_exception_handler_regs
-	clb $t1, $a0, -7($c3)			# TLB trap #6
-	save_counting_exception_handler_cause $c10
-	clear_counting_exception_handler_regs
-	clb $t1, $a0, -8($c3)			# TLB trap #7
-	save_counting_exception_handler_cause $c11
-	clear_counting_exception_handler_regs
-	clb $t1, $zero, 0($c3)			# TLB trap #8
-	save_counting_exception_handler_cause $c12
+
+	check_instruction_traps_info_in_creg $c10, clb $t1, $a0, -7($c3)	# TLB trap #6
+
+	check_instruction_traps_info_in_creg $c11, clb $t1, $a0, -8($c3)	# TLB trap #7
+
+	check_instruction_traps_info_in_creg $c12, clb $t1, $zero, 0($c3)	# TLB trap #8
 END_TEST
 

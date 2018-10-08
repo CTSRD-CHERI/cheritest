@@ -45,19 +45,15 @@ BEGIN_TEST
 
 		# Try loading + storing relative to null (should give tag violation)
 		cgetnull $c4
-		clear_counting_exception_handler_regs
-		do_cap_load_store d, $v0, $c4
-		save_counting_exception_handler_cause $c4  # trap # 1 tag violation
-
+		# trap # 1 tag violation
+		check_instruction_traps_info_in_creg $c4, do_cap_load_store d, $v0, $c4
 
 		# now check that all the capability load/stores die.
 		# All these loads/stores should fail with
 		# permit_store/permit_load violations and not tag violations
 
 .macro check_cap_ddc_relative_ld_st width, store_cause_reg
-	clear_counting_exception_handler_regs
-	do_cap_load_store	\width, $t2, $ddc
-	save_counting_exception_handler_cause \store_cause_reg
+	check_instruction_traps_info_in_creg \store_cause_reg, do_cap_load_store \width, $t2, $ddc
 .endm
 		check_cap_ddc_relative_ld_st b, $c5	# byte load/store #trap 2
 		check_cap_ddc_relative_ld_st h, $c6	# short load/store #trap 3
@@ -80,23 +76,17 @@ BEGIN_TEST
 .endif
 
 		# finally cap load/store
-		clear_counting_exception_handler_regs
-		do_cap_load_store	c, $c3, $ddc	# cap load/store #trap 9
-		save_counting_exception_handler_cause $c12
+		check_instruction_traps_info_in_creg $c12, do_cap_load_store	c, $c3, $ddc	# cap load/store #trap 9
 
 		# cap load/store relative to null should give tag violation
-		clear_counting_exception_handler_regs
 		cgetnull $c13
-		do_cap_load_store	c, $c3, $c13	# null cap load/store #trap 10
-		save_counting_exception_handler_cause $c13
+		check_instruction_traps_info_in_creg $c13, do_cap_load_store	c, $c3, $c13	# null cap load/store #trap 10
 
 
 		# Now the MIPS loads/stores (should also use $ddc not $cnull)
 		dla	$t9, data
 .macro check_mips_load_store width, store_cause_reg
-	clear_counting_exception_handler_regs
-	do_mips_load_store	\width, $t2, $t9
-	save_counting_exception_handler_cause \store_cause_reg
+	check_instruction_traps_info_in_creg \store_cause_reg, do_mips_load_store	\width, $t2, $t9
 .endm
 
 .if TESTING_LLSC >= 1

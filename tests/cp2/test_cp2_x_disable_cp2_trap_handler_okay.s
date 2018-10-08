@@ -42,8 +42,6 @@ BEGIN_TEST
 	mtc0	$t0, $12
 	# This should trap now:
 	dli	$t0, 12345678
-	clear_counting_exception_handler_regs
-	cgetcause $t0
-	move	$s1, $k1	# Store compressed info in $k1 (this is where the trap handler stores is)
+	check_instruction_traps $s1, cgetcause $t0		# should trap
 	nop
 END_TEST

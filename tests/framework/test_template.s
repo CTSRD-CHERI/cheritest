@@ -48,13 +48,13 @@ END_TEST
 BEGIN_TEST
 	# Test itself goes here
 	nop
-
-	# Clear the registers used by the trap handler so that saving them
-	# doesn't yield the previous exception values
-	clear_counting_exception_handler_regs
-	teq $zero, $zero	# or any other code that causes a trap
-	# Save exception details in a capreg (test the value in python using self.assertCompressedTrapInfo())
-	save_counting_exception_handler_cause $c3
+	# Use the following macro to check for a trap:
+	# The exception details will be saved in arg1 ($s0), the remaining arguments are the test code
+	# This can be checked in the python code using using self.assertCompressedTrapInfo()
+	check_instruction_traps $s0, teq $zero, $zero	# or any other code that causes a trap
+	# If you don't have enough gprs available for this test you can also store the
+	# trap info in a capability register:
+	check_instruction_traps_info_in_creg $s0, csetbounds $c1, $cnull, 10	# or any other code that causes a trap
 END_TEST
 
 .endif # THIS_TEST_NEEDS_A_TRAP_HANDLER

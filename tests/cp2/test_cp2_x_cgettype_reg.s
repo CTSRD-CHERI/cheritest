@@ -53,8 +53,6 @@ sandbox:
 
 BEGIN_TEST
 		# $v0 will be set to 1 if the exception handler is called
-		dli	$v0, 0
-		clear_counting_exception_handler_regs
 
 		cgetdefault   $c27
 		

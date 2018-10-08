@@ -49,7 +49,7 @@ END_TEST
 
 BEGIN_CUSTOM_TRAP_HANDLER
 		dmfc0	$a1, $8, 1	# BadInstr register
-		collect_compressed_trap_info $a2
+		collect_compressed_trap_info compressed_info_reg=$a2
 
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET

@@ -29,31 +29,27 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('capabilities')
+@attr('cached')
 class test_cp2_x_multiop_ll_adel(BaseBERITestCase):
-    @attr('capabilities')
-    @attr('cached')
     def test_cp2_x_multiop_ll_adel_cllc(self):
         # This one should always trap:
-        self.assertCompressedTrapInfo(self.MIPS.c4,
+        self.assertCompressedTrapInfo(self.MIPS.s0,
             mips_cause=self.MIPS.Cause.AdEL,
             trap_count=1, msg="unaligned cllc should fail")
 
-    @attr('capabilities')
-    @attr('cached')
     def test_cp2_x_multiop_ll_adel_cllb(self):
         # cllb one should never trap:
-        self.assertNullCap(self.MIPS.c5, msg="cllb should work at any alignment")
+        self.assertTrapInfoNoTrap(self.MIPS.s1, msg="cllb should work at any alignment")
 
-    @attr('capabilities')
-    @attr('cached')
     def test_cp2_x_multiop_ll_adel_unalign_trap(self):
-        self.assertCompressedTrapInfo(self.MIPS.c6,
+        self.assertCompressedTrapInfo(self.MIPS.s2,
             mips_cause=self.MIPS.Cause.AdEL,
             trap_count=2, msg="unaligned cllh should fail")
-        self.assertCompressedTrapInfo(self.MIPS.c7,
+        self.assertCompressedTrapInfo(self.MIPS.s3,
             mips_cause=self.MIPS.Cause.AdEL,
             trap_count=3, msg="unaligned cllw should fail")
-        self.assertCompressedTrapInfo(self.MIPS.c8,
+        self.assertCompressedTrapInfo(self.MIPS.s4,
             mips_cause=self.MIPS.Cause.AdEL,
             trap_count=4, msg="unaligned clld should fail")
         # If we trap on unaligned csd/cld we should get 4 exceptions here

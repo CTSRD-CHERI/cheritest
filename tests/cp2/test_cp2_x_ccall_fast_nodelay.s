@@ -41,8 +41,6 @@
 BEGIN_TEST
   # Initialise $t2. The test fails if $v0 is not 0x44 (i.e. exception triggered).
   dli             $v0, 0x44
-  clear_counting_exception_handler_regs	# This test should not trigger an exception
-
 
   cgetpcc         $c3
   cgetdefault     $c4

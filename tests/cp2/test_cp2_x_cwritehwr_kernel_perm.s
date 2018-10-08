@@ -33,10 +33,8 @@
 #
 
 .macro try_write_cap_hwreg cap_hwreg_number, cause_capreg
-	clear_counting_exception_handler_regs
-	CWriteHwr $c1, \cap_hwreg_number
 	# Save exception details in cause_capreg
-	save_counting_exception_handler_cause \cause_capreg
+	check_instruction_traps_info_in_creg \cause_capreg, CWriteHwr $c1, \cap_hwreg_number
 .endm
 
 BEGIN_TEST

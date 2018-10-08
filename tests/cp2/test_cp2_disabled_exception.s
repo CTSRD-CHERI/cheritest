@@ -81,7 +81,7 @@ END_TEST
 BEGIN_CUSTOM_TRAP_HANDLER
 		mfc0	$a1, $13	# Get cause register
 		dmfc0	$a2, $14        # get EPC
-		collect_compressed_trap_info $a4
+		collect_compressed_trap_info compressed_info_reg=$a4
 		# Set EPC to continue after exception return
 		dla	$k0, return
 		dmtc0	$k0, $14

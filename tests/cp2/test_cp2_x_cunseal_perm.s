@@ -74,9 +74,7 @@ BEGIN_TEST
 
 		cgetdefault	$c4
 
-		clear_counting_exception_handler_regs
-		cunseal $c4, $c3, $c2 # This should raise an exception
-		save_counting_exception_handler_cause $c5	# store trap info in $c5
+		check_instruction_traps $s0, cunseal $c4, $c3, $c2 # This should raise an exception
 
 		# The exception handler should return to here, and
 		# $c4 should have been unchanged by the failed attempt to
