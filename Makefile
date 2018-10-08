@@ -445,6 +445,7 @@ clean: cleantest
 	rm -f $(OBJDIR)/*.o
 	rm -f $(OBJDIR)/*.elf
 	rm -f $(OBJDIR)/*.dump
+	rm -f $(OBJDIR)/*.sailbin
 	rm -f $(TESTDIR)/*/*.pyc
 	rm -f $(OBJDIR)/*.hex *.hex mem.bin
 
