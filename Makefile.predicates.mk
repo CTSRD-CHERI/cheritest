@@ -294,6 +294,10 @@ no_experimental_clc \
 no_experimental_csc \
 count_register_is_icount
 
+ifdef MIPS_ONLY
+QEMU_UNSUPPORTED_FEATURES+=beri_statcounters
+endif
+
 # XXXAM why settype is disabled?
 # XXXAR: mtc0signex was added here because since upstream QEMU commit d54a299b
 # the mtc0 instruction no longer sign extends

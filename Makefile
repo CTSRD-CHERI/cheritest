@@ -222,9 +222,7 @@ endif
 
 # detect QEMU binary:
 ifdef MIPS_ONLY
-$(warn Tests will not work with qemu-system-mips64, defaulting to $(CHERI_SDK_BINDIR)/qemu-system-cheri256")
-QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-cheri256
-# QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-mips64
+QEMU?=$(CHERI_SDK_BINDIR)/qemu-system-mips64
 else
 ifneq ($(wildcard $(CHERI_SDK_BINDIR)/qemu-system-cheri$(CAP_SIZE)),)
 ifneq ($(CAP_SIZE),256)

@@ -463,19 +463,23 @@ $(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(CHECK_QEMU_
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
+FAIL_FAST_QEMU_ERROR?=0
+ifneq ($(FAIL_FAST_QEMU_ERROR),0)
+fail_qemu_logfile=rm -f "$@"; false
+else
+fail_qemu_logfile=true
+endif
+
+
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(CHECK_QEMU_EXISTS) | $(QEMU_LOGDIR)
 	@echo "$(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) > /dev/null"
 	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
 	    if [ "$(dollar)exit_code" -ne 255 ] && [ "$(dollar)exit_code" -ne 0 ]; then \
-	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
+	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; $(fail_qemu_logfile); \
 	    fi
-	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
-
-ifndef MIPS_ONLY
-	# ensure that the logfile contains some output
-	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
-endif
+	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; $(fail_qemu_logfile) ; fi
+	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; $(fail_qemu_logfile) ; fi
 
 $(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log
 	$(CHERI_SDK_BINDIR)/symbolize-cheri-trace.py $< "$(OBJDIR)/`basename $< .log`.elf" > $@
