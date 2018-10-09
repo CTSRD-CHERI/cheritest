@@ -85,7 +85,6 @@
 .endm
 
 
-
 # Use the UserLocal register to store the exception count
 # TODO: we could also use some other COP0 register instead? E.g. Compare?
 # There also seems to be Kscratch (dmf0 $a1, $31, 2/3) but not sure
@@ -259,7 +258,7 @@ trap_count:
 .endm
 
 .macro check_instruction_traps compressed_info, insn:vararg
-	move \compressed_info, $zero
+	dli \compressed_info, 0
 	clear_counting_exception_handler_regs
 	\insn
 	move \compressed_info, $k1
@@ -350,8 +349,28 @@ trap_count:
 	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
 .endm
 
+.macro remove_pcc_perms_jump capreg, perms, label, tmpgpr=$at
+	.set push
+	.set noat
+	cgetpcc		\capreg
+	dli		\tmpgpr, ~(\perms)
+	candperm	\capreg, \capreg, \tmpgpr
+	dla		\tmpgpr, \label
+	csetoffset	\capreg, \capreg, \tmpgpr
+	cjr		\capreg
+	nop		# branch delay slot
+	.set pop
+.endm
 
-        
+.macro cap_from_label capreg, label, tmpgpr=$at
+	.set push
+	.set noat
+	cgetpcc		\capreg
+	dla		\tmpgpr, \label
+	csetoffset	\capreg, \capreg, \tmpgpr
+	.set pop
+.endm
+
 # The maximum number of hw threads (threads*cores) we expect for
 # any configuration. This is so that we can allocate a conservative
 # amount of space for static per thread structures. May need to
