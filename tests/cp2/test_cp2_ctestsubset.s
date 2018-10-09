@@ -36,28 +36,35 @@
 #
 
 BEGIN_TEST
-
-		dla	$t0, data
 		cgetdefault $c1
+		cgetdefault $c2
+
+                # Test a cap with reduced bounds
+		dla	$t0, data
 		csetoffset $c1, $c1, $t0
 		dli	$t0, 8
 		csetbounds $c1, $c1, $t0
-
-		cgetdefault $c2
-
 		ctestsubset $a0, $c2, $c1
+		ctestsubset $a1, $c1, $c2
 
+                # Test a cap with reduced perms
 		dli	$t0, 2
-		candperm $c2, $c1, $t0
-		ctestsubset $a1, $c2, $c1
-
-		dli	$t0, 0x7ff
-		candperm $c2, $c1, $t0
+		candperm $c1, $c2, $t0
 		ctestsubset $a2, $c2, $c1
+		ctestsubset $a3, $c1, $c2
 
+                # Test a cap with reduced uperms
+		dli	$t0, 0x7ff
+		candperm $c1, $c2, $t0
+		ctestsubset $a4, $c2, $c1
+		ctestsubset $a5, $c1, $c2
+
+                # Test a zero length cap
 		dli	$t0, 0
-		csetboundsexact $c2, $c1, $t0
-		ctestsubset $a3, $c2, $c1
+		csetboundsexact $c1, $c2, $t0
+		ctestsubset $a6, $c2, $c1
+		ctestsubset $a7, $c1, $c2
+
 END_TEST
 
 		.data

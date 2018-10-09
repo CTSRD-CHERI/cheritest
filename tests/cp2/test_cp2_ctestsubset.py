@@ -32,16 +32,32 @@ class test_cp2_ctestsubset(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_ctestsubset_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, 1, "CTestSubset returned incorrect result when ct was a subset")
+        self.assertRegisterEqual(self.MIPS.a0, 1, "CTestSubset returned incorrect result when bounds were a subset")
 
     @attr('capabilities')
     def test_cp2_ctestsubset_2(self):
-        self.assertRegisterEqual(self.MIPS.a1, 0, "CTestSubset returned incorrect result when perms were not a subset")
+        self.assertRegisterEqual(self.MIPS.a1, 0, "CTestSubset returned incorrect result when bounds were not a subset")
 
     @attr('capabilities')
     def test_cp2_ctestsubset_3(self): 
-        self.assertRegisterEqual(self.MIPS.a2, 0, "CTestSubset returned incorrect result when uperms were not a subset")
+        self.assertRegisterEqual(self.MIPS.a2, 1, "CTestSubset returned incorrect result when perms werea subset")
 
     @attr('capabilities')
     def test_cp2_ctestsubset_4(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0, "CTestSubset returned incorrect result when length was not a subset")
+        self.assertRegisterEqual(self.MIPS.a3, 0, "CTestSubset returned incorrect result when perms were not a subset")
+
+    @attr('capabilities')
+    def test_cp2_ctestsubset_5(self):
+        self.assertRegisterEqual(self.MIPS.a4, 1, "CTestSubset returned incorrect result when uperms were a subset")
+
+    @attr('capabilities')
+    def test_cp2_ctestsubset_6(self):
+        self.assertRegisterEqual(self.MIPS.a5, 0, "CTestSubset returned incorrect result when uperms were not a subset")
+
+    @attr('capabilities')
+    def test_cp2_ctestsubset_7(self): 
+        self.assertRegisterEqual(self.MIPS.a6, 1, "CTestSubset returned incorrect result when zero length was a subset")
+
+    @attr('capabilities')
+    def test_cp2_ctestsubset_8(self):
+        self.assertRegisterEqual(self.MIPS.a7, 0, "CTestSubset returned incorrect result when zero length was not a subset")
