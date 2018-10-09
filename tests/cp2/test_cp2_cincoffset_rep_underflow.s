@@ -66,5 +66,6 @@ END_TEST
 
 
 .data
+.align 6
 cap:
 	.space 128
