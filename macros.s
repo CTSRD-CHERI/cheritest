@@ -180,6 +180,8 @@
 \name:
 	.set push
 	.set noat
+	ori $0, $0, 0xdead	# turn off QEMU tracing
+
 	# Check if this is a syscall and exit if it is (don't update trap count!)
 	dmfc0 	$k0, $13		# k0 = Cause
 	andi	$k1, $k0, (0x1f << 2)	# Extract the cause bits
@@ -212,6 +214,7 @@
 
 .Ldo_eret:
 	dmfc0	$k0, $8			# k0 = BadVaddr
+	ori $0, $0, 0xbeef	# turn on QEMU tracing again
 	DO_ERET
 .Lsyscall:
 	# For now just exit the test on any syscall trap
@@ -219,6 +222,7 @@
 	# dmfc0 	$k1, $8, 1	# Get BadInstr
 	# On exit store total exception count in v0
 	__get_counting_trap_handler_count $v0	# get exception count in $v0
+	ori $0, $0, 0xbeef	# turn on QEMU tracing again
 	# This needs to be a jr with the real address since a branch or j will
 	# jump to unmapped memory just after the trap handler
 	dla	$ra, finish
