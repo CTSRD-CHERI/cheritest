@@ -491,7 +491,8 @@ TEST_MEM_FILES=					\
 		test_lwr.s			\
 		test_lwl.s			\
 		test_swr.s			\
-		test_swl.s
+		test_swl.s			\
+		test_magic_nop_memset.s
 
 TEST_LLSC_FILES=				\
 		test_ll_unalign.s		\
