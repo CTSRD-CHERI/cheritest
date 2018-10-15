@@ -30,9 +30,9 @@
 .endm
 
 .macro cheri_2arg_insn code, r1, r2
-	cheri_3arg_insn 0x3f, \code, \r1, \r2
+	cheri_3arg_insn 0x3f, \r1, \r2, \code
 .endm
 
 .macro cheri_1arg_insn code, r1
-	cheri_2arg_insn 0x1f, \code, \r1
+	cheri_2arg_insn 0x1f, \r1, \code
 .endm
