@@ -138,30 +138,30 @@
 
 	# Check if CP2 is enabled
 	mfc0	\tmp_reg, $12	# Get status
-	dli	$v0, (1 << 30)	# CP2 enabled bit
-	and	\tmp_reg, \tmp_reg, $v0	# check if zero
+	dli	\trap_count_reg, (1 << 30)	# CP2 enabled bit
+	and	\tmp_reg, \tmp_reg, \trap_count_reg	# check if zero
 	beqz	\tmp_reg, .Lcp2_disabled_skip_capcause
 	nop
 .Lset_capcause:
 	# Set bits 0-16 of k1 to CapCause
-	cgetcause $v0
-	andi	$v0, $v0, 0xffff	# Ensure the high bits of capcause are empty (they should be anyway)
-	or	\compressed_info_reg, \compressed_info_reg, $v0		# Add capcause in bits 0-16
+	cgetcause \trap_count_reg
+	andi	\trap_count_reg, \trap_count_reg, 0xffff	# Ensure the high bits of capcause are empty (they should be anyway)
+	or	\compressed_info_reg, \compressed_info_reg, \trap_count_reg		# Add capcause in bits 0-16
 .Lcp2_disabled_skip_capcause:
 	# TODO: (save STATUS)?
 	# dmfc0   $v1, $12			# a6 = status
 
 	# increment trap_count and keep result in v0
-	__get_counting_trap_handler_count $v0	# get old exception count
-	daddiu $v0, $v0, 1			# v0 = new exception count
-	__set_counting_trap_handler_count $v0	# save exception count value
+	__get_counting_trap_handler_count \trap_count_reg	# get old exception count
+	daddiu \trap_count_reg, \trap_count_reg, 1			# v0 = new exception count
+	__set_counting_trap_handler_count \trap_count_reg	# save exception count value
 
 	# Shift exception count to the high 16 bits
-	# Strictly speaking might modify $v0 but more than 2^16 exceptions should
+	# Strictly speaking might modify \trap_count_reg but more than 2^16 exceptions should
 	# be impossible in any of the tests
-	dsll	$v0, $v0, 48
-	or	\compressed_info_reg, \compressed_info_reg, $v0		# Add count in bits 31-63
-	dsrl	$v0, $v0, 48		# restore expection count $v0
+	dsll	\trap_count_reg, \trap_count_reg, 48
+	or	\compressed_info_reg, \compressed_info_reg, \trap_count_reg		# Add count in bits 31-63
+	dsrl	\trap_count_reg, \trap_count_reg, 48		# restore expection count \trap_count_reg
 .endm
 
 # define a trap handler function that sets the following:
@@ -173,7 +173,7 @@
 #    Bits 32-63 are the exception count
 # On return it just jumps to EPC+4 (i.e. it doesn't handle traps in branches/jumps)
 # This handler also allows exiting from usermode by treating sycall as a request to exit
-.macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler
+.macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler, trap_count_reg=$v0
 .text
 .global \name
 .ent \name
@@ -191,7 +191,7 @@
 	# Otherwise skip the instruction and return from the handler
 .Lnot_syscall:
 	# save the trap info in $k1+$v0, using $k0 as the scratch reg
-	collect_compressed_trap_info
+	collect_compressed_trap_info trap_count_reg=\trap_count_reg
 
 	# Check for bdelay flag (bit 47 of compressed trap info:
 	dsrl	$k0, $k1, 47
@@ -327,10 +327,10 @@ trap_count:
 # Using the macro save_counting_exception_handler_cause can shorten the test even more
 #
 # Optional argument 1 can be used to declare extra stack space used by the function.
-.macro BEGIN_TEST extra_stack_space=0
+.macro BEGIN_TEST extra_stack_space=0, trap_count_reg=$v0
 .text
 	__SET_DEFAULT_TEST_ASM_OPTS
-	DEFINE_COUNTING_CHERI_TRAP_HANDLER default_trap_handler
+	DEFINE_COUNTING_CHERI_TRAP_HANDLER default_trap_handler, trap_count_reg=\trap_count_reg
 
 	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
 		dli $v0, 0	# trap handler sets $v0 to exception count on error
