@@ -47,24 +47,14 @@
 .include "macros.s"
 
 page=0xafa # A randomly chosen (even) page
-BEGIN_TEST
-
-		#
-		# Set up 'handler' as the RAM exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Save the desired EPC value for this exception so we can
 		# check it later.
 		#
 		dla	$a6, desired_epc
 
-	
+
  		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
 		dmtc0	$zero, $0		# TLB index
 		li      $t0, (page<<12)
@@ -84,17 +74,19 @@ BEGIN_TEST
 		nop
 		and     $a4, $a0, 0xfff		# Get offset of testdata within page.
 		add     $a4, (page<<12)	        # Add page number
-desired_epc:	sd      $a5, 0($a4)		# Load from virtual address
+		dli	$t0, (0xc << 60)
+		or	$a4, $a4, $t0
+desired_epc:
+		check_instruction_traps $s5, sd      $a5, 0($a4)	# Load from virtual address
 		ld      $a7, 0($a0)		# Check that the store didn't work...
 return:
 END_TEST
 
 #
 # Exception handler.  
-#
-		.ent bev0_handler
-bev0_handler:
-		dmfc0   $s6, $14      		# EPC
+BEGIN_CUSTOM_TRAP_HANDLER
+		collect_compressed_trap_info trap_count_reg=$s7
+		dmfc0   $s6, $14		# EPC
 		daddu   $t0, $s6, 4		# Increment EPC
 		dmtc0   $t0, $14		# and store it back
 		dmfc0	$s0, $8			# BadVAddr
@@ -102,11 +94,10 @@ bev0_handler:
 		dmfc0	$s2, $20		# XContext
 		dmfc0	$s3, $10		# EntryHi
 		dmfc0   $s4, $12	      	# Status
-		dmfc0	$s5, $13		# Cause
 		DO_ERET
-		.end bev0_handler
-	
+END_CUSTOM_TRAP_HANDLER
+
 	.data
-	.align 5
+	.align 7
 testdata:
 	.dword 0xfedcba9876543210

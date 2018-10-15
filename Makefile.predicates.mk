@@ -67,7 +67,7 @@ dma		\
 beri_statcounters	\
 "
 
-COMMON_UNSUPPORTED_FEATURES?=
+COMMON_UNSUPPORTED_FEATURES?=notyet
 
 ifneq ($(TEST_CP2),1)
 COMMON_UNSUPPORTED_FEATURES+=capabilities

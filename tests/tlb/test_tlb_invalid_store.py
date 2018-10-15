@@ -42,40 +42,36 @@ from beritest_tools import attr
 # s2: XContext
 # s3: EntryHi
 # s4: Status
-# s5: Cause
-# s6: EPC	
+# s5: compressed trap info
+# s6: EPC
+# s7: trap count
 
+@attr('tlb')
 class test_tlb_invalid_store(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('tlb')
     def test_badvaddr(self):
         self.assertRegisterEqual(self.MIPS.s0, self.MIPS.a4, "Wrong BadVaddr")
 
-    @attr('tlb')
     def test_context(self):
         self.assertRegisterEqual(self.MIPS.s1, (self.MIPS.a4 & 0xffffe000)>>9, "Wrong Context") # TODO test page table base
 
-    @attr('tlb')
     def test_xcontext(self):
         self.assertRegisterEqual(self.MIPS.s2, (self.MIPS.a4 & 0xffffe000)>>9, "Wrong XContext") # TODO test page table base
 
-    @attr('tlb')
     def test_entryhi(self):
         self.assertRegisterMaskEqual(self.MIPS.a4, 0xfffff000, self.MIPS.s3, "Wrong EntryHi")
 
-    @attr('tlb')
     def test_status(self):
         self.assertRegisterMaskEqual(self.MIPS.s4, 2, 2, "Wrong EXL")
 
-    @attr('tlb')
-    def test_cause(self):
-        self.assertRegisterMaskEqual(self.MIPS.s5, 0x7c, 0xc, "Wrong Exception Code")
-
-    @attr('tlb')
     def test_epc(self):
         '''Test EPC after TLB Invalid exception'''
-        self.assertRegisterEqual(self.MIPS.a6, self.MIPS.s6, "Wrong EPC")
+        # plus 12 since check_instruction_traps uses 3 instructions before invoking the actual insn
+        self.assertRegisterEqual(self.MIPS.a6 + 12, self.MIPS.s6, "Wrong EPC")
 
-    @attr('tlb')
     def test_testdata(self):
         self.assertRegisterEqual(self.MIPS.a7, 0xfedcba9876543210, "Wrong testdata")
+
+    def test_trap_info(self):
+        self.assertCompressedTrapInfo(self.MIPS.s5, mips_cause=self.MIPS.Cause.TLB_Store, trap_count=1)
