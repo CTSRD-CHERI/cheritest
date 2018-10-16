@@ -55,7 +55,7 @@ class test_cp2_swr_clear_tags(BaseBERITestCase):
         assert self.MIPS.c13.t, "Second cap tag should NOT be cleared after swl"
 
     def test_cap1_after_sdl(self):
-        assert self.MIPS.c12.t == 0, "First cap tag should be cleared after sdl"
+        assert self.MIPS.c14.t == 0, "First cap tag should be cleared after sdl"
 
     def test_cap2_after_sdl(self):
-        assert self.MIPS.c13.t, "Second cap tag should NOT be cleared after sdl"
+        assert self.MIPS.c15.t, "Second cap tag should NOT be cleared after sdl"
