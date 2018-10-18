@@ -96,7 +96,8 @@ class test_cp2_null_vs_ddc(BaseBERITestCase):
 
     @attr('capabilities')
     def test_clc_uses_ddc(self):
-        self.assertRegisterEqual(self.MIPS.c11.base + self.MIPS.c11.offset, 0x0123456789abcdef, "clc cursor wrong?")
+        # Depending on encoding base+offset could end up wrapping so take mod 2^64 to reconstruct cursor
+        self.assertRegisterEqual((self.MIPS.c11.base + self.MIPS.c11.offset) % (2**64), 0x0123456789abcdef, "clc cursor wrong?")
 
     @attr('capabilities')
     def test_load_linked_uses_ddc(self):
@@ -107,5 +108,6 @@ class test_cp2_null_vs_ddc(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cllc_uses_ddc(self):
-        self.assertRegisterEqual(self.MIPS.c12.base + self.MIPS.c12.offset, 0x0123456789abcdef, "cllc cursor wrong?")
+        # Depending on encoding base+offset could end up wrapping so take mod 2^64 to reconstruct cursor
+        self.assertRegisterEqual((self.MIPS.c12.base + self.MIPS.c12.offset) % (2**64), 0x0123456789abcdef, "cllc cursor wrong?")
 
