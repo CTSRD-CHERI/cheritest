@@ -51,4 +51,12 @@ class test_cp2_magic_memset_clears_tags(BaseBERITestCase):
         assert self.MIPS.c5.t == 0, "tag should NOT be set after memset"
         assert self.MIPS.c5.offset + self.MIPS.c5.base == HexInt(0x1111111111111111), "cursor should be all 0x11 after memset"
 
+    def test_cap2_tag_before_memset(self):
+        assert self.MIPS.c6.t == 1, "tag should be set before memset"
 
+    def test_cap2_tag_after_memset(self):
+        # The initial implementation of magic memset only cleared the first tag
+        # -> check that we clear the tag for cap2 as well
+        # self.assertNullCap(self.MIPS.c5, msg="Should be a untagged null cap after memset")
+        assert self.MIPS.c7.t == 0, "second cap tag should NOT be set after memset"
+        assert self.MIPS.c7.offset + self.MIPS.c7.base == HexInt(0x1111111111111111), "cursor should be all 0x11 after memset"

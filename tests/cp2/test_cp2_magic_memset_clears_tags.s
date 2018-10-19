@@ -44,6 +44,11 @@ BEGIN_TEST
 		csc	$c2, $zero, 0($c3)
 		clc	$c4, $zero, 0($c3)	# load back before memset
 
+		dla	$t0, cap2_location
+		csetoffset $c8, $c1, $t0	# create cap for cap2_location
+		csc	$c2, $zero, 0($c8)
+		clc	$c6, $zero, 0($c8)	# load back before memset
+
 		# call qemu_memset()
 		dli	$v1, 1		# selector for QEMU magic function
 		dli	$v0, 0		# to check return value
@@ -57,6 +62,7 @@ BEGIN_TEST
 		move	$s3, $v1	# should be changed to 0xdec0ded by the helper
 
 		clc	$c5, $zero, 0($c3)	# load cap1 after memset
+		clc	$c7, $zero, 0($c8)	# load cap2 after memset
 
 		dla	$a5, end_data
 		lbu	$s4, 0($a5)	# load first byte after memset
@@ -70,6 +76,9 @@ begin_data:
 	.8byte 0x1234567887654321
 cap_location:
 	.chericap 0xabcde	# capability size element
+cap2_location:
+	.chericap 0xabcde	# capability size element
+	.8byte 0x1234567887654321
 end_data:
 	.byte 0xab
 
