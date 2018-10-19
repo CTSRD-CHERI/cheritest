@@ -74,8 +74,6 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		nop
 		and     $a4, $a0, 0xfff		# Get offset of testdata within page.
 		add     $a4, (page<<12)	        # Add page number
-		dli	$t0, (0xc << 60)
-		or	$a4, $a4, $t0
 desired_epc:
 		check_instruction_traps $s5, sd      $a5, 0($a4)	# Load from virtual address
 		ld      $a7, 0($a0)		# Check that the store didn't work...
