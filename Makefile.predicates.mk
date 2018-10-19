@@ -69,6 +69,8 @@ beri_statcounters	\
 
 COMMON_UNSUPPORTED_FEATURES?=notyet
 
+COMMON_UNSUPPORTED_FEATURES+=qemu_magic_nops
+
 ifneq ($(TEST_CP2),1)
 COMMON_UNSUPPORTED_FEATURES+=capabilities
 endif
@@ -332,6 +334,7 @@ QEMU_UNSUPPORTED_IF+=beri_statcounters=cache
 # TODO: remove once https://github.com/CTSRD-CHERI/cheri-isa/issues/19 is resolved
 QEMU_UNSUPPORTED_FEATURES+=cap_unrep_clears_all_info
 QEMU_UNSUPPORTED_FEATURES_FINAL=$(filter-out cap_unrep_retains_info,$(QEMU_UNSUPPORTED_FEATURES))
+QEMU_UNSUPPORTED_FEATURES_FINAL:=$(filter-out qemu_magic_nops,$(QEMU_UNSUPPORTED_FEATURES_FINAL))
 
 # QEMU_UNSUPPORTED_FEATURES+=beri_statcounters
 

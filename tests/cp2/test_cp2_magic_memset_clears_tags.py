@@ -30,6 +30,7 @@ from beritest_tools import BaseBERITestCase, attr, HexInt
 @attr("qemu_magic_nops")
 class test_cp2_magic_memset_clears_tags(BaseBERITestCase):
     EXPECTED_EXCEPTIONS = 0
+
     # a6 contains begin_data
     def test_return_value(self):
         assert self.MIPS.s2 == self.MIPS.a6, "memset should return begin_data"
