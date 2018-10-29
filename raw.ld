@@ -45,4 +45,5 @@ SECTIONS
 	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
 	__bss_start = ADDR(.bss);
 	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
+        /DISCARD/ : { *(.MIPS.options) *(.MIPS.abiflags) *(.pdr)}
 }
