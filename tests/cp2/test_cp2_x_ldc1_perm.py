@@ -33,29 +33,20 @@ from beritest_tools import attr
 # Permit_Load.
 #
 
+@attr('capabilities')
+@attr('float')
+@attr('float64')
 class test_cp2_x_ldc1_perm(BaseBERITestCase):
+    '''Test LDC1 raises an exception when $ddc doesn't have Permit_Load permission'''
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('capabilities')
-    @attr('float')
-    @attr('float64')
-    def test_cp2_x_ldc1_perm_1(self):
+    def test_not_loaded(self):
         '''Test LDC1 did not load without Permit_Load permission'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
             "LDC1 loaded without Permit_Load permission")
 
-    @attr('capabilities')
-    @attr('float')
-    @attr('float64')
-    def test_cp2_x_ldc1_perm_2(self):
-        '''Test LDC1 raises an exception when doesn't have Permit_Load permission'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "LDC1 did not raise an exception when didn't have Permit_Load permission")
-
-    @attr('capabilities')
-    @attr('float')
-    @attr('float64')
-    def test_cp2_x_ldc1_perm_3(self):
+    def test_cp2_cause(self):
         '''Test capability cause is set correctly when doesn't have Permit_Load permission'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1200,
-            "Capability cause was not set correctly when didn't have Permit_Load permission")
+        self.assertCp2Fault(self.MIPS.s0, trap_count=1, cap_cause=self.MIPS.CapCause.Permit_Load_Violation,
+            cap_reg=0, msg="Capability cause was not set correctly when didn't have Permit_Load permission")
 
