@@ -25,17 +25,20 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.macro CALL_MAGIC_NOP
+.macro CALL_MAGIC_NOP begin, end
 	# call qemu_memset()
-	dli	$v1, 1		# selector for QEMU magic function
+	dli	$v1, 3		# selector for QEMU magic function
 	dli	$v0, 0		# to check return value
-	dla	$a0, begin_data	# dest = begin_data
-	move	$a6, $a0	# save begin_data in $a6
-	dli	$a1, 0x11	# fill with 0x11
-	dla	$a2, end_data - begin_data	# whole buffer
+	dla	$a0, \begin	# dest = begin_data
+	dla	$a1, zerobuffer	# src = 4k of 0x11
+	dla	$a2, \end - \begin	# whole buffer
 	ori	$zero, $zero, 0xC0DE	# call the magic helper
 .endm
 
 .include "tests/cp2/common_code_qemu_magic_nop_clears_tag.s"
 
 
+.data
+.balign 4096
+zerobuffer:
+.fill 4096, 1, 0x11
