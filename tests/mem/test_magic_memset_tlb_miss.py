@@ -28,7 +28,7 @@
 from beritest_tools import BaseBERITestCase, attr, HexInt
 
 @attr("qemu_magic_nops")
-class test_magic_memset_tlb_miss2(BaseBERITestCase):
+class test_magic_memset_tlb_miss(BaseBERITestCase):
     EXPECTED_EXCEPTIONS = 1
 
     def test_badvaddr(self):

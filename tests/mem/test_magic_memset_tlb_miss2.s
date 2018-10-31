@@ -76,9 +76,9 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		add     $a4, (page<<12)	        # Add page number
 		# prepare magic memset args
 		move	$t2, $a0	# save paddr $a0 for later
-		move	$a0, $a4	# invalid vaddr
 		dli	$t0, (0xc << 60)
-		or	$a0, $a0, $t0
+		or	$a4, $a4, $t0
+		move	$a0, $a4	# invalid vaddr
 		dli	$a1, 0xab	# value
 		dli	$a2, 1		# one byte
 		dli	$v1, 1		# memset selector

@@ -32,16 +32,16 @@ class test_magic_memset_tlb_miss2(BaseBERITestCase):
     EXPECTED_EXCEPTIONS = 1
 
     def test_badvaddr(self):
-        self.assertRegisterEqual(self.MIPS.s0, self.MIPS.a4, "Wrong BadVaddr")
+        assert self.MIPS.s0 == self.MIPS.a4, "Wrong BadVaddr"
 
     def test_context(self):
-        self.assertRegisterEqual(self.MIPS.s1, (self.MIPS.a4 & 0xffffe000)>>9, "Wrong Context") # TODO test page table base
+        assert HexInt(self.MIPS.s1 & 0xffffffff) == HexInt((self.MIPS.a4 & 0xffffe000) >> 9), "Wrong Context" # TODO test page table base
 
     def test_xcontext(self):
-        self.assertRegisterEqual(self.MIPS.s2, (self.MIPS.a4 & 0xffffe000)>>9, "Wrong XContext") # TODO test page table base
+        assert HexInt(self.MIPS.s2 & 0xffffffff) == HexInt((self.MIPS.a4 & 0xffffe000) >> 9), "Wrong XContext" # TODO test page table base
 
     def test_entryhi(self):
-        self.assertRegisterMaskEqual(self.MIPS.a4, 0xfffff000, self.MIPS.s3, "Wrong EntryHi")
+        self.assertRegisterMaskEqual(self.MIPS.a4, 0xfffffffffffff000, self.MIPS.s3, "Wrong EntryHi")
 
     def test_status(self):
         self.assertRegisterMaskEqual(self.MIPS.s4, 2, 2, "Wrong EXL")
