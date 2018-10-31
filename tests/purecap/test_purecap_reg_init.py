@@ -55,9 +55,6 @@ class test_purecap_reg_init(BaseBERITestCase):
             elif regnum == 17:
                 self.assertValidCap(cap, name + " (link cap)", perms=self.max_nostore_perms,
                                     offset=self.MIPS.ra, length=self.max_length)
-            elif self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED and regnum == 29:
-                # the kernel capabilities KCC should be a default cap
-                self.assertDefaultCap(cap, name)
             else:
                 # All other capability registers should be null
                 # Note: $c26 should also be null since _CHERI_CAPABILITY_TABLE_ will have

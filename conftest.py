@@ -55,7 +55,7 @@ def pytest_configure(config):
     #import _pytest.config
     #assert isinstance(config, _pytest.config.Config)
     # TODO: add the available features to the config object
-    #  if LOGDIR/CAP_SIZE/CHERI_C0_IS_NULL/TEST_MACHINE are not set, set sensible default values (QEMU)
+    #  if LOGDIR/CAP_SIZE/TEST_MACHINE are not set, set sensible default values (QEMU)
     print("TEST_MACHINE:", config.getoption(CheritestOptions.TEST_MACHINE.name))
     if config.option.help:
         return

@@ -37,10 +37,7 @@ from beritest_tools import attr
 class test_cp2_null_vs_ddc(BaseBERITestCase):
     @attr('capabilities')
     def test_cmove_0_is_null(self):
-        if self.MIPS.CHERI_C0_IS_NULL:
-            self.assertNullCap(self.MIPS.c4, "cmove $c4, $cnull should return NULL")
-        else:
-            self.assertCapabilitiesEqual(self.MIPS.c4, self.MIPS.c3, "cmove $c4, $cnull should return $ddc (legacy mode)")
+        self.assertNullCap(self.MIPS.c4, "cmove $c4, $cnull should return NULL")
 
     @attr('capabilities')
     def test_cfromptr_0_is_ddc(self):
@@ -51,10 +48,7 @@ class test_cp2_null_vs_ddc(BaseBERITestCase):
         self.assertCapabilitiesEqual(self.MIPS.t1, self.MIPS.c3.offset, "ctoptr ct == 0 should use $ddc")
         self.assertCapabilitiesEqual(self.MIPS.t1, self.MIPS.t1, "ctoptr ct == 0 should use $ddc")
         self.assertRegisterNotEqual(self.MIPS.t1, 0, "ctoptr ct == 0 should use $ddc")
-        if self.MIPS.CHERI_C0_IS_NULL:
-            self.assertRegisterEqual(self.MIPS.t2, 0, "ctoptr cb == 0 should use return 0")
-        else:
-            self.assertRegisterEqual(self.MIPS.t2, self.MIPS.c3.offset, "ctoptr cb == 0 should use return $ddc (legacy)")
+        self.assertRegisterEqual(self.MIPS.t2, 0, "ctoptr cb == 0 should use return 0")
 
     @attr('capabilities')
     def test_cbuildcap_0_is_ddc(self):
@@ -63,29 +57,19 @@ class test_cp2_null_vs_ddc(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cincoffset_imm_0_is_null(self):
-        if self.MIPS.CHERI_C0_IS_NULL:
-            self.assertIntCap(self.MIPS.c8, int_value=42, msg="cincoffsetimm $cnull should return NULL")
-        else:
-            self.assertDefaultCap(self.MIPS.c8, offset=self.MIPS.c3.offset + 42, msg="cincoffsetimm $cnull should return $ddc (legacy mode)")
+        self.assertIntCap(self.MIPS.c8, int_value=42, msg="cincoffsetimm $cnull should return NULL")
 
     @attr('capabilities')
     def test_cincoffset_reg_0_is_null(self):
-        if self.MIPS.CHERI_C0_IS_NULL:
-            self.assertIntCap(self.MIPS.c9, int_value=43, msg="cincoffset $cnull should return NULL")
-        else:
-            self.assertDefaultCap(self.MIPS.c9, offset=self.MIPS.c3.offset + 43, msg="cincoffset $cnull should return $ddc (legacy mode)")
+        self.assertIntCap(self.MIPS.c9, int_value=43, msg="cincoffset $cnull should return NULL")
 
     @attr('capabilities')
     def test_csetoffset_0_is_null(self):
-        if self.MIPS.CHERI_C0_IS_NULL:
-            self.assertIntCap(self.MIPS.c10, int_value=44, msg="csetoffset $cnull should return NULL")
-        else:
-            self.assertDefaultCap(self.MIPS.c10, offset=44, msg="csetoffset $cnull should return $ddc (legacy mode)")
+        self.assertIntCap(self.MIPS.c10, int_value=44, msg="csetoffset $cnull should return NULL")
 
     @attr('capabilities')
     def test_write_0_noop(self):
-        if self.MIPS.CHERI_C0_IS_NULL:
-            self.assertNullCap(self.MIPS.c0, msg="None of the operations with $c0 as output should modify $c0")
+        self.assertNullCap(self.MIPS.c0, msg="None of the operations with $c0 as output should modify $c0")
 
     @attr('capabilities')
     def test_load_uses_ddc(self):

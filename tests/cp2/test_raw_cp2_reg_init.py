@@ -34,22 +34,14 @@ from beritest_tools import BaseBERITestCase, attr
 class test_raw_cp2_reg_init(BaseBERITestCase):
     def test_gpr_state(self):
         for i in range(1, 32):
-            if self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED and i in (29, 31):
-                # kcc + epcc are initialized to a full-addrspace value (and may still be mirrored to the cap register file
-                self.assertDefaultCap(self.MIPS.cp2[i])
-            else:
-                self.assertNullCap(self.MIPS.cp2[i])
+            self.assertNullCap(self.MIPS.cp2[i])
 
     def test_cp2_reg_init_c0(self):
         '''Check that c0 is correctly initialized (either as $ddc or $cnull)'''
         # TODO: remove this test once everything is updated to
         for t in self.MIPS.threads.values():
-            if self.MIPS.CHERI_C0_IS_NULL:
-                self.assertNullCap(t.cp2[0], msg="C0 should be the null register")
-                self.assertNotEqual(t.cp2[0], t.cp2_hwregs[0], msg="C0 should not be a mirror of caphwr ddc")
-            else:
-                self.assertDefaultCap(t.cp2[0], msg="C0 should be ddc")
-                self.assertCapabilitiesEqual(t.cp2[0], t.cp2_hwregs[0], msg="C0 should be a mirror of mirrored caphwr ddc")
+            self.assertNullCap(t.cp2[0], msg="C0 should be the null register")
+            self.assertNotEqual(t.cp2[0], t.cp2_hwregs[0], msg="C0 should not be a mirror of caphwr ddc")
 
     def test_cp2_reg_init_unused_hwregs(self):
         '''Test that all cap hwregs that aren't defined in the spec are None'''
@@ -62,9 +54,6 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
             func = self.assertNullCap if is_null else self.assertDefaultCap
             func(getattr(t, name), msg="$" + name + " incorrect")
             func(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?")
-            if self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED:
-                # also check that it was mirrored into the general-purepose register file
-                func(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
 
     def test_cp2_reg_init_ddc(self):
         '''Check that $ddc is correctly initialized to be the full addrespace'''

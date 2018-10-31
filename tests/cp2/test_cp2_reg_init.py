@@ -76,9 +76,6 @@ class test_cp2_reg_init(BaseBERITestCase):
     def test_cp2_reg_init_rest(self):
         '''Test that CP2 general-purpose register perms are correctly initialised'''
         for i in range(1, 32):
-            # if we are still mirroring into GPRs skip 29 to 31
-            if self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED and i >= 29:
-                continue
             # c12 will be set up to point to the start of the test and $c17 will be the return value
             if i == 12:
                 self.assertDefaultCap(self.MIPS.cp2[i], offset=self.MIPS.a1, msg="$c12 should point to start of test fn")
@@ -106,10 +103,6 @@ class test_cp2_reg_init(BaseBERITestCase):
             func = self.assertNullCap if is_null else self.assertDefaultCap
             func(getattr(t, name), msg="$" + name + " incorrect")
             func(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?")
-            if self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED:
-                # also check that it was mirrored into the general-purepose register file
-                func(t.cp2[number], msg="$c" + str(number) + " != $" + name + "?")
-
 
     @attr('capabilities')
     def test_cp2_reg_init_ddc(self):
@@ -122,12 +115,8 @@ class test_cp2_reg_init(BaseBERITestCase):
     def test_cp2_reg_init_c0(self):
         '''Check that c0 is correctly initialized (either as $ddc or $cnull)'''
         for t in self.MIPS.threads.values():
-            if self.MIPS.CHERI_C0_IS_NULL:
-                self.assertNullCap(t.cp2[0], msg="C0 should be the null register")
-                self.assertNotEqual(t.cp2[0], t.cp2_hwregs[0], msg="C0 should not be a mirror of caphwr ddc")
-            else:
-                self.assertDefaultCap(t.cp2[0], msg="C0 should be ddc")
-                self.assertCapabilitiesEqual(t.cp2[0], t.cp2_hwregs[0], msg="C0 should be a mirror of mirrored caphwr ddc")
+            self.assertNullCap(t.cp2[0], msg="C0 should be the null register")
+            self.assertNotEqual(t.cp2[0], t.cp2_hwregs[0], msg="C0 should not be a mirror of caphwr ddc")
 
     @attr('capabilities')
     def test_cp2_reg_init_usertls_null(self):

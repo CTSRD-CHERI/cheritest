@@ -201,15 +201,8 @@ class ThreadStatus(object):
     # Return a capabilty
     def _special_capreg(self, number, name):
         # type: (self, int, str) -> Capability
-        if MipsStatus.CHERI_C0_IS_NULL:
-            assert self.cp2_hwregs[number] is not None, "CapHWR {} ({}) not defined?".format(number, name)
-            return self.cp2_hwregs[number]
-        else:
-            # legacy behaviour: it is just a numbered GPR:
-            if self.cp2_hwregs[number]:
-                assert self.cp2[number] == self.cp2_hwregs[number], "cap hwr {} not mirrored to $c{}?".format(name, number)
-                return self.cp2_hwregs[number]
-            return self.cp2[number]
+        assert self.cp2_hwregs[number] is not None, "CapHWR {} ({}) not defined?".format(number, name)
+        return self.cp2_hwregs[number]
 
     # noinspection PyStringFormat
     def __repr__(self):
@@ -245,15 +238,7 @@ class CheriPermissionBits(Enum):
 
 
 class MipsStatus(object):
-    # TODO: remove these two once we have released V7
-    CHERI_C0_IS_NULL = is_envvar_true("CHERI_C0_IS_NULL")  # type: bool
-    # Reuse CHERI_C0_IS_NULL for this check
-    CHERI_C27_TO_31_INACESSIBLE = is_envvar_true("CHERI_C27_TO_C31_PROTECTED") or not is_envvar_true("CHERI_C0_IS_NULL")  # type: bool
-
-    @property
-    def ARE_SPECIAL_CAPREGS_MIRRORED(self):
-        # Just reuse the CHERI_C0_IS_NULL flag for this
-        return not self.CHERI_C0_IS_NULL
+    CHERI_C27_TO_31_INACESSIBLE = False  # type: bool
 
     '''Represents the status of the MIPS CPU registers, populated by parsing
     a log file. If x is a MipsStatus object, registers can be accessed by name

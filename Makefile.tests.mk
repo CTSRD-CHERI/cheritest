@@ -522,10 +522,9 @@ endif
 
 NOSETESTS:=PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) $(NOSETESTS)
 PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
-# For now allow running tests with c0 == ddc by setting CHERI_C0_IS_NULL=0
-CHERI_C0_IS_NULL?=1
-NOSETESTS:=CHERI_C0_IS_NULL=$(CHERI_C0_IS_NULL) CAP_SIZE=$(CAP_SIZE) $(NOSETESTS)
-PYTEST:=CHERI_C0_IS_NULL=$(CHERI_C0_IS_NULL) CAP_SIZE=$(CAP_SIZE) $(PYTEST)
+
+NOSETESTS:=CAP_SIZE=$(CAP_SIZE) $(NOSETESTS)
+PYTEST:=CAP_SIZE=$(CAP_SIZE) $(PYTEST)
 
 SIM_NOSETESTS=		LOGDIR=$(LOGDIR) TEST_MACHINE=SIM $(NOSETESTS)
 HWSIM_NOSETESTS=	LOGDIR=$(HWSIM_LOGDIR) TEST_MACHINE=HWSIM $(NOSETESTS)
@@ -740,17 +739,12 @@ check_valid_qemu:
 ifndef MIPS_ONLY
 	@echo "CAP_PRECISE='$(CAP_PRECISE)', QEMU_CAP_PRECISE='$(QEMU_CAP_PRECISE)'"
 	@echo "CAP_SIZE='$(CAP_SIZE)', QEMU_CAP_SIZE='$(QEMU_CAP_SIZE)'"
-	@echo "CHERI_C0_IS_NULL='$(CHERI_C0_IS_NULL)', QEMU_C0_IS_NULL='$(QEMU_C0_IS_NULL)'"
 	@if [ "$(CAP_PRECISE)" != "$(QEMU_CAP_PRECISE)" ]; then \
 		echo "CAP_PRECISE set to '$(CAP_PRECISE)' but QEMU precise capabilities=$(QEMU_CAP_PRECISE). Change CAP_PRECISE or select a different $(dollar)QEMU"; \
 		exit 1; \
 	fi
 	@if [ "$(CAP_SIZE)" != "$(QEMU_CAP_SIZE)" ]; then \
 		echo "CAP_SIZE set to '$(CAP_SIZE)' but QEMU capability size='$(QEMU_CAP_SIZE)'. Change CAP_SIZE or select a different $(dollar)QEMU"; \
-		exit 1; \
-	fi
-	@if [ "$(CHERI_C0_IS_NULL)" != "$(QEMU_C0_IS_NULL)" ]; then \
-		echo "CHERI_C0_IS_NULL set to '$(CHERI_C0_IS_NULL)' but QEMU $c0 == $cnull is '$(QEMU_C0_IS_NULL)'. Change CHERI_C0_IS_NULL or select a different $(dollar)QEMU"; \
 		exit 1; \
 	fi
 endif

@@ -62,13 +62,10 @@ class test_cp2_clearregs_gplo(BaseBERITestCase):
     @attr('capabilities')
     def test_cap(self):
         '''Test that cap regs have expected values'''
-        if self.MIPS.CHERI_C0_IS_NULL:
-            self.assertNullCap(self.MIPS.c0, "$cnull was modified unexpectedly")
-        else:
-            self.assertDefaultCap(self.MIPS.c0, "$ddc was modified unexpectedly")
+        self.assertNullCap(self.MIPS.c0, "$cnull was modified unexpectedly")
         for reg in range(1, 32):
             capreg_val = self.MIPS.cp2[reg]
-            if not self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED and reg == 31:
+            if reg == 31:
                 # c31 was left as NULL (due to assembler restrictions, for to)
                 # FIXME: remove this special case
                 self.assertNullCap(capreg_val, "$c%d was modified unexpectedly" % reg)

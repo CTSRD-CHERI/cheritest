@@ -66,7 +66,7 @@ class test_cp2_clearregs_caphi(BaseBERITestCase):
                 # the test clears the even numbered registers in gplo16
                 self.assertNullCap(capreg_val, "$c%d was not cleared" % reg)
             else:
-                if not self.MIPS.ARE_SPECIAL_CAPREGS_MIRRORED and reg == 31:
+                if reg == 31:
                     # c31 was left as NULL (due to assembler restrictions, for to)
                     # FIXME: remove this special case
                     self.assertNullCap(capreg_val, "$c%d was modified unexpectedly" % reg)
