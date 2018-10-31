@@ -25,14 +25,13 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.macro CALL_MAGIC_NOP
+.macro CALL_MAGIC_NOP begin, end
 	# call qemu_memset()
 	dli	$v1, 1		# selector for QEMU magic function
 	dli	$v0, 0		# to check return value
-	dla	$a0, begin_data	# dest = begin_data
-	move	$a6, $a0	# save begin_data in $a6
+	dla	$a0, \begin	# dest = begin_data
 	dli	$a1, 0x11	# fill with 0x11
-	dla	$a2, end_data - begin_data	# whole buffer
+	dla	$a2, \end - \begin	# whole buffer
 	ori	$zero, $zero, 0xC0DE	# call the magic helper
 .endm
 
