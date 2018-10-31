@@ -82,6 +82,13 @@ def pytest_configure(config):
 
 
 def pytest_ignore_collect(path, config):
+    path_str = str(path)
+    if "/tests/" not in path_str:
+        # print("Ignoring dir", path, "since it is not below tests/ directory.")
+        return True
+    if "/__pycache__" in path_str:
+        # print("Ignoring dir", path, "since it is python bitcode.")
+        return True
     skip_paths = {
         "fuzz_test": "/tests/fuzz",
         "fuzz_test_regression": "/tests/fuzz_regressions",
@@ -93,7 +100,7 @@ def pytest_ignore_collect(path, config):
     }
 
     for opt, skip_path in skip_paths.items():
-        if str(path).endswith(skip_path) and config.CHERITEST_UNSUPPORTED_FEATURES.get(opt):
+        if path_str.endswith(skip_path) and config.CHERITEST_UNSUPPORTED_FEATURES.get(opt):
             print("Ignoring test dir", skip_path, "since attr", opt, "is unsupported.")
             return True
     return False
