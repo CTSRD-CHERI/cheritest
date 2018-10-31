@@ -38,7 +38,6 @@ class test_magic_nop_memset(BaseBERITestCase):
     # a6 contains begin_data
     def test_return_value(self):
         assert self.MIPS.s2 == self.MIPS.a6, "memset should return begin_data"
-        assert self.MIPS.a4 == self.MIPS.a6, "memset $a0 argument should not change"
 
     def test_magic_nop_called(self):
         assert self.MIPS.s3 == HexInt(0xDEC0DED), "magic function selector $v1 should be changed to 0xDEC0DED after call"
