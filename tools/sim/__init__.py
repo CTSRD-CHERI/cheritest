@@ -271,18 +271,19 @@ class MipsStatus(object):
         '''Parse a log file and populate self.reg_vals and self.pc'''
         thread = 0
         for line in self.fh:
-            line = line.strip()
-            if line.endswith("======"):
-                thread_groups = THREAD_RE.search(line)
-                if thread_groups:
-                    thread = int(thread_groups.group(1))
-                    continue
-
-            # All other regexes start with "DEBUG " so skip any lines that don't
-            # start with DEBUG to save time
+            # TODO: this parses a lot of useless data. It might be better to start reading from the end of the file...
+            # All regexes but one start with "DEBUG " so skip any lines that don't
+            # start with DEBUG to save time and don't call line.strip()
             if not line.startswith("DEBUG "):
+                # The only exception is the THREAD_RE:
+                line = line.strip()
+                if line.endswith("======"):
+                    thread_groups = THREAD_RE.search(line)
+                    if thread_groups:
+                        thread = int(thread_groups.group(1))
                 continue
 
+            line = line.strip()  # strip leading whitespace
             # First check for the MIPS regexes:
             if line.startswith("DEBUG MIPS"):
                 # We use 'thread' for both thread id and core id.
