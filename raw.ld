@@ -41,6 +41,8 @@ SECTIONS
 	.text ALIGN(0x8): AT(0x40000000) { *(.text) . = ALIGN(8); }
 	.bss  ALIGN(0x8): { *(.bss) . = ALIGN(8); } 
 	.data ALIGN(0x8): { *(.data)  . = ALIGN(8);}
+	.MIPS.abiflags ALIGN(0x8): { *(.MIPS.abiflags)}
+	.MIPS.options ALIGN(0x8): { *(.MIPS.options)}
 
 	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
 	__bss_start = ADDR(.bss);
