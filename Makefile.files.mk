@@ -493,6 +493,7 @@ TEST_MEM_FILES=					\
 		test_swr.s			\
 		test_swl.s			\
 		test_magic_nop_memset.s		\
+		test_magic_nop_memset_u32_pattern.s	\
 		test_magic_nop_memset_tlb_miss.s	\
 		test_magic_memset_tlb_miss.s	\
 		test_magic_memset_tlb_miss2.s
