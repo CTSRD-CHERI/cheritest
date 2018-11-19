@@ -62,8 +62,9 @@ BEGIN_TEST trap_count_reg=$a7
 		# now pretend we are continuing
 		nop
 		nop
-		dli	$a0, 0x0001000000100001	# pretend we were able to write one byte
-		dli	$a2, 4094
+		dli	$v0, 0x0001000000100001	# pretend we were able to write one byte
+		dla	$a0, 0x0001000000100000	# dest = bad (too many virtual address bits used)
+		dli	$a2, 4095
 		check_instruction_traps $s7, ori	$zero, $zero, 0xC0DE	# call the magic helper
 		nop
 		nop

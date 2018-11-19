@@ -60,16 +60,16 @@ class test_magic_nop_memset_tlb_miss(BaseBERITestCase):
         assert self.MIPS.s6 == 4095, "$a1 should not be modified on trap"
 
     def test_return_value_after_second_call(self):
-        assert self.MIPS.a5 == self.BAD_ADDRESS, "On second call the helper should use the saved $v0 register and not update it to $a0"
+        assert self.MIPS.a5 == HexInt(self.BAD_ADDRESS + 1), "On second call the helper should use the saved $v0"
 
     def test_selector_value_after_second_call(self):
         assert self.MIPS.s3 == 0xbadc0de00000001, "Continuation flag + memset selector should be set in $v1"
 
     def test_a0_after_second_call(self):
-        assert self.MIPS.a0 == self.BAD_ADDRESS + 1, "$a0 should still be BAD_ADDR + 1"
+        assert self.MIPS.a0 == HexInt(self.BAD_ADDRESS), "$a0 should still be BAD_ADDR"
 
     def test_a1_after_second_call(self):
         assert self.MIPS.a1 == 0x12, "$a1 should not be modified by second call"
 
     def test_a2_after_second_call(self):
-        assert self.MIPS.a2 == 4094, "$a1 should not be modified by second call"
+        assert self.MIPS.a2 == 4095, "$a1 should not be modified by second call"
