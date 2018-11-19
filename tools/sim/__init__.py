@@ -111,6 +111,11 @@ class Capability(object):
         self.base   = HexInt(base)
         self.length = HexInt(length)
 
+    @property
+    def address(self):
+        # Since python ints are variable length we need a mod 2^64 to get a u64
+        return HexInt((self.offset + self.base) & 0xffffffffffffffff)
+
     def __repr__(self):
         return '<t:%x s:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x>'%(
             self.t, self.s, self.perms, self.ctype, self.offset, self.base, self.length)
