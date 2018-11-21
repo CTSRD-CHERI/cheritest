@@ -242,7 +242,6 @@ statcounters \
 float \
 pic \
 mt \
-einstr \
 count_register_is_time \
 no_experimental_clc \
 experimental_csc

@@ -693,10 +693,6 @@ nosetests_sail_cheri128_c: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI128_C_SIM), sail CHERI128_C)
 	$(MAKE) $(MFLAGS) nosetests_sail_cheri128_c.xml
 
-# SAIL_MIPS_SIM=$(SAIL_DIR)/mips/mips
-# SAIL_CHERI_SIM=$(SAIL_DIR)/cheri/cheri
-# SAIL_CHERI128_SIM=$(SAIL_DIR)/cheri/cheri128
-
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_MIPS_NOSEFLAGS) \
