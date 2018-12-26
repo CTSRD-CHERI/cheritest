@@ -445,7 +445,7 @@ class BaseBERITestCase(unittest.TestCase):
         msg += " " if msg else ""
         if check_msg is None:
             check_msg = "valid cap"
-            if not isinstance(offset, collections.Iterable) and offset != 0:
+            if not isinstance(offset, collections.abc.Iterable) and offset != 0:
                 check_msg += " with offset 0x%x" % offset
         msg += "(cap=<" + str(cap) + ">)\nshould be " + check_msg + " but "
         # valid unsealed caps always have tag, !sealed, otype==0
@@ -453,7 +453,7 @@ class BaseBERITestCase(unittest.TestCase):
         self.assertRegisterEqual(cap.s, 0, msg + "is sealead")
         self.assertRegisterEqual(cap.ctype, 0, msg + "has nonzero otype")
         # other checks:
-        if isinstance(offset, collections.Iterable):
+        if isinstance(offset, collections.abc.Iterable):
             err = "offset not in range [0x%x,0x%x]" % (offset[0], offset[-1])
             self.assertRegisterInRange(cap.offset, offset[0], offset[-1], msg + err)
         else:
