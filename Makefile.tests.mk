@@ -795,7 +795,7 @@ qemu_purecap_symbolized_logs: $(addsuffix .log.symbolized,$(addprefix $(QEMU_LOG
 
 pytest_qemu_purecap_tests: pytest_qemu_purecap_tests.xml
 pytest_qemu_purecap_tests.xml: $(PURECAP_TEST_LOGS) check_valid_qemu check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE)(QEMU_PYTEST) --junit-xml=$@ -v $(PURECAP_TESTDIRS)
+	$(MAYBE_IGNORE_EXIT_CODE)$(QEMU_PYTEST) --junit-xml=$@ -v $(PURECAP_TESTDIRS)
 
 CP2_TESTS := $(basename $(TEST_CP2_FILES))
 CP2_TEST_LOGS := $(addsuffix .log,$(addprefix $(QEMU_LOGDIR)/,$(CP2_TESTS)))
