@@ -23,6 +23,8 @@ extern volatile __int64_t continue_after_exception;
 		"nop\n\t" \
 		".end default_trap_handler\n\t"); \
 
+#define DECLARE_TEST(name, desc) int test(void);
+#define DECLARE_TEST_FAULT(name, desc) int test(void);
 
 #define BEGIN_TEST(name)					\
 	SET_TRAP_HANDLER					\
@@ -37,21 +39,3 @@ extern volatile __int64_t continue_after_exception;
 	assert_eq(exception_count, TEST_EXPECTED_FAULTS);	\
 	return (retval);					\
 }
-
-/* Allow some of the tests to continue after an exception: */
-
-
-#define ASSERT_HAS_PERMISSION(x, perm) \
-	assert_eq((__builtin_cheri_perms_get((void*)x) & __CHERI_CAP_PERMISSION_PERMIT_ ## perm ## __), __CHERI_CAP_PERMISSION_PERMIT_ ## perm ## __)
-
-#define ASSERT_HAS_NOT_PERMISSION(x, perm) \
-	assert_eq((__builtin_cheri_perms_get((void*)x) & __CHERI_CAP_PERMISSION_PERMIT_ ## perm ## __), 0)
-
-
-
-
-#ifdef INCLUDE_XFAIL
-#define XFAIL(x) assert(x)
-#else
-#define XFAIL(x) do {} while(0)
-#endif

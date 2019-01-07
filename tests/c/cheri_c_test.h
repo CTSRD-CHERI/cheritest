@@ -1,1 +1,0 @@
-../purecap/cheri_c_test.h

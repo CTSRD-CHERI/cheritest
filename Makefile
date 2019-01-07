@@ -176,6 +176,10 @@ CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension
 HYBRID_CFLAGS?=-ffreestanding -g -mno-abicalls -fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as -O3 -ffunction-sections -nostdlibinc
 PURECAP_CFLAGS?=-ffreestanding -g -fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as -O3 -ffunction-sections -nostdlibinc -Itests/purecap
 
+# This is needed to customize cheri-c-tests:
+PURECAP_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -Icheri-c-tests
+HYBRID_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -Icheri-c-tests
+
 ifneq ($(CHERI$(CAP_SIZE)_SDK),)
 CHERI_SDK:=$(CHERI$(CAP_SIZE)_SDK)
 $(info Requested build for $(CAP_SIZE) bits, setting CHERI_SDK to $(dollar)CHERI256_SDK)

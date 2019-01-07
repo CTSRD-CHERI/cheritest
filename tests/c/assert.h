@@ -41,6 +41,8 @@ typedef __attribute((memory_address)) __UINT64_TYPE__ vaddr_t;
 #define _VADDR_T_DECLARED
 #endif
 
+typedef __INTPTR_TYPE__ intptr_t;
+typedef __UINTPTR_TYPE__ uintptr_t;
 
 __attribute__((noreturn)) int __assert_fail(int);
 static inline void __assert(int cond, int line)
@@ -55,7 +57,7 @@ static inline void __assert(int cond, int line)
 void __assert_eq_long(int line, long actual, long expected);
 #define assert_eq(actual, expected) __assert_eq_long(__LINE__, actual, expected)
 
-void __assert_eq_cap(int line, void* __capability actual, void* __capability expected);
+void __assert_eq_cap(int line, const void* __capability actual, const void* __capability expected);
 #define assert_eq_cap(actual, expected) __assert_eq_cap(__LINE__, actual, expected)
 
 
