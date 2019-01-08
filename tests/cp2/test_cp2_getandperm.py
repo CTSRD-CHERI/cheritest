@@ -43,8 +43,8 @@ class test_cp2_getandperm(BaseBERITestCase):
     # TODO: this is probably incorrect for CHERI64
     def test_cp2_getperm_without_user_perms(self):
         '''Test that cgetperm returns correct value after candperm'''
-        self.assertRegisterMaskEqual(self.MIPS.a0, (1 << 15) - 1, (1 << 11) - 1,
-                                     "There are only 11 HW permissions (should not be extended to fill all 15 bits)")
+        self.assertRegisterMaskEqual(self.MIPS.a0, (1 << 15) - 1, (1 << 12) - 1,
+                                     "There are only 12 HW permissions (should not be extended to fill all 15 bits)")
 
     def test_cp2_getperm_after_mask(self):
         '''Test that cgetperm returns correct value after candperm'''

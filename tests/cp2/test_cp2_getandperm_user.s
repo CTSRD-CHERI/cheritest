@@ -63,7 +63,7 @@ BEGIN_TEST
 		cgetperm $a3, $c2
 
 		# clear all hardware perms and check that user perms start at bit 15
-		.set ALL_HW_PERMS, (2 * CHERI_PERM_SYSTEM_REGS) - 1
+		.set ALL_HW_PERMS, (2 * CHERI_PERM_SET_CID) - 1
 		dli $t0, ~ALL_HW_PERMS
 		cgetdefault $c3
 		candperm $c3, $c3, $t0
