@@ -179,7 +179,7 @@ BEGIN_TEST
 		# Scrub capability registers in between to make sure that
 		# fields are being properly restored.
 		#
-		dli	$t0, 0xffffffffffffffff
+		dli	$t0, 0xffffffffff000000
 		dli	$t1, 0
 		dli	$t2, 0x010101
 
