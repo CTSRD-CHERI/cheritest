@@ -38,7 +38,7 @@ BEGIN_TEST
 		dli	$a0, 0
 
 		cgetdefault $c2
-		dli	$t0, 0x400000
+		dli	$t0, 0x10000
 		csetoffset $c2, $c2, $t0
 		dli	$t0, 1
 		csetbounds $c2, $c2, $t0
