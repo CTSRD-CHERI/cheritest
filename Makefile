@@ -117,6 +117,12 @@ NOFUZZR?=1
 CAP_SIZE?=256
 
 
+# Avoid GNU make implicit rule processing:
+# https://stackoverflow.com/a/8828716/894271
+MAKEFLAGS += --no-builtin-rules
+.SUFFIXES:
+
+
 ifeq ($(CAP_SIZE),0)
 $(info "Building tests without CHERI support")
 TEST_CP2:=0
