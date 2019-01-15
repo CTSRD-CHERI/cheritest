@@ -24,7 +24,7 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-#include "../c/cheri_c_test.h"
+#include "../../cheri-c-tests/cheri_c_test.h"
 /*
  * Make sure that if we assign a register value in a C test function, that
  * the register assignment is visible.  We use $gp since we've asked C not to

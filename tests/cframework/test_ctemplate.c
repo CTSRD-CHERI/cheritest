@@ -25,7 +25,7 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-#include "../c/cheri_c_test.h"
+#include "../../cheri-c-tests/cheri_c_test.h"
 /*
  * Short block comment describing the test: what instruction/behaviour are we
  * investigating; what properties are we testing, what properties are deferred

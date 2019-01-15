@@ -24,7 +24,7 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-#include "../c/cheri_c_test.h"
+#include "../../cheri-c-tests/cheri_c_test.h"
 /*
  * Check that if we return an integer from our C function, it arrives at the
  * right register in the calling context.

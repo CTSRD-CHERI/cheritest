@@ -184,8 +184,8 @@ HYBRID_CFLAGS?=-ffreestanding -g -mno-abicalls -fno-pic -target cheri-unknown-fr
 PURECAP_CFLAGS?=-ffreestanding -g -fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as $(OPTFLAGS) -ffunction-sections -nostdlibinc -Itests/purecap
 
 # This is needed to customize cheri-c-tests:
-PURECAP_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -Icheri-c-tests
-HYBRID_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -Icheri-c-tests
+PURECAP_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -I$(PWD)/cheri-c-tests -I$(PWD)/tests/purecap/
+HYBRID_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -I$(PWD)/cheri-c-tests -I$(PWD)/tests/c/
 
 ifneq ($(CHERI$(CAP_SIZE)_SDK),)
 CHERI_SDK:=$(CHERI$(CAP_SIZE)_SDK)
