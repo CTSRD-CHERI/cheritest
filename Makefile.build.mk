@@ -63,6 +63,8 @@ PURECAP_ASMDEFS+=-cheri-cap-table-abi=pcrel
 PURECAP_ASMDEFS+=-Wa,-defsym,__CHERI_CAPABILITY_TABLE__=2
 endif
 
+PURECAP_CXXFLAGS?=-fno-rtti -std=c++11 -fno-exceptions
+
 PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
 		$(OBJDIR)/purecap_lib.o \
 		$(OBJDIR)/purecap_crt_init_globals.o
@@ -77,6 +79,8 @@ $(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c | $(OBJDIR)
 	$(CLANG_CC) $(PURECAP_CFLAGS) -fno-builtin $(CWARNFLAGS) -c -o $@ $<
 $(OBJDIR)/purecap_atomic_runtime.o: tests/purecap/atomic.c | $(OBJDIR)
 	$(CLANG_CC) $(PURECAP_CFLAGS) -fno-builtin $(CWARNFLAGS) -c -o $@ $<
+$(OBJDIR)/purecap_cxx_runtime.o: tests/purecap/fake_cxx_runtime.cpp | $(OBJDIR)
+	$(CLANG_CC) $(PURECAP_CFLAGS) $(PURECAP_CXXFLAGS) -fno-builtin $(CWARNFLAGS) -c -o $@ $<
 
 ifdef VERBOSE
 _V=
@@ -93,7 +97,7 @@ $(TEST_PURECAP_C_OBJS): $(OBJDIR)/%.o: tests/purecap/%.c | $(OBJDIR)
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp | $(OBJDIR)
 	@echo PURECAP_CXX $@
-	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(CWARNFLAGS) -c -o $@ $<
+	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(PURECAP_CXXFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s | $(OBJDIR)
 	@echo PURECAP_AS $@
 	$(_V)$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
@@ -140,6 +144,9 @@ $(eval $(call multiobj_purecap_rule,test_purecap_switch,tmp_purecap_test_switch.
 $(eval $(call compile_purecap_with_extra_defs,test_purecap_switch.c,tmp_purecap_test_switch.o,-DCOMPILE_SWITCH_FN=1))
 
 $(eval $(call multiobj_purecap_rule,test_purecap_atomic,purecap_atomic_runtime.o))
+
+$(eval $(call multiobj_purecap_rule,test_purecap_member_ptr,purecap_cxx_runtime.o test_purecap_member_ptr_impl.o))
+$(eval $(call compile_purecap_with_extra_defs,test_purecap_member_ptr.cpp,test_purecap_member_ptr_impl.o,$(PURECAP_CXXFLAGS) -DBUILD_IMPLEMENTATION=1))
 
 
 $(OBJDIR)/test_purecap_%_cached.elf : $(OBJDIR)/test_purecap_%.o \
