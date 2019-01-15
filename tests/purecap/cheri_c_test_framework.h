@@ -23,12 +23,18 @@ extern volatile __int64_t continue_after_exception;
 		"nop\n\t" \
 		".end default_trap_handler\n\t"); \
 
-#define DECLARE_TEST(name, desc) int test(void);
-#define DECLARE_TEST_FAULT(name, desc) int test(void);
+#ifdef __cplusplus
+#define _EXTERN_C extern "C"
+#else
+#define _EXTERN_C
+#endif
+
+#define DECLARE_TEST(name, desc) _EXTERN_C int test(void);
+#define DECLARE_TEST_FAULT(name, desc) _EXTERN_C int test(void);
 
 #define BEGIN_TEST(name)					\
 	SET_TRAP_HANDLER					\
-	int test(void) {					\
+	_EXTERN_C int test(void) {				\
 		continue_after_exception = TEST_EXPECTED_FAULTS;
 
 #define END_TEST 						\
