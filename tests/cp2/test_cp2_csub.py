@@ -25,12 +25,29 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr, HexInt
 
+@attr('capabilities')
 class test_cp2_csub(BaseBERITestCase):
 
-    @attr('capabilities')
     def test_cp2_csub_1(self):
         '''Test CSub of two capabilities'''
-        self.assertRegisterEqual(self.MIPS.a0, 4, "CSub did not compute the expected result")
+        assert self.MIPS.a0 == 4, "CSub did not compute the expected result"
+
+    def test_cp2_csub_untagged_untagged(self):
+        assert self.MIPS.a1 == HexInt(0x233), "CSub untagged, untagged was wrong"
+
+    def test_cp2_csub_tagged_untagged(self):
+        assert self.MIPS.a2 == HexInt(0x1111), "CSub tagged, untagged was wrong"
+
+    def test_cp2_csub_untagged_tagged(self):
+        assert self.MIPS.a3 == HexInt(0x5432), "CSub untagged, tagged was wrong"
+
+    def test_cp2_csub_tagged_tagged(self):
+        assert self.MIPS.a4 == HexInt(0x7654), "CSub tagged, tagged (non-overlapping bounds) was wrong"
+
+    def test_cp2_csub_tagged_null(self):
+        assert self.MIPS.a5 == HexInt(0x2345), "CSub null, tagged was wrong"
+
+    def test_cp2_csub_null_tagged(self):
+        assert self.MIPS.a6 == HexInt(0), "CSub tagged, null was wrong"
