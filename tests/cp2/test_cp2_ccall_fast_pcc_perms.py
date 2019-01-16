@@ -36,25 +36,25 @@ class test_cp2_ccall_fast_pcc_perms(BaseBERITestCase):
         assert self.MIPS.c5.s == 0, "pre-sandbox pcc should not be sealed"
         assert self.MIPS.c5.t, "pre-sandbox pcc should not be tagged"
         assert self.MIPS.c5.perms == self.max_permissions
-        assert self.MIPS.c5.ctype == 0
+        assert self.MIPS.c5.ctype == self.unsealed_otype
 
     def test_in_sandbox_pcc(self):
         assert self.MIPS.c6.s == 0, "in sandbox pcc should not be sealed"
         assert self.MIPS.c6.t, "in sandbox pcc should not be tagged"
         assert self.MIPS.c6.perms == self.permission_bits.Execute | self.permission_bits.CCall
-        assert self.MIPS.c6.ctype == 0
+        assert self.MIPS.c6.ctype == self.unsealed_otype
 
     def test_post_sandbox_pcc(self):
         assert self.MIPS.c7.s == 0, "post-sandbox pcc should not be sealed"
         assert self.MIPS.c7.t, "post-sandbox pcc should not be tagged"
         assert self.MIPS.c7.perms == self.max_permissions
-        assert self.MIPS.c7.ctype == 0
+        assert self.MIPS.c7.ctype == self.unsealed_otype
         assert self.MIPS.c7.t
 
     def test_idc(self):
         assert self.MIPS.idc.s == 0, "idc should not be sealed"
         assert self.MIPS.idc.t, "idc should not be tagged"
-        assert self.MIPS.idc.ctype == 0
+        assert self.MIPS.idc.ctype == self.unsealed_otype
         assert self.MIPS.idc.perms == self.max_nonexec_perms
         assert self.MIPS.idc.base == 0x10000
         assert self.MIPS.idc.length == 0x1000

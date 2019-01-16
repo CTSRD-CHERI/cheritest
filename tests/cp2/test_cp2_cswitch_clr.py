@@ -70,7 +70,7 @@ class test_cp2_cswitch_clr(BaseBERITestCase):
 
     @attr('capabilities')
     def test_ctype(self):
-        self.assertRegisterEqual(self.MIPS.ddc.ctype, 0x0, "ctype incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.ddc.ctype, self.unsealed_otype, "ctype incorrect after context switch")
         for i in range(1, 28):
-            self.assertRegisterEqual(self.MIPS.cp2[i].ctype, 0x0, "ctype incorrect after context switch")
-        self.assertRegisterEqual(self.MIPS.epcc.ctype, 0x0, "ctype incorrect after context switch")
+            self.assertRegisterEqual(self.MIPS.cp2[i].ctype, self.unsealed_otype, "ctype incorrect after context switch")
+        self.assertRegisterEqual(self.MIPS.epcc.ctype, self.unsealed_otype, "ctype incorrect after context switch")

@@ -107,7 +107,7 @@ class test_cp2_exception_epcc(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.cp2[3].perms, 0x0007, "sandbox EPCC perms incorrect")
 
     def test_sandbox_epcc_ctype(self):
-        self.assertRegisterEqual(self.MIPS.cp2[3].ctype, 0, "sandbox EPCC ctype incorrect")
+        self.assertRegisterEqual(self.MIPS.cp2[3].ctype, self.unsealed_otype, "sandbox EPCC ctype incorrect")
         
     def test_sandbox_epcc_offset(self):
         self.assertRegisterEqual(self.MIPS.cp2[3].offset, 0x14, "sandbox EPCC offset incorrect")

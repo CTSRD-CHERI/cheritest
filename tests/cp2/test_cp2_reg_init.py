@@ -62,7 +62,7 @@ class test_cp2_reg_init(BaseBERITestCase):
 
     @attr('capabilities')
     def test_cp2_reg_init_pcc_otype(self):
-        self.assertRegisterEqual(self.MIPS.pcc.ctype, 0x0, "CP2 PCC ctype incorrectly initialised")
+        self.assertRegisterEqual(self.MIPS.pcc.ctype, self.unsealed_otype, "CP2 PCC ctype incorrectly initialised")
 
     @attr('capabilities')
     def test_cp2_reg_init_pcc_perms(self):

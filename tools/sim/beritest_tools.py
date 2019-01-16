@@ -143,6 +143,10 @@ class BaseBERITestCase(unittest.TestCase):
     def TEST_MACHINE(self):
         return pytest.config.option.TEST_MACHINE.lower()
 
+    @property
+    def CAP_SIZE(self):
+        return pytest.config.option.CAP_SIZE
+
     def __init__(self, *args, **kwargs):
         super(BaseBERITestCase, self).__init__(*args, **kwargs)
         self._MIPS = None  # type: MipsStatus
@@ -366,6 +370,14 @@ class BaseBERITestCase(unittest.TestCase):
             self.fail(msg + "0x%016x is not a QNaN value"%(reg_val))
 
     @property
+    def unsealed_otype(self):
+        # this used to be zero. Could vary depending on size of field
+        return {
+            128 : 0x3ffff,
+            256 : 0xffffff,
+        }[self.CAP_SIZE]
+
+    @property
     def max_permissions(self):
         perm_size = int(pytest.config.option.PERM_SIZE)
         if perm_size == 31:
@@ -426,7 +438,7 @@ class BaseBERITestCase(unittest.TestCase):
             msg += "an untagged integer value but "
         self.assertRegisterEqual(cap.t     , 0, msg + "tag set")
         self.assertRegisterEqual(cap.s     , 0, msg + "is sealed")
-        self.assertRegisterEqual(cap.ctype , 0, msg + "has nonzero otype")
+        self.assertRegisterEqual(cap.ctype , self.unsealed_otype, msg + "has otype != -1")
         self.assertRegisterEqual(cap.perms , 0, msg + "has nonzero perms")
         self.assertRegisterEqual(cap.offset, offset, msg + "has wrong offset")
         self.assertRegisterEqual(cap.base  , 0, msg + "has nonzero base")
@@ -448,10 +460,10 @@ class BaseBERITestCase(unittest.TestCase):
             if not isinstance(offset, collections.abc.Iterable) and offset != 0:
                 check_msg += " with offset 0x%x" % offset
         msg += "(cap=<" + str(cap) + ">)\nshould be " + check_msg + " but "
-        # valid unsealed caps always have tag, !sealed, otype==0
+        # valid unsealed caps always have tag, !sealed, otype==-1
         self.assertRegisterEqual(cap.t, 1, msg + "tag not set")
         self.assertRegisterEqual(cap.s, 0, msg + "is sealead")
-        self.assertRegisterEqual(cap.ctype, 0, msg + "has nonzero otype")
+        self.assertRegisterEqual(cap.ctype, self.unsealed_otype, msg + "has otype != -1")
         # other checks:
         if isinstance(offset, collections.abc.Iterable):
             err = "offset not in range [0x%x,0x%x]" % (offset[0], offset[-1])

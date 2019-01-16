@@ -83,8 +83,8 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
         assert self.MIPS.epcc.perms == 0x0, "sandbox EPCC perms incorrect (final dump value)"
 
     def test_epcc_ctype(self):
-        assert self.MIPS.cp2[3].ctype == 0, "sandbox EPCC ctype incorrect"
-        assert self.MIPS.epcc.ctype == 0, "sandbox EPCC ctype incorrect (final dump value)"
+        assert self.MIPS.cp2[3].ctype == self.unsealed_otype, "sandbox EPCC ctype incorrect"
+        assert self.MIPS.epcc.ctype == self.unsealed_otype, "sandbox EPCC ctype incorrect (final dump value)"
 
     def test_epcc_addr(self):
         assert self.MIPS.cp2[3].base + self.MIPS.cp2[3].offset == self.MIPS.a7 + HexInt(0x10000000), "sandbox EPCC offset incorrect"

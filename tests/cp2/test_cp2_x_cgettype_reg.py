@@ -45,7 +45,7 @@ class test_cp2_x_cgettype_reg(BaseBERITestCase):
             # For no type cgettype returns -1
             assert self.MIPS.a0 == self.minus_one_as_u64, "c27-c31 are no longer special - " + self.instruction + " should succeed"
             assert self.MIPS.c27.s == 0, "c27-c31 are no longer special - " + self.instruction + " should succeed"
-            assert self.MIPS.c27.ctype == 0, "c27-c31 are no longer special - " + self.instruction + " should succeed"
+            assert self.MIPS.c27.ctype == self.unsealed_otype, "c27-c31 are no longer special - " + self.instruction + " should succeed"
 
     def test_trap_count(self):
         '''Test cgetbase did not raise a C2E exception when register was reserved'''

@@ -33,4 +33,5 @@ class test_cp2_clcr_otype(BaseBERITestCase):
     @attr('cap256')
     @attr('capabilities')
     def test_cp2_clcr_otype_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0xffffff, "CGetType of an all 1's untagged capability did not return the expected value")
+        # otype field is xored from in-memory representation because null type has all ones otype
+        self.assertRegisterEqual(self.MIPS.a0, 0, "CGetType of an all 1's untagged capability did not return the expected value")
