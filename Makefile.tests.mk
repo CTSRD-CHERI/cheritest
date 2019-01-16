@@ -567,16 +567,16 @@ _SIM_MAKE=$(MAKE)
 endif
 
 nosetest:
-	$(_SIM_MAKE) nosetests_uncached.xml
+	+$(_SIM_MAKE) nosetests_uncached.xml
 
 nosetest_cached:
-	$(_SIM_MAKE) nosetests_cached.xml
+	+$(_SIM_MAKE) nosetests_cached.xml
 
 nosetests_multi:
-	$(_SIM_MAKE) nosetests_multi.xml
+	+$(_SIM_MAKE) nosetests_multi.xml
 
 nosetests_cachedmulti:
-	$(_SIM_MAKE) nosetests_cachedmulti.xml
+	+$(_SIM_MAKE) nosetests_cachedmulti.xml
 
 #
 # Merge resuls of cached and uncached tests
