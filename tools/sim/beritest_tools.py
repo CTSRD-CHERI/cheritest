@@ -371,11 +371,9 @@ class BaseBERITestCase(unittest.TestCase):
 
     @property
     def unsealed_otype(self):
-        # this used to be zero. Could vary depending on size of field
-        return {
-            128 : 0x3ffff,
-            256 : 0xffffff,
-        }[self.CAP_SIZE]
+        # This used to be zero. Architecture now specifies 'reserved / special' otypes
+        # are negative with unsealed = -1
+        return 0xffffffffffffffff
 
     @property
     def max_permissions(self):
