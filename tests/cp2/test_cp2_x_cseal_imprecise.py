@@ -48,8 +48,17 @@ class test_cp2_x_cseal_imprecise(BaseBERITestCase):
             self.assertNullCap(self.MIPS.c3, "Should not have changed capreg")
             self.assertCp2Fault(self.MIPS.s0, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=1)
 
-    def test_definitely_unrepresenatable(self):
-        trap_count = 1 if is_feature_supported('improved_cheri_cc') else 2
-        self.assertCp2Fault(self.MIPS.s1, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=trap_count)
-        self.assertNullCap(self.MIPS.c6, "Should not have changed capreg")
+    def test_used_to_be_unrepresenatable(self):
+        # latest cheri_cc can seal all caps so will succeed here where used to fail
+        assert self.MIPS.c6.ctype == 0x12
+        # exact values of base, length, offest will depend on format
+        # due to imprecise bounds so just assert they are same as input
+        assert self.MIPS.c6.base == self.MIPS.c1.base
+        assert self.MIPS.c6.length == self.MIPS.c1.length
+        assert self.MIPS.c6.offset == self.MIPS.c1.offset
+        assert self.MIPS.c6.t
+        assert self.MIPS.c6.s
+        #trap_count = 1 if is_feature_supported('improved_cheri_cc') else 2
+        #self.assertCp2Fault(self.MIPS.s1, cap_reg=1, cap_cause=self.MIPS.CapCause.Bounds_Not_Exactly_Representable, trap_count=trap_count)
+        #self.assertNullCap(self.MIPS.c6, "Should not have changed capreg")
 
