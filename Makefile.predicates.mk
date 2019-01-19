@@ -326,7 +326,7 @@ else
 QEMU_UNSUPPORTED_FEATURES+=no_dext nomthc1 nowatch
 endif
 
-QEMU_UNSUPPORTED_IF+=beri_statcounters=icount
+# QEMU now supports the icount statcounters register
 QEMU_UNSUPPORTED_IF+=beri_statcounters=mem
 QEMU_UNSUPPORTED_IF+=beri_statcounters=cache
 

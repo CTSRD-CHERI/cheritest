@@ -32,40 +32,33 @@ from beritest_tools import attr
 # Test that rdhwr counter register is not accessible from user mode when the coprocessor
 # enable bit is not set.
 @attr('statcounters')
+@attr('tlb')
+@attr('rdhwr')
 class test_cp0_rdhwr_statcounters_icount(BaseBERITestCase):
-    @attr('tlb')
-    @attr('rdhwr')
     def test_hwena_cleared(self):
         '''Test that hwrena is cleared'''
         self.assertRegisterEqual(self.MIPS.a4, 1 << 4, "hwrena was not set to icount only")
 
-    @attr('tlb')
     @attr(beri_statcounters="any")  # should always return non-zero even for fake statcounters implementation
     def test_icount_nonzero(self):
         '''Test that statcounters icount is non-zero is cleared'''
         self.assertRegisterNotEqual(self.MIPS.a1, 1 << 4, "statcounters icount should be non-zero")
         self.assertRegisterNotEqual(self.MIPS.a2, 1 << 4, "statcounters icount should be non-zero")
 
-    @attr('tlb')
     @attr(beri_statcounters="icount")  # should always return non-zero even for fake statcounters implementation
     def test_icount_changed(self):
         '''Test that statcounters icount is non-zero is cleared'''
         self.assertRegisterNotEqual(self.MIPS.a1, self.MIPS.a2, "statcounters icount should have changed!")
 
-    @attr('tlb')
     @attr(beri_statcounters="icount")
     def test_icount_difference(self):
         '''Test that icount difference is the number of instructions is cleared'''
         self.assertRegisterEqual(self.MIPS.a3, 2, "Statcounters icount difference after two instrs is wrong")
 
-    @attr('tlb')
-    @attr('rdhwr')
     def test_exception_fired(self):
         '''Test that rdhwr throws an exception if don't have permission'''
         self.assertRegisterEqual(self.MIPS.a5, 1, "rdhwr did not throw an exception when didn't have permission")
 
-    @attr('tlb')
-    @attr('rdhwr')
     def test_cause_code(self):
         '''Test that rdhwr sets the exception code to "reserved instruction" if don't have permission.'''
         self.assertRegisterEqual((self.MIPS.a7 >> 2) & 0x1f, 10, "rdhwr did not set cause to reserved instruction exception.")
