@@ -158,7 +158,12 @@ class BERITestBaseClasses:
     
         def test_epc(self):
             assert self.MIPS.s0 == self.MIPS.s2, "epc not set to expected_epc for " + self.msg
-    
+
+        def test_epcc_offset(self):
+            # check that epcc offset has not changed
+            # this is really important for sealed case
+            assert self.MIPS.c2.offset == self.MIPS.s2
+
         def test_epcc_tag(self):
             assert self.MIPS.c2.t == self.expected_epcc_tag, "EPCC.tag was not expected value for "  + self.msg
     
