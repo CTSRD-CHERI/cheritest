@@ -71,6 +71,10 @@ COMMON_UNSUPPORTED_FEATURES?=notyet
 
 COMMON_UNSUPPORTED_FEATURES+=qemu_magic_nops
 
+ifeq ($(TEST_CP2),1)
+COMMON_UNSUPPORTED_FEATURES+=mtc0signex
+endif
+
 ifneq ($(TEST_CP2),1)
 COMMON_UNSUPPORTED_FEATURES+=capabilities
 endif
