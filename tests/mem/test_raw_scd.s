@@ -94,12 +94,12 @@ thread_spin:    bnez    $k0, thread_spin # spin if not thread 0
 		scd	$s0, -8($gp)
 		ld	$s1, -8($gp)
 		
-		# Initialize link register to a different address.
+		# Initialize link register to an address in a different line.
 		lld 	$k0, 0($gp)
 		# Fail to store and load a double word into double word storage
 		dli	$s2, 0x0123456789abcdef
-		scd	$s2, -32($gp)			# @dword
-		ld	$s3, -32($gp)
+		scd	$s2, -64($gp)			# @dword
+		ld	$s3, -64($gp)
 
 		# Dump registers in the simulator
 		mtc0	$v0, $26
@@ -113,6 +113,7 @@ end:
 		b end
 		nop
 
+                .align 7
 		.data
 dword:		.dword	0x0000000000000000
 positive:	.dword	0x0000000000000000
