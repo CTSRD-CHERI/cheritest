@@ -49,7 +49,7 @@ BEGIN_TEST
 		ori	$t0, $t0, 0x4
 		dmtc0	$t0, $12
 
-		cgetepcc	$c2	# getepcc with ERL should return ErrorEPC
+		cgetepcc	$c2	# getepcc with ERL should still return EPC
 
 		# Turn off ERL bit and fetch again:
 		dmfc0	$t0, $12
@@ -62,5 +62,5 @@ BEGIN_TEST
 		dmfc0	$t0, $12
 		ori	$t0, $t0, 0x4
 		dmtc0	$t0, $12
-		cgetepcc	$c4	# ERL on again -> should return ErrorEPC
-END_TEST	# When dumping registers epcc.offset should now print ErrorEPC
+		cgetepcc	$c4	# ERL on again -> should return EPC
+END_TEST	# When dumping registers epcc.offset should now print EPC

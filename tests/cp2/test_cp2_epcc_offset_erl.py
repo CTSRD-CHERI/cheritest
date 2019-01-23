@@ -40,13 +40,13 @@ class test_cp2_epcc_offset_erl(BaseBERITestCase):
         self.assertDefaultCap(self.MIPS.c1, offset=0xE9C, msg="cgetepcc offset without ERL should be EPC")
 
     def test_cgetepcc_on(self):
-        self.assertDefaultCap(self.MIPS.c2, offset=0xE8808E9C, msg="cgetepcc offset with ERL should be ErrorEPC")
+        self.assertDefaultCap(self.MIPS.c2, offset=0xE9C, msg="cgetepcc offset with ERL should still be EPC")
 
     def test_cgetepcc_off_again(self):
         self.assertDefaultCap(self.MIPS.c3, offset=0xE9C, msg="cgetepcc offset without ERL should be EPC")
 
     def test_cgetepcc_on_again(self):
-        self.assertDefaultCap(self.MIPS.c4, offset=0xE8808E9C, msg="cgetepcc offset with ERL should be ErrorEPC")
+        self.assertDefaultCap(self.MIPS.c4, offset=0xE9C, msg="cgetepcc offset with ERL should still be EPC")
 
     def test_finalepcc(self):
-        self.assertDefaultCap(self.MIPS.epcc, offset=0xE8808E9C, msg="dumped EPCC offset should be EPC if ERL is not set")
+        self.assertDefaultCap(self.MIPS.epcc, offset=0xE9C, msg="dumped EPCC offset should be EPC")
