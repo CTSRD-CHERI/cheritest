@@ -31,8 +31,7 @@ import copy
 
 
 #
-# Test that creadhwr raises exceptions when the kernel registers are accessed
-# without the appropriate permissions
+# Test that the trap handle and finish() can deal with CP2 being disabled
 #
 @attr('capabilities')
 class test_cp2_x_disable_cp2_trap_handler_okay(BaseBERITestCase):

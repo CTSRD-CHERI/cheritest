@@ -47,7 +47,13 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
     # Check that EPC is as expected
     #
     def test_epc(self):
-        assert self.MIPS.s3 == self.MIPS.a7 + HexInt(0x10000000), "sandbox EPC unexpected"
+        # Test that base+offset is preserved for unrepresentable EPCC
+        # In precise (256) case base remains the same and s3 is as requested (0x1000000),
+        # In unrepresentable case EPCC.base will be zero but base+offset will be as requested.
+        # a7 = sandbox address == initial base of EPCC
+        # s3 = EPC after setting (maybe) unrepresentable
+        # c3 = EPCC after
+        assert self.MIPS.c3.base + self.MIPS.s3 == self.MIPS.a7 + HexInt(0x10000000), "sandbox EPC unexpected"
 
     #
     # Check that the post-unrepresentable EPCC is as expected: unrepresentable.
