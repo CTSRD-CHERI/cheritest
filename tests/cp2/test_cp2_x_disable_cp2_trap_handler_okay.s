@@ -44,4 +44,9 @@ BEGIN_TEST
 	dli	$t0, 12345678
 	check_instruction_traps $s1, cgetcause $t0		# should trap
 	nop
+	# Reenable CP2 for the "finish" sequence.
+	mfc0	$t2, $12
+	dli	$t3, (1 << 30)
+	or	$t2, $t2, $t3
+	mtc0	$t2, $12
 END_TEST
