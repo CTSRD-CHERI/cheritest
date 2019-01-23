@@ -47,7 +47,7 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
     # Check that EPC is as expected
     #
     def test_epc(self):
-        assert self.MIPS.s3 == 0x10000000, "sandbox EPC unexpected"
+        assert self.MIPS.s3 == self.MIPS.a7 + HexInt(0x10000000), "sandbox EPC unexpected"
 
     #
     # Check that the post-unrepresentable EPCC is as expected: unrepresentable.
