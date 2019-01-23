@@ -28,6 +28,7 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('allow_unaligned')
 class test_ld_unalign_ok(BaseBERITestCase):
 
     @attr('allow_unaligned')

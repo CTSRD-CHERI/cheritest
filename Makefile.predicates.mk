@@ -348,9 +348,7 @@ QEMU_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(QEMU_UNSUPPORTED_FEATURES_F
 ####### Simulator predicates #######
 
 NOSEPRED=$(COMMON_UNSUPPORTED_FEATURES)
-ifeq ($(ALLOW_UNALIGNED),0)
 NOSEPRED+=allow_unaligned
-endif
 NOSEPRED+=csettype
 NOSEPRED+=dumpicache
 NOSEPRED+=loadcachetag
