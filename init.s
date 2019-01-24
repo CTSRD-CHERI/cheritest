@@ -395,6 +395,12 @@ end_of_jump_to_real_trap_handler:
 		.global exception_count_handler
 		.ent exception_count_handler
 exception_count_handler:
+.ifdef BUILDING_PURECAP
+		# Don't clobber the stack of the current program
+		cincoffset $c28, $cnull, $sp # save old $sp in $c28 (which is ABI reserved for the kernel)
+		cgetaddr $sp, $c11
+		daddiu $sp, $sp, -1024
+.endif
 		daddu	$sp, $sp, -32
 		sd	$ra, 24($sp)
 		sd	$fp, 16($sp)
@@ -442,6 +448,10 @@ skip_increment:
 		ld	$fp, 16($sp)
 	        ld      $k0,  8($sp)
 		daddu	$sp, $sp, 32
+.ifdef BUILDING_PURECAP
+		# Restore the original $sp value for purecap code
+		cgetaddr $sp, $c28
+.endif
 		DO_ERET
 end_of_exception_count_handler:
 		nop
