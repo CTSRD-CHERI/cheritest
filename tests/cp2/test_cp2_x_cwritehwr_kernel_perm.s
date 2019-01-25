@@ -82,7 +82,7 @@ without_access_sys_regs:
 
 	# Try to write a non-existent kernel special capreg (trap #4)
 	# Should fail with reserved instr
-	try_write_cap_hwreg $28, $c7
+	try_write_cap_hwreg $25, $c7
 
 	# Now try accessing the registers from user mode.
 
@@ -128,7 +128,7 @@ userspace_test:
 
 	# Try to read a non-existent kernel special capreg (trap #10)
 	# Should fail with reserved instr
-	try_write_cap_hwreg $28, $c20
+	try_write_cap_hwreg $25, $c20
 
 	# TODO: should I also check this without PCC.access_sys_regs here?
 

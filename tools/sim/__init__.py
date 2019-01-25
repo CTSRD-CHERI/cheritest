@@ -196,8 +196,12 @@ class ThreadStatus(object):
     @property
     def epcc(self):
         # type: (self) -> Capability
-        # Should currently be mirrored (31 could be a GPR again soon)
         return self._special_capreg(31, "$epcc")
+
+    @property
+    def error_epcc(self):
+        # type: (self) -> Capability
+        return self._special_capreg(28, "$error_epcc")
 
     @property
     def idc(self):
@@ -396,6 +400,8 @@ class MipsStatus(object):
     def kdc(self) -> Capability: return self.threads[0].kdc
     @property
     def epcc(self) -> Capability: return self.threads[0].epcc
+    @property
+    def error_epcc(self) -> Capability: return self.threads[0].error_epcc
 
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''

@@ -46,7 +46,7 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
     def test_cp2_reg_init_unused_hwregs(self):
         '''Test that all cap hwregs that aren't defined in the spec are None'''
         for t in self.MIPS.threads.values():
-            for i in itertools.chain(range(2, 8), range(9, 22), range(24, 29)):
+            for i in itertools.chain(range(2, 8), range(9, 22), range(24, 28)):
                 self.assertIsNone(t.cp2_hwregs[i], msg="Hwreg " + str(i) + " should not exist")
 
     def _test_special_hwreg(self, name, number, is_null=False):
@@ -76,6 +76,9 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
     def test_cp2_reg_init_hwreg_kr2c_null(self):
         for t in self.MIPS.threads.values():
             self.assertNullCap(t.cp2_hwregs[23], msg="caphwr kr1c should be null on reset")
+
+    def test_cp2_reg_init_error_epcc(self):
+        self._test_special_hwreg("error_epcc", 28)
 
     def test_cp2_reg_init_kcc(self):
         self._test_special_hwreg("kcc", 29)
