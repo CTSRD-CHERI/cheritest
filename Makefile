@@ -461,6 +461,7 @@ clean: cleantest
 distclean:
 	$(MAKE) $(MFLAGS) CAP_SIZE=256 clean
 	$(MAKE) $(MFLAGS) CAP_SIZE=128 clean
+	$(MAKE) $(MFLAGS) CAP_SIZE=128 CAP_PRECISE=1 clean
 	$(MAKE) $(MFLAGS) CAP_SIZE=64 clean
 	$(MAKE) $(MFLAGS) CAP_SIZE=0 clean
 
