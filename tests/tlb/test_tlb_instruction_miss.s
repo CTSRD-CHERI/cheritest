@@ -78,6 +78,12 @@ mapped_code:
 		dli		$a5, 0xbeef
 	
 return:
+		li $s2, 0xc0de
+		li $s3, 0xbad
+		rdhwr $s3, $5
+		li $s4, 0xbad
+		rdhwr $s4, $6
+end_test:
 END_TEST
 
 #
@@ -91,7 +97,13 @@ END_TEST
 default_trap_handler:
 bev0_handler:
 		li	$a2, 1
-tlb_stuff:
+		bne $s2, 0xc0de, .Ltlb_stuff
+		nop
+.Lrdhwr_not_implemented:
+		# end test if itlb statcounters rdhwr is missing
+		dla	$s3, end_test
+		jr	$s3
+.Ltlb_stuff:
 		dmfc0	$t0, $8					# Get bad virtual address
 		move	$a6, $t0				# Get bad virtual address
 		dmfc0	$a7, $14				# Get victim address

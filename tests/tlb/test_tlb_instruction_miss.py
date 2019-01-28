@@ -28,31 +28,34 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr, xfail_on
 
+@attr('tlb')
 class test_tlb_instruction_miss(BaseBERITestCase):
-
-    @attr('tlb')
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a5, 0xbeef, "Translated instructions didn't run")
 
-    @attr('tlb')
     def test_badVaddr(self):
         self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a6, "Bad Virtual Address is incorrect")
 
-    @attr('tlb')
     def test_badVictim(self):
         self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a7, "EPC is incorrect")
 
-    @attr('tlb')
     def test_context(self):
         self.assertRegisterMaskEqual(self.MIPS.s0, 0xffffffffff800000, 0xfeedfacede800000, "tlb context ptebase incorrect")
         self.assertRegisterMaskEqual(self.MIPS.s0, 0x7ffff0, (self.MIPS.a4 >> 9) & 0x7ffff0, "tlb context vpn2 incorrect")
         self.assertRegisterMaskEqual(self.MIPS.s0, 0xf, 0, "tlb context 3..0 incorrect")
         
-    @attr('tlb')
     @xfail_on('qemu')
     def test_xcontext_ptebase(self):
         self.assertRegisterMaskEqual(self.MIPS.s1, 0xfffffffe00000000, 0xafadedca00000000, "tlb xcontext ptebase incorrect")
         self.assertRegisterMaskEqual(self.MIPS.s1, 0x1fffffff0, (self.MIPS.a4 >> 9) & 0x7ffff0, "tlb xcontext r/ vpn2 incorrect")
         self.assertRegisterMaskEqual(self.MIPS.s1, 0xf, 0, "tlb xcontext 3..0 incorrect")
+
+    @attr(beri_statcounters="tlb")
+    def test_itlb_miss_statcounters(self):
+        assert self.MIPS.s3 == 1, "Expected one ifetch TLB miss"
+
+    @attr(beri_statcounters="tlb")
+    def test_dtlb_miss_statcounters(self):
+        assert self.MIPS.s4 == 0, "Expected zero data TLB miss"
 
 
