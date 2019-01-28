@@ -379,24 +379,24 @@ class BaseBERITestCase(unittest.TestCase):
     def max_permissions(self):
         perm_size = int(pytest.config.option.PERM_SIZE)
         if perm_size == 31:
-            return 0x7fff8fff
+            return HexInt(0x7fff8fff)
         elif perm_size == 23:
-            return 0x7f8fff
+            return HexInt(0x7f8fff)
         elif perm_size == 15:
-            return 0x78fff
+            return HexInt(0x78fff)
         assert False, "Invalid perm size %d" % perm_size
 
     @property
     def max_nonexec_perms(self):
-        return self.max_permissions & ~2
+        return HexInt(self.max_permissions & ~2)
 
     @property
     def max_nostore_perms(self):
-        return self.max_permissions & ~(8 | 32)
+        return HexInt(self.max_permissions & ~(8 | 32))
 
     @property
     def max_length(self):
-        return 0xffffffffffffffff
+        return HexInt(0xffffffffffffffff)
 
     @property
     def permission_bits(self):
@@ -404,7 +404,7 @@ class BaseBERITestCase(unittest.TestCase):
 
     @property
     def minus_one_as_u64(self):
-        return 0xffffffffffffffff
+        return HexInt(0xffffffffffffffff)
 
     def assertRegisterAllPermissions(self, reg_val, msg=None):
         self.assertCapPermissions(reg_val, self.max_permissions, msg)
