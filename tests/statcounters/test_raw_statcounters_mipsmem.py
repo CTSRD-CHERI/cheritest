@@ -70,12 +70,22 @@ class test_raw_statcounters_mipsmem(BaseBERITestCase):
         '''Test that querying the dword write counter returns expected value'''
         self.assertRegisterEqual(self.MIPS.a7, 144, "mips mem dword write counter corrupted")
 
-    @attr(beri_statcounters='mem')
+    @attr(beri_statcounters='cap_mem')
     def test_raw_statcounters_cap_read(self):
         '''Test that querying the cap read counter returns expected value'''
         self.assertRegisterEqual(self.MIPS.t0, 24, "mips mem cap read counter corrupted")
 
-    @attr(beri_statcounters='mem')
+    @attr(beri_statcounters='cap_mem')
     def test_raw_statcounters_cap_write(self):
         '''Test that querying the cap write counter returns expected value'''
-        self.assertRegisterEqual(self.MIPS.t1, 24, "mips mem cap write counter corrupted")
+        self.assertRegisterEqual(self.MIPS.t1, 22, "mips mem cap write counter corrupted")
+
+    @attr(beri_statcounters='cap_mem')
+    def test_raw_statcounters_cap_read_tagged(self):
+        '''One less tagged read than tagged store'''
+        self.assertRegisterEqual(self.MIPS.t2, 23, "mips mem cap read (tagged) counter corrupted")
+
+    @attr(beri_statcounters='cap_mem')
+    def test_raw_statcounters_cap_write_tagged(self):
+        '''One less tagged store than total cap stores'''
+        self.assertRegisterEqual(self.MIPS.t3, 21, "mips mem cap write (tagged) counter corrupted")

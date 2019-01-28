@@ -58,6 +58,8 @@ DWORD_READ  = 6
 DWORD_WRITE = 7
 CAP_READ    = 8
 CAP_WRITE   = 9
+CAP_READ_WITH_TAG = 10
+CAP_WRITE_WITH_TAG = 11
 
 # Master interface counters
 READ_REQ       = 0

@@ -113,10 +113,17 @@ start:
     dla     $t0, cap1
     # ... CAP_TIMES times
     dli     $a4, CAP_TIMES-1
+    dli     $a5, CAP_TIMES-3  # do less stores:
+    cgetnull $c1
+    csc		$c1, $t0, 0($ddc)	# store one untagged value
+    cgetdefault $c2	# otherwise store tagged ones (to get a different value
     1:
     flush_nops
-    clc 	$c1, $t0, 0($ddc)
-    csc 	$c1, $t0, 0($ddc)
+    clc		$c1, $t0, 0($ddc)
+    ble		$a5, $zero, .Lskip_store
+    daddiu	$a5, $a5, -1
+    csc		$c2, $t0, 0($ddc)
+.Lskip_store:
     bne     $a4, $zero, 1b
     daddi   $a4, -1
     flush_nops
@@ -138,6 +145,8 @@ start:
     getstatcounter  11, MIPSMEM, DWORD_WRITE    # in a7
     getstatcounter  12, MIPSMEM, CAP_READ       # in t0
     getstatcounter  13, MIPSMEM, CAP_WRITE      # in t1
+    getstatcounter  14, MIPSMEM, CAP_READ_WITH_TAG       # in t2
+    getstatcounter  15, MIPSMEM, CAP_WRITE_WITH_TAG      # in t3
 
     # Dump registers in the simulator
     mtc0 $v0, $26
