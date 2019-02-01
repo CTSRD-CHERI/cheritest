@@ -723,6 +723,16 @@ nosetests_sail_cheri128_c.xml: $(SAIL_CHERI128_C_TEST_LOGS) check_pytest_version
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(SAIL_CHERI128_NOSEFLAGS) \
 	    $(TESTDIRS)
 
+# Convenience targets to build sail and run tests.
+
+sail128:
+	$(MAKE) -C $(SAIL_CHERI_MIPS_DIR)/cheri cheri128_c
+	$(MAKE) -j8 CAP_SIZE=128 nosetests_sail_cheri128_c
+
+sail256:
+	$(MAKE) -C $(SAIL_CHERI_MIPS_DIR)/cheri cheri_c
+	$(MAKE) -j8 CAP_SIZE=256 nosetests_sail_cheri_c
+
 .PHONY: nosetests_qemu check_valid_qemu
 
 nosetests_qemu:
