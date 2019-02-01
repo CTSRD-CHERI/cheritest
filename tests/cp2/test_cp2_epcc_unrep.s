@@ -91,4 +91,16 @@ this_test:
                 # Observe EPCC
                 cgetepcc $c3
 
+                # Now set EPC back in bounds to make it representable again
+                # and observe EPCC. An implementation that had a separate
+                # EPC and EPCC.offset might have unexpected results here.
+                dli     $t0, 0x0
+                dmtc0   $t0, $14
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                cgetepcc $c4
 END_TEST
