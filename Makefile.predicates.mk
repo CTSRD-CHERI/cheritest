@@ -248,7 +248,8 @@ pic \
 mt \
 count_register_is_time \
 no_experimental_clc \
-experimental_csc
+experimental_csc \
+sentry_caps
 
 SAIL_MIPS_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_UNSUPPORTED_FEATURES) capabilities"
 SAIL_CHERI_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_UNSUPPORTED_FEATURES)"
