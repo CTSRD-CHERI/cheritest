@@ -38,7 +38,7 @@ MULTI = bool(int(os.environ.get("MULTI1", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-TEST_FILE_RE = re.compile('test_.+\.(c|cpp)')
+TEST_FILE_RE = re.compile('test_.+\\.(c|cpp)')
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 LOG_DIR = pytest.config.option.LOGDIR
