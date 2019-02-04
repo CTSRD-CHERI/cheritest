@@ -35,7 +35,8 @@ extern volatile __int64_t continue_after_exception;
 #define BEGIN_TEST(name)					\
 	SET_TRAP_HANDLER					\
 	_EXTERN_C int test(void) {				\
-		continue_after_exception = TEST_EXPECTED_FAULTS;
+		continue_after_exception = TEST_EXPECTED_FAULTS; \
+		__asm__ volatile("":::"memory");
 
 #define END_TEST 						\
 	assert_eq(exception_count, TEST_EXPECTED_FAULTS);	\
