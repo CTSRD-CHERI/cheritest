@@ -109,6 +109,7 @@ start:
     daddi   $a4, -1
     flush_nops
 
+.if(TEST_CP2 == 1)
     # load and store a cap ...
     dla     $t0, cap1
     # ... CAP_TIMES times
@@ -127,6 +128,7 @@ start:
     bne     $a4, $zero, 1b
     daddi   $a4, -1
     flush_nops
+.endif
 
     # wait a bit for counters update
     dli     $a4, DELAY_TIME

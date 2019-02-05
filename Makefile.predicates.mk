@@ -77,6 +77,7 @@ endif
 
 ifneq ($(TEST_CP2),1)
 COMMON_UNSUPPORTED_FEATURES+=capabilities
+COMMON_UNSUPPORTED_FEATURES_IF+=beri_statcounters=cap_mem
 endif
 
 ifneq ($(CAP_SIZE),256)
@@ -332,6 +333,7 @@ QEMU_UNSUPPORTED_FEATURES+=no_dext nomthc1 nowatch
 endif
 
 # QEMU now supports the icount statcounters register
+QEMU_UNSUPPORTED_IF=$(COMMON_UNSUPPORTED_FEATURES_IF)
 QEMU_UNSUPPORTED_IF+=beri_statcounters=mem
 QEMU_UNSUPPORTED_IF+=beri_statcounters=cache
 
@@ -409,6 +411,6 @@ NOSEPRED+=nowatch
 endif
 
 ifneq ($(NOSEPRED),)
-NOSEFLAGS?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) uncached"
-NOSEFLAGS_UNCACHED?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) cached"
+NOSEFLAGS?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) uncached" --unsupported-feature-if-equal "$(COMMON_UNSUPPORTED_FEATURES_IF)"
+NOSEFLAGS_UNCACHED?=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(NOSEPRED) cached" --unsupported-feature-if-equal "$(COMMON_UNSUPPORTED_FEATURES_IF)"
 endif
