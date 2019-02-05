@@ -41,8 +41,6 @@ END_TEST
 .balign 4096
 .ent userspace_test
 userspace_test:
-	cgetpcc $c16
-
 
 	# Read all statcounters in usermode:
 
