@@ -91,6 +91,7 @@ start:
     checkstatcounter MIPSMEM, CAP_READ, THRESHOLD
     checkstatcounter MIPSMEM, CAP_WRITE, THRESHOLD
 
+.if(TEST_CP2 == 1)
     checkstatcounter TAGCACHE, WRITE_HIT, THRESHOLD
     checkstatcounter TAGCACHE, WRITE_MISS, THRESHOLD
     checkstatcounter TAGCACHE, READ_HIT, THRESHOLD*2
@@ -99,6 +100,7 @@ start:
     checkstatcounter TAGCACHE, PFTCH_MISS, THRESHOLD
     checkstatcounter TAGCACHE, EVICT, THRESHOLD
     checkstatcounter TAGCACHE, PFTCH_EVICT, THRESHOLD
+.endif
 
     checkstatcounter L2CACHEMASTER, READ_REQ, THRESHOLD*2
     checkstatcounter L2CACHEMASTER, WRITE_REQ, THRESHOLD
@@ -107,12 +109,14 @@ start:
     checkstatcounter L2CACHEMASTER, READ_RSP_FLIT, THRESHOLD*2
     checkstatcounter L2CACHEMASTER, WRITE_RSP, THRESHOLD
 
+.if(TEST_CP2 == 1)
     checkstatcounter TAGCACHEMASTER, READ_REQ, THRESHOLD*2
     checkstatcounter TAGCACHEMASTER, WRITE_REQ, THRESHOLD
     checkstatcounter TAGCACHEMASTER, WRITE_REQ_FLIT, THRESHOLD
     checkstatcounter TAGCACHEMASTER, READ_RSP, THRESHOLD*3
     checkstatcounter TAGCACHEMASTER, READ_RSP_FLIT, THRESHOLD*3
     checkstatcounter TAGCACHEMASTER, WRITE_RSP, THRESHOLD
+.endif
 
     # Dump registers in the simulator
     mtc0 $v0, $26
