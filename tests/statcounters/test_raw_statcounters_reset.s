@@ -88,10 +88,10 @@ start:
     checkstatcounter MIPSMEM, WORD_WRITE, THRESHOLD
     checkstatcounter MIPSMEM, DWORD_READ, THRESHOLD
     checkstatcounter MIPSMEM, DWORD_WRITE, THRESHOLD
+.if(TEST_CP2 == 1)
     checkstatcounter MIPSMEM, CAP_READ, THRESHOLD
     checkstatcounter MIPSMEM, CAP_WRITE, THRESHOLD
 
-.if(TEST_CP2 == 1)
     checkstatcounter TAGCACHE, WRITE_HIT, THRESHOLD
     checkstatcounter TAGCACHE, WRITE_MISS, THRESHOLD
     checkstatcounter TAGCACHE, READ_HIT, THRESHOLD*2
