@@ -109,7 +109,7 @@ start:
     daddi   $a4, -1
     flush_nops
 
-.if(TEST_CP2 == 1)
+.if(TEST_CP2 != 0)
     # load and store a cap ...
     dla     $t0, cap1
     # ... CAP_TIMES times
@@ -123,6 +123,7 @@ start:
     clc		$c1, $t0, 0($ddc)
     ble		$a5, $zero, .Lskip_store
     daddiu	$a5, $a5, -1
+    flush_nops
     csc		$c2, $t0, 0($ddc)
 .Lskip_store:
     bne     $a4, $zero, 1b
