@@ -164,6 +164,12 @@ no_float:
 		# When building for purecap (and potentially also hybrid) we
 		# need to call crt_init_globals() before starting the test
 		cfromptr	$c11, $c1, $sp
+		# set bounds on the stack
+		dla	$t0, __stack_size__
+		dnegu	$t1, $t0
+		cincoffset $c11, $c11, $t1
+		csetbounds $c11, $c11, $t0
+		cincoffset $c11, $c11, $t0
 .ifdef __CHERI_CAPABILITY_TABLE__
 		# If we are using the capability table we also need to setup $cgp
 		dla $at, _CHERI_CAPABILITY_TABLE_

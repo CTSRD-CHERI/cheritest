@@ -26,7 +26,7 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import attr, HexInt
 
 # Check that the registers used in purecap tests are initialized to usable values
 class test_purecap_reg_init(BaseBERITestCase):
@@ -47,8 +47,11 @@ class test_purecap_reg_init(BaseBERITestCase):
             name = "$c" + str(regnum)
             cap = self.MIPS.cp2[regnum]
             if regnum == 11:
+                # Stack should be 4k
+                stack_size = 4096
                 self.assertValidCap(cap, name + " (stack cap)", perms=self.max_nonexec_perms,
-                                    offset=self.MIPS.sp, length=self.max_length)
+                                    offset=stack_size, length=stack_size, base=self.MIPS.sp - stack_size)
+                assert HexInt(cap.base + cap.offset) == self.MIPS.sp, "Address of $c11 should be same as $sp"
             elif regnum == 12:
                 self.assertValidCap(cap, name + " (jump cap)", perms=self.max_nostore_perms,
                                     offset=self.MIPS.t9, length=self.max_length)

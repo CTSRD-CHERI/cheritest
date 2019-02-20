@@ -403,6 +403,10 @@ class MipsStatus(object):
     @property
     def error_epcc(self) -> Capability: return self.threads[0].error_epcc
 
+    @property
+    def cp2(self):
+        return self.threads[0].cp2
+
     def __getattr__(self, key):
         '''Return a register value by name. For backwards compatibility this defaults to thread zero.'''
         return getattr(self.threads[0], key)

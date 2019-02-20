@@ -26,8 +26,8 @@
  */
 
 
-__stack_size__ = 0x400; /* 1k stack */
-__mem_top__ = 0x9000000000008000;
+__stack_size__ = 0x1000; /* 4k stack */
+__mem_top__ = 0x9000000000010000;
 
 __sp = __mem_top__;
 __heap_top__ = __mem_top__ - __stack_size__;
