@@ -411,6 +411,9 @@ exception_count_handler:
 .ifdef BUILDING_PURECAP
 		# Don't clobber the stack of the current program
 		cincoffset $c28, $cnull, $sp # save old $sp in $c28 (which is ABI reserved for the kernel)
+		cgetdefault $c29  # save $ddc in $c29
+		cgetkcc $c30  # need a full address space $ddc
+		csetdefault $c30
 		dla $sp, purecap_kernel_stack
 .endif
 		daddu	$sp, $sp, -32
@@ -463,6 +466,10 @@ skip_increment:
 .ifdef BUILDING_PURECAP
 		# Restore the original $sp value for purecap code
 		cgetaddr $sp, $c28
+		csetdefault $c29
+		cgetnull $c28
+		cgetnull $c29
+		cgetnull $c30
 .endif
 		DO_ERET
 end_of_exception_count_handler:
