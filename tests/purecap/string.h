@@ -13,6 +13,9 @@
 
 #define memcpy cmemcpy
 #define memmove cmemmove
+#define cheritest_memcpy cmemcpy
+#define cheritest_memmove cmemmove
+
 
 void*
 memset(void *s, int c, size_t len)
