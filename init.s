@@ -397,6 +397,13 @@ end_of_jump_to_real_trap_handler:
 		.set pop
 .end jump_to_real_trap_handler
 
+.ifdef BUILDING_PURECAP
+purecap_kernel_stack:
+.space 64
+.size purecap_kernel_stack, 64
+.endif
+
+
 
 		.global exception_count_handler
 		.ent exception_count_handler
@@ -404,8 +411,7 @@ exception_count_handler:
 .ifdef BUILDING_PURECAP
 		# Don't clobber the stack of the current program
 		cincoffset $c28, $cnull, $sp # save old $sp in $c28 (which is ABI reserved for the kernel)
-		cgetaddr $sp, $c11
-		daddiu $sp, $sp, -1024
+		dla $sp, purecap_kernel_stack
 .endif
 		daddu	$sp, $sp, -32
 		sd	$ra, 24($sp)
