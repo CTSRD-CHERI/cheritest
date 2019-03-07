@@ -124,7 +124,6 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
         assert self.MIPS.epcc.length == 20, "sandbox EPCC length incorrect (final dump value)"
 
     @attr('cap_imprecise')
-    @attr('cap_null_length')
     def test_epcc_length_imprecise(self):
         assert self.MIPS.cp2[3].length == HexInt(0xffffffffffffffff), "sandbox EPCC length incorrect"
         assert self.MIPS.cp2[4].length == HexInt(0xffffffffffffffff), "sandbox EPCC length incorrect (back in bounds)"

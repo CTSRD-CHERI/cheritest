@@ -64,13 +64,11 @@ class test_cp2_csetoffset_imprecise(BaseBERITestCase):
 
     @attr('capabilities')
     @attr('cap_precise')
-    @attr('cap_null_length')
     def test_cp2_csetoffet_imprecise_len_precise(self):
         self.assertRegisterEqual(self.MIPS.a3, 1, "CSetOffset did not set length to the expected value")
 
     @attr('capabilities')
     @attr('cap_imprecise')
-    @attr('cap_null_length')
     def test_cp2_csetoffset_precise_len_imprecise(self):
         self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff,
                                  "CSetOffset did not set length to the expected NULL length when the result was imprecise")
