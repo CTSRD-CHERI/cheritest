@@ -31,7 +31,7 @@ from beritest_tools import attr
 
 # Test that rdhwr counter register is not accessible from user mode when the coprocessor
 # enable bit is not set.
-@attr('statcounters')
+@attr(beri_statcounters="any")
 @attr('tlb')
 @attr('rdhwr')
 class test_cp0_rdhwr_statcounters_icount(BaseBERITestCase):
