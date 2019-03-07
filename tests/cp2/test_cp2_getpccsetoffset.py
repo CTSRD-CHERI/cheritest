@@ -36,19 +36,16 @@ from beritest_tools import attr
 class test_cp2_getpccsetoffset(BaseBERITestCase):
 
     @attr('capabilities')
-    @attr('cgetpccsetoffset')
     def test_cp2_getpcc1(self):
         '''Test that cgetpcc returns correct base'''
         self.assertRegisterEqual(self.MIPS.a2, 0, "cgetpcc returns incorrect base")
 
     @attr('capabilities')
-    @attr('cgetpccsetoffset')
     def test_cp2_getpcc2(self):
         '''Test that cgetpcc returns correct len'''
         self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "cgetpcc returns incorrect len")
         
     @attr('capabilities')
-    @attr('cgetpccsetoffset')
     def test_cp2_getpcc3(self):
         '''Test that cgetpcc returns correct offset'''
         self.assertRegisterEqual(self.MIPS.a4, self.MIPS.v0, "cgetpcc returns incorrect offset")
