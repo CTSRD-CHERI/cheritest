@@ -51,6 +51,7 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x20000
 		csetbounds $c1, $c1, $t1
+		cmove $c5, $c1  # initial cap 1
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
@@ -64,6 +65,7 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t3
 		dli	$t1, 0x10
 		csetbounds $c1, $c1, $t1
+		cmove $c6, $c1  # bounded cap 1
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
@@ -84,6 +86,7 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x0
 		csetbounds $c1, $c1, $t1
+		cmove $c7, $c1  # initial cap 2
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
@@ -95,6 +98,7 @@ BEGIN_TEST
 		dli	$t3, 0x0
 		daddu $t0, $t0, $t3 # Add this offset to the previous base to get new base.
 		csetoffset $c1, $c1, $t3
+		cmove $c8, $c1  # failing cap 2
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
@@ -113,6 +117,7 @@ BEGIN_TEST
 		dli	$t1, 0x400000
 		csetbounds $c1, $c1, $t1
 		# Get and assert that the base and length are what we set.
+		cmove $c9, $c1  # initial cap 3
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
 		nop
@@ -122,8 +127,10 @@ BEGIN_TEST
 		# Stage 2 attempt the failing inc offsets.
 		dli	$t3, 0x7ee940
 		cincoffset $c1, $c1, $t3
+		cmove $c10, $c1  # incoffset #1 cap 3
 		dli	$t3, 0xfffffffffffff0e8
 		cincoffset $c1, $c1, $t3
+		cmove $c11, $c1  # incoffset #2 cap 3
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
@@ -144,12 +151,15 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t0
 		dli	$t1, 0x300000
 		csetbounds $c1, $c1, $t1
+		cmove $c12, $c1  # initial cap 4
 		cgetdefault $c3
 		cseal $c1, $c1, $c3
+		cmove $c13, $c1  # sealed cap 4
 		dla $t2, data
 		csc $c1, $t2, 0($ddc)
 		clc $c1, $t2, 0($ddc)
 		cunseal $c1, $c1, $c3
+		cmove $c14, $c1  # unsealed cap 4
 		# Get and assert that the base and length are what we set.
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
@@ -171,6 +181,7 @@ BEGIN_TEST
 		csetbounds $c1, $c1, $t1
 		dli $t2, 0x88c0
 		csetoffset $c1, $c1, $t2
+		cmove $c15, $c1  # initial cap 5
 		# Set up return instruction
 		dla $t2, return_to_c17
 		ld $t3, 0($t2)
@@ -178,6 +189,7 @@ BEGIN_TEST
 		cjalr	$c1,$c17
 		nop
 		# Get and assert that the base and length are what we set.
+		cmove $c16, $c1  # return cap 5
 		cgetbase $v0, $c1
 		bne $v0, $t0, error
 		nop
