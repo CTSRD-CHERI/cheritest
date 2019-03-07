@@ -35,7 +35,6 @@ import copy
 # without the appropriate permissions
 #
 @attr('capabilities')
-@attr('cap_hwregs')
 class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
     def test_pcc_has_no_access_sys_regs(self):
         self.assertCapPermissions(self.MIPS.c14, self.max_permissions & ~1024,
