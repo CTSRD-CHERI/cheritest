@@ -20,6 +20,7 @@ GXEMUL_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "   \
 allow_unaligned 	\
 llsc		\
 cache           \
+badinstr	\
 bev1            \
 trapi           \
 counterdev      \

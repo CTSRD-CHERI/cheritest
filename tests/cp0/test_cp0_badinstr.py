@@ -31,6 +31,7 @@ from beritest_tools import attr
 #
 # Test that the BadInstr register is implemented
 #
+@attr('badinstr')
 class test_cp0_badinstr(BaseBERITestCase):
     EXPECTED_EXCEPTIONS = 1
 
