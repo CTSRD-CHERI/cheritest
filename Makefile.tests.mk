@@ -350,12 +350,12 @@ $(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.mem $(TOOLS_DIR_ABS)/debug/cherictl
 #
 $(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
-	-$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | $(GXEMUL_LOG_FILTER) >$@
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | $(GXEMUL_LOG_FILTER) >$@
 
 
 $(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
-	-$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | $(GXEMUL_LOG_FILTER) >$@
+	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | $(GXEMUL_LOG_FILTER) >$@
 
 max_cycles: max_cycles.c
 	$(CC) -o max_cycles max_cycles.c
@@ -526,6 +526,7 @@ PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
 NOSETESTS:=CAP_SIZE=$(CAP_SIZE) $(NOSETESTS)
 PYTEST:=CAP_SIZE=$(CAP_SIZE) $(PYTEST)
 
+GXEMUL_NOSETESTS=	LOGDIR=$(GXEMUL_LOGDIR) TEST_MACHINE=GXEMUL $(NOSETESTS)
 SIM_NOSETESTS=		LOGDIR=$(LOGDIR) TEST_MACHINE=SIM $(NOSETESTS)
 HWSIM_NOSETESTS=	LOGDIR=$(HWSIM_LOGDIR) TEST_MACHINE=HWSIM $(NOSETESTS)
 L3_NOSETESTS=		LOGDIR=$(L3_LOGDIR) TEST_MACHINE=L3 $(NOSETESTS)
@@ -627,14 +628,14 @@ hwsim-nosetest_cached: $(CHERISOCKET) all $(HWSIM_TEST_CACHED_LOGS)
 nosetests_gxemul: nosetests_gxemul_uncached.xml
 
 nosetests_gxemul_uncached.xml: $(GXEMUL_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE)env PYTHONPATH=tools/gxemul CACHED=0 $(NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env PYTHONPATH=tools/gxemul CACHED=0 $(GXEMUL_NOSETESTS) \
 	    $(PYTHON_TEST_XUNIT_FLAG)=nosetests_gxemul_uncached.xml \
 	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS)
 
 nosetests_gxemul_cached: nosetests_gxemul_cached.xml
 
 nosetests_gxemul_cached.xml: $(GXEMUL_TEST_CACHED_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
-	$(MAYBE_IGNORE_EXIT_CODE)env PYTHONPATH=tools/gxemul CACHED=1 $(NOSETESTS) \
+	$(MAYBE_IGNORE_EXIT_CODE)env PYTHONPATH=tools/gxemul CACHED=1 $(GXEMUL_NOSETESTS) \
 	    $(PYTHON_TEST_XUNIT_FLAG)=nosetests_gxemul_cached.xml \
 	    $(GXEMUL_NOSEFLAGS) $(TESTDIRS)
 
