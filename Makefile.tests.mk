@@ -10,9 +10,9 @@ GXEMUL_BINDIR?=/usr/groups/ctsrd/gxemul/CTSRD-CHERI-gxemul-testversion
 GXEMUL_TRACE_OPTS?=-i
 GXEMUL_OPTS=-V -E oldtestmips -M 3072 $(GXEMUL_TRACE_OPTS) -p "end"
 ifeq ($(BRIEF_GXEMUL),1)
-GXEMUL_LOG_FILTER=grep -A100 'cpu0:    pc = '
+GXEMUL_LOG_FILTER=./gxemultosim
 else
-GXEMUL_LOG_FILTER=cat
+GXEMUL_LOG_FILTER=./gxemultosim -v
 endif
 L3_LOGDIR=l3_log
 SAIL_MIPS_LOGDIR=sail_mips_log
@@ -161,9 +161,9 @@ ALTERA_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 HWSIM_TEST_LOGS := $(addsuffix .log,$(addprefix $(HWSIM_LOGDIR)/,$(TESTS)))
 HWSIM_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(HWSIM_LOGDIR)/,$(TESTS)))
-GXEMUL_TEST_LOGS := $(addsuffix _gxemul.log,$(addprefix \
+GXEMUL_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
-GXEMUL_TEST_CACHED_LOGS := $(addsuffix _gxemul_cached.log,$(addprefix \
+GXEMUL_TEST_CACHED_LOGS := $(addsuffix _cached.log,$(addprefix \
 	$(GXEMUL_LOGDIR)/,$(TESTS)))
 L3_TEST_LOGS := $(addsuffix .log,$(addprefix \
 	$(L3_LOGDIR)/,$(TESTS)))
@@ -348,12 +348,12 @@ $(HWSIM_LOGDIR)/%.log : $(OBJDIR)/%.mem $(TOOLS_DIR_ABS)/debug/cherictl
 # to step TEST_CYCLE_LIMIT times then exit and 2) wait until gxemul
 # closes stdin before exiting the pipeline.
 #
-$(GXEMUL_LOGDIR)/%_gxemul.log : $(OBJDIR)/%.elf
+$(GXEMUL_LOGDIR)/%.log : $(OBJDIR)/%.elf gxemultosim
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | $(GXEMUL_LOG_FILTER) >$@
 
 
-$(GXEMUL_LOGDIR)/%_gxemul_cached.log : $(OBJDIR)/%_cached.elf
+$(GXEMUL_LOGDIR)/%_cached.log : $(OBJDIR)/%_cached.elf gxemultosim
 	(printf "step $(TEST_CYCLE_LIMIT)\nquit\n"; while echo > /dev/stdout; do sleep 0.01; done ) | \
 	$(GXEMUL_BINDIR)/gxemul $(GXEMUL_OPTS) $< 2>&1 | $(GXEMUL_LOG_FILTER) >$@
 
@@ -362,6 +362,9 @@ max_cycles: max_cycles.c
 
 l3tosim: l3tosim.c
 	$(CC) -o l3tosim l3tosim.c
+
+gxemultosim: gxemultosim.c
+	$(CC) -o gxemultosim gxemultosim.c
 
 ifeq ($(MULTI),1)
 L3_MULTI=--nbcore 2
