@@ -158,6 +158,7 @@ config5		\
 userlocal       \
 mt              \
 pic		\
+mul_hilo_cleared \
 mips_overflow 	\
 dma		\
 beri_statcounters
