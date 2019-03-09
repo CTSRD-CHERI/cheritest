@@ -16,57 +16,6 @@
 #              cache semantics.
 # cheri - gxemul is simply not CHERI
 #
-GXEMUL_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "   \
-allow_unaligned 	\
-llsc		\
-cache           \
-badinstr	\
-bev1            \
-trapi           \
-counterdev      \
-watch           \
-capabilities    \
-clang           \
-beri            \
-dumpicache	\
-einstr		\
-jump_unaligned	\
-nofloat         \
-floatabs2008	\
-floatpaired     \
-floatindexed    \
-floatcmove      \
-floatfccr       \
-floatfenr       \
-floatfexr       \
-floatrecip      \
-floatrsqrt      \
-float64         \
-floatexception  \
-floatechonan    \
-floatmadd	\
-smalltlb        \
-bigtlb          \
-beri1tlb	\
-beri2tlb	\
-beri1cache	\
-beri1oldcache	\
-beri2cache	\
-extendedtlb	\
-enablelargetlb  \
-tlbcheck	\
-invalidateL2    \
-rdhwr           \
-config2		\
-config3         \
-config5		\
-userlocal       \
-mt              \
-pic		\
-mips_overflow 	\
-dma		\
-beri_statcounters	\
-"
 
 COMMON_UNSUPPORTED_FEATURES?=notyet
 
@@ -158,6 +107,63 @@ endif
 
 # TODO: remove once https://github.com/CTSRD-CHERI/cheri-isa/issues/19 is resolved
 COMMON_UNSUPPORTED_FEATURES+=	cap_unrep_retains_info
+
+#
+# GXEMUL predicates
+#
+
+GXEMUL_UNSUPPORTED_FEATURES=$(COMMON_UNSUPPORTED_FEATURES) \
+allow_unaligned 	\
+llsc		\
+cache           \
+badinstr	\
+bev1            \
+trapi           \
+counterdev      \
+watch           \
+clang           \
+beri            \
+dumpicache	\
+einstr		\
+jump_unaligned	\
+nofloat         \
+floatabs2008	\
+floatpaired     \
+floatindexed    \
+floatcmove      \
+floatfccr       \
+floatfenr       \
+floatfexr       \
+floatrecip      \
+floatrsqrt      \
+float64         \
+floatexception  \
+floatechonan    \
+floatmadd	\
+smalltlb        \
+bigtlb          \
+beri1tlb	\
+beri2tlb	\
+beri1cache	\
+beri1oldcache	\
+beri2cache	\
+extendedtlb	\
+enablelargetlb  \
+tlbcheck	\
+invalidateL2    \
+rdhwr           \
+config2		\
+config3         \
+config5		\
+userlocal       \
+mt              \
+pic		\
+mips_overflow 	\
+dma		\
+beri_statcounters
+
+
+GXEMUL_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(GXEMUL_UNSUPPORTED_FEATURES)"
 
 
 ####### L3 predicates #######
