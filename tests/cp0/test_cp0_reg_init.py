@@ -143,6 +143,10 @@ class test_cp0_reg_init(BaseBERITestCase):
             assert company_id == 0x00, "Unexpected BERI CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected BERI CP0_PRID[15..8]"
             assert revision_id >= 2, "Expected at least rev 2 (which includes the NULL register) for BERI CP0_PRID[7..0]"
+        elif self.TEST_MACHINE == "gxemul":
+            assert company_id == 0x01, "Unexpected GXEMUL CP0_PRID[23..16]"
+            assert processor_id == 0x89, "Unexpected GXEMUL CP0_PRID[15..8]"
+            assert revision_id >= 1, "Expected at least rev 1"
         else:
             self.fail("Expected processor ID value not implemented for TEST_MACHINE={tm} (PRID was {prid_val}: company={cid},"
                       " processor={pid}, revision={rev})".format(tm=self.TEST_MACHINE, prid_val=hex(self.MIPS.a5), cid=hex(company_id),
