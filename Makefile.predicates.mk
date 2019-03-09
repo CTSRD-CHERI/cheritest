@@ -134,7 +134,6 @@ floatcmove      \
 floatfccr       \
 floatfenr       \
 floatfexr       \
-floatfirextended \
 floatrecip      \
 floatrsqrt      \
 float64         \
