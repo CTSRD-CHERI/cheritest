@@ -32,6 +32,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 int main(int argc, char **argv)
 {
@@ -52,7 +53,7 @@ int core = 0;
       (strstr(buff, "<-") == (char *) 0))
     {
       buff[6] = '\0';
-      reg_num = atoi(buff + 4);
+      reg_num = strtol(buff + 4, NULL, 10);
       printf("DEBUG MIPS REG %2d 0x%s\n", reg_num, buff + 7);
     }
     else if ((strncmp(buff, "PC ", 3) == 0) && (core == 0))
