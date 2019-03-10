@@ -161,7 +161,8 @@ pic		\
 mul_hilo_cleared \
 mips_overflow 	\
 dma		\
-beri_statcounters
+beri_statcounters \
+no_dext
 
 
 GXEMUL_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(GXEMUL_UNSUPPORTED_FEATURES)"
