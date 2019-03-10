@@ -46,13 +46,14 @@ class test_cp0_config3(BaseBERITestCase):
         "CP0.config3.ulri is not set")
 
 
+    @attr('badinstr')
     def test_cp0_config3_badinstr(self):
         '''Test CP0.Config3.BadInstr is set'''
         self.assertRegisterEqual((self.MIPS.a3 >> 26) & 1, 1,
-        "CP0.config3.ulri is not set")
+        "CP0.Config3.BadInstr is not set")
 
-    @attr("badinstr_p")
+    @attr('badinstr_p')
     def test_cp0_config3_badinstr_p(self):
-        '''Test CP0.Config3.BadInstr is set'''
+        '''Test CP0.Config3.BadInstrP is set'''
         self.assertRegisterEqual((self.MIPS.a3 >> 27) & 1, 1,
-        "CP0.config3.ulri is not set")
+        "CP0.Config3.BadInstrP is not set")
