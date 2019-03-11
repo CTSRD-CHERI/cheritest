@@ -26,31 +26,31 @@ JobConfig getJobParameters() {
 	echo "Computed base job names as $jobName"
 	Map config = [
 			"CHERI1-TEST": [buildArgs: 'CAP=True',
-					testArgs: 'NOFUZZR=1 GENERIC_L1=1 STATCOUNTERS=1 SIM_TRACE_OPTS= nosetest_cached nosetest'],
+					testArgs: 'NOFUZZR=1 GENERIC_L1=1 TEST_WATCH=1 STATCOUNTERS=1 SIM_TRACE_OPTS= nosetest_cached nosetest'],
 			"CHERI1-CACHECORE-TEST": [
 					buildArgs: 'CAP=True ICACHECORE=1 DCACHECORE=1',
-					testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'],
+					testArgs: 'NOFUZZR=1 GENERIC_L1=1 TEST_WATCH=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-FPU-TEST": [
 					buildArgs: 'CAP=True COP1=1',
-					testArgs: 'TEST_FPU=1 CLANG=0 NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'],
+					testArgs: 'TEST_FPU=1 CLANG=0 NOFUZZR=1 GENERIC_L1=1 TEST_WATCH=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-CAP128-TEST": [
 					buildArgs: 'CAP128=True',
-					testArgs: 'GENERIC_L1=1 CAP_SIZE=128 PERM_SIZE=15 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached nosetest'],
+					testArgs: 'GENERIC_L1=1 TEST_WATCH=1 CAP_SIZE=128 PERM_SIZE=15 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached nosetest'],
 			"CHERI1-MICRO-TEST": [
 					buildArgs: 'MICRO=True CAP=True NOWATCH=True',
 					testArgs: 'CHERI_MICRO=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-MULTI1-TEST": [
 					buildArgs: 'MULTI=1 CAP=True',
-					testArgs: 'NOFUZZR=1 GENERIC_L1=1 SIM_TRACE_OPTS= nosetest_cached'],
+					testArgs: 'NOFUZZR=1 GENERIC_L1=1 TEST_WATCH=1 SIM_TRACE_OPTS= nosetest_cached'],
 			"CHERI1-MULTI2-TEST": [
 					buildArgs: 'MULTI=2 CAP=True',
-					testArgs: 'GENERIC_L1=1 MULTI=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
+					testArgs: 'GENERIC_L1=1 TEST_WATCH=1 MULTI=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
 
 			// BERI TESTS:
 
 			"BERI1-TEST": [
 					buildArgs: '',
-					testArgs: 'TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 BERI=1 nosetest_cached'],
+					testArgs: 'TEST_CP2=0 GENERIC_L1=1 TEST_WATCH=1 NOFUZZR=1 BERI=1 nosetest_cached'],
 
 			"BERI1-MICRO-TEST": [
 					buildArgs: 'MICRO=True NOWATCH=True',
@@ -58,15 +58,15 @@ JobConfig getJobParameters() {
 
 			"BERI1-MULTI1-TEST": [
 					buildArgs: 'MULTI=1',
-					testArgs: 'TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'],
+					testArgs: 'TEST_CP2=0 GENERIC_L1=1 TEST_WATCH=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetest_cached'],
 
 			"BERI1-MULTI2-TEST": [
 					buildArgs: 'MULTI=2',
-					testArgs: 'MULTI=1 TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
+					testArgs: 'MULTI=1 TEST_CP2=0 GENERIC_L1=1 TEST_WATCH=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
 
 			"BERI1-MULTI2-TIMEBASED-TEST": [
 					buildArgs: 'MULTI=2 TIMEBASED=1',
-					testArgs: 'MULTI=1 TEST_CP2=0 GENERIC_L1=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
+					testArgs: 'MULTI=1 TEST_CP2=0 GENERIC_L1=1 TEST_WATCH=1 NOFUZZR=1 SIM_TRACE_OPTS= nosetests_cachedmulti.xml'],
 	]
 	Map result = config.get(jobName)
 	if (!result) {
