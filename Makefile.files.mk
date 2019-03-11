@@ -873,7 +873,7 @@ ifdef COP1_ONLY
 TEST_FILES=	$(RAW_FPU_FILES) $(TEST_FPU_FILES)
 endif
 
-ifdef TEST_PS
+ifeq ($(TEST_PS),1)
 ifeq ($(USING_LLVM_ASSEMBLER),1)
 $(error "The LLVM assembler does not support paired single instructions")
 endif
