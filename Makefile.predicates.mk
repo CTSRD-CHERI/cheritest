@@ -91,6 +91,11 @@ else
 COMMON_UNSUPPORTED_FEATURES+=float float64
 endif
 
+ifeq ($(TEST_WATCH),1)
+COMMON_UNSUPPORTED_FEATURES+=nowatch
+else
+COMMON_UNSUPPORTED_FEATURES+=watch
+endif
 
 ifndef TEST_TRACE
 ifndef TEST_TRACE_ONLY
@@ -195,7 +200,6 @@ beri2tlb \
 gxemultlb \
 beri2cache \
 beri1oldcache \
-watch \
 deterministic_random \
 noextendedtlb \
 csettype \
@@ -247,7 +251,6 @@ beri1tlb   \
 beri1cache \
 beri2cache \
 beri1oldcache \
-watch \
 deterministic_random \
 extendedtlb \
 csettype \
@@ -303,7 +306,6 @@ nofloat \
 pic \
 swisync \
 tlbcheck \
-watch \
 csettype \
 mtc0signex \
 no_experimental_clc \
@@ -411,12 +413,10 @@ NOSEPRED+=count_register_is_time
 
 NOSEPRED+=llscnoalias
 ifdef CHERI_MICRO
-NOSEPRED+=tlb cache invalidateL2 bigtlb watch
+NOSEPRED+=tlb cache invalidateL2 bigtlb
 ifdef WONTFIX
 NOSEPRED+=jump_unaligned
 endif
-else
-NOSEPRED+=nowatch
 endif
 
 ifneq ($(NOSEPRED),)
