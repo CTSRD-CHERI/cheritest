@@ -91,6 +91,10 @@ else
 COMMON_UNSUPPORTED_FEATURES+=float float64
 endif
 
+ifneq ($(TEST_PS),1)
+COMMON_UNSUPPORTED_FEATURES+=floatpaired
+endif
+
 ifeq ($(TEST_WATCH),1)
 COMMON_UNSUPPORTED_FEATURES+=nowatch
 else
@@ -133,7 +137,6 @@ einstr		\
 jump_unaligned	\
 nofloat         \
 floatabs2008	\
-floatpaired     \
 floatindexed    \
 floatcmove      \
 floatfccr       \
@@ -209,7 +212,6 @@ count_register_is_time
 
 L3_UNSUPPORTED_FEATURES+=\
 float32 \
-floatpaired \
 floatfexr \
 floatfenr \
 floatflags \
@@ -293,7 +295,6 @@ floatlegacyabs \
 float_mov_signex \
 float_mtc_signex \
 floatnan2008 \
-floatpaired \
 floatrecipflushesdenorm \
 ignorebadex \
 invalidateL2 \
@@ -397,9 +398,6 @@ NOSEPRED+=berisyncistep
 endif
 ifeq ($(TEST_FPU),1)
 NOSEPRED+=float32 floatexception floatflags floatrecipflushesdenorm floatri floatmadd float_mtc_signex float_mov_signex floatabs2008 float_round_upwards
-ifndef TEST_PS
-NOSEPRED+=floatpaired
-endif
 ifdef WONTFIX
 NOSEPRED+=float_multiply_rounding float_round_maxint
 endif
