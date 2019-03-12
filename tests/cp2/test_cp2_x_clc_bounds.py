@@ -33,23 +33,21 @@ from beritest_tools import attr
 # the end of the capability.
 #
 
+@attr('capabilities')
 class test_cp2_x_clc_bounds(BaseBERITestCase):
 
-    @attr('capabilities')
     def test_cp2_x_clc_bounds_1(self):
         '''Test clc did not read beyond the end of the array'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
             "clc read beyond the end of the array")
 
-    @attr('capabilities')
     def test_cp2_x_clc_bounds_2(self):
         '''Test clc raises an exception when read beyond length'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
+        self.assertRegisterEqual(self.MIPS.v0, 1,
             "clc did not raise an exception when read beyond length")
 
-    @attr('capabilities')
     def test_cp2_x_clc_bounds_3(self):
         '''Test capability cause is set when read beyond end of array'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0101,
-            "capability cause register not set correctly when read beyond end of array")
+        self.assertCp2Fault(self.MIPS.s1, cap_cause=self.MIPS.CapCause.Length_Violation, cap_reg=1, trap_count=1,
+            msg="capability cause register not set correctly when read beyond end of array")
 

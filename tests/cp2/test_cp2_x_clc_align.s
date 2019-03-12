@@ -36,16 +36,6 @@
 #
 
 BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
 
@@ -74,14 +64,14 @@ BEGIN_TEST
 		# Clear $c1 so we can tell if the load happened
 		#
 
-		cfromptr  $c1, $c1, $0
+		cgetnull $c1
 
 		#
 		# Reload from an unaligned address
 		#
 
 		dla     $t0, cap1
-		clc     $c1, $t0, 0($ddc) # This should raise an exception
+		check_instruction_traps $s1, clc $c1, $t0, 0($ddc) # This should raise an exception
 
 		#
 		# Check that the load didn't happen.
@@ -91,16 +81,6 @@ BEGIN_TEST
 		cgetoffset $a1, $c1
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		mfc0	$a3, $13	# Cause register
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
 
 		.data
 		.align	3
