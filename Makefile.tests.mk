@@ -682,22 +682,22 @@ check_sail_deps: FORCE
 
 nosetests_sail: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_SIM), sail MIPS)
-	$(MAKE) $(MFLAGS) nosetests_sail.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 nosetests_sail.xml
 nosetests_sail_mips_c: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_C_SIM), sail MIPS_C)
-	$(MAKE) $(MFLAGS) nosetests_sail_mips_c.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 nosetests_sail_mips_c.xml
 nosetests_sail_cheri: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI_SIM), sail CHERI256)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=256 nosetests_sail_cheri.xml
 nosetests_sail_cheri_c: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI_C_SIM), sail CHERI_C)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri_c.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=256 nosetests_sail_cheri_c.xml
 nosetests_sail_cheri128: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI128_SIM), sail CHERI128)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri128.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=128 nosetests_sail_cheri128.xml
 nosetests_sail_cheri128_c: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI128_C_SIM), sail CHERI128_C)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri128_c.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=128 nosetests_sail_cheri128_c.xml
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
@@ -912,9 +912,9 @@ pytest/sail_impl/%.py: %.py FORCE
 	env "LOGDIR=$(SAIL_IMPL_LOGDIR)" $(SAIL_PYTEST) $(SINGLE_TEST_VERBOSE) $(SAIL_$(SAIL_PYTEST_IMPL_FLAGS)_NOSEFLAGS) $<
 
 pytest/sail_mips/%.py: %.py FORCE
-	$(MAKE) $(MFLAGS) CAP_SIZE=-1 "SAIL_IMPL_LOGDIR=$(SAIL_MIPS_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=MIPS' "pytest/sail_impl/$*.py"
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 "SAIL_IMPL_LOGDIR=$(SAIL_MIPS_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=MIPS' "pytest/sail_impl/$*.py"
 pytest/sail_mips_c/%.py: %.py FORCE
-	$(MAKE) $(MFLAGS) CAP_SIZE=-1 "SAIL_IMPL_LOGDIR=$(SAIL_MIPS_C_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=MIPS' "pytest/sail_impl/$*.py"
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 "SAIL_IMPL_LOGDIR=$(SAIL_MIPS_C_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=MIPS' "pytest/sail_impl/$*.py"
 pytest/sail_cheri/%.py: %.py FORCE
 	$(MAKE) $(MFLAGS) CAP_SIZE=256 "SAIL_IMPL_LOGDIR=$(SAIL_CHERI_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=CHERI' "pytest/sail_impl/$*.py"
 pytest/sail_cheri_c/%.py: %.py FORCE
