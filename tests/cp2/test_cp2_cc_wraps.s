@@ -44,8 +44,14 @@ BEGIN_TEST
         cgetbase    $s0, $c2
         cgetlen     $s1, $c2
         cgettag     $s2, $c2
-        #check_instruction_traps  $s3,
+        ctestsubset $s3, $c1, $c2
+        dla   $t0, test_data
+        daddu $t0, $t0, 1
+        # Attempt to use supposedly restricted capability to access test_data
+        clwu  $t1, $t0, 0($c2)
+
         #clb $0, $0, 0($c1)
+        #clb $0, $0, 1($c2)
 
         cgetdefault $c3
         # base=2**64-1, length=1
@@ -56,6 +62,11 @@ BEGIN_TEST
         cgetbase    $a0, $c4
         cgetlen     $a1, $c4
         cgettag     $a2, $c4
-        #clb         $0, $0, 0($c4)
+        ctestsubset $s3, $c3, $c4
+        #clb         $0, $0, 0($c3)
+        #clb         $0, $0, -1($c4)
 END_TEST
 
+.data
+test_data:
+        .word   0xc0d3c0d3
