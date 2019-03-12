@@ -242,6 +242,7 @@ invalidateL2 \
 loadcachetag \
 llscnotmatching \
 llscspan \
+llscspan_csc \
 llscnoalias \
 mtc0signex \
 mul_hilo_cleared \
