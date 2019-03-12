@@ -73,6 +73,19 @@ BEGIN_TEST
 		clc	$c3, $zero, 0($c1)
 		cgettag	$a2, $c3
 
+
+		#
+		# Same again but this time store just a word instead of a capability
+		#
+		cgetdefault $c4
+		li	$t0, 1
+		li	$t2, 1
+		csc	$cnull, $zero, 0($c1)	# store untagged value first
+		cllc	$c2, $c1
+		sd	$t2, 0($t1)	# Should cause the sc to fail
+		cscc	$a4, $c4, $c1	# should not store the tagged value
+		clc	$c5, $zero, 0($c1)
+
 END_TEST
 
 
