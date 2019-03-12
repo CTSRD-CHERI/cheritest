@@ -77,6 +77,12 @@ def pytest_configure(config):
     for option in CheritestOptions:
         value = config.getoption(option.name)
         # TODO: infer default values
+        if value is None and option == CheritestOptions.PERM_SIZE:
+            cap_size = config.getoption(CheritestOptions.CAP_SIZE.name)
+            if cap_size == 256:
+                value = 31
+            elif cap_size == 128:
+                value = 15
         if value is None:
             raise pytest.UsageError("env var $" + option.name + " or option " + option.cmdline_flag + " must be set!")
 
