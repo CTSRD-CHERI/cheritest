@@ -32,37 +32,32 @@ from beritest_tools import attr
 # Test that storing a capability with an immediate offset works.
 #
 
+@attr('capabilities')
 class test_cp2_csc_neg(BaseBERITestCase):
-    @attr('capabilities')
     def test_cp2_csc_neg_underflow(self):
         '''Test that csc with negative immediate didn't overwrite dword before requested addr'''
         self.assertRegisterEqual(self.MIPS.a4, 0x0123456789abcdef, "csci underflow")
 
-    @attr('capabilities')
     @attr('cap256')
     def test_cp2_csci_neg_dword0(self):
         '''Test that csc with negative immediate stored perms, sealed and otype fields correctly'''
         self.assertRegisterEqual(self.MIPS.a0, 0x00000000000000fe, "csci stored incorrect sealed, perms, and otype fields")
 
-    @attr('capabilities')
-    @attr('cap256')
     def test_cp2_csc_neg_dword1(self):
+        # cursor is the second field both for 128 and 256
         '''Test that csc with negative immediate stored the offset field correctly'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x0000000000000001, "csci stored incorrect offset")
+        self.assertRegisterEqual(self.MIPS.a1, 0x1234567890abcdef, "csci stored incorrect offset")
 
-    @attr('capabilities')
     @attr('cap256')
     def test_cp2_csc_neg_dword2(self):
         '''Test that csc with negative immediate stored the base field correctly'''
         self.assertRegisterEqual(self.MIPS.a2, 0x0000000000000000, "csci stored incorrect base address")
 
-    @attr('capabilities')
     @attr('cap256')
     def test_cp2_csc_neg_dword3(self):
         '''Test that csc with negative immediate stored the length field correctly'''
         self.assertRegisterEqual(self.MIPS.a3, 0x0000000000000000, "csci stored incorrect length")
 
-    @attr('capabilities')
     def test_cp2_csc_neg_overflow(self):
         '''Test that csc with negative immediate didn't overwrite dword before requested addr'''
         self.assertRegisterEqual(self.MIPS.a5, 0x0123456789abcdef, "csci underflow")

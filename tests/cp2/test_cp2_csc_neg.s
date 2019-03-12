@@ -42,7 +42,7 @@ BEGIN_TEST
 		#
 
 		cgetdefault $c2
-		dli	$t0, 0x1
+		dli	$t0, 0x1234567890abcdef
 		csetoffset $c2, $c2, $t0
 
 		#
