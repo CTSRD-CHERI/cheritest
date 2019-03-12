@@ -26,32 +26,24 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr, HexInt
 
+
+@attr('llsc')
+@attr('cached')
+@attr('capabilities')
 class test_cp2_cllb_span(BaseBERITestCase):
 
-
-    @attr('llsc')
-    @attr('llscspan')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllb_3(self):
         '''That an uninterrupted cllb+cld+cscb succeeds'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted cllb+cld+cscb failed")
 
-    @attr('llsc')
     @attr('llscspan')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllb_7(self):
         '''That an cllb+cscb spanning a store to the line does not store'''
         self.assertRegisterNotEqual(self.MIPS.a2, 1, "Interrupted cllb+csb+cscb stored value")
 
-    @attr('llsc')
     @attr('llscspan')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllb_6(self):
         '''That an cllb+csb+cscb spanning fails'''
         self.assertRegisterEqual(self.MIPS.t0, 0, "Interrupted cllb+csb+cscb succeeded")

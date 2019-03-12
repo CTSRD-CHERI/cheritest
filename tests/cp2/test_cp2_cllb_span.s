@@ -66,7 +66,8 @@ BEGIN_TEST
 		# store.
 		#
 
-		li	$t0, 1
+		li	$t0, 2
+		li	$a3, 1
 		cllb	$a1, $c1
 		sb	$a1, 0($t1)
 		cscb	$t0, $a3, $c1
