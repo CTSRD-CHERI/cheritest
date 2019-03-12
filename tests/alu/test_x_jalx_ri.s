@@ -36,17 +36,6 @@
 #
 
 BEGIN_TEST
-
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
 		dli	$a0, 0
 		dli	$a2, 0
 
@@ -63,29 +52,11 @@ BEGIN_TEST
 		.set	mips64r2
 		# From LLVM tests:
 		# CHECK-EB: jals 1328         # encoding: [0x74,0x00,0x02,0x98]
-		.word 0x7400ffff # jals 0xffff
+		check_instruction_traps $s1, .word 0x7400ffff # jals 0xffff
 		nop
 Ltarget:
 		nop
 		.set	pop
 
 END_TEST
-
-.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-
-		mfc0	$a3, $13
-		srl	$a3, $a3, 2
-		andi	$a3, $a3, 0x1f	# ExcCode
-
-		mfc0	$a4, $13
-		srl	$a4, $a4, 28
-		andi	$a4, $a4, 0x3
-
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-.end bev0_handler
 
