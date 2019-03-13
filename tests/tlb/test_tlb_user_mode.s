@@ -43,7 +43,7 @@ BEGIN_TEST
 		mfc0	$a0, $0			# TLB Index
 		srl	$t0, $a0, 31
 		bnez	$t0, L1
-		nop				# branch delay slot`
+		nop				# branch delay slot
 
 		#
 		# Clear the existing TLB entry by setting its ASID to
