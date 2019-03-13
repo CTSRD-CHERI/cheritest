@@ -389,7 +389,7 @@ $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles | $(SAIL_
 	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< >$@ 2>&1
 
 $(OBJDIR)/%.sailbin: $(OBJDIR)/%.elf $(SAIL)
-	$(SAIL) -elf $< -o $@ 
+	$(SAIL) -elf $< -o $@ 2>/dev/null
 
 $(SAIL_MIPS_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_MIPS_C_SIM) max_cycles | $(SAIL_MIPS_C_LOGDIR)
 	-$(SAIL_MIPS_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< >$@ 2>&1
@@ -523,6 +523,7 @@ ifeq ($(PYTEST),)
 PYTEST:=python3 -m pytest
 endif
 
+PYTEST_NOENV:=PYTHONPATH=tools/sim $(PYTEST)
 NOSETESTS:=PYTHONPATH=tools/sim PERM_SIZE=$(PERM_SIZE) $(NOSETESTS)
 PYTEST:=PYTHONPATH=tools/sim:. PERM_SIZE=$(PERM_SIZE) $(PYTEST)
 
@@ -538,6 +539,7 @@ QEMU_PYTEST=		LOGDIR=$(QEMU_LOGDIR) TEST_MACHINE=QEMU $(PYTEST) $(QEMU_NOSEFLAGS
 ALTERA_NOSETESTS=	LOGDIR=$(ALTERA_LOGDIR) TEST_MACHINE=ALTERA $(NOSETESTS)
 # For this one we don't set LOGDIR since each target uses a different one
 SAIL_NOSETESTS= 	TEST_MACHINE=SAIL $(NOSETESTS)
+SAIL_PYTEST=		TEST_MACHINE=SAIL $(PYTEST)
 
 
 
@@ -680,22 +682,22 @@ check_sail_deps: FORCE
 
 nosetests_sail: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_SIM), sail MIPS)
-	$(MAKE) $(MFLAGS) nosetests_sail.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 nosetests_sail.xml
 nosetests_sail_mips_c: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_C_SIM), sail MIPS_C)
-	$(MAKE) $(MFLAGS) nosetests_sail_mips_c.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 nosetests_sail_mips_c.xml
 nosetests_sail_cheri: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI_SIM), sail CHERI256)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=256 nosetests_sail_cheri.xml
 nosetests_sail_cheri_c: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI_C_SIM), sail CHERI_C)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri_c.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=256 nosetests_sail_cheri_c.xml
 nosetests_sail_cheri128: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI128_SIM), sail CHERI128)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri128.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=128 nosetests_sail_cheri128.xml
 nosetests_sail_cheri128_c: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_CHERI128_C_SIM), sail CHERI128_C)
-	$(MAKE) $(MFLAGS) nosetests_sail_cheri128_c.xml
+	$(MAKE) $(MFLAGS) CAP_SIZE=128 nosetests_sail_cheri128_c.xml
 
 nosetests_sail.xml: $(SAIL_MIPS_TEST_LOGS) check_pytest_version $(TEST_PYTHON) FORCE
 	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(SAIL_MIPS_LOGDIR) $(SAIL_NOSETESTS) \
@@ -902,17 +904,22 @@ pytest/l3_cachedmulti/%.py: %.py FORCE
 
 
 # run single sail test:
-_RUN_SINGLE_SAIL_TEST=$(MAKE) $(MFLAGS) $(strip $(1))/$(notdir $(basename $@)).log && env "LOGDIR=$(strip $(1))" $(filter-out -q,$(SAIL_NOSETESTS) $(SINGLE_TEST_VERBOSE)) $(2) -v $<
+# _RUN_SINGLE_SAIL_TEST=$(MAKE) $(MFLAGS) "CAP_SIZE=$(2)" $(strip $(1))/$(notdir $(basename $@)).log && env "CAP_SIZE=$(2)" "LOGDIR=$(strip $(1))" "TEST_MACHINE=SAIL" $(PYTEST_NOENV) $(SINGLE_TEST_VERBOSE) $(3) -v $<
+
+pytest/sail_impl/%.py: %.py FORCE
+	# printf "%s\n*****\n" "LOGDIR=$(SAIL_IMPL_LOGDIR)" $(SAIL_PYTEST) $(SINGLE_TEST_VERBOSE) $(SAIL_$(SAIL_PYTEST_IMPL_FLAGS)_NOSEFLAGS) $<
+	$(MAKE) $(MFLAGS) $(SAIL_IMPL_LOGDIR)/$(notdir $(basename $@)).log
+	env "LOGDIR=$(SAIL_IMPL_LOGDIR)" $(SAIL_PYTEST) $(SINGLE_TEST_VERBOSE) $(SAIL_$(SAIL_PYTEST_IMPL_FLAGS)_NOSEFLAGS) $<
 
 pytest/sail_mips/%.py: %.py FORCE
-	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_MIPS_LOGDIR), $(SAIL_MIPS_NOSEFLAGS))
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 "SAIL_IMPL_LOGDIR=$(SAIL_MIPS_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=MIPS' "pytest/sail_impl/$*.py"
 pytest/sail_mips_c/%.py: %.py FORCE
-	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_MIPS_LOGDIR), $(SAIL_MIPS_NOSEFLAGS))
+	$(MAKE) $(MFLAGS) CAP_SIZE=0 "SAIL_IMPL_LOGDIR=$(SAIL_MIPS_C_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=MIPS' "pytest/sail_impl/$*.py"
 pytest/sail_cheri/%.py: %.py FORCE
-	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_CHERI_LOGDIR), $(SAIL_CHERI_NOSEFLAGS))
+	$(MAKE) $(MFLAGS) CAP_SIZE=256 "SAIL_IMPL_LOGDIR=$(SAIL_CHERI_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=CHERI' "pytest/sail_impl/$*.py"
 pytest/sail_cheri_c/%.py: %.py FORCE
-	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_CHERI_C_LOGDIR), $(SAIL_CHERI_NOSEFLAGS))
+	$(MAKE) $(MFLAGS) CAP_SIZE=256 "SAIL_IMPL_LOGDIR=$(SAIL_CHERI_C_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=CHERI' "pytest/sail_impl/$*.py"
 pytest/sail_cheri128/%.py: %.py FORCE
-	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_CHERI128_LOGDIR), $(SAIL_CHERI128_NOSEFLAGS))
+	$(MAKE) $(MFLAGS) CAP_SIZE=128 "SAIL_IMPL_LOGDIR=$(SAIL_CHERI128_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=CHERI128' "pytest/sail_impl/$*.py"
 pytest/sail_cheri128_c/%.py: %.py FORCE
-	$(call _RUN_SINGLE_SAIL_TEST, $(SAIL_CHERI128_C_LOGDIR), $(SAIL_CHERI128_NOSEFLAGS))
+	$(MAKE) $(MFLAGS) CAP_SIZE=128 "SAIL_IMPL_LOGDIR=$(SAIL_CHERI128_C_LOGDIR)" 'SAIL_PYTEST_IMPL_FLAGS=CHERI128' "pytest/sail_impl/$*.py"

@@ -1,6 +1,5 @@
 #-
-# Copyright (c) 2011 Robert N. M. Watson
-# Copyright (c) 2013 Michael Roe
+# Copyright (c) 2019 Robert M. Norton-Wright
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -26,24 +25,48 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase, attr, HexInt
+.set mips64
+.set noreorder
+.set nobopt
+.set noat
+.include "macros.s"
 
+#
+# Test cheri concentrate corner cases.
+#
 
-@attr('llsc')
-@attr('cached')
-@attr('capabilities')
-class test_cp2_cllb_span(BaseBERITestCase):
+BEGIN_TEST
+        cgetdefault $c1
+        # base=0, length=0
+        csetbounds  $c1, $c1, $0
+        # set address to -1
+        cincoffset  $c2, $c1, -1
+        cgetbase    $s0, $c2
+        cgetlen     $s1, $c2
+        cgettag     $s2, $c2
+        ctestsubset $s3, $c1, $c2
+        dla   $t0, test_data
+        daddu $t0, $t0, 1
+        # Attempt to use supposedly restricted capability to access test_data
+        clwu  $t1, $t0, 0($c2)
 
-    def test_cp2_cllb_3(self):
-        '''That an uninterrupted cllb+cld+cscb succeeds'''
-        self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted cllb+cld+cscb failed")
+        #clb $0, $0, 0($c1)
+        #clb $0, $0, 1($c2)
 
-    @attr('llscspan')
-    def test_cp2_cllb_7(self):
-        '''That an cllb+cscb spanning a store to the line does not store'''
-        self.assertRegisterNotEqual(self.MIPS.a2, 1, "Interrupted cllb+csb+cscb stored value")
+        cgetdefault $c3
+        # base=2**64-1, length=1
+        cincoffset  $c3, $c3, -1
+        csetbounds  $c3, $c3, 1
+        # set address to 0
+        cincoffset  $c4, $c3, 1
+        cgetbase    $a0, $c4
+        cgetlen     $a1, $c4
+        cgettag     $a2, $c4
+        ctestsubset $s3, $c3, $c4
+        #clb         $0, $0, 0($c3)
+        #clb         $0, $0, -1($c4)
+END_TEST
 
-    @attr('llscspan')
-    def test_cp2_cllb_6(self):
-        '''That an cllb+csb+cscb spanning fails'''
-        self.assertRegisterEqual(self.MIPS.t0, 0, "Interrupted cllb+csb+cscb succeeded")
+.data
+test_data:
+        .word   0xc0d3c0d3

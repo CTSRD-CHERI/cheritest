@@ -67,6 +67,7 @@ BEGIN_TEST
 		#
 
 		li	$t0, 1
+		li	$a3, 1
 		cllw	$a1, $c1
 		sw	$a1, 0($t1)
 		cscw	$t0, $a3, $c1

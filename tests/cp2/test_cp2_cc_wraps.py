@@ -1,6 +1,5 @@
 #-
-# Copyright (c) 2011 Robert N. M. Watson
-# Copyright (c) 2013 Michael Roe
+# Copyright (c) 2019 Robert M. Norton-Wright
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -26,24 +25,10 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase, attr, HexInt
+from beritest_tools import BaseBERITestCase
+from beritest_tools import attr
 
-
-@attr('llsc')
-@attr('cached')
 @attr('capabilities')
-class test_cp2_cllb_span(BaseBERITestCase):
-
-    def test_cp2_cllb_3(self):
-        '''That an uninterrupted cllb+cld+cscb succeeds'''
-        self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted cllb+cld+cscb failed")
-
-    @attr('llscspan')
-    def test_cp2_cllb_7(self):
-        '''That an cllb+cscb spanning a store to the line does not store'''
-        self.assertRegisterNotEqual(self.MIPS.a2, 1, "Interrupted cllb+csb+cscb stored value")
-
-    @attr('llscspan')
-    def test_cp2_cllb_6(self):
-        '''That an cllb+csb+cscb spanning fails'''
-        self.assertRegisterEqual(self.MIPS.t0, 0, "Interrupted cllb+csb+cscb succeeded")
+class test_cp2_cc_wraps(BaseBERITestCase):
+    def test_template(self):
+        pass # empty for now

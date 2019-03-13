@@ -36,16 +36,6 @@
 # bug found by the automatic test generator.
 
 BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
 		cgetdefault $c1
 		dla	$t0, cap1
 		csetoffset $c1, $c1, $t0
@@ -60,20 +50,10 @@ BEGIN_TEST
 		cgetdefault $c2
  		# Initialize length to 0 to test if load occured.
 		csetoffset $c2, $c2, $zero
-		clc	$c2, $zero, 32($c1) # This should raise an exception
+		check_instruction_traps $s1, clc $c2, $zero, 32($c1) # This should raise an exception
 		cgetoffset $a0, $c2
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
 
 		.data
 

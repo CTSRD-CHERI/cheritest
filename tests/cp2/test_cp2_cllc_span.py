@@ -26,32 +26,34 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr
 
+@attr('llsc')
+@attr('cached')
+@attr('capabilities')
 class test_cp2_cllc_span(BaseBERITestCase):
 
-
-    @attr('llsc')
-    @attr('llscspan')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllc_3(self):
         '''That an uninterrupted cllc+clc+cscc succeeds'''
         self.assertRegisterEqual(self.MIPS.a4, 1, "Uninterrupted cllc+clc+cscc failed")
 
-    @attr('llsc')
-    @attr('llscspan')
-    @attr('cached')
-    @attr('capabilities')
+    @attr('llscspan_csc')
     def test_cp2_cllc_7(self):
         '''That an cllc+cscc spanning a store to the line does not store'''
         self.assertRegisterNotEqual(self.MIPS.a2, 0, "Interrupted cllc+csci+cscc stored value")
 
-    @attr('llsc')
-    @attr('llscspan')
-    @attr('cached')
-    @attr('capabilities')
+    @attr('llscspan_csc')
     def test_cp2_cllc_6(self):
         '''That an cllc+csci+cscc spanning fails'''
         self.assertRegisterEqual(self.MIPS.a3, 0, "Interrupted cllc+csci+cscc succeeded")
+
+    @attr('llscspan')
+    def test_cp2_cllc_8(self):
+        '''That an cllc+cscc spanning a store to the line does not store'''
+        self.assertRegisterEqual(self.MIPS.a4, 0, "Interrupted cllc+csci+cscc succeeded")
+
+    @attr('llscspan')
+    def test_cp2_cllc_9(self):
+        '''That an cllc+csci+cscc spanning fails'''
+        assert not self.MIPS.c5.t, "Interrupted cllc+csci+cscc stored a value"
+        self.assertNullCap(self.MIPS.c5, "Interrupted cllc+csci+cscc stored a value")

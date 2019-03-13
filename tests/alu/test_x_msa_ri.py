@@ -30,15 +30,16 @@ from beritest_tools import attr
 
 @xfail_on("L3")
 class test_x_msa_ri(BaseBERITestCase):
-    @attr('no_experimental_csc')
+    EXPECTED_EXCEPTIONS = 1
+
     def test_x_msa_ri(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "MSA isn't supported, but didn't raise an exception")
+        self.assertRegisterEqual(self.MIPS.v0, 1, "MSA isn't supported, but didn't raise an exception")
 
     @attr('no_experimental_csc')
     def test_x_msa_ri_csc_bigimm_not_implemented(self):
-        self.assertRegisterEqual(self.MIPS.a3, 10, "MSA isn't supported, but didn't raise RESERVED_INSTRUCTION")
+        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.ReservedInstruction, trap_count=1)
 
     @attr('capabilities')
     @attr('experimental_csc')
     def test_x_msa_ri_csc_bigimm_cp2_off(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0xb, "CSC bigimm with cp2 off didn't raise CP2 unusuable")
+        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=1)

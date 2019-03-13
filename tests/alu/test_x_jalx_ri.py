@@ -31,15 +31,16 @@ from beritest_tools import attr
 
 @xfail_on("L3")
 class test_x_jalx_ri(BaseBERITestCase):
-    @attr('no_experimental_clc')
+    EXPECTED_EXCEPTIONS = 1
+
     def test_x_jalx_ri(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "JALX isn't supported, but didn't raise an exception")
+        self.assertRegisterEqual(self.MIPS.v0, 1, "JALX isn't supported, but didn't raise an exception")
 
     @attr('no_experimental_clc')
     def test_x_jalx_ri_clc_bigimm_not_implemented(self):
-        self.assertRegisterEqual(self.MIPS.a3, 10, "JALX isn't supported, but didn't raise RESERVED_INSTRUCTION")
+        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.ReservedInstruction, trap_count=1)
 
     @attr('capabilities')
     @attr('experimental_clc')
     def test_x_jalx_ri_clc_bigimm_cp2_off(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0xb, "CLC bigimm with cp2 off didn't raise CP2 unusuable")
+        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=1)

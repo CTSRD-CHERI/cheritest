@@ -37,22 +37,6 @@
 #
 
 BEGIN_TEST
-
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		dli	$a0, 0
-		dli	$a2, 0
-
-		dli	$t0, 42
-
 		# Turn off CP2 (to ensure this faults even with experimental CSC)
 		mfc0	$t0, $12
 		dli	$t1, 1 << 30
@@ -65,25 +49,7 @@ BEGIN_TEST
 		# CHECK:        andi.b  $w2, $w29, 48           # encoding: [0x78,0x30,0xe8,0x80]
 		# andi.b  $w2, $w29, 48
 		# .word 0x7830e880
-		.word 0x78000000
+		check_instruction_traps $s1, .word 0x78000000
 
 END_TEST
-
-.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-
-		mfc0	$a3, $13
-		srl	$a3, $a3, 2
-		andi	$a3, $a3, 0x1f	# ExcCode
-
-		mfc0	$a4, $13
-		srl	$a4, $a4, 28
-		andi	$a4, $a4, 0x3
-
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-.end bev0_handler
 
