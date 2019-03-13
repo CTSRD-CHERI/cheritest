@@ -31,7 +31,6 @@ from beritest_tools import attr
 #
 # Test that the BadInstr register is implemented
 #
-@attr('badinstr')
 class test_cp0_badinstr_p(BaseBERITestCase):
     def test_trap_handler_ran(self):
         assert self.MIPS.v1 == 42, "trap handler didn't run"
@@ -40,6 +39,7 @@ class test_cp0_badinstr_p(BaseBERITestCase):
     def test_badinstr_p_supported(self):
         assert ((self.MIPS.a4 >> 27) & 1) == 1, "CP0.config3.BadInstrP is not set"
 
+    @attr('badinstr')
     def test_badinstr_value(self):
         assert self.MIPS.a1 == 0x00000034, "expected teq $zero, $zero in BadInstr"
 
@@ -51,6 +51,7 @@ class test_cp0_badinstr_p(BaseBERITestCase):
         assert ((self.MIPS.a3 >> 31) & 1) == 0x1, "expected BDELAY flag in Cause"
 
 
+    @attr('badinstr')
     def test_not_taken_badinstr_value(self):
         assert self.MIPS.s1 == 0x00000034, "expected teq $zero, $zero in BadInstr"
 
