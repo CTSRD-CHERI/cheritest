@@ -28,7 +28,7 @@
 
 BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
-		dmtc0	$zero, $0		# TLB index 
+		mtc0	$zero, $0		# TLB index 
 		dmtc0	$zero, $10		# TLB HI address
 
 		dla     $a0, testdata		# Load address of testdata in bram

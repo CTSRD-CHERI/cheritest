@@ -32,7 +32,7 @@ BEGIN_TEST_WITH_OLD_EXCEPTION_HANDLER
 		dla     $a0, testdata		# Load address of testdata in bram
 
 		dli 	$k0, 0			# TLB index
-		dmtc0	$k0, $0			# TLB index = k0
+		mtc0	$k0, $0			# TLB index = k0
 
 		dli     $a1 , (0xfffffffffffff000) # TLB HI address (top page of kseg3)
 		dmtc0	$a1, $10		# TLB HI address = a1

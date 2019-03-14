@@ -58,10 +58,10 @@ BEGIN_TEST
 L1:
 		dmtc0   $zero, $10
 		tlbp
-		dmfc0   $a0, $0  
+		mfc0    $a0, $0  		# TLB index
 
  		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
-		dmtc0	$zero, $0		# TLB index 
+		mtc0	$zero, $0		# TLB index 
 		dmtc0	$zero, $10		# TLB entryHi
 
 		dla     $a0, testcode		# Load address of testdata in bram

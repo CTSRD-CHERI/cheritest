@@ -35,7 +35,7 @@ BEGIN_TEST
 		# TLB write of index 6	
  		dmtc0	$zero, $5       	# Write 0 to page mask i.e. 4k pages
  		li	$a0, 0x6
-		dmtc0	$a0, $0			# TLB index
+		mtc0	$a0, $0			# TLB index
 		dli	$a0, 0xc000000000002005
 		dmtc0	$a0, $10		# TLB HI address
 		li	$a0, 0x3017
@@ -51,7 +51,7 @@ BEGIN_TEST
 		
 		# Clear the tlb registers
 		dmtc0	$zero, $5       	# 0 page mask
-		dmtc0	$zero, $0       	# 0 index
+		mtc0	$zero, $0       	# 0 index
 		dmtc0	$zero, $10       	# 0 EntryHi
 		dmtc0	$zero, $2       	# 0 EntryLo0
 		dmtc0	$zero, $3       	# 0 EntryLo1
@@ -61,7 +61,7 @@ BEGIN_TEST
 		
 		# TLB read of index 6.
 		li	$a0, 0x6
-		dmtc0	$a0, $0			# TLB index
+		mtc0	$a0, $0			# TLB index
 		nop
 		nop
 		nop
@@ -76,7 +76,7 @@ BEGIN_TEST
 		
 		# Gather the results of the tlb read
 		dmfc0	$a0, $5       	# 0 page mask
-		dmfc0	$a1, $0       	# 0 index
+		mfc0	$a1, $0       	# 0 index
 		dmfc0	$a2, $10       	# 0 EntryHi
 		dmfc0	$a3, $2       	# 0 EntryLo0
 		dmfc0	$a4, $3       	# 0 EntryLo1

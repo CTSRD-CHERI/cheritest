@@ -34,7 +34,7 @@ BEGIN_TEST
 		dla     $a1, testdata2		# Load address of testdata in bram
 
 		# Set up TLB entry for testdata1
-		dmtc0	$zero, $0		        # TLB index = 0
+		mtc0	$zero, $0		        # TLB index = 0
 		li      $t0, 1			      # ASID=1
 		dmtc0	$t0, $10		        # TLB HI address (BRAM) Virtual address (first page, ASID=1) 63:62 == 00 means kernel user address space
 		and     $a2, $a0, 0xffffffe000	# Get physical page (PFN) of testdata (40 bits less 13 low order bits)
@@ -46,7 +46,7 @@ BEGIN_TEST
 	
 		# Set up TLB entry for testdata2
 		li      $t0, 1
-		dmtc0	$t0, $0			# TLB index = 1
+		mtc0	$t0, $0			# TLB index = 1
 		li      $t0, 2 			# ASID=2
 		dmtc0	$t0, $10		# TLB HI address (BRAM) Virtual address (first page, ASID=2) 63:62 == 00 means kernel user address space
 		and     $a3, $a1, 0xffffffe000	# Get physical page (PFN) of testdata (40 bits less 13 low order bits)

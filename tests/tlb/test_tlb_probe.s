@@ -38,7 +38,7 @@ BEGIN_TEST
 probe_test_start:
  		dmtc0	$zero, $5       	# Write 0 to page mask i.e. 4k pages
  		li	$a0, 0x6
-		dmtc0	$a0, $0			# TLB index 
+		mtc0	$a0, $0			# TLB index 
 		dmtc0	$zero, $10		# TLB HI address
 	
 		dla     $a0, testdata		# Load address of testdata in bram
@@ -51,37 +51,37 @@ probe_test_start:
 		tlbwi				# Write Indexed TLB Entry
 		
 		li	$a0, 0
-		dmtc0	$a0, $0			# TLB Index
+		mtc0	$a0, $0			# TLB Index
 		li	$a0, 0x2000
 		dmtc0	$a0, $10		# EntryHi
 		tlbwi
 
 		li	$a0, 1
-		dmtc0	$a0, $0
+		mtc0	$a0, $0
 		li	$a0, 0x4000
 		dmtc0	$a0, $10
 		tlbwi
 
 		li	$a0, 2
-		dmtc0	$a0, $0
+		mtc0	$a0, $0
 		li	$a0, 0x6000
 		dmtc0	$a0, $10
 		tlbwi
 
 		li	$a0, 3
-		dmtc0	$a0, $0
+		mtc0	$a0, $0
 		li	$a0, 0x8000
 		dmtc0	$a0, $10
 		tlbwi
 
 		li	$a0, 4
-		dmtc0	$a0, $0
+		mtc0	$a0, $0
 		li	$a0, 0xa000
 		dmtc0	$a0, $10
 		tlbwi
 
 		li	$a0, 5
-		dmtc0	$a0, $0
+		mtc0	$a0, $0
 		li	$a0, 0xc000
 		dmtc0	$a0, $10
 		tlbwi
@@ -93,7 +93,7 @@ probe_test_start:
 		
 		# Clear the tlb registers
 		dmtc0	$zero, $5       	# 0 page mask
-		dmtc0	$zero, $0       	# 0 index
+		mtc0	$zero, $0       	# 0 index
 		dmtc0	$zero, $10       	# 0 EntryHi
 		dmtc0	$zero, $2       	# 0 EntryLo0
 		dmtc0	$zero, $3       	# 0 EntryLo1

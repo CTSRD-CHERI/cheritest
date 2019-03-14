@@ -65,7 +65,7 @@ BEGIN_TEST
 
 	
  		dmtc0	$zero, $5               # Write 0 to page mask i.e. 4k pages
-		dmtc0	$zero, $0		# TLB index
+		mtc0	$zero, $0		# TLB index
 		li      $t0, (page<<12)
 		dmtc0	$t0, $10		# TLB HI address
 	
