@@ -203,7 +203,6 @@ beri2tlb \
 gxemultlb \
 beri2cache \
 beri1oldcache \
-deterministic_random \
 noextendedtlb \
 csettype \
 beri_statcounters \
