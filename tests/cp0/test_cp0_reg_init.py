@@ -150,7 +150,7 @@ class test_cp0_reg_init(BaseBERITestCase):
         elif self.TEST_MACHINE == "l3":
             assert company_id == 0x00, "Unexpected L3 CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected L3 CP0_PRID[15..8]"
-            assert revision_id == 0, "Expected revision 0"
+            assert revision_id >= 0, "Expected at least revision 0"
         else:
             self.fail("Expected processor ID value not implemented for TEST_MACHINE={tm} (PRID was {prid_val}: company={cid},"
                       " processor={pid}, revision={rev})".format(tm=self.TEST_MACHINE, prid_val=hex(self.MIPS.a5), cid=hex(company_id),
