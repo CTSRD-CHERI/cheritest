@@ -399,7 +399,7 @@ endif
 ifeq ($(TEST_FPU),1)
 NOSEPRED+=float32 floatexception floatflags floatrecipflushesdenorm floatri floatmadd float_mtc_signex float_mov_signex floatabs2008 float_round_upwards
 ifdef WONTFIX
-NOSEPRED+=float_multiply_rounding float_round_maxint
+NOSEPRED+=float_multiply_rounding
 endif
 endif
 
