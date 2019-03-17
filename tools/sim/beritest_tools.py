@@ -171,9 +171,9 @@ class BaseBERITestCase(unittest.TestCase):
         # True or False), but actually all tests which expect
         # exceptions have custom handlers so none of them need to.
         if self.EXPECTED_EXCEPTIONS is not None:
-            # Don;t fail if the logile cannot be found. It will also cause
+            # Don't fail if the logfile cannot be found. It will also cause
             # the other tests to fail and causes failures even if all other tests
-            # in a class are disable with @attr():
+            # in a class are disabled with @attr():
             if self._MIPS is None:
                 self._do_setup()
                 if self._SETUP_EXCEPTION is not None:
