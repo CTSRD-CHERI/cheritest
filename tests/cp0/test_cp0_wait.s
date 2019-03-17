@@ -62,7 +62,7 @@ LSimulator_wait:
 LQEMU_wait:
 		# QEMU doesn't increment the Count register based on cycles,
 		# instead it uses time (50 increments per second).
-		# Witht he current implementation in QEMU the small increment
+		# With the current implementation in QEMU the small increment
 		# used by the simulators will cause the implementation in
 		# QEMU to underflow and wait for almost the maximum ~80 seconds
 		dli $t1, (1000 * 1000) # wait for 20ms
