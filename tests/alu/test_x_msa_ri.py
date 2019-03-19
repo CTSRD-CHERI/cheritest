@@ -25,21 +25,19 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase, xfail_on
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, is_feature_supported
 
-@xfail_on("L3")
 class test_x_msa_ri(BaseBERITestCase):
     EXPECTED_EXCEPTIONS = 1
 
     def test_x_msa_ri(self):
-        self.assertRegisterEqual(self.MIPS.v0, 1, "MSA isn't supported, but didn't raise an exception")
+        self.assertRegisterEqual(self.MIPS.v0, 1, "This test should raise exactly one exception")
 
-    @attr('no_experimental_csc')
-    def test_x_msa_ri_csc_bigimm_not_implemented(self):
-        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.ReservedInstruction, trap_count=1)
-
-    @attr('capabilities')
-    @attr('experimental_csc')
-    def test_x_msa_ri_csc_bigimm_cp2_off(self):
-        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=1)
+    def test_x_msa_ri_csc_bigimm(self):
+        if is_feature_supported("capabilities") and is_feature_supported("experimental_csc"):
+            self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=1,
+                msg="CSC (BigImm) is supported -> should raise a coprocessor disabled exception")
+        else:
+            # instruction should not be supported and raise R
+            self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.ReservedInstruction, trap_count=1,
+                msg="CSC (BigImm) is not supported -> should raise a RI exception")

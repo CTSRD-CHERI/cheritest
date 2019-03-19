@@ -25,22 +25,22 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase, xfail_on
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, xfail_on, is_feature_supported
 
-
-@xfail_on("L3")
 class test_x_jalx_ri(BaseBERITestCase):
     EXPECTED_EXCEPTIONS = 1
 
     def test_x_jalx_ri(self):
         self.assertRegisterEqual(self.MIPS.v0, 1, "JALX isn't supported, but didn't raise an exception")
 
-    @attr('no_experimental_clc')
-    def test_x_jalx_ri_clc_bigimm_not_implemented(self):
-        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.ReservedInstruction, trap_count=1)
-
-    @attr('capabilities')
-    @attr('experimental_clc')
     def test_x_jalx_ri_clc_bigimm_cp2_off(self):
-        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=1)
+        have_caps = is_feature_supported("capabilities")
+        have_clc_bigimm = is_feature_supported("experimental_clc") and not is_feature_supported("no_experimental_clc")
+        print("have_capabilities:", have_caps, "have_clc_bigimm:", have_clc_bigimm)
+        if have_caps and have_clc_bigimm:
+            self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=1,
+                msg="CLC (BigImm) is supported -> should raise a coprocessor disabled exception")
+        else:
+            # instruction should not be supported and raise RI
+            self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.ReservedInstruction, trap_count=1,
+                msg="CLC (BigImm) is not supported -> should raise a RI exception")
