@@ -37,34 +37,32 @@
 
 BEGIN_TEST
         cgetdefault $c1
-        # base=0, length=0
-        csetbounds  $c1, $c1, $0
+        # base=0, length=1
+        csetbounds  $c1, $c1, 1
         # set address to -1
         cincoffset  $c2, $c1, -1
-        cgetbase    $s0, $c2
-        cgetlen     $s1, $c2
-        cgettag     $s2, $c2
-        ctestsubset $s3, $c1, $c2
         dla   $t0, test_data
         daddu $t0, $t0, 1
-        # Attempt to use supposedly restricted capability to access test_data
-        clwu  $t1, $t0, 0($c2)
-
-        #clb $0, $0, 0($c1)
-        #clb $0, $0, 1($c2)
-
+        # On a previous version of CHERI this was mistakenly permitted
+        check_instruction_traps $s0, clwu  $t1, $t0, 0($c2)
+        # This should throw length exception
+        check_instruction_traps $s1, clb $0, $0, 0($c2)
+        # This should throw TLB exception (i.e. capability checks succeed)
+        check_instruction_traps $s2, clb $0, $0, 1($c2)
+        
         cgetdefault $c3
         # base=2**64-1, length=1
         cincoffset  $c3, $c3, -1
         csetbounds  $c3, $c3, 1
         # set address to 0
         cincoffset  $c4, $c3, 1
-        cgetbase    $a0, $c4
-        cgetlen     $a1, $c4
-        cgettag     $a2, $c4
-        ctestsubset $s3, $c3, $c4
-        #clb         $0, $0, 0($c3)
-        #clb         $0, $0, -1($c4)
+        # TLB exception
+        check_instruction_traps $s3, clb         $0, $0, 0($c3)
+        # length exception
+        check_instruction_traps $s4, clb         $0, $0, 0($c4)
+        # TLB exception
+        li $t0, -1
+        check_instruction_traps $s5, clb         $0, $0, -1($c4)
 END_TEST
 
 .data
