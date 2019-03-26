@@ -42,6 +42,7 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t0
 		dli	$t0, 1
 		csetbounds $c1, $c1, $t0
+		cincoffset $c1, $c1, $t0        # use non-zero initial offset
 		dli	$t0, 1
 		dsll	$t0, $t0, 24
 		cincoffset $c1, $c1, $t0	# possible loss of precision

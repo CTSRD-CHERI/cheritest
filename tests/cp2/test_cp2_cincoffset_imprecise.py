@@ -33,12 +33,12 @@ class test_cp2_cincoffset_imprecise(BaseBERITestCase):
     @attr('capabilities')
     @attr('cap_precise')
     def test_cp2_cincoffset_imprecise_offset_precise(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x1000000, "CIncOffset did not set the offset to the expected value")
+        self.assertRegisterEqual(self.MIPS.a0, 0x1000001, "CIncOffset did not set the offset to the expected value")
 
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_cincoffset_imprecise_offset_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x1000002, "CIncOffset did not set the offset to the expected value")
+        self.assertRegisterEqual(self.MIPS.a0, 0x1000003, "CIncOffset did not set the offset to the expected value")
 
     @attr('capabilities')
     @attr('cap_precise')
