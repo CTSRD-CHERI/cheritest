@@ -51,18 +51,17 @@ BEGIN_TEST
         check_instruction_traps $s2, clb $0, $0, 1($c2)
         
         cgetdefault $c3
-        # base=2**64-1, length=1
-        cincoffset  $c3, $c3, -1
+        # base=2**64-2, length=1
+        cincoffset  $c3, $c3, -2
         csetbounds  $c3, $c3, 1
         # set address to 0
-        cincoffset  $c4, $c3, 1
+        cincoffset  $c4, $c3, 2
         # TLB exception
         check_instruction_traps $s3, clb         $0, $0, 0($c3)
         # length exception
         check_instruction_traps $s4, clb         $0, $0, 0($c4)
         # TLB exception
-        li $t0, -1
-        check_instruction_traps $s5, clb         $0, $0, -1($c4)
+        check_instruction_traps $s5, clb         $0, $0, -2($c4)
 END_TEST
 
 .data

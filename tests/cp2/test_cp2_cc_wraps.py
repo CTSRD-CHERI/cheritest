@@ -41,15 +41,11 @@ class test_cp2_cc_wraps(BaseBERITestCase):
     def test_cc_wraps_in_bounds_load1(self):
         self.assertCompressedTrapInfo(self.MIPS.s2, trap_count=3, mips_cause=self.MIPS.Cause.TLB_Load, msg="In bounds access did not cause expected TLB fault when pointer has wrapped around address space.")
 
-    # The following tests require cap128 because they need top=2**64 
-    @attr('cap_imprecise')
     def test_cc_wraps_in_bounds_load2(self):
         self.assertCompressedTrapInfo(self.MIPS.s3, trap_count=4, mips_cause=self.MIPS.Cause.TLB_Load, msg="In bounds access did not cause expected TLB fault when pointer has wrapped around address space.")
 
-    @attr('cap_imprecise')
     def test_cc_wraps_oob_load3(self):
         self.assertCp2Fault(self.MIPS.s4, trap_count=5, cap_cause=self.MIPS.CapCause.Length_Violation, cap_reg=4, msg="Out of bounds access did not cause expected capabiltiy fault when pointer has wrapped around address space.")
 
-    @attr('cap_imprecise')
     def test_cc_wraps_in_bounds_load3(self):
         self.assertCompressedTrapInfo(self.MIPS.s5, trap_count=6, mips_cause=self.MIPS.Cause.TLB_Load, msg="In bounds access did not cause expected TLB fault when pointer has wrapped around address space.")
