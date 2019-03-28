@@ -39,6 +39,7 @@
 BEGIN_TEST
 		# Turn off CP2 (to ensure this faults even with experimental CSC)
 		mfc0	$t0, $12
+		move	$a3, $t0
 		dli	$t1, 1 << 30
 		not	$t1
 		and	$t0, $t0, $t1
@@ -51,5 +52,10 @@ BEGIN_TEST
 		# .word 0x7830e880
 		check_instruction_traps $s1, .word 0x78000000
 
+		#
+		# Re-enable CP2
+		#
+
+		mtc0	$a3, $12
 END_TEST
 

@@ -280,7 +280,11 @@ finish:
 		beqz $k0, .Lcontinue_finish
 		nop
 .Ldump_cp2_regs:
-		# NOTE: the mtc2 works whether cp2 is enabled or not (as long as it is available)
+		#
+		# NOTE: On QEUMU, the mtc2 works whether cp2 is enabled or not (as long as
+		# it is available). On FPGA, this won't work if CP2 is disabled.
+		#
+
 		mtc2 $k0, $0, 6
 .Lcontinue_finish:
 		#

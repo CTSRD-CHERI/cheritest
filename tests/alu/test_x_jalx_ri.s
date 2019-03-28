@@ -43,6 +43,7 @@ BEGIN_TEST
 
 		# Turn off CP2 (to ensure this faults even with experimental CLC)
 		mfc0	$t0, $12
+		move	$a3, $t0
 		dli	$t1, 1 << 30
 		not	$t1
 		and	$t0, $t0, $t1
@@ -57,6 +58,12 @@ BEGIN_TEST
 Ltarget:
 		nop
 		.set	pop
+
+		#
+		# Re-enable CP2
+		#
+
+		mtc0	$a3, $12
 
 END_TEST
 
