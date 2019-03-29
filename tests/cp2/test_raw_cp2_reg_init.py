@@ -77,6 +77,7 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
         for t in self.MIPS.threads.values():
             self.assertNullCap(t.cp2_hwregs[23], msg="caphwr kr1c should be null on reset")
 
+    @attr('errorepc')
     def test_cp2_reg_init_error_epcc(self):
         self._test_special_hwreg("error_epcc", 28)
 
