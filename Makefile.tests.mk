@@ -466,7 +466,7 @@ $(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(CHECK_QEMU_
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
 
-FAIL_FAST_QEMU_ERROR?=0
+FAIL_FAST_QEMU_ERROR?=1
 ifneq ($(FAIL_FAST_QEMU_ERROR),0)
 fail_qemu_logfile=rm -f "$@"; false
 else
