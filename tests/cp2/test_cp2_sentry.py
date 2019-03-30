@@ -94,7 +94,6 @@ class test_cp2_sentry(BaseBERITestCase):
         self.assertTrapInfoNoTrap(self.MIPS.s7, msg="CIncOffset 0 on sentry should work")
         assert self.MIPS.c20.s == 1, "$c22 should be sealed"
 
-
     def test_sentry_no_load_permitted(self):
         self.assertCp2Fault(self.MIPS.t2, cap_cause=self.MIPS.CapCause.Seal_Violation,
                             cap_reg=1, msg="Loading via sentry cap should trap", trap_count=8)
@@ -104,16 +103,16 @@ class test_cp2_sentry(BaseBERITestCase):
         self.assertIntCap(self.MIPS.c21, 0x1234, "Unsealed call should be able to load value")
 
     def test_unsealed_call_no_load(self):
-        self.assertIntCap(self.MIPS.c22, 0xbad, "Unsealed call without perm_exe shoudl not load")
+        self.assertIntCap(self.MIPS.c22, 0xbad, "Unsealed call without perm_exe should not load")
 
     def test_sentry_cjalr_perm_load(self):
         self.assertIntCap(self.MIPS.c23, 0x1234, "Sentry cjalr should be able to load value")
 
     def test_unsealed_cjalr_noload(self):
-        self.assertIntCap(self.MIPS.c24, 0xbad, "Sentry cjalr without perm_exe shoudl not load")
+        self.assertIntCap(self.MIPS.c24, 0xbad, "Sentry cjalr without perm_exe should not load")
 
     def test_sentry_cjr_perm_load(self):
         self.assertIntCap(self.MIPS.c25, 0x1234, "Sentry cjr should be able to load value")
 
     def test_unsealed_cjr_noload(self):
-        self.assertIntCap(self.MIPS.c26, 0xbad, "Sentry cjr without perm_exe shoudl not load")
+        self.assertIntCap(self.MIPS.c26, 0xbad, "Sentry cjr without perm_exe should not load")
