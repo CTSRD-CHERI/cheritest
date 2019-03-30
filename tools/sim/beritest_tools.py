@@ -103,23 +103,42 @@ def _is_feature_value_unsupported(feature, value) -> int:
     return 0
 
 
+# These tests can be disabled in the makefile -> skip them instead of XFAIL
+SKIP_ATTR_INSTEAD_OF_XFAIL = ("capabilities", "float", "float64", "notyet")
+# These attributes are used on tests that don't fail even if the attribute is unsupported
+SHOULD_BE_XFAIL_BUT_IS_NOT_YET = (
+    "cap128", "cap256", "cap64",
+    "cap_precise", "cap_imprecise"
+    "bev1ram", "watch",
+)
+ATTRS_TO_SKIP = SKIP_ATTR_INSTEAD_OF_XFAIL + SHOULD_BE_XFAIL_BUT_IS_NOT_YET
+
+
+def skip_or_xfail(feature: str, reason: str):
+    # Special case some features: capabilities -> skip instead of xfail (and same for float+cache)
+    # TODO: turn cap128/cap256/cap64 into an XFAIL instead of skip
+    if feature in ATTRS_TO_SKIP:
+        return pytest.mark.skip(reason=reason)
+    # TODO: not quite ready for this yet
+    # return pytest.mark.xfail(reason=reason, strict=True, run=True)
+    return pytest.mark.skip(reason=reason)
+
+
 def attr(*args, **kwargs):
     def wrap_test_fn(ob):
         return ob
 
-    # import pprint
-    # pprint.pprint(vars(pytest.config.option))
     for feature in args:
         if _is_feature_any_value_unsupported(feature):
-            return pytest.mark.skip("Feature '" + feature + "' is not supported!")
+            return skip_or_xfail(feature, reason="Feature '" + feature + "' is not supported")
     for feature, value in kwargs.items():
         unsupported_kind = _is_feature_value_unsupported(feature, value)
         if unsupported_kind == 1:
-            return pytest.mark.skip("Feature '" + feature + "' value '" + value + "' is not supported!")
+            return skip_or_xfail(feature, "Feature '" + feature + "' value '" + value + "' is not supported")
         if unsupported_kind == 2:
-            return pytest.mark.skip("Feature '" + feature + "' value '" + value +
-                                    "' is not supported (feature is completely unsupported)!")
+            return skip_or_xfail(feature, "Feature '" + feature + "' value '" + value + "' is not supported (feature is completely unsupported)!")
     return wrap_test_fn
+
 
 class BaseBERITestCase(unittest.TestCase):
     '''Abstract base class for test cases for the BERI CPU running under BSIM.
