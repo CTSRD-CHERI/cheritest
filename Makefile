@@ -363,6 +363,15 @@ QEMU_CAP_SIZE=$(strip $(if \
     $(findstring Compiled for CHERI256,$(QEMU_VERSION)), 256, \
     $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), 128, \
     $(error could not infer QEMU_CAP_SIZE from $(QEMU_ABSPATH): $(QEMU_VERSION)) )))
+# Assume QEMU without this string uses the old 23 bit format
+QEMU_CHERI_CC_BASE_WIDTH=$(strip \
+    $(if $(findstring CHERI-CC base width is 14,$(QEMU_VERSION)), 14, \
+     $(if $(findstring CHERI-CC base width is 23,$(QEMU_VERSION)), 23, \
+      $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), \
+       $(if $(findstring CHERI-CC base width is,$(QEMU_VERSION)), \
+        $(error Unexpected CHERI CC width for $(QEMU_ABSPATH): $(QEMU_VERSION)), \
+        $(info Using default value of 23 for QEMU_CHERI_CC_BASE_WIDTH)23), \
+       $(info Not using CHERI-CC -> QEMU_CHERI_CC_BASE_WIDTH=64)64))))
 
 QEMU_CAP_PRECISE=$(strip $(if \
     $(findstring Compiled for CHERI256,$(QEMU_VERSION)), 1, \
@@ -510,6 +519,8 @@ endif
 	@echo "    QEMU built with precise capabilities: $(QEMU_CAP_PRECISE)"
 	@echo "    QEMU built with support for unaligned loads: $(QEMU_UNALIGNED_OKAY)"
 	@echo "    QEMU built with C0 == NULL: $(QEMU_C0_IS_NULL)"
+	@echo "    QEMU precision: $(QEMU_CHERI_CC_BASE_WIDTH)"
+	@echo "    QEMU version: $(QEMU_VERSION)"
 	@echo
 	@echo "Sail MIPS: $(SAIL_MIPS_SIM)"
 	@echo "Sail CHERI256: $(SAIL_CHERI_SIM)"
