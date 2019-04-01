@@ -298,7 +298,6 @@ floatnan2008 \
 floatrecipflushesdenorm \
 ignorebadex \
 invalidateL2 \
-lladdr \
 llscnotmatching \
 llscspan \
 loadcachetag \

@@ -35,7 +35,10 @@
 # and store conditional operations.
 #
 BEGIN_TEST
-	
+
+		#Read config5 to determine if LLBit is supported
+		dmfc0	$s7, $16, 5
+
 		#
 		# Save addresses that will be checked in test results;
 		# convert to physical addresses as that is what lladdr will
