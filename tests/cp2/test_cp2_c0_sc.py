@@ -25,12 +25,14 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr
 
+
+@attr('capabilities')
+@attr('cached')
 class test_cp2_c0_sc(BaseBERITestCase):
 
-    @attr('capabilities')
-    @attr('cached')
+    EXPECTED_EXCEPTIONS = 0
+
     def test_cp2_c0_sc_1(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0, "An exception was raised by SC with an unaligned DDC")
+        self.assertTrapInfoNoTrap(self.MIPS.s0, "An exception was raised by SC with an unaligned DDC (but address overall is aligned)")

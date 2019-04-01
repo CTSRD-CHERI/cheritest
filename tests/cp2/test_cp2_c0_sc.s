@@ -36,30 +36,6 @@
 
 BEGIN_TEST
 		#
-		# Clear the BEV flag
-		#
-
-		jal	bev_clear
-		nop
-
-		#
-		# Set up exception handler
-		#
-
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, bev0_common_handler_stub
-		dli	$a2, 12	# instruction count
-		dsll	$a2, 2	# convert to byte count
-		jal	memcpy_nocap
-		nop		# branch delay slot	
-
-		#
-		# $a2 will be set if an exception is raised
-		#
-
-		dli	$a2, 0
-
-		#
 		# Make a capability for the array 'data'
 		#
 
@@ -88,7 +64,7 @@ loop:
 		csetdefault $c1
 		ll	$t0, 4($zero)
 		csetdefault $c3
-		sc	$a0, 3($zero)
+		check_instruction_traps $s0, sc	$a0, 3($zero)
 		beqz	$a0, loop
 		nop	
 
@@ -97,22 +73,6 @@ on_error:
 		
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		dli	$a2, 1
-		mfc0	$a3, $13	# CP0.Cause
-		dla	$k0, on_error
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
-
-		.ent bev0_common_handler_stub
-bev0_common_handler_stub:
-		dla	$k0, bev0_handler
-		jr	$k0
-		nop
-		.end bev0_common_handler_stub
 
 		.data
 data:		.dword 0
