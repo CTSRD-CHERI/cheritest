@@ -31,19 +31,10 @@
 .set noat
 .include "macros.s"
 #
-# Unaligned scd, firing an address exception.
+# Unaligned sc, firing an address exception.
 #
 
-BEGIN_TEST
-		#
-		# Set up exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Clear registers we'll use when testing results later.
 		#
@@ -65,19 +56,24 @@ BEGIN_TEST
 		#
 		# Trigger exception.
 		#
-		# The result is "unpredictable" according to the MIPS
-		# specification, because there is no matching LL. BERI wi;;
-		# raise an exception due to the unaligned address.
+		# The result is "unpredictable" accoeding ti the MIPS
+		# specification, because there is no matching LL.
+		# BERI will raise an exception due to the unaligned address.
 		#
 		dla	$s0, bytes
+		ld	$s1, 0($s0)	# load value before sc
 desired_epc:
-		scd	$a7, -1($s0)
-		daddi $s0, $s0, -1
+		li	$a7, -1
+		sc	$a7, -1($s0)
+		daddi	$s3, $s0, -1
 
 		#
 		# Exception return.
 		#
 		li	$a1, 1
+		# Even if the scd didn't trap (due to mismatched LL),
+		# the value of the bytes should not have changed
+		ld	$s2, 0($s0)
 		mfc0	$a6, $12	# Status register after ERET
 
 return:
@@ -89,8 +85,7 @@ END_TEST
 # checks BD as well), so EPC += 4 should return control after the overflow
 # instruction.
 #
-		.ent bev0_handler
-bev0_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		li	$a2, 1
 		mfc0	$a3, $12	# Status register
 		mfc0	$a4, $13	# Cause register
@@ -99,7 +94,7 @@ bev0_handler:
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
 		DO_ERET
-		.end bev0_handler
+END_CUSTOM_TRAP_HANDLER
 
 		.data
 		.align	5

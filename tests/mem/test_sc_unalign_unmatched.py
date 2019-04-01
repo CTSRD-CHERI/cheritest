@@ -25,46 +25,51 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr, HexInt
 
-class test_sc_unalign(BaseBERITestCase):
-    @attr('llsc')
+
+@attr('llsc')
+class test_sc_unalign_unmatched(BaseBERITestCase):
+    """
+    Note: even if the CPU supports unaligned accesses (e.g. QEMU) this
+    does not apply to SC. According MIPS64 spec v6.06:
+
+    The effective address must be naturally-aligned.
+    If any of the 2 least-significant bits of the address is non-zero,
+    an Address Error exception occurs.
+    """
+
+    def test_returned(self):
+        self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by sc instruction")
+
+    def test_value_not_written(self):
+        assert self.MIPS.s1 == HexInt(0x5656565656565656), "value before sc wrong"
+        assert self.MIPS.s2 == HexInt(0x5656565656565656), "sc stored value!"
+
     @attr('llscnotmatching')
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
 
-    @attr('llsc')
-    @attr('llscnotmatching')
-    def test_returned(self):
-        self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by sc instruction")
-
-    @attr('llsc')
     @attr('llscnotmatching')
     def test_handled(self):
         self.assertRegisterEqual(self.MIPS.a2, 1, "sc exception handler not run")
 
-    @attr('llsc')
     @attr('llscnotmatching')
     def test_exl_in_handler(self):
         self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
         
-    @attr('llsc')
     @attr('llscnotmatching')
     def test_badvaddr(self):
-        self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s0, "BadVAddr equal to Unaligned Address")
+        self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s3, "BadVAddr equal to Unaligned Address")
 
-    @attr('llsc')
     @attr('llscnotmatching')
     def test_cause_bd(self):
         self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")
 
-    @attr('llsc')
     @attr('llscnotmatching')
     def test_cause_code(self):
         self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 5, "Code not set to AdES")
 
-    @attr('llsc')
     @attr('llscnotmatching')
     def test_not_exl_after_handler(self):
         self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
