@@ -299,6 +299,7 @@ floatrecipflushesdenorm \
 ignorebadex \
 invalidateL2 \
 lladdr \
+llscnotmatching \
 llscspan \
 loadcachetag \
 mt \
