@@ -502,8 +502,8 @@ TEST_MEM_FILES=					\
 TEST_LLSC_FILES=				\
 		test_ll_unalign.s		\
 		test_lld_unalign.s		\
-		test_sc_unalign.s		\
-		test_scd_unalign.s		\
+		test_sc_unalign_unmatched.s	\
+		test_scd_unalign_unmatched.s	\
 		test_scd_alias.s		\
 		test_llsc.s			\
 		test_lldscd_span.s		\
