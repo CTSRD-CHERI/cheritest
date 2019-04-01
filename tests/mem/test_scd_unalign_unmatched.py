@@ -29,7 +29,7 @@ from beritest_tools import BaseBERITestCase, attr, HexInt
 
 
 @attr('llsc')
-class test_scd_unalign(BaseBERITestCase):
+class test_scd_unalign_unmatched(BaseBERITestCase):
     """
     Note: even if the CPU supports unaligned accesses (e.g. QEMU) this
     does not apply to SCD. According MIPS64 spec v6.06:
