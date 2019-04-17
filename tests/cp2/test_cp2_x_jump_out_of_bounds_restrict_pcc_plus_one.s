@@ -24,7 +24,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 
-# Test that an exception is before executing the instruction after then end of $pcc
+# Test that an exception is raised before executing the instruction after then end of $pcc
 # This is a slight variation of the restrict pcc test since $pcc allows access to
 # one additional byte (so not enough for an instruction fetch)
 .macro branch_out_of_bounds bad_addr_gpr
@@ -35,7 +35,7 @@
 	li	$a7, 1		# getpcc + 16
 	nop				# getpcc + 20
 	li	$a7, 0xf00d		# getpcc + 24
-	# should trap now due to pcc bounds (only
+	# should trap now due to pcc bounds (only one byte remaining)
 .endm
 
 .include "tests/cp2/common_code_mips_branch_out_of_bounds.s"

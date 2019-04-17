@@ -24,7 +24,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 
-# Test that an exception is before executing the instruction after then end of $pcc
+# Test that an exception is raised before executing the instruction after then end of $pcc
 .macro branch_out_of_bounds bad_addr_gpr
 	cgetpcc	$c12
 	cincoffset $c12, $c12, 20	# getpcc + 4
