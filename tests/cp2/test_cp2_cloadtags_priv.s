@@ -59,6 +59,23 @@ BEGIN_TEST
 		csw		$t0, $t0, 0($c1)   # 0
 		daddiu	$t0, $t0, CAP_SIZE/8
 		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csw		$t0, $t0, 0($c1)   # 0
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csw		$t0, $t0, 0($c1)   # 0
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		# In the end the pattern is 0xe7a5.
 
 		dla	$t0, data
 		csetoffset $c2, $c1, $t0

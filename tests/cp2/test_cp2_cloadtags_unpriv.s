@@ -40,12 +40,12 @@
 BEGIN_TEST
 		#
 		# Set up $c2 to point at data
-		# We want $c2.length to be 8 * CAP_SIZE/8 bytes
+		# We want $c2.length to be a cache line, assuming 128-byte lines.
 		#
 		cgetdefault $c2
 		dla	$t0, data
 		csetoffset $c2, $c2, $t0
-		dli	$t1, CAP_SIZE
+		dli	$t1, 128 # TODO: Avoid hard-coded values.
 		csetbounds $c2, $c2, $t1
 
 		cloadtags $a0, $c2
@@ -67,6 +67,23 @@ BEGIN_TEST
 		csw		$t0, $t0, 0($c1)   # 0
 		daddiu	$t0, $t0, CAP_SIZE/8
 		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csw		$t0, $t0, 0($c1)   # 0
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csw		$t0, $t0, 0($c1)   # 0
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # 1
+		# In the end the pattern is 0xe7a5.
 
 		cloadtags $a1, $c2
 

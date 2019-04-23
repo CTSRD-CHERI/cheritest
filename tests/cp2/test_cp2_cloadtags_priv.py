@@ -29,7 +29,21 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
 class test_cp2_cloadtags_priv(BaseBERITestCase):
+
     @attr('capabilities')
-    def test_cp2_cloadtags_priv(self):
+    @attr('cap256')
+    def test_cp2_cloadtags_priv_256(self):
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000000, "CLoadTags initial pattern")
+        self.assertRegisterEqual(self.MIPS.a1, 0x00000005, "CLoadTags updated pattern")
+
+    @attr('capabilities')
+    @attr('cap128')
+    def test_cp2_cloadtags_priv_128(self):
         self.assertRegisterEqual(self.MIPS.a0, 0x00000000, "CLoadTags initial pattern")
         self.assertRegisterEqual(self.MIPS.a1, 0x000000A5, "CLoadTags updated pattern")
+
+    @attr('capabilities')
+    @attr('cap64')
+    def test_cp2_cloadtags_priv_64(self):
+        self.assertRegisterEqual(self.MIPS.a0, 0x00000000, "CLoadTags initial pattern")
+        self.assertRegisterEqual(self.MIPS.a1, 0x0000E7A5, "CLoadTags updated pattern")
