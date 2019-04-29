@@ -38,58 +38,93 @@
 #
 
 BEGIN_TEST
-		#
-		# Set up $c2 to point at data
-		# We want $c2.length to be a cache line, assuming 128-byte lines.
-		#
+		# Point $c2 at the data block below
 		cgetdefault $c2
 		dla	$t0, data
 		csetoffset $c2, $c2, $t0
-		dli	$t1, 128 # TODO: Avoid hard-coded values.
-		csetbounds $c2, $c2, $t1
 
+		# Initially, there should be no tags; record that fact.
 		cloadtags $a0, $c2
 
-		# Store through maximally privileged cap
+		# Figure out how wide our reach is, up to 64 caps: write
+		# all ones to the tags through DDC+offset.  While 64 is
+		# almost surely overkill, it's permitted and could happen if
+		# we ever get a very clever cache fabric.
+		#
+		# When/if we port this test to RISC-V, 64 should become XLEN
 		cgetdefault $c1
-		csc		$c1, $t0, 0($c1)   # 1
+		dla	$t0, data
+		dli     $t1, 64
+floop:
+		csc		$c1, $t0, 0($c1)
 		daddiu	$t0, $t0, CAP_SIZE/8
-		csw		$t0, $t0, 0($c1)   # 0
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csw		$t0, $t0, 0($c1)   # 0
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csw		$t0, $t0, 0($c1)   # 0
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csw		$t0, $t0, 0($c1)   # 0
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csw		$t0, $t0, 0($c1)   # 0
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csw		$t0, $t0, 0($c1)   # 0
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		daddiu	$t0, $t0, CAP_SIZE/8
-		csc		$c1, $t0, 0($c1)   # 1
-		# In the end the pattern is 0xe7a5.
+		bnez    $t1, floop
+		daddi   $t1, $t1, -1
 
+		# Write our reach bit pattern to a1
 		cloadtags $a1, $c2
+
+		# Now write a more interesting pattern to the tags
+		dla	$t0, data
+
+		csc		$c1, $t0, 0($c1)   # [0] 1  \
+		daddiu	$t0, $t0, CAP_SIZE/8 
+		csw		$t0, $t0, 0($c1)   # [1] 0  |  0x5
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # [2] 1  |
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csw		$t0, $t0, 0($c1)   # [3] 0  /
+		daddiu	$t0, $t0, CAP_SIZE/8
+
+		csw		$t0, $t0, 0($c1)   # [4] 0  \
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # [5] 1  |  0xA
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csw		$t0, $t0, 0($c1)   # [6] 0  |
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # [7] 1  /
+		daddiu	$t0, $t0, CAP_SIZE/8
+
+		csc		$c1, $t0, 0($c1)   # [8] 1  \
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # [9] 1  |  0x7
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # [a] 1  |
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csw		$t0, $t0, 0($c1)   # [b] 0  /
+		daddiu	$t0, $t0, CAP_SIZE/8
+
+		csw		$t0, $t0, 0($c1)   # [c] 0  \
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # [d] 1  |  0xE
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # [e] 1  |
+		daddiu	$t0, $t0, CAP_SIZE/8
+		csc		$c1, $t0, 0($c1)   # [f] 1 /
+		# In the end the pattern is 0xf..fe7a5.
+
+		# read back through unrestricted capability
+		cloadtags $a2, $c2
+
+		# read back through restricted capability
+		#
+		# Set up $c2 to point at data
+		# We want $c2.length to be enough to cover the cloadtags
+		# stride.
+		dli     $t1, 0
+		daddiu  $a3, $a1, 0
+cloop:
+		dsrl    $a3, $a3, 1
+		bnez    $a3, cloop
+		daddiu  $t1, $t1, CAP_SIZE/8
+
+		csetbounds $c3, $c2, $t1
+
+		cloadtags $a3, $c3
 
 END_TEST
 
 		.data
 		.p2align 12
 data:
-		.space CAP_SIZE
+		.space 64*CAP_SIZE
