@@ -28,22 +28,26 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
-class test_cp2_cloadtags_priv(BaseBERITestCase):
+pattern = 0x0000E7A5
+
+class test_cp2_cloadtags(BaseBERITestCase):
 
     @attr('capabilities')
-    @attr('cap256')
-    def test_cp2_cloadtags_priv_256(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x00000000, "CLoadTags initial pattern")
-        self.assertRegisterEqual(self.MIPS.a1, 0x00000005, "CLoadTags updated pattern")
+    def test_cp2_cloadtags(self):
 
-    @attr('capabilities')
-    @attr('cap128')
-    def test_cp2_cloadtags_priv_128(self):
+        # When there were no tags, we got zeros
         self.assertRegisterEqual(self.MIPS.a0, 0x00000000, "CLoadTags initial pattern")
-        self.assertRegisterEqual(self.MIPS.a1, 0x000000A5, "CLoadTags updated pattern")
 
-    @attr('capabilities')
-    @attr('cap64')
-    def test_cp2_cloadtags_priv_64(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x00000000, "CLoadTags initial pattern")
-        self.assertRegisterEqual(self.MIPS.a1, 0x0000E7A5, "CLoadTags updated pattern")
+        # When we stored tags, we got a right-aligned mask with a power of
+        # two bits.  While other reaches are possible, that would be very
+        # strange and I don't thing we intend to have such strangely aligned
+        # caches.
+        assert self.MIPS.a1 in \
+          [ 0x01, 0x03, 0x0F, 0xFF, 0xFFFF, 0xFFFFFFFF, 0xFFFFFFFFFFFFFFFF ], \
+            ("CLoadTags reach %x not expected" % (self.MIPS.a1,))
+
+        self.assertRegisterEqual(self.MIPS.a2, pattern & self.MIPS.a1,
+            "CLoadTags updated pattern through DDC")
+
+        self.assertRegisterEqual(self.MIPS.a3, pattern & self.MIPS.a1,
+            "CLoadTags updated pattern through length-bounded cap")
