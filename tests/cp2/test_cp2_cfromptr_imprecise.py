@@ -38,7 +38,7 @@ class test_cp2_cfromptr_imprecise(BaseBERITestCase):
     @attr('capabilities')
     @attr('cap_imprecise')
     def test_cp2_cfromptr_imprecise_offset_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a0, 0x1000002, "CFromPtr did not set the offset to the expected value")
+        self.assertRegisterEqual(self.MIPS.a0, 0x0, "CFromPtr did not set the offset to the expected value")
 
     @attr('capabilities')
     @attr('cap_precise')
@@ -57,18 +57,5 @@ class test_cp2_cfromptr_imprecise(BaseBERITestCase):
         self.assertRegisterEqual(self.MIPS.a2, 2, "CFromPtr did not set base to the expected value")
 
     @attr('capabilities')
-    @attr('cap_imprecise')
-    def test_cp2_cfromptr_imprecise_base_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a2, 0, "CFromPtr did not set base to zero when the result was imprecise")
-    @attr('capabilities')
-
-    @attr('capabilities')
-    @attr('cap_precise')
     def test_cp2_cfromptr_imprecise_len_precise(self):
         self.assertRegisterEqual(self.MIPS.a3, 1, "CFromPtr did not set length to the expected value")
-
-    @attr('capabilities')
-    @attr('cap_imprecise')
-    def test_cp2_cfromptr_precise_len_imprecise(self):
-        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff,
-                                 "CFromPtr did not set length to the expected NULL length when the result was imprecise")
