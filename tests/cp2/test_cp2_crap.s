@@ -35,10 +35,17 @@
 BEGIN_TEST
 	# Create a capability with a base address with lots of interleaved 1/0
 	dli $t0, 0x5555aaaa5555aaaa
-	cgetdefault $c1
-	csetaddr $c1, $c1, $t0
 	dli $t1, 0xaaaa5555aaaa5555	# invert the value -> length
-	csetbounds $c2, $c1, $t1
+	cgetdefault $c1
+	
+	# derive representable base without using CRAM
+	csetaddr $c2, $c1, $t0
+	csetbounds $c2, $c2, $t1
+	cgetbase $t0, $c2
+	
+	# try again with representable base
+	csetaddr $c2, $c1, $t0
+	csetbounds $c2, $c2, $t1
 	# get the representable length for 0x5555aaaa5555aaaa
 	crap $a0, $t1
 	# and check that it matches the resulting length of $c2
