@@ -76,22 +76,7 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
     def test_epcc_perms_precise(self):
         assert self.MIPS.cp2[3].perms == 0x0007, "sandbox EPCC perms incorrect"
         assert self.MIPS.cp2[4].perms == 0x0007, "sandbox EPCC perms incorrect (back in bounds)"
-
-    # See https://github.com/CTSRD-CHERI/cheri-isa/issues/19
-    @attr('cap_imprecise')
-    @attr('cap_unrep_retains_info')
-    def test_epcc_perms_imprecise_retains_perms(self):
-        # QEMU doesn't clear the permissions fields on unrep (to help debugging)
-        assert self.MIPS.cp2[3].perms == 0x7, "sandbox EPCC perms should not change on unrep"
-        assert self.MIPS.cp2[4].perms == 0x7, "sandbox EPCC perms should not change on unrep (back in bounds)"
         assert self.MIPS.epcc.perms == 0x7, "sandbox EPCC perms should not change on unrep (final dump value)"
-
-    @attr('cap_imprecise')
-    @attr('cap_unrep_clears_all_info')
-    def test_epcc_perms_imprecise_clears_perms(self):
-        assert self.MIPS.cp2[3].perms == 0x0, "sandbox EPCC perms incorrect"
-        assert self.MIPS.cp2[4].perms == 0x0, "sandbox EPCC perms incorrect after setting EPC back in bounds"
-        assert self.MIPS.epcc.perms == 0x0, "sandbox EPCC perms incorrect (final dump value)"
 
     def test_epcc_ctype(self):
         assert self.MIPS.cp2[3].ctype == self.unsealed_otype, "sandbox EPCC ctype incorrect"
@@ -105,26 +90,14 @@ class test_cp2_epcc_unrep(BaseBERITestCase):
         assert self.MIPS.cp2[4].offset == 0, "sandbox EPCC offset incorrect after settting back in bounds"
         assert self.MIPS.epcc.offset == 0, "sandbox EPCC offset incorrect (final dump value)"
 
-    @attr('cap_imprecise')
-    def test_epcc_base_imprecise(self):
-        assert self.MIPS.cp2[3].base == 0, "sandbox EPCC base incorrect"
-        assert self.MIPS.cp2[4].base == 0, "sandbox EPCC base incorrect (back in bounds)"
-        assert self.MIPS.epcc.base == 0, "sandbox EPCC base incorrect (final dump value)"
-
     @attr('cap_precise')
     def test_epcc_base_precise(self):
         assert self.MIPS.cp2[3].base == self.MIPS.a7, "sandbox EPCC base incorrect"
         assert self.MIPS.cp2[4].base == self.MIPS.a7, "sandbox EPCC base incorrect (back in bounds)"
         assert self.MIPS.epcc.base == self.MIPS.a7, "sandbox EPCC base incorrect  (final dump value)"
 
-    @attr('cap_precise')
     def test_epcc_length_precise(self):
         assert self.MIPS.cp2[3].length == 20, "sandbox EPCC length incorrect"
         assert self.MIPS.cp2[4].length == 20, "sandbox EPCC length incorrect (back in bounds)"
         assert self.MIPS.epcc.length == 20, "sandbox EPCC length incorrect (final dump value)"
 
-    @attr('cap_imprecise')
-    def test_epcc_length_imprecise(self):
-        assert self.MIPS.cp2[3].length == HexInt(0xffffffffffffffff), "sandbox EPCC length incorrect"
-        assert self.MIPS.cp2[4].length == HexInt(0xffffffffffffffff), "sandbox EPCC length incorrect (back in bounds)"
-        assert self.MIPS.epcc.length == HexInt(0xffffffffffffffff), "sandbox EPCC length incorrect (final dump value)"
