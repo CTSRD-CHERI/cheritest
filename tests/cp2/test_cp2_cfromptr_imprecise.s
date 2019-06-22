@@ -42,6 +42,9 @@ BEGIN_TEST
 		csetoffset $c1, $c1, $t0
 		dli	$t0, 1
 		csetbounds $c1, $c1, $t0
+		dli	$t0, 6	# clear permissions to get the same value for 128/256
+		candperm $c1, $c1, $t0
+		cmove $c2, $c1	# save original cap
 		dli	$t0, 1
 		dsll	$t0, $t0, 24
 		cfromptr $c1, $c1, $t0	# possible loss of precision
@@ -50,5 +53,5 @@ BEGIN_TEST
 		cgettag	$a1, $c1
 		cgetbase $a2, $c1
 		cgetlen $a3, $c1
-		
+		cgetaddr $a4, $c1
 END_TEST

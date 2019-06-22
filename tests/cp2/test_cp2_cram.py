@@ -42,11 +42,11 @@ class test_cp2_cram(BaseBERITestCase):
         self.assertTrapInfoNoTrap(self.MIPS.a1, msg="Should not trap in exact setbounds")
 
     @attr("cap_imprecise")
-    def test_crepresentable_alignment_mask_expected_result(self):
+    def test_imprecise_cram_expected_result(self):
         assert self.MIPS.a0 == HexInt(0xffe0000000000000), "wrong result from crrl?"
 
     @attr("cap_precise")
-    def test_crepresentable_alignment_mask_expected_result(self):
+    def test_precise_cram_expected_result(self):
         assert self.MIPS.a0 == HexInt(0xffffffffffffffff), "wrong result from crrl (precise)?"
 
     @attr("cap_imprecise")
