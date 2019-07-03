@@ -170,7 +170,13 @@ L1:
 		#
 
 		csetdefault $c26
-
+        
+		# Restore access system regs permission in PCC
+		dla	$t0, L2
+		csetoffset $c1, $c26, $t0
+		cjr	$c1
+		nop		# branch delay slot
+L2:
 END_TEST
 
 		.ent bev0_handler
