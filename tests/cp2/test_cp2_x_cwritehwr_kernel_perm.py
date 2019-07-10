@@ -68,16 +68,22 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
 
     # But KR1C and KR2C should be fine
     def test_no_sysregs_in_kernel_mode_kr1c(self):
-        self.assertTrapInfoNoTrap(self.MIPS.c5, msg="Accessing KR1C should work")
+        self.assertCompressedTrapInfo(self.MIPS.c5,
+            mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
+            cap_reg=22, trap_count=4, msg="Accessing KR1C should fail")
 
     def test_no_sysregs_in_kernel_mode_kr2c(self):
-        self.assertTrapInfoNoTrap(self.MIPS.c6, msg="Accessing KR1C should work")
+        self.assertCompressedTrapInfo(self.MIPS.c6,
+            mips_cause=self.MIPS.Cause.COP2,
+            cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
+            cap_reg=23, trap_count=5, msg="Accessing KR2C should fail")
 
     def test_no_sysregs_in_kernel_mode_invalid_reg(self):
         # CapHWR 28 doesn't exist so this should raise reserved instr
         self.assertCompressedTrapInfo(self.MIPS.c7,
             mips_cause=self.MIPS.Cause.ReservedInstruction,
-            trap_count=4, msg="Accessing invalid reg should fail")
+            trap_count=6, msg="Accessing invalid reg should fail")
 
     # In user mode none of the registers should be accessible
     def test_usermode_pcc_no_access_sys_regs(self):
@@ -90,44 +96,44 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
         self.assertCompressedTrapInfo(self.MIPS.c15,
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-            cap_reg=31, trap_count=5, msg="Accessing EPCC should fail")
+            cap_reg=31, trap_count=7, msg="Accessing EPCC should fail")
 
     def test_user_mode_kdc(self):
         self.assertCompressedTrapInfo(self.MIPS.c16,
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-            cap_reg=30, trap_count=6, msg="Accessing KDC should fail")
+            cap_reg=30, trap_count=8, msg="Accessing KDC should fail")
 
     def test_user_mode_kcc(self):
         self.assertCompressedTrapInfo(self.MIPS.c17,
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-            cap_reg=29, trap_count=7, msg="Accessing KCC should fail")
+            cap_reg=29, trap_count=9, msg="Accessing KCC should fail")
 
     def test_user_mode_kr1c(self):
         self.assertCompressedTrapInfo(self.MIPS.c18,
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-            cap_reg=22, trap_count=8, msg="Accessing KR1C should fail")
+            cap_reg=22, trap_count=10, msg="Accessing KR1C should fail")
 
     def test_user_mode_kr2c(self):
         self.assertCompressedTrapInfo(self.MIPS.c19,
             mips_cause=self.MIPS.Cause.COP2,
             cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-            cap_reg=23, trap_count=9, msg="Accessing KR2C should fail")
+            cap_reg=23, trap_count=11, msg="Accessing KR2C should fail")
 
     def test_user_mode_invalid_reg(self):
         # CapHWR 28 doesn't exist so this should raise reserved instr
         self.assertCompressedTrapInfo(self.MIPS.c20,
             mips_cause=self.MIPS.Cause.ReservedInstruction,
-            trap_count=10, msg="Accessing invalid reg should fail")
+            trap_count=12, msg="Accessing invalid reg should fail")
 
     def test_final_values(self):
         # check that kr1c and kr2c were not updated by the writes to chwr $22 and $23 in kernel mode:
         self.assertNullCap(self.MIPS.c27, msg="kr1c should not mirrored to $c27")
         self.assertNullCap(self.MIPS.c28, msg="kr2c should not mirrored to $c28")
-        self.assertIntCap(self.MIPS.cp2_hwregs[22], int_value=0xbad1, msg="kr1c should not mirrored to $c27")
-        self.assertIntCap(self.MIPS.cp2_hwregs[23], int_value=0xbad1, msg="kr2c should not mirrored to $c28")
+        self.assertIntCap(self.MIPS.cp2_hwregs[22], int_value=22, msg="kr1c should not mirrored to $c27")
+        self.assertIntCap(self.MIPS.cp2_hwregs[23], int_value=23, msg="kr2c should not mirrored to $c28")
         # these should not have changed (they are mirrored):
         self.assertDefaultCap(self.MIPS.kcc, offset=29)
         self.assertDefaultCap(self.MIPS.cp2_hwregs[29], offset=29)
@@ -140,5 +146,5 @@ class test_cp2_x_cwritehwr_kernel_perm(BaseBERITestCase):
             length=self.max_length, perms=self.max_permissions)
 
     def test_total_exception_count(self):
-        self.assertRegisterEqual(self.MIPS.v0, 10, "Wrong number of exceptions triggered")
+        self.assertRegisterEqual(self.MIPS.v0, 12, "Wrong number of exceptions triggered")
 

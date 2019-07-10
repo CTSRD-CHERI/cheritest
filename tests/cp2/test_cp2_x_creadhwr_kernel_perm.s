@@ -79,7 +79,7 @@ without_access_sys_regs:
 	# Try to read KCC (should fail - trap #3). Save exception details in $c4
 	try_read_cap_hwreg $29, $c4
 
-	# KR1C and KR2Cshould work
+	# KR1C and KR2C should not work any more (save exception details in c5 and c6)
 	try_read_cap_hwreg $22, $c5	# Read KR1C
 	try_read_cap_hwreg $23, $c6	# Read KR2C
 

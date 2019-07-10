@@ -76,7 +76,7 @@ without_access_sys_regs:
 	# Try to write KCC (should fail - trap #3). Save exception details in $c4
 	try_write_cap_hwreg $29, $c4
 
-	# KR1C and KR2Cshould work
+	# KR1C and KR2C should not work (any more)
 	try_write_cap_hwreg $22, $c5	# Write KR1C
 	try_write_cap_hwreg $23, $c6	# Write KR2C
 
