@@ -324,9 +324,9 @@ endif
 
 CLANG_CMD?=clang
 ifdef MIPS_ONLY
-CLANG_CC?=$(CLANG_CMD) -target mips64-unknown-freebsd -mcpu=mips4
+CLANG_CC?=$(CLANG_CMD) -target mips64-unknown-freebsd -mcpu=beri
 else
-CLANG_CC?=$(CLANG_CMD) -target cheri-unknown-freebsd -mcpu=mips4 -cheri=$(CAP_SIZE)
+CLANG_CC?=$(CLANG_CMD) -target cheri-unknown-freebsd -mcpu=beri -cheri=$(CAP_SIZE)
 endif
 CLANG_AS=$(CLANG_CC) -fno-pic -c -Wno-unused-command-line-argument -mno-abicalls
 
@@ -335,6 +335,7 @@ RUN_MIPS_LD?=$(MIPS_LD) --fatal-warnings -EB -G0 -L $(CURDIR)
 USING_LLVM_ASSEMBLER?=0
 ifeq ($(USING_LLVM_ASSEMBLER),1)
 DEFSYM_FLAG=-Wa,-defsym,
+MIPS_AS:=$(MIPS_AS) -mcpu=beri
 else
 DEFSYM_FLAG=-defsym=
 # Without -march=mips4 the movz instruction will be rejected by GNU as
