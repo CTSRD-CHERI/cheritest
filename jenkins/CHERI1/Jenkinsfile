@@ -100,6 +100,7 @@ ${prepareAssembler}
 
 . /local/ecad/setup.bash \$QUARTUS_DEFAULT
 cd \$WORKSPACE/cheritest
+export "CHERI_CPU_GIT_ROOT=\$WORKSPACE/cheri-cpu"
 # always do a full clean in case the linker/compiler has changed
 make distclean
 rm -f nose*.xml
