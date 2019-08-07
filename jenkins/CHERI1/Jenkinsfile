@@ -99,14 +99,14 @@ cd \$WORKSPACE
 ${prepareAssembler}
 
 . /local/ecad/setup.bash \$QUARTUS_DEFAULT
-cd \$WORKSPACE/ctsrd/cheritest/trunk
+cd \$WORKSPACE/cheritest
 # always do a full clean in case the linker/compiler has changed
 make distclean
 rm -f nose*.xml
 make PYTHON_TESTRUNNER=pytest ${assemblerTestFlag} ${args.testArgs} -j16
 """
 		// JUnit Results
-		junit 'ctsrd/cheritest/trunk/nosetests_*.xml'
+		junit 'cheritest/nosetests_*.xml'
 	}
 }
 
@@ -132,12 +132,12 @@ set -xe
 . /local/ecad/setup.bash \$QUARTUS_DEFAULT
 
 #export PATH=\$WORKSPACE/binutils/bin:\$CHERITEST_TOOL_PATH:$PATH
-cd ctsrd/cheri/trunk
+cd cheri-cpu/cheri
 # make clean
 rm -f sim sim.so
 # build the simulator
 ''' + "make ${args.buildArgs} sim || (make clean ; make ${args.buildArgs} sim)"
-			archiveArtifacts allowEmptyArchive: false, artifacts: 'ctsrd/cheri/trunk/sim, ctsrd/cheri/trunk/sim.so, ctsrd/cheri/trunk/sim.dtb, ctsrd/cheri/trunk/build_*_sim/sim, ctsrd/cheri/trunk/build_*_sim/sim.so, ctsrd/cheri/trunk/build_*_sim/sim.dtb, ctsrd/cherilibs/trunk/peripherals/*.so, ctsrd/cherilibs/trunk/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'ctsrd/cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
+			archiveArtifacts allowEmptyArchive: false, artifacts: 'cheri-cpu/cheri/sim, cheri-cpu/cheri/sim.so, cheri-cpu/cheri/sim.dtb, cheri-cpu/cheri/build_*_sim/sim, cheri-cpu/cheri/build_*_sim/sim.so, cheri-cpu/cheri/build_*_sim/sim.dtb, cheri-cpu/cherilibs/peripherals/*.so, cheri-cpu/cherilibs/tools/memConv.py', caseSensitive: true, defaultExcludes: true, excludes: 'cheritest/**/*', fingerprint: false, onlyIfSuccessful: true
 		}
 		// timeout(90) {
 		if (false) {
@@ -163,22 +163,13 @@ def cheriHardwareTest() {
 		JobConfig args = getJobParameters()
 		echo "Found job config: BUILD_ARGS: '${args.buildArgs}'\nTEST_ARGS: '${args.testArgs}'"
 		stage('Checkout') {
-			// dir('ctsrd/cheritest/trunk') { git url: 'git@github.com:CTSRD-CHERI/cheritest.git', credentialsId: 'cheritest_key', branch: 'master'}
-			dir('ctsrd/cheritest/trunk') {
+			// dir('cheritest') { git url: 'git@github.com:CTSRD-CHERI/cheritest.git', credentialsId: 'cheritest_key', branch: 'master'}
+			dir('cheritest') {
 				args.gitInfo = checkout scm  // get the sources from git
 			}
-			// Get the SVN sources:
-			checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '',
-					excludedRegions: '', excludedRevprop: '', excludedUsers: '',
-					filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '',
-					locations: [
-							[credentialsId: 'cffd45a1-3d92-4d8e-a485-db5a5852fe70', depthOption: 'infinity',
-									ignoreExternalsOption: true, local: 'ctsrd/cherilibs/trunk',
-									remote: 'svn+ssh://secsvn@svn-ctsrd.cl.cam.ac.uk/ctsrd/cherilibs/trunk'],
-							[credentialsId: 'cffd45a1-3d92-4d8e-a485-db5a5852fe70', depthOption: 'infinity',
-									ignoreExternalsOption: true, local: 'ctsrd/cheri/trunk',
-									remote: 'svn+ssh://secsvn@svn-ctsrd.cl.cam.ac.uk/ctsrd/cheri/trunk']],
-					workspaceUpdater: [$class: 'UpdateUpdater']])
+			dir('cheri-cpu') {
+				git credentialsId: 'ctsrd-jenkins-new-github-api-key', url: 'https://github.com/CTSRD-CHERI/cheri-cpu'
+			}
 		}
 		try {
 			setGitHubStatus(args.gitInfo) // set PENDING status
