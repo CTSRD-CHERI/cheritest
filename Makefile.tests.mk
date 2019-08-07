@@ -57,10 +57,10 @@ TEST_CYCLE_LIMIT?=1500000
 #
 
 # Set to 0 to disable capability tests
-CTSRD_SVN_ROOT?=../../
-CHERIROOT?=$(CTSRD_SVN_ROOT)/cheri$(BERI_VER)/trunk
+CHERI_CPU_GIT_ROOT?=../../
+CHERIROOT?=$(CHERI_CPU_GIT_ROOT)/cheri$(BERI_VER)
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
-CHERILIBS?=$(CTSRD_SVN_ROOT)/cherilibs/trunk
+CHERILIBS?=$(CHERI_CPU_GIT_ROOT)/cherilibs
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
 PISM_MODULES_PATH=$(CHERILIBS_ABS)/peripherals
 MEMCONF?=$(CHERIROOT_ABS)/memoryconfig
@@ -87,23 +87,23 @@ endif
 endif
 
 ifeq ($(wildcard $(TOOLS_DIR_ABS)),)
-MEMCONV=$(error Cannot find find memConv.py, set CHERILIBS to the cherilibs/trunk directory or set CTSRD_SVN_ROOT to the SVN root)
+MEMCONV=$(error Cannot find find memConv.py, set CHERILIBS to the cherilibs directory or set CHERI_CPU_GIT_ROOT to the SVN root)
 else
 MEMCONV=python ${TOOLS_DIR_ABS}/memConv.py
 endif
 
 ifeq ($(wildcard $(CHERIROOT_ABS)),)
-CHERI_SW_MEM_BIN=$(error Cannot find find CHERIROOT/sw/mem.bin, set CHERIROOT to the cheri/trunk directory or set CTSRD_SVN_ROOT to the SVN root)
+CHERI_SW_MEM_BIN=$(error Cannot find find CHERIROOT/sw/mem.bin, set CHERIROOT to the cheri directory or set CHERI_CPU_GIT_ROOT to the SVN root)
 else
 CHERI_SW_MEM_BIN=${CHERIROOT_ABS}/sw/mem.bin
 endif
 
 ifeq ($(wildcard $(MEMCONF)),)
-MEMCONF=$(error Cannot find find $(CHERIROOT_ABS)/memoryconfig, set CHERIROOT to the cheri/trunk directory or set CTSRD_SVN_ROOT to the SVN root )
+MEMCONF=$(error Cannot find find $(CHERIROOT_ABS)/memoryconfig, set CHERIROOT to the cheri directory or set CHERI_CPU_GIT_ROOT to the SVN root )
 endif
 
 ifeq ($(wildcard $(SIM)),)
-SIM_ABS=$(error Cannot find find $(SIM), set CHERIROOT to the cheri/trunk directory )
+SIM_ABS=$(error Cannot find find $(SIM), set CHERIROOT to the cheri directory )
 else
 SIM_ABS:=$(realpath $(SIM))
 endif
@@ -193,7 +193,7 @@ SIM_FUZZ_TEST_CACHED_LOGS := $(filter $(LOGDIR)/test_fuzz_%, $(CHERI_TEST_CACHED
 GXEMUL_FUZZ_TEST_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_LOGS))
 GXEMUL_FUZZ_TEST_CACHED_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_TEST_CACHED_LOGS))
 
-#REWRITE_PISM_CONF = sed -e 's,../../cherilibs/trunk,$(CHERILIBS_ABS),' < $(1) > $(2)
+#REWRITE_PISM_CONF = sed -e 's,../../cherilibs,$(CHERILIBS_ABS),' < $(1) > $(2)
 #COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(MEMCONF),$$TMPDIR/memoryconfig)
 COPY_PISM_CONFS = cp $(MEMCONF) $$TMPDIR/memoryconfig
 
