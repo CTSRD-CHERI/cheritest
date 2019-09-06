@@ -189,14 +189,12 @@ def cheriHardwareTest() {
             if (currentBuild.result == null)
                 currentBuild.result = currentBuild.currentResult
             // Avoid setting an error flag on github commits just because binutils is still broken
-            if (JobConfig.assembler != 'gnu-binutils') {
-                echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
-                if (JobConfig.gitInfo != null)
-                    setGitHubStatus(JobConfig.gitInfo)
-                // Also set the status on the QEMU repo
-                if (JobConfig.QEMUgitInfo != null)
-                    setGitHubStatus(JobConfig.QEMUgitInfo)
-            }
+            echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
+            if (JobConfig.gitInfo != null)
+                setGitHubStatus(JobConfig.gitInfo)
+            // Also set the status on the QEMU repo
+            if (JobConfig.QEMUgitInfo != null)
+                setGitHubStatus(JobConfig.QEMUgitInfo)
             stage("Coverage report") {
                 // collect coverage reports (only include target/mips files and exclude some unsupported stuff)
                 sh 'gcovr -r $WORKSPACE/qemu-build -f ".*target/mips.*" -e ".*target/mips/(msa|lmi|dsp)_helper.c" -e ".*/gdbstub.c" --xml -o qemu_coverage.xml'

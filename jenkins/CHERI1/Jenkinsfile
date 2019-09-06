@@ -5,6 +5,8 @@ class JobConfig {
 	String testArgs
 	String name = null
 	static Object gitInfo = null
+	static Object cheriCPUgitInfo = null
+
 
 	// TODO: for some reason I can't make these globals, so let's just put them here
 	static String clangArchiveName = 'cheri-multi-master-clang-llvm.tar.xz'
@@ -168,8 +170,19 @@ def cheriHardwareTest() {
 			dir('cheritest') {
 				args.gitInfo = checkout scm  // get the sources from git
 			}
+			def cheriCpuGitOptions = [ changelog: true, poll: true,
+				scm: [$class: 'GitSCM',
+					  doGenerateSubmoduleConfigurations: false,
+					  branches: [[name: "refs/heads/master"]],
+					  extensions: [/* to skip polling: [$class: 'IgnoreNotifyCommit'], */
+								[$class: 'CloneOption', noTags: false, reference: '/var/tmp/git-reference-repos/cheri-cpu', shallow: false, depth: 10, timeout: 60],
+					],
+					userRemoteConfigs: [[url: 'https://github.com/CTSRD-CHERI/cheri-cpu', credentialsId: 'ctsrd-jenkins-new-github-api-key']]
+				]
+			]
 			dir('cheri-cpu') {
-				git credentialsId: 'ctsrd-jenkins-new-github-api-key', url: 'https://github.com/CTSRD-CHERI/cheri-cpu'
+				// git credentialsId: 'ctsrd-jenkins-new-github-api-key', url: 'https://github.com/CTSRD-CHERI/cheri-cpu'
+				JobConfig.cheriCPUgitInfo = checkout cheriCpuGitOptions
 			}
 		}
 		try {
@@ -182,8 +195,13 @@ def cheriHardwareTest() {
 			// it seems like the currentBuild.Result will always be null (PENDING) unless I set it explicitly here
 			if (currentBuild.result == null)
 				currentBuild.result = currentBuild.currentResult
+			// Avoid setting an error flag on github commits just because binutils is still broken
 			echo("final result = ${currentBuild.result} currentResult = ${currentBuild.currentResult}")
-			setGitHubStatus(args.gitInfo)
+			if (JobConfig.gitInfo != null)
+				setGitHubStatus(JobConfig.gitInfo)
+			// Also set the status on the CheriCPU repo
+			if (JobConfig.cheriCPUgitInfo != null)
+				setGitHubStatus(JobConfig.cheriCPUgitInfo)
 		}
 	}
 }
