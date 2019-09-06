@@ -175,7 +175,8 @@ def cheriHardwareTest() {
 					  doGenerateSubmoduleConfigurations: false,
 					  branches: [[name: "refs/heads/master"]],
 					  extensions: [/* to skip polling: [$class: 'IgnoreNotifyCommit'], */
-								[$class: 'CloneOption', noTags: false, reference: '/var/tmp/git-reference-repos/cheri-cpu', shallow: false, depth: 10, timeout: 60],
+						[$class: 'CloneOption', noTags: false, reference: '/var/tmp/git-reference-repos/cheri-cpu', shallow: false, depth: 10, timeout: 60],
+						[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: true, recursiveSubmodules: true, reference: '', trackingSubmodules: false],
 					],
 					userRemoteConfigs: [[url: 'https://github.com/CTSRD-CHERI/cheri-cpu', credentialsId: 'ctsrd-jenkins-new-github-api-key']]
 				]
