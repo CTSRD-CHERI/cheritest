@@ -32,4 +32,5 @@ from beritest_baseclasses import BERITestBaseClasses
 class test_cp2_x_eret_epcc_sealed(BERITestBaseClasses.EPCCInvalidERETTestCase):
     msg = "eret with sealed epcc"
     expected_cap_cause = MipsStatus.CapCause.Seal_Violation
+    expected_epcc_tag = 0
     expected_epcc_sealed = 1
