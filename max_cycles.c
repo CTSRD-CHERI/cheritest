@@ -83,7 +83,8 @@ char *cp;
       (strcmp(cp, "test_clang_memcpy.log") == 0) ||
       (strcmp(cp, "test_clang_memcpy_cached.log") == 0) ||
       (strcmp(cp, "test_clang_memcpy_multi.log") == 0) ||
-      (strcmp(cp, "test_clang_memcpy_cachedmulti.log") == 0))
+      (strcmp(cp, "test_clang_memcpy_cachedmulti.log") == 0) ||
+      (strcmp(cp, "test_clang_dhrystone_ipc.log") == 0))
     printf("%s\n", argv[3]);
   else
     printf("%s\n", argv[2]);
