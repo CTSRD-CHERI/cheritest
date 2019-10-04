@@ -59,7 +59,7 @@ start:
     bne             $a6, $zero, 2b
     daddi           $a6, -1
     delay           $at, DELAY_TIME
-    getstatcounter  6, L2CACHEMASTER, READ_REQ  # a2 takes the value of counter READ_REQ in group L2CACHEMASTER
+    getstatcounter  6, L2CACHE, READ_MISS  # a2 takes the value of counter READ_HIT in group L2CACHE
     bne             $a5, $zero, 1b
     daddi           $a5, -1
 
