@@ -25,12 +25,11 @@
 # Performs a test for every .c file in the TEST_DIR which matches TEST_FILE_RE.
 # Just checks that the test produced the appropriate pass value in v0 to indicate
 # that all c asserts passed. Cribbed from tests/fuzz/fuzz.py.
-
 from beritest_tools import TestClangBase
 import os
 import pytest
 import re
-from beritest_tools import attr
+from beritest_tools import attr, LOG_DIR
 
 # Parameters from the environment
 # Cached or uncached mode.
@@ -39,11 +38,8 @@ MULTI = bool(int(os.environ.get("MULTI1", "0")))
 # Pass to restrict to only a particular test
 ONLY_TEST = os.environ.get("ONLY_TEST", None)
 
-TEST_FILE_RE = re.compile('test_[\w_]*clang_.+\.(c|cpp)')
+TEST_FILE_RE = re.compile('test_[\\w_]*clang_.+\\.(c|cpp)')
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-
-LOG_DIR = pytest.config.option.LOGDIR
-
 
 def check_answer(test_name, test_file):
     if MULTI and CACHED:

@@ -35,6 +35,9 @@ class CheritestOptions(Enum):
         self.argparse_args["help"] = "Alternative to env var $" + self.name + " (default value: " + str(self.argparse_args["default"]) + ")"
 
 
+config_options_from_pytest = None
+config_object = None
+
 def pytest_addoption(parser):
     # TODO: this should probably be pytest_sessionstart?
     # ensure the root directoy is in PYTHONPATH
@@ -86,6 +89,11 @@ def pytest_configure(config):
         if value is None:
             raise pytest.UsageError("env var $" + option.name + " or option " + option.cmdline_flag + " must be set!")
 
+    global config_options_from_pytest
+    global config_object
+    config_options_from_pytest = config.option
+    config_object = config
+
 
 def pytest_ignore_collect(path, config):
     path_str = str(path)
@@ -110,7 +118,6 @@ def pytest_ignore_collect(path, config):
             print("Ignoring test dir", skip_path, "since attr", opt, "is unsupported.")
             return True
     return False
-
 
 # https://docs.pytest.org/en/latest/assert.html#defining-your-own-assertion-comparison
 # print integer comparison failures as hex:

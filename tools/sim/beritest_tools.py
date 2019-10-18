@@ -31,8 +31,7 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
-from __future__ import print_function
-
+import argparse
 import collections
 import functools
 import unittest
@@ -46,7 +45,14 @@ try:
 except ImportError:
     typing = {}
 
+import conftest
 from tools.sim import *
+
+def config_options() -> argparse.Namespace:
+    print(conftest.config_options_from_pytest)
+    return conftest.config_options_from_pytest
+
+LOG_DIR = config_options().LOGDIR
 
 def xfail_on(var, reason=""):
     '''
@@ -55,10 +61,10 @@ def xfail_on(var, reason=""):
     :param var: the machine where this test is expected to fail (e.g. "qemu"
     :return:
     '''
-    reason_str = "Not supported on " + pytest.config.option.TEST_MACHINE.lower() + ": "
+    reason_str = "Not supported on " + config_options().TEST_MACHINE.lower() + ": "
     if reason:
         reason_str += ": " + reason
-    return pytest.mark.xfail(pytest.config.option.TEST_MACHINE.lower() == var.lower(),
+    return pytest.mark.xfail(config_options().TEST_MACHINE.lower() == var.lower(),
                              reason=reason_str)
 
 
@@ -91,17 +97,16 @@ def is_feature_supported(feature, value=None):
 
 
 def _is_feature_any_value_unsupported(feature):
-    return feature in pytest.config.CHERITEST_UNSUPPORTED_FEATURES
+    return feature in conftest.config_object.CHERITEST_UNSUPPORTED_FEATURES
 
 
 def _is_feature_value_unsupported(feature, value) -> int:
-    is_unsupported_list = pytest.config.CHERITEST_UNSUPPORTED_FEATURES.get(feature, list())
+    is_unsupported_list = conftest.config_object.CHERITEST_UNSUPPORTED_FEATURES.get(feature, list())
     if value in is_unsupported_list:
         return 1
     elif "ALWAYS" in is_unsupported_list:
         return 2
     return 0
-
 
 # These tests can be disabled in the makefile -> skip them instead of XFAIL
 SKIP_ATTR_INSTEAD_OF_XFAIL = ("capabilities", "float", "float64", "notyet")
@@ -148,7 +153,6 @@ class BaseBERITestCase(unittest.TestCase):
     ".log"). Subclasses will be provided with the class variable MIPS, containing
     an instance of MipsStatus representing the state of the BERI CPU.'''
 
-    LOG_DIR = os.environ.get("LOGDIR", "log")
     LOG_FN = None
     MIPS_EXCEPTION = None
     ## Trigger a test failure (for testing the test-cases)
@@ -160,11 +164,11 @@ class BaseBERITestCase(unittest.TestCase):
 
     @property
     def TEST_MACHINE(self):
-        return pytest.config.option.TEST_MACHINE.lower()
+        return config_options().TEST_MACHINE.lower()
 
     @property
     def CAP_SIZE(self):
-        return pytest.config.option.CAP_SIZE
+        return config_options().CAP_SIZE
 
     def __init__(self, *args, **kwargs):
         super(BaseBERITestCase, self).__init__(*args, **kwargs)
@@ -230,7 +234,7 @@ class BaseBERITestCase(unittest.TestCase):
                 self.LOG_FN = self.__class__.__name__ + ".log"
         assert self._MIPS is None
         try:
-            self.parseLog(os.path.join(self.LOG_DIR, self.LOG_FN))
+            self.parseLog(os.path.join(LOG_DIR, self.LOG_FN))
         except Exception as e:
             self._SETUP_EXCEPTION = e
 
@@ -396,7 +400,7 @@ class BaseBERITestCase(unittest.TestCase):
 
     @property
     def max_permissions(self):
-        perm_size = int(pytest.config.option.PERM_SIZE)
+        perm_size = int(config_options().PERM_SIZE)
         if perm_size == 31:
             return HexInt(0x7fff8fff)
         elif perm_size == 23:
@@ -568,7 +572,6 @@ class BaseBERITestCase(unittest.TestCase):
 class BaseICacheBERITestCase(BaseBERITestCase):
     '''Abstract base class for test cases for the BERI Instruction Cache.'''
 
-    LOG_DIR = os.environ.get("LOGDIR", "log")
     LOG_FN = None
     ICACHE = None
     ICACHE_EXCEPTION = None
@@ -589,7 +592,7 @@ class BaseICacheBERITestCase(BaseBERITestCase):
                 self.LOG_FN = self.__name__ + "_cached.log"
             else:
                 self.LOG_FN = self.__name__ + ".log"
-        fh = open(os.path.join(self.LOG_DIR, self.LOG_FN), "rt")
+        fh = open(os.path.join(LOG_DIR, self.LOG_FN), "rt")
         try:
             self.ICACHE = ICacheStatus(fh)
         except ICacheException as e:

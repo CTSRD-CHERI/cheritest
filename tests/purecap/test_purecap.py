@@ -26,7 +26,7 @@
 # Just checks that the test produced the appropriate pass value in v0 to indicate
 # that all c asserts passed. Cribbed from tests/fuzz/fuzz.py.
 
-from beritest_tools import TestClangBase, attr
+from beritest_tools import TestClangBase, attr, LOG_DIR, config_options
 import os
 import re
 import pytest
@@ -41,7 +41,6 @@ ONLY_TEST = os.environ.get("ONLY_TEST", None)
 TEST_FILE_RE = re.compile('test_.+\\.(c|cpp)')
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
-LOG_DIR = pytest.config.option.LOGDIR
 
 def check_answer(test_name, test_file):
     if MULTI and CACHED:
@@ -62,7 +61,7 @@ def _get_xfail_reason(test_name):
         return "This test needs a much larger stack than we provide here"
     if test_name == "test_purecap_statcounters":
         # L3/SAIL don't implement the statcounters instructions
-        if os.getenv("TEST_MACHINE", "").lower() in ("l3", "sail"):
+        if config_options().TEST_MACHINE.lower() in ("l3", "sail"):
             return "Statcounters rdhwr not supported on " + os.getenv("TEST_MACHINE", "")
     return None
 

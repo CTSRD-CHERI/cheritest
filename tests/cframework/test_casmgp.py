@@ -29,4 +29,4 @@ from beritest_tools import BaseBERITestCase
 
 class test_casmgp(BaseBERITestCase):
     def test_gp(self):
-        self.assertRegisterEqual(self.MIPS.gp, 0x00000000e51a6b98, "Value in \$gp corrupted on C return")
+        self.assertRegisterEqual(self.MIPS.gp, 0x00000000e51a6b98, "Value in $gp corrupted on C return")
