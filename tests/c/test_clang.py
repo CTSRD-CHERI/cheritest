@@ -29,7 +29,7 @@ from beritest_tools import TestClangBase
 import os
 import pytest
 import re
-from beritest_tools import attr, LOG_DIR
+from beritest_tools import attr, LOG_DIR, config_options
 
 # Parameters from the environment
 # Cached or uncached mode.
@@ -58,8 +58,10 @@ def check_answer(test_name, test_file):
 # If the test is expected to fail return a reason, otherwise None
 def _get_xfail_reason(test_name):
     # Add xfail checks here:
-    if test_name == "foo_test":
-        return "Foo_test is not supported yet!"
+    if test_name == "test_clang_dhrystone_ipc":
+        # QEMU doesn't report real cycles
+        if config_options().TEST_MACHINE.lower() == "qemu":
+            return "cycle counter in QEMU reports realtime not cycles"
     return None
 
 
