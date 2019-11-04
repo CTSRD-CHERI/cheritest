@@ -37,7 +37,7 @@ ENTRY(start)
 
 SECTIONS
 {
-	. = 0x9000000040000000;
+	. = 0x900000ff40000000;
 
 	.text . : AT(0x40000000) {
                 . = ALIGN(8);

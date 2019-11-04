@@ -37,7 +37,7 @@ ENTRY(multi_start)
 
 SECTIONS
 {
-	. = 0x9000000040000000;
+	. = 0x900000ff40000000;
 
 	.text ALIGN(0x8): {
 		*/init_multi.o(.text)

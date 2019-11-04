@@ -64,10 +64,9 @@ BEGIN_TEST
 		#
 
 		dli	$t0, 0x9000000000000000		# xkphys uncached
-		daddu	$t0, $gp, $t0
-		ld	$a2, 0($t0)
-		lui $t1, 0x4000
-		dsubu $t0, $t0, $t1
+		daddu	$t1, $gp, $t0
+		ld	$a2, 0($t1)
+		dli     $t0, 0x9000000000004000
 		sd	$a2, 0($t0)	# Store constant in lower 512MB to prepare for 32 bit mapping tests
 
 		dli	$t0, 0x9800000000000000		# xkphys cached,
@@ -90,14 +89,10 @@ BEGIN_TEST
 		# Also test historic MIPS ckseg0 and ckseg1, also present in
 		# R4000.
 		#
-		lui $t0, 0x4000
-		dsubu $gp, $gp, $t0
-		dli	$t0, 0xffffffffa0000000		# ckseg1, uncached
-		daddu	$t0, $gp, $t0
+		dli	$t0, 0xffffffffa0004000		# ckseg1, uncached
 		ld	$a0, 0($t0)
 
-		dli	$t0, 0xffffffff80000000		# ckseg0, cached
-		daddu	$t0, $gp, $t0
+		dli	$t0, 0xffffffff80004000		# ckseg0, cached
 		ld	$a1, 0($t0)
 
 END_TEST
