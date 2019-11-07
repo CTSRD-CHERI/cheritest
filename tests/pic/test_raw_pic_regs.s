@@ -33,7 +33,7 @@
 		.ent start
 start:
     # Load PIC base address
-		dli   $a0, 0x900000007f804000
+		dli   $a0, 0x900000ff7f804000
     # Test PIC control registers
     li    $t0, 127
     # $s0==0 means control registers read ok.  This is default.
@@ -50,7 +50,7 @@ control_reg_skip_fail:
     addi  $t0, $t0, -1
     
     # Test PIC read registers
-    dli   $a0, 0x900000007f806000
+    dli   $a0, 0x900000ff7f806000
     li    $t0, 15
     # $s1==0 means read registers read ok.  This is default.
     li    $s1, 0
@@ -66,20 +66,20 @@ read_reg_skip_fail:
 	
 		# Test setting PIC interrupt
 		# Enable soft interrupt 1
-		dli   $a0, 0x900000007f804000 + 8*64
+		dli   $a0, 0x900000ff7f804000 + 8*64
 		ori   $t0, $0, 0x1
 		sll   $t0, $t0, 31
 		sd    $t0, 0($a0)
 		# Load read address
-    dli   $a0, 0x900000007f806008
+    dli   $a0, 0x900000ff7f806008
     ld    $t0, 0($a0)
     # Load set address
-    dli   $a1, 0x900000007f806000 + 136
+    dli   $a1, 0x900000ff7f806000 + 136
     ori   $t0, $t0, 0x1
     sd    $t0, 0($a1)
     ld    $s2, 0($a0)
     # Load clear address
-    dli   $a1, 0x900000007f806000 + 264
+    dli   $a1, 0x900000ff7f806000 + 264
     sd    $t0, 0($a1)
     ld    $s3, 0($a0)
     

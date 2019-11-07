@@ -42,7 +42,7 @@
 # IP1 are reserved for software interrupts).
 #
 BEGIN_TEST
-	        dli     $a0, 0x900000007f804000 # PIC_BASE 
+	        dli     $a0, 0x900000ff7f804000 # PIC_BASE 
 		sd	$zero, 0($a0)		# disable source 0
 		sd	$zero, 8($a0)		# disable source 1
    	 	dli     $t0, 0x80000004         # enable source 2, forward to irq 4
