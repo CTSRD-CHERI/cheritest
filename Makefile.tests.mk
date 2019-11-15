@@ -416,18 +416,12 @@ $(ALL_LOGDIRS) $(OBJDIR):
 	mkdir -p "$@"
 
 
-# TODO: make BERI the default once everyone has updated
-ifdef MIPS_ONLY
-QEMU_CPU_MODEL?=BERI
-else
-QEMU_CPU_MODEL?=5Kf
-endif
-
 QEMU_FLAGS=-D "$@" -cpu $(QEMU_CPU_MODEL) -bc `./max_cycles $@ 20000 300000` \
            -kernel "$<" -serial none -monitor none -nographic -m 2048M -bp 0x`$(OBJDUMP) -t "$<" | awk -f end.awk`
 
-QEMU_MACHINE_MODEL?=mipssim
+QEMU_CPU_MODEL?=BERI
 # QEMU_MACHINE_MODEL?=mipssim
+QEMU_MACHINE_MODEL?=malta
 ifeq ($(MULTI),1)
 QEMU_FLAGS+=-smp 2 -M malta
 else
