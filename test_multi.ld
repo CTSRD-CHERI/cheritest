@@ -25,8 +25,8 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-INCLUDE common.ld
 __base__ = __uncached_base__;
+INCLUDE common.ld
 
 ENTRY(multi_start)
 

@@ -58,6 +58,29 @@ BEGIN_TEST
 	csetbounds $c4, $c3, $s2
 	nop
 	check_instruction_traps $a1, csetboundsexact $c5, $c3, $s2
+
+
+	dli $t0, 4095
+	cgetdefault $c1
+	csetaddr $c1, $c1, $t0
+	dli $t1, 4096	# almost representable
+	csetbounds $c6, $c1, $t1	# imprecise result in $c6
+	cram $a2, $t1 # get the representable mask
+
+	# get precise length by rounding up (add mask, and with mask+1)
+	not $a3, $a2		# negate the mask
+	daddu $a3, $t1, $a3	# ensure we go over the next alignment boundary by adding negated mask
+	and $s4, $a3, $a2	# s4 = round up to precise length
+	# apply mask to base address
+	and $s5, $t0, $a2	# s5 = round down to precise base
+
+	# This should work now that base and length have been rounded:
+	# Try a imprecise setbounds and ensure the value is correct
+	cgetdefault $c7
+	csetaddr $c7, $c7, $s5	# set precise base
+	csetbounds $c8, $c7, $s4
+	nop
+	check_instruction_traps $a3, csetboundsexact $c9, $c7, $s4
 END_TEST
 
 

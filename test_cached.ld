@@ -24,8 +24,8 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-INCLUDE common.ld
 __base__ = __cached_base__;
+INCLUDE common.ld
 
 ENTRY(uncached_start)
 
@@ -33,7 +33,8 @@ SECTIONS
 {
 	. = __text_start__;
 	.setLMA . : AT(__text_start_phys__) {}
-	.text ALIGN(0x8) : {
+	.text . : {
+		. = ALIGN(8);
 		*/init_cached.o(.text)
 		*/init.o(.text)
 		*(EXCLUDE_FILE (init*.o) .text)

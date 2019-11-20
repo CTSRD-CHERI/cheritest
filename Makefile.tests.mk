@@ -200,7 +200,7 @@ COPY_PISM_CONFS = cp $(MEMCONF) $$TMPDIR/memoryconfig
 PREPARE_TEST = \
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp $(OBJDIR)/sim_boot_stub.mem mem.bin && \
+	cp $(abspath $(OBJDIR)/sim_boot_stub.mem) mem.bin && \
 	$(MEMCONV) bsim && \
 	$(MEMCONV) bsimc2 && \
 	$(COPY_PISM_CONFS)
@@ -314,7 +314,7 @@ $(LOGDIR)/test_clang_dma%.log: $(OBJDIR)/startdramtest.mem $(OBJDIR)/test_clang_
 		$(call REPEAT_5, CHERI_KERNEL=$(notdir $(word 2, $^)) $(RUN_TEST_COMMAND)); \
 		$(CLEAN_TEST)
 
-$(LOGDIR)/%.log : $(OBJDIR)/%.elf sim_boot_stub.mem $(CHECK_SIM_EXISTS)
+$(LOGDIR)/%.log : $(OBJDIR)/%.elf $(OBJDIR)/sim_boot_stub.mem $(CHECK_SIM_EXISTS)
 	$(call PREPARE_TEST,$<) && $(call RUN_TEST,$<); $(CLEAN_TEST)
 
 # The test won't be run, but attempting to build with the standard rules fails

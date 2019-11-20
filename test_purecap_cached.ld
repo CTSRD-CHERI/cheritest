@@ -25,9 +25,8 @@
  * @BERI_LICENSE_HEADER_END@
  */
 
-INCLUDE common.ld
 __base__ = __cached_base__;
-__stack_size__ = 0x1000; /* 4k stack */
+INCLUDE common.ld
 
 ENTRY(uncached_start)
 

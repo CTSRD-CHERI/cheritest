@@ -30,10 +30,10 @@
 
 	.text
 	.set noat
-	.global boot
-	.ent boot
-	.global boot
-boot:
+	.global boot_stub
+	.ent boot_stub
+	.global boot_stub
+boot_stub:
 	# Simplified version of simboot/miniboot.s
 	# TODO: we should remove the stuff from init.s that is already in miniboot and use that instead
 	# Assume that there is 64-bit ELF kernel loaded at a virtual
@@ -43,4 +43,4 @@ boot:
 	ld	$at, 0x18($at)
 	jr	$at
 	nop
-	.end boot
+	.end boot_stub

@@ -27,10 +27,18 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
+__base__ = __uncached_base__;
 INCLUDE common.ld
 
+ENTRY(boot_stub)
 SECTIONS
 {
-	. = __uncached_base__ + 0x000000ff40000000;
-	.text ALIGN(0x8): { *(.text) }
+	. = __uncached_base__ + __boot_phys_addr__;
+	.text __uncached_base__ + __boot_phys_addr__ : AT(__boot_phys_addr__){
+		. = ALIGN(8);
+		*(.text)
+	}
+	.shstrtab : { *(.shstrtab) }
+	/DISCARD/ : { *(*) }
+
 }
