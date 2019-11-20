@@ -35,7 +35,7 @@ SECTIONS
 {
 	. = __text_start__;
 
-	.text ALIGN(0x8): {
+	.text ALIGN(0x8): AT(__text_start__) {
 		*/init_multi.o(.text)
 		*/init.o(.text)
 		*(EXCLUDE_FILE (init*.o) .text)

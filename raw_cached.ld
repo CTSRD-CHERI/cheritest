@@ -34,7 +34,7 @@ SECTIONS
 {
 	. = __text_start__;
 
-	.text ALIGN(0x8): {
+	.text ALIGN(0x8): AT(__text_start__) {
 		*/init_cached.o(.text)
 		*(EXCLUDE_FILE (init_cached.o) .text)
 	}

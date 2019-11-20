@@ -35,7 +35,7 @@ SECTIONS
 {
 	. = __text_start__;
 
-	.text ALIGN(0x8): {
+	.text ALIGN(0x8): AT(__text_start__) {
 		*/purecap_init_cached.o(.text)
 		*/purecap_init.o(.text)
 		*(EXCLUDE_FILE (purecap_init*.o) .text)
