@@ -32,8 +32,8 @@ ENTRY(start)
 SECTIONS
 {
 	. = __text_start__;
-
-	.text . : AT(__text_start__) {
+	.setLMA . : AT(__text_start_phys__) {}
+	.text . : {
                 . = ALIGN(8);
 		*/init.o(.text)
 		*(EXCLUDE_FILE (init.o) .text .text.*)

@@ -33,8 +33,8 @@ ENTRY(start)
 SECTIONS
 {
 	. = __text_start__;
-
-	.text ALIGN(0x8): AT(__text_start__) { *(.text) . = ALIGN(8); }
+	.setLMA . : AT(__text_start_phys__) {}
+	.text ALIGN(0x8): { *(.text) . = ALIGN(8); }
 	.bss  ALIGN(0x8): { *(.bss) . = ALIGN(8); } 
 	.data ALIGN(0x8): { *(.data)  . = ALIGN(8);}
 	.MIPS.abiflags ALIGN(0x8): { *(.MIPS.abiflags)}

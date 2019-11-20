@@ -34,8 +34,8 @@ ENTRY(uncached_start)
 SECTIONS
 {
 	. = __text_start__;
-
-	.text ALIGN(0x8): AT(__text_start__) {
+	.setLMA . : AT(__text_start_phys__) {}
+	.text ALIGN(0x8): {
 		*/purecap_init_cached.o(.text)
 		*/purecap_init.o(.text)
 		*(EXCLUDE_FILE (purecap_init*.o) .text)

@@ -34,8 +34,8 @@ ENTRY(multi_start)
 SECTIONS
 {
 	. = __text_start__;
-
-	.text ALIGN(0x8): AT(__text_start__) {
+	.setLMA . : AT(__text_start_phys__) {}
+	.text ALIGN(0x8): {
 		*/init_multi.o(.text)
 		*(EXCLUDE_FILE (init_multi.o) .text)
 	}

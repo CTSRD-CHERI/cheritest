@@ -35,8 +35,8 @@ ENTRY(start)
 SECTIONS
 {
 	. = __text_start__;
-
-	.text . : AT(__text_start__) {
+	.setLMA . : AT(__text_start_phys__) {}
+	.text . : {
 		. = ALIGN(8);
 		*/purecap_init.o(.text)
 		*(EXCLUDE_FILE (purecap_init.o) .text .text.* )
