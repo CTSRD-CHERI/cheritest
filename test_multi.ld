@@ -25,20 +25,15 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-
-__stack_size__ = 0x400; /* 1k stack */
-__mem_top__ = 0x9800000000008000;
-
-__sp = __mem_top__;
-__heap_top__ = __mem_top__ - __stack_size__;
-__sp_bottom = __heap_top__;
+INCLUDE common.ld
+__base__ = __uncached_base__;
 
 ENTRY(multi_start)
 
 
 SECTIONS
 {
-	. = 0x980000ff40000000;
+	. = __text_start__;
 
 	.text ALIGN(0x8): {
 		*/init_multi.o(.text)

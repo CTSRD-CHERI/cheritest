@@ -25,21 +25,18 @@
  * @BERI_LICENSE_HEADER_END@
  */
 
-
+INCLUDE common.ld
+__base__ = __uncached_base__;
 __stack_size__ = 0x1000; /* 4k stack */
-__mem_top__ = 0x9000000000010000;
 
-__sp = __mem_top__;
-__heap_top__ = __mem_top__ - __stack_size__;
-__sp_bottom = __heap_top__;
 
 ENTRY(start)
 
 SECTIONS
 {
-	. = 0x900000ff40000000;
+	. = __text_start__;
 
-	.text . : AT(0x40000000) {
+	.text . : AT(__text_start__) {
 		. = ALIGN(8);
 		*/purecap_init.o(.text)
 		*(EXCLUDE_FILE (purecap_init.o) .text .text.* )

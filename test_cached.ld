@@ -24,21 +24,15 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-
-__stack_size__ = 0x400; /* 1k stack */
-__mem_top__ = 0x9800000000008000;
-
-__sp = __mem_top__;
-__heap_top__ = __mem_top__ - __stack_size__;
-__sp_bottom = __heap_top__;
+INCLUDE common.ld
+__base__ = __cached_base__;
 
 ENTRY(uncached_start)
 
 SECTIONS
 {
-	. = 0x980000ff40000000;
-
-	.text ALIGN(0x8): {
+	. = __text_start__;
+	.text ALIGN(0x8) : AT(__text_start__) {
 		*/init_cached.o(.text)
 		*/init.o(.text)
 		*(EXCLUDE_FILE (init*.o) .text)
