@@ -116,7 +116,7 @@ FUZZ_DMA_ONLY?=0
 NOFUZZ?=1
 NOFUZZR?=1
 TEST_WATCH?=0
-CAP_SIZE?=256
+CAP_SIZE?=128
 
 
 # Avoid GNU make implicit rule processing:
