@@ -235,3 +235,6 @@ $(OBJDIR)/test_%_cachedmulti.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_LIB_OBJECT) $(SELECT_INIT)
 	$(RUN_MIPS_LD) $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))`  $< -o $@ -m elf64btsmip
+
+$(OBJDIR)/sim_boot_stub.elf: $(OBJDIR)/sim_boot_stub.o sim_boot_stub.ld
+	$(RUN_MIPS_LD) $(MIPS_LDFLAGS) sim_boot_stub.ld $< -o $@ -m elf64btsmip

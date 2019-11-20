@@ -200,7 +200,7 @@ COPY_PISM_CONFS = cp $(MEMCONF) $$TMPDIR/memoryconfig
 PREPARE_TEST = \
 	TMPDIR=$$(mktemp -d) && \
 	cd $$TMPDIR && \
-	cp $(PWD)/$(1) mem.bin && \
+	cp $(OBJDIR)/sim_boot_stub.mem mem.bin && \
 	$(MEMCONV) bsim && \
 	$(MEMCONV) bsimc2 && \
 	$(COPY_PISM_CONFS)
@@ -216,6 +216,7 @@ RUN_TEST_COMMAND = \
     PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	CHERI_DTB=$(DTB_FILE) \
+	CHERI_KERNEL=$(abspath $(1)) \
 	BERI_DEBUG_SOCKET_0=$(CHERISOCKET)  $(SIM_ABS) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@; \
 
@@ -297,7 +298,7 @@ endif
 	$(call PREPARE_TEST,$<) && \
 	((BERI_DEBUG_SOCKET_0=$$TMPDIR/sock \
 	CHERI_TRACE_FILE=$(CHERI_TRACE_FILE) \
-	$(call RUN_TEST,$*); \
+	$(call RUN_TEST, $(OBJDIR)/test_raw_trac$*.elf); \
 	$(CLEAN_TEST)) &) && \
 	$(call WAIT_FOR_SOCKET,$$TMPDIR/sock) && \
 	$(CHERICTL) setreg -r 12 -v 1 -p $$TMPDIR/sock && \
@@ -313,8 +314,8 @@ $(LOGDIR)/test_clang_dma%.log: $(OBJDIR)/startdramtest.mem $(OBJDIR)/test_clang_
 		$(call REPEAT_5, CHERI_KERNEL=$(notdir $(word 2, $^)) $(RUN_TEST_COMMAND)); \
 		$(CLEAN_TEST)
 
-$(LOGDIR)/%.log : $(OBJDIR)/%.mem $(CHECK_SIM_EXISTS)
-	$(call PREPARE_TEST,$<) && $(call RUN_TEST,$*); $(CLEAN_TEST)
+$(LOGDIR)/%.log : $(OBJDIR)/%.elf sim_boot_stub.mem $(CHECK_SIM_EXISTS)
+	$(call PREPARE_TEST,$<) && $(call RUN_TEST,$<); $(CLEAN_TEST)
 
 # The test won't be run, but attempting to build with the standard rules fails
 $(LOGDIR)/test_clang_dma%_cached.log : ;
