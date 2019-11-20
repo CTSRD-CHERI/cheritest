@@ -290,7 +290,7 @@ $(LOGDIR)/test_raw_trace_cached.log: CHERI_TRACE_FILE=$(PWD)/log/test_raw_trace_
 # We fork the test, and use cherictl
 # test_raw_trac, because % must be non-empty...
 #
-$(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.mem $(CHECK_SIM_EXISTS) $(CHERICTL)
+$(LOGDIR)/test_raw_trac%.log: $(OBJDIR)/test_raw_trac%.elf $(CHECK_SIM_EXISTS) $(CHERICTL)
 ifeq ($(wildcard $(CHERICTL)),)
 	$(error CHERICTL not found, set CHERILIBS variable correctly!)
 endif
@@ -298,7 +298,7 @@ endif
 	$(call PREPARE_TEST,$<) && \
 	((BERI_DEBUG_SOCKET_0=$$TMPDIR/sock \
 	CHERI_TRACE_FILE=$(CHERI_TRACE_FILE) \
-	$(call RUN_TEST, $(OBJDIR)/test_raw_trac$*.elf); \
+	$(call RUN_TEST, $<); \
 	$(CLEAN_TEST)) &) && \
 	$(call WAIT_FOR_SOCKET,$$TMPDIR/sock) && \
 	$(CHERICTL) setreg -r 12 -v 1 -p $$TMPDIR/sock && \
