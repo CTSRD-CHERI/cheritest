@@ -97,13 +97,13 @@ BEGIN_TEST
 		# tests.
 		#
 		# XXXRW: This test incorrectly assumes that there is memory to
-		# be found at ~0x4000 before the unit test start address.
+		# be found at 0x4000 before the unit test start address.
 		# To make this test more reliable, we should ideally use a
 		# start address in the base 512M of physical memory.  Possible
 		# failure modes here include overwriting arbitrary portions of
 		# test memory.
 		#
-		lui	$t0, 0x4000
+		dli	$t0, 0x4000
 		dsubu	$gp, $gp, $t0
 
 		dli	$t0, 0x9000000000000000
