@@ -64,8 +64,6 @@ branch_target:
 
 		# Terminate the simulator
 		mtc0	$v0, $23
-		dla	$t0, end
-		jr	$t0
 		nop
 end:
 		b end
