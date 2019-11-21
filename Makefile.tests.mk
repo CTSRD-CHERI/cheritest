@@ -488,7 +488,7 @@ $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(CHECK_QEMU_EXISTS) | $(QEMU_L
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; $(fail_qemu_logfile) ; fi
 
 $(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log
-	$(CHERI_SDK_BINDIR)/symbolize-cheri-trace.py $< "$(OBJDIR)/`basename $< .log`.elf" > $@
+	$(CHERI_SDK_BINDIR)/symbolize-cheri-trace.py "--llvm-symbolizer=$(CHERI_SDK_BINDIR)/llvm-symbolizer" $< "$(OBJDIR)/`basename $< .log`.elf" > $@
 
 clion/$(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log.symbolized
 	clion $(abspath $<)
@@ -863,7 +863,7 @@ QEMU_ALL_PYTHON_TESTS=$(addprefix pytest/qemu/, $(TEST_PYTHON))
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
 $(QEMU_ALL_PYTHON_TESTS): pytest/qemu/%.py: %.py check_valid_qemu FORCE
 	# echo "DEPS: $^ "
-	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log
+	$(MAKE) $(MFLAGS) $(QEMU_LOGDIR)/$(notdir $(basename $@)).log.symbolized
 	$(QEMU_PYTEST) $(SINGLE_TEST_VERBOSE) $<
 
 # TODO: $(NOTDIR $(BASENAME)) won't work on the % wildcard dependency
