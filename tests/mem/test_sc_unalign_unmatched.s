@@ -30,11 +30,11 @@
 .set nobopt
 .set noat
 .include "macros.s"
+
 #
 # Unaligned sc, firing an address exception.
 #
-
-BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
+BEGIN_TEST
 		#
 		# Clear registers we'll use when testing results later.
 		#
@@ -56,15 +56,20 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Trigger exception.
 		#
-		# The result is "unpredictable" accoeding ti the MIPS
+		# The result is "unpredictable" according to the MIPS
 		# specification, because there is no matching LL.
 		# BERI will raise an exception due to the unaligned address.
 		#
+		# However:
+		# The effective address must be naturally-aligned. If any of the
+		# 3 least-significant bits of the address is non-zero, an
+		# Address Error exception occurs.
+
 		dla	$s0, bytes
 		ld	$s1, 0($s0)	# load value before sc
 desired_epc:
-		li	$a7, -1
-		sc	$a7, -1($s0)
+		li	$a7, 0x12345
+		check_instruction_traps $s5, sc	$a7, -1($s0)
 		daddi	$s3, $s0, -1
 
 		#
@@ -78,23 +83,6 @@ desired_epc:
 
 return:
 END_TEST
-
-#
-# Our actual exception handler, which tests various properties.  This code
-# assumes that the overflow wasn't in a branch-delay slot (and the test code
-# checks BD as well), so EPC += 4 should return control after the overflow
-# instruction.
-#
-BEGIN_CUSTOM_TRAP_HANDLER
-		li	$a2, 1
-		mfc0	$a3, $12	# Status register
-		mfc0	$a4, $13	# Cause register
-		dmfc0	$a5, $14	# EPC
-		dmfc0	$a7, $8   # bad virtual address
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-END_CUSTOM_TRAP_HANDLER
 
 		.data
 		.align	5

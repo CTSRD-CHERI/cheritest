@@ -38,6 +38,10 @@ class test_sc_unalign_unmatched(BaseBERITestCase):
     If any of the 2 least-significant bits of the address is non-zero,
     an Address Error exception occurs.
     """
+    EXPECTED_EXCEPTIONS = 1
+
+    def test_trap(self):
+        self.assertCompressedTrapInfo(self.MIPS.s5, mips_cause=self.MIPS.Cause.AdES, trap_count=1)
 
     def test_returned(self):
         self.assertRegisterEqual(self.MIPS.a1, 1, "flow broken by sc instruction")
@@ -46,30 +50,7 @@ class test_sc_unalign_unmatched(BaseBERITestCase):
         assert self.MIPS.s1 == HexInt(0x5656565656565656), "value before sc wrong"
         assert self.MIPS.s2 == HexInt(0x5656565656565656), "sc stored value!"
 
-    @attr('llscnotmatching')
-    def test_epc(self):
-        self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a5, "Unexpected EPC")
-
-    @attr('llscnotmatching')
-    def test_handled(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "sc exception handler not run")
-
-    @attr('llscnotmatching')
-    def test_exl_in_handler(self):
-        self.assertRegisterEqual((self.MIPS.a3 >> 1) & 0x1, 1, "EXL not set in exception handler")
-        
-    @attr('llscnotmatching')
-    def test_badvaddr(self):
-        self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s3, "BadVAddr equal to Unaligned Address")
-
-    @attr('llscnotmatching')
-    def test_cause_bd(self):
-        self.assertRegisterEqual((self.MIPS.a4 >> 31) & 0x1, 0, "Branch delay (BD) flag improperly set")
-
-    @attr('llscnotmatching')
-    def test_cause_code(self):
-        self.assertRegisterEqual((self.MIPS.a4 >> 2) & 0x1f, 5, "Code not set to AdES")
-
-    @attr('llscnotmatching')
-    def test_not_exl_after_handler(self):
-        self.assertRegisterEqual((self.MIPS.a6 >> 1) & 0x1, 0, "EXL still set after ERET")
+    def test_llsc_result(self):
+        # The result of SC is UNPREDICTABLE, however all of our implementations return zero
+        # or leave the register unchanged on failure:
+        assert self.MIPS.a7 == 0 or self.MIPS.a7 == 0x12345, "Expected sc failure return code"
