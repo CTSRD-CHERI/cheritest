@@ -30,6 +30,7 @@
 .set noreorder
 .set nobopt
 .set noat
+.set nomacro
 .include "macros.s"
 #
 # Test a simple forward branch with maximum (positive) offset.  $t0 is
@@ -43,70 +44,23 @@ start:
 		li	$a1, 0
 		li	$a2, 0
 		li	$a3, 0
+		li	$a4, 0
 
-		dla $s0, branch        # load the address of the branch
-		dli $t0, 0x8000000     # set the distance we want to move the target
-		dsub $s1, $s0, $t0     # generate the target address
-		lw $s2,16($s0)
-		sw $s2,16($s1)
-		lw $s2,20($s0)
-		sw $s2,20($s1)
-		lw $s2,24($s0)
-		sw $s2,24($s1)
-		lw $s2,28($s0)
-		sw $s2,28($s1)
-		lw $s2,32($s0)
-		sw $s2,32($s1)
-		lw $s2,36($s0)
-		sw $s2,36($s1)
-		lw $s2,40($s0)
-		sw $s2,40($s1)
-		lw $s2,44($s0)
-		sw $s2,44($s1)
-		lw $s2,48($s0)
-		sw $s2,48($s1)
-		lw $s2,52($s0)
-		sw $s2,52($s1)
-		lw $s2,56($s0)
-		sw $s2,56($s1)
-		dli $t0, 0x801fff4     # set the distance we want to move the branch, note 4 not c because branch is relative to branch delay slot
-		dsub $s1, $s0, $t0     # generate the target address
-		lw $s2, 0($s0)         # move the words to the target
-		sw $s2, 0($s1)
-		lw $s2, 4($s0)
-		sw $s2, 4($s1)
-		lw $s2, 8($s0)
-		sw $s2, 8($s1)
-		lw $s2,12($s0)
-		sw $s2,12($s1)
-		sync
-		nop										# some nops to give the data time to propagate
-		nop                   # before the instruction fetch.
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		nop
-		jr $s1                 # jump to the branch
-		nop
-branch:
-		li	$a0, 1
-		b	0x1fffc
+		li	$a0, 1		# before branch
+		b	0x1fffc		# max offset
 		li	$a1, 1		# branch-delay slot
-		li	$a2, 1
-branch_target:
+		li	$a2, 1		# after branch-delay slot
+.space 0x1fffc - 12  # max offset minus 3 instrs
+
+before_branch_target:
 		li	$a3, 1
+branch_target:
+		li	$a4, 1
 
 		# Dump registers in the simulator
 		mtc0	$v0, $26
+		nop
+		nop
 
 		# Terminate the simulator
 		mtc0	$v0, $23

@@ -28,18 +28,23 @@
 
 from beritest_tools import BaseBERITestCase
 
+
 class test_raw_b_maxoffset(BaseBERITestCase):
-    def test_t0(self):
-        self.assertRegisterEqual(self.MIPS.a0, 1, "instruction before branch missed")
+    def test_before_branch__exec(self):
+        assert self.MIPS.a0 == 1, "instruction before branch missed"
 
-    def test_t1(self):
-        '''Test instruction in branch delay slot is executed'''
-        self.assertRegisterEqual(self.MIPS.a1, 1, "instruction in branch-delay slot missed")
+    def test_at_branch_delay_slot_exec(self):
+        """'Test instruction in branch delay slot is executed"""
+        assert self.MIPS.a1 == 1, "instruction in branch-delay slot missed"
 
-    def test_t2(self):
-        '''Test instruction after branch delay slot is not executed'''
-        self.assertRegisterNotEqual(self.MIPS.a2, 1, "branch failed to skip instruction")
+    def test_after_branch_delay_slot_not_exec(self):
+        """Test instruction after branch delay slot is not executed"""
+        assert self.MIPS.a2 != 1, "branch failed to skip instruction"
 
-    def test_t3(self):
-        '''Test instruction at branch target is executed'''
-        self.assertRegisterEqual(self.MIPS.a3, 1, "branch target missed")
+    def test_before_branch_target_not_exec(self):
+        """Test instruction before branch target is not executed"""
+        assert self.MIPS.a3 != 1, "branch failed to skip instruction"
+
+    def test_at_branch_target_exec(self):
+        """Test instruction at branch target is executed"""
+        assert self.MIPS.a4 == 1, "branch target missed"
