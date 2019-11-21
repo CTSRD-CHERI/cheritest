@@ -35,13 +35,5 @@ SECTIONS
 	. = __text_start__;
 	.setLMA . : AT(__text_start_phys__) {}
 	.text ALIGN(0x8): { *(.text) . = ALIGN(8); }
-	.bss  ALIGN(0x8): { *(.bss) . = ALIGN(8); } 
-	.data ALIGN(0x8): { *(.data)  . = ALIGN(8);}
-	.MIPS.abiflags ALIGN(0x8): { *(.MIPS.abiflags)}
-	.MIPS.options ALIGN(0x8): { *(.MIPS.options)}
-
-	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
-	__bss_start = ADDR(.bss);
-	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
-        /DISCARD/ : { *(.MIPS.options) *(.MIPS.abiflags) *(.pdr)}
+	INCLUDE common-sections.ld
 }

@@ -38,12 +38,5 @@ SECTIONS
 		*/init_cached.o(.text)
 		*(EXCLUDE_FILE (init_cached.o) .text)
 	}
-	.bss ALIGN(0x8): { *(.bss) }
-	.data ALIGN(0x8): { *(.data)}
-	.MIPS.abiflags ALIGN(0x8): { *(.MIPS.abiflags)}
-	.MIPS.options ALIGN(0x8): { *(.MIPS.options)}
-
-	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
-	__bss_start = ADDR(.bss);
-	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
+	INCLUDE common-sections.ld
 }
