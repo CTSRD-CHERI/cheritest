@@ -55,7 +55,7 @@ BEGIN_TEST
 		cgettag $a1, $c2
 		
 		# Exercise a potential victim buffer in the tag cache.
-		dla	$t1, cap1-0x4000000	# A conflicting address
+		dla	$t1, cap1+0x4000000	# A conflicting address
 		dla	$t2, cap1+0x1000	# A different address
 		cgetdefault	$c1
 		# Store a valid cap to an address that conflicts with one in the cache.
@@ -83,7 +83,7 @@ BEGIN_TEST
 END_TEST
 
 		.data
-		.align	5		# Must 256-bit align capabilities
+		.balign	32		# Must 256-bit align capabilities
 buffer:		.dword	0x0123456789abcdef # uperms/reserved
 		.dword	0x0123456789abcdef # otype/eaddr
 		.dword	0x0123456789abcdef # base
