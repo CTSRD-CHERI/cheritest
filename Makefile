@@ -324,9 +324,9 @@ endif
 
 CLANG_CMD?=clang
 ifdef MIPS_ONLY
-CLANG_CC?=$(CLANG_CMD) -target mips64-unknown-freebsd -mcpu=beri
+CLANG_CC?=$(CLANG_CMD) -target mips64-unknown-freebsd -mcpu=beri -mhard-float
 else
-CLANG_CC?=$(CLANG_CMD) -target cheri-unknown-freebsd -mcpu=beri -cheri=$(CAP_SIZE)
+CLANG_CC?=$(CLANG_CMD) -target cheri-unknown-freebsd -mcpu=beri -cheri=$(CAP_SIZE) -mhard-float
 endif
 CLANG_AS=$(CLANG_CC) -fno-pic -c -Wno-unused-command-line-argument -mno-abicalls
 
