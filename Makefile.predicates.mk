@@ -188,7 +188,6 @@ dumpicache \
 ignorebadex \
 invalidateL2 \
 loadcachetag \
-llscnotmatching \
 llscspan \
 llscnoalias \
 llscuncached \
@@ -236,7 +235,6 @@ dumpicache \
 ignorebadex \
 invalidateL2 \
 loadcachetag \
-llscnotmatching \
 llscspan \
 llscspan_csc \
 llscnoalias \
@@ -295,7 +293,6 @@ floatnan2008 \
 floatrecipflushesdenorm \
 ignorebadex \
 invalidateL2 \
-llscnotmatching \
 llscspan \
 loadcachetag \
 mt \
