@@ -2,13 +2,13 @@
 
 
 SELECT_INIT:=$(OBJDIR)/select_init
-
-RAW_LDSCRIPT=raw.ld common.ld
-RAW_CACHED_LDSCRIPT=raw_cached.ld common.ld
-RAW_MULTI_LDSCRIPT=raw_multi.ld common.ld
-TEST_LDSCRIPT=test.ld common.ld
-TEST_CACHED_LDSCRIPT=test_cached.ld common.ld
-TEST_MULTI_LDSCRIPT=test_multi.ld common.ld
+COMMON_LDSCRIPTS=common.ld common-sections-pre.ld common-sections-post.ld
+RAW_LDSCRIPT=raw.ld $(COMMON_LDSCRIPTS)
+RAW_CACHED_LDSCRIPT=raw_cached.ld $(COMMON_LDSCRIPTS)
+RAW_MULTI_LDSCRIPT=raw_multi.ld $(COMMON_LDSCRIPTS)
+TEST_LDSCRIPT=test.ld $(COMMON_LDSCRIPTS)
+TEST_CACHED_LDSCRIPT=test_cached.ld $(COMMON_LDSCRIPTS)
+TEST_MULTI_LDSCRIPT=test_multi.ld $(COMMON_LDSCRIPTS)
 
 TEST_INIT_OBJECT=$(OBJDIR)/init.o
 # Fuzz tests have a slightly different init which doesn't dump

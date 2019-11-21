@@ -38,6 +38,6 @@ SECTIONS
 		*/purecap_init.o(.text)
 		*(EXCLUDE_FILE (purecap_init.o) .text .text.* )
 	}
-	*(.global_sizes) *(.rodata) *(.rodata.*);
+	INCLUDE common-sections-post.ld
 }
 

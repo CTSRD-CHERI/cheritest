@@ -1,8 +1,8 @@
 	.data . : {
 		. = ALIGN(8);
-		*(.data)
-		*(.global_sizes)
-		*(.rodata)
+		*(.data);
+		*(.global_sizes);
+		*(.rodata);
 		*(.rodata.*);
 		PROVIDE_HIDDEN(_edata = .);
 	}
