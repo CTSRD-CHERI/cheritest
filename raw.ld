@@ -32,8 +32,7 @@ ENTRY(start)
 
 SECTIONS
 {
-	. = __text_start__;
-	.setLMA . : AT(__text_start_phys__) {}
+	INCLUDE common-sections-pre.ld
 	.text ALIGN(0x8): { *(.text) . = ALIGN(8); }
-	INCLUDE common-sections.ld
+	INCLUDE common-sections-post.ld
 }

@@ -32,8 +32,7 @@ ENTRY(start)
 
 SECTIONS
 {
-	. = __text_start__;
-	.setLMA . : AT(__text_start_phys__) {}
+	INCLUDE common-sections-pre.ld
 	.text . : {
 		. = ALIGN(8);
 		*/purecap_init.o(.text)
