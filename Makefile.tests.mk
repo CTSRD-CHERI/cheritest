@@ -395,7 +395,7 @@ endif
 endif
 
 $(SAIL_MIPS_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_MIPS_SIM) max_cycles | $(SAIL_MIPS_LOGDIR)
-	-$(TIMEOUT) 2m $(SAIL_MIPS_SIM) $< >$@ 2>&1
+	-$(SAIL_MIPS_SIM) -cycle-limit `./max_cycles $@ 20000 300000` $< >$@ 2>&1
 
 $(OBJDIR)/%.sailbin: $(OBJDIR)/%.elf $(SAIL)
 	$(SAIL) -elf $< -o $@ 2>/dev/null
@@ -404,13 +404,13 @@ $(SAIL_MIPS_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_MIPS_C_SIM) max_cycles |
 	-$(SAIL_MIPS_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< >$@ 2>&1
 
 $(SAIL_CHERI_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI_SIM) max_cycles | $(SAIL_CHERI_LOGDIR)
-	-$(TIMEOUT) 2m $(SAIL_CHERI_SIM) $< >$@ 2>&1
+	-$(SAIL_CHERI_SIM)  -cycle-limit `./max_cycles $@ 20000 300000` $< >$@ 2>&1
 
 $(SAIL_CHERI_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_CHERI_C_SIM) max_cycles | $(SAIL_CHERI_C_LOGDIR)
 	-$(SAIL_CHERI_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< >$@ 2>&1
 
 $(SAIL_CHERI128_LOGDIR)/%.log: $(OBJDIR)/%.elf $(SAIL_CHERI128_SIM) max_cycles | $(SAIL_CHERI128_LOGDIR)
-	-$(TIMEOUT) 2m $(SAIL_CHERI128_SIM) $< >$@ 2>&1
+	-$(SAIL_CHERI128_SIM) -cycle-limit `./max_cycles $@ 20000 300000` $< >$@ 2>&1
 
 $(SAIL_CHERI128_C_LOGDIR)/%.log: $(OBJDIR)/%.sailbin $(SAIL_CHERI128_C_SIM) max_cycles | $(SAIL_CHERI128_C_LOGDIR)
 	-$(SAIL_CHERI128_C_SIM) --cyclelimit `./max_cycles $@ 20000 300000` --image $< >$@ 2>&1
@@ -685,8 +685,7 @@ nosetests_l3_cachedmulti.xml: $(L3_TEST_CACHEDMULTI_LOGS) check_pytest_version $
 
 _CHECK_FILE_EXIST=$(if $(wildcard $(shell command -v $(1) 2>/dev/null)),$(info SAIL_MIPS_SIM=$(1)),$(error $(2) not found in expected path: "$(1)"))
 check_sail_deps: FORCE
-	@echo Checking if timeout command exists:
-	@which $(TIMEOUT)
+	true # timeout no longer required 
 
 nosetests_sail: check_sail_deps FORCE
 	$(call _CHECK_FILE_EXIST, $(SAIL_MIPS_SIM), sail MIPS)
