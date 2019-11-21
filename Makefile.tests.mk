@@ -1,6 +1,5 @@
 ## This file contains all the rules for the test targets
 
-
 #### configure LOGDIR paths:
 LOGDIR=log
 ALTERA_LOGDIR=altera_log
@@ -109,6 +108,13 @@ SIM_ABS=$(error Cannot find find $(SIM), set CHERIROOT to the cheri directory )
 else
 SIM_ABS:=$(realpath $(SIM))
 endif
+
+ifeq ($(wildcard $(CHERIROOT_ABS)/setup.sh),)
+CHERI_SETUP_SH=$(error Cannot find find cheri/setup.sh, set CHERI_CPU_GIT_ROOT the cheri-cpu directory )
+else
+CHERI_SETUP_SH:=$(CHERIROOT_ABS)/setup.sh
+endif
+
 
 
 TESTS_WITHOUT_PURECAP := $(basename $(TEST_FILES))
@@ -575,7 +581,9 @@ nose_fuzz_cached: $(CHECK_SIM_EXISTS) fuzz_run_tests_cached
 
 
 ifndef BLUESPECDIR
-_SIM_MAKE=source $(CHERIROOT_ABS)/setup.sh && $(MAKE)
+# We have to use bash to source setup.sh:
+SHELL=bash
+_SIM_MAKE=. $(CHERI_SETUP_SH) && $(MAKE)
 else
 _SIM_MAKE=$(MAKE)
 endif
