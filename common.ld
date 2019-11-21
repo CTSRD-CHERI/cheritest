@@ -44,6 +44,9 @@ __mem_size__ = 0x8000000 - __kernel_load_offset__;
 __sp = __cached_base__ + __mem_size__ - __stack_size__;
 __os_memory_size__ = __mem_size__ - __stack_size__;
 __os_elf_header__ = __cached_base__ + __kernel_load_offset__;
+__dip_switches__ = __uncached_base__ + 0xff7f009000;
+__dtb__ = __uncached_base__ + 0xff7f010000;
+__spin_table_top__ =  __cached_base__ + __kernel_load_offset__;
 /*
  * It seems like LLD allows us to define __base__ = __(un)cached_base__
  * in the mains script so that these can be resolved lazily
@@ -53,5 +56,5 @@ __mem_top__ = __base__ + __mem_size__;
 __sp = __mem_top__ - __stack_size__;
 __heap_top__ = __mem_top__ - __stack_size__;
 __sp_bottom = __heap_top__;
-__text_start_phys__ = __kernel_load_offset__;
+__text_start_phys__ = __kernel_load_offset__ + SIZEOF_HEADERS;
 __text_start__ = __base__ + __text_start_phys__;
