@@ -30,7 +30,7 @@
 __base__ = __uncached_base__;
 INCLUDE common.ld
 
-ENTRY(boot_stub)
+ENTRY(start)
 SECTIONS
 {
 	. = __uncached_base__ + __boot_phys_addr__;
@@ -38,7 +38,16 @@ SECTIONS
 		. = ALIGN(8);
 		*(.text)
 	}
-	.shstrtab : { *(.shstrtab) }
-	/DISCARD/ : { *(*) }
+	.data : {
+		. = ALIGN(8);
+		*(.data)
+	}
+	/DISCARD/ : {
+	  *(.MIPS.abiflags)
+	  *(.MIPS.options)
+	  *(.got)
+	}
+	/* .shstrtab : { *(.shstrtab) } */
+	/* /DISCARD/ : { *(*) } */
 
 }

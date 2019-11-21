@@ -3,12 +3,12 @@
 
 SELECT_INIT:=$(OBJDIR)/select_init
 
-RAW_LDSCRIPT=raw.ld
-RAW_CACHED_LDSCRIPT=raw_cached.ld
-RAW_MULTI_LDSCRIPT=raw_multi.ld
-TEST_LDSCRIPT=test.ld
-TEST_CACHED_LDSCRIPT=test_cached.ld
-TEST_MULTI_LDSCRIPT=test_multi.ld
+RAW_LDSCRIPT=raw.ld common.ld
+RAW_CACHED_LDSCRIPT=raw_cached.ld common.ld
+RAW_MULTI_LDSCRIPT=raw_multi.ld common.ld
+TEST_LDSCRIPT=test.ld common.ld
+TEST_CACHED_LDSCRIPT=test_cached.ld common.ld
+TEST_MULTI_LDSCRIPT=test_multi.ld common.ld
 
 TEST_INIT_OBJECT=$(OBJDIR)/init.o
 # Fuzz tests have a slightly different init which doesn't dump
@@ -235,6 +235,3 @@ $(OBJDIR)/test_%_cachedmulti.elf : $(OBJDIR)/test_%.o \
 	    $(TEST_INIT_OBJECT) $(TEST_INIT_CACHED_OBJECT) \
 	    $(TEST_LIB_OBJECT) $(SELECT_INIT)
 	$(RUN_MIPS_LD) $(MIPS_LDFLAGS) `$(SELECT_INIT) $@ $(abspath $(OBJDIR))`  $< -o $@ -m elf64btsmip
-
-$(OBJDIR)/sim_boot_stub.elf: $(OBJDIR)/sim_boot_stub.o sim_boot_stub.ld
-	$(RUN_MIPS_LD) $(MIPS_LDFLAGS) sim_boot_stub.ld $< -o $@ -m elf64btsmip

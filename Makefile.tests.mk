@@ -62,6 +62,8 @@ CHERIROOT?=$(CHERI_CPU_GIT_ROOT)/cheri$(BERI_VER)
 CHERIROOT_ABS:=$(realpath $(CHERIROOT))
 CHERILIBS?=$(CHERI_CPU_GIT_ROOT)/cherilibs
 CHERILIBS_ABS:=$(realpath $(CHERILIBS))
+CHERIBSD_TOOLS?=$(CHERI_CPU_GIT_ROOT)/cheribsd
+CHERIBSD_TOOLS_ABS:=$(realpath $(CHERIBSD_TOOLS))
 PISM_MODULES_PATH=$(CHERILIBS_ABS)/peripherals
 MEMCONF?=$(CHERIROOT_ABS)/memoryconfig
 TOOLS_DIR= ${CHERILIBS_ABS}/tools
@@ -196,6 +198,12 @@ GXEMUL_FUZZ_TEST_CACHED_LOGS := $(filter $(GXEMUL_LOGDIR)/test_fuzz_%, $(GXEMUL_
 #REWRITE_PISM_CONF = sed -e 's,../../cherilibs,$(CHERILIBS_ABS),' < $(1) > $(2)
 #COPY_PISM_CONFS = $(call REWRITE_PISM_CONF,$(MEMCONF),$$TMPDIR/memoryconfig)
 COPY_PISM_CONFS = cp $(MEMCONF) $$TMPDIR/memoryconfig
+
+sim_boot_stub.s: $(CHERIBSD_TOOLS_ABS)/miniboot/miniboot.S
+	$(CLANG_CC) -E -DNOT_INTERACTIVE $< -o $@
+
+$(OBJDIR)/sim_boot_stub.elf: $(OBJDIR)/sim_boot_stub.o sim_boot_stub.ld
+	$(RUN_MIPS_LD) $(MIPS_LDFLAGS) sim_boot_stub.ld $< -o $@ -m elf64btsmip
 
 PREPARE_TEST = \
 	TMPDIR=$$(mktemp -d) && \

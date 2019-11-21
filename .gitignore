@@ -19,3 +19,4 @@ out\.txt
 *.log~
 
 *.py~
+/sim_boot_stub.s
