@@ -31,7 +31,7 @@ from beritest_tools import attr
 class test_raw_counterdev(BaseBERITestCase):
     @attr('counterdev')
     def test_t0(self):
-        self.assertRegisterEqual(self.MIPS.t0, 0x900000007f800000, "Unexpected counter address")
+        self.assertRegisterEqual(self.MIPS.t0, 0x900000ff7f800000, "Unexpected counter address")
 
     @attr('counterdev')
     def test_a0_a1(self):

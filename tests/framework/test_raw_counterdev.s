@@ -39,7 +39,7 @@
 		.global start
 		.ent start
 start:
-		dli	$t0, 0x900000007f800000
+		dli	$t0, 0x900000ff7f800000
 
 		#
 		# Read three times, we'll make sure they are all different.
