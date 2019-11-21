@@ -29,11 +29,12 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr, HexInt
 
 # Check that the registers used in purecap tests are initialized to usable values
+@attr('capabilities')
 class test_purecap_reg_init(BaseBERITestCase):
-    @attr('capabilities')
     def test_pcc(self):
         self.MIPS.pcc.offset = (self.MIPS.pcc.offset & 0x00FFFFFFFFFFFFFF)
-        self.assertValidCap(self.MIPS.pcc, "$pcc", offset=(0x00000040000000, 0x000000400fffff),
+        # The test ELF binaries are loaded at 0x100000
+        self.assertValidCap(self.MIPS.pcc, "$pcc", offset=(0x100000, 0x10ffff),
                             length=self.max_length, perms=self.max_nostore_perms)
 
     @attr('capabilities')
