@@ -44,7 +44,7 @@ BEGIN_TEST
 		# there is enough memory for the large jump offset.
 		#
 
-		dli	$a0, 0x9800000010000000
+		dla	$a0, __end_of_elf_file__
 		dla	$a1, target
 		dli	$a2, 0x80
 		jal	memcpy_nocap
@@ -54,7 +54,7 @@ BEGIN_TEST
 		# Copy the routine 'branch' at the desired offset from 'branch'
 		#
 
-		dli	$a0, 0x9800000010000000 + 131072 - 4
+		dla	$a0, __end_of_elf_file__ + 131072 - 4
 		dla	$a1, branch
 		dli	$a2, 0x80
 		jal	memcpy_nocap
@@ -79,7 +79,7 @@ BEGIN_TEST
 		# Jump to the copy of 'branch'
 		#
 
-		dli	$a0, 0x9800000010000000 + 131072 - 4
+		dla	$a0, __end_of_elf_file__ + 131072 - 4
 		jr	$a0
 		nop
 

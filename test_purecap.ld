@@ -38,26 +38,7 @@ SECTIONS
 		. = ALIGN(8);
 		*/purecap_init.o(.text)
 		*(EXCLUDE_FILE (purecap_init.o) .text .text.* )
-                . = ALIGN(32);
-                __start___cap_relocs = .;
-                *(__cap_relocs); 
-                __stop___cap_relocs = .; 
 	}
-
-	.data . : { . = ALIGN(8); *(.data)  *(.global_sizes) *(.rodata) *(.rodata.*); }
-	.got  . : {
-                    . = ALIGN(16);
-                 _gp = ALIGN(16) + 0x7ff0;
-                 *(.got.plt) *(.got) 
-                 }
-	.bss  . : { . = ALIGN(8); *(.bss); } =0
-	.MIPS.abiflags ALIGN(0x8): { *(.MIPS.abiflags)}
-	.MIPS.options ALIGN(0x8): { *(.MIPS.options)}
-	
-	__heap = ALIGN(0x8);	/* 64-bit aligned heap pointer */
-	__bss_start = ADDR(.bss);
-	__bss_end = ALIGN(__bss_start + SIZEOF(.bss), 0x8);
-
-        /DISCARD/ : { *(.MIPS.options) *(.MIPS.abiflags) *(.pdr)}
+	*(.global_sizes) *(.rodata) *(.rodata.*);
 }
 
