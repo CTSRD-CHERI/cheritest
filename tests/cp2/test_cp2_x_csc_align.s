@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -37,19 +38,6 @@
 
 BEGIN_TEST
 		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
-		#
 		# Make $c1 a data capability for the array 'data'
 		#
 
@@ -63,7 +51,7 @@ BEGIN_TEST
 
 		# Store $c1 to an unaligned address
 		dla     $t0, cap1
-		csc      $c1, $t0, 0($ddc) # This should raise an exception
+		check_instruction_traps $s1, csc $c1, $t0, 0($ddc) # This should raise an exception
 
 		# Check that the store didn't happen.
 		# $t0 is double-word aligned, so it is safe to read it with
@@ -74,25 +62,15 @@ BEGIN_TEST
 
 END_TEST
 
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		mfc0	$a3, $13	# Cause register
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
-
 		.data
 		.align	3
 data:		.dword	0x0123456789abcdef
 		.dword  0x0123456789abcdef
 
 		.align 5
-padding:	.dword 0x0 # Padding to make cap1 unaligned
+padding:	.dword 0x12345678 # Padding to make cap1 unaligned
 
-cap1:		.dword 0x0 # This is not 32-byte aligned, so a capability
-		.dword 0x0 # store here will raise an exception
-		.dword 0x0
-		.dword 0x0
+cap1:		.dword 0x12345678 # This is not 32-byte aligned, so a capability
+		.dword 0x12345678 # store here will raise an exception
+		.dword 0x12345678
+		.dword 0x12345678
