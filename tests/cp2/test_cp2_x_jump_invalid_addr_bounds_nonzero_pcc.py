@@ -31,6 +31,7 @@ from beritest_tools import attr
 # Check that we get sensible EPCC and EPC values if we get a CHERI violation with a non-zero $pcc base
 
 @attr('capabilities')
+@attr('tlb')
 class test_cp2_x_jump_invalid_addr_bounds_nonzero_pcc(BaseBERITestCase):
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a4, 0x70, "epc is wrong")

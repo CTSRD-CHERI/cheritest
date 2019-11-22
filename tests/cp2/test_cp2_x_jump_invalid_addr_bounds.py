@@ -33,6 +33,7 @@ from beritest_tools import attr
 #
 
 @attr('capabilities')
+@attr('tlb')
 class test_cp2_x_jump_invalid_addr_bounds(BaseBERITestCase):
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a4, 0x80, "epc is wrong")
