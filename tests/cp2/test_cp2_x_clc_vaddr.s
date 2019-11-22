@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2012 Michael Roe
 # Copyright (c) 2013 Robert M. Norton
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -37,27 +38,14 @@
 # an address exception (in this case due to alignment).
 #
 
-BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Make $c1 a data capability for the array 'data'
 		#
 
 		cgetdefault $c1
-		dla     $t1, data
-		csetoffset $c1, $c1, $t1
+		dla     $a7, data
+		csetoffset $c1, $c1, $a7
 		dli     $t0, 96
 		csetbounds $c1, $c1, $t0
 		dli     $t0, 0x7f
@@ -69,42 +57,38 @@ BEGIN_TEST
 
 		dla     $t0, padding
 		csc     $c1, $t0, 0($ddc)
+		clc     $c3, $t0, 0($ddc)
 
 		#
 		# Clear $c1 so we can tell if the load happened
 		#
+		cgetnull  $c1
 
-		cmove     $c2, $c1
-		cfromptr  $c1, $c1, $0
-
-		# Calculate offset of 'cap1' from 'data'
-		dla     $a6, cap1
-		dsub    $t0, $a6, $t1
+		# Make $c2 a pointer to cap1
+		dla	$a4, cap1
+		cgetdefault	$c2
+		csetaddr	$c2, $c2, $a4
 
 		#
 		# Reload from an unaligned address
 		#        
-		clc     $c1, $t0, 0($c2) # This should raise an exception
-
-		#
+		check_instruction_traps $s1, clc     $c1, $zero, 0($c2) # This should raise an exception
 		# Check that the load didn't happen.
-		#
-
-		cgettag $a0, $c1
-		cgetoffset $a1, $c1
 
 END_TEST
 
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		mfc0	$a3, $13	# Cause register
-		dmfc0	$a4, $8   	# Bad Vaddr Register
+BEGIN_CUSTOM_TRAP_HANDLER
+		# Custom trap handler logic:
+		# Save the information on the trap handler in a register
+		collect_compressed_trap_info
+		dmfc0   $a6, $8         # read badvaddr
+
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
 		DO_ERET
-		.end bev0_handler
+END_CUSTOM_TRAP_HANDLER
+
 
 		.data
 		.align	3

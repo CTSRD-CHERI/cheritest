@@ -68,15 +68,15 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 END_TEST
 
 BEGIN_CUSTOM_TRAP_HANDLER
-	# Custom trap handler logic:
-	# Save the information on the trap handler in a register
-	collect_compressed_trap_info
-	dmfc0   $a6, $8         # read badvaddr
+		# Custom trap handler logic:
+		# Save the information on the trap handler in a register
+		collect_compressed_trap_info
+		dmfc0   $a6, $8         # read badvaddr
 
-	dmfc0	$a5, $14	# EPC
-	daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-	dmtc0	$k0, $14
-	DO_ERET
+		dmfc0	$a5, $14	# EPC
+		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		dmtc0	$k0, $14
+		DO_ERET
 END_CUSTOM_TRAP_HANDLER
 
 		.data
