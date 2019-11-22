@@ -402,6 +402,8 @@ end_of_jump_to_real_trap_handler:
 .end jump_to_real_trap_handler
 
 .ifdef BUILDING_PURECAP
+# Ensure the exception handler stack is aligned
+.balign 32
 purecap_kernel_stack:
 .space 64
 .size purecap_kernel_stack, 64
