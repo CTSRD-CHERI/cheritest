@@ -47,7 +47,7 @@ class test_cp2_cleu(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cleu_equal(self):
         '''Compare LEU equal capabilities'''
-        self.assertRegisterEqual(self.MIPS.a1, construct_answer(1,1,1,0,1,1), "Equal capabilities compare incorrectly")
+        self.assertRegisterEqual(self.MIPS.a1, construct_answer(1,1,1,1,1,1), "Equal capabilities compare incorrectly")
 
     @attr('capabilities')
     def test_cp2_cleu_bases_diff(self):
@@ -67,4 +67,4 @@ class test_cp2_cleu(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_cleu_base_and_offset_diff_sum_equal(self):
         '''Compare LEU capabilities with complementary bases and offsets'''
-        self.assertRegisterEqual(self.MIPS.a5, construct_answer(1,1,1,0,1,1), "Capabilities with equivalent base + offset compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a5, construct_answer(1,1,1,1,1,1), "Capabilities with equivalent base + offset compared incorrectly")

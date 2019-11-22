@@ -47,7 +47,7 @@ class test_cp2_ceq(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_ceq_equal(self):
         '''Compare equal capabilities'''
-        self.assertRegisterEqual(self.MIPS.a1, construct_answer(1,1,0,0,1,1), "Equal capabilities compare incorrectly")
+        self.assertRegisterEqual(self.MIPS.a1, construct_answer(1,1,1,1,1,1), "Equal capabilities compare incorrectly")
 
     @attr('capabilities')
     def test_cp2_ceq_bases_diff(self):
@@ -67,4 +67,4 @@ class test_cp2_ceq(BaseBERITestCase):
     @attr('capabilities')
     def test_cp2_ceq_base_and_offset_diff_sum_equal(self):
         '''Test capabilities with complimentary bases and offsets'''
-        self.assertRegisterEqual(self.MIPS.a5, construct_answer(1,1,0,0,1,1), "Capabilities with equivalent base + offset compared incorrectly")
+        self.assertRegisterEqual(self.MIPS.a5, construct_answer(1,1,1,1,1,1), "Capabilities with equivalent base + offset compared incorrectly")
