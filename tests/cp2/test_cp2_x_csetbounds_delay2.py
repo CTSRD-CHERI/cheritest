@@ -1,5 +1,6 @@
-#-
+# -
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -25,31 +26,22 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr
+
 
 #
 # Test what happens when csetbounds raises a C2E exception in a branch delay slot
 #
-
+@attr('capabilities')
 class test_cp2_x_csetbounds_delay2(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    # XXX : FIXME : This is wrong.
-    @attr('capabilities')
     def test_cp2_x_csetbounds_delay2_1(self):
-        '''Test CSetBounds did not set the length of of a sealed capability'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "CSetBounds set the length of a sealed capability")
+        self.assertNullCap(self.MIPS.c3, "CSetBounds should have trapped!")
 
-    @attr('capabilities')
     def test_cp2_x_csetbounds_delay2_2(self):
         '''Test CSetBounds raised a C2E exception when capability was sealed'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "CSetBounds did not raise an exception when capability was sealed")
-
-    @attr('capabilities')
-    def test_cp2_x_csetbounds_delay2_3(self):
-        '''Test CP0 cause is set correctly when C2E in a branch delay slot'''
-        self.assertRegisterEqual(self.MIPS.a3, 0xffffffff80000048,
-            "CP0 cause was not set correcly when C2E in a branch delay slot")
-
+        self.assertCp2Fault(self.MIPS.s7, cap_reg=1,
+                            cap_cause=self.MIPS.CapCause.Seal_Violation,
+                            trap_count=1, bdelay=True,
+                            msg="CSetBounds did not raise an exception when capability was sealed")

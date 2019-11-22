@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -38,19 +39,6 @@
 
 BEGIN_TEST
 		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
-		#
 		# Make $c1 a data capability for the array 'data'
 		#
 
@@ -73,6 +61,8 @@ BEGIN_TEST
 		sd	$t1, 0($t0)
 		clc 	$c1, $t0, 0($ddc)
 
+		dli $s7, 0
+		clear_counting_exception_handler_regs
 		dli	$t1, 1
 		j	L1
 		# The exception happens in the branch delay slot
@@ -80,6 +70,8 @@ BEGIN_TEST
 		nop
 		nop
 L1:
+		move	$s7, $k1
+		clear_counting_exception_handler_regs
 		dla	$t0, cap1
 		dla	$t1, cap2
 		csc 	$c1, $t1, 0($ddc)
@@ -101,20 +93,6 @@ L1:
                 xor     $s3, $s3, $t2
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		mfc0    $a3, $13 	# Cause register
-		#
-		# The exception should be in a branch delay slot, so can't
-		# just increment EPC. Instead, load EPC with L1, the address
-		# of the end of the test.
-		#
-		dla     $k0, L1
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
 
 		.data
 
