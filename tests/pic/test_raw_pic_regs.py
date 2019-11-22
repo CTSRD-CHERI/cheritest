@@ -20,24 +20,20 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
-
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
-class test_raw_pic_regs(BaseBERITestCase):
 
-    @attr('pic')
+@attr('pic')
+class test_raw_pic_regs(BaseBERITestCase):
     def test_pic_control_initial(self):
         self.assertRegisterEqual(self.MIPS.s0, 0x5, "Control registers initialized incorrectly")
 
-    @attr('pic')
     def test_pic_read_initial(self):
         self.assertRegisterEqual(self.MIPS.s1, 0x0, "Read registers initialized incorrectly")
         
-    @attr('pic')
     def test_pic_set(self):
         self.assertRegisterEqual(self.MIPS.s2, 0x01, "Set interrupt")
 
-    @attr('pic')
     def test_pic_clear(self):
         self.assertRegisterEqual(self.MIPS.s3, 0x0, "Cleared interrupt")

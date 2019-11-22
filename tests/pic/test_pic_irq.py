@@ -24,21 +24,17 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
-
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('pic')
 class test_pic_irq(BaseBERITestCase):
-
-    @attr('pic')
     def test_pic_irq_1(self):
         self.assertRegisterEqual(self.MIPS.a2, 4, "PIC interrupt pending was not set")
 
-    @attr('pic')
     def test_pic_irq_2(self):
         self.assertRegisterEqual(self.MIPS.a3, 0x40, "Interrupt was not forwarded to IP6")
 
-    @attr('pic')
     def test_pic_irq_3(self):
         self.assertRegisterEqual(self.MIPS.a4, 0, "PIC interrupt pending was not cleared")
 
