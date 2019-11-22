@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2014 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -34,43 +35,54 @@
 # Test that jalr raises an exception if the destination is not aligned.
 #
 
-BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		dli	$a0, 0
-		dli	$a1, 0
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
+		dli	$a1, 0	# $ra set by jalr
+		dli	$a2, 0	# should be one at end
+		dli	$a3, 0	# addr of subroutine + 1
+		dli	$a4, 0	# BadVADDR
+		dli	$a5, 0	# EPC
+		dli	$a6, 0	# should zero one at end
+		dli	$a7, 0	# should be one at end
+
 
 		dla	$a3, subroutine
 		daddi	$a3, $a3, 1
-		jalr	$a3	# This should raise an exception
+		# Note: this should not switch to microMIPS mode!
+		dli $s1, 0
+		dli $ra, 0x12345
+		clear_counting_exception_handler_regs
+		jalr $a3	# This should raise an exception
 		nop		# branch delay slot
-
 exit:
+		dli $a2, 1
 END_TEST
 
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
+BEGIN_CUSTOM_TRAP_HANDLER
+		# Save the information on the trap handler in $k1 and trap count in $v0
+		collect_compressed_trap_info
 		dmfc0	$a0, $13	# CP0.Cause
-		dmfc0	$a1, $8		# BadVAddr
+		dmfc0	$a4, $8		# BadVAddr
 		dmfc0	$a5, $14	# EPC
-		dla	$k0, exit
-		dmtc0	$k0, $14
+		# load ~3
+		dli	$t0, 3
+		not	$t0
+		daddiu	$t1, $a5, 4	# EPC += 4 to bump PC forward on ERET
+		and	$t1, $t1, $t0	# clear low bits
+		dmtc0	$t1, $14
 		DO_ERET
-		.end bev0_handler
+END_CUSTOM_TRAP_HANDLER
 
+		.balign 32
 		.ent subroutine
 subroutine:
-		jr	$ra
+		dli $a6, 1	# this one should be skipped
+		dli $a7, 1	# But not this one
+		move $a1, $ra
+		move $s1, $k1
+		clear_counting_exception_handler_regs
+
+		dla	$s2, exit
+		jr	$s2
 		nop
 		.end subroutine

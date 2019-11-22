@@ -79,7 +79,7 @@ END_TEST
 
 BEGIN_CUSTOM_TRAP_HANDLER
 		# Custom trap handler logic:
-		# Save the information on the trap handler in a register
+		# Save the information on the trap handler in $k1 and trap count in $v0
 		collect_compressed_trap_info
 		dmfc0   $a6, $8         # read badvaddr
 

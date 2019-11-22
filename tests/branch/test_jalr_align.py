@@ -26,21 +26,29 @@
 #
 
 from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+
 
 class test_jalr_align(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('jump_unaligned')
-    def test_jalr_align_1(self):
+    def test_jalr_align_trap_info(self):
         '''Test that CP0.Cause.ExcCode was set to AdEL after jalr to unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a0, 4 << 2, "Cause.ExcCode was not set to AdEL after jalr to unaligned address")
+        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.AdEL)
 
-    @attr('jump_unaligned')
-    def test_jalr_align_2(self):
-        '''Test that BadVAddr is set after jalr to unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a1, self.MIPS.a3, "BadVAddr was not set correctly after jalr to unaligned address")
+    def test_jalr_align_vaddr(self):
+        self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a3, "BadVAddr was not set correctly after jalr to unaligned address")
 
-    @attr('jump_unaligned')
-    def test_jalr_align_3(self):
-        '''Test that an exception is raised after jalr to unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a2, 1, "An exception was not raised after jalr to unaligned address")
+    def test_jalr_align_epc(self):
+        self.assertRegisterEqual(self.MIPS.a5, self.MIPS.a3, "EPC was not set correctly after jalr to unaligned address")
+
+    def test_jalr_align_continue(self):
+        assert self.MIPS.a2 == 1, "Did not continue after branch delay slot"
+
+    def test_jalr_subroutine_call1(self):
+        assert self.MIPS.a6 == 0, "Should have skipped first instr in subroutine"
+
+    def test_jalr_subroutine_call2(self):
+        assert self.MIPS.a7 == 1, "Should not skip second instr in subroutine"
+
+    def test_jalr_ra_should_be_set(self):
+        assert self.MIPS.a1 == self.MIPS.s2, "$ra should be set to &exit, fault happens on target not on call!"
