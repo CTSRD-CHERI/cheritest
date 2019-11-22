@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -28,22 +29,18 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+
 #
 # Test exception priority: C2E/Length Violation has higher priority
 # than an address error.
 #
-
+@attr('capabilities')
 class test_cp2_x_clc_priority(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('capabilities')
-    def test_cp2_x_clc_prority_1(self):
-        '''Test clc set cause code to Length Violation'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0101,
-            "clc did not set cause code to Length Violation")
-
-    @attr('capabilities')
-    def test_cp2_x_clc_prority_2(self):
-        '''Test clc set exception cause code to C2E'''
-        self.assertRegisterEqual(self.MIPS.a4, 18*4,
-            "clc did not set exception cause to C2E")
-
+    def test_cp2_x_clc_prority(self):
+        """Test clc set cause code to Length Violation instead of AdES"""
+        self.assertCp2Fault(self.MIPS.s1,
+                            cap_cause=self.MIPS.CapCause.Length_Violation,
+                            cap_reg=1, trap_count=1,
+                            msg="clc did not set cause code to Length Violation")

@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -25,83 +26,28 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr, HexInt
+
 
 #
 # Test that csc raises an exception is the address at which the capability
 # is to be stored is not aligned on a 32-byte boundary.
 #
-
+@attr('capabilities')
 class test_cp2_x_csc_vaddr(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('capabilities')
-    @attr('cap256')
-    def test_cp2_x_csc_align_1_256(self):
-        '''Test CSC did not write to an unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x1234,
-            "CSC wrote to an unaligned address")
+    def test_cp2_x_csc_align_value_pre(self):
+        assert self.MIPS.a0 == HexInt(0x1234), "Incorrect initial value"
 
-    @attr('capabilities')
-    @attr('cap128')
-    def test_cp2_x_csc_align_1_128(self):
-        '''Test CSC did not write to an unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x1234,
-            "CSC wrote to an unaligned address")
+    def test_cp2_x_csc_align_value_post(self):
+        assert self.MIPS.a1 == HexInt(0x1234), "CSC wrote to an unaligned address"
 
-    @attr('capabilities')
-    @attr('cap256')
-    def test_cp2_x_csc_align_2_256(self):
-        '''Test csc did not write to an unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x1234,
-            "CSC wrote to an unaligned address")
+    def test_cp2_x_csc_trap_kind(self):
+        """Test CP0 cause register was set correctly when address was unaligned"""
+        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.AdES, trap_count=1, msg="CP0 status was not set to AdES when the address was unaligned")
 
-    @attr('capabilities')
-    @attr('cap128')
-    def test_cp2_x_csc_align_2_128(self):
-        '''Test csc did not write to an unaligned address'''
-        self.assertRegisterEqual(self.MIPS.a1, 0x1234,
-            "CSC wrote to an unaligned address")
-
-    @attr('capabilities')
-    @attr('cap256')
-    def test_cp2_x_csc_align_3_256(self):
-        '''Test CSC raises an exception when the address is unaligned'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "CSC did not raise an exception when the address was unaligned")
-
-    @attr('capabilities')
-    @attr('cap128')
-    def test_cp2_x_csc_align_3_128(self):
-        '''Test CSC raises an exception when the address is unaligned'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "CSC did not raise an exception when the address was unaligned")
-
-    @attr('capabilities')
-    @attr('cap256')
-    def test_cp2_x_csc_align_4_256(self):
-        '''Test CP0 cause register was set correctly when address was unaligned'''
-        self.assertRegisterEqual(self.MIPS.a3, 5*4,
-            "CP0 status was not set to AdES when the address was unaligned")
-
-    @attr('capabilities')
-    @attr('cap128')
-    def test_cp2_x_csc_align_4_128(self):
-        '''Test CP0 cause register was set correctly when address was unaligned'''
-        self.assertRegisterEqual(self.MIPS.a3, 5*4,
-            "CP0 status was not set to AdES when the address was unaligned")
-
-    @attr('capabilities')
-    @attr('cap256')
-    def test_cp2_x_csc_align_vaddr_256(self):
+    def test_cp2_x_csc_align_vaddr(self):
         '''Test CP0 badvaddr register was set correctly when address was unaligned'''
-        self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a6,
-            "CP0 badvaddr was not set to cap1 when the address was unaligned")
-
-    @attr('capabilities')
-    @attr('cap128')
-    def test_cp2_x_csc_align_vaddr_128(self):
-        '''Test CP0 badvaddr register was set correctly when address was unaligned'''
-        self.assertRegisterEqual(self.MIPS.a4, self.MIPS.a6,
-            "CP0 badvaddr was not set to cap1 when the address was unaligned")
+        assert self.MIPS.a4 == self.MIPS.a6, "CP0 badvaddr was not set to cap1 when the address was unaligned"
 

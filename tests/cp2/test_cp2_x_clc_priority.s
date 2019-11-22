@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -42,27 +43,13 @@ sandbox:
 		creturn
 
 BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
 		cgetdefault $c1
 		dla	$t0, cap1
 		csetoffset $c1, $c1, $t0
 		dli	$t0, 32
 		csetbounds $c1, $c1, $t0
 
-		cgetdefault $c2
-		cfromptr $c2, $c2, $zero # So we can tell if $c2 has changed
+		cgetnull $c2 # So we can tell if $c2 has changed
 
 		# There are two possible exceptions that could be raised in
 		# the next instruction: the address isn't 32-byte aligned
@@ -72,22 +59,11 @@ BEGIN_TEST
 		# needed for security; it isn't security-relevant in this case,
 		# but we keep the same priority order for simplicity.
 
-		dli $t0, 33
-		clc 	$c2, $t0, 0($c1)
+		dli	$t0, 33
+		check_instruction_traps $s1, clc	$c2, $t0, 0($c1)
 		cgetlen $a0, $c2
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		cgetcause $a3
-		mfc0	$a4, $13	# Exception cause	
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
 
 		.data
 		.align	5

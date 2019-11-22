@@ -171,7 +171,7 @@
 #    Bits 0-7 are capcause.reg, 8-15 are capcause.cause
 #    Bits 16-31 are the low 16 bits of CP0_Cause (i.e. the cause is bits 18-22)
 #    Bits 32-63 are the exception count
-# On return it just jumps to EPC+4 (i.e. it doesn't handle traps in branches/jumps)
+# This trap handler correctly handles traps in branches/jumps and jumps to either +4/+8
 # This handler also allows exiting from usermode by treating sycall as a request to exit
 .macro DEFINE_COUNTING_CHERI_TRAP_HANDLER name=counting_trap_handler, trap_count_reg=$v0
 .text

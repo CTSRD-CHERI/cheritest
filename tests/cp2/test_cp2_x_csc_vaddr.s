@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2012 Michael Roe
 # Copyright (c) 2013 Robert M. Norton
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -37,20 +38,7 @@
 # register on csc address exception.
 #
 
-BEGIN_TEST
-		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Make $c1 a data capability for the array 'data'
 		#
@@ -68,7 +56,7 @@ BEGIN_TEST
                 dsub    $t0, $a4, $t1
         
 		# Store $c1 to an unaligned address (cap1)
-		csc     $c1, $t0, 0($c1) # This should raise an exception
+		check_instruction_traps $s1, csc     $c1, $t0, 0($c1) # This should raise an exception
 
 		# Check that the store didn't happen.
 		# $a4 is double-word aligned, so it is safe to read it with
@@ -79,16 +67,17 @@ BEGIN_TEST
 
 END_TEST
 
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		mfc0	$a3, $13	# Cause register
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-                dmfc0   $a6, $8         # read badvaddr
-		DO_ERET
-		.end bev0_handler
+BEGIN_CUSTOM_TRAP_HANDLER
+	# Custom trap handler logic:
+	# Save the information on the trap handler in a register
+	collect_compressed_trap_info
+	dmfc0   $a6, $8         # read badvaddr
+
+	dmfc0	$a5, $14	# EPC
+	daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
+	dmtc0	$k0, $14
+	DO_ERET
+END_CUSTOM_TRAP_HANDLER
 
 		.data
 		.align	3
