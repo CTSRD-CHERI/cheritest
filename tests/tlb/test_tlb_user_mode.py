@@ -25,6 +25,7 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
 class test_tlb_user_mode(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 0
 
     @attr('tlb')
     def test_flag_set(self):

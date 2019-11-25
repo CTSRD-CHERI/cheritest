@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Robert M. Norton
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # @BERI_LICENSE_HEADER_START@
@@ -28,15 +29,9 @@
 # returning via a system call.
 
 BEGIN_TEST
-		# Install exception handler
-		dla	$a0, exception_handler
-		jal 	bev0_handler_install
-		nop
-	
 		#
 		# Check to see if we already have a TLB entry for page 0
 		#
-
 		dli	$t0, 0x0
 		dmtc0	$t0, $10		# TLB EntryHi
 		tlbp
@@ -78,20 +73,22 @@ L1:
 		and     $k0, $a0, 0x1fff	# Get offset of testdata within page.
 		jr 	$k0			# Jump to virtual address
 		nop
-
-after_syscall:	
+after_syscall:
+		li $s2, 1
 END_TEST
-	
-testcode:
-        .rept 10
-		nop
-        .endr
-                bgtz    $a5, testcode
-		sub	$a5, 1			# Set the test flag
-		syscall
-		nop
 
-exception_handler:
-		dla	$t0, after_syscall
-		jr	$t0
-		nop
+# Ensure all of the test fits in a page (the linker appears to place testcode just before a page boundary)
+.balign 128
+testcode:
+.rept 10
+	nop
+.endr
+	bgtz    $a5, testcode
+	sub	$a5, 1		# Set the test flag
+
+	syscall  # exit test sucessfully
+	nop
+	teq $zero, $zero
+	b after_syscall
+	nop
+
