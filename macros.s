@@ -153,7 +153,7 @@
 
 	# increment trap_count and keep result in v0
 	__get_counting_trap_handler_count \trap_count_reg	# get old exception count
-	daddiu \trap_count_reg, \trap_count_reg, 1			# v0 = new exception count
+	daddiu \trap_count_reg, \trap_count_reg, 1		# v0 = new exception count
 	__set_counting_trap_handler_count \trap_count_reg	# save exception count value
 
 	# Shift exception count to the high 16 bits
