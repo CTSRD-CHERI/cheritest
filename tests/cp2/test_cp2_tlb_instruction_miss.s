@@ -106,7 +106,7 @@ tlb_stuff:
 	dsrl	$a2, $t0, 6             # Put PFN in correct position for EntryLow
 	or	$a2, 0x17		# Set valid and uncached bits
 	dmtc0   $a2, $2		# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
-	daddu	$a0, $a0, 0x40		# Add one to PFN for EntryLow1
+	daddu	$a2, $a2, 0x40		# Add one to PFN for EntryLow1
 	dmtc0   $a2, $3		# TLB EntryLow1 = a2 (Upper half of TLB entry for even virtual $
 	nop
 	nop
