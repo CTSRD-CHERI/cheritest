@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2014 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -28,17 +29,15 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('capabilities')
+@attr('tlb')
 class test_cp2_x_csc_tlb(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('capabilities')
-    @attr('tlb')
     def test_cp2_clc_tlb_progress(self):
         '''Test that test finishes at the end of stage 3'''
         self.assertRegisterEqual(self.MIPS.a5, 3, "Test did not finish at the end of stage 3")
 
-    @attr('capabilities')
-    @attr('tlb')
-    def test_cp2_clc_tlb_cause(self):
-        '''Test that CP0 cause register is set correctly'''
-        self.assertRegisterMaskEqual(self.MIPS.a7, 0x1f << 2, 18 << 2, "CP0.Cause.ExcCode was not set correctly when capability store failed due to capability store inhibited in the TLB entry")
-
+    def test_cp2_clc_tlb_cause_csc(self):
+        '''Test that CP0 cause set to TLB_Store_Capability_Violation'''
+        self.assertCp2Fault(self.MIPS.s1, cap_cause=self.MIPS.CapCause.TLB_Store_Capability_Violation, trap_count=1)

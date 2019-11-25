@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2012 Robert M. Norton
-# Cipyright (c) 2014 Michael Roe
+# Copyright (c) 2014 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -33,7 +34,7 @@
 # 'disable capability store' bit is set in the TLB entry for the page.
 #
 
-BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
+BEGIN_TEST
 		#
 		# To test user code we must set up a TLB entry.
 		#
@@ -87,7 +88,7 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 the_end:
 END_TEST
 
-
+.balign 256  # ensure that all of testcode is on the same page
 testcode:
 		nop
 		dli	$a5, 1			# Set the test flag
@@ -114,9 +115,7 @@ testcode:
 		dli	$t0, 64
 		csetoffset $c1, $c1, $t0
 		csetbounds $c1, $c1, $t0
-		csc 	$c1, $a2, 0($ddc)
-
-		dli	$a5, 4
+		check_instruction_traps $s1, csc $c1, $a2, 0($ddc)
 
 		#
 		# If it doesn't, return to kernel mode anyway
@@ -125,26 +124,9 @@ testcode:
 		syscall	0
 		nop
 
+		dli	$a5, 4
 
-BEGIN_CUSTOM_TRAP_HANDLER
 
-                dmfc0   $a6, $12                # Read status
-                mfc0    $a7, $13                # Read cause
-
-		#
-		# Check to see if the capability store succeeded
-		#
-
-		# clc 	$c2, $a2, 0($ddc)
-		# cgetbase $a3, $c2
-		# cgetlen	 $a4, $c2
-		# ld	$a3, 16($a2)
-		# ld	$a4, 24($a2)
-
-		dla	$t0, the_end
-		jr	$t0
-		nop
-END_CUSTOM_TRAP_HANDLER
 		.data
 		.align 5
 cap:

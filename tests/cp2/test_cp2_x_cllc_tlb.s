@@ -90,7 +90,8 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 
 the_end:
 END_TEST
-	
+
+.balign 256  # ensure that all of testcode is on the same page
 testcode:
 		nop
 		dli	$a5, 1			# Set the test flag
@@ -149,7 +150,7 @@ BEGIN_CUSTOM_TRAP_HANDLER
 		# exception handler should not be called for clc,
 		# but will be called for syscall to end test.
 		# increment a0 to count number of exceptions
-		add     $a0, 1
+		collect_compressed_trap_info compressed_info_reg=$s1
 		li      $a5, 6
 		mfc0    $a7, $13                # Read cause
 		dla	$t0, the_end
