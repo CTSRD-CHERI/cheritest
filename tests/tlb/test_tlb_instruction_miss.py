@@ -30,6 +30,7 @@ from beritest_tools import attr, xfail_on
 
 @attr('tlb')
 class test_tlb_instruction_miss(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
     def test_epc(self):
         self.assertRegisterEqual(self.MIPS.a5, 0xbeef, "Translated instructions didn't run")
 

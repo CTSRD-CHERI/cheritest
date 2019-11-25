@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2012 Robert N. M. Watson
 # Copyright (c) 2012 Jonathan Woodruff
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -47,7 +48,7 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		dli		$a5, 0
 		dli		$s0, 0
 		dli		$s1, 0
-		jalr	$a4
+		jalr		$a4
 		dli		$a6, 0
 		dla		$a1, return
 		jr		$a1
@@ -56,15 +57,16 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Instructions to run mapped.
 		#
+.balign 8192
 mapped_code:
-		jr		$31
+		jr		$ra
 		dli		$a5, 0xbeef
 	
 return:
 		li $s2, 0xc0de
 		li $s3, 0xbad
-		rdhwr $s3, $5
 		li $s4, 0xbad
+		rdhwr $s3, $5
 		rdhwr $s4, $6
 end_test:
 END_TEST
