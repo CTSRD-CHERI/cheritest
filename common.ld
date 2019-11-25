@@ -58,3 +58,9 @@ __heap_top__ = __mem_top__ - __stack_size__;
 __sp_bottom = __heap_top__;
 __text_start_phys__ = ALIGN(__kernel_load_offset__ + SIZEOF_HEADERS, 4096);
 __text_start__ = __base__ + __text_start_phys__;
+
+PHDRS {
+  headers PT_PHDR PHDRS;
+  p_code_rodata PT_LOAD FILEHDR PHDRS AT(__kernel_load_offset__);
+  p_rwdata PT_LOAD;
+}
