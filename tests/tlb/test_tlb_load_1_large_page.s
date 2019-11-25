@@ -36,29 +36,28 @@ BEGIN_TEST
 
 		addi    $a0, $zero, 0            # TLB entry 0
 		dla     $a1, testdata            # Physical address testdata
-		addi    $a2, $zero, 0x200
-		dsll    $a2, 13                  # Virtual address 0x400000
+		dla	$a2, __kernel_load_offset__	# load kernel base address and map a 4MB page
 		li	$a3, 0x7FE000            # Page mask of 10 1s, 1024*4k = 4M page
 		jal     install_tlb_entry
 		nop
 
+		# Load testdata via its virtual address into a4
 		dla	$a1, testdata
 		andi	$a1, $a1, 0xFFFF         # Keep the bottom 16 bits of the address
-		addi    $a4, $zero, 0x200        # Load testdata via its virtual address into a5
-		dsll    $a4, $a4, 13
-		or	$a4, $a4, $a1	
-		ld      $a6, 0($a4)              # Load testdata into a5 via full TLB lookup 
+		dla	$a4, __kernel_load_offset__
+		daddu	$a4, $a4, $a1		# Add to low bits to base address
+		ld      $a6, 0($a4)              # Load testdata into a6 via full TLB lookup
 		ld      $a7, 0($a4)              # Load testdata again via TLB cache
-		
+
+		# Load testdata2 via its virtual address into a4
 		dla	$a1, testdata2
 		andi	$a1, $a1, 0xFFFF         # Keep the bottom 16 bits of the address
-		addi    $a4, $zero, 0x200        # Load testdata2 via its virtual address into a4
-		dsll    $a4, $a4, 13
-		or	$a4, $a4, $a1
+		dla	$a4, __kernel_load_offset__
+		daddu	$a4, $a4, $a1		# Add to low bits to base address
 		ld      $a5, 0($a4)              # Load testdata2 via same page
 		ld      $a4, 0($a4)              # Load testdata2 again to test any caching
 END_TEST
-	
+
 	.data
 	.align 12                            # Align on 4KB page boundary
 testdata:

@@ -28,7 +28,7 @@
 .include "macros.s"
 
 #
-# Map the RAM (physical address 0x40000000 and upward) at virtual address
+# Map the RAM (physical address 0x100000 and upward) at virtual address
 # 0 and upward, using 4MB pages.
 #
 
@@ -63,7 +63,7 @@ BEGIN_TEST
 
                 dli     $a2, 0          # EntryHi for first TLB entry
 
-		dli	$t0, 0x40000000 # Physical address of start of RAM
+		dla	$t0, __kernel_load_offset__ # Physical address of start of RAM
 		dsrl	$t0, $t0, 6	# Shift to position for PFN
 		ori	$a3, $t0, 0x1b	# Cached, Valid and Global bits set
 					# $a3 is EntryL0 for first TLB entry
@@ -95,19 +95,20 @@ loop:
 		and	$t0, $t0, $t1
 		ld	$a3, 0($t0)
 
-		dli	$t0, 0x9800000040004000
+
+		dla	$t0, __kernel_load_offset__ + 0x9800000000004000
 		dli	$a4, 0xdead
 		sd	$a4, 0($t0)
 		and	$t0, $t0, $t1
 		ld	$a4, 0($t0)
 		
-		dli	$t0, 0x9800000040400000
+		dla	$t0, __kernel_load_offset__ + 0x9800000000400000
 		dli	$a5, 0xbeef
 		sd	$a5, 0($t0)
 		and	$t0, $t0, $t1
 		ld      $a5, 0($t0)
 
-		dli	$t0, 0x9800000040800000
+		dla	$t0, __kernel_load_offset__ + 0x9800000000800000
 		dli	$a6, 0xf00d
 		sd	$a6, 0($t0)
 		and	$t0, $t0, $t1
