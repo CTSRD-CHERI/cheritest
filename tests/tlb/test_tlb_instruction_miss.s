@@ -102,7 +102,7 @@ bev0_handler:
 		dsrl	$a2, $t0, 6				# Put PFN in correct position for EntryLow
 		or	$a2, 0x17				# Set valid and uncached bits
 		dmtc0   $a2, $2					# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
-		ori	$a2, 0x1000				# Set the 13th bit for to insert the upper physical address
+		daddu	$a0, $a0, 0x40				# Add one to PFN for EntryLow1
 		dmtc0   $a2, $3					# TLB EntryLow1 = a2 (Upper half of TLB entry for even virtual $
 		dmfc0   $s0, $4   # get tlb context register
 		dmfc0   $s1, $20  # get tlb xcontext register
