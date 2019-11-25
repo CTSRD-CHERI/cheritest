@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2014 Michael Roe
 # Copyright (c) 2014 Robert M. Norton
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -26,43 +27,29 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr, HexInt
 
+@attr('capabilities')
+@attr('tlb')
 class test_cp2_clc_tlb(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('capabilities')
-    @attr('tlb')
     def test_cp2_clc_tlb_base(self):
         '''Test that capability load succeeded when TLB entry prohibited load'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x40, "clc did not load c1.base when capbility load inhibit bit was set in the TLB")
+        assert self.MIPS.c2.base == HexInt(0x40), "clc did not load c1.base when capbility load inhibit bit was set in the TLB"
 
-    @attr('capabilities')
-    @attr('tlb')
     def test_cp2_clc_tlb_length(self):
         '''Test that capability load succeeded when TLB entry prohibited load'''
-        self.assertRegisterEqual(self.MIPS.a4, 0x40, "clc did not load c1.length when capbility load inhibit bit was set in the TLB")
+        assert self.MIPS.c2.length == HexInt(0x40), "clc did not load c1.length when capbility load inhibit bit was set in the TLB"
 
-    @attr('capabilities')
-    @attr('tlb')
     def test_cp2_clc_tlb_tag(self):
         '''Test that capability tag was cleared when TLB entry prohibited load'''
-        self.assertRegisterEqual(self.MIPS.a6, 0x0, "clc did not clear c1.tag when capbility load inhibit bit was set in the TLB")
+        assert self.MIPS.c2.t == 0, "clc did not clear c1.tag when capbility load inhibit bit was set in the TLB"
 
-    @attr('capabilities')
-    @attr('tlb')
     def test_cp2_clc_tlb_progress(self):
         '''Test that test reaches the end of stage 6'''
         self.assertRegisterEqual(self.MIPS.a5, 6, "Test did not make it to the end of stage 6")
 
-    @attr('capabilities')
-    @attr('tlb')
     def test_cp2_clc_tlb_cause(self):
         '''Test that CP0 cause set to syscall'''
-        self.assertRegisterEqual(self.MIPS.a7, 0x8 << 2, "CP0 cause not set to syscall")
-
-    @attr('capabilities')
-    @attr('tlb')
-    def test_cp2_clc_tlb_exception_count(self):
-        '''Test that only one exception occurred'''
-        self.assertRegisterEqual(self.MIPS.a0, 0x1, "Expected exactly one exception")
+        self.assertCompressedTrapInfo(self.MIPS.s1, mips_cause=self.MIPS.Cause.SYSCALL, trap_count=1, msg="Expected syscall")

@@ -1,6 +1,7 @@
 #-
 # Copyright (c) 2012, 2014 Robert M. Norton
 # Copyright (c) 2014 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -35,15 +36,7 @@
 # copying data using clc/csc in no-cap regions.
 #
 
-BEGIN_TEST
-		#
-		# Install exception handler
-		#
-
-		dla	$a0, exception_handler
-		jal 	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
                 # To test user code we must set up a TLB entry.
 		#
@@ -99,7 +92,8 @@ BEGIN_TEST
 the_end:
 END_TEST
 
-.balign 4096	# ensure all the userspace testcode is on one page
+.balign 8192	# ensure all the userspace testcode is on one page
+	nop
 testcode:
 		nop
 		dli	$a5, 1			# Set the test flag
@@ -145,25 +139,26 @@ testcode:
 		cgetbase $a3, $c2
 		cgetlen  $a4, $c2
 		cgettag  $a6, $c2
-	
+
 		dli	$a5, 5
 
 		# Return to kernel mode to finish test
 		syscall	0
 		nop
 
-exception_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		#
 		# Check to see if the capability load succeeded
 		# exception handler should not be called for clc,
 		# but will be called for syscall to end test.
 		# increment a0 to count number of exceptions
-		add     $a0, 1
+		collect_compressed_trap_info compressed_info_reg=$s1, trap_count_reg=$a0
 		li      $a5, 6
 		mfc0    $a7, $13                # Read cause
 		dla	$t0, the_end
 		jr	$t0
 		nop
+END_CUSTOM_TRAP_HANDLER
 
 		.data
 		.align 5
