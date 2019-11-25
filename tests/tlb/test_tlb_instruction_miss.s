@@ -27,29 +27,12 @@
 #
 
 .include "macros.s"
+.set noreorder
 
 #
 # Test that a very simple TLB handler using the automatically filled EntryHi will work as expected.
 #
 BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
-		jal		bev_clear
-		nop
-
-		#
-		# Set up 'handler' as the RAM exception handler.
-		# Note that we set up both common and xtlb handlers
-		# because the first miss (with EXL=1) will go to
-		# the common handler but subsequent misses (following eret)
-		# will go to xtlb miss.
-		#
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-		# Also set the xtlb handler
-		dla	$a0, bev0_handler
-		jal	set_bev0_xtlb_handler
-		nop
-
 		dli     $t0, 0xfeedfacedeadbeef
 		dmtc0   $t0, $4  # write context register PTEBase
 		dli     $t0, 0xafadedcafefacade
@@ -92,24 +75,29 @@ END_TEST
 # generated EntryHi value to write the TLB.  This is the fast-path, and the general scheme
 # used in FreeBSD.
 #
-.global default_trap_handler
-		.ent bev0_handler
-default_trap_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 bev0_handler:
 		li	$a2, 1
 		bne $s2, 0xc0de, .Ltlb_stuff
 		nop
 .Lrdhwr_not_implemented:
+.Lend_test:
 		# end test if itlb statcounters rdhwr is missing
 		dla	$s3, end_test
 		jr	$s3
+		nop
 .Ltlb_stuff:
+		# Abort after more than one trap
+		collect_compressed_trap_info
+		bge	$v0, 2, .Lend_test
+		nop
+
 		dmfc0	$t0, $8					# Get bad virtual address
 		move	$a6, $t0				# Get bad virtual address
 		dmfc0	$a7, $14				# Get victim address
-		dli 	$t3, 0xFFFFE000			# Mask off the page offset
+		dli	$t3, 0xFFFFE000				# Mask off the page offset
 		and	$t0, $t0, $t3
-		dsrl	$a2, $t0, 6             # Put PFN in correct position for EntryLow
+		dsrl	$a2, $t0, 6				# Put PFN in correct position for EntryLow
 		or	$a2, 0x17				# Set valid and uncached bits
 		dmtc0   $a2, $2					# TLB EntryLow0 = a2 (Low half of TLB entry for even virtual $
 		ori	$a2, 0x1000				# Set the 13th bit for to insert the upper physical address
@@ -123,4 +111,4 @@ bev0_handler:
 		tlbwr								# Write Random
 
 		DO_ERET
-		.end bev0_handler
+END_CUSTOM_TRAP_HANDLER
