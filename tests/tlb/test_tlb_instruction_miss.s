@@ -57,7 +57,6 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Instructions to run mapped.
 		#
-.balign 8192
 mapped_code:
 		jr		$ra
 		dli		$a5, 0xbeef
