@@ -55,7 +55,9 @@ END_TEST
 
 # TODO: add a variant of this without restricted pcc
 
-.balign 4096	# ensure all the userspace testcode is on one page
+# .balign 4096	# ensure all the userspace testcode is on one page
+# FIXME: currently all TLB setup code appears to assume even page numbers
+.balign 8192	# ensure all the userspace testcode is on one page
 testcode:
 		invalid_address_pcc_setup $c3	# defined in the individual tests
 		cincoffset $c3, $c3, 40		#  should jump to one of the nops
