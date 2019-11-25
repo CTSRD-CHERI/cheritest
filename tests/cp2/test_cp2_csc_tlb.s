@@ -87,7 +87,7 @@ BEGIN_TEST
 the_end:	
 END_TEST
 
-.balign 4096
+.balign 8192  # Note: this test assumes testcode lies on an even page!
 .ent testcode
 testcode:
 		clear_counting_exception_handler_regs

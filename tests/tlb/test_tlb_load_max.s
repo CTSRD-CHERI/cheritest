@@ -54,6 +54,7 @@ BEGIN_TEST_WITH_OLD_EXCEPTION_HANDLER
 END_TEST
 
 
+.balign 8192  # Note: this test assumes testdata lies on an even page!
 	.data
 	.align 5
 testdata:

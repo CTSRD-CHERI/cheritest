@@ -48,6 +48,8 @@ BEGIN_TEST_WITH_OLD_EXCEPTION_HANDLER
 END_TEST
 
 	.data
-	.align 5
+	# FIXME: test assumes data is on an even page
+	# .align 5
+	.balign 8192
 testdata:
 	.dword 0xfedcba9876543210
