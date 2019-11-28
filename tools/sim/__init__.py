@@ -105,7 +105,7 @@ class Capability(object):
     def __init__(self, t, s, perms, ctype, offset, base, length):
         self.t      = t
         self.s      = s
-        self.ctype  = ctype
+        self.ctype  = HexInt(ctype)
         self.perms  = HexInt(perms)
         self.offset = HexInt(offset)
         self.base   = HexInt(base)
