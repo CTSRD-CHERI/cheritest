@@ -5,7 +5,6 @@
 		*(.rodata.*);
 	} :p_code_rodata
 	__cap_relocs . : {
-		. = ALIGN(32);
 		PROVIDE_HIDDEN(__start___cap_relocs = ABSOLUTE(.));
 		*(__cap_relocs);
 		PROVIDE_HIDDEN(__stop___cap_relocs = ABSOLUTE(.));
