@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -26,28 +27,22 @@
 #
 
 .include "macros.s"
-.set mips64
 .set noreorder
-.set nobopt
-.set noat
-
 
 BEGIN_TEST
 		# Make $c1 differemt from $pcc
-		cgetdefault $c1
-		dli	$t0, 4
-		csetoffset $c1, $c1, $t0
-		dli     $t0, 8
-		csetbounds  $c1, $c1, $t0
-		dli	$t0, 4
-		candperm $c1, $c1, $t0
-		
+		cgetnull $c1
+		cgetnull $c2
+		dla $s0, .Lfirst_getpcc
+		dla $s1, .Lsecond_getpcc
+
+.Lfirst_getpcc:
 		cgetpcc  $c1
 
-		cgetperm $a0, $c1
-		cgettype $a1, $c1
-		cgetbase $a2, $c1
-		cgetlen  $a3, $c1
-
+		b .Lcontinue
+.Lsecond_getpcc:
+		cgetpcc $c2 # getpcc in brach delay slot
+.Lcontinue:
+		nop
 END_TEST
 

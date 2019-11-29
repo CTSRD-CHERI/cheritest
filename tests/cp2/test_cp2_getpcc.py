@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2011 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -25,20 +26,24 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr, HexInt
 
 #
 # Check basic behaviour of cgetpcc.
 #
 
+@attr('capabilities')
 class test_cp2_getpcc(BaseBERITestCase):
-    @attr('capabilities')
-    def test_cp2_getpcc1(self):
-        '''Test that cgetpcc returns correct base'''
-        self.assertRegisterEqual(self.MIPS.a2, 0, "cgetpcc returns incorrect base")
+    EXPECTED_EXCEPTIONS = 0
 
-    @attr('capabilities')
-    def test_cp2_getpcc2(self):
-        '''Test that cgetpcc returns correct len'''
-        self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "cgetpcc returns incorrect len")
+    def test_getpcc_basic(self):
+        self.assertValidCap(self.MIPS.c1, base=0, offset=self.MIPS.s0, perms=self.max_permissions,
+                            length=self.max_length, msg="Expected full addrspace value with offset == .Lfirst_getpcc")
+
+    def test_getpcc_bdelay(self):
+        """Check that we set the current $pcc value even in a branch delay slot"""
+        self.assertValidCap(self.MIPS.c2, base=0, offset=self.MIPS.s1, perms=self.max_permissions,
+                            length=self.max_length, msg="Expected full addrspace value with offset == .Lsecond_getpcc")
+
+    def test_expected_difference(self):
+        assert self.MIPS.s1 == self.MIPS.s0 + 8, "Expected a difference of two instructions"

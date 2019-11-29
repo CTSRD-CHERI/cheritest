@@ -27,31 +27,21 @@
 #
 
 .include "macros.s"
-.set mips64
 .set noreorder
-.set nobopt
-.set noat
-
+.set nomacro
 
 BEGIN_TEST
 		# Make $c1 differemt from $pcc
-		cgetdefault $c1
-		dli	$t0, 4
-		csetoffset $c1, $c1, $t0
-		dli      $t0, 8
-		csetbounds $c1, $c1, $t0
-		dli	$t0, 4	# Permit_Load
-		candperm $c1, $c1, $t0
-		
+		cgetnull $c1
+		cgetnull $c2
+
 		# Get the pcc, setting the offset to a value.
 		dli $v0, 0x1234
-		cgetpccsetoffset  $c1, $v0
+		cgetpccsetoffset $c1, $v0
 
-		cgetperm   $a0, $c1
-		cgettype   $a1, $c1
-		cgetbase   $a2, $c1
-		cgetlen    $a3, $c1
-		cgetoffset $a4, $c1
+		b .L1
+		cgetpccsetoffset $c2, $v0  # getpccsetoffset in brach delay slot
+.L1:
 
 END_TEST
 
