@@ -97,6 +97,41 @@ def is_envvar_true(var):
 
 # Ensures that assertion messages print this as hex (e.g. capability length, etc)
 class HexInt(int):
+    def __new__(cls, value, *args, **kwargs):
+        result = super().__new__(cls, value, *args, **kwargs)
+        result.value = value
+        return result
+
+    def __add__(self, other): return HexInt(self.value.__add__(other))
+    def __sub__(self, other): return HexInt(self.value.__sub__(other))
+    def __mul__(self, other): return HexInt(self.value.__mul__(other))
+    def __floordiv__(self, other): return HexInt(self.value.__floordiv__(other))
+    def __mod__(self, other): return HexInt(self.value.__mod__(other))
+    def __divmod__(self, other): return HexInt(self.value.__divmod__(other))
+    def __lshift__(self, other): return HexInt(self.value.__lshift__(other))
+    def __rshift__(self, other): return HexInt(self.value.__rshift__(other))
+    def __and__(self, other): return HexInt(self.value.__and__(other))
+    def __xor__(self, other): return HexInt(self.value.__xor__(other))
+    def __or__(self, other): return HexInt(self.value.__or__(other))
+    def __radd__(self, other): return HexInt(self.value.__radd__(other))
+    def __rsub__(self, other): return HexInt(self.value.__rsub__(other))
+    def __rmul__(self, other): return HexInt(self.value.__rmul__(other))
+    def __rfloordiv__(self, other): return HexInt(self.value.__rfloordiv__(other))
+    def __rmod__(self, other): return HexInt(self.value.__rmod__(other))
+    def __rdivmod__(self, other): return HexInt(self.value.__rdivmod__(other))
+    def __rlshift__(self, other): return HexInt(self.value.__rlshift__(other))
+    def __rrshift__(self, other): return HexInt(self.value.__rrshift__(other))
+    def __rand__(self, other): return HexInt(self.value.__rand__(other))
+    def __rxor__(self, other): return HexInt(self.value.__rxor__(other))
+    def __ror__(self, other): return HexInt(self.value.__ror__(other))
+
+    def __truediv__(self, other):
+        # Allow non-int division but raise an error if the result would be a float
+        result = self.value.__truediv__(other)
+        if result == int(result):
+            return HexInt(int(result))
+        raise ValueError("Result " + str(result) + " is not an integer, use '//' for integer division")
+
     def __repr__(self):
         return hex(self)
 

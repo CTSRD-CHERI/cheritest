@@ -393,12 +393,6 @@ class BaseBERITestCase(unittest.TestCase):
             self.fail(msg + "0x%016x is not a QNaN value"%(reg_val))
 
     @property
-    def unsealed_otype(self):
-        # This used to be zero. Architecture now specifies 'reserved / special' otypes
-        # are negative with unsealed = -1
-        return 0xffffffffffffffff
-
-    @property
     def max_permissions(self):
         perm_size = int(config_options().PERM_SIZE)
         if perm_size == 31:
@@ -431,6 +425,12 @@ class BaseBERITestCase(unittest.TestCase):
 
     @property
     def sentry_otype(self):
+        return HexInt(self.minus_one_as_u64 - 1)
+
+    @property
+    def unsealed_otype(self):
+        # This used to be zero. Architecture now specifies 'reserved / special' otypes
+        # are negative with unsealed = -1
         return self.minus_one_as_u64
 
     def assertRegisterAllPermissions(self, reg_val, msg=None):
