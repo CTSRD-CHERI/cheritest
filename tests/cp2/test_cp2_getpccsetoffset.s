@@ -28,7 +28,6 @@
 
 .include "macros.s"
 .set noreorder
-.set nomacro
 
 BEGIN_TEST
 		# Make $c1 differemt from $pcc
@@ -42,6 +41,7 @@ BEGIN_TEST
 		b .L1
 		cgetpccsetoffset $c2, $v0  # getpccsetoffset in brach delay slot
 .L1:
-
+		cgetoffset $a4, $c1
+		cgetoffset $a5, $c2
 END_TEST
 

@@ -44,7 +44,9 @@ class test_cp2_getpccsetoffset(BaseBERITestCase):
     def test_offset(self):
         '''Test that cgetpcc returns correct offset'''
         assert self.MIPS.a4 == self.MIPS.v0, "cgetpccsetoffset returns incorrect offset"
+        assert self.MIPS.a5 == self.MIPS.v0, "cgetpccsetoffset returns incorrect offset"
         assert self.MIPS.a4 == HexInt(0x1234), "cgetpccsetoffset returns incorrect offset"
+        assert self.MIPS.a5 == HexInt(0x1234), "cgetpccsetoffset returns incorrect offset"
 
     def test_delay_slot(self):
         assert self.MIPS.c1 == self.MIPS.c2, "Value set in branch delay slot should be the same!"
