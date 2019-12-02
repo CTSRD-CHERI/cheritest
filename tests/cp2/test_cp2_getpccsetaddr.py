@@ -58,3 +58,25 @@ class test_cp2_getpccsetaddr(BaseBERITestCase):
         assert self.MIPS.c4.address == self._EXPECTED_ADDR, "expected address 0x123456"
         self.assertValidCap(self.MIPS.c4, base=0, offset=self._EXPECTED_ADDR, perms=self.max_permissions,
                             length=self.max_length, msg="Expected full addrspace value with offset == 0x123456")
+
+    def test_restricted_getpccsetaddr(self):
+        assert self.MIPS.c5.address == self.MIPS.s5 - 1, "Expected addr == .Lnonzero_base - 1"
+        assert self.MIPS.c5.base == self.MIPS.s5, "Expected base == .Lnonzero_base"
+        assert self.MIPS.c5.offset == HexInt(-1), "Expected offset == -1"
+        assert self.MIPS.c5.length == 16
+
+    def test_restricted_getpccsetaddr_unrep_common(self):
+        assert self.MIPS.c6.address == HexInt(0x123), "Expected addr to be 0x123"
+        assert self.MIPS.c6.length == 16
+
+    @attr("cap_imprecise")
+    def test_restricted_getpccsetaddr_unrep_imprecise(self):
+        assert not self.MIPS.c6.t, "Expected tag to be cleared"
+        assert self.MIPS.c6.base != self.MIPS.s5, "Expected base to be changed"
+        assert self.MIPS.c6.offset == HexInt(0x2173), "Expected offset == HexInt(4)"
+
+    @attr("cap_precise")
+    def test_restricted_getpccsetaddr_unrep_precise(self):
+        assert self.MIPS.c6.t, "Expected tag"
+        assert self.MIPS.c6.base == self.MIPS.s5, "Expected base == .Lnonzero_base"
+        assert self.MIPS.c6.offset == HexInt(0x123) - self.MIPS.s5, "Expected offset == 0x123 - .Lnonzero_base + 4"

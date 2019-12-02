@@ -69,6 +69,20 @@ BEGIN_TEST
 .Lfourth_getpcc:
 		cgetpccincoffset_compat 4, 4  # branch delay slot
 .Lcontinue2:
-
+		# Create an a $pcc with a nonzero base and try cgetpccincoffset
+		cap_from_label $c12, .Lnonzero_base, tmpgpr=$s5
+		cap_from_label $c17, .Lend_test
+		csetbounds $c12, $c12, 16	# create a restricted sandbox
+		li $5, -1
+		li $6, 0x10000000	# large enough to make it unrepresentable
+		cjr $c12
+		nop
+.Lnonzero_base:
+		cgetpccincoffset_compat 5, 5 # getpcc and add -1
+		cgetpccincoffset_compat 6, 6 # getpcc and add 0x10000000
+		cjr	$c17  # return to .Lend_test
+		nop	# delay slot
+.Lend_test:
+		nop
 END_TEST
 

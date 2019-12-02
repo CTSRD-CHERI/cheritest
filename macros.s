@@ -360,7 +360,7 @@ trap_count:
 	dli		\tmpgpr, ~(\perms)
 	candperm	\capreg, \capreg, \tmpgpr
 	dla		\tmpgpr, \label
-	csetoffset	\capreg, \capreg, \tmpgpr
+	csetaddr	\capreg, \capreg, \tmpgpr
 	cjr		\capreg
 	nop		# branch delay slot
 	.set pop

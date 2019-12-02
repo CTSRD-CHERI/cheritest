@@ -27,10 +27,10 @@
 
 from beritest_tools import BaseBERITestCase, attr, HexInt
 
+
 #
 # Check basic behaviour of cgetpcc.
 #
-
 @attr('capabilities')
 class test_cp2_getpccincoffset(BaseBERITestCase):
     EXPECTED_EXCEPTIONS = 0
@@ -56,3 +56,31 @@ class test_cp2_getpccincoffset(BaseBERITestCase):
     def test_expected_difference(self):
         assert self.MIPS.s1 == self.MIPS.s0 + 8, "Expected a difference of two instructions"
         assert self.MIPS.s3 == self.MIPS.s2 + 8, "Expected a difference of two instructions"
+
+    def test_restricted_target(self):
+        assert self.MIPS.c12.base == self.MIPS.s5, "Expected base == .Lnonzero_base"
+        assert self.MIPS.c12.address == self.MIPS.s5, "Expected addr == .Lnonzero_base"
+        assert self.MIPS.c12.offset == 0
+        assert self.MIPS.c12.length == 16
+
+    def test_restricted_getpccincoffset(self):
+        assert self.MIPS.c5.address == self.MIPS.s5 - 1, "Expected addr == .Lnonzero_base - 1"
+        assert self.MIPS.c5.base == self.MIPS.s5, "Expected base == .Lnonzero_base"
+        assert self.MIPS.c5.offset == HexInt(-1), "Expected offset == -1"
+        assert self.MIPS.c5.length == 16
+
+    def test_restricted_getpccincoffset_unrep_common(self):
+        assert self.MIPS.c6.address == self.MIPS.s5 + 0x10000000 + 4, "Expected addr to be .Lnonzero_base+4+0x10000000"
+        assert self.MIPS.c6.length == 16
+
+    @attr("cap_imprecise")
+    def test_restricted_getpccincoffset_unrep_imprecise(self):
+        assert not self.MIPS.c6.t, "Expected tag to be cleared"
+        assert self.MIPS.c6.base == self.MIPS.s5 + 0x10000000, "Expected base to be changed"
+        assert self.MIPS.c6.offset == HexInt(4), "Expected offset == HexInt(0x10000000)"
+
+    @attr("cap_precise")
+    def test_restricted_getpccincoffset_unrep_precise(self):
+        assert self.MIPS.c6.t, "Expected tag"
+        assert self.MIPS.c6.base == self.MIPS.s5, "Expected base == .Lnonzero_base"
+        assert self.MIPS.c6.offset == HexInt(0x10000000) + 4, "Expected offset == 0x10000004"
