@@ -98,6 +98,8 @@ def is_envvar_true(var):
 # Ensures that assertion messages print this as hex (e.g. capability length, etc)
 class HexInt(int):
     def __new__(cls, value, *args, **kwargs):
+        # UINT64:
+        value &= 0xffffffffffffffff
         result = super().__new__(cls, value, *args, **kwargs)
         result.value = value
         return result
