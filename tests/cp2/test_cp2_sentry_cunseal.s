@@ -40,15 +40,15 @@ BEGIN_TEST
         # 64 bits
         dli         $t0, 0xfffffffffffffffe
         csetoffset  $c2, $c2, $t0
-        check_instruction_traps $a1, cunseal $c1, $c1, $c2 # trap #1
+        check_instruction_traps $a1, cunseal $c3, $c1, $c2 # trap #1
 
         # 18 bits
         dli         $t0, 0x3fffe
         csetoffset  $c2, $c2, $t0
-        check_instruction_traps $a2, cunseal $c1, $c1, $c2 # trap #2
+        check_instruction_traps $a2, cunseal $c3, $c1, $c2 # trap #2
 
         # 24 bits
         dli         $t0, 0xfffffe
         csetoffset  $c2, $c2, $t0
-        check_instruction_traps $a3, cunseal $c1, $c1, $c2 # trap #3
+        check_instruction_traps $a3, cunseal $c3, $c1, $c2 # trap #3
 END_TEST

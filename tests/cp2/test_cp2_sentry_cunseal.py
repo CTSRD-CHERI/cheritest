@@ -35,12 +35,12 @@ class test_cp2_sentry_cunseal(BaseBERITestCase):
 
     def test_sentry_no_unseal1(self):
         self.assertCp2Fault(self.MIPS.a1, cap_cause=self.MIPS.CapCause.Type_Violation,
-            cap_reg=2, trap_count=1, msg="Should not be able to unseal sentry cap using cunseal.")
+            cap_reg=1, trap_count=1, msg="Should not be able to unseal sentry cap using cunseal")
 
     def test_sentry_no_unseal2(self):
         self.assertCp2Fault(self.MIPS.a2, cap_cause=self.MIPS.CapCause.Type_Violation,
-            cap_reg=2, trap_count=2, msg="Should not be able to unseal sentry cap using cunseal.")
+            cap_reg=1, trap_count=2, msg="Should not be able to unseal sentry cap using cunseal")
 
     def test_sentry_no_unseal3(self):
         self.assertCp2Fault(self.MIPS.a3, cap_cause=self.MIPS.CapCause.Type_Violation,
-            cap_reg=2, trap_count=3, msg="Should not be able to unseal sentry cap using cunseal.")
+            cap_reg=1, trap_count=3, msg="Should not be able to unseal sentry cap using cunseal")
