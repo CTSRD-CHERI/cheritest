@@ -29,10 +29,6 @@
 .include "macros_extra.s"
 
 
-.macro make_sentry out, in
-	cheri_2arg_insn 0x1d, \out, \in
-.endm
-
 BEGIN_TEST
 
 	dli $a7, 0	# number of sandbox calls
@@ -40,14 +36,14 @@ BEGIN_TEST
 	# create a code capability ($c7) and seal it ($c1) using the new CSealEntry instruction
 	cap_from_label	$c12, label=sandbox
 	# csealcode	$c1, $c1, $c12
-	check_instruction_traps $s0, make_sentry 1, 12		# should not trap
+	check_instruction_traps $s0, csealentry $c1, $c12		# should not trap
 
 	# This should trap since $c3 does not have permit_execute
 	dli	$t0, 0
 	candperm	$c4, $c12, $t0
 	cgetnull	$c5	# should still be null
 	# csealcode	$c1, $c5, $c4
-	check_instruction_traps $s1, make_sentry 5, 4		# trap #1
+	check_instruction_traps $s1, csealentry $c5, $c4		# trap #1
 
 	# check that we can't use CSealEntry with sealed caps
 	# create a seal cap for otyp 1234
@@ -57,7 +53,7 @@ BEGIN_TEST
 	check_instruction_traps  $s2, cseal	$c7, $c12, $c16		# should not trap
 	# sealed caps can't be sentries:
 	# csealcode	$c1, $c8, $c7
-	check_instruction_traps $s3, make_sentry 8, 7		# trap #2
+	check_instruction_traps $s3, csealentry $c8, $c7		# trap #2
 
 
 	# no check that we can't modify the sentry cap
@@ -95,7 +91,7 @@ BEGIN_TEST
 	CFromInt $c23, $t0	# Check that we loaded the "0x1234" with a sentry cjalr
 
 	# test a sentry cap without permit_load
-	make_sentry	14, 13
+	csealentry	$c14, $c13
 	cjalr	$c14, $c17
 	CFromInt $c24, $t0	# Check that didn't load "0x1234" with a no_load sentry cjalr
 

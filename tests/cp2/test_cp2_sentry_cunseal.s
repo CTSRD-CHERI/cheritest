@@ -29,15 +29,11 @@
 .include "macros.s"
 .include "macros_extra.s"
 
-.macro make_sentry out, in
-	cheri_2arg_insn 0x1d, \out, \in
-.endm
-
 # Check that cunseal does not permit unsealing sentry caps
 # even if the address is set to -2 (with various plausible widths)
 BEGIN_TEST
         cgetdefault $c1
-        make_sentry 1, 1
+        csealentry $c1, $c1
 
         cgetdefault $c2
 
