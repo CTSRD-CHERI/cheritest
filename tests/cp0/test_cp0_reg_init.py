@@ -130,16 +130,13 @@ class test_cp0_reg_init(BaseBERITestCase):
         company_id = (self.MIPS.a5 >> 16) & 0xff
         processor_id = (self.MIPS.a5 >> 8) & 0xff
         if self.TEST_MACHINE == "qemu":
-            # QEMU uses company id = 0x0f, processor id = 0x04, revision = 2+
+            # QEMU uses company id = 0x0f, processor id = 0x04
             assert company_id == 0x0f, "Unexpected QEMU CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected QEMU CP0_PRID[15..8]"
             assert revision_id >= 5, "Expected at least rev 5 for QEMU CP0_PRID[7..0]"
-        elif self.TEST_MACHINE == "sail":
-            assert company_id == 0, "Unexpected CP0_PRID[23..16]"
-            assert processor_id == 0x04, "Unexpected CP0_PRID[15..8]"
-            assert revision_id == 0, "Expected at least rev 0"
-        elif self.TEST_MACHINE == "sim":
-            # CHERI Bluespec implementation, company id = 0x00, processor id = 0x04, revision = 2+
+        elif self.TEST_MACHINE in ("sim", "sail", "l3"):
+            # CHERI Bluespec implementation, company id = 0x00, processor id = 0x04
+            # Sail and L3 should report the same values as Bluespec
             assert company_id == 0x00, "Unexpected BERI CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected BERI CP0_PRID[15..8]"
             assert revision_id >= 5, "Expected at least rev 5 for BERI CP0_PRID[7..0]"
@@ -147,15 +144,10 @@ class test_cp0_reg_init(BaseBERITestCase):
             assert company_id == 0x01, "Unexpected GXEMUL CP0_PRID[23..16]"
             assert processor_id == 0x89, "Unexpected GXEMUL CP0_PRID[15..8]"
             assert revision_id >= 1, "Expected at least rev 1"
-        elif self.TEST_MACHINE == "l3":
-            assert company_id == 0x00, "Unexpected L3 CP0_PRID[23..16]"
-            assert processor_id == 0x04, "Unexpected L3 CP0_PRID[15..8]"
-            assert revision_id >= 0, "Expected at least revision 0"
         else:
             self.fail("Expected processor ID value not implemented for TEST_MACHINE={tm} (PRID was {prid_val}: company={cid},"
                       " processor={pid}, revision={rev})".format(tm=self.TEST_MACHINE, prid_val=hex(self.MIPS.a5), cid=hex(company_id),
-                                                                pid=hex(processor_id), rev=hex(revision_id)))
-        self.assertRegisterMaskEqual(self.MIPS.a5, 0xff << 8, 0x04 << 8, "Unexpected CP0 vendor value on reset")
+                                                                 pid=hex(processor_id), rev=hex(revision_id)))
 
     @attr('beri')
     def test_config_reg(self):
