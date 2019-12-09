@@ -43,24 +43,31 @@ class test_cp2_sentry(BaseBERITestCase):
 
     def test_attributes_sealed(self):
         assert self.MIPS.a1 == 1, "cgetsealed $a1, $c1 should return true"
+        assert self.MIPS.c1.s
 
     def test_attributes_perm(self):
         assert self.MIPS.a2 == self.max_permissions, "cgetperm $a2, $c1 should return max exec perms"
+        assert self.MIPS.c1.perms == self.max_permissions
 
     def test_attributes_base(self):
         assert self.MIPS.a3 == 0, "cgetbase $a3, $c1 wrong"
+        assert self.MIPS.c1.base == 0
 
     def test_attributes_offset(self):
         assert self.MIPS.a4 == self.MIPS.c12.offset, "cgetoffset $a4, $c1 wrong"
+        assert self.MIPS.c1.offset == self.MIPS.c12.offset
 
     def test_attributes_len(self):
         assert self.MIPS.a5 == self.MIPS.c12.length, "cgetlen $a5, $c1 wrong"
+        assert self.MIPS.c1.length == self.MIPS.c12.length
 
     def test_attributes_tag(self):
         assert self.MIPS.a6 == 1, "cgettag $a6, $c1 wrong"
+        assert self.MIPS.c1.t
 
     def test_attributes_type(self):
-        assert self.MIPS.t8 == HexInt(self.minus_one_as_u64 - 1), "cgettype $t3, $c1 should be -2"
+        assert self.MIPS.t8 == self.sentry_otype, "cgettype $t3, $c1 should be -2"
+        assert self.MIPS.c1.ctype == self.sentry_otype
 
     def test_good_csealcode(self):
         self.assertTrapInfoNoTrap(self.MIPS.s0, msg="CSealCode with normal $pcc should succeed")

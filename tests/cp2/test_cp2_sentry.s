@@ -35,7 +35,6 @@ BEGIN_TEST
 
 	# create a code capability ($c7) and seal it ($c1) using the new CSealEntry instruction
 	cap_from_label	$c12, label=sandbox
-	# csealcode	$c1, $c1, $c12
 	check_instruction_traps $s0, csealentry $c1, $c12		# should not trap
 
 	# This should trap since $c3 does not have permit_execute
