@@ -506,7 +506,7 @@ class MipsStatus(object):
         TLB_Store_Capability_Violation = 0x09
         Bounds_Not_Exactly_Representable = 0x0a
         # reserved = 0x0b
-        # reserved = 0x0c
+        CapLoadGen_Mismatch = 0x0c
         # reserved = 0x0d
         # reserved = 0x0e
         # reserved = 0x0f
