@@ -28,20 +28,10 @@
 
 .include "macros.s"
 
-#
-# Test that csc does NOT raise an exception if the 'disable capability store'
-# bit is set in the TLB entry for the page but the tag bit on data is unset.
-#
+# Test multiple CSC instructions in a loop
 
 BEGIN_TEST
-		#
-		# To test user code we must set up a TLB entry.
-		#
 .set at
-		#
-		# Write 0 to page mask i.e. 4k pages
-		#
-
 		cgetdefault $c1
 		cincoffset $c1, $c1, 0x123
 		cgetdefault $c2
