@@ -37,42 +37,23 @@
 # EntryHi.
 #
 
+.macro tlb_preproc_set_bits tlbentryreg, tempreg
+	dli \tempreg, 0x1		# Set CLG == 1, which mismatches EntryHi
+	dsll \tempreg, \tempreg, 61
+	ori \tempreg, 0xc		# Make entry cached and valid
+	or \tlbentryreg, \tlbentryreg, \tempreg
+.endm
+
 BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 .set at
- 		dmtc0	$zero, $5		# Page mask = 0 (4K pages)
-		dmtc0	$zero, $0		# TLB index
-		dmtc0	$zero, $10		# TLB entryHi
+		li	$a0, 0
 
 		dla	$a2, cap
 		andi	$a2, 0x1fff
 
-		dla	$a1, testcode		# Load address of testcode
-		and	$a0, $a1, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
-		dsrl	$a0, $a0, 6		# Put PFN in correct position for EntryLow
-		ori	$a0, $a0, 0x1f		# Set global, valid and dirty bits, cached noncoherent
-
-		dli	$t0, 0x1		# Set CLG == 1, which mismatches EntryHi
-		dsll	$t0, $t0, 61
-		or	$a0, $a0, $t0
-
-		dmtc0	$a0, $2			# TLB EntryLow0
-		daddu 	$a0, $a0, 0x40		# Add one to PFN for EntryLow1
-		dmtc0	$a0, $3			# TLB EntryLow1
-		tlbwi				# Write Indexed TLB Entry
-
-		dli	$a5, 0			# Initialise test flags
 		li	$a6, 1
-		li	$a0, 0
 
-		and	$k0, $a1, 0xfff		# Get offset of testcode within page.
-		dmtc0	$k0, $14		# Put EPC
-		dmfc0	$t2, $12		# Read status
-		ori	$t2, 0x12		# Set user mode, exl
-		and	$t2, 0xffffffffefffffff # Clear cu0 bit
-		dmtc0	$t2, $12		# Write status
-		DO_ERET				# Jump to test code
-		nop
-		nop
+		jump_to_usermode testcode, tlb_preproc_set_bits
 
 the_end:
 END_TEST
