@@ -450,8 +450,35 @@ max_thread_count = 32
 	CWriteHwr	$c1, $chwr_\()\reg
 .endm
 
-# Clobbers $t0, $t1 and $t2
-.macro jump_to_usermode function
+# Installs a TLB entry; clobbers t0; assumes EntryHi and TLB Index valid on
+# entry.  Clobbers t0 and t1 (well, for callback's use, but pretend).
+#
+# The "preproc" argument is a macro of two arguments, both register names:
+# the tlb entry itself and a scratch register.  If one tries being very
+# fancy and desires to pass state to the callback, it must not be in
+# registers clobbered by install_tlb_entry itself.
+.macro install_tlb_entry physaddr, preproc=install_tlb_entry_stub
+	.set push
+	.set at
+		dla	$t0, \physaddr		# Load address
+		and	$t0, $t0, 0xffffffe000	# Get physical page (PFN: 40 bits less 13 low order bits)
+		dsrl	$t0, $t0, 6		# Put PFN in correct position for EntryLow
+		ori	$t0, $t0, 0x13		# Set valid and global bits, uncached
+
+		\preproc $t0, $t1
+
+		dmtc0	$t0, $2			# TLB EntryLow0
+		daddu	$t0, $t0, 0x40		# Add one to PFN for EntryLow1
+		dmtc0	$t0, $3			# TLB EntryLow1
+		tlbwi				# Write Indexed TLB Entry
+	.set pop
+.endm
+
+.macro install_tlb_entry_stub tlbentryreg, tempreg
+.endm
+
+# Clobbers $at, $t0, $t1 and $t2
+.macro jump_to_usermode function, tlb_preproc=install_tlb_entry_stub
 	.set push
 	.set at
 		# To test user code we must set up a TLB entry.
@@ -459,17 +486,12 @@ max_thread_count = 32
 		dmtc0	$zero, $0		# TLB index
 		dmtc0	$zero, $10		# TLB entryHi
 
-		dla	$t0, \function		# Load address of testcode
-		and	$t1, $t0, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
-		dsrl	$t1, $t1, 6		# Put PFN in correct position for EntryLow
-		ori	$t1, $t1, 0x13		# Set valid and global bits, uncached
-		dmtc0	$t1, $2			# TLB EntryLow0
-		daddu	$t1, $t1, 0x40		# Add one to PFN for EntryLow1
-		dmtc0	$t1, $3			# TLB EntryLow1
-		tlbwi				# Write Indexed TLB Entry
+		install_tlb_entry \function, \tlb_preproc
 
-		and	$t0, $t0, 0x1fff	# Get offset of testcode within page.
+		dla	$t0, \function
+		and	$t0, $t0, 0x1fff	# Get offset of function within page.
 		dmtc0	$t0, $14		# Put EPC
+
 		dmfc0	$t2, $12		# Read status
 		ori	$t2, 0x12		# Set user mode, exl
 		and	$t2, 0xffffffffefffffff	# Clear cu0 bit
