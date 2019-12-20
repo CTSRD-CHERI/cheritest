@@ -62,6 +62,7 @@ without_access_sys_regs:
 	nop
 with_access_sys_regs_again:
 	cgetpcc $c3
+	csetepcc $c3	# set an EPCC with ASR so that userspace gets ASR
 	check_instruction_traps $a5, dmfc0 $a4, $15		# PrId
 	jump_to_usermode userspace_test
 END_TEST
