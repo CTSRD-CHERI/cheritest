@@ -51,34 +51,37 @@ class test_cp2_asr_cp0(BaseBERITestCase):
     def test_prid_read_kernel_no_asr(self):
         assert self.MIPS.a1 == HexInt(-1), "Should not have read PrID"
     def test_prid_read_kernel_no_asr_cause(self):
-        self.assertCp2Fault(self.MIPS.s2, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-                            trap_count=1, msg="mcf0 should not succeed in kernel mode without ASR")
+        self.assertCp2Fault(self.MIPS.s2, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=1,
+                            msg="mcf0 should not succeed in kernel mode without ASR")
     def test_tlbwi_read_kernel_no_asr_cause(self):
-        self.assertCp2Fault(self.MIPS.s3, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-                            trap_count=2, msg="tlbwi should not succeed in kernel mode without ASR")
+        self.assertCp2Fault(self.MIPS.s3, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=2,
+                            msg="tlbwi should not succeed in kernel mode without ASR")
 
     def test_prid_read_kernel_asr_restored(self):
         assert self.MIPS.a4 != HexInt(-1), "Should have read PrID"
     def test_prid_read_kernel_asr_restored(self):
         self.assertTrapInfoNoTrap(self.MIPS.a5)
 
+
+    # In userspace with ASR we should get the CP0 unusable exception
     def test_prid_read_user_asr(self):
         assert self.MIPS.a2 == HexInt(-1), "Should not have read PrID"
     def test_prid_read_user_asr_cause(self):
-        self.assertCp2Fault(self.MIPS.s4, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-                            trap_count=3, msg="mcf0 should not succeed in user mode with ASR")
+        self.assertCompressedTrapInfo(self.MIPS.s4, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=3,
+                                      msg="mcf0 should not succeed in user mode with ASR (COP_UNSUABLE expected)")
     def test_tlbwi_read_user_asr_cause(self):
-        self.assertCp2Fault(self.MIPS.s5, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-                            trap_count=4, msg="tlbwi should not succeed in user mode with ASR")
+        self.assertCompressedTrapInfo(self.MIPS.s5, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=4,
+                                      msg="mcf0 should not succeed in user mode with ASR (COP_UNSUABLE expected)")
 
+    # But without ASR, the ASR fault is checked first.
     def test_prid_read_user_no_asr(self):
         assert self.MIPS.a3 == HexInt(-1), "Should not have read PrID"
     def test_prid_read_user_no_asr_cause(self):
-        self.assertCp2Fault(self.MIPS.s6, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-                            trap_count=5, msg="mcf0 should not succeed in user mode with ASR")
+        self.assertCp2Fault(self.MIPS.s6, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=5,
+                            msg="mcf0 should not succeed in user mode without ASR (CP2 fault expected)")
     def test_tlbwi_read_user_no_asr_cause(self):
-        self.assertCp2Fault(self.MIPS.s7, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation,
-                            trap_count=6, msg="tlbwi should not succeed in user mode with ASR")
+        self.assertCp2Fault(self.MIPS.s7, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=6,
+                            msg="tlbwi should not succeed in user mode without ASR (CP2 fault expected)")
 
     # check that we intially have asr, and don't in the second case
     def test_asr_perm_user_1(self):
