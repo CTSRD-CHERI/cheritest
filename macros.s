@@ -363,7 +363,6 @@ trap_count:
 	.set noat
 	cgetpcc		\capreg
 	remove_cap_perms \capreg, \perms, tmpgpr=\tmpgpr
-	candperm	\capreg, \capreg, \tmpgpr
 	dla		\tmpgpr, \label
 	csetaddr	\capreg, \capreg, \tmpgpr
 	cjr		\capreg
@@ -451,6 +450,7 @@ max_thread_count = 32
 	CWriteHwr	$c1, $chwr_\()\reg
 .endm
 
+# Clobbers $t0, $t1 and $t2
 .macro jump_to_usermode function
 	.set push
 	.set at
@@ -459,19 +459,17 @@ max_thread_count = 32
 		dmtc0	$zero, $0		# TLB index
 		dmtc0	$zero, $10		# TLB entryHi
 
-		dla	$a0, \function		# Load address of testcode
-		and	$a2, $a0, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
-		dsrl	$a3, $a2, 6		# Put PFN in correct position for EntryLow
-		ori	$a3, $a3, 0x13		# Set valid and global bits, uncached
-		dmtc0	$a3, $2			# TLB EntryLow0
-		daddu	$a4, $a3, 0x40		# Add one to PFN for EntryLow1
-		dmtc0	$a4, $3			# TLB EntryLow1
+		dla	$t0, \function		# Load address of testcode
+		and	$t1, $t0, 0xffffffe000	# Get physical page (PFN) of testcode (40 bits less 13 low order bits)
+		dsrl	$t1, $t1, 6		# Put PFN in correct position for EntryLow
+		ori	$t1, $t1, 0x13		# Set valid and global bits, uncached
+		dmtc0	$t1, $2			# TLB EntryLow0
+		daddu	$t1, $t1, 0x40		# Add one to PFN for EntryLow1
+		dmtc0	$t1, $3			# TLB EntryLow1
 		tlbwi				# Write Indexed TLB Entry
 
-		dli	$a5, 0			# Initialise test flag
-
-		and	$k0, $a0, 0x1fff		# Get offset of testcode within page.
-		dmtc0	$k0, $14		# Put EPC
+		and	$t0, $t0, 0x1fff	# Get offset of testcode within page.
+		dmtc0	$t0, $14		# Put EPC
 		dmfc0	$t2, $12		# Read status
 		ori	$t2, 0x12		# Set user mode, exl
 		and	$t2, 0xffffffffefffffff	# Clear cu0 bit
