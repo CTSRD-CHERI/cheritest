@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012, 2015 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -35,46 +36,12 @@
 # Test that ld raises an exception if C0.base + offset is incorrectly aligned,
 # even if the offset itself is aligned.
 #
-# XXX: This test doesn't work at the moment, because it needs to install
-# an exception handler that can cope with $ddc being set to an unexpected
-# value.
-
 BEGIN_TEST
-		#
-		# Clear the BEV flag
-		#
-
-		jal	bev_clear
-		nop
-
-		#
-		# Set up exception handlers
-		#
-
-		#
-		# Handler for XTLB refill - shouldn't be called, but might be
-		# if there is a bug in exception processing
-		#
-
-		dli	$a0, 0xffffffff80000080
-		dla	$a1, bev0_common_handler_stub
-		dli	$a2, 12	# instruction count
-		dsll	$a2, 2	# convert to byte count
-		jal	memcpy_nocap
-		nop		# branch delay slot	
-
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, bev0_common_handler_stub
-		dli	$a2, 12	# instruction count
-		dsll	$a2, 2	# convert to byte count
-		jal	memcpy_nocap
-		nop		# branch delay slot	
-
 		# $a2 will be set to 1 if the exception handler is called
 		dli	$a2, 0
 
 		#
-		# Save c0
+		# Save $ddc
 		#
 
 		cgetdefault   $c1
@@ -98,32 +65,15 @@ BEGIN_TEST
 
 		dli	$t1, 0
 		dli     $a0, 1
-		ld      $a0, 0($zero) # This should raise a C2E exception
+		check_instruction_traps $s0, ld $a0, 0($zero) # This should raise a C2E exception
 
 		#
-		# Restore c0
+		# Restore $ddc
 		#
 
 		csetdefault $c1
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		dli	$a2, 1
-		mfc0	$a3, $13	# CP0.Cause
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
-
-		.ent bev0_common_handler_stub
-bev0_common_handler_stub:
-		dla	$k0, bev0_handler
-		jr	$k0
-		nop
-		.end bev0_common_handler_stub
 
 		.data
 		.align	5

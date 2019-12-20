@@ -28,19 +28,15 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
-class test_cp2_x_ld_align(BaseBERITestCase):
 
-    @attr('capabilities')
-    @attr('alignex')
-    def test_cp2_x_ld_align_1(self):
+@attr('capabilities')
+@attr('alignex')
+class test_cp2_x_ld_align(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
+
+    def test_cp2_x_ld_align(self):
         self.assertRegisterEqual(self.MIPS.a0, 1, "LD succeeded even though C0.base was not aligned")
 
-    @attr('capabilities')
-    @attr('alignex')
-    def test_cp2_x_ld_align_2(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "LD did not raise an exception when C0.base was not aligned")
+    def test_cp2_x_ld_align_cause(self):
+      self.assertCompressedTrapInfo(self.MIPS.s0, mips_cause=self.MIPS.Cause.AdEL, trap_count=1)
 
-    @attr('capabilities')
-    @attr('alignex')
-    def test_cp2_x_ld_align_3(self):
-        self.assertRegisterEqual(self.MIPS.a3, 4 << 2, "CP0.Status was not set correctly when C0.base was not aligned")
