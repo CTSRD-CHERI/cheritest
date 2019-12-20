@@ -353,11 +353,16 @@ trap_count:
 	BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER \extra_stack_space
 .endm
 
+.macro remove_cap_perms capreg, perms, tmpgpr=$at
+	dli		\tmpgpr, ~(\perms)
+	candperm	\capreg, \capreg, \tmpgpr
+.endm
+
 .macro remove_pcc_perms_jump capreg, perms, label, tmpgpr=$at
 	.set push
 	.set noat
 	cgetpcc		\capreg
-	dli		\tmpgpr, ~(\perms)
+	remove_cap_perms \capreg, \perms, tmpgpr=\tmpgpr
 	candperm	\capreg, \capreg, \tmpgpr
 	dla		\tmpgpr, \label
 	csetaddr	\capreg, \capreg, \tmpgpr

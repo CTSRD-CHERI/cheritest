@@ -138,6 +138,25 @@ class HexInt(int):
         return hex(self)
 
 
+class CheriPermissionBits(Enum):
+    Global = 1 << 0
+    Execute = 1 << 1
+    Load = 1 << 2
+    Store = 1 << 3
+    LoadCap = 1 << 4
+    StoreCap = 1 << 5
+    StoreLocalCap = 1 << 6
+    Seal = 1 << 7
+    CCall = 1 << 8
+    Unseal = 1 << 9
+    AccessSystemRegs = 1 << 10
+
+    def __or__(self, other) -> int:
+        if isinstance(other, CheriPermissionBits):
+            return self.value | other.value
+        return self.value | other
+
+
 class Capability(object):
     def __init__(self, t, s, perms, ctype, offset, base, length):
         self.t      = t
@@ -152,6 +171,11 @@ class Capability(object):
     def address(self):
         # Since python ints are variable length we need a mod 2^64 to get a u64
         return HexInt((self.offset + self.base) & 0xffffffffffffffff)
+
+    def has_perms(self, perms):
+        if isinstance(perms, CheriPermissionBits):
+            perms = perms.value
+        return (self.perms & int(perms) == int(perms))
 
     def __repr__(self):
         return '<t:%x s:%x perms:0x%08x type:0x%06x offset:0x%016x base:0x%016x length:0x%016x>'%(
@@ -262,25 +286,6 @@ class ThreadStatus(object):
             v.append("%s: %s"%(reg_num, self.cp2[i]))
         v.append("PCC: %s"%(self.pcc))
         return "\n".join(v)
-
-
-class CheriPermissionBits(Enum):
-    Global = 1 << 0
-    Execute = 1 << 1
-    Load = 1 << 2
-    Store = 1 << 3
-    LoadCap = 1 << 4
-    StoreCap = 1 << 5
-    StoreLocalCap = 1 << 6
-    Seal = 1 << 7
-    CCall = 1 << 8
-    Unseal = 1 << 9
-    AccessSystemRegs = 1 << 10
-
-    def __or__(self, other) -> int:
-        if isinstance(other, CheriPermissionBits):
-            return self.value | other.value
-        return self.value | other
 
 
 class MipsStatus(object):

@@ -202,8 +202,9 @@ class BaseBERITestCase(unittest.TestCase):
                 if self._SETUP_EXCEPTION is not None:
                     return
             assert self.MIPS.k0 == self.EXPECTED_EXCEPTIONS, \
-                self.__class__.__name__ + " threw " + str(self._MIPS.k0) + " exception(s) unexpectedly\n" + \
-                "Possible trap info (unless $k1 was clobbered): " + repr(self.CompressedTrapInfo(self.MIPS.k1))
+                self.__class__.__name__ + " threw " + str(self._MIPS.k0) + " exception(s) but expected " + \
+                str(self.EXPECTED_EXCEPTIONS) + "\nPossible trap info (unless $k1 was clobbered): " + \
+                repr(self.CompressedTrapInfo(self.MIPS.k1))
 
 
 
