@@ -33,7 +33,7 @@ BEGIN_TEST
 		dla	$a0, exception_handler
 		jal 	bev0_handler_install
 		nop
-
+		li      $a5, 0
 		#
 		# Set CP0.HWREna to zero, so that user-mode programs do not
 		# have access to hardware registers via rdhwr.

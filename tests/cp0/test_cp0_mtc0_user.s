@@ -31,7 +31,7 @@ BEGIN_TEST
 		dla	$a0, exception_handler
 		jal 	bev0_handler_install
 		nop
-
+		li      $a5, 0
 		jump_to_usermode testcode
 the_end:
 END_TEST
