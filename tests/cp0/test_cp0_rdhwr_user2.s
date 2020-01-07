@@ -61,8 +61,6 @@ END_TEST
 
 .balign 4096	# ensure all the userspace testcode is on one page
 testcode:
-		nop
-		add	$a5, 1			# Set the test flag
 		.set push
 		.set mips32r2
 		li      $t0, 1
@@ -76,7 +74,6 @@ testcode:
 		li      $t0, 0
 		# test that the user count register is accessible
 		rdhwr	$a2, $2
-		
 		.set pop
 		syscall 0			# Return to kernel mode
 
