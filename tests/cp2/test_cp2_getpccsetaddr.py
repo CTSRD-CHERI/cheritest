@@ -73,7 +73,7 @@ class test_cp2_getpccsetaddr(BaseBERITestCase):
     def test_restricted_getpccsetaddr_unrep_imprecise(self):
         assert not self.MIPS.c6.t, "Expected tag to be cleared"
         assert self.MIPS.c6.base != self.MIPS.s5, "Expected base to be changed"
-        assert self.MIPS.c6.offset == HexInt(0x2173), "Expected offset == HexInt(4)"
+        assert (self.MIPS.c6.base + self.MIPS.c6.offset) == HexInt(0x123), "Expected offset == HexInt(4)"
 
     @attr("cap_precise")
     def test_restricted_getpccsetaddr_unrep_precise(self):
