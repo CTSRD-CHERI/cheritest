@@ -83,7 +83,7 @@ BEGIN_TEST
 		csc	$cnull, $zero, 0($c1)	# store untagged value first
 		cllc	$c2, $c1
 		sd	$t2, 0($t1)	# Should cause the sc to fail
-		cscc	$a4, $c4, $c1	# should not store the tagged value
+		cscc	$a1, $c4, $c1	# should not store the tagged value
 		clc	$c5, $zero, 0($c1)
 
 END_TEST
