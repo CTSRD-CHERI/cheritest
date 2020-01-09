@@ -68,7 +68,7 @@ BEGIN_TEST
 		# Make a watch point at this address
 		ori	$a1, $a0, 1     # Set write watch bit
 		dmtc0	$a1, $18        # Set watchLo
-                dli     $t0, 0x400000ff # Set global bit, zero mask
+                dli     $t0, 0x40000000 # Set global bit, zero mask
                 dmtc0   $t0, $19        # Set watchHi
 		nop
 		nop
