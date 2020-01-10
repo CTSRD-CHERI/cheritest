@@ -481,6 +481,7 @@ class MipsStatus(object):
         TRAP = 13
         FPE = 15
         COP2 = 18
+        WATCH = 23
 
         @staticmethod
         def fromint(value):

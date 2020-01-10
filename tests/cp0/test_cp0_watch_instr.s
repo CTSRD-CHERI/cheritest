@@ -39,16 +39,7 @@
 # On cheri2 watchpoints are only accurate to 8 bytes, so control the alignment of
 # the test to ensure that desired_epc has correct alignment.
                 .align  8
-BEGIN_TEST
-		#
-		# Set up exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 		#
 		# Clear registers we'll use when testing results later.
 		#
@@ -105,13 +96,13 @@ END_TEST
 # checks BD as well), so EPC += 4 should return control after the overflow
 # instruction.
 #
-		.ent bev0_handler
-bev0_handler:
+BEGIN_CUSTOM_TRAP_HANDLER
 		li	$a2, 1
+		collect_compressed_trap_info compressed_info_reg=$s0
 		mfc0	$a3, $12	# Status register
 		mfc0	$a4, $13	# Cause register
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
 		DO_ERET
-		.end bev0_handler
+END_CUSTOM_TRAP_HANDLER
