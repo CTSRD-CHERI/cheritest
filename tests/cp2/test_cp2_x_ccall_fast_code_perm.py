@@ -43,5 +43,5 @@ class test_cp2_x_ccall_fast_code_perm(BaseBERITestCase):
 
     def test_cp2_x_ccall_fast_code_perm_2(self):
         '''Test that the exception raised has the correct cause'''
-        self.assertCp2Fault(self.MIPS.k1, cap_reg=1, cap_cause=self.MIPS.CapCause.Permit_CCall_Violation,
+        self.assertCp2Fault(self.MIPS.s0, cap_reg=1, cap_cause=self.MIPS.CapCause.Permit_CCall_Violation,
                             trap_count=1, msg="expected a Permit_CCall violation")

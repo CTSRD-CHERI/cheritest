@@ -26,8 +26,6 @@
 #
 # @BERI_LICENSE_HEADER_END@
 #
-
-.set mips64
 .set noreorder
 .set nobopt
 .set noat
@@ -83,11 +81,12 @@ BEGIN_TEST
 
         li          $t1, 0      # clear $t1, a change in $t1 means failure.
 
-        # do the ccallfast 
+        # do the ccallfast
+	dli $s0, 0
 	ccall	$c1, $c2, 1
 	nop
-
 restored_ra:
+	move $s0, $k1	# Move the trap cause to $s0
 END_TEST
 
         .ent sandbox
