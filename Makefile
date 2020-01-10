@@ -115,7 +115,7 @@ FUZZ_DMA_ONLY?=0
 # fuzz tests are currently broken
 NOFUZZ?=1
 NOFUZZR?=1
-TEST_WATCH?=0
+TEST_WATCH?=1
 CAP_SIZE?=128
 
 

@@ -95,12 +95,6 @@ ifneq ($(TEST_PS),1)
 COMMON_UNSUPPORTED_FEATURES+=floatpaired
 endif
 
-ifeq ($(TEST_WATCH),1)
-COMMON_UNSUPPORTED_FEATURES+=nowatch
-else
-COMMON_UNSUPPORTED_FEATURES+=watch
-endif
-
 ifndef TEST_TRACE
 ifndef TEST_TRACE_ONLY
 COMMON_UNSUPPORTED_FEATURES+=	trace_tests
@@ -203,6 +197,7 @@ noextendedtlb \
 csettype \
 beri_statcounters \
 tlb_read_uninitialized \
+watch \
 count_register_is_time
 
 L3_UNSUPPORTED_FEATURES+=\
@@ -214,6 +209,7 @@ floatrecip \
 floatrsqrt \
 floatexception \
 floatechonan \
+watch \
 float_round_upwards
 
 L3_UNSUPPORTED_FEATURES+=ccall_hw_1
@@ -258,7 +254,9 @@ pic \
 mt \
 count_register_is_time \
 no_experimental_clc \
-experimental_csc
+experimental_csc \
+watch
+
 
 SAIL_MIPS_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_UNSUPPORTED_FEATURES) capabilities"
 SAIL_CHERI_NOSEFLAGS=$(PYTHON_TEST_ATTRIB_SELETOR_FLAG) "$(SAIL_UNSUPPORTED_FEATURES)"
@@ -304,7 +302,8 @@ csettype \
 mtc0signex \
 no_experimental_clc \
 no_experimental_csc \
-count_register_is_icount
+count_register_is_icount \
+watch
 
 ifdef MIPS_ONLY
 QEMU_UNSUPPORTED_FEATURES+=beri_statcounters
@@ -391,6 +390,12 @@ NOSEPRED+=float32 floatexception floatflags floatrecipflushesdenorm floatri floa
 ifdef WONTFIX
 NOSEPRED+=float_multiply_rounding
 endif
+endif
+
+ifeq ($(TEST_WATCH),0)
+NOSEPRED+=watch
+else
+NOSEPRED+=nowatch
 endif
 
 # CHERI supports experimental CLC since r30617
