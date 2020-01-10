@@ -77,11 +77,11 @@ class test_cp2_asr_cp0(BaseBERITestCase):
     def test_prid_read_user_no_asr(self):
         assert self.MIPS.a3 == HexInt(-1), "Should not have read PrID"
     def test_prid_read_user_no_asr_cause(self):
-        self.assertCp2Fault(self.MIPS.s6, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=5,
-                            msg="mcf0 should not succeed in user mode without ASR (CP2 fault expected)")
+        self.assertCompressedTrapInfo(self.MIPS.s6, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=5,
+                                      msg="mcf0 should not succeed in user mode without ASR (COP_UNSUABLE expected)")
     def test_tlbwi_read_user_no_asr_cause(self):
-        self.assertCp2Fault(self.MIPS.s7, cap_cause=self.MIPS.CapCause.Access_System_Registers_Violation, trap_count=6,
-                            msg="tlbwi should not succeed in user mode without ASR (CP2 fault expected)")
+        self.assertCompressedTrapInfo(self.MIPS.s7, mips_cause=self.MIPS.Cause.COP_Unusable, trap_count=6,
+                                      msg="mcf0 should not succeed in user mode without ASR (COP_UNSUABLE expected)")
 
     # check that we intially have asr, and don't in the second case
     def test_asr_perm_user_1(self):
