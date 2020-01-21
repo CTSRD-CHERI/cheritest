@@ -445,7 +445,14 @@ endif
 
 # There is a use-after free due to undetermined pthread shutdown order, ignore that too:
 # TODO: ASAN_OPTIONS=suppressions=QEMU_ASAN.supp
-SANITIZER_ENV=UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 LSAN_OPTIONS=suppressions=QEMU_LEAKS.supp
+# FIXME: there seems to be a LSAN 9.0.1 false positive (or bug in glib), disable it for now:
+#   #0  0x000000000049dfc4 in malloc ()
+#   #1  0x00007ffff5e1dab9 in g_malloc () from /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0
+#   #2  0x00007ffff5e2864c in ?? () from /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0
+#   #3  0x00007ffff7de5733 in call_init (env=0x7fffffffd760, argv=0x7fffffffd6b8, argc=20, l=<optimised out>) at dl-init.c:72
+#   #4  _dl_init (main_map=0x7ffff7ffe170, argc=20, argv=0x7fffffffd6b8, env=0x7fffffffd760) at dl-init.c:119
+#   #5  0x00007ffff7dd60ca in _dl_start_user () from /lib64/ld-linux-x86-64.so.2
+SANITIZER_ENV=UBSAN_OPTIONS=print_stacktrace=1,halt_on_error=1 ASAN_OPTIONS=detect_leaks=0 LSAN_OPTIONS=suppressions=QEMU_LEAKS.supp
 
 # We can't have the logfile targets depend on $(QEMU) since that gives the
 # following useless error if $(QEMU) doesn't exist:
