@@ -58,9 +58,16 @@ without_access_sys_regs:
 	# restore ASR:
 	dla $t0, with_access_sys_regs_again
 	csetaddr $c12, $c1, $t0
-	cjalr $c12, $cnull
+	# check branch delay slot of an instruction that restores ASR still traps
+	dli $a6, 0
+	clear_counting_exception_handler_regs
+	cjalr $c12, $cnull	# this restores ASR (but only if it commits)
+	tlbwr	# Write Random TLB Entry (trap #3)
+	move $a6, $k1
+	cjalr $c12, $cnull	# jump again since the previous cjalr should have aborted
 	nop
 with_access_sys_regs_again:
+	clear_counting_exception_handler_regs
 	cgetpcc $c3
 	csetepcc $c3	# set an EPCC with ASR so that userspace gets ASR
 	check_instruction_traps $a5, dmfc0 $a4, $15		# PrId
@@ -75,8 +82,8 @@ userspace_test:
 .Luserspace_getpcc:
 	cgetpcc $c10			# Ensure we have access system registers permission in userspace
 userspace_with_asr:
-	check_instruction_traps $s4, dmfc0 $a2, $15		# PrId (trap #3)
-	check_instruction_traps $s5, tlbwi	# Write Indexed TLB Entry (trap #4)
+	check_instruction_traps $s4, dmfc0 $a2, $15		# PrId (trap #4)
+	check_instruction_traps $s5, tlbwi	# Write Indexed TLB Entry (trap #5)
 	# Now remove ASR and try again (in kernel mode)
 	# can't use absolute addresses in userspace (since we are relative to address 0) -> use a relative cincoffset
 	dla $t0, (.Luserspace_without_access_sys_regs - .Luserspace_getpcc)
@@ -86,9 +93,14 @@ userspace_with_asr:
 	nop
 .Luserspace_without_access_sys_regs:
 	cgetpcc $c11			# Ensure access system registers permission was removed
-	check_instruction_traps $s6, dmfc0 $a3, $15		# PrId (trap #5)
-	check_instruction_traps $s7, tlbwi	# Write Indexed TLB Entry (trap #6)
-
+	check_instruction_traps $s6, dmfc0 $a3, $15		# PrId (trap #6)
+	check_instruction_traps $s7, tlbwi	# Write Indexed TLB Entry (trap #7)
+	# check branch delay slot of an instruction that restores ASR still traps
+	dli $a7, 0
+	clear_counting_exception_handler_regs
+	cjr $c1	# this would restore ASR (but only if it commits)
+	tlbwr	# Write Random TLB Entry (trap #8)
+	move $a7, $k1
 	EXIT_TEST_WITH_COUNTING_CHERI_TRAP_HANDLER
 .end userspace_test
 
