@@ -36,9 +36,13 @@
 #
 
 BEGIN_TEST
+
+		# create a return capability with ASR
+		cap_from_label $c17, .Lexit
+
 		# Restrict the PCC capability that sandbox will run with.
 		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
-		# Permit_Load_Capability, Permit_Store_Capability, 
+		# Permit_Load_Capability, Permit_Store_Capability,
 		# Permit_Store_Ephemeral_Capability.
 
 		dli $t1, 0x7f
@@ -55,8 +59,11 @@ L1:
 		cgetpcc  $c2
 		# FIXME: new assembler syntax
 		cgetperm $a3, $c2
-		
+		cjr $c17
+		nop
 
+.Lexit:
+		nop
 END_TEST
 
 		.data
