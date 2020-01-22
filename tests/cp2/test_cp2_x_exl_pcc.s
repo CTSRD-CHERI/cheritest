@@ -37,10 +37,6 @@
 #
 
 sandbox:
-		#
-		# Try to use KR1C ($c27) as a capability, without having
-		# the required permission in PCC.
-		#
 		dli     $a0, 0
 		dli     $t0, 0
 		cgetnull	$c4
@@ -50,7 +46,7 @@ sandbox:
 		# branch delay slot
 		nop
 
-BEGIN_TEST
+BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 
 		#
 		# Set up exception handler
@@ -120,21 +116,21 @@ catch:
 		nop	# Apparently the handler jumps to catch + 4 so we need a nop here
 END_TEST
 
-		.ent bev0_handler
+BEGIN_CUSTOM_TRAP_HANDLER
 bev0_handler:
 		li	$a2, 1
-		mfc0	$a3, $12		# Status
-		andi	$a3, $a3, 0x7
+		# Note: this will also set the number of times that the trap handler has been invoked in $v0
+		collect_compressed_trap_info
 		cgetpcc $c1
-		cgetperm $a1, $c1
+
 		dmfc0	$a5, $14	# EPC
 		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
 		dmtc0	$k0, $14
 		DO_ERET
-		.end bev0_handler
+
+END_CUSTOM_TRAP_HANDLER
 
 		.data
-
 		.align 5
 cap1:		.dword	0x0123456789abcdef	# uperms/reserved
 		.dword	0x0123456789abcdef	# otype/eaddr

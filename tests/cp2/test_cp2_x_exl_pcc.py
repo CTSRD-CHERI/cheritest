@@ -33,4 +33,4 @@ class test_cp2_x_exl_pcc(BaseBERITestCase):
     @attr('capabilities')
     def test_test_cp2_x_exl_pcc(self):
         '''Test that an exception when EXL is true sets PCC'''
-        self.assertRegisterAllPermissions(self.MIPS.a1, "An exception while EXL was true did not set PCC from KCC")
+        self.assertRegisterAllPermissions(self.MIPS.c1.perms, "An exception while EXL was true did not set PCC from KCC")
