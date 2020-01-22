@@ -40,6 +40,9 @@ BEGIN_TEST
                 # permission to access reserved registers).
                 #
 
+                # but save a full-permissions $c17 first
+		cap_from_label $c17, .Lreturn_addr
+
                 cgetpcc     $c1
                 dli         $t0, 0x1ff
                 candperm    $c1, $c1, $t0
@@ -93,13 +96,14 @@ L1:
                 # populate $a4 with a non zero value for the end test
                 dli         $a4, 42
 
-                # invoke the sandbox
-                dla         $t0, invoke
-                jalr        $t0
-                nop
+		# invoke the sandbox (using cjr, since $c17 must contain a capability with ASR)
+		cap_from_label $c12, invoke
+		cjr       $c12
+		nop
 
                 # end the test
                 # landing here...
+.Lreturn_addr:
                 ##############################################################
                 cld         $sp, $zero, 0($c26)
                 csetoffset  $c26, $c26, $zero
@@ -173,9 +177,7 @@ invoke:         .ent invoke
                 csetoffset $c4, $c4, $t0
 
                 # prepare code capability
-                cgetpcc     $c23
-                csetoffset  $c23, $c23, $ra
-                cseal       $c23, $c23, $c4
+                cseal       $c23, $c17, $c4
 
                 # prepare the data capability, this time just use default which is aligned.
                 cgetdefault $c24
