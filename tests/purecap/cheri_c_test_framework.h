@@ -29,6 +29,8 @@ extern volatile __int64_t continue_after_exception;
 #define _EXTERN_C
 #endif
 
+#define __unused __attribute__((unused))
+
 #define DECLARE_TEST(name, desc) _EXTERN_C int test(void);
 #define DECLARE_TEST_FAULT(name, desc) _EXTERN_C int test(void);
 

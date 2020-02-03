@@ -41,6 +41,10 @@
 
 #include "assembly.h"
 
+// Don't warn about ambigous provenance
+#pragma clang diagnostic ignored "-Wcheri-provenance"
+
+
 // Clang objects if you redefine a builtin.  This little hack allows us to
 // define a function with the same name as an intrinsic.
 #pragma redefine_extname __atomic_load_c SYMBOL_NAME(__atomic_load)
