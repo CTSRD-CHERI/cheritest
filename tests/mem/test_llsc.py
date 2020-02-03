@@ -28,34 +28,32 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
-class test_llsc(BaseBERITestCase):
 
-    @attr('llsc')
-    @attr('cached')
+@attr('llsc')
+@attr('cached')
+class test_llsc(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
+
     def test_ll_sc_success(self):
         '''That an uninterrupted ll+sc succeeds'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted ll+sc failed")
 
-    @attr('llsc')
-    @attr('cached')
     def test_ll_sc_value(self):
         '''That an uninterrupted ll+sc stored the right value'''
         self.assertRegisterEqual(self.MIPS.a1, 0xffffffff, "Uninterrupted ll+sc stored wrong value")
 
-    @attr('llsc')
-    @attr('cached')
     def test_ll_add_sc_success(self):
         '''That an uninterrupted ll+add+sc succeeds'''
         self.assertRegisterEqual(self.MIPS.a3, 1, "Uninterrupted ll+add+sc failed")
 
-    @attr('llsc')
-    @attr('cached')
     def test_ll_add_sc_value(self):
         '''That an uninterrupted ll+add+sc stored the right value'''
         self.assertRegisterEqual(self.MIPS.a4, 0, "Uninterrupted ll+add+sc stored wrong value")
 
-    @attr('llsc')
-    @attr('cached')
     def test_ll_tnei_sc_failure(self):
         '''That an ll+sc spanning a trap fails'''
-        self.assertRegisterEqual(self.MIPS.a7, 0, "Interrupted ll+tnei+sc succeeded")
+        self.assertRegisterEqual(self.MIPS.a5, 0, "Interrupted ll+tnei+sc succeeded")
+
+    def test_ll_tnei_sc_failure(self):
+        '''That an ll+sc spanning a trap fails'''
+        self.assertRegisterEqual(self.MIPS.a6, 0, "Interrupted changed value")

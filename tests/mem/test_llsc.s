@@ -35,15 +35,6 @@
 #
 
 BEGIN_TEST
-		#
-		# Set up nop exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-		
 		dla $t0, word
 
 		#
@@ -67,26 +58,14 @@ BEGIN_TEST
 		# Trap between ll and sc; check to make sure that the sc not
 		# only returns failure, but doesn't store.
 		#
-		ll	$a7, 0($t0)
+		ll	$a5, 0($t0)
+		addiu	$a5, $a5, 1
 		tnei	$zero, 1
-		sc	$a7, 0($t0)
+		sc	$a5, 0($t0)
+		lwu $a6, 0($t0)
 
 END_TEST
 
-
-#
-# No-op exception handler to return back after the tnei and confirm that the
-# following sc fails.  This code assumes that the trap isn't from a branch-
-# delay slot.
-
-#
-		.ent bev0_handler
-bev0_handler:
-		dmfc0	$k0, $14	# EPC
-		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
 
 		.data
 word:		.word	0xffffffff
