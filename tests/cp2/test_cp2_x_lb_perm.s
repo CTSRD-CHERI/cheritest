@@ -36,69 +36,26 @@
 #
 
 BEGIN_TEST
-		#
-		# Clear the BEV flag
-		#
-
-		jal	bev_clear
-		nop
-
-		#
-		# Set up exception handler
-		#
-
-		dli	$a0, 0xffffffff80000180
-		dla	$a1, bev0_common_handler_stub
-		dli	$a2, 12	# instruction count
-		dsll	$a2, 2	# convert to byte count
-		jal	memcpy_nocap
-		nop		# branch delay slot	
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
-		#
-		# Save c0
-		#
-
+		# Save $ddc
 		cgetdefault   $c1
-
-		#
-		# Make $ddc a write-only capability
-		#
-
-		dli     $t0, 0xb # Permit_Load not granted
-		candperm $c2, $c1, $t0
-		csetdefault $c2
+		li $a0, 0xdead
+		li $a1, 0xdead
 
 		dla	$t1, data
-		dli     $a0, 0
-		lbu     $a0, 0($t1) # This should raise a C2E exception
+		# An initial load should succeed:
+		check_instruction_traps $s0, lbu $a0, 0($t1)
 
-		#
-		# Restore c0
-		#
+		# Make $ddc a write-only capability
+		dli	$t0, (CHERI_PERM_GLOBAL | CHERI_PERM_EXECUTE | CHERI_PERM_STORE | CHERI_PERM_LOAD_CAP)
+		candperm $c2, $c1, $t0
 
+		csetdefault $c2
+		check_instruction_traps $s1, lbu $a1, 0($t1) # This should raise a C2E exception
+
+		# Restore $ddc
 		csetdefault $c1
 
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		dli	$a2, 1
-		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
-
-		.ent bev0_common_handler_stub
-bev0_common_handler_stub:
-		dla	$k0, bev0_handler
-		jr	$k0
-		nop
-		.end bev0_common_handler_stub
 
 		.data
 		.align	3

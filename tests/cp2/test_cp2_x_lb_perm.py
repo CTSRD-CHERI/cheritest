@@ -25,29 +25,27 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-from beritest_tools import BaseBERITestCase
-from beritest_tools import attr
+from beritest_tools import BaseBERITestCase, attr, HexInt
+
 
 #
 # Test that lbu raises a C2E exception if c0 does not grant Permit_Load.
 #
-
+@attr('capabilities')
 class test_cp2_x_lb_perm(BaseBERITestCase):
-    @attr('capabilities')
-    def test_cp2_x_lb_perm_1(self):
+    EXPECTED_EXCEPTIONS = 1
+
+    def test_cp2_x_lb_first_load_succeeds(self):
         '''Test lbu did not read without Permit_Load permission'''
-        self.assertRegisterEqual(self.MIPS.a0, 0,
-            "lbu read without Permit_Load permission")
+        assert self.MIPS.a0 == 1, "lbu should read with Permit_Load permission"
+        self.assertTrapInfoNoTrap(self.MIPS.s0)
 
-    @attr('capabilities')
-    def test_cp2_x_lb_perm_2(self):
+    def test_cp2_x_lb_perm_not_loaded(self):
+        '''Test lbu did not read without Permit_Load permission'''
+        assert self.MIPS.a1 == HexInt(0xdead), "lbu should not read without Permit_Load permission"
+
+    def test_cp2_x_lb_perm_excecption(self):
         '''Test lbu raises an exception when doesn't have Permit_Load permission'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "lbu did not raise an exception when didn't have Permit_Load permission")
-
-    @attr('capabilities')
-    def test_cp2_x_lb_perm_3(self):
-        '''Test capability cause is set correctly when doesn't have Permit_Load permission'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1200,
-            "Capability cause was not set correctly when didn't have Permit_Load permission")
-
+        self.assertCp2Fault(self.MIPS.s1, cap_cause=self.MIPS.CapCause.Permit_Load_Violation,
+                            cap_reg=0, trap_count=1,
+                            msg="lbu did not raise an exception when didn't have Permit_Load permission")
