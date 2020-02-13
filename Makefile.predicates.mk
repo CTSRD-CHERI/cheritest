@@ -290,7 +290,6 @@ floatnan2008 \
 floatrecipflushesdenorm \
 ignorebadex \
 invalidateL2 \
-llscspan \
 loadcachetag \
 mt \
 mul_hilo_cleared \
