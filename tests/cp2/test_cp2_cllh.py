@@ -31,74 +31,48 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+@attr('llsc')
+@attr('cached')
+@attr('capabilities')
 class test_cp2_cllh(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllh_1(self):
         '''That an uninterrupted cllh+csch succeeds'''
         self.assertRegisterEqual(self.MIPS.a0, 1, "Uninterrupted cllh+csch failed")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllh_2(self):
         '''That an uninterrupted cllh+csch stored the right value'''
         self.assertRegisterEqual(self.MIPS.a1, 0xffffffffffffffff, "Uninterrupted cllh+csch stored wrong value")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllh_4(self):
         '''That an uninterrupted cllh+add+csch succeeds'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "Uninterrupted cllh+add+csch failed")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllh_5(self):
         '''That an uninterrupted cllh+add+csch stored the right value'''
         self.assertRegisterEqual(self.MIPS.a3, 0, "Uninterrupted cllh+add+csch stored wrong value")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_cp2_cllh_8(self):
         '''That an cllh+csch spanning a trap fails'''
         self.assertRegisterEqual(self.MIPS.a4, 0, "Interrupted cllh+tnei+csch succeeded")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_s0(self):
         '''Test signed-extended capability load linked half-word from double word'''
         self.assertRegisterEqual(self.MIPS.s0, 0xfffffffffffffedc, "Sign-extended capability load linked word from double word failed")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_s1(self):
         '''Test signed-extended positive capability load linked half-word'''
         self.assertRegisterEqual(self.MIPS.s1, 0x7fff, "Sign-extended positive half-word capability load linked failed")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_s2(self):
         '''Test signed-extended negative capability load linked half-word'''
         self.assertRegisterEqual(self.MIPS.s2, 0xffffffffffffffff, "Sign-extended negative half-word capability load linked failed")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_s3(self):
         '''Test unsigned positive capability load linked half-word'''
         self.assertRegisterEqual(self.MIPS.s3, 0x7fff, "Unsigned positive half-word capability load linked failed")
 
-    @attr('llsc')
-    @attr('cached')
-    @attr('capabilities')
     def test_s4(self):
         '''Test unsigned negative capability load linked half-word'''
         self.assertRegisterEqual(self.MIPS.s4, 0xffff, "Unsigned negative half-word capability load linked failed")

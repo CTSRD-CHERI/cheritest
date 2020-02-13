@@ -39,16 +39,6 @@
 
 BEGIN_TEST
 		#
-		# Set up nop exception handler.
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		#
 		# Uninterrupted access; check to make sure the right value
 		# comes back.
 		#
@@ -81,21 +71,6 @@ BEGIN_TEST
 		cscd	$a4, $a4, $c1
 
 END_TEST
-
-
-#
-# No-op exception handler to return back after the tnei and confirm that the
-# following sc fails.  This code assumes that the trap isn't from a branch-
-# delay slot.
-
-#
-		.ent bev0_handler
-bev0_handler:
-		dmfc0	$k0, $14	# EPC
-		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
 
 		.data
 dword:		.dword	0xffffffffffffffff

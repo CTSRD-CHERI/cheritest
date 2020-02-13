@@ -30,6 +30,7 @@ from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
 class test_cp2_clld(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
     @attr('llsc')
     @attr('cached')

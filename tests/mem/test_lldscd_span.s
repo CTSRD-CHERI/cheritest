@@ -38,15 +38,6 @@
 #
 
 BEGIN_TEST
-		#
-		# Set up nop exception handler.
-		#
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
 		dla	$t1, dword
 		#
 		# Load the double word into another register between lld and
@@ -55,7 +46,7 @@ BEGIN_TEST
 		lld	$a2, 0($t1)
 		ld	$t0, 0($t1)
 		scd	$a2, 0($t1)
-		
+
 		#
 		# Store to unaligned byte between lld and scd; check to make
 		# sure that the scd not only returns failure, but doesn't
@@ -81,19 +72,7 @@ BEGIN_TEST
 END_TEST
 
 
-#
-# No-op exception handler to return back after the tnei and confirm that the
-# following sc fails.  This code assumes that the trap isn't from a branch-
-# delay slot.
 
-#
-		.ent bev0_handler
-bev0_handler:
-		dmfc0	$k0, $14	# EPC
-		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
 
 		.data
 dword:		.dword	0xffffffffffffffff
