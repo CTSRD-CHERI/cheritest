@@ -30,19 +30,6 @@
 .include "macros_extra.s"
 .set noreorder
 
-# Allow building this test without compiler support
-.ifdef COMPILER_UPDATED
-.macro cgetpccincoffset_compat out, offset
-	cgetpccincoffset $c\out, $\offset
-.endm
-.else
-.macro cgetpccincoffset_compat out, offset
-	cheri_2arg_insn 0x13, \out, \offset
-.endm
-.endif
-
-
-
 BEGIN_TEST
 		# Make $c1-4 differemt from $pcc
 		cgetnull $c1
@@ -55,31 +42,33 @@ BEGIN_TEST
 		dla $s3, .Lfourth_getpcc
 
 .Lfirst_getpcc:
-		cgetpccincoffset_compat 1, 0  # equivalent to getpcc
+		cgetpccincoffset $c1, $zero  # equivalent to getpcc
 
 		b .Lcontinue
 .Lsecond_getpcc:
-		cgetpccincoffset_compat 2, 0 # equivalent to getpcc in brach delay slot
+		cgetpccincoffset $c2, $zero # equivalent to getpcc in brach delay slot
 .Lcontinue:
 		ori $4, $zero, 1
 .Lthird_getpcc:
-		cgetpccincoffset_compat 3, 4
+		cgetpccincoffset $c3, $4
 
 		b .Lcontinue2
 .Lfourth_getpcc:
-		cgetpccincoffset_compat 4, 4  # branch delay slot
+		cgetpccincoffset $c4, $4  # branch delay slot
 .Lcontinue2:
 		# Create an a $pcc with a nonzero base and try cgetpccincoffset
 		cap_from_label $c12, .Lnonzero_base, tmpgpr=$s5
 		cap_from_label $c17, .Lend_test
-		csetbounds $c12, $c12, 16	# create a restricted sandbox
 		li $5, -1
 		li $6, 0x10000000	# large enough to make it unrepresentable
+		csetbounds $c12, $c12, 116	# create a restricted sandbox
+		cincoffset $c12, $c12, 100	# Ensure $pcc has a non-zero offset
 		cjr $c12
 		nop
 .Lnonzero_base:
-		cgetpccincoffset_compat 5, 5 # getpcc and add -1
-		cgetpccincoffset_compat 6, 6 # getpcc and add 0x10000000
+		.space 100	# This padding should be skipped
+		cgetpccincoffset $c5, $5 # getpcc and add -1
+		cgetpccincoffset $c6, $6 # getpcc and add 0x10000000
 		cjr	$c17  # return to .Lend_test
 		nop	# delay slot
 .Lend_test:
