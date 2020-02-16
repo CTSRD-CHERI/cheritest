@@ -371,7 +371,7 @@ QEMU_CHERI_CC_BASE_WIDTH=$(strip \
       $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), \
        $(if $(findstring CHERI-CC base width is,$(QEMU_VERSION)), \
         $(error Unexpected CHERI CC width for $(QEMU_ABSPATH): $(QEMU_VERSION)), \
-        $(info Using default value of 23 for QEMU_CHERI_CC_BASE_WIDTH)23), \
+        $(info Using default value of 14 for QEMU_CHERI_CC_BASE_WIDTH)14), \
        $(info Not using CHERI-CC -> QEMU_CHERI_CC_BASE_WIDTH=64)64))))
 
 QEMU_CAP_PRECISE=$(strip $(if \

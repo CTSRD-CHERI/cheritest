@@ -70,10 +70,9 @@ BEGIN_TEST
 		#
 		cgetdefault $c4
 		li	$t0, 1
-		li	$t2, 1
 		csc	$cnull, $zero, 0($c1)	# store untagged value first
 		cllc	$c2, $c1
-		sd	$t2, 0($t1)	# Should cause the sc to fail
+		sd	$zero, 0($t1)	# Should cause the sc to fail (even though value is the same)
 		cscc	$a1, $c4, $c1	# should not store the tagged value
 		clc	$c5, $zero, 0($c1)
 

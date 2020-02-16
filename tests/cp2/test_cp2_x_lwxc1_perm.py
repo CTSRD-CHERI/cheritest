@@ -32,30 +32,19 @@ from beritest_tools import attr
 # Test that floating point load raises a C2E exception if c0 does not grant
 # Permit_Load.
 #
-
+@attr('capabilities')
+@attr('float')
+@attr('floatindexed')
 class test_cp2_x_lwxc1_perm(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
-    @attr('capabilities')
-    @attr('float')
-    @attr('floatindexed')
     def test_cp2_x_lwxc1_perm_1(self):
         '''Test LWXC1 did not load without Permit_Load permission'''
         self.assertRegisterEqual(self.MIPS.a0, 0,
             "LWXC1 loaded without Permit_Load permission")
 
-    @attr('capabilities')
-    @attr('float')
-    @attr('floatindexed')
     def test_cp2_x_lwxc1_perm_2(self):
         '''Test LWXC1 raises an exception when doesn't have Permit_Load permission'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "LWXC1 did not raise an exception when didn't have Permit_Load permission")
-
-    @attr('capabilities')
-    @attr('float')
-    @attr('floatindexed')
-    def test_cp2_x_lwxc1_perm_3(self):
-        '''Test capability cause is set correctly when doesn't have Permit_Load permission'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x1200,
-            "Capability cause was not set correctly when didn't have Permit_Load permission")
+        self.assertCp2Fault(self.MIPS.s0, cap_cause=self.MIPS.CapCause.Permit_Load_Violation, trap_count=1,
+                            msg="LWXC1 did not raise an exception when didn't have Permit_Load permission")
 

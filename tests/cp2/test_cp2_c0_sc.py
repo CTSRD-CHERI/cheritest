@@ -36,3 +36,6 @@ class test_cp2_c0_sc(BaseBERITestCase):
 
     def test_cp2_c0_sc_1(self):
         self.assertTrapInfoNoTrap(self.MIPS.s0, "An exception was raised by SC with an unaligned DDC (but address overall is aligned)")
+
+    def test_cp2_c0_sc_success(self):
+        assert self.MIPS.a0 == 1, "SC should succeed"

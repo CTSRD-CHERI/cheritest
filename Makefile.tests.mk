@@ -473,7 +473,7 @@ $(CHECK_SIM_EXISTS): $(SIM) | $(LOGDIR)
 
 # raw tests need to be started with tracing in, for the others we can start it in init.s
 $(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(CHECK_QEMU_EXISTS) | $(QEMU_LOGDIR)
-	rm -f "$@"
+	$(_V)rm -f "$@"
 	@echo "$(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) -d instr > /dev/null"
 	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
@@ -492,7 +492,7 @@ endif
 
 
 $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(CHECK_QEMU_EXISTS) | $(QEMU_LOGDIR)
-	rm -f "$@"
+	$(_V)rm -f "$@"
 	@echo "$(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) > /dev/null"
 	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \

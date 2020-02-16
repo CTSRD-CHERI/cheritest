@@ -60,17 +60,19 @@ BEGIN_TEST
 		dli	$t0, 1
 		cincoffset $c3, $c1, $t0
 
+		dli $t1, 10	# max ten failures
 loop:
+		beqz	$t1, on_error
 		csetdefault $c1
 		ll	$t0, 4($zero)
 		csetdefault $c3
 		check_instruction_traps $s0, sc	$a0, 3($zero)
 		beqz	$a0, loop
-		nop	
+		daddiu	$t1, $t1, -1	# delay slot
 
 on_error:
 		csetdefault $c2
-		
+
 
 END_TEST
 
