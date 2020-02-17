@@ -100,7 +100,7 @@
 # "make gxemul-test" runs the tests through gxemul
 #
 dollar = $$
-TEST_FPU?=0
+TEST_FPU?=1
 TEST_PS?=0
 MULTI?=0
 MT?=0
