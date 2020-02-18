@@ -757,11 +757,11 @@ nosetests_sail_cheri128_c.xml: $(SAIL_CHERI128_C_TEST_LOGS) check_pytest_version
 
 sail128:
 	$(MAKE) -C $(SAIL_CHERI_MIPS_DIR)/cheri cheri128_c
-	$(MAKE) -j8 CAP_SIZE=128 nosetests_sail_cheri128_c
+	$(MAKE) -j8 CAP_SIZE=128 TEST_FPU=0 nosetests_sail_cheri128_c
 
 sail256:
 	$(MAKE) -C $(SAIL_CHERI_MIPS_DIR)/cheri cheri_c
-	$(MAKE) -j8 CAP_SIZE=256 nosetests_sail_cheri_c
+	$(MAKE) -j8 CAP_SIZE=256 TEST_FPU=0 nosetests_sail_cheri_c
 
 .PHONY: nosetests_qemu check_valid_qemu
 
