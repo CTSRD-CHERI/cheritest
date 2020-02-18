@@ -187,7 +187,7 @@ PURECAP_CFLAGS?=-ffreestanding -g -fpic -target cheri-unknown-freebsd -G 0 -mabi
 
 # This is needed to customize cheri-c-tests:
 PURECAP_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -I$(PWD)/cheri-c-tests -I$(PWD)/tests/purecap/
-HYBRID_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -I$(PWD)/cheri-c-tests -I$(PWD)/tests/c/
+HYBRID_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -I$(PWD)/cheri-c-tests -I$(PWD)/tests/c/  -D_KERNEL
 
 ifneq ($(CHERI$(CAP_SIZE)_SDK),)
 CHERI_SDK:=$(CHERI$(CAP_SIZE)_SDK)
