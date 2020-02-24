@@ -111,6 +111,27 @@ endif
 #
 # GXEMUL predicates
 #
+FLOAT_FEATURES=float \
+float32 \
+float64 \
+floatfexr \
+floatfenr \
+floatflags \
+floatrecip \
+floatrsqrt \
+floatexception \
+floatechonan \
+float_round_upwards \
+floatindexed \
+floatpaired \
+floatrecipflushesdenorm \
+floatri \
+floatmadd \
+float_mtc_signex \
+float_mov_signex \
+floatabs2008 \
+float_round_upwards
+
 
 GXEMUL_UNSUPPORTED_FEATURES=$(COMMON_UNSUPPORTED_FEATURES) \
 allow_unaligned 	\
@@ -200,17 +221,7 @@ tlb_read_uninitialized \
 watch \
 count_register_is_time
 
-L3_UNSUPPORTED_FEATURES+=\
-float32 \
-floatfexr \
-floatfenr \
-floatflags \
-floatrecip \
-floatrsqrt \
-floatexception \
-floatechonan \
-watch \
-float_round_upwards
+L3_UNSUPPORTED_FEATURES+=$(FLOAT_FEATURES) watch
 
 L3_UNSUPPORTED_FEATURES+=ccall_hw_1
 
@@ -249,7 +260,7 @@ extendedtlb \
 csettype \
 beri_statcounters \
 statcounters \
-float \
+$(FLOAT_FEATURES) \
 pic \
 mt \
 count_register_is_time \

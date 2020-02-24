@@ -38,6 +38,7 @@ class CheritestOptions(Enum):
 config_options_from_pytest = None
 config_object = None
 
+
 def pytest_addoption(parser):
     # TODO: this should probably be pytest_sessionstart?
     # ensure the root directoy is in PYTHONPATH
@@ -111,11 +112,18 @@ def pytest_ignore_collect(path, config):
         "trace_tests": "/tests/trace",
         "beri_statcounters": "/tests/statcounters",
         "cache": "/tests/cache",
+        "capabilities": "/tests/cp2",
     }
+    check_path = path_str
+    if os.path.isfile(path_str):
+        check_path = os.path.dirname(path_str)
 
     for opt, skip_path in skip_paths.items():
-        if path_str.endswith(skip_path) and config.CHERITEST_UNSUPPORTED_FEATURES.get(opt):
-            print("Ignoring test dir", skip_path, "since attr", opt, "is unsupported.")
+        if check_path.endswith(skip_path) and config.CHERITEST_UNSUPPORTED_FEATURES.get(opt):
+            if os.path.isdir(path_str):
+                print("Ignoring test dir", skip_path, "since attr", opt, "is unsupported.")
+            else:
+                print("Ignoring test file", os.path.basename(path_str), "since attr", opt, "is unsupported.")
             return True
     return False
 
