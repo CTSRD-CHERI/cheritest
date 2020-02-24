@@ -25,7 +25,7 @@
 # Performs a test for every .c file in the TEST_DIR which matches TEST_FILE_RE.
 # Just checks that the test produced the appropriate pass value in v0 to indicate
 # that all c asserts passed. Cribbed from tests/fuzz/fuzz.py.
-from beritest_tools import TestClangBase
+from beritest_tools import TestClangBase, is_feature_supported
 import os
 import pytest
 import re
@@ -62,6 +62,8 @@ def _get_xfail_reason(test_name):
         # QEMU doesn't report real cycles
         if config_options().TEST_MACHINE.lower() == "qemu":
             return "cycle counter in QEMU reports realtime not cycles"
+    if test_name in ("test_clang_load_float", "test_clang_load_double") and not is_feature_supported("float"):
+        return "Floating-point not supported"
     return None
 
 
