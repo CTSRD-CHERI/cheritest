@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2014-2015 Michael Roe
+# Copyright (c) 2019 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -56,7 +57,25 @@ BEGIN_TEST
 		candperm $c2, $c2, $t0
 		cseal	$c2, $c2, $c1
 
-		cincoffset $c3, $c2, $zero
+
+		cgetnull $c3
+		cgetnull $c4
+		cgetnull $c5
+		cgetnull $c6
+		# CMove should never trap even with sealed caps
+		check_instruction_traps $s0, cmove $c3, $c2
+
+		# Same for CIncOffset with register zero (since we used to encode CMove that way before we had a dedicated instruction)
+		check_instruction_traps $s1, cincoffset $c4, $c2, $zero
+
+		# However, CIncOffsetImmediate does not have the special case and should always trap
+		check_instruction_traps $s2, cincoffsetimm $c5, $c2, 0
+
+		# Additionally, a CIncOffset where the value happens to be zero should trap:
+		dli	$t1, 0
+		check_instruction_traps $s3, cincoffset $c6, $c2, $t1
+
+
 		cgetperm $a1, $c3
 
 		dli	$a0, 1
