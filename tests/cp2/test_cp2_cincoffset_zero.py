@@ -31,7 +31,7 @@ from beritest_tools import attr
 
 @attr('capabilities')
 class test_cp2_cincoffset_zero(BaseBERITestCase):
-    EXPECTED_EXCEPTIONS = 2
+    EXPECTED_EXCEPTIONS = 3
 
     def test_cp2_cincoffset_zero_1(self):
         '''Test that CIncOffset with an offset of zero can copy a sealed capability'''
@@ -45,9 +45,10 @@ class test_cp2_cincoffset_zero(BaseBERITestCase):
         self.assertTrapInfoNoTrap(self.MIPS.s0, "CMove should not trap with a sealed capability")
         self.assertCapabilitiesEqual(self.MIPS.c3, self.MIPS.c2)
 
-    def test_cincoffset_reg0_works(self):
-        self.assertTrapInfoNoTrap(self.MIPS.s1, "CIncOffset $zero should not trap with a sealed capability")
-        self.assertCapabilitiesEqual(self.MIPS.c4, self.MIPS.c2)
+    def test_cincoffset_reg0_traps(self):
+        self.assertCp2Fault(self.MIPS.s3, cap_reg=2, cap_cause=self.MIPS.CapCause.Seal_Violation,
+                            msg="CIncOffsetImm with register $zero should trap with a sealed capability")
+        self.assertNullCap(self.MIPS.c4)
 
     def test_cincoffsetimm_value0_traps(self):
         '''Test that CIncOffset with an offset of zero copied the permissions field of a sealed capability'''

@@ -65,21 +65,20 @@ BEGIN_TEST
 		# CMove should never trap even with sealed caps
 		check_instruction_traps $s0, cmove $c3, $c2
 
-		# Same for CIncOffset with register zero (since we used to encode CMove that way before we had a dedicated instruction)
+		# CIncOffset with register zero used to be allowed with sealed caps since we
+		# didn't have a dedicated move instruction. Check that it traps now.
 		check_instruction_traps $s1, cincoffset $c4, $c2, $zero
 
-		# However, CIncOffsetImmediate does not have the special case and should always trap
+		# CIncOffsetImmediate does not have the special case and should always trap
 		check_instruction_traps $s2, cincoffsetimm $c5, $c2, 0
 
 		# Additionally, a CIncOffset where the value happens to be zero should trap:
 		dli	$t1, 0
 		check_instruction_traps $s3, cincoffset $c6, $c2, $t1
 
-
 		cgetperm $a1, $c3
 
 		dli	$a0, 1
-
 END_TEST
 
 		.data

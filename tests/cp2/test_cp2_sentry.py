@@ -33,7 +33,7 @@ from beritest_tools import BaseBERITestCase, attr, HexInt
 @attr('capabilities')
 @attr('sentry_caps')
 class test_cp2_sentry(BaseBERITestCase):
-    EXPECTED_EXCEPTIONS = 8
+    EXPECTED_EXCEPTIONS = 9
 
     def test_good_return_value(self):
         assert self.MIPS.a0 == 42, "test did not run to completion"
@@ -98,12 +98,12 @@ class test_cp2_sentry(BaseBERITestCase):
         assert self.MIPS.c19.s == 1, "$c21 should be sealed"
 
     def test_sentry_immutable_cincoffset_0(self):
-        self.assertTrapInfoNoTrap(self.MIPS.s7, msg="CIncOffset 0 on sentry should work")
-        assert self.MIPS.c20.s == 1, "$c22 should be sealed"
+        self.assertCp2Fault(self.MIPS.s7, cap_cause=self.MIPS.CapCause.Seal_Violation,
+                            cap_reg=1, msg="CIncOffset 0 on sentry should trap", trap_count=5)
 
     def test_sentry_no_load_permitted(self):
         self.assertCp2Fault(self.MIPS.t2, cap_cause=self.MIPS.CapCause.Seal_Violation,
-                            cap_reg=1, msg="Loading via sentry cap should trap", trap_count=8)
+                            cap_reg=1, msg="Loading via sentry cap should trap", trap_count=9)
         assert self.MIPS.t3 == 0xbad
 
     def test_unsealed_call_perm_load(self):

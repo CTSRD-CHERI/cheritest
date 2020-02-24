@@ -61,7 +61,8 @@ BEGIN_TEST
 	check_instruction_traps $s5, candperm	$c18, $c1, $zero	# trap #4
 	# Check that we can move the value
 	check_instruction_traps $s6, cmove	$c19, $c1		# no trap
-	check_instruction_traps $s7, cincoffset	$c20, $c1, $zero	# no trap
+	# No more special case for cincoffset $zero
+	check_instruction_traps $s7, cincoffset	$c20, $c1, $zero	# trap #5
 
 
 	# Now check properties of the sentry cap
