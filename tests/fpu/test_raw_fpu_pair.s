@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
+.set mips64r2
 .set noreorder
 .set nobopt
 .set noat
@@ -56,7 +56,7 @@ start:
 		mtc1 $t0, $f7
 		lui $t0, 0x4000
 		mtc1 $t0, $f8
-		pll.PS $f7, $f7, $f8
+		pll.ps $f7, $f7, $f8
 		dmfc1 $a0, $f7
 		
 		# PLU.PS
@@ -65,7 +65,7 @@ start:
 		lui $t0, 0x3F80
 		dsll $t0, $t0, 32
 		dmtc1 $t0, $f23
-		plu.PS $f14, $f13, $f23
+		plu.ps $f14, $f13, $f23
 		dmfc1 $a1, $f14
 		
 		# PUL.PS
@@ -73,11 +73,11 @@ start:
 		dsll $t0, $t0, 32
 		dmtc1 $t0, $f5
 		mtc1 $0, $f6
-		pul.PS $f5, $f5, $f6
+		pul.ps $f5, $f5, $f6
 		dmfc1 $a2, $f5
 		
 		# PUU.PS
-		puu.PS $f5, $f5, $f23
+		puu.ps $f5, $f5, $f23
 		dmfc1 $a3, $f5
 		
 		# Dump registers on the simulator (gxemul dumps regs on exit)
