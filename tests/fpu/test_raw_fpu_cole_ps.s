@@ -87,7 +87,7 @@ start:
 		# C.OLE.PS (True)
 		c.ole.PS $f23, $f23
 		cfc1 $s2, $25
-		ctc1 $0, $f31
+		ctc1 $0, $31
 		
 		# C.OLE.S (False)
 		c.ole.S $f3, $f4
@@ -100,7 +100,7 @@ start:
 		# C.OLE.PS
 		c.ole.PS $f24, $f23
 		cfc1 $s5, $25
-		ctc1 $0, $f31
+		ctc1 $0, $31
 		
 		# C.OLE.S (True)
 		c.ole.S $f4, $f3

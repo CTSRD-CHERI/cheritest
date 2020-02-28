@@ -50,7 +50,7 @@ start:
 
 		# Clear FCSR
 
-		mtc1 $0, $f31
+		mtc1 $0, $31
 
 		# Setup parameters
 		    
@@ -78,7 +78,7 @@ start:
 		# C.EQ.PS (True)
 		c.eq.PS $f23, $f23
 		cfc1 $s2, $25
-		ctc1 $0, $f31
+		ctc1 $0, $31
 		
 		# C.EQ.PS (False)
 		c.eq.PS $f23, $f24
