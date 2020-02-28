@@ -210,7 +210,7 @@ def cheriHardwareTest() {
 try {
 	properties([
 			pipelineTriggers([
-					[$class: "GitHubPushTrigger"],
+					githubPush(),
 					pollSCM('@daily')
 			]),
 			[$class: 'JobPropertyImpl', throttle: [count: 2, durationName: 'day', userBoost: true]],

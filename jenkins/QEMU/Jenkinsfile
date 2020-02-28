@@ -197,7 +197,7 @@ def cheriHardwareTest() {
                 setGitHubStatus(JobConfig.QEMUgitInfo)
             stage("Coverage report") {
                 // collect coverage reports (only include target/mips files and exclude some unsupported stuff)
-                sh 'gcovr -r $WORKSPACE/qemu-build -f ".*target/mips.*" -e ".*target/mips/(msa|lmi|dsp)_helper.c" -e ".*/gdbstub.c" --xml -o qemu_coverage.xml'
+                sh 'gcovr -r $WORKSPACE/qemu-asan-build -f ".*target/cheri.*" -f ".*target/mips.*" -e ".*target/mips/(msa|lmi|dsp)_helper.c" -e ".*/gdbstub.c" --xml -o qemu_coverage.xml'
                 cobertura(coberturaReportFile: 'qemu_coverage.xml',
                           autoUpdateHealth: false, autoUpdateStability: false,
                           enableNewApi: true, failNoReports: false,
@@ -214,7 +214,7 @@ def cheriHardwareTest() {
 try {
     properties([
             pipelineTriggers([
-                    [$class: "GitHubPushTrigger"],
+                    githubPush(),
                     pollSCM('@daily')
             ]),
             disableConcurrentBuilds(),
