@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2013 Robert M. Norton
+# Copyright (c) 2020 Alex Richardson
 # All rights reserved.
 #
 # @BERI_LICENSE_HEADER_START@
@@ -30,36 +31,43 @@ from beritest_tools import attr
 # a2 - desired badvaddr 1
 # a3 - actual badvaddr 1
 # a4 - cause 1
+# s5 - trap info 1
 # a5 - desired epc 2
 # a6 - actual  epc 2
 # a7 - desired badvaddr 2
 # s0 - actual  badvaddr 2
 # s1 - cause 2
+# s6 - trap info 2
 
+
+@attr('tlb')
 class test_tlb_addrerr_store(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 2
 
-    @attr('tlb')
     def test_epc1(self):
         self.assertRegisterEqual(self.MIPS.a0, self.MIPS.a1, "Wrong EPC 1")
 
-    @attr('tlb')
     def test_badvaddr1(self):
         '''Test BadVAddr after load from bad user space address'''
         self.assertRegisterEqual(self.MIPS.a2, self.MIPS.a3, "Wrong badaddr 1")
 
-    @attr('tlb')
     def test_cause1(self):
         self.assertRegisterMaskEqual(self.MIPS.a4, 0xff, 0x14, "Wrong cause 1")
 
-    @attr('tlb')
+    def test_trap_info_1(self):
+        self.assertCompressedTrapInfo(self.MIPS.s5, mips_cause=self.MIPS.Cause.AdES, trap_count=1,
+                                      msg="Expected address error on store fault")
+
     def test_epc2(self):
         self.assertRegisterEqual(self.MIPS.a5, self.MIPS.a6, "Wrong EPC 2")
 
-    @attr('tlb')
     def test_badvaddr2(self):
         '''Test BadVAddr after load from bad kernel space address'''
         self.assertRegisterEqual(self.MIPS.a7, self.MIPS.s0, "Wrong badaddr 2")
 
-    @attr('tlb')
     def test_cause2(self):
         self.assertRegisterMaskEqual(self.MIPS.s1, 0xff, 0x14, "Wrong cause 2")
+
+    def test_trap_info_2(self):
+        self.assertCompressedTrapInfo(self.MIPS.s6, mips_cause=self.MIPS.Cause.AdES, trap_count=2,
+                                      msg="Expected address error on store fault")

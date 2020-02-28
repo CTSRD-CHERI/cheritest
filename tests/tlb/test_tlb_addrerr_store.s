@@ -23,7 +23,7 @@
 
 # Test store access to regions of address space with no valid mapping, such
 # as physical addresses larger than the physical address space (PABITS) and
-# virtual addresses higher than the virtual segment size (SEGBITS).        
+# virtual addresses higher than the virtual segment size (SEGBITS).
 
 # Register assignment:
 # a0 - desired epc 1
@@ -36,7 +36,7 @@
 # a7 - desired badvaddr 2
 # s0 - actual  badvaddr 2
 # s1 - cause 2
-	
+
 .set mips64
 .set noreorder
 .set nobopt
@@ -49,7 +49,10 @@ BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
 
                 dla     $a0, desired_epc1
                 dla     $a2, 0x0001000000100000
+		clear_counting_exception_handler_regs
 desired_epc1:	sd      $a5, 0($a2)		# Load from bad user space virtual address (virtual address too large)
+		move $s5, $k1
+		clear_counting_exception_handler_regs
                 move    $a1, $s0                # stash EPC
                 move    $a3, $s1                # stash bad addr
                 move    $a4, $s2                # stash cause
@@ -60,8 +63,11 @@ desired_epc1:	sd      $a5, 0($a2)		# Load from bad user space virtual address (v
 
                 dla     $a5, desired_epc2
                 dla     $a7, 0x9801000000100000
+		clear_counting_exception_handler_regs
 desired_epc2:	sd      $a7, 0($a7)		# Load from bad kernel space address (too large for physical address space)
-                move    $a6, $s0                # stash EPC  
+		move $s6, $k1
+		clear_counting_exception_handler_regs
+                move    $a6, $s0                # stash EPC
                 move    $s0, $s1                # stash bad addr
                 move    $s1, $s2                # stash cause
 
@@ -69,9 +75,10 @@ return:
 END_TEST
 
 #
-# Exception handler.  
+# Exception handler.
 #
 BEGIN_CUSTOM_TRAP_HANDLER
+		collect_compressed_trap_info
 		dmfc0   $s0, $14		# EPC
 		daddu   $t0, $s0, 4		# Increment EPC
 		dmtc0   $t0, $14		# and store it back
