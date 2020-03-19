@@ -226,7 +226,7 @@ PREPARE_TEST = \
 
 RUN_TEST = \
 	if [ -z "$(dollar)BLUESPECDIR" ]; then echo "BLUESPECDIR not set, source the setup.sh script first!"; exit 1; fi; \
-	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals DYLD_FALLBACK_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
     PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	CHERI_DTB=$(DTB_FILE) \
@@ -249,7 +249,7 @@ RUN_TEST_REPEAT = $(call REPEAT_5,$(RUN_TEST_COMMAND))
 #
 #RUN_TEST = \
 #	for attempt in 0 1 2 4 5; do if \
-#	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
+#	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals DYLD_FALLBACK_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 #	PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 #	CHERI_CONFIG=$$TMPDIR/simconfig \
 #	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM_ABS) -V $(HOME)/$(1).vcd +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
