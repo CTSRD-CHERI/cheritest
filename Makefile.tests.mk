@@ -231,7 +231,7 @@ RUN_TEST_COMMAND = \
 	CHERI_CONFIG=$$TMPDIR/simconfig \
 	CHERI_DTB=$(DTB_FILE) \
 	CHERI_KERNEL=$(abspath $(1)) \
-	BERI_DEBUG_SOCKET_0=$(CHERISOCKET)  $(SIM_ABS) -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+	BERI_DEBUG_SOCKET_0=$(CHERISOCKET) $(SIM_ABS) +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@; \
 
 REPEAT_5 = \
@@ -250,7 +250,7 @@ RUN_TEST = $(call REPEAT_5,$(RUN_TEST_COMMAND))
 #	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
 #	PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
 #	CHERI_CONFIG=$$TMPDIR/simconfig \
-#	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM_ABS) -V $(HOME)/$(1).vcd -w +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
+#	BERI_DEBUG_SOCKET=$(CHERISOCKET) $(SIM_ABS) -V $(HOME)/$(1).vcd +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 #	    $(PWD)/$@; \
 #	then break; else false; fi; done
 
