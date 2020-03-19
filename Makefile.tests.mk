@@ -224,7 +224,7 @@ PREPARE_TEST = \
 # command several times until it succeeds. The for loop should be removed once the license server problem
 # is fixed.
 
-RUN_TEST_COMMAND = \
+RUN_TEST = \
 	if [ -z "$(dollar)BLUESPECDIR" ]; then echo "BLUESPECDIR not set, source the setup.sh script first!"; exit 1; fi; \
 	LD_LIBRARY_PATH=$(CHERILIBS_ABS)/peripherals \
     PISM_MODULES_PATH=$(PISM_MODULES_PATH) \
@@ -233,13 +233,15 @@ RUN_TEST_COMMAND = \
 	CHERI_KERNEL=$(abspath $(1)) \
 	BERI_DEBUG_SOCKET_0=$(CHERISOCKET) $(SIM_ABS) +regDump $(SIM_TRACE_OPTS) -m $(TEST_CYCLE_LIMIT) > \
 	    $(PWD)/$@; \
+	if ! test -s "$(PWD)/$@"; then echo "ERROR: Bluesim created a zero size logfile for $@"; rm "$(PWD)/$@"; false ; fi
+
 
 REPEAT_5 = \
-	for attempt in 0 1 2 4 5; do if \
+	for attempt in 0; do if \
 	$(1) \
-	then break; else false; fi; done
+	then break; else false; fi; done \
 
-RUN_TEST = $(call REPEAT_5,$(RUN_TEST_COMMAND))
+RUN_TEST_REPEAT = $(call REPEAT_5,$(RUN_TEST_COMMAND))
 
 # XXX jes212
 # Use the following version instead of the above (running a severely limited number of tests) if you wish
