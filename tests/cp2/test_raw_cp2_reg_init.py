@@ -49,11 +49,11 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
             for i in itertools.chain(range(2, 8), range(9, 22), range(24, 28)):
                 self.assertIsNone(t.cp2_hwregs[i], msg="Hwreg " + str(i) + " should not exist")
 
-    def _test_special_hwreg(self, name, number, is_null=False):
+    def _test_special_hwreg(self, name, number, is_null=False, **kwargs):
         for t in self.MIPS.threads.values():
             func = self.assertNullCap if is_null else self.assertDefaultCap
-            func(getattr(t, name), msg="$" + name + " incorrect")
-            func(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?")
+            func(getattr(t, name), msg="$" + name + " incorrect", **kwargs)
+            func(t.cp2_hwregs[number], msg="cap_hwr " + str(number) + " != $" + name + "?", **kwargs)
 
     def test_cp2_reg_init_ddc(self):
         '''Check that $ddc is correctly initialized to be the full addrespace'''
@@ -79,7 +79,8 @@ class test_raw_cp2_reg_init(BaseBERITestCase):
 
     @attr('errorepc')
     def test_cp2_reg_init_error_epcc(self):
-        self._test_special_hwreg("error_epcc", 28)
+        # Offset may not be zero for QEMU (it initializes errorEPC to 0xffffffffbfc00000)
+        self._test_special_hwreg("error_epcc", 28, offset=(0, self.max_length))
 
     def test_cp2_reg_init_kcc(self):
         self._test_special_hwreg("kcc", 29)
