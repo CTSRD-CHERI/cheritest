@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/CTSRD-CHERI/cheri-c-tests
 	branch = master
-	commit = 2f140b0a486b1da5cd23a2f95a18b1720c396650
-	parent = ba49a5e3755f536e9b3d2c590dddbbe8bbad6a48
+	commit = b866aad0487f678da19a63ed2f987c57467faea3
+	parent = 27eba0acd040a085d7559b0465455c97c5da8993
 	cmdver = 0.4.1
 	method = merge
