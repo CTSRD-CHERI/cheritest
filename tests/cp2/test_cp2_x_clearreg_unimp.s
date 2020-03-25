@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2012, 2015, 2016 Michael Roe
+# Copyright 2020 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -35,49 +36,10 @@
 # Test that CClearReg raises an exception for register sets that aren't
 # defined yet.
 #
-
 BEGIN_TEST
-		#
-		# Clear the BEV flag
-		#
-
-		jal	bev_clear
-		nop
-
-		#
-		# Set up exception handler
-		#
-
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
-
 		#
 		# CClearRegs with register set 6 - should raise an exception
 		#
-
-		.word 0x49e60000	
-
+		check_instruction_traps $s0, .word 0x49e60000
 END_TEST
-
-		.ent bev0_handler
-bev0_handler:
-		dli	$a2, 1
-		mfc0	$a3, $13	# Cause register
-
-		dmfc0	$k0, $14	# EPC
-		daddiu	$k0, $k0, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
-
-		.data
-		.align	3
-data:		.dword	0x0123456789abcdef
-		.dword  0x0123456789abcdef
-
 

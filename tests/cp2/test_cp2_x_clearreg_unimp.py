@@ -1,5 +1,6 @@
 #-
 # Copyright (c) 2015, 2016 Michael Roe
+# Copyright 2020 Alex Richardson
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -28,8 +29,13 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
-class test_cp2_x_clearreg_unimp(BaseBERITestCase):
 
-    @attr('capabilities')
+@attr('capabilities')
+class test_cp2_x_clearreg_unimp(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
+
     def test_cp2_x_clearreg_unimp_1(self):
-        self.assertRegisterEqual(self.MIPS.a2, 1, "CClearReg with an unsupported register set not raise an exception")
+        self.assertCompressedTrapInfo(self.MIPS.s0,
+                                      mips_cause=self.MIPS.Cause.ReservedInstruction,
+                                      trap_count=1,
+                                      msg="CClearReg with an unsupported register set not raise an exception")
