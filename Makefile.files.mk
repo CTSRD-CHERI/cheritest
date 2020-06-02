@@ -605,6 +605,7 @@ ifeq ($(TEST_CP2),1)
 # Use a wildcard to make it easier to add new tests
 TEST_CP2_FILES=$(notdir $(wildcard tests/cp2/test_cp2_*.s))	\
 		test_raw_cp2_reg_init.s				\
+		test_raw_loop_icount.s				\
 		test_raw_cp2_exceptions.s
 
 endif # TEST_CP2=1
