@@ -414,6 +414,8 @@ all: sanity-check-makefile $(TEST_MEMS) $(TEST_CACHED_MEMS) $(TEST_DUMPS) $(TEST
 
 elfs: $(TEST_ELFS) $(TEST_CACHED_ELFS) $(TEST_MULTI_ELFS) $(TEST_CACHEDMULTI_ELFS)
 
+elfs_mips:
+	$(MAKE) CAP_SIZE=0 elfs
 elfs128:
 	$(MAKE) CAP_SIZE=128 elfs
 elfs256:

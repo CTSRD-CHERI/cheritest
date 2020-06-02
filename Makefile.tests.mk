@@ -854,11 +854,14 @@ qemu_logs128:
 	$(MAKE) CAP_SIZE=128 CAP_PRECISE=0 qemu_logs
 qemu_logs128magic:
 	$(MAKE) CAP_SIZE=128 CAP_PRECISE=1 qemu_logs
+qemu_logs_mips:
+	$(MAKE) CAP_SIZE=0 qemu_logs
 
 
 pytest_qemu_mips:
 	$(MAKE) CAP_SIZE=0 nosetests_qemu
 pytest_qemu256:
+	$(MAKE) elfs256
 	$(MAKE) CAP_SIZE=256 CAP_PRECISE=1 nosetests_qemu
 pytest_qemu128:
 	$(MAKE) CAP_SIZE=128 CAP_PRECISE=0 nosetests_qemu
@@ -867,13 +870,13 @@ pytest_qemu128magic:
 
 pytest_qemu_all:
 	# first build all the binaries to check for assembler errors (and to make use of parallelism)
-	@$(MAKE) elfs128 elfs256
+	@$(MAKE) elfs128 elfs_mips
 	# Also generate the QEMU lots in parallel:
-	@$(MAKE) qemu_logs256 qemu_logs128 qemu_logs128magic
+	@$(MAKE) qemu_logs128 qemu_logs128magic qemu_logs_mips
 	# But these steps should run sequentially:
-	$(MAKE) FAIL_MAKE_ON_TEST_ERRORS=1 pytest_qemu256
 	$(MAKE) FAIL_MAKE_ON_TEST_ERRORS=1 pytest_qemu128
 	$(MAKE) FAIL_MAKE_ON_TEST_ERRORS=1 pytest_qemu128magic
+	$(MAKE) FAIL_MAKE_ON_TEST_ERRORS=1 pytest_qemu_mips
 
 # pytest -rxXs  # show extra info on xfailed, xpassed, and skipped tests
 SINGLE_TEST_VERBOSE=-v -rxXs
