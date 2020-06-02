@@ -88,7 +88,7 @@ BEGIN_TEST
 the_end:
 END_TEST
 
-.balign 256  # ensure that all of testcode is on the same page
+.balign 8192  # ensure that all of testcode is on the same (even) page
 testcode:
 		nop
 		dli	$a5, 1			# Set the test flag
