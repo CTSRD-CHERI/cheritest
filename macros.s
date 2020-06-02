@@ -450,6 +450,52 @@ max_thread_count = 32
 	CWriteHwr	$c1, $chwr_\()\reg
 .endm
 
+# Performs a fast (and still vaguely unsafe, but matching Linux and FreeBSD)
+# initialization of the TLB.  If this ever proves problematic, we should go
+# adopt the full algorithm from the MIPS manual.
+#
+# All entries installed into ASID 0.
+#
+# If this platform supports the Extended TLB (configN magic), this does not
+# initialize those entries.  (They default disabled, thankfully, so this should
+# be fine.)
+#
+# Clobbers t0, t1, t2
+.macro init_tlb
+		dmtc0   $zero,  $5      # Page Mask = 0
+		dmtc0   $zero,  $2      # EntryLo0; valid bit notably off
+		dmtc0   $zero,  $3      # EntryLo1; valid bit notably off
+
+		dmfc0   $t0, $16, 1     # read config1
+		dsrl    $t0, $t0, 25    # extract maximum TLB index
+		andi    $t0, $t0, 0x3F
+
+		dli     $t1, 0x3fffffff80000000 # MIPS_KSEG0_START, "region" bits clear
+1:
+		dsll    $t2, $t0, 13    # TLB index -> page offset; two pages (even/odd)
+		dadd    $t2, $t1, $t2
+
+		# Nominally there are other fields in EntryHi, but they're all tucked
+		# around the VPN2 field, and we just want them to be zero anyway.
+
+		dmtc0   $t2, $10        # EntryHi
+		dmtc0   $t0, $0         # Index
+		ssnop                   # Take a guess at the hazard required
+		ssnop
+		ssnop
+		ssnop
+		tlbwi
+
+		dsub    $t0, $t0, 1     # Next index, unless this was 0
+		bgez    $t0, 1b
+		nop
+
+		ssnop                   # One more hazard for good measure
+		ssnop
+		ssnop
+		ssnop
+.endm
+
 # Installs a TLB entry; clobbers t0; assumes EntryHi and TLB Index valid on
 # entry.  Clobbers t0 and t1 (well, for callback's use, but pretend).
 #

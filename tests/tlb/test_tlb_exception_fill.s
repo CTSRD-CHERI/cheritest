@@ -36,6 +36,8 @@
 #
 
 BEGIN_TEST_WITH_CUSTOM_TRAP_HANDLER
+		init_tlb
+
 		# Initialise the in-memory page table to all zeros
 		dli     $t0, 0x9800000001000000
 		li      $t1, 64
