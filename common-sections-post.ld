@@ -1,5 +1,5 @@
 	/* Rodata */
-	.rodata ALIGN(8) : {
+	.rodata ALIGN(16) : {
 		*(.rodata);
 		*(.rodata.*);
 	} :p_code_rodata
@@ -12,12 +12,12 @@
 		PROVIDE_HIDDEN(_gp = ABSOLUTE(ALIGN(16) + 0x7ff0));
 		*(.got.plt) *(.got)
 	} :p_rwdata
-	.data ALIGN(8) : {
+	.data : {
 		*(.data);
 		*(.global_sizes);
 		PROVIDE_HIDDEN(_edata = ABSOLUTE(.));
 	} :p_rwdata
-	.bss ALIGN(8) : {
+	.bss : {
 		*(.bss);
 	} :p_rwdata =0
 	PROVIDE_HIDDEN(__heap = ABSOLUTE(ALIGN(0x8)));	/* 64-bit aligned heap pointer */

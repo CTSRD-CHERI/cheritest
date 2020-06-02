@@ -56,7 +56,7 @@ __mem_top__ = __base__ + __mem_size__;
 __sp = __mem_top__ - __stack_size__;
 __heap_top__ = __mem_top__ - __stack_size__;
 __sp_bottom = __heap_top__;
-__text_start_phys__ = ALIGN(__kernel_load_offset__ + SIZEOF_HEADERS, 4096);
+__text_start_phys__ = ALIGN(__kernel_load_offset__ + SIZEOF_HEADERS, 8192);
 __text_start__ = __base__ + __text_start_phys__;
 
 PHDRS {
