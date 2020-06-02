@@ -29,6 +29,8 @@
 # returning via a system call.
 
 BEGIN_TEST
+		init_tlb
+
 		#
 		# Check to see if we already have a TLB entry for page 0
 		#

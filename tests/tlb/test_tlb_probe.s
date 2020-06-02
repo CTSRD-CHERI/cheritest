@@ -32,6 +32,8 @@
 .include "macros.s"
 
 BEGIN_TEST
+		init_tlb
+
 		li	$t0, 1			# Load counter so that we execute the following test twice,
 						# to check for tlb probe speed.
 		# Fill in a tlb entry and write it
