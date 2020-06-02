@@ -103,7 +103,7 @@ END_TEST
 # c4: trap handler read-back for second trap (checked against c2)
 # c5: mainline read-back after store (checked equal to c1)
 
-.balign 256  # ensure that all of testcode is on the same page
+.balign 8192  # ensure that all of testcode is on the same (even) page
 testcode:
 		nop
 		dli	$a5, 1
