@@ -772,6 +772,7 @@ nosetests_qemu:
 	$(MAKE) $(MFLAGS) nosetests_qemu.xml
 
 check_valid_qemu:
+	$(call _CHECK_FILE_EXIST, $(QEMU), QEMU)
 	@echo "Checking if QEMU $(QEMU_ABSPATH) is valid for this configuration:"
 	$(QEMU) --version
 ifndef MIPS_ONLY
@@ -790,7 +791,7 @@ endif
 
 
 # set TEST_MACHINE to QEMU to mark tests that are not implemented as xfail
-nosetests_qemu.xml: $(QEMU_TEST_LOGS) check_pytest_version $(TEST_PYTHON) check_valid_qemu FORCE
+nosetests_qem%.xml: $(QEMU_TEST_LOGS) check_pytest_version $(TEST_PYTHON) check_valid_qemu FORCE
 	@echo "Pytest flags: $(QEMU_NOSEFLAGS)"
 	$(MAYBE_IGNORE_EXIT_CODE)env LOGDIR=$(QEMU_LOGDIR) $(QEMU_NOSETESTS) \
 	$(PYTHON_TEST_XUNIT_FLAG)=$@ $(TESTDIRS)
@@ -859,14 +860,14 @@ qemu_logs_mips:
 
 
 pytest_qemu_mips:
-	$(MAKE) CAP_SIZE=0 nosetests_qemu
+	$(MAKE) CAP_SIZE=0 nosetests_qemu_mips64.xml
 pytest_qemu256:
 	$(MAKE) elfs256
-	$(MAKE) CAP_SIZE=256 CAP_PRECISE=1 nosetests_qemu
+	$(MAKE) CAP_SIZE=256 CAP_PRECISE=1 nosetests_qemu_cheri256.xml
 pytest_qemu128:
-	$(MAKE) CAP_SIZE=128 CAP_PRECISE=0 nosetests_qemu
+	$(MAKE) CAP_SIZE=128 CAP_PRECISE=0 nosetests_qemu_cheri128.xml
 pytest_qemu128magic:
-	$(MAKE) CAP_SIZE=128 CAP_PRECISE=1 nosetests_qemu
+	$(MAKE) CAP_SIZE=128 CAP_PRECISE=1 nosetests_qemu_cheri128magic.xml
 
 pytest_qemu_all:
 	# first build all the binaries to check for assembler errors (and to make use of parallelism)
