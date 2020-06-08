@@ -27,19 +27,17 @@
 #
 from beritest_tools import BaseBERITestCase, attr
 
+@attr(beri_statcounters="icount")
 class test_raw_loop_icount(BaseBERITestCase):
     def test_result(self):
         '''Test that MOVZ does not change the value of $zero'''
         self.assertRegisterEqual(self.MIPS.t0, self.minus_one_as_u64, "Loop should terminate when t0 is zero")
 
-    @attr(beri_statcounters="icount")
     def test_start_icount_nonzero(self):
         assert self.MIPS.s0 != 0, "icount should be nonzero"
 
-    @attr(beri_statcounters="icount")
     def test_start_icount_after_one_instr(self):
         assert self.MIPS.s1 == self.MIPS.s0 + 1, "icount should be one more after one inst"
 
-    @attr(beri_statcounters="icount")
     def test_start_icount_nonzero(self):
         assert self.MIPS.s2 == self.MIPS.s0 + 3 + (3 * 2), "icount after loop wrong"
