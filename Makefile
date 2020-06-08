@@ -357,9 +357,6 @@ QEMU_VERSION:=$(shell $(QEMU_ABSPATH) --version)
 QEMU_UNALIGNED_OKAY_STRING=Built with support for unaligned loads/stores
 QEMU_UNALIGNED_OKAY=$(if $(findstring $(QEMU_UNALIGNED_OKAY_STRING),$(QEMU_VERSION)),1,0)
 
-QEMU_C0_IS_NULL_STRING=Built with C0 as NULL register
-QEMU_C0_IS_NULL=$(if $(findstring $(QEMU_C0_IS_NULL_STRING),$(QEMU_VERSION)),1,0)
-
 QEMU_CAP_SIZE=$(strip $(if \
     $(findstring Compiled for CHERI256,$(QEMU_VERSION)), 256, \
     $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), 128, \
@@ -383,17 +380,14 @@ QEMU_CAP_PRECISE=$(strip $(if \
 #$(info QEMU built with QEMU_CAP_SIZE=$(QEMU_CAP_SIZE))
 #$(info QEMU built with QEMU_CAP_PRECISE=$(QEMU_CAP_PRECISE))
 #$(info QEMU built with QEMU_UNALIGNED_OKAY=$(QEMU_UNALIGNED_OKAY))
-#$(info QEMU built with QEMU_C0_IS_NULL=$(QEMU_C0_IS_NULL))
 endif  # ifneq ($(QEMU_ABSPATH),)
 
 QEMU_UNALIGNED_OKAY?=0
 ifdef MIPS_ONLY
 QEMU_CAP_SIZE=0
-QEMU_C0_IS_NULL=MIPS-ONLY
 QEMU_CAP_PRECISE=MIPS-ONLY
 QEMU_CAP_SIZE=MIPS-ONLY
 else
-QEMU_C0_IS_NULL?=0
 QEMU_CAP_SIZE?=-1
 QEMU_CAP_PRECISE?=-1
 endif
@@ -521,7 +515,6 @@ endif
 	@echo "    QEMU CHERI capability size: $(QEMU_CAP_SIZE)"
 	@echo "    QEMU built with precise capabilities: $(QEMU_CAP_PRECISE)"
 	@echo "    QEMU built with support for unaligned loads: $(QEMU_UNALIGNED_OKAY)"
-	@echo "    QEMU built with C0 == NULL: $(QEMU_C0_IS_NULL)"
 	@echo "    QEMU precision: $(QEMU_CHERI_CC_BASE_WIDTH)"
 	@echo "    QEMU version: $(QEMU_VERSION)"
 	@echo
