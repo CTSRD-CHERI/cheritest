@@ -195,7 +195,9 @@ $(info Requested build for $(CAP_SIZE) bits, setting CHERI_SDK to $(dollar)CHERI
 endif
 
 ifdef MIPS_ONLY
+ifdef QEMU_MIPS64
 QEMU?=$(QEMU_MIPS64)
+endif
 else
 ifdef QEMU_CHERI128
 QEMU?=$(QEMU_CHERI128)
