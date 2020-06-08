@@ -194,6 +194,14 @@ CHERI_SDK:=$(CHERI$(CAP_SIZE)_SDK)
 $(info Requested build for $(CAP_SIZE) bits, setting CHERI_SDK to $(dollar)CHERI256_SDK)
 endif
 
+ifdef MIPS_ONLY
+QEMU?=$(QEMU_MIPS64)
+else
+ifdef QEMU_CHERI128
+QEMU?=$(QEMU_CHERI128)
+endif
+endif
+
 # If CHERI_SDK is set use the binaries from the CHERI SDK
 ifneq ($(CHERI_SDK),)
 $(info Using CHERI SDK: $(CHERI_SDK))
@@ -340,12 +348,6 @@ else
 DEFSYM_FLAG=-defsym=
 # Without -march=mips4 the movz instruction will be rejected by GNU as
 MIPS_AS:=$(MIPS_AS) -march=mips4 -defsym=_GNU_AS_=1
-endif
-
-ifeq ($(CAP_SIZE),128)
-QEMU?=qemu-system-cheri128
-else
-QEMU?=qemu-system-cheri
 endif
 
 
