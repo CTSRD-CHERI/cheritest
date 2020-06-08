@@ -141,7 +141,7 @@ PURECAP?=1
 OBJDIR=obj/$(CAP_SIZE)
 # CHECK that CAP_SIZE is a sensible value
 ifneq ($(CAP_SIZE),$(filter $(CAP_SIZE),64 128 256))
-$(error "Invalid value for CAP_SIZE: $(CAP_SIZE))
+$(error "Invalid value for CAP_SIZE: $(CAP_SIZE)")
 endif
 
 endif  # CAP_SIZE != 0
@@ -537,7 +537,7 @@ endif
 	@echo "objdump:   $(OBJDUMP)"
 ifeq ($(OBJCOPY),)
 	# TODO: $(error) ?
-	@echo "WARNING: $(dollar)OBJCOPY not found -> only QEMU tests will work
+	@echo "WARNING: $(dollar)OBJCOPY not found -> only QEMU tests will work"
 endif
 	@echo "objcopy:   $(OBJCOPY)"
 	@echo "cherictl:  $(CHERICTL)"
