@@ -28,6 +28,10 @@
 from beritest_tools import BaseBERITestCase
 from beritest_tools import attr
 
+# Note: MIPS64 QEMU cannot detect a store of the loaded value before the sc
+# since LL/SC is implemented using CAS. It works for CHERI since we can use the
+# tag invalidate event to clear the linked flag
+
 class test_lldscd_span(BaseBERITestCase):
 
     @attr('llsc')
@@ -36,17 +40,19 @@ class test_lldscd_span(BaseBERITestCase):
     def test_lld_ld_scd_success(self):
         '''That lld+ld+scd succeeds'''
         self.assertRegisterEqual(self.MIPS.a2, 1, "lld+ld+scd failed")
-    
+
     @attr('llsc')
     @attr('cached')
     @attr('llscspan')
-    def test_lld_sd_scd_value(self):
+    @attr('llscspan_same_value')
+    def test_lld_sd_scd_value_1(self):
         '''That an lld+scd spanning a byte store to the line does not store'''
         self.assertRegisterNotEqual(self.MIPS.a3, 2, "Interrupted lld+sd+scd stored value")
 
     @attr('llsc')
     @attr('cached')
     @attr('llscspan')
-    def test_lld_sd_scd_value(self):
+    @attr('llscspan_same_value')
+    def test_lld_sd_scd_value_2(self):
         '''That an lld+scd spanning a double store to the line does not store'''
         self.assertRegisterNotEqual(self.MIPS.a6, 1, "Interrupted lld+sd+scd stored value")
