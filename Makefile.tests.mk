@@ -523,7 +523,7 @@ clion/$(QEMU_LOGDIR)/%.log.symbolized: $(QEMU_LOGDIR)/%.log.symbolized
 NOSETESTS?=python3 -m pytest -q
 _PYTEST_INSTALLED_STR=This is pytest
 PYTEST_VERSION_OUTPUT=$(shell $(NOSETESTS) --version 2>&1)
-PYTEST_CHECK1=$(if $(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),@echo pytest is installed,$(error pytest not installed? Try running `pip3 install --user pytest`. Got error running $(NOSETESTS) --version: $(PYTEST_VERSION_OUTPUT)"))
+PYTEST_CHECK1=$(if $(findstring $(_PYTEST_INSTALLED_STR),$(PYTEST_VERSION_OUTPUT)),@echo pytest is installed,$(error "pytest not installed? Try running 'pip3 install --user pytest'. Got error running $(NOSETESTS) --version: $(PYTEST_VERSION_OUTPUT)"))
 PYTEST_CHECK2=$(if $(findstring requires pytest-,$(PYTEST_VERSION_OUTPUT)),$(error pytest version is too old. Try running `pip3 install --upgrade --user pytest`),@echo installed pytest version is new enough)
 
 
