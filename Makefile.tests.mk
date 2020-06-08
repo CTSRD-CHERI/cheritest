@@ -860,7 +860,7 @@ qemu_logs_mips:
 
 
 pytest_qemu_mips:
-	$(MAKE) CAP_SIZE=0 nosetests_qemu_mips64.xml
+	$(MAKE) CAP_SIZE=0 MIPS_ONLY=1 nosetests_qemu_mips64.xml
 pytest_qemu256:
 	$(MAKE) elfs256
 	$(MAKE) CAP_SIZE=256 CAP_PRECISE=1 nosetests_qemu_cheri256.xml
