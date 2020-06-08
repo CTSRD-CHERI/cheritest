@@ -32,23 +32,39 @@ from beritest_tools import attr
 # Test that capability jump and link register saves PCC to RCC.
 #
 
+
+@attr('capabilities')
 class test_cp2_cjalr_rcc(BaseBERITestCase):
-    @attr('capabilities')
+    EXPECTED_EXCEPTIONS = 4
+
     def test_cp2_cjalr_rcc1(self):
         '''Test that RCC.perms was changed by cjalr'''
         self.assertRegisterAllPermissions(self.MIPS.a0, "RCC.perms was not set correctly by cjalr")
 
-    @attr('capabilities')
     def test_cp2_cjalr_rcc2(self):
         '''Test that RCC.offset was changed by cjalr'''
         self.assertRegisterEqual(self.MIPS.a1, 0, "RCC.offset was not set correctly by cjalr")
 
-    @attr('capabilities')
     def test_cp2_cjalr_rcc3(self):
         '''Test that RCC.base was changed by cjalr'''
         self.assertRegisterEqual(self.MIPS.a2, 0, "RCC.base was not set correctly by cjalr")
 
-    @attr('capabilities')
     def test_cp2_cjalr_rcc4(self):
         '''Test that RCC.len was changed by cjalr'''
         self.assertRegisterEqual(self.MIPS.a3, 0xffffffffffffffff, "RCC.len was not set correctly by cjalr")
+
+    def test_cp2_cjalr_rcc_trap_candperm(self):
+        self.assertCp2Fault(self.MIPS.s0, cap_cause=self.MIPS.CapCause.Seal_Violation, msg="RCC should be an immutable sentry")
+
+    def test_cp2_cjalr_rcc_trap_csetoffset(self):
+        self.assertCp2Fault(self.MIPS.s1, cap_cause=self.MIPS.CapCause.Seal_Violation, msg="RCC should be an immutable sentry")
+
+    def test_cp2_cjalr_rcc_trap_cincoffset(self):
+        self.assertCp2Fault(self.MIPS.s2, cap_cause=self.MIPS.CapCause.Seal_Violation, msg="RCC should be an immutable sentry")
+
+    def test_cp2_cjalr_rcc_trap_cincoffsetimm(self):
+        self.assertCp2Fault(self.MIPS.s3, cap_cause=self.MIPS.CapCause.Seal_Violation, msg="RCC should be an immutable sentry")
+
+    def test_cp2_cjalr_returned(self):
+        '''Test that RCC.len was changed by cjalr'''
+        self.assertRegisterEqual(self.MIPS.a5, 1, "Did not return to caller")

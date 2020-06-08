@@ -38,7 +38,7 @@
 BEGIN_TEST
 		# Restrict the PCC capability that sandbox will run with.
 		# Non_Ephemeral, Permit_Execute, Permit_Load, Permit_Store,
-		# Permit_Load_Capability, Permit_Store_Capability, 
+		# Permit_Load_Capability, Permit_Store_Capability,
 		# Permit_Store_Ephemeral_Capability.
 		dli      $t0, 0x7f
 		cgetdefault $c1
@@ -52,27 +52,35 @@ BEGIN_TEST
 		csetoffset $c24, $c24, $t0
 		dli      $t0, 0
 		candperm $c24, $c24, $t0
-		
-		# Jump to L1, with $pcc replaced with $c1
-		dla	$t0, L1
+
+		# Jump to cjalr_target, with $pcc replaced with $c1
+		dla	$t0, .Lcjalr_target
 		csetoffset $c1, $c1, $t0
+
 		cjalr	$c1, $c24
 		nop			# branch delay slot
-
-L1:
-		# Check that PCC was copied to RCC
+.Lreturn_addr:
+		dli	$a5, 1	# returned
+		b .Lexit_test
+		nop
+.Lcjalr_target:
+		# Check that PCC was copied to RCC (as a sentry)
 		cgetperm $a0, $c24
 		cgetoffset $a1, $c24
-		dla	 $t0, L1
+		dla	 $t0, .Lreturn_addr
 		dsubu	 $a1, $a1, $t0
 		cgetbase $a2, $c24
 		cgetlen  $a3, $c24
-		
-		# Restore the old PCC
-		dla     $t0, L2
-		csetoffset $c24, $c24, $t0
-		cjr     $c24
-		nop 		#  branch delay slot
+		cgettype $a4, $c24
 
-L2:
+
+		check_instruction_traps $s0, candperm $c16, $c24, $zero
+		check_instruction_traps $s1, csetoffset $c16, $c24, $zero
+		check_instruction_traps $s2, cincoffset $c16, $c24, $zero
+		check_instruction_traps $s3, cincoffset $c16, $c24, 0
+
+		# Restore the old PCC
+		cjr	$c24
+		nop 		#  branch delay slot
+.Lexit_test:
 END_TEST
