@@ -14,9 +14,6 @@ class JobConfig {
     // TODO: for some reason I can't make these globals, so let's just put them here
     static String clangArchiveName = 'cheri-multi-master-clang-llvm.tar.xz'
     static String clangJobName = 'CLANG-LLVM-master/CPU=cheri-multi,label=linux/'
-    static String binutilsArchiveName = 'binutils.tar.bz2'
-    static String binutilsJobName = 'CHERI-binutils/label=linux/'
-
 }
 
 // TODO: instead of this we could also have a Jenkinsfile per config and use JobDSL to generate one job per jenkinsfile
@@ -28,16 +25,8 @@ JobConfig getJobParameters() {
     if (jobName.endsWith('-pipeline')) {
         jobName = jobName.substring(0, jobName.indexOf('-pipeline'))
     }
-    boolean usesBinutils = false;
-    if (jobName.endsWith('-gnu-binutils')) {
-        usesBinutils = true
-        jobName = jobName.substring(0, jobName.indexOf('-gnu-binutils'))
-    }
     echo "Computed base job names as $jobName"
-    Map config = ["sail2-CHERI256": [testTarget: 'nosetests_sail_cheri',
-                                     sailModel: 'cheri',
-                                     testArgs : 'TEST_CP2=1 CAP_SIZE=256'],
-                  "sail2-CHERI128": [testTarget: 'nosetests_sail_cheri128',
+    Map config = ["sail2-CHERI128": [testTarget: 'nosetests_sail_cheri128',
                                      sailModel: 'cheri128',
                                      testArgs : 'TEST_CP2=1 CAP_SIZE=128'],
                   "sail2-MIPS"    : [testTarget: 'nosetests_sail',
@@ -47,23 +36,17 @@ JobConfig getJobParameters() {
     if (!result) {
         error("No configuration found for job ${jobName}! Please add one to the Map above")
     }
-    if (usesBinutils)
-        result.assembler = 'gnu-binutils'
     result.name = jobName
     return result as JobConfig
 }
 
 
 def runTests(JobConfig args) {
-    if (args.assembler == 'gnu-binutils') {
-        copyArtifacts filter: args.binutilsArchiveName, fingerprintArtifacts: true, projectName: args.binutilsJobName
-    } else {
-        if (args.assembler != 'clang') {
-            error("Bad compiler: ${args.compiler}")
-        }
-        // Use lastCompleted() here to also pull yellow builds
-        copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName, selector: lastWithArtifacts()
+    if (args.assembler != 'clang') {
+        error("Bad compiler: ${args.compiler}")
     }
+    // Use lastCompleted() here to also pull yellow builds
+    copyArtifacts filter: args.clangArchiveName, fingerprintArtifacts: true, projectName: args.clangJobName, selector: lastWithArtifacts()
     def prepareAssembler = ''
     def assemblerTestFlag = ''
     if (args.assembler == 'clang') {
