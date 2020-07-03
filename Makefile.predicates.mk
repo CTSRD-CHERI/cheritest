@@ -330,14 +330,6 @@ else
 QEMU_UNSUPPORTED_FEATURES+=trap_unaligned_ld_st alignex
 endif
 
-ifdef MIPS_ONLY
-# MIPS64 QEMU cannot detect a store of the ll value before the sc since LL/SC
-# is implemented using CAS. It works for CHERI since we can use the tag
-# invalidate event to clear the linked flag
-QEMU_UNSUPPORTED_FEATURES+=llscspan_same_value
-endif
-
-
 ifdef TEST_QEMU_R4000
 QEMU_UNSUPPORTED_FEATURES+=\
 floatcmove \
