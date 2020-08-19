@@ -30,6 +30,19 @@ from beritest_tools import attr
 
 class test_cp2_cbuildcap(BaseBERITestCase):
 
+    # This test uses the claimed decode of the capability
     @attr('capabilities')
     def test_cp2_cbuildcap_1(self):
-        self.assertRegisterEqual(self.MIPS.a0, 1, "CBuildCap did not restore capability correctly")
+        assert self.MIPS.c1 == self.MIPS.c3, \
+          "CBuildCap did not restore capability correctly"
+
+    # CEXEQ has access to hidden state (the encoded cr_ebt in QEMU, e.g)
+    @attr('capabilities')
+    def test_cp2_cbuildcap_2(self):
+        assert self.MIPS.a0 == 1, \
+          "CBuildCap did not restore capability correctly (CEXEQ)"
+
+    # Cycling through memory can reveal discrepancies
+    @attr('capabilities')
+    def test_cp2_cbuildcap_3(self):
+        assert self.MIPS.c3 == self.MIPS.c4, "Memory roundtrip not identity"
