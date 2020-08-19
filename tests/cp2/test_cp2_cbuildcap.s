@@ -40,13 +40,17 @@ BEGIN_TEST
 		cgetdefault $c1
 		dla	$t0, data
 		csetoffset $c1, $c1, $t0
-		dli	$t0, 8
+		dli	$t0, 32
 		csetbounds $c1, $c1, $t0
 
 		ccleartag $c2, $c1
 
 		cgetdefault $c3
 		cbuildcap $c3, $c3, $c2
+
+		# Cycle through memory to catch inconsistent metadata
+		csc	$c3, $zero, 0($c1)
+		clc	$c4, $zero, 0($c1)
 
 		cexeq	$a0, $c1, $c3
 
