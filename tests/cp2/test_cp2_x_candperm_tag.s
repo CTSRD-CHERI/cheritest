@@ -38,22 +38,8 @@
 
 BEGIN_TEST
 		#
-		# Set up exception handler
-		#
-
-		jal	bev_clear
-		nop
-		dla	$a0, bev0_handler
-		jal	bev0_handler_install
-		nop
-
-		# $a2 will be set to 1 if the exception handler is called
-		dli	$a2, 0
-
-		#
 		# Make $c1 a data capability for the array 'data'
 		#
-
 		cgetdefault $c1
 		dla     $t0, data
 		csetoffset $c1, $c1, $t0
@@ -74,7 +60,7 @@ BEGIN_TEST
 		clc 	$c1, $t0, 0($ddc)
 
 		dli	$t1, 0
-		candperm $c1, $c1, $t1 # This should raise a C2E exception
+		check_instruction_traps $a2, candperm $c1, $c1, $t1 # This should raise a C2E exception
 
 		dla	$t1, cap2
 		csc 	$c1, $t1, 0($ddc)
@@ -97,18 +83,7 @@ BEGIN_TEST
 
 END_TEST
 
-		.ent bev0_handler
-bev0_handler:
-		li	$a2, 1
-		cgetcause $a3
-		dmfc0	$a5, $14	# EPC
-		daddiu	$k0, $a5, 4	# EPC += 4 to bump PC forward on ERET
-		dmtc0	$k0, $14
-		DO_ERET
-		.end bev0_handler
-
 		.data
-
 		.align 5
 cap1:		.dword	0x0123456789abcdef	# uperms/reserved
 		.dword	0x0123456789abcdef	# otype/eaddr

@@ -34,18 +34,14 @@ from beritest_tools import attr
 #
 
 class test_cp2_x_candperm_tag(BaseBERITestCase):
+    EXPECTED_EXCEPTIONS = 1
 
     @attr('capabilities')
     def test_cp2_x_candperm_tag_1(self):
         '''Test CAndPerm raised a C2E exception when capability tag was unset'''
-        self.assertRegisterEqual(self.MIPS.a2, 1,
-            "CAndPerm did not raise an exception when capability tag was unset")
+        self.assertCp2Fault(self.MIPS.a2, cap_cause=self.MIPS.CapCause.Tag_Violation, cap_reg=1,
+            msg="CAndPerm did not raise an exception when capability tag was unset")
 
-    @attr('capabilities')
-    def test_cp2_x_candperm_tag_2(self):
-        '''Test CAndPerm set capability cause correctly when capability tag was unset'''
-        self.assertRegisterEqual(self.MIPS.a3, 0x0201,
-            "Capability cause was not set correcly when capability tag was unset")
     @attr('capabilities')
     def test_cp2_x_candperm_tag_3(self):
         '''Test CAndPerm did not change dword 0 of an untagged capability'''
