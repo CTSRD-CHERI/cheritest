@@ -25,7 +25,7 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-.set mips64
+.set mips64r2
 .set noreorder
 .set nobopt
 .set noat
@@ -59,7 +59,7 @@ start:
 		dsll $t1, $t1, 16   # 2.0
 		or $t2, $t2, $t1
 		dmtc1 $t2, $f13
-		mul.PS $f13, $f13, $f13
+		mul.ps $f13, $f13, $f13
 		dmfc1 $s3, $f13
 		
 		# Loading (3, 4.89)
