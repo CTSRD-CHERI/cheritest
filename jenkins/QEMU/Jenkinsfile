@@ -10,8 +10,8 @@ class JobConfig {
     static String assembler = 'clang'
 
     // TODO: for some reason I can't make these globals, so let's just put them here
-    static String clangArchiveName = 'cheri-multi-master-clang-llvm.tar.xz'
-    static String clangJobName = 'CLANG-LLVM-master/CPU=cheri-multi,label=linux/'
+    static String clangArchiveName = 'cheri-clang-llvm.tar.xz'
+    static String clangJobName = 'CLANG-LLVM-linux/master'
     static String binutilsArchiveName = 'binutils.tar.bz2'
     static String binutilsJobName = 'CHERI-binutils/label=linux/'
 
@@ -65,7 +65,7 @@ def runTests(JobConfig args) {
     def assemblerTestFlag = ''
     // llvm-symbolizer must not have a suffix otherwise asan complains:
     // https://stackoverflow.com/questions/38079761/why-does-asan-symbolizer-path-no-longer-work-with-version-adorned-binaries
-    def llvmSymbolizerPath = '/usr/lib/llvm-4.0/bin/llvm-symbolizer'
+    def llvmSymbolizerPath = "${env.WORKSPACE}/bin/llvm-symbolizer"
     sh """
 echo "Checking for llvm-symbolizer at ${llvmSymbolizerPath}"
 stat "${llvmSymbolizerPath}" > /dev/null || exit 1
