@@ -65,11 +65,7 @@ def runTests(JobConfig args) {
     def assemblerTestFlag = ''
     // llvm-symbolizer must not have a suffix otherwise asan complains:
     // https://stackoverflow.com/questions/38079761/why-does-asan-symbolizer-path-no-longer-work-with-version-adorned-binaries
-    def llvmSymbolizerPath = "${env.WORKSPACE}/bin/llvm-symbolizer"
-    sh """
-echo "Checking for llvm-symbolizer at ${llvmSymbolizerPath}"
-stat "${llvmSymbolizerPath}" > /dev/null || exit 1
-"""
+    def llvmSymbolizerPath = "${env.WORKSPACE}/cherisdk/bin/llvm-symbolizer"
     env.ASAN_SYMBOLIZER_PATH = llvmSymbolizerPath
     env.UBSAN_SYMBOLIZER_PATH = llvmSymbolizerPath
     if (args.assembler == 'clang') {
@@ -92,6 +88,9 @@ export PATH=\$WORKSPACE/binutils/bin:\$PATH"""
 set -xe
 cd \$WORKSPACE
 ${prepareAssembler}
+
+echo "Checking for llvm-symbolizer at ${llvmSymbolizerPath}"
+stat "${llvmSymbolizerPath}" > /dev/null || exit 1
 
 cd \$WORKSPACE/ctsrd/cheritest/trunk
 # always do a full clean in case the linker/compiler has changed
