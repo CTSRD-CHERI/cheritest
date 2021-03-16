@@ -133,13 +133,13 @@ class test_cp0_reg_init(BaseBERITestCase):
             # QEMU uses company id = 0x0f, processor id = 0x04
             assert company_id == 0x0f, "Unexpected QEMU CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected QEMU CP0_PRID[15..8]"
-            assert revision_id >= 5, "Expected at least rev 5 for QEMU CP0_PRID[7..0]"
+            assert revision_id >= 6, "Expected at least rev 6 for QEMU CP0_PRID[7..0]"
         elif self.TEST_MACHINE in ("sim", "sail", "l3"):
             # CHERI Bluespec implementation, company id = 0x00, processor id = 0x04
             # Sail and L3 should report the same values as Bluespec
             assert company_id == 0x00, "Unexpected BERI CP0_PRID[23..16]"
             assert processor_id == 0x04, "Unexpected BERI CP0_PRID[15..8]"
-            assert revision_id >= 5, "Expected at least rev 5 for BERI CP0_PRID[7..0]"
+            assert revision_id >= 6, "Expected at least rev 6 for BERI CP0_PRID[7..0]"
         elif self.TEST_MACHINE == "gxemul":
             assert company_id == 0x01, "Unexpected GXEMUL CP0_PRID[23..16]"
             assert processor_id == 0x89, "Unexpected GXEMUL CP0_PRID[15..8]"
