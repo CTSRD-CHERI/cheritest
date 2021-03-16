@@ -34,12 +34,14 @@
 
 #
 # Test CBNZ (capability branch if not NULL).
+# Note: This only checks the address (a valid cap with address 0 is "NULL")
 #
 
 BEGIN_TEST
 		dli	$a0, 0
 		dli	$a2, 0
 		cgetdefault	$c22
+		cincoffset	$c22, $c22, 1	# Ensure non-zero address
 		cbnz	$c22, L1	# This branch should be taken
 		dli	$a2, 1  # Branch delay slot is executed even if branch
 		dli     $a0, 1
@@ -48,7 +50,8 @@ BEGIN_TEST
 L1:
 		nop
 		dli	$a1, 0
-		cgetnull $c22
+		cgetdefault	$c22
+		csetaddr	$c22, $c22, $zero	# Ensure zero address
 		cbnz	$c22, L2	# This branch should not be taken
 		nop 		# Branch delay slot
 		dli	$a1, 1
