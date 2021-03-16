@@ -182,8 +182,8 @@ endif
 OPTFLAGS=-O3
 MIPS_ASFLAGS=$(MIPS_AS_ABICALLS) -EB -mabi=64 -G0 -ggdb $(DEFSYM_FLAG)TEST_CP2=$(TEST_CP2) $(DEFSYM_FLAG)CAP_SIZE=$(CAP_SIZE)
 CWARNFLAGS?=-Werror -Wall -Wpedantic -Wno-option-ignored -Wno-language-extension-token -Wno-error=unused -Wno-error=pedantic
-HYBRID_CFLAGS?=-ffreestanding -g -mno-abicalls -fno-pic -target cheri-unknown-freebsd -G 0 -mabi=n64 -integrated-as $(OPTFLAGS) -ffunction-sections -nostdlibinc
-PURECAP_CFLAGS?=-ffreestanding -g -fpic -target cheri-unknown-freebsd -G 0 -mabi=purecap -integrated-as $(OPTFLAGS) -ffunction-sections -nostdlibinc -Itests/purecap
+HYBRID_CFLAGS?=-ffreestanding -g -mno-abicalls -fno-pic -G0 -mabi=n64 -integrated-as $(OPTFLAGS) -ffunction-sections -nostdlibinc
+PURECAP_CFLAGS?=-ffreestanding -g -fpic -G 0 -mabi=purecap -integrated-as $(OPTFLAGS) -ffunction-sections -nostdlibinc -Itests/purecap
 
 # This is needed to customize cheri-c-tests:
 PURECAP_CFLAGS+=-DTEST_CUSTOM_FRAMEWORK=1 -I$(PWD)/cheri-c-tests -I$(PWD)/tests/purecap/
@@ -336,7 +336,7 @@ CLANG_CMD?=clang
 ifdef MIPS_ONLY
 CLANG_CC?=$(CLANG_CMD) -target mips64-unknown-freebsd -mcpu=beri -mhard-float
 else
-CLANG_CC?=$(CLANG_CMD) -target cheri-unknown-freebsd -mcpu=beri -cheri=$(CAP_SIZE) -mhard-float
+CLANG_CC?=$(CLANG_CMD) -target mips64-unknown-freebsd -mcpu=beri -cheri=$(CAP_SIZE) -mhard-float
 endif
 CLANG_AS=$(CLANG_CC) -fno-pic -c -Wno-unused-command-line-argument -mno-abicalls
 
