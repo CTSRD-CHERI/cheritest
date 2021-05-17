@@ -379,7 +379,8 @@ QEMU_CAP_PRECISE=$(strip $(if \
     $(findstring Compiled for CHERI256,$(QEMU_VERSION)), 1, \
     $(if $(findstring Compiled for CHERI128 (magic),$(QEMU_VERSION)), 1, \
     $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), 0, \
-    $(error could not infer QEMU_CAP_PRECISE from $(QEMU_ABSPATH): $(QEMU_VERSION)) ))))
+    $(if $(findstring Compiled for MIPS64 (with CHERI),$(QEMU_VERSION)), 0, \
+    $(error could not infer QEMU_CAP_PRECISE from $(QEMU_ABSPATH): $(QEMU_VERSION)) )))))
 
 #$(info QEMU built with QEMU_CAP_SIZE=$(QEMU_CAP_SIZE))
 #$(info QEMU built with QEMU_CAP_PRECISE=$(QEMU_CAP_PRECISE))
