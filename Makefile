@@ -364,16 +364,18 @@ QEMU_UNALIGNED_OKAY=$(if $(findstring $(QEMU_UNALIGNED_OKAY_STRING),$(QEMU_VERSI
 QEMU_CAP_SIZE=$(strip $(if \
     $(findstring Compiled for CHERI256,$(QEMU_VERSION)), 256, \
     $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), 128, \
-    $(error could not infer QEMU_CAP_SIZE from $(QEMU_ABSPATH): $(QEMU_VERSION)) )))
-# Assume QEMU without this string uses the old 23 bit format
+    $(if $(findstring Compiled for MIPS64 (with CHERI),$(QEMU_VERSION)), 128, \
+    $(error could not infer QEMU_CAP_SIZE from $(QEMU_ABSPATH): $(QEMU_VERSION)) ))))
+# Assume QEMU without this string uses the new 14 bit format
 QEMU_CHERI_CC_BASE_WIDTH=$(strip \
+    $(if $(findstring Compiled for MIPS64 (with CHERI),$(QEMU_VERSION)), 14, \
     $(if $(findstring CHERI-CC base width is 14,$(QEMU_VERSION)), 14, \
-     $(if $(findstring CHERI-CC base width is 23,$(QEMU_VERSION)), 23, \
-      $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), \
-       $(if $(findstring CHERI-CC base width is,$(QEMU_VERSION)), \
-        $(error Unexpected CHERI CC width for $(QEMU_ABSPATH): $(QEMU_VERSION)), \
-        $(info Using default value of 14 for QEMU_CHERI_CC_BASE_WIDTH)14), \
-       $(info Not using CHERI-CC -> QEMU_CHERI_CC_BASE_WIDTH=64)64))))
+    $(if $(findstring CHERI-CC base width is 23,$(QEMU_VERSION)), 23, \
+     $(if $(findstring Compiled for CHERI128,$(QEMU_VERSION)), \
+      $(if $(findstring CHERI-CC base width is,$(QEMU_VERSION)), \
+       $(error Unexpected CHERI CC width for $(QEMU_ABSPATH): $(QEMU_VERSION)), \
+       $(info Using default value of 14 for QEMU_CHERI_CC_BASE_WIDTH)14), \
+      $(info Not using CHERI-CC -> QEMU_CHERI_CC_BASE_WIDTH=64)64)))))
 
 QEMU_CAP_PRECISE=$(strip $(if \
     $(findstring Compiled for CHERI256,$(QEMU_VERSION)), 1, \
