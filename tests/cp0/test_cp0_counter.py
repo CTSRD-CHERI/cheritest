@@ -40,12 +40,16 @@ class test_cp0_counter(BaseBERITestCase):
     @attr('count_register_is_icount')
     def test_cp0_counter_1(self):
         '''Test that the count register gives almost the same value when it is read two different ways'''
+        assert self.MIPS.a1 > 0, "Expected a non-zero value"
         self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a1, self.MIPS.a1 + 100,
             "rdhwr and mfc0 did not give nearly the same value for the count register")
 
     @attr('rdhwr')
     @attr('count_register_is_time')
     def test_cp0_counter_qemu_1(self):
-        '''Test that the count register gives almost the same value when it is read two different ways'''
-        self.assertRegisterInRange(self.MIPS.a2, self.MIPS.a1, self.MIPS.a1 + 160000,
-            "rdhwr and mfc0 did not give nearly the same value for the count register")
+        # QEMU uses host time for the count register, so it can increment a lot
+        # between instructions (especially when using QEMU instrumented with
+        # ASAN on a server under a lot of load). Therefore, we simply check that
+        # the value is greater than the previous one.
+        assert self.MIPS.a1 > 0, "Expected a non-zero value"
+        assert self.MIPS.a2 > self.MIPS.a1, "rdhwr and mfc0 did not give nearly the same value for the count register"
