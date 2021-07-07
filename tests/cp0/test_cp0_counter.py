@@ -51,5 +51,7 @@ class test_cp0_counter(BaseBERITestCase):
         # between instructions (especially when using QEMU instrumented with
         # ASAN on a server under a lot of load). Therefore, we simply check that
         # the value is greater than the previous one.
+        # Note: In some cases it can also be equal depending on how QEMU queries
+        # the host clock. This happens more frequently now that QEMU runs faster.
         assert self.MIPS.a1 > 0, "Expected a non-zero value"
-        assert self.MIPS.a2 > self.MIPS.a1, "rdhwr and mfc0 did not give nearly the same value for the count register"
+        assert self.MIPS.a2 >= self.MIPS.a1, "rdhwr and mfc0 did not give nearly the same value for the count register"
