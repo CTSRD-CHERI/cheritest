@@ -50,7 +50,7 @@ JobConfig getJobParameters(String jobName) {
     result.name = jobName
     if (usesBinutils)
         result.assembler = 'gnu-binutils'
-    return result as JobConfig
+    return new JobConfig(*:result)
 }
 
 
