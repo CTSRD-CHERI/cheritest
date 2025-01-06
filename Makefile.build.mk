@@ -70,11 +70,11 @@ PURECAP_INIT_OBJS=$(OBJDIR)/purecap_init.o \
 		$(OBJDIR)/purecap_crt_init_globals.o
 PURECAP_INIT_CACHED_OBJS=$(OBJDIR)/purecap_init_cached.o $(PURECAP_INIT_OBJS)
 $(OBJDIR)/purecap_init.o: init.s | $(OBJDIR)
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
+	$(CLANG_AS) -mabi=purecap -mabicalls -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
 $(OBJDIR)/purecap_init_cached.o: init_cached.s | $(OBJDIR)
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
+	$(CLANG_AS) -mabi=purecap -mabicalls -ggdb $(PURECAP_ASMDEFS)  -o $@ $<
 $(OBJDIR)/purecap_lib.o: lib.s | $(OBJDIR)
-	$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
+	$(CLANG_AS) -mabi=purecap -mabicalls -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 $(OBJDIR)/purecap_crt_init_globals.o: crt_init_globals.c | $(OBJDIR)
 	$(CLANG_CC) $(PURECAP_CFLAGS) -fno-builtin $(CWARNFLAGS) -c -o $@ $<
 $(OBJDIR)/purecap_atomic_runtime.o: tests/purecap/atomic.c | $(OBJDIR)
@@ -100,7 +100,7 @@ $(TEST_PURECAP_CXX_OBJS): $(OBJDIR)/%.o: tests/purecap/%.cpp | $(OBJDIR)
 	$(_V)$(CLANG_CC) $(PURECAP_CFLAGS) $(PURECAP_CXXFLAGS) $(CWARNFLAGS) -c -o $@ $<
 $(TEST_PURECAP_ASM_OBJS): $(OBJDIR)/%.o: tests/purecap/%.s | $(OBJDIR)
 	@echo PURECAP_AS $@
-	$(_V)$(CLANG_AS) -mabi=purecap -mabicalls -G0 -ggdb $(PURECAP_ASMDEFS) -o $@ $<
+	$(_V)$(CLANG_AS) -mabi=purecap -mabicalls -ggdb $(PURECAP_ASMDEFS) -o $@ $<
 
 # The purecap tests still use the old exception_count_handler
 PURECAP_LDFLAGS=-m elf64btsmip_cheri_fbsd --defsym=default_trap_handler=exception_count_handler
