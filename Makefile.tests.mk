@@ -480,7 +480,7 @@ $(QEMU_LOGDIR)/test_raw_%.log: $(OBJDIR)/test_raw_%.elf max_cycles $(CHECK_QEMU_
 	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) -d instr 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
 	    if [ "$(dollar)exit_code" -ne 255 ] && [ "$(dollar)exit_code" -ne 0 ]; then \
-	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; rm -f "$@"; false; \
+	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code for $@"; rm -f "$@"; false; \
 	    fi
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; false ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; rm "$@"; false ; fi
@@ -499,7 +499,7 @@ $(QEMU_LOGDIR)/%.log: $(OBJDIR)/%.elf max_cycles $(CHECK_QEMU_EXISTS) | $(QEMU_L
 	@env $(SANITIZER_ENV) $(QEMU) $(QEMU_FLAGS) 2>&1 >/dev/null; \
 	    exit_code=$(dollar)?; \
 	    if [ "$(dollar)exit_code" -ne 255 ] && [ "$(dollar)exit_code" -ne 0 ]; then \
-	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code"; $(fail_qemu_logfile); \
+	        echo "UNEXPECTED EXIT CODE $(dollar)exit_code for $@"; $(fail_qemu_logfile); \
 	    fi
 	@if ! test -e "$@"; then echo "ERROR: QEMU didn't create $@"; $(fail_qemu_logfile) ; fi
 	@if ! test -s "$@"; then echo "ERROR: QEMU created a zero size logfile for $@"; $(fail_qemu_logfile) ; fi
