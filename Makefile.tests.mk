@@ -870,7 +870,7 @@ pytest_qemu128magic:
 
 pytest_qemu_all:
 	# first build all the binaries to check for assembler errors (and to make use of parallelism)
-	@$(MAKE) elfs128 elfs_mips
+	@$(MAKE) elfs128 elfs_mips max_cycles
 	# Also generate the QEMU lots in parallel:
 	@$(MAKE) qemu_logs128 qemu_logs_mips
 	# But these steps should run sequentially:
